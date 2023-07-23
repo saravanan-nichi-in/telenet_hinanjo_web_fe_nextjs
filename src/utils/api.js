@@ -2,18 +2,18 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'https://api.example.com', // Replace with your API base URL
+  baseURL: 'https://jsonplaceholder.typicode.com/', // Replace with your API base URL
 });
 
 // Request interceptor
 api.interceptors.request.use((config) => {
   // Retrieve the authentication token from wherever it's stored (e.g., localStorage, cookies, etc.)
-  const authToken = localStorage.getItem('authToken');
+  // const authToken = localStorage.getItem('authToken');
   
   // Add the authentication token to the request headers
-  if (authToken) {
-    config.headers['Authorization'] = `Bearer ${authToken}`;
-  }
+  // if (authToken) {
+  //   config.headers['Authorization'] = `Bearer ${authToken}`;
+  // }
   
   return config;
 }, (error) => {
@@ -29,10 +29,10 @@ api.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   // Handle error response
-  if (error.response.status === 401) {
-    // Handle unauthorized access (e.g., redirect to login page)
-    window.location.href = '/login';
-  }
+  // if (error.response.status === 401) {
+  //   // Handle unauthorized access (e.g., redirect to login page)
+  //   window.location.href = '/login';
+  // }
   
   // eslint-disable-next-line no-undef
   return Promise.reject(error);

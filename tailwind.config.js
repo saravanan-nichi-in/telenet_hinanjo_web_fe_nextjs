@@ -1,9 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // './app/**/*.{js,ts,jsx,tsx,mdx}', // Note the addition of the `app` directory.
+    // './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    // './components/**/*.{js,ts,jsx,tsx,mdx}',
+
+    // Or if using `src` directory:
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -11,8 +14,8 @@ module.exports = {
         '1sm': '700px',
         '2sm': '600px',
       },
-      dropShadow:{
-        'sidebar' : "0 0 4 rgba(0, 0, 0, 1)"
+      dropShadow: {
+        'sidebar': "0 0 4 rgba(0, 0, 0, 1)"
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -29,16 +32,16 @@ module.exports = {
         "app-gray": "#817E78",
         "border-breadcrumb": "#CFCECE",
         "input-gray": "#F2F2F2",
-        "auth-button-text":"#326394",
-        "link":"#91B7DD",
-        iconGray:"#EDF2F5",
-        "customGray":"#C2C2C2",
-        "customGreen":"#1AB517",
-        "redCustom":"red"
+        "auth-button-text": "#326394",
+        "link": "#91B7DD",
+        iconGray: "#EDF2F5",
+        "customGray": "#C2C2C2",
+        "customGreen": "#1AB517",
+        "redCustom": "red"
       },
       backgroundColor: {
         "auth-input": "#0C4278",
-        'input' :'#F2FAFF' 
+        'input': '#F2FAFF'
       },
       borderRadius: {
         sidebar: "66px",

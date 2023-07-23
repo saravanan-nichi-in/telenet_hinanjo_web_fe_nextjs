@@ -1,11 +1,5 @@
 "use client";
 
-import {
-  dashboard,
-  management,
-  user,
-  settings,
-} from "../../../public/menuIcons.js";
 import Link from "next/link";
 import Image from "next/image";
 import TelnetLogo from "../../../public/telnetLogo.svg";
