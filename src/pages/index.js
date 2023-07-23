@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import axios from '@/utils/api';
@@ -25,11 +23,13 @@ function Dashboard({ posts }) {
     };
 
     return (
-        <div className="grid grid-nogutter surface-0 text-800">
-            <div className="col-12 p-6 text-center flex align-items-center ">
-                <section className='col-12 text-center'>
-                    <span className="block text-6xl font-bold mb-1" onClick={() => fetchData()}>Dashboard</span>
-                </section>
+        <div className="grid">
+            <div className="col-12">
+                <div className='card'>
+                    <section className='col-12 text-center'>
+                        <span className="block text-6xl font-bold mb-1" onClick={() => fetchData()}>Dashboard</span>
+                    </section>
+                </div>
             </div>
         </div>
     );

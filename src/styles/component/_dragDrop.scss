@@ -1,33 +1,13 @@
-.simple {
-    background: #f5f5f5;
-    padding: 10px 20px 20px;
-    border-radius: 5px;
-}
-
-.simple h2 {
-    margin: 0;
-    padding: 10px 0;
-}
-
-.simple a,
-.simple a:active,
-.simple a:hover,
-.simple a:visited {
-    color: #22abed;
-}
-
-ol,
+.dargDrop_view ol,
 ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.simple1 ol {
-    background: #fff;
-}
-
-.simple1 ol li {
+.dargDrop_view ol li {
+    background-color: var(--surface-overlay);
+    color: var(--surface-900);
     border-bottom: solid 1px #ddd;
     padding: 8px 16px;
     min-height: 60px;
@@ -35,29 +15,33 @@ ul {
     transition: all ease 0.3s;
     display: flex;
     align-items: center;
+
+    a {
+        position: absolute;
+        right: 20px;
+        cursor: move;
+        user-select: none;
+        padding: 10px;
+    }
+
+    &:hover {
+        background-color: rgba(34, 171, 237, 0.1);
+        color: var(--surface-900);
+
+        a {
+            color: var(--surface-900)
+        }
+    }
 }
 
-.simple1 ol li:hover {
-    background: rgba(34, 171, 237, 0.1);
-}
-
-.simple1 ol li a {
-    position: absolute;
-    right: 20px;
-    cursor: move;
-    user-select: none;
-    padding: 10px;
-}
-
-.simple1 ol li:nth-last-child(1) {
+.dargDrop_view ol li:nth-last-child(1) {
     border-bottom: 0 none;
 }
 
-.simple1 .simple-inner {
+.dargDrop_view .dargDrop_view-inner {
     overflow: hidden;
     border: solid 1px #ddd;
     border-radius: 5px;
-    height: 400px;
     overflow: auto;
     margin: 0 auto;
 }

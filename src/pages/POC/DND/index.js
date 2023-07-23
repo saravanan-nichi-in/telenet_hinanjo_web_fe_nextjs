@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDragListView from 'react-drag-listview';
 
 const DND = () => {
@@ -28,11 +28,11 @@ const DND = () => {
 
     return (
         <div className="grid">
-            <div className="col-12">
+            <div className="col-12 mb-4">
                 <div className="card">
                     <h5 className='text-3xl font-bold'>DRAG AND DROP</h5>
-                    <div className="col-12 simple1">
-                        <div className="simple-inner">
+                    <div className="col-12 dargDrop_view">
+                        <div className="dargDrop_view-inner">
                             <ReactDragListView {...dragProps}>
                                 <ol>
                                     {data.map((item, index) => (

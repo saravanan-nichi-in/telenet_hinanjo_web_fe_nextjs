@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
