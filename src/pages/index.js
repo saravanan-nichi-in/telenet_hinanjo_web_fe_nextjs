@@ -33,13 +33,9 @@ function Dashboard({ posts }) {
             </div>
         </div>
     );
-};
+}
 
-// export const getStaticProps = async () => {
-//     const res = await axios.get('posts')
-//     const posts = await res.data;
-//     return { props: { posts } }
-// }
+
 
 export async function getServerSideProps(context) {
     // Api calls

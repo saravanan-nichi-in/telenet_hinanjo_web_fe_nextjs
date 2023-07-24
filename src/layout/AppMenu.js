@@ -28,6 +28,27 @@ const AppMenu = () => {
             items: [
                 { label: 'Redux', icon: 'pi pi-fw pi-id-card', to: '/POC/Redux' },
             ]
+        }, 
+        {
+            label: 'Pages',
+            items: [
+                {
+                    label: 'Auth',
+                    icon: 'pi pi-fw pi-user',
+                    items: [
+                        {
+                            label: 'Login',
+                            icon: 'pi pi-fw pi-sign-in',
+                            to: '/auth/login'
+                        },
+                        {   
+                            label: 'Register',
+                            icon: 'pi pi-fw pi-sign-in',
+                            to: '/auth/register'
+                        }
+                    ]
+                },
+            ]
         },
     ];
 
