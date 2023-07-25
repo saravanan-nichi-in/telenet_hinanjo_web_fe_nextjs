@@ -5,7 +5,7 @@
   ],
   "ignorePatterns": ["src/__test__"],
   "rules": {
-    "no-console": "error",
+    // "no-console": "error",
     "no-multi-spaces": "error",
     "no-unused-vars": [
       "error",

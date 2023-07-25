@@ -4,10 +4,10 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { increment, decrement } from '@/redux/features/counterSlice';
-import styles from './styles.module.css'
+import Styles from './Styles.module.css'
 
 const Redux = () => {
-    const count = useAppSelector((state) => state.counterReducer.value)
+    const count = useAppSelector((state) => state.counterReducer.value);
     const dispatch = useAppDispatch();
 
     return (
@@ -17,9 +17,9 @@ const Redux = () => {
                     <h5 className='text-3xl font-bold'>REDUX</h5>
                     <hr />
                     <div className="flex flex-wrap gap-2">
-                        <Button label="Increment" className={styles.button} onClick={() => dispatch(increment())} />
+                        <Button label="Increment" className={Styles.button} onClick={() => dispatch(increment())} />
                         <span className='flex align-items-center'>{count && count}</span>
-                        <Button label="Decrement" className={styles.button} onClick={() => dispatch(decrement())} />
+                        <Button label="Decrement" className={Styles.button} onClick={() => dispatch(decrement())} />
                     </div>
                 </div>
             </div>

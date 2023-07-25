@@ -8,6 +8,7 @@ import 'primeicons/primeicons.css';
 // import '@/styles/globals.scss'
 import '@/styles/layout/layout.scss';
 import '@/styles/component/_dragDrop.scss';
+import '@/styles/component/_perspective.scss';
 
 export default function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
