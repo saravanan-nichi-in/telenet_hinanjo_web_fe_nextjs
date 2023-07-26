@@ -8,6 +8,8 @@ import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
+import { appWithTranslation } from 'next-i18next'
+
 
 function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
@@ -37,4 +39,4 @@ function MyApp({ Component, pageProps }) {
     }
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
