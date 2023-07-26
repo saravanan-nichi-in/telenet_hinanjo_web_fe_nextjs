@@ -1,17 +1,14 @@
-// .dialogDemo .webcam {
-//     width: -webkit-fill-available;
-//     width: -moz-available;
-// }
+.dialogDemo .webcam {
+    width: -webkit-fill-available;
+    width: -moz-available;
+}
 
-// .dialogDemo .p-dialog .p-dialog-content {
-//     padding: 4rem !important;
-// }
+.dialogDemo .p-dialog {
+    height: auto !important;
+}
 
-// .dialogDemo .p-dialog {
-//     height: auto !important;
-// }
-
-// .dialogDemo .p-dialog-content {
-//     // overflow: hidden;
-//     flex-grow: inherit;
-// }
+.dialogDemo .p-dialog-content {
+    overflow: hidden;
+    flex-grow: inherit;
+    padding: 0rem !important;
+}

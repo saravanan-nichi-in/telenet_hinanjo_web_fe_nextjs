@@ -15,16 +15,18 @@ const { Dragger } = Upload
 const ImageCropper = () => {
     const webcamRef = useRef(null);
     const cropperRef = useRef();
-    const [capturedImage, setCapturedImage] = useState(null);
     const [displayPosition, setDisplayPosition] = useState(false);
     const [position, setPosition] = useState('center');
     const webcamContainerRef = useRef(null);
     const [cropState, setCropState] = useState();
     const [img, setImg] = useState();
     const [loader, setLoader] = useState(false);
+    const [selectUtil, setSelectUtil] = useState('camera');
+    const [completed, setCompleted] = useState(false);
 
     useEffect(() => {
-        setCapturedImage(null);
+        setSelectUtil('camera');
+        setCompleted(false);
         setImg(undefined);
         setCropState();
         setLoader(false);
@@ -42,24 +44,30 @@ const ImageCropper = () => {
         }
     }
 
-    const captureImage = (name) => {
-        const imageSrc = webcamRef.current.getScreenshot();
-        setCapturedImage(imageSrc);
-    };
+    const onCameraBtnClick = (name) => {
+        setSelectUtil('camera');
+    }
 
-    const onHide = (name) => {
-        dialogFuncMap[`${name}`](false);
-        setImg(undefined);
-        setCropState();
-        setLoader(false);
+    const onCapture = (name) => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        setImg(imageSrc);
+    }
+
+    const onFileSelectionBtnClick = (name) => {
+        setSelectUtil('file');
     }
 
     const submit = (name) => {
-        captureImage(name);
+        console.log("Submitted successfully");
     }
 
-    const reset = () => {
-        setCapturedImage(null);
+    const onHide = (name) => {
+        dialogFuncMap[`${name}`](false);
+        setSelectUtil('camera');
+        setCompleted(false);
+        setImg(undefined);
+        setCropState();
+        setLoader(false);
     }
 
     const renderFooter = (name) => {
@@ -67,21 +75,40 @@ const ImageCropper = () => {
             <div>
                 {!cropState ? (
                     <>
-                        <Button label="Submit" onClick={() => submit()} />
+                        {selectUtil == "file" ? (
+                            <Button label="Camera" onClick={() => onCameraBtnClick()} />
+                        ) : (
+                            <>
+                                <Button label="File" onClick={() => onFileSelectionBtnClick()} />
+                                <Button label="Capture" onClick={() => onCapture()} />
+                            </>
+                        )}
                     </>
                 ) : (
                     <>
-                        <Button label="Done" onClick={() => doSomething()} />
                         <Button label="Back" onClick={() => {
-                            cropperRef.current.backToCrop()
+                            cropperRef.current.backToCrop();
+                            setCompleted(false);
                         }} />
                         <Button
                             label='Reset'
                             onClick={() => {
+                                setSelectUtil('camera');
+                                setCompleted(false);
                                 setImg(undefined);
                                 setCropState();
                             }}
                         />
+                        {!completed ? (
+                            <Button label="Done" onClick={() => doSomething()} />
+                        ) : (
+                            <Button
+                                label='Submit'
+                                onClick={() => {
+                                    submit();
+                                }}
+                            />
+                        )}
                     </>
                 )}
             </div>
@@ -101,7 +128,9 @@ const ImageCropper = () => {
                     thMode: window.cv.ADAPTIVE_THRESH_GAUSSIAN_C
                 }
             })
+
             console.log(res);
+            setCompleted(true);
         } catch (e) {
             console.log('error', e)
         }
@@ -160,15 +189,6 @@ const ImageCropper = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
-                                {/* {!capturedImage && (
-                                <Webcam
-                                    audio={false}
-                                    ref={webcamRef}
-                                    screenshotFormat="image/jpeg"
-                                    screenshotQuality={1}
-                                    className="webcam"
-                                />
-                            )} */}
                                 <Cropper
                                     // openCvPath='./CROP/opencv/opencv.js'
                                     ref={cropperRef}
@@ -180,21 +200,24 @@ const ImageCropper = () => {
                                 />
                             </div>
                         ) : null}
-                        {!img && !loader && (
-                            <div className='py-4'>
+                        <div className='p-4'>
+                            {selectUtil == "camera" ? (
+                                <Webcam
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat="image/jpeg"
+                                    screenshotQuality={1}
+                                    className="webcam"
+                                />
+                            ) : !img && !loader ? (
                                 <Dragger {...draggerProps} >
                                     <p>
                                         <PlusOutlined />
                                     </p>
                                     <p>Upload</p>
                                 </Dragger>
-                            </div>
-                        )}
-                        {/* <input
-                            type='file'
-                            onChange={onImgSelection}
-                            accept='image/*'
-                        /> */}
+                            ) : null}
+                        </div>
                     </Dialog>
                 </div>
             </div>

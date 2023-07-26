@@ -6,6 +6,8 @@ import { useOpenCv } from 'opencv-react'
 
 function Dashboard({ posts }) {
     const router = useRouter();
+    // Load opencv on initial render of application
+    useOpenCv();
 
     useEffect(() => {
         console.log(posts);
@@ -37,13 +39,9 @@ function Dashboard({ posts }) {
     );
 }
 
-
-
 export async function getServerSideProps(context) {
-    // Load opencv 
-    useOpenCv();
-
     // Api calls
+
     // Fetch
     // const res = await fetch('https://jsonplaceholder.typicode.com/posts')
     // const posts = await res.json()

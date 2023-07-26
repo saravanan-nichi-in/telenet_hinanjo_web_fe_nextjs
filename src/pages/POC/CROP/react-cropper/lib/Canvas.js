@@ -39,7 +39,7 @@ const Canvas = ({
   var newCv = window.cv;
   var cvLoaded = true;
 
-  console.log(newCv, cvLoaded);
+  console.log("OpenCV loaded ???", newCv, cvLoaded);
 
   const canvasRef = useRef()
   const previewCanvasRef = useRef()
