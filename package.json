@@ -24,7 +24,10 @@
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "fabric": "^5.3.0",
+    "file-saver": "^2.0.5",
     "formik": "^2.4.2",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.31",
     "next": "13.4.3",
     "next-redux-wrapper": "^8.1.0",
     "opencv-react": "^0.0.6",
@@ -45,6 +48,7 @@
     "react-webcam": "^7.1.1",
     "redux-saga": "^1.2.3",
     "tailwindcss": "3.3.2",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {

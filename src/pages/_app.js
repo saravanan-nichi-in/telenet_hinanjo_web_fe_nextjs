@@ -7,8 +7,7 @@ import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 // import '@/styles/globals.scss'
 import '@/styles/layout/layout.scss';
-import '@/styles/component/_dragDrop.scss';
-import '@/styles/component/_perspective.scss';
+import '@/styles/components/components.scss';
 import { OpenCvProvider } from 'opencv-react'
 
 
@@ -18,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
     } else {
         return (
             <OpenCvProvider
-                // openCvPath={props.openCvPath}
+            // openCvPath={props.openCvPath}
             >
                 <Providers>
                     <LayoutProvider>
