@@ -1,8 +1,9 @@
+'use client'
+
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import axios from '@/utils/api';
 import { useOpenCv } from 'opencv-react'
-
 
 function Dashboard({ posts }) {
     const router = useRouter();
@@ -10,8 +11,7 @@ function Dashboard({ posts }) {
     useOpenCv();
 
     useEffect(() => {
-        console.log(posts);
-        // fetchData();
+        fetchData();
     }, []);
 
     // Function to fetch data from the API
@@ -37,34 +37,6 @@ function Dashboard({ posts }) {
             </div>
         </div>
     );
-}
-
-export async function getServerSideProps(context) {
-    // Api calls
-
-    // Fetch
-    // const res = await fetch('https://jsonplaceholder.typicode.com/posts')
-    // const posts = await res.json()
-
-    // Axios
-    const res = await axios.get('posts')
-    const posts = await res.data;
-
-    // Perform any server-side checks or authentication here.
-    // If the condition for redirection is met, use the redirect method.
-    // For example, let's say you want to redirect to /redirect-page if some condition is true.
-    const shouldRedirect = false; // Replace this with your actual condition.
-    if (shouldRedirect) {
-        return {
-            redirect: {
-                destination: '/auth/login',
-                permanent: false, // Set this to true if the redirection is permanent
-            },
-        };
-    }
-    return {
-        props: { posts }, // If no redirection is needed, return an empty object.
-    };
 }
 
 export default Dashboard;

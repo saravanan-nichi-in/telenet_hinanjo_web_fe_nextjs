@@ -4,11 +4,11 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Webcam from "react-webcam";
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { fabric } from "fabric";
-import './crop.module.css'
 import Cropper from './react-cropper'
 import { Spin, Upload } from 'antd'
-import { CheckOutlined, PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
+
+import './crop.module.css'
 
 const { Dragger } = Upload
 

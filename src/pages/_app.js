@@ -11,7 +11,15 @@ import '@/styles/components/components.scss';
 
 function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
-        return <LayoutProvider>{Component.getLayout(<Component {...pageProps} />)}</LayoutProvider>;
+        return (
+            <OpenCvProvider
+            // openCvPath={props.openCvPath}
+            >
+                <LayoutProvider>
+                    {Component.getLayout(<Component {...pageProps} />)
+                    }</LayoutProvider>
+            </OpenCvProvider>
+        )
     } else {
         return (
             <OpenCvProvider
