@@ -3,8 +3,7 @@ import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Rating } from 'primereact/rating';
-import { Tooltip } from 'primereact/tooltip';
+import { Divider } from 'primereact/divider';
 
 const sampleProducts = [
     { "番号": "1", "避難所": "避難所A", "避難可能人数": "20000人", "現在の避難者数": "4078人", "避難者数": "20%", "避難中の世帯数": "62世帯", "個人情報なしの避難者数": "4000人", "男": "42人" },
@@ -133,23 +132,6 @@ function AdminDashboard() {
         return <Button icon="pi pi-search" />;
     };
 
-
-    const imageBodyTemplate = (rowData) => {
-        return <img src={`/demo/images/product/${rowData.image}`} onError={(e) => (e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png')} alt={rowData.image} className="shadow-2" width={100} />;
-    };
-
-    const priceBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.price);
-    };
-
-    const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    };
-
-    const statusBodyTemplate = (rowData) => {
-        return <span className={`product-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
-    };
-
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
 
@@ -169,8 +151,9 @@ function AdminDashboard() {
                         {/* Header */}
                         <h5 style={{
                             fontSize: "26px",
-                            borderBottom: "1px solid black",
+                            // borderBottom: "1px solid black",
                         }}>避難者状況一覧</h5>
+                        <Divider />
 
                         {/* Table */}
                         <div className="col-12">
@@ -198,18 +181,11 @@ function AdminDashboard() {
                                 paginatorLeft={paginatorLeft}
                                 paginatorRight={paginatorRight}
                             >
-                                {/* <Column field="番号" header="番号" sortable style={{ minWidth: '12rem' }} className='text-center' />
-                                <Column field="避難所" header="避難可能人数" sortable style={{ minWidth: '12rem' }} className='text-center' />
-                                <Column field="現在の避難者数" header="現在の避難者数" sortable style={{ minWidth: '15rem' }} className='text-center' />
-                                <Column field="避難者数" header="避難者数" sortable style={{ minWidth: '12rem' }} />
-                                <Column field="避難中の世帯数" header="避難中の世帯数" sortable style={{ minWidth: '15rem' }} className='text-center' />
-                                <Column field="個人情報なしの避難者数" header="個人情報なしの避難者数" sortable style={{ minWidth: '20rem' }} className='text-center' />
-                                <Column field="男" header="男" sortable style={{ minWidth: '12rem' }} className='text-center' /> */}
                                 {cols.map((col, index) => (
-                                    <Column key={index} field={col.field} header={col.header} sortable style={{ 
+                                    <Column key={index} field={col.field} header={col.header} sortable style={{
                                         minWidth: col.minWidth && col.minWidth,
                                         textAlign: 'center',
-                                    }}/>
+                                    }} />
                                 ))}
                             </DataTable>
                         </div>

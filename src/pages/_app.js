@@ -2,16 +2,14 @@ import React from 'react';
 import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
+import { OpenCvProvider } from 'opencv-react';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
-// import '@/styles/globals.scss'
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
-import { OpenCvProvider } from 'opencv-react'
 
-
-export default function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
         return <LayoutProvider>{Component.getLayout(<Component {...pageProps} />)}</LayoutProvider>;
     } else {
@@ -30,3 +28,5 @@ export default function MyApp({ Component, pageProps }) {
         );
     }
 }
+
+export default MyApp;
