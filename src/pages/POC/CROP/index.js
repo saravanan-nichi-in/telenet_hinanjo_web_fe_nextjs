@@ -44,7 +44,6 @@ const ImageCropper = () => {
 
     const captureImage = (name) => {
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc);
         setCapturedImage(imageSrc);
     };
 
@@ -93,13 +92,13 @@ const ImageCropper = () => {
     const onChange = useCallback((s) => setCropState(s), [])
 
     const doSomething = async () => {
-        console.log(cropState);
         try {
             const res = await cropperRef.current.done({
                 preview: true,
                 filterCvParams: {
                     grayScale: false,
-                    th: false
+                    th: false,
+                    thMode: window.cv.ADAPTIVE_THRESH_GAUSSIAN_C
                 }
             })
             console.log(res);
@@ -109,16 +108,17 @@ const ImageCropper = () => {
     }
 
     const onImgSelection = async (e) => {
-        console.log(e.file.originFileObj);
+        console.log(e);
+        // if (e.target.files && e.target.files.length > 0) {
+        //     // it can also be a http or base64 string for example
+        //     setImg(e.target.files[0])
+        // }
         setLoader(true);
         if (e.file) {
             // it can also be a http or base64 string for example
             setTimeout(() => {
-                setImg(undefined);
-                setCropState();
                 setLoader(false);
                 setImg(e.file.originFileObj);
-                console.log(cropperRef);
             }, 2000);
         }
     }
@@ -150,7 +150,7 @@ const ImageCropper = () => {
                                 }}>
                                 <Spin />
                             </div>
-                        ) : (
+                        ) : !loader && img ? (
                             <div ref={webcamContainerRef}
                                 className='py-4'
                                 style={{
@@ -170,7 +170,7 @@ const ImageCropper = () => {
                                 />
                             )} */}
                                 <Cropper
-                                    // openCvPath='./opencv/opencv.js'
+                                    // openCvPath='./CROP/opencv/opencv.js'
                                     ref={cropperRef}
                                     image={img}
                                     onChange={onChange}
@@ -179,7 +179,7 @@ const ImageCropper = () => {
                                     maxHeight={"100%"}
                                 />
                             </div>
-                        )}
+                        ) : null}
                         {!img && !loader && (
                             <div className='py-4'>
                                 <Dragger {...draggerProps} >
@@ -190,6 +190,11 @@ const ImageCropper = () => {
                                 </Dragger>
                             </div>
                         )}
+                        {/* <input
+                            type='file'
+                            onChange={onImgSelection}
+                            accept='image/*'
+                        /> */}
                     </Dialog>
                 </div>
             </div>

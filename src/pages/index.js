@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import axios from '@/utils/api';
+import { useOpenCv } from 'opencv-react'
+
 
 function Dashboard({ posts }) {
     const router = useRouter();
@@ -38,8 +40,10 @@ function Dashboard({ posts }) {
 
 
 export async function getServerSideProps(context) {
-    // Api calls
+    // Load opencv 
+    useOpenCv();
 
+    // Api calls
     // Fetch
     // const res = await fetch('https://jsonplaceholder.typicode.com/posts')
     // const posts = await res.json()

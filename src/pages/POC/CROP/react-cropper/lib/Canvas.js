@@ -35,7 +35,12 @@ const Canvas = ({
   maxWidth,
   maxHeight
 }) => {
-  const { loaded: cvLoaded, cv } = useOpenCv()
+
+  var newCv = window.cv;
+  var cvLoaded = true;
+
+  console.log(newCv, cvLoaded);
+
   const canvasRef = useRef()
   const previewCanvasRef = useRef()
   const magnifierCanvasRef = useRef()
@@ -43,8 +48,6 @@ const Canvas = ({
   const [cropPoints, setCropPoints] = useState()
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState('crop')
-
-  console.log(cropperRef, image);
 
   useImperativeHandle(cropperRef, () => ({
     backToCrop: () => {
@@ -54,13 +57,13 @@ const Canvas = ({
       return new Promise((resolve) => {
         setLoading(true)
         transform(
-          cv,
+          newCv,
           canvasRef.current,
           cropPoints,
           imageResizeRatio,
           setPreviewPaneDimensions
         )
-        applyFilter(cv, canvasRef.current, opts.filterCvParams)
+        applyFilter(newCv, canvasRef.current, opts.filterCvParams)
         if (opts.preview) {
           setMode('preview')
         }
@@ -116,41 +119,41 @@ const Canvas = ({
   }
 
   const showPreview = (image) => {
-    const src = image || cv.imread(canvasRef.current)
-    const dst = new cv.Mat()
-    const dsize = new cv.Size(0, 0)
-    cv.resize(
+    const src = image || newCv.imread(canvasRef.current)
+    const dst = new newCv.Mat()
+    const dsize = new newCv.Size(0, 0)
+    newCv.resize(
       src,
       dst,
       dsize,
       imageResizeRatio,
       imageResizeRatio,
-      cv.INTER_AREA
+      newCv.INTER_AREA
     )
-    cv.imshow(previewCanvasRef.current, dst)
+    newCv.imshow(previewCanvasRef.current, dst)
     src.delete()
     dst.delete()
   }
 
   const detectContours = () => {
-    const dst = cv.imread(canvasRef.current)
-    const ksize = new cv.Size(5, 5)
+    const dst = newCv.imread(canvasRef.current)
+    const ksize = new newCv.Size(5, 5)
     // convert the image to grayscale, blur it, and find edges in the image
-    cv.cvtColor(dst, dst, cv.COLOR_RGBA2GRAY, 0)
-    cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT)
-    cv.Canny(dst, dst, 75, 200)
+    newCv.cvtColor(dst, dst, newCv.COLOR_RGBA2GRAY, 0)
+    newCv.GaussianBlur(dst, dst, ksize, 0, 0, newCv.BORDER_DEFAULT)
+    newCv.Canny(dst, dst, 75, 200)
     // find contours
-    cv.threshold(dst, dst, 120, 200, cv.THRESH_BINARY)
-    const contours = new cv.MatVector()
-    const hierarchy = new cv.Mat()
-    cv.findContours(
+    newCv.threshold(dst, dst, 120, 200, newCv.THRESH_BINARY)
+    const contours = new newCv.MatVector()
+    const hierarchy = new newCv.Mat()
+    newCv.findContours(
       dst,
       contours,
       hierarchy,
-      cv.RETR_CCOMP,
-      cv.CHAIN_APPROX_SIMPLE
+      newCv.RETR_CCOMP,
+      newCv.CHAIN_APPROX_SIMPLE
     )
-    const rect = cv.boundingRect(dst)
+    const rect = newCv.boundingRect(dst)
     dst.delete()
     hierarchy.delete()
     contours.delete()

@@ -9,19 +9,25 @@ import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/component/_dragDrop.scss';
 import '@/styles/component/_perspective.scss';
+import { OpenCvProvider } from 'opencv-react'
+
 
 export default function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
         return <LayoutProvider>{Component.getLayout(<Component {...pageProps} />)}</LayoutProvider>;
     } else {
         return (
-            <Providers>
-                <LayoutProvider>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </LayoutProvider>
-            </Providers>
+            <OpenCvProvider
+                // openCvPath={props.openCvPath}
+            >
+                <Providers>
+                    <LayoutProvider>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </LayoutProvider>
+                </Providers>
+            </OpenCvProvider>
         );
     }
 }
