@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const sampleProducts = [
+    { "番号": "", "避難所": "合計", "避難可能人数": "66920人", "現在の避難者数": "2124人	", "避難者数": "15.77%", "避難中の世帯数": "443世帯", "個人情報なしの避難者数": "1555人", "男": "153人" },
     { "番号": "1", "避難所": "避難所A", "避難可能人数": "20000人", "現在の避難者数": "4078人", "避難者数": "20%", "避難中の世帯数": "62世帯", "個人情報なしの避難者数": "4000人", "男": "42人" },
     {
         "番号": "2", "避難所": "Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町",
@@ -66,6 +67,14 @@ function AdminDashboard() {
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     };
+
+    const rowClass = (data) => {
+        return {
+            'last-row': data.避難所 === '合計',
+            'font-bold': data.避難所 === '合計',
+        };
+    };
+
 
     const rowExpansionTemplate = (data) => {
         return (
@@ -172,6 +181,7 @@ function AdminDashboard() {
                                 rowExpansionTemplate={rowExpansionTemplate}
                                 dataKey="id"
                                 paginator
+                                rowClassName={rowClass}
                                 className="p-datatable-gridlines"
                                 showGridlines
                                 rows={5}
