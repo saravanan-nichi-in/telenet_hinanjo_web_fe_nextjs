@@ -1,5 +1,3 @@
-const { i18n } = require('./next-i18next.config')
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     compiler: { styledComponents: true, },
@@ -10,7 +8,6 @@ const nextConfig = {
         customKey: process.env.NODE_ENV === 'development' ? 'my-value-dev' : 'my-value-prod',
     },
     swcMinify: true,
-    i18n,
 }
 
 module.exports = nextConfig

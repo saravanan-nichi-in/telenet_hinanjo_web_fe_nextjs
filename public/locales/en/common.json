@@ -1,5 +1,6 @@
 {
     "admin": {
+        "header": {},
         "sidebar": {
             "vault_info": "Evacuation Information",
             "evacuation_status_list": "Evacuation Status List",
@@ -19,6 +20,12 @@
             "questionnaire": "Questionnaire",
             "individual_questionnaire": "Individual Questionnaire",
             "setting_systems": "Setting Systems"
-        }
-    }
+        },
+        "pages": {
+            "dashboard": {}
+        },
+        "footer": {}
+    },
+    "staff": {},
+    "user": {}
 }

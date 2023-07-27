@@ -8,25 +8,22 @@ import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
-import { appWithTranslation } from 'next-i18next'
-
 
 function MyApp({ Component, pageProps }) {
     if (Component.getLayout) {
         return (
-            <OpenCvProvider
-            // openCvPath={props.openCvPath}
-            >
-                <LayoutProvider>
-                    {Component.getLayout(<Component {...pageProps} />)
-                    }</LayoutProvider>
+            <OpenCvProvider>
+                <Providers>
+                    <LayoutProvider>
+                        {Component.getLayout(<Component {...pageProps} />)
+                        }
+                    </LayoutProvider>
+                </Providers>
             </OpenCvProvider>
         )
     } else {
         return (
-            <OpenCvProvider
-            // openCvPath={props.openCvPath}
-            >
+            <OpenCvProvider>
                 <Providers>
                     <LayoutProvider>
                         <Layout>
@@ -39,4 +36,4 @@ function MyApp({ Component, pageProps }) {
     }
 }
 
-export default appWithTranslation(MyApp);
+export default MyApp;

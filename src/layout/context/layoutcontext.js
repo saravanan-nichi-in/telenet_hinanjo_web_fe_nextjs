@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import jpJson from '../../../public/locales/jp/common.json'
+import enJson from '../../../public/locales/en/common.json'
 
 export const LayoutContext = React.createContext();
 
@@ -21,6 +23,8 @@ export const LayoutProvider = (props) => {
         menuHoverActive: false
     });
 
+    const [localeJson, setLocaleJson] = useState(jpJson);
+
     const onMenuToggle = () => {
         if (isOverlay()) {
             setLayoutState((prevLayoutState) => ({ ...prevLayoutState, overlayMenuActive: !prevLayoutState.overlayMenuActive }));
@@ -37,6 +41,14 @@ export const LayoutProvider = (props) => {
         setLayoutState((prevLayoutState) => ({ ...prevLayoutState, profileSidebarVisible: !prevLayoutState.profileSidebarVisible }));
     };
 
+    const onChangeLocale = (props) => {
+        if (props === "en") {
+            setLocaleJson(enJson);
+        } else {
+            setLocaleJson(jpJson);
+        }
+    }
+
     const isOverlay = () => {
         return layoutConfig.menuMode === 'overlay';
     };
@@ -51,7 +63,9 @@ export const LayoutProvider = (props) => {
         layoutState,
         setLayoutState,
         onMenuToggle,
-        showProfileSidebar
+        showProfileSidebar,
+        onChangeLocale,
+        localeJson
     };
 
     return <LayoutContext.Provider value={value}>{props.children}</LayoutContext.Provider>;

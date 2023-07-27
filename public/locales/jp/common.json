@@ -19,6 +19,12 @@
             "questionnaire": "個別項目追加表示(世带全体)",
             "individual_questionnaire": "個別項目追加表示(個人ごと)",
             "setting_systems": "環境設定"
-        }
-    }
+        },
+        "pages": {
+            "dashboard": {}
+        },
+        "footer": {}
+    },
+    "staff": {},
+    "user": {}
 }

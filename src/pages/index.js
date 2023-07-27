@@ -1,16 +1,10 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router'
 import axios from '@/utils/api';
 import { useOpenCv } from 'opencv-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 function Dashboard({ posts }) {
     // Load opencv on initial render of application
     useOpenCv();
-
-    const { locale, locales, push } = useRouter();
-    const { t: translate } = useTranslation('common')
 
     useEffect(() => {
         fetchData();
@@ -41,15 +35,6 @@ function Dashboard({ posts }) {
             </div>
         </div>
     );
-}
-
-export async function getStaticProps({ locale }) {
-    return {
-        props: {
-            ...(await serverSideTranslations(locale, ['common'])),
-            // Will be passed to the page component as props
-        },
-    }
 }
 
 export default Dashboard;

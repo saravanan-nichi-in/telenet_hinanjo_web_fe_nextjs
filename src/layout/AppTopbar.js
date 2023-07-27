@@ -5,17 +5,14 @@ import { LayoutContext } from './context/layoutcontext';
 import Image from 'next/image'
 import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
-import { useTranslation } from 'next-i18next'
 
 const AppTopbar = forwardRef((props, ref) => {
-    const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar } = useContext(LayoutContext);
+    const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
 
     const router = useRouter();
-    const { locale, locales, push } = useRouter();
-    const { t: translate } = useTranslation('common')
 
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
@@ -26,12 +23,10 @@ const AppTopbar = forwardRef((props, ref) => {
     const selectedCountryTemplate = (option, props) => {
         if (option) {
             return (
-                <Link href={router && router.pathname} locale={locale === 'en' ? 'jp' : 'en'}>
-                    <div className="flex align-items-center px-2">
-                        <img alt={option.name} src={option.image} className={`mr-3`} style={{ width: '18px' }} />
-                        <div>{option.name}</div>
-                    </div>
-                </Link>
+                <div className="flex align-items-center px-2" onClick={() => onChangeLocale(option.name === "JP" ? "jp" : "en")}>
+                    <img alt={option.name} src={option.image} className={`mr-3`} style={{ width: '18px' }} />
+                    <div>{option.name}</div>
+                </div>
             );
         }
 
