@@ -4,8 +4,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 const sampleProducts = [
     { "番号": "", "避難所": "合計", "避難可能人数": "66920人", "現在の避難者数": "2124人	", "避難者数": "15.77%", "避難中の世帯数": "443世帯", "個人情報なしの避難者数": "1555人", "男": "153人" },
@@ -21,8 +20,7 @@ const sampleProducts = [
 ]
 
 function AdminDashboard() {
-    const { locale, locales, push } = useRouter();
-    const { t: translate } = useTranslation('common')
+
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
     const [expandedRows, setExpandedRows] = useState(null);
@@ -40,7 +38,7 @@ function AdminDashboard() {
 
     const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
 
-    console.log(locale);
+
 
     useEffect(() => {
         setProducts(sampleProducts);
@@ -167,7 +165,7 @@ function AdminDashboard() {
                             fontSize: "26px",
                             // borderBottom: "1px solid black",
                         }}>
-                            {translate('admin.sidebar.evacuation_status_list')}
+                            避難者状況一覧
                         </h5>
                         <Divider />
 
@@ -213,13 +211,6 @@ function AdminDashboard() {
     );
 }
 
-export async function getStaticProps({ locale }) {
-    return {
-        props: {
-            ...(await serverSideTranslations(locale, ['common'])),
-            // Will be passed to the page component as props
-        },
-    }
-}
+
 
 export default AdminDashboard;
