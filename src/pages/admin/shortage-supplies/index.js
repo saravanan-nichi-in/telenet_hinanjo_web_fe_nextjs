@@ -3,12 +3,7 @@ import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Rating } from 'primereact/rating';
-import { Tooltip } from 'primereact/tooltip';
 import { Divider } from 'primereact/divider';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// import ShortageSuppliesModal from '@/sakai_components/ShortageSupplies_modal';
 import { Dialog } from 'primereact/dialog';
 
 const sampleProducts = [
@@ -20,10 +15,7 @@ const sampleProducts = [
     { "避難所": "不足合計", "Test1(2)": "3981574", "Test2(2)": "33", "test3(3)": "32", "test6(5)": "5" },
 ]
 
-
 function ShoratgeSupplies() {
-    const { locale, locales, push } = useRouter();
-    const { t: translate } = useTranslation('common')
     const header = (
         <div>
             <h5 style={{
@@ -64,7 +56,7 @@ function ShoratgeSupplies() {
             'clickable-row': true,
         };
     };
-    
+
 
 
 
@@ -110,7 +102,7 @@ function ShoratgeSupplies() {
                                 rowsPerPageOptions={[5, 10, 25, 50]}
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                             >
-                                
+
                                 {cols.map((col, index) => (
                                     <Column key={index} field={col.field} header={col.header} sortable style={{
                                         minWidth: col.minWidth && col.minWidth,
@@ -147,16 +139,6 @@ function ShoratgeSupplies() {
             </div>
         </div>
     );
-}
-
-
-export async function getStaticProps({ locale }) {
-    return {
-        props: {
-            ...(await serverSideTranslations(locale, ['common'])),
-            // Will be passed to the page component as props
-        },
-    }
 }
 
 export default ShoratgeSupplies;
