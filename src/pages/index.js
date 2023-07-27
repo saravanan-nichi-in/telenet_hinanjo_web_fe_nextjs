@@ -1,20 +1,16 @@
-'use client'
-
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import axios from '@/utils/api';
-import { useOpenCv } from 'opencv-react'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Link from 'next/link'
+import { useOpenCv } from 'opencv-react';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 function Dashboard({ posts }) {
-    const router = useRouter();
     // Load opencv on initial render of application
     useOpenCv();
 
     const { locale, locales, push } = useRouter();
-    const { t: translate } = useTranslation('about')
+    const { t: translate } = useTranslation('common')
 
     useEffect(() => {
         fetchData();

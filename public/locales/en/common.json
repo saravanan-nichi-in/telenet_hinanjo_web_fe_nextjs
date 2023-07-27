@@ -1,8 +1,24 @@
 {
-    "change-locale": "Change locale",
-    "error-with-status": "A {{statusCode}} error occurred on server",
-    "error-without-status": "An error occurred on the server",
-    "h1": "A simple example",
-    "to-second-page": "To second page",
-    "to-lazy-reload-page": "To lazy reload page"
+    "admin": {
+        "sidebar": {
+            "vault_info": "Evacuation Information",
+            "evacuation_status_list": "Evacuation Status List",
+            "list_of_evacuees": "List of Evacuees",
+            "shortage_supplies_list": "Shortage Supplies List",
+            "stockpile_summary": "Stockpile Summary",
+            "statistics": "Statistics",
+            "operation_management": "Operation Management",
+            "qr_code_create": "QR Code Create",
+            "staff_management": "Staff Management",
+            "admin_management": "Admin Management",
+            "setting": "Setting",
+            "places": "Places",
+            "material": "Material List",
+            "stockpile_master_management": "Stockpile Master Management",
+            "special_care_list": "Special Care List",
+            "questionnaire": "Questionnaire",
+            "individual_questionnaire": "Individual Questionnaire",
+            "setting_systems": "Setting Systems"
+        }
+    }
 }

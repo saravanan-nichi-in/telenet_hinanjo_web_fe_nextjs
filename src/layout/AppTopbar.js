@@ -72,9 +72,6 @@ const AppTopbar = forwardRef((props, ref) => {
                 <i className="pi pi-bars" />
             </button>
 
-            <div>{translate('h1')}</div>
-
-
             <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
                 <i className="pi pi-ellipsis-v" />
             </button>

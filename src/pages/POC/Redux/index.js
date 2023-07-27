@@ -14,12 +14,13 @@ const Redux = () => {
     const { locale, locales, push } = useRouter();
     const { t: translate } = useTranslation('common')
 
+    console.log(locale);
+
     return (
         <div className="grid">
             <div className="col-12">
                 <div className="card">
                     <h5 className='text-3xl font-bold'>REDUX</h5>
-                    <div>{translate('h1')}</div>
                     <hr />
                     <div className="flex flex-wrap gap-2">
                         <Button label="Increment" className={Styles.button} onClick={() => dispatch(increment())} />

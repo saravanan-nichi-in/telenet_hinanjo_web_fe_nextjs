@@ -1,8 +1,24 @@
 {
-    "change-locale": "Wechseln Locale",
-    "error-with-status": "Auf dem Server ist ein Fehler ({{statusCode}}) aufgetreten",
-    "error-without-status": "Auf dem Server ist ein Fehler aufgetreten",
-    "h1": "Ein einfaches Beispiel",
-    "to-second-page": "Zur zweiten Seite",
-    "to-lazy-reload-page": "Zur Lazy-Reload Seite"
+    "admin": {
+        "sidebar": {
+            "vault_info": "避難所情報",
+            "evacuation_status_list": "避難者状況一覧",
+            "list_of_evacuees": "避難者一覧",
+            "shortage_supplies_list": "不足物資一覧",
+            "stockpile_summary": "備蓄品集計",
+            "statistics": "不足物資一覧",
+            "operation_management": "運用管理",
+            "qr_code_create": "QRコード作成",
+            "staff_management": "スタッフ管理",
+            "admin_management": "管理者管理",
+            "setting": "設定",
+            "places": "避難所マスタ管理",
+            "material": "物資マスタ管理",
+            "stockpile_master_management": "S備蓄品マスタ管理",
+            "special_care_list": "要配慮者事項",
+            "questionnaire": "個別項目追加表示(世带全体)",
+            "individual_questionnaire": "個別項目追加表示(個人ごと)",
+            "setting_systems": "環境設定"
+        }
+    }
 }
