@@ -31,12 +31,12 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'stockpile_summary'),
                     icon: 'pi pi-copy',
-                    to: '/auth/register'
+                    to: '/admin/stockpile/summary'
                 },
                 {
                     label: translate(localeJson, 'statistics'),
                     icon: 'pi pi-users',
-                    to: '/pages/e'
+                    to: '/admin/statistics'
                 }
             ]
         },

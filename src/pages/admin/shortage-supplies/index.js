@@ -1,10 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { Dialog } from 'primereact/dialog';
+import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const sampleProducts = [
     { "避難所": "日本の避難所", "Test1(2)": "505", "Test2(2)": "3", "test3(3)": "2", "test6(5)": "1" },
@@ -17,15 +19,20 @@ const sampleProducts = [
 
 function ShoratgeSupplies() {
     const header = (
-        <div>
-            <h5 style={{
-                fontSize: "22px",
-                // borderBottom: "1px solid black",
-            }}>日本の避難所</h5>
+        <>
+            <div>
+                <h5 style={{
+                    fontSize: "22px",
+                    // borderBottom: "1px solid black",
+                }}>日本の避難所</h5>
 
-            <Divider />
-        </div>
+
+            </div>
+            <hr />
+        </>
     )
+
+    const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
 
     const onRowClick = (event) => {
@@ -58,6 +65,9 @@ function ShoratgeSupplies() {
     };
 
 
+    const exportCSV = (selectionOnly) => {
+        dt.current.exportCSV({ selectionOnly });
+    };
 
 
     return (
@@ -69,14 +79,12 @@ function ShoratgeSupplies() {
                         <h5 style={{
                             fontSize: "26px",
                             // borderBottom: "1px solid black",
-                        }}>避難者状況一覧</h5>
+                        }}>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <Divider />
                         {/* Table */}
                         <div className="col-12">
                             <div class="flex justify-content-end ">
-                                <a href="https://rakuraku.nichi.in/admin/shortage-supplies/csv/export">
-                                    <Button className="btnprimary font-18" label="エクスポート" rounded />
-                                </a>
+                                <Button className="btnprimary font-18" label={translate(localeJson, 'export')} rounded onClick={() => exportCSV(false)} />
                             </div>
                             {/* Table */}
                             &nbsp;
@@ -127,12 +135,12 @@ function ShoratgeSupplies() {
                 </div>
             </div>
             <div>
-                <Dialog header={header} visible={showModal} onHide={() => setShowModal(false)} style={{ width: '600px' }}>
-                    <label className='w-full font-18'>その他不足物資</label><br />
-                    <textarea className="w-full font-18" rows="5" readonly="">food</textarea>
+                <Dialog header={header} visible={showModal} onHide={() => setShowModal(false)} style={{ width: '600px', padding: "10px" }}>
+                    <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
+                    <textarea className="w-full font-18 textarea-bgcolor" rows="5" readonly="">food</textarea>
                     <br /><br />
-                    <label className='w-full font-18'>その他不足物資</label><br />
-                    <textarea className="w-full font-18" rows="5" readonly="">Chain</textarea>
+                    <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
+                    <textarea className="w-full font-18 textarea-bgcolor " rows="5" readonly="">Chain</textarea>
 
                 </Dialog>
 

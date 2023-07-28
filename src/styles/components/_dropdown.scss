@@ -1,0 +1,19 @@
+.p-inputtext {
+    font-size: 22px;
+}
+
+.p-dropdown-item {
+    font-size: 16px;
+
+}
+
+.p-dropdown:not(.p-disabled).p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #ffffff;
+    border-color: #ced4da;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    color: #64b0f2;
+}

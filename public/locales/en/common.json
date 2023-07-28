@@ -22,7 +22,13 @@
             "setting_systems": "Setting Systems"
         },
         "pages": {
-            "dashboard": {}
+            "dashboard": {},
+            "shortage-supplies": {
+                "Other_shortage_supplies": "Other shortage supplies"
+            }
+        },
+        "buttons": {
+            "export": "export"
         },
         "footer": {}
     },

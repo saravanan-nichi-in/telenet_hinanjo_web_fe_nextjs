@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
+import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { LayoutContext } from '@/layout/context/layoutcontext';
 
 
 const sampleProducts = [
@@ -25,6 +27,7 @@ function AdminDashboard() {
     const [products, setProducts] = useState([]);
     const [expandedRows, setExpandedRows] = useState(null);
     const [allExpanded, setAllExpanded] = useState(false);
+    const { layoutConfig, localeJson } = useContext(LayoutContext);
     const cols = [
         { field: '番号', header: '番号', minWidth: '8rem' },
         { field: '避難所', header: '避難所', minWidth: '15rem' },
@@ -69,7 +72,7 @@ function AdminDashboard() {
     const rowClass = (data) => {
         return {
             'last-row': data.避難所 === '合計',
-            'font-bold': data.避難所 === '合計',
+            'font-bold': data.避難所 === '合計'
         };
     };
 
@@ -165,7 +168,7 @@ function AdminDashboard() {
                             fontSize: "26px",
                             // borderBottom: "1px solid black",
                         }}>
-                            避難者状況一覧
+                            {translate(localeJson, 'evacuation_status_list')}
                         </h5>
                         <Divider />
 

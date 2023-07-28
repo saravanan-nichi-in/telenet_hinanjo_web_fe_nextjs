@@ -6,7 +6,7 @@
             "list_of_evacuees": "避難者一覧",
             "shortage_supplies_list": "不足物資一覧",
             "stockpile_summary": "備蓄品集計",
-            "statistics": "不足物資一覧",
+            "statistics": "統計",
             "operation_management": "運用管理",
             "qr_code_create": "QRコード作成",
             "staff_management": "スタッフ管理",
@@ -21,7 +21,13 @@
             "setting_systems": "環境設定"
         },
         "pages": {
-            "dashboard": {}
+            "dashboard": {},
+            "shortage-supplies": {
+                "Other_shortage_supplies": "その他不足物資"
+            }
+        },
+        "buttons": {
+            "export": "エクスポート"
         },
         "footer": {}
     },
