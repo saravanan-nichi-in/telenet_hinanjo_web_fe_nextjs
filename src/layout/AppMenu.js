@@ -36,7 +36,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'statistics'),
                     icon: 'pi pi-users',
-                    to: '/pages/empty'
+                    to: '/pages/e'
                 }
             ]
         },
@@ -46,7 +46,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'qr_code_create'),
                     icon: 'pi pi-camera',
-                    to: '/auth/login'
+                    to: '/pages/empty'
                 },
                 {
                     label: translate(localeJson, 'staff_management'),
@@ -66,7 +66,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'places'),
                     icon: 'pi pi-sign-out',
-                    to: '/auth/login'
+                    to: '/auth/register'
                 },
                 {
                     label: translate(localeJson, 'material'),
