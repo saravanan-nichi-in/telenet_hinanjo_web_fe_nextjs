@@ -9,16 +9,20 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   // Retrieve the authentication token from wherever it's stored (e.g., localStorage, cookies, etc.)
   // const authToken = localStorage.getItem('authToken');
-  
+  const authToken = true;
+
+  console.log("authToken", authToken);
+
   // Add the authentication token to the request headers
-  // if (authToken) {
-  //   config.headers['Authorization'] = `Bearer ${authToken}`;
-  // }
-  
+  if (authToken) {
+    // config.headers['Authorization'] = `Bearer ${authToken}`;
+    // window.location.href = 'auth/login';
+  }
+
   return config;
 }, (error) => {
   // Handle request error
-  
+
   // eslint-disable-next-line no-undef
   return Promise.reject(error);
 });
@@ -33,7 +37,7 @@ api.interceptors.response.use((response) => {
   //   // Handle unauthorized access (e.g., redirect to login page)
   //   window.location.href = '/login';
   // }
-  
+
   // eslint-disable-next-line no-undef
   return Promise.reject(error);
 });

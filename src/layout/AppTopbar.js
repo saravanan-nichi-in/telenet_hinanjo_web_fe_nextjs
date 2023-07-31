@@ -5,6 +5,8 @@ import { LayoutContext } from './context/layoutcontext';
 import Image from 'next/image'
 import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
+import { AuthenticationAuthorizationService } from '@/services';
+import { LogoutOutlined} from '@ant-design/icons';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
@@ -13,6 +15,9 @@ const AppTopbar = forwardRef((props, ref) => {
     const topbarmenubuttonRef = useRef(null);
 
     const router = useRouter();
+
+    /* Services */
+    const { logout } = AuthenticationAuthorizationService;
 
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
@@ -35,13 +40,25 @@ const AppTopbar = forwardRef((props, ref) => {
 
     const items = [
         {
+            label: (
+                <div onClick={() => logout()}>
+                    Logout
+                </div>
+            ),
+            icon: <LogoutOutlined /> ,
+            key: '0',
+        },
+        {
+            type: 'divider',
+        },
+        {
             label: selectedCountryTemplate({
                 name: 'EN',
                 code: 'US',
                 placeholder: '',
                 image: "/layout/images/us.png"
             }),
-            key: '0',
+            key: '1',
         },
         {
             type: 'divider',
@@ -53,7 +70,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 placeholder: '',
                 image: "/layout/images/jp.png"
             }),
-            key: '1',
+            key: '2',
         },
     ];
 
