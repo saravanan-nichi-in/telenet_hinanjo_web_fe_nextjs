@@ -1,5 +1,6 @@
 {
     "admin": {
+        "header": {},
         "sidebar": {
             "vault_info": "避難所情報",
             "evacuation_status_list": "避難者状況一覧",
@@ -21,16 +22,32 @@
             "setting_systems": "環境設定"
         },
         "pages": {
-            "dashboard": {},
-            "shortage-supplies": {
-                "Other_shortage_supplies": "その他不足物資"
-            }
+            "Other_shortage_supplies": "その他不足物資"
         },
         "buttons": {
             "export": "エクスポート"
         },
         "footer": {}
     },
-    "staff": {},
+    "staff": {
+        "header": {},
+        "sidebar": {},
+        "pages": {
+            "name": "Staff",
+            "staff_login_screen": "スタッフ用ログイン画面",
+            "mail_address": "メールアドレス",
+            "email_required": "メールは必須です。",
+            "email_valid": "正しいメールアドレスをご入力ください。",
+            "password": "パスワード",
+            "password_required": "パスワードは必須です。",
+            "password_atLeast_8_characters" : "パスワードは8文字以上でなければなりません",
+            "admin_login_screen": "ADMIN用ログイン画面"
+        },
+        "buttons": {
+            "login": "ログイン",
+            "forgot_password_caption": "パスワードがわからない場合"
+        },
+        "footer": {}
+    },
     "user": {}
 }

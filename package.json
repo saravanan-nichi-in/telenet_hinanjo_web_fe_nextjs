@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@uidotdev/usehooks": "^2.0.1",
     "antd": "^5.7.3",
@@ -26,6 +27,7 @@
     "eslint-config-next": "13.4.3",
     "file-saver": "^2.0.5",
     "formik": "^2.4.2",
+    "google-map-react": "^2.2.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.31",
     "lodash": "^4.17.21",

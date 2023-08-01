@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import jpJson from '../../../public/locales/jp/common.json'
-import enJson from '../../../public/locales/en/common.json'
+import jpJson from '../../../public/locales/jp/lang.json'
+import enJson from '../../../public/locales/en/lang.json'
 
 export const LayoutContext = React.createContext();
 

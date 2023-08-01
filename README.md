@@ -1,4 +1,4 @@
-P-Talk : project that is developed using React.js, that uses Next.js (https://nextjs.org/).
+Telnet : project that is developed using React.js, that uses Next.js (https://nextjs.org/).
 
 # Web Application for Admin
 

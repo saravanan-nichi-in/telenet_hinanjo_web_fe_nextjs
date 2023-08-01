@@ -9,8 +9,8 @@ import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
 import { useRouter } from 'next/router';
-import axios from '@/utils/api';
 import { AuthenticationAuthorizationService } from '@/services';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -18,16 +18,11 @@ function MyApp({ Component, pageProps }) {
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        // on initial load - run auth check 
         authCheck(router.asPath);
-
-        // on route change start - hide page content by setting authorized to false  
         const hideContent = () => setAuthorized(false);
         router.events.on('routeChangeStart', hideContent);
-
         // on route change complete - run auth check 
         router.events.on('routeChangeComplete', authCheck)
-
         // unsubscribe from events in useEffect return function
         return () => {
             router.events.off('routeChangeStart', hideContent);
@@ -37,62 +32,52 @@ function MyApp({ Component, pageProps }) {
 
     function authCheck(url) {
         // redirect to login page if accessing a private page and not logged in 
-        setUser(AuthenticationAuthorizationService.userValue);
-        const publicPaths = ['/auth/login', '/auth/register'];
+        const publicPaths = ['/admin/login', '/staff/login'];
         const path = url.split('?')[0];
-        if (!AuthenticationAuthorizationService.userValue && !publicPaths.includes(path)) {
+        if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !publicPaths.includes(path)) {
             setAuthorized(false);
             router.push({
-                pathname: '/auth/login',
+                pathname: '/admin/login',
+            });
+        } else if (path.startsWith('/staff') && !AuthenticationAuthorizationService.staffValue && !publicPaths.includes(path)) {
+            setAuthorized(false);
+            router.push({
+                pathname: '/staff/login',
             });
         } else {
             setAuthorized(true);
         }
     }
 
-    // Function to fetch data from the API
-    const fetchData = async () => {
-        try {
-            const res = await axios.get('posts')
-            const posts = await res.data;
-            console.log(posts);
-            return posts;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    if (Component.getLayout) {
-        return (
-            <OpenCvProvider>
-                <Providers>
-                    <LayoutProvider>
-                        {authorized && (
+    return (
+        <OpenCvProvider>
+            <Providers>
+                <LayoutProvider>
+                    {authorized ? (
+                        Component.getLayout ? (
                             <>
                                 {Component.getLayout(<Component {...pageProps} />)}
                             </>
-                        )}
-                    </LayoutProvider>
-                </Providers>
-            </OpenCvProvider>
-        )
-    } else {
-        return (
-            authorized && (
-                <OpenCvProvider>
-                    <Providers>
-                        <LayoutProvider>
-                            {authorized && (
-                                <Layout>
-                                    <Component {...pageProps} />
-                                </Layout>
-                            )}
-                        </LayoutProvider>
-                    </Providers>
-                </OpenCvProvider>
-            )
-        );
-    }
+                        ) : (
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        )
+                    ) : (
+                        <div style={{
+                            height: '100vh',
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
+                        </div>
+                    )}
+                </LayoutProvider>
+            </Providers>
+        </OpenCvProvider>
+    )
 }
 
 export default MyApp;
