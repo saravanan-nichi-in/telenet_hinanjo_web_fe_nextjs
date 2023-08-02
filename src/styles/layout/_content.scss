@@ -1,3 +1,4 @@
+/* Layout */
 .layout-main-container {
     display: flex;
     flex-direction: column;
@@ -9,6 +10,15 @@
 
 .layout-main {
     flex: 1 1 auto;
+}
+
+.auth_surface_ground_border {
+    border: $borderWidth-5px solid $auth;
+    border-radius: $borderRadius-025rem;
+}
+
+.auth_surface_ground {
+    background-color: $auth;
 }
 
 /* Font */
@@ -34,8 +44,14 @@
     border-radius: 28px;
 }
 
+/* Custom */
 .custom_inputText {
     .p-inputtext {
-        font-size: 15px;
+        font-size: $fontSize-15px;
     }
+}
+
+.custom_radiusBtn {
+    width: $width-15rem;
+    border-radius: $borderRadius-28px;
 }

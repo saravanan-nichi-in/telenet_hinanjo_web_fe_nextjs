@@ -40,12 +40,20 @@
             "email_valid": "正しいメールアドレスをご入力ください。",
             "password": "パスワード",
             "password_required": "パスワードは必須です。",
-            "password_atLeast_8_characters" : "パスワードは8文字以上でなければなりません",
-            "admin_login_screen": "ADMIN用ログイン画面"
+            "password_atLeast_8_characters": "パスワードは8文字以上でなければなりません",
+            "admin_login_screen": "ADMIN用ログイン画面",
+            "password_reset": "パスワードを忘れた場合",
+            "new_password": "新しいパスワード",
+            "new_password_confirm": "新しいパスワード（確認)",
+            "confirm_password_notMatch": "新しいパスワード（確認)が新しいパスワードと一致しません。",
+            "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
+            "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
         },
         "buttons": {
             "login": "ログイン",
-            "forgot_password_caption": "パスワードがわからない場合"
+            "forgot_password_caption": "パスワードがわからない場合",
+            "send": "送信",
+            "save": "保存"
         },
         "footer": {}
     },

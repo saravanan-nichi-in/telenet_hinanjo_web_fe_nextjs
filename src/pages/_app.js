@@ -3,14 +3,15 @@ import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
 import { OpenCvProvider } from 'opencv-react';
+import { useRouter } from 'next/router';
+import { AuthenticationAuthorizationService } from '@/services';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
-import { useRouter } from 'next/router';
-import { AuthenticationAuthorizationService } from '@/services';
-import { ProgressSpinner } from 'primereact/progressspinner';
+import '@/styles/pages/pages.scss';
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -32,7 +33,7 @@ function MyApp({ Component, pageProps }) {
 
     function authCheck(url) {
         // redirect to login page if accessing a private page and not logged in 
-        const publicPaths = ['/admin/login', '/staff/login'];
+        const publicPaths = ['/admin/login', '/staff/login', '/admin/forgot-password', '/staff/forgot-password', '/admin/reset-password', '/staff/reset-password'];
         const path = url.split('?')[0];
         if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !publicPaths.includes(path)) {
             setAuthorized(false);

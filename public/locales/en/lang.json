@@ -39,12 +39,20 @@
             "email_valid": "The email must be a valid email address.",
             "password": "Password",
             "password_required": "The password must be required.",
-            "password_atLeast_8_characters" : "Password must be at least 8 characters.",
-            "admin_login_screen": "Admin login screen"
+            "password_atLeast_8_characters": "Password must be at least 8 characters.",
+            "admin_login_screen": "Admin login screen",
+            "password_reset": "Password reset",
+            "new_password": "New password",
+            "new_password_confirm": "New password (confirmation)",
+            "confirm_password_notMatch": "The new password (confirmation) does not match the new password.",
+            "forgot_password_failure": "An error has occurred Please try again.",
+            "forgot_password_success": "A password reset email has been sent to the email address you entered."
         },
         "buttons": {
             "login": "Login",
-            "forgot_password_caption": "If you don't know your password"
+            "forgot_password_caption": "If you don't know your password",
+            "send": "Send",
+            "save": "Save"
         },
         "footer": {}
     },

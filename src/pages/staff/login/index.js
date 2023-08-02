@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
@@ -11,10 +10,12 @@ import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled, LockFilled } from '@ant-design/icons';
 import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { useRouter } from 'next/router';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const containerClassName = classNames('auth-surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+    const router = useRouter();
+    const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
@@ -22,7 +23,6 @@ const LoginPage = () => {
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
-        checked: Yup.boolean(),
     });
 
     /* Services */
@@ -32,7 +32,7 @@ const LoginPage = () => {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "", password: "", checked: false }}
+                initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
                     login('staff', values);
                 }}
@@ -48,10 +48,7 @@ const LoginPage = () => {
                     <div className={containerClassName}>
                         <div className="flex flex-column align-items-center justify-content-center">
                             <div className="card w-full surface-card py-2 px-2" >
-                                <div className='py-4 px-4' style={{
-                                    border: '5px solid rgb(100, 176, 242)',
-                                    borderRadius: '0.25rem'
-                                }}>
+                                <div className='auth_view py-4 px-4 auth_surface_ground_border'>
                                     <form onSubmit={handleSubmit}>
                                         <div class="flex justify-content-center w-100 mt-3">
                                             <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
@@ -70,7 +67,6 @@ const LoginPage = () => {
                                                         name='email'
                                                         placeholder={translate(localeJson, 'mail_address')}
                                                         className={`w-full ${errors.email && touched.email && 'p-invalid'}`}
-                                                        inputClassName='md:w-20rem'
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.email}
@@ -91,9 +87,7 @@ const LoginPage = () => {
                                                     <Password
                                                         name='password'
                                                         placeholder={translate(localeJson, 'password')}
-                                                        // toggleMask
                                                         className={`w-full ${errors.password && touched.password && 'p-invalid'}`}
-                                                        inputClassName='md:w-20rem'
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.password}
@@ -107,9 +101,9 @@ const LoginPage = () => {
                                                 </small>
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
-                                                <Button type='submit' label={translate(localeJson, 'login')} className="w-15rem radius-28" severity="primary"></Button>
+                                                <Button type='submit' label={translate(localeJson, 'login')} className="custom_radiusBtn" severity="primary"></Button>
                                             </div>
-                                            <div className='flex justify-content-center'>
+                                            <div className='flex justify-content-center' onClick={() => router.push('/staff/forgot-password')}>
                                                 <Button label={translate(localeJson, 'forgot_password_caption')} link></Button>
                                             </div>
                                         </div>
