@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import getConfig from 'next/config';
 import { profiles } from '@/utils/constant';
+import { Toast } from 'primereact/toast';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
@@ -20,18 +21,16 @@ export const AuthenticationAuthorizationService = {
     delete: _delete
 };
 
-function _login(key, values) {
+function _login(key, values, callBackFun) {
     const { email, password } = values && values;
     const isAuthorized = profiles.filter((profile) => profile.email === email && profile.password === password);
     if (isAuthorized.length > 0) {
         if (key === 'admin') {
             admin.next(values);
-            localStorage.setItem('admin', JSON.stringify(values));
-            window.location.href = "/admin/dashboard";
+            callBackFun(values);
         } else {
             staff.next(values);
-            localStorage.setItem('staff', JSON.stringify(values));
-            window.location.href = "/staff/dashboard";
+            callBackFun(values);
         }
     }
 }

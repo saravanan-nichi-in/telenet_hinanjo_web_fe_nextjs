@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
@@ -16,6 +16,10 @@ const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+
+    /* Services */
+    const { login } = AuthenticationAuthorizationService;
+
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
@@ -25,8 +29,12 @@ const LoginPage = () => {
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
 
-    /* Services */
-    const { login } = AuthenticationAuthorizationService;
+    const onLoginSuccess = (values) => {
+        if (AuthenticationAuthorizationService.adminValue) {
+            localStorage.setItem('admin', JSON.stringify(values));
+            router.push("/admin/dashboard");
+        }
+    };
 
     return (
         <>
@@ -34,7 +42,7 @@ const LoginPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
-                    login('admin', values);
+                    login('admin', values, onLoginSuccess);
                 }}
             >
                 {({

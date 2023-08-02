@@ -11,7 +11,8 @@ $borderWidth-5px: 5px;
 /* transition duration */
 $transitionDuration: .2s;
 /* colors */
-$auth: rgb(100, 176, 242);
+// $auth: rgb(100, 176, 242);
+$auth: var(--primary-color);
 /* font-size / PX */
 $fontSize-15px: 15px;
 /* width / REM */
