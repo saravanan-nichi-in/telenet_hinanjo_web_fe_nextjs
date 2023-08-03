@@ -1,16 +1,16 @@
 .layout-sidebar {
     position: fixed;
-    width: 320px;
-    height: calc(100vh - 6.8rem);
+    width: 300px;
+    height: calc(100vh - 9rem);
     z-index: 999;
     overflow-y: auto;
     user-select: none;
-    top: 5.8rem;
-    left: 0.8rem;
-    border-radius: $borderRadius-12px;
+    top: 7rem;
+    left: 2rem;
     transition: transform $transitionDuration, left $transitionDuration;
     background-color: var(--surface-overlay);
-    padding: 1rem 1rem;
+    border-radius: $borderRadius-12px;;
+    padding: 0.5rem 1.5rem;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
 }
 
@@ -22,38 +22,16 @@
 
     .layout-root-menuitem {
         >.layout-menuitem-root-text {
+            font-size: .857rem;
             text-transform: uppercase;
-            font-weight: 500;
-            margin-bottom: .3rem;
-            padding: .75rem 0.5rem;
-            display: flex;
-            align-items: center;
-            color: var(--text-color);
-            transition: background-color $transitionDuration, box-shadow $transitionDuration;
-
-            .layout-menuitem-icon {
-                margin-right: .5rem;
-            }
-
-            &.active-route {
-                font-weight: 700;
-                background-color: #f5f8fb;
-                color: #64b0f2;
-                border-radius: 0px;
-            }
-        }
-
-        li {
-            margin-left: 1rem;
+            font-weight: 700;
+            color: var(--surface-900);
+            margin: .75rem 0;
         }
 
         >a {
             display: none;
         }
-    }
-
-    li {
-        margin-bottom: .3rem;
     }
 
     li.active-menuitem {
@@ -80,11 +58,14 @@
             outline: 0 none;
             color: var(--text-color);
             cursor: pointer;
-            padding: .75rem 0.5rem;
-            border-radius: 0px;
+            padding: .75rem 1rem;
+            border-radius: $borderRadius-12px;;
             transition: background-color $transitionDuration, box-shadow $transitionDuration;
 
             .layout-menuitem-icon {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
                 margin-right: .5rem;
             }
 
@@ -102,21 +83,22 @@
 
             &.active-route {
                 font-weight: 700;
-                background-color: #f5f8fb;
-                color: #64b0f2;
-                border-radius: 0px;
+                color: var(--primary-color);
             }
 
             &:hover {
                 background-color: var(--surface-hover);
-                border-radius: 0px;
+            }
+
+            &:focus {
+                @include focused-inset();
             }
         }
 
         ul {
             overflow: hidden;
             max-height: 0;
-            border-radius: $borderRadius-12px;
+            border-radius: $borderRadius-12px;;
 
             li {
                 a {

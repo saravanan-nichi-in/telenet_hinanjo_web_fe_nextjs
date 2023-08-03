@@ -1,15 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
-import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { useRouter } from 'next/router';
+import { getValueByKeyRecursively as translate } from '@/utils/functions';
+import _ from 'lodash';
+import { MdDashboard, MdManageAccounts } from "react-icons/md";
+import { HiDocumentText } from "react-icons/hi";
+import { RiUserSharedFill } from "react-icons/ri";
 
 const AppMenu = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
+    const [model, setModel] = useState([]);
 
-    const model = [
+    const adminModel = [
         {
             label: translate(localeJson, 'vault_info'), icon: 'pi pi-fw pi-home',
             items: [
@@ -98,10 +103,80 @@ const AppMenu = () => {
         },
     ];
 
+    const staffModel = [
+        {
+            label: translate(localeJson, 'vault_info'), icon: 'pi pi-fw pi-home',
+            items: [
+                {
+                    label: "ダッシュボード",
+                    icon: <MdDashboard size={15} />,
+                    to: '/staff/dashboard'
+                },
+            ]
+        },
+        {
+            label: '避難者情報', icon: 'pi pi-fw pi-home',
+            items: [
+                {
+                    label: "避難者一覧",
+                    icon: <HiDocumentText size={15} />,
+                    to: '/staff/family'
+                },
+                {
+                    label: "仮登録者一覧",
+                    icon: <HiDocumentText size={15} />,
+                    to: '/staff/temp/family'
+                },
+            ]
+        },
+        {
+            label: '備蓄品管理', icon: 'pi pi-fw pi-home',
+            items: [
+                {
+                    label: "備蓄品一覧",
+                    icon: <HiDocumentText size={15} />,
+                    to: '/staff/stockpile/dashboard'
+                },
+                {
+                    label: "備蓄品履歴",
+                    icon: <HiDocumentText size={15} />,
+                    to: '/staff/stockpile/history'
+                },
+            ]
+        },
+        {
+            label: '設定', icon: 'pi pi-fw pi-home',
+            items: [
+                {
+                    label: "必要物資登録",
+                    icon: <MdManageAccounts size={15} />,
+                    to: '/staff/supplies'
+                },
+                {
+                    label: "入所者数登録",
+                    icon: <RiUserSharedFill size={15} />,
+                    to: '/staff/register-checkin'
+                },
+            ]
+        },
+    ];
+    
+
+    useEffect(() => {
+        /* Services */
+        const publicPaths = ['/admin/login', '/staff/login', '/admin/forgot-password', '/staff/forgot-password', '/admin/reset-password', '/staff/reset-password'];
+        const path = router.asPath.split('?')[0];
+        if (path.startsWith('/admin') && !publicPaths.includes(path)) {
+            setModel(adminModel);
+        } else if (path.startsWith('/staff') && !publicPaths.includes(path)) {
+            setModel(staffModel);
+        }
+    }, [localeJson])
+
     return (
         <MenuProvider>
-            <ul className="layout-menu font-18">
-                {model.map((item, i) => {
+            <ul className="layout-menu">
+                {!_.isEmpty(model) && model.map((item, i) => {
                     return !item.seperator ? <AppMenuitem item={item} root={true} index={i} key={i} /> : <li className="menu-separator"></li>;
                 })}
             </ul>
