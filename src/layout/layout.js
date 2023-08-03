@@ -9,6 +9,7 @@ import AppTopbar from './AppTopbar';
 import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
 import AppConfig from './AppConfig';
+import { Scrollbar } from 'react-scrollbars-custom';
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
@@ -121,8 +122,10 @@ const Layout = (props) => {
 
             <div className={containerClass}>
                 <AppTopbar ref={topbarRef} />
-                <div ref={sidebarRef} className="layout-sidebar">
-                    <AppSidebar />
+                <div className="layout-sidebar">
+                    <div ref={sidebarRef} className='layout_sidebar_scroll'>
+                        <AppSidebar />
+                    </div>
                 </div>
                 <div className="layout-main-container">
                     <div className="layout-main">{props.children}</div>

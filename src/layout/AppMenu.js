@@ -13,6 +13,7 @@ import { ImUser, ImUsers } from "react-icons/im";
 import { IoMdToday } from "react-icons/io";
 import { AiOutlineAreaChart, AiFillSetting } from "react-icons/ai";
 import { MdPlace } from "react-icons/md";
+import { BiSolidPurchaseTagAlt } from "react-icons/bi";
 
 const AppMenu = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -80,12 +81,12 @@ const AppMenu = () => {
                 },
                 {
                     label: translate(localeJson, 'material'),
-                    icon: <FaBox size={15} />,
+                    icon: <BiSolidPurchaseTagAlt size={15} />,
                     to: '/auth/register'
                 },
                 {
                     label: translate(localeJson, 'stockpile_master_management'),
-                    icon: <FaBox size={15} />,
+                    icon: <BiSolidPurchaseTagAlt size={15} />,
                     to: '/auth/register'
                 }, {
                     label: translate(localeJson, 'special_care_list'),
