@@ -164,10 +164,7 @@ function AdminDashboard() {
                 <div className='card'>
                     <section className='col-12'>
                         {/* Header */}
-                        <h5 style={{
-                            fontSize: "26px",
-                            // borderBottom: "1px solid black",
-                        }}>
+                        <h5 className='page_header'>
                             {translate(localeJson, 'evacuation_status_list')}
                         </h5>
                         <Divider />

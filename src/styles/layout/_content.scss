@@ -22,23 +22,63 @@
 }
 
 /* Font */
+.font-90 {
+    font-size: $fontSize-90px;
+
+}
+.font-70 {
+    font-size: $fontSize-70px;
+
+}
+.font-48 {
+    font-size: $fontSize-48px;
+
+}
+.font-40 {
+    font-size: $fontSize-40px;
+
+}
+.font-32 {
+    font-size: $fontSize-32px;
+
+}
+.font-30 {
+    font-size: $fontSize-30px;
+
+}
+.font-28 {
+    font-size: $fontSize-28px;
+
+}
+.font-27 {
+    font-size: $fontSize-27px;
+
+}
+.font-26 {
+    font-size: $fontSize-26px;
+
+}
+
 .font-25 {
-    font-size: 25px;
+    font-size: $fontSize-25px;
 
 }
 
 .font-18 {
-    font-size: 18px;
+    font-size: $fontSize-18px;
 }
 
 .font-16 {
-    font-size: 16px;
+    font-size: $fontSize-16px;
 }
 
 .font-15 {
-    font-size: 15px;
+    font-size: $fontSize-15px;
 }
+.font-14 {
+    font-size: $fontSize-14px;
 
+}
 /* Radius */
 .radius-28 {
     border-radius: 28px;
@@ -54,4 +94,9 @@
 .custom_radiusBtn {
     width: $width-15rem;
     border-radius: $borderRadius-28px;
+}
+
+.page_header{
+    font-size: $fontSize-26px;
+    font-weight: 500;
 }

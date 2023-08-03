@@ -76,10 +76,7 @@ function ShoratgeSupplies() {
                 <div className='card'>
                     <section className='col-12'>
                         {/* Header */}
-                        <h5 style={{
-                            fontSize: "26px",
-                            // borderBottom: "1px solid black",
-                        }}>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <Divider />
                         {/* Table */}
                         <div className="col-12">

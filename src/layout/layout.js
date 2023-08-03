@@ -9,7 +9,7 @@ import AppTopbar from './AppTopbar';
 import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
 import AppConfig from './AppConfig';
-import { Scrollbar } from 'react-scrollbars-custom';
+
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
