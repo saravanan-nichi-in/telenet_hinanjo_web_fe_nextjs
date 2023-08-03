@@ -5,9 +5,14 @@ import { MenuProvider } from './context/menucontext';
 import { useRouter } from 'next/router';
 import { getValueByKeyRecursively as translate } from '@/utils/functions';
 import _ from 'lodash';
-import { MdDashboard, MdManageAccounts } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";
-import { RiUserSharedFill } from "react-icons/ri";
+import { RiUserSharedFill, RiAdminFill } from "react-icons/ri";
+import { FaQrcode, FaBox, FaUserPlus, FaUsers } from "react-icons/fa";
+import { ImUser, ImUsers } from "react-icons/im";
+import { IoMdToday } from "react-icons/io";
+import { AiOutlineAreaChart, AiFillSetting } from "react-icons/ai";
+import { MdPlace } from "react-icons/md";
 
 const AppMenu = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -16,87 +21,87 @@ const AppMenu = () => {
 
     const adminModel = [
         {
-            label: translate(localeJson, 'vault_info'), icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'vault_info'), icon: <MdDashboard size={15} />,
             items: [
                 {
                     label: translate(localeJson, 'evacuation_status_list'),
-                    icon: 'pi pi-fw pi-sign-in',
+                    icon: <ImUsers size={15} />,
                     to: '/admin/dashboard'
                 },
                 {
                     label: translate(localeJson, 'list_of_evacuees'),
-                    icon: 'pi pi-bookmark',
+                    icon: <HiDocumentText size={15} />,
                     to: '/admin/evacuation'
                 },
                 {
                     label: translate(localeJson, 'shortage_supplies_list'),
-                    icon: 'pi pi-globe',
+                    icon: <IoMdToday size={15} />,
                     to: '/admin/shortage-supplies'
                 },
                 {
                     label: translate(localeJson, 'stockpile_summary'),
-                    icon: 'pi pi-copy',
+                    icon: <IoMdToday size={15} />,
                     to: '/admin/stockpile/summary'
                 },
                 {
                     label: translate(localeJson, 'statistics'),
-                    icon: 'pi pi-users',
+                    icon: <AiOutlineAreaChart size={15} />,
                     to: '/admin/statistics'
                 }
             ]
         },
         {
-            label: translate(localeJson, 'operation_management'), icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'operation_management'), icon: <MdDashboard size={15} />,
             items: [
                 {
                     label: translate(localeJson, 'qr_code_create'),
-                    icon: 'pi pi-camera',
+                    icon: <FaQrcode size={15} />,
                     to: '/pages/empty'
                 },
                 {
                     label: translate(localeJson, 'staff_management'),
-                    icon: 'pi pi-inbox',
+                    icon: <ImUser size={15} />,
                     to: '/auth/register'
                 },
                 {
                     label: translate(localeJson, 'admin_management'),
-                    icon: 'pi pi-save',
+                    icon: <RiAdminFill size={15} />,
                     to: '/auth/register'
                 }
             ]
         },
         {
-            label: translate(localeJson, 'setting'), icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'setting'), icon: <MdDashboard size={15} />,
             items: [
                 {
                     label: translate(localeJson, 'places'),
-                    icon: 'pi pi-sign-out',
+                    icon: <MdPlace size={15} />,
                     to: '/auth/register'
                 },
                 {
                     label: translate(localeJson, 'material'),
-                    icon: 'pi pi-image',
+                    icon: <FaBox size={15} />,
                     to: '/auth/register'
                 },
                 {
                     label: translate(localeJson, 'stockpile_master_management'),
-                    icon: 'pi pi-images',
+                    icon: <FaBox size={15} />,
                     to: '/auth/register'
                 }, {
                     label: translate(localeJson, 'special_care_list'),
-                    icon: 'pi pi-sitemap',
+                    icon: <ImUser size={15} />,
                     to: '/auth/register'
                 }, {
                     label: translate(localeJson, 'questionnaire'),
-                    icon: 'pi pi-eject',
+                    icon: <FaUserPlus size={15} />,
                     to: '/auth/register'
                 }, {
                     label: translate(localeJson, 'individual_questionnaire'),
-                    icon: 'pi pi-tags',
+                    icon: <FaUsers size={15} />,
                     to: '/auth/register'
                 }, {
                     label: translate(localeJson, 'setting_systems'),
-                    icon: 'pi pi-star',
+                    icon: <AiFillSetting size={15} />,
                     to: '/auth/register'
                 },
             ]
@@ -105,62 +110,61 @@ const AppMenu = () => {
 
     const staffModel = [
         {
-            label: translate(localeJson, 'vault_info'), icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'dashboard'), icon: <MdDashboard size={15} />,
             items: [
                 {
-                    label: "ダッシュボード",
+                    label: translate(localeJson, 'dashboard'),
                     icon: <MdDashboard size={15} />,
                     to: '/staff/dashboard'
                 },
             ]
         },
         {
-            label: '避難者情報', icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'evacuee_information'), icon: <MdDashboard size={15} />,
             items: [
                 {
-                    label: "避難者一覧",
+                    label: translate(localeJson, 'list_of_evacuees'),
                     icon: <HiDocumentText size={15} />,
                     to: '/staff/family'
                 },
                 {
-                    label: "仮登録者一覧",
+                    label: translate(localeJson, 'temporary_registrants'),
                     icon: <HiDocumentText size={15} />,
                     to: '/staff/temp/family'
                 },
             ]
         },
         {
-            label: '備蓄品管理', icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'stockpile_management'), icon: <MdDashboard size={15} />,
             items: [
                 {
-                    label: "備蓄品一覧",
+                    label: translate(localeJson, 'stockpile_list'),
                     icon: <HiDocumentText size={15} />,
                     to: '/staff/stockpile/dashboard'
                 },
                 {
-                    label: "備蓄品履歴",
+                    label: translate(localeJson, 'stockpile_history'),
                     icon: <HiDocumentText size={15} />,
                     to: '/staff/stockpile/history'
                 },
             ]
         },
         {
-            label: '設定', icon: 'pi pi-fw pi-home',
+            label: translate(localeJson, 'setting'), icon: <MdDashboard size={15} />,
             items: [
                 {
-                    label: "必要物資登録",
-                    icon: <MdManageAccounts size={15} />,
+                    label: translate(localeJson, 'necessary_supplies_registration'),
+                    icon: <ImUser size={15} />,
                     to: '/staff/supplies'
                 },
                 {
-                    label: "入所者数登録",
+                    label: translate(localeJson, 'manual_registration_of_evacuees'),
                     icon: <RiUserSharedFill size={15} />,
                     to: '/staff/register-checkin'
                 },
             ]
         },
     ];
-    
 
     useEffect(() => {
         /* Services */

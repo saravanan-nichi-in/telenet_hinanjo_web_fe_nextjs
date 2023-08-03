@@ -31,7 +31,17 @@
     },
     "staff": {
         "header": {},
-        "sidebar": {},
+        "sidebar": {
+            "dashboard": "ダッシュボード",
+            "evacuee_information": "避難者情報",
+            "list_of_evacuees": "避難者一覧",
+            "temporary_registrants": "仮登録者一覧",
+            "stockpile_management": "備蓄品管理",
+            "stockpile_list": "備蓄品一覧",
+            "stockpile_history": "備蓄品履歴",
+            "necessary_supplies_registration": "必要物資登録",
+            "manual_registration_of_evacuees": "入所者数登録"
+        },
         "pages": {
             "name": "Staff",
             "staff_login_screen": "スタッフ用ログイン画面",

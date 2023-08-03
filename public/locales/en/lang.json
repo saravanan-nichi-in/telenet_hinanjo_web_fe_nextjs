@@ -31,7 +31,17 @@
     },
     "staff": {
         "header": {},
-        "sidebar": {},
+        "sidebar": {
+            "dashboard": "Dashboard",
+            "evacuee_information": "Evacuee Information",
+            "list_of_evacuees": "The list of evacuees",
+            "temporary_registrants": "Temporary registrants",
+            "stockpile_management": "Stockpile Management",
+            "stockpile_list": "Stockpile List",
+            "stockpile_history": "Stockpile History",
+            "necessary_supplies_registration": "Necessary supplies registration",
+            "manual_registration_of_evacuees": "Manual registration of evacuees"
+        },
         "pages": {
             "staff_login_screen": "Staff login screen",
             "mail_address": "Mail address",
