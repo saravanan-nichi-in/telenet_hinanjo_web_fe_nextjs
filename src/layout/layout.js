@@ -10,7 +10,6 @@ import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
 import AppConfig from './AppConfig';
 
-
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef(null);

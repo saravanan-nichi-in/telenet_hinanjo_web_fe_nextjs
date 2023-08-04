@@ -12,6 +12,8 @@ import 'primeicons/primeicons.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
 import '@/styles/pages/pages.scss';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from '@/redux/store'; // Your Redux store
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -44,6 +46,7 @@ function MyApp({ Component, pageProps }) {
             setAuthorized(false);
             router.push({
                 pathname: '/staff/login',
+                query: { hinan: 1 }
             });
         } else {
             setAuthorized(true);
@@ -52,30 +55,32 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <OpenCvProvider>
-            <Providers>
-                <LayoutProvider>
-                    {authorized ? (
-                        Component.getLayout ? (
-                            <>
-                                {Component.getLayout(<Component {...pageProps} />)}
-                            </>
+            <Providers store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <LayoutProvider>
+                        {authorized ? (
+                            Component.getLayout ? (
+                                <>
+                                    {Component.getLayout(<Component {...pageProps} />)}
+                                </>
+                            ) : (
+                                <Layout>
+                                    <Component {...pageProps} />
+                                </Layout>
+                            )
                         ) : (
-                            <Layout>
-                                <Component {...pageProps} />
-                            </Layout>
-                        )
-                    ) : (
-                        <div style={{
-                            height: '100vh',
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
-                        </div>
-                    )}
-                </LayoutProvider>
+                            <div style={{
+                                height: '100vh',
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
+                            </div>
+                        )}
+                    </LayoutProvider>
+                </PersistGate>
             </Providers>
         </OpenCvProvider>
     )

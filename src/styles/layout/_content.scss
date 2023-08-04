@@ -91,6 +91,12 @@
     }
 }
 
+.dropdown_text{
+    .p-inputtext{
+        font-size: $fontSize-22px ;
+    }
+}
+
 .custom_radiusBtn {
     width: $width-15rem;
     border-radius: $borderRadius-28px;

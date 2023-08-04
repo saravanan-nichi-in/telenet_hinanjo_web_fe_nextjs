@@ -11,10 +11,13 @@ import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled, LockFilled } from '@ant-design/icons';
 import { getValueByKeyRecursively as translate } from '@/utils/functions'
 import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/redux/hooks';
+import { setStaffValue } from '@/redux/auth';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
     /* Services */
@@ -31,7 +34,10 @@ const LoginPage = () => {
 
     const onLoginSuccess = (values) => {
         if (AuthenticationAuthorizationService.staffValue) {
-            localStorage.setItem('staff', JSON.stringify(values));
+            localStorage.setItem('staff', JSON.stringify(values.data));
+            dispatch(setStaffValue({
+                staff: values.data
+            }));
             router.push("/staff/dashboard");
         }
     };
@@ -42,7 +48,9 @@ const LoginPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
-                    login('staff', values, onLoginSuccess);
+                    const updatedValues = values;
+                    updatedValues.place_id = router.query ? router.query.hinan : "";
+                    login('staff', updatedValues, onLoginSuccess);
                 }}
             >
                 {({

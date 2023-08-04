@@ -93,7 +93,7 @@ const BarChartDemo = () => {
             <div className="card">
                 <h5 className='page_header'> {translate(localeJson, 'statistics')}</h5>
                 <Divider />
-                <Dropdown style={{ fontSize: "21px" }} className='' value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
+                <Dropdown className={"dropdown_text"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
 
                 <Chart type="bar" data={basicData} options={horizontalOptions} />
             </div>

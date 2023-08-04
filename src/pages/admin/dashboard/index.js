@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { getValueByKeyRecursively as translate } from '@/utils/functions'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-
+import axios from '@/utils/api';
 
 const sampleProducts = [
     { "番号": "", "避難所": "合計", "避難可能人数": "66920人", "現在の避難者数": "2124人	", "避難者数": "15.77%", "避難中の世帯数": "443世帯", "個人情報なしの避難者数": "1555人", "男": "153人" },
@@ -41,10 +41,15 @@ function AdminDashboard() {
 
     const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
 
-
-
     useEffect(() => {
         setProducts(sampleProducts);
+        axios.get('/admin/place')
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
     }, [])
 
     const toggleAll = () => {
