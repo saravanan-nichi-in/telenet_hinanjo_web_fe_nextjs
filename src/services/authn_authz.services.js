@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import getConfig from 'next/config';
 import { profiles } from '@/utils/constant';
 import { Toast } from 'primereact/toast';
+import axios from '@/utils/api';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
@@ -22,16 +23,32 @@ export const AuthenticationAuthorizationService = {
 };
 
 function _login(key, values, callBackFun) {
-    const { email, password } = values && values;
-    const isAuthorized = profiles.filter((profile) => profile.email === email && profile.password === password);
-    if (isAuthorized.length > 0) {
-        if (key === 'admin') {
-            admin.next(values);
-            callBackFun(values);
-        } else {
-            staff.next(values);
-            callBackFun(values);
-        }
+    if (key === 'admin') {
+        axios.post('/auth/admin/login', values)
+            .then((response) => {
+                console.log(response);
+                if (response && response.data) {
+                    admin.next(response.data);
+                    callBackFun(response.data);
+                }
+            })
+            .catch((error) => {
+                // Handle errors here
+                console.error('Error fetching data:', error);
+            });
+    } else {
+        axios.post('/auth/staff/login', values)
+            .then((response) => {
+                console.log(response);
+                if (response && response.data) {
+                    staff.next(response.data);
+                    callBackFun(response.data);    
+                }
+            })
+            .catch((error) => {
+                // Handle errors here
+                console.error('Error fetching data:', error);
+            });
     }
 }
 
@@ -44,7 +61,7 @@ function _logout() {
     } else {
         localStorage.removeItem('staff');
         admin.next(null);
-        window.location.href = "/staff/login";
+        window.location.href = "/staff/login?hinan=1";
     }
 }
 

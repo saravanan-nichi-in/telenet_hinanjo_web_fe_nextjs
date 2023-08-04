@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jpJson from '../../../public/locales/jp/lang.json'
 import enJson from '../../../public/locales/en/lang.json'
 
@@ -25,6 +25,11 @@ export const LayoutProvider = (props) => {
 
     const [localeJson, setLocaleJson] = useState(jpJson);
 
+
+    useEffect(() => {
+        localStorage.setItem('locale', 'ja');
+    }, [])
+
     const onMenuToggle = () => {
         if (isOverlay()) {
             setLayoutState((prevLayoutState) => ({ ...prevLayoutState, overlayMenuActive: !prevLayoutState.overlayMenuActive }));
@@ -44,8 +49,10 @@ export const LayoutProvider = (props) => {
     const onChangeLocale = (props) => {
         if (props === "en") {
             setLocaleJson(enJson);
+            localStorage.setItem('locale', 'en');
         } else {
             setLocaleJson(jpJson);
+            localStorage.setItem('locale', 'ja');
         }
     }
 
