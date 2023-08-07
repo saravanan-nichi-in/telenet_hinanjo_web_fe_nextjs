@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
 import { LockFilled } from '@ant-design/icons';
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { Password } from 'primereact/password';
 
 const ResetPasswordPage = () => {

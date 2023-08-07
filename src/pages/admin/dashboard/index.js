@@ -4,7 +4,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import axios from '@/utils/api';
 

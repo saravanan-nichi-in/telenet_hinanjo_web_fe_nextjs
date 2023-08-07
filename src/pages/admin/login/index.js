@@ -9,7 +9,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled, LockFilled } from '@ant-design/icons';
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';

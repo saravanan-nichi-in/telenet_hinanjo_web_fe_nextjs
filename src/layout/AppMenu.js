@@ -3,7 +3,7 @@ import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
 import { useRouter } from 'next/router';
-import { getValueByKeyRecursively as translate } from '@/utils/functions';
+import { getValueByKeyRecursively as translate } from '@/helper';
 import _ from 'lodash';
 import { MdDashboard } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";

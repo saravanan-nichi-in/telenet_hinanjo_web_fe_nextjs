@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Chart } from 'primereact/chart';
 import { Dropdown } from 'primereact/dropdown';
 import { Divider } from 'primereact/divider';
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 

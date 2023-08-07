@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled } from '@ant-design/icons';
-import { getValueByKeyRecursively as translate } from '@/utils/functions'
+import { getValueByKeyRecursively as translate } from '@/helper'
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
