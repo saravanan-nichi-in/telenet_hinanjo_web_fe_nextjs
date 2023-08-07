@@ -1,5 +1,4 @@
 import axios from 'axios';
-import _ from 'lodash';
 
 // Create an Axios instance
 const api = axios.create({

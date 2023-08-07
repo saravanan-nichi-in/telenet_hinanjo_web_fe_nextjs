@@ -12,7 +12,8 @@ export const getValueByKeyRecursively = (data, key) => {
 
     // Recursively traverse the nested object
     for (const nestedKey in data) {
-        if (data.hasOwnProperty(nestedKey)) {
+        // data.hasOwnProperty(nestedKey)
+        if (nestedKey in data) {
             const value = getValueByKeyRecursively(data[nestedKey], key);
             if (value !== undefined) {
                 return value;

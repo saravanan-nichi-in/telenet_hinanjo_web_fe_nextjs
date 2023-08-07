@@ -1,6 +1,6 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { increment } from "@/redux/features/counterSlice"
-import { EXAMPLE_SAGA_INCREMENT } from '@/utils/constant';
+// import { EXAMPLE_SAGA_INCREMENT } from '@/utils/constant';
 
 // Worker saga will be fired on SAMPLE_PAGE_SAGA actions
 function *sampleUpdateFunction (action) {
@@ -14,7 +14,7 @@ function *sampleUpdateFunction (action) {
 // Starts fetchUser on each dispatched EXAMPLE_SAGA_INCREMENT action
 // Allows concurrent fetches
 function *sampleSaga () {
-    yield takeEvery(EXAMPLE_SAGA_INCREMENT, sampleUpdateFunction);
+    // yield takeEvery(EXAMPLE_SAGA_INCREMENT, sampleUpdateFunction);
 }
 
 export default sampleSaga;

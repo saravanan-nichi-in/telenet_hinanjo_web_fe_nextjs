@@ -1,3 +1,5 @@
+/*eslint no-undef: 0*/
+
 import React, {
   useCallback,
   useEffect,
@@ -9,9 +11,9 @@ import React, {
 import { useOpenCv } from 'opencv-react'
 import T from 'prop-types'
 
-import { calcDims, readFile, isCrossOriginURL } from '../lib/utils'
-import CropPoints from '../lib/CropPoints'
-import { applyFilter, transform } from '../lib/imgManipulation'
+import { calcDims, readFile, isCrossOriginURL } from './utils'
+import CropPoints from './CropPoints'
+import { applyFilter, transform } from './imgManipulation'
 import CropPointsDelimiters from './CropPointsDelimiters'
 
 const buildImgContainerStyle = (previewDims) => ({

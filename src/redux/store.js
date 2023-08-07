@@ -6,7 +6,6 @@ import { persistStore } from 'redux-persist';
 
 const sagaMiddleware = createSagaMiddleware();
 
-
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",

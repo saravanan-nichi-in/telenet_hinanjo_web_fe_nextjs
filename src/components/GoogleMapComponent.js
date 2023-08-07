@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import React, { useState } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
 const containerStyle = {
@@ -46,11 +45,11 @@ export const GoogleMapComponent = ({ initialPosition }) => {
                     setCurrentLocation(current);
                 },
                 (error) => {
-                    setError(error.message);
+                    console.log(error.message);
                 }
             );
         } else {
-            setError('Geolocation is not supported by your browser.');
+            console.log('Geolocation is not supported by your browser.');
         }
     };
 

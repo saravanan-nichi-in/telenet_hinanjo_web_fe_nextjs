@@ -1,19 +1,15 @@
-import React, { useContext,useState } from 'react';
-import { useRouter } from 'next/router'
+import React, { useState } from 'react';
 import { Divider } from 'primereact/divider';
 import IconPosBtn from '@/components/Buttons/iconPositionBtn';
 import RoundedBtn from '@/components/Buttons/roundedbtn';
 import DividerComponent from '@/components/Divider/divider';
 import CalendarComponent from '@/components/date/calendar';
 import InputIcon from '@/components/input/inputIcon';
-import { InputText } from 'primereact/inputtext';
 import InputSwitcher from '@/components/switch/inputSwitch';
 import TogglBtn from '@/components/switch/toglbtn';
+
 function ComponentsDemo() {
     const [checked1, setChecked1] = useState(false);
-
-
-
     return (
         <div className="grid">
             <div className="col-12">
@@ -44,10 +40,10 @@ function ComponentsDemo() {
                         </div>
                         < div class="card  ">
                        <h2>input icons</h2> 
-                        <InputIcon placeholder="input-left-icon"  icon="pi pi-search" iconpos="p-input-icon-left"/> &nbsp;
-                        <InputIcon placeholder="input-right-icon"  icon="pi pi-search" iconpos="p-input-icon-right"/> &nbsp;
-                        <InputIcon placeholder="input"  /> &nbsp;
-                        <InputIcon /> 
+                        <InputIcon placeholder="input-left-icon" icon="pi pi-search" iconpos="p-input-icon-left"/> &nbsp;
+                        <InputIcon placeholder="input-right-icon" icon="pi pi-search" iconpos="p-input-icon-right"/> &nbsp;
+                        <InputIcon placeholder="input" /> &nbsp;
+                        <InputIcon />
                         </div>
                         <div class="card" >
                             <h2>Switch Component</h2>

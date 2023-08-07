@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import Canvas from './lib/Canvas'
+import React from 'react'
+import Canvas from '@/utils/js/crop/lib/Canvas'
 import T from 'prop-types'
 
 const Cropper = React.forwardRef((props, ref) => {
@@ -12,7 +12,9 @@ const Cropper = React.forwardRef((props, ref) => {
     )
 })
 
-export default Cropper
+Cropper.displayName = "Cropper";
+
+export default Cropper;
 
 Cropper.propTypes = {
     openCvPath: T.string

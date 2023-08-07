@@ -13,7 +13,7 @@ import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
 import '@/styles/pages/pages.scss';
 import { PersistGate } from 'redux-persist/integration/react';
-import store, { persistor } from '@/redux/store'; // Your Redux store
+import { persistor } from '@/redux/store'; // Your Redux store
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <OpenCvProvider>
-            <Providers store={store}>
+            <Providers>
                 <PersistGate loading={null} persistor={persistor}>
                     <LayoutProvider>
                         {authorized ? (
