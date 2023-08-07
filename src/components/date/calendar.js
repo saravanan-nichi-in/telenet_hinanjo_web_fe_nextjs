@@ -20,7 +20,7 @@ const CalendarComponent = (props) => {
         today: '今日',
         clear: 'クリア'
     });
-    
+
     return (
         <div>
             <Calendar className={` ${props.width} ${props.height}`} id="basic" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" showIcon placeholder={props.placeholder} />

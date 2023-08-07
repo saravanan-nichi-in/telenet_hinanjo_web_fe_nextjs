@@ -6,7 +6,7 @@ const TogglBtn = (props) => {
     return (
         <div>
             <ToggleButton className={`${props.bgcolor} ${props.additionalclass}`} onLabel={props.onlabel} offLabel={props.offLabel} onIcon={props.onicon} offIcon={props.officon}
-                checked={props.checked} onChange={props.onchange} />
+                checked={props.checked} onChange={props.onChange} />
         </div>
     );
 }
