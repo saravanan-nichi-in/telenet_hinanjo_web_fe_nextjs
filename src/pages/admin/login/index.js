@@ -1,8 +1,7 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext} from 'react';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
 import Image from 'next/image'
 import { Formik } from "formik";
@@ -13,7 +12,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
-import InputRightGroup from '@/components/input/inputRightGroup';
+import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -78,11 +77,11 @@ const LoginPage = () => {
                                                     {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
                                                 </label>
 
-                                                <InputRightGroup
+                                                <InputLeftRightGroup
                                                     name='email'
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
-                                                    ico={<MailFilled />}
+                                                    rightico={<MailFilled />}
                                                     placeholder={translate(localeJson, 'mail_address')}
                                                     additionalclass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
 

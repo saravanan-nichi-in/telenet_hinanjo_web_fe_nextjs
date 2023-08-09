@@ -7,7 +7,7 @@ const CalendarComponent = (props) => {
     const [date, setDate] = useState(null);
 
     addLocale('en', {
-        firstDayOfWeek: 0, // In Japan, Sunday is often the first day of the week (0).
+        firstDayOfWeek: 0, 
         dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
         dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
         dayNamesMin: ['日', '月', '火', '水', '木', '金', '土'],
@@ -22,8 +22,8 @@ const CalendarComponent = (props) => {
     });
 
     return (
-        <div>
-            <Calendar className={` ${props.width} ${props.height}`} id="basic" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" showIcon placeholder={props.placeholder} />
+        <div className={`${props.additionalclass}`}>
+            <Calendar className={` ${props.width} ${props.height} ${props.additionalclasses}`} id="basic" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" showIcon placeholder={props.placeholder} />
         </div>
     );
 
