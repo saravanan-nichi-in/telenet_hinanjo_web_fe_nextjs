@@ -6,7 +6,8 @@ import Image from 'next/image'
 import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
-import { LogoutOutlined} from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
+import Datepicker from '@/components/date/datePicker';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
@@ -45,7 +46,7 @@ const AppTopbar = forwardRef((props, ref) => {
                     Logout
                 </div>
             ),
-            icon: <LogoutOutlined /> ,
+            icon: <LogoutOutlined />,
             key: '0',
         },
         {
@@ -89,22 +90,16 @@ const AppTopbar = forwardRef((props, ref) => {
             </button>
 
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
-                <button type="button" className="p-link layout-topbar-button">
-                    <i className="pi pi-calendar"></i>
-                    <span>Calendar</span>
-                </button>
-                <button type="button" className="p-link layout-topbar-button">
-                    <i className="pi pi-user"></i>
-                    <span>Profile</span>
-                </button>
+
+                <Datepicker fontsize={"mt-3"} />
                 <Dropdown
                     menu={{
                         items,
                     }}
                     trigger={['click']}
                 >
-                    <button type="button" className="p-link layout-topbar-button">
-                        <i className="pi pi-cog"></i>
+                    <button type="button" className="p-link layout-topbar-button mt-1">
+                        <i className="pi pi-cog "></i>
                         <span>Settings</span>
                     </button>
                 </Dropdown>
@@ -112,6 +107,5 @@ const AppTopbar = forwardRef((props, ref) => {
         </div>
     );
 });
-
-AppTopbar.displayName = "AppTopbar";
+AppTopbar.displayName = "AppTopbar"
 export default AppTopbar;

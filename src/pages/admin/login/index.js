@@ -1,8 +1,7 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext} from 'react';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
 import Image from 'next/image'
 import { Formik } from "formik";
@@ -13,13 +12,14 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
+import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
-
+    
     /* Services */
     const { login } = AuthenticationAuthorizationService;
 
@@ -76,7 +76,16 @@ const LoginPage = () => {
                                                 <label htmlFor="email" className="block mb-2">
                                                     {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
                                                 </label>
-                                                <div className="p-inputgroup">
+
+                                                <InputLeftRightGroup
+                                                    name='email'
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    rightico={<MailFilled />}
+                                                    placeholder={translate(localeJson, 'mail_address')}
+                                                    additionalclass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
+
+                                                {/* <div className="p-inputgroup">
                                                     <InputText
                                                         name='email'
                                                         placeholder={translate(localeJson, 'mail_address')}
@@ -88,7 +97,7 @@ const LoginPage = () => {
                                                     <span className="p-inputgroup-addon">
                                                         <MailFilled />
                                                     </span>
-                                                </div>
+                                                </div> */}
                                                 <small className="p-error block">
                                                     {errors.email && touched.email && errors.email}
                                                 </small>
