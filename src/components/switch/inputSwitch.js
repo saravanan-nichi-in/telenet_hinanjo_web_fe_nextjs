@@ -6,7 +6,7 @@ const InputSwitcher = (props) => {
     return (
         <div>
             
-                <InputSwitch className={`${props.bgcolor} ${props.additionalclass}`} checked={props.checked} onChange={props.onChange} />          
+                <InputSwitch className={`${props.bgColor} ${props.additionalClass}`} checked={props.checked} onChange={props.onChange} />          
         </div>
     );
 }

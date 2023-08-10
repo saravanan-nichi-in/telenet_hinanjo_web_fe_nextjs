@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-const CalendarComponent = (props) => {
+const Range = (props) => {
 
     const [date, setDate] = useState(null);
 
@@ -23,9 +23,9 @@ const CalendarComponent = (props) => {
 
     return (
         <div className={`${props.additionalClass}`}>
-            <Calendar className={` ${props.width} ${props.height} ${props.additionalClasses}`} id="basic" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" showIcon placeholder={props.placeholder} />
+            <Calendar className={` ${props.width} ${props.height} ${props.additionalClasses}`} id="range" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" selectionMode="range" readOnlyInput showIcon placeholder={props.placeholder} />
         </div>
     );
 
 }
-export default CalendarComponent             
+export default Range             

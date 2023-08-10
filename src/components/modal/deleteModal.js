@@ -1,5 +1,5 @@
 import React,{useState} from "react"
-import IconPosBtn from "../Buttons/iconPositionBtn";
+import IconPosBtn from "../button/iconPositionBtn";
 import { Dialog } from 'primereact/dialog';
 import { InputSwitch } from "primereact/inputswitch";
 export default function DeleteModal(props) {
@@ -7,7 +7,7 @@ export default function DeleteModal(props) {
     const footer = (
         <div className="text-center">
             <IconPosBtn additionalClasses={"h-3rem"} additionalClass={"inline"} text={"キャンセル"}/>
-            <IconPosBtn additionalClasses={"h-3rem"} additionalClass={"inline"} text={props.btntext} severity={"danger"}/> 
+            <IconPosBtn additionalClasses={"h-3rem"} additionalClass={"inline"} text={props.btnText} severity={"danger"}/> 
         </div>
     );
     
@@ -15,8 +15,8 @@ export default function DeleteModal(props) {
         <div>
             {props.text ? (
                 <>
-            <IconPosBtn text={props.text} icon={props.icon} iconpos={props.iconpos} onClick={() => setVisible(true)} />
-            <Dialog header={props.header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+            <IconPosBtn text={props.text} icon={props.icon} iconPos={props.iconPos} onClick={() => setVisible(true)} />
+            <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
             <div class="text-center">
                     <p>{props.content1}</p>
                     <p>{props.content2}</p>
@@ -24,8 +24,8 @@ export default function DeleteModal(props) {
             </Dialog> 
             </> ):(
                 <>
-                <InputSwitch className={`${props.bgcolor} ${props.additionalclass}`} checked={props.checked} onChange={() => setVisible(true)}/>
-                <Dialog header={props.header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+                <InputSwitch className={`${props.bgColor} ${props.additionalClass}`} checked={props.checked} onChange={() => setVisible(true)}/>
+                <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
                 <div class="text-center">
                         <p>{props.content}</p>
                     </div>

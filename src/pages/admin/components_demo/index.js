@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
-import IconPosBtn from '@/components/Buttons/iconPositionBtn';
-import RoundedBtn from '@/components/Buttons/roundedbtn';
-import DividerComponent from '@/components/Divider/divider';
+import IconPosBtn from '@/components/button/iconPositionBtn';
+import RoundedBtn from '@/components/button/roundedbtn';
+import DividerComponent from '@/components/divider/divider';
 import CalendarComponent from '@/components/date/calendar';
 import InputIcon from '@/components/input/inputIcon';
 import InputSwitcher from '@/components/switch/inputSwitch';
@@ -19,6 +19,12 @@ import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 import DeleteModal from '@/components/modal/deleteModal';
 import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/services/service';
+import Linker from '@/components/link/link';
+import Images from '@/components/image/image';
+import Range from '@/components/date/range';
+import TimePicker from '@/components/date/time';
+import IncrementDecrement from '@/components/input/incrementDecrement';
+
 
 
 export default function ComponentsDemo() {
@@ -104,72 +110,82 @@ export default function ComponentsDemo() {
                             <div>
                                 <IconPosBtn icon={"pi pi-star-fill"} radius={"border-round-lg"} additionalClass={"mb-1"} />
                                 <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconpos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconpos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconpos={"left"} />
-                                <RoundedBtn text={"避難者状況一覧"} mx={"mx-0"} icon={"pi pi-star-fill"} iconpos={"right"} radius={"border-round-3xl"} bg={"bg-orange-500"} hoverBg={"hover:bg-orange-600"} borderColor={"border-cyan-800"} /> <hr />
+                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
+                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
+                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"left"} />
+                                <RoundedBtn text={"避難者状況一覧"} mx={"mx-0"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-3xl"} bg={"bg-orange-500"} hoverBg={"hover:bg-orange-600"} borderColor={"border-cyan-800"} /> <hr />
                             </div>
                         </div>
 
                         < div class="card ">
                             <h2> Date Components</h2>
                             <h6>Current date and time component</h6>
-                            <Datepicker additionalclass={"pb-3"} />
-                            <h6>Calendar component</h6>
-                            <CalendarComponent placeholder={"yy-mm-dd"} />
+                            <Datepicker additionalClass={"pb-1"} />
+                            <h6>Date Picker</h6>
+                            <CalendarComponent placeholder={"yy-mm-dd"} width={"w-4"} />
+                            <h6>Date Range Picker</h6>
+                            <Range width={"w-4"}/>
+                            <h6>Time Picker</h6>
+                            <TimePicker width={"w-4"}/>
+                            <h6>Date and Time</h6>
+
                         </div>
                         < div class="card ">
                             <h2>input icons</h2>
-                            <InputIcon additionalclass={"mr-2 "} placeholder="input-left-icon" icon="pi pi-search" iconpos="p-input-icon-left" />
-                            <InputIcon additionalclass={"mr-2"} placeholder="input-right-icon" icon="pi pi-search" iconpos="p-input-icon-right" />
-                            <InputIcon additionalclass={"mt-3"} placeholder="input" />
-                            <InputIcon additionalclass={"mt-3"} />
-                            <InputIcon additionalclass={"mt-3"} readOnly={"true"} value={10} />
+                            <InputIcon additionalClass={"w-3"} placeholder="input-left-icon" icon="pi pi-search" iconPos="p-input-icon-left" /><br />
+                            <InputIcon additionalClass={"w-3"} placeholder="input-right-icon" icon="pi pi-search" iconPos="p-input-icon-right" />
+                            <InputIcon additionalClass={"mt-3 "} inputClassName={"w-3"} placeholder="input" />
+                            <InputIcon additionalClass={"mt-3 "} inputClassName={"w-3"} />
+                            <InputIcon additionalClass={"mt-3"} inputClassName={"w-3"} readOnly={"true"} value={20} />
                             <div class="pt-3">
                                 <h2>input group</h2>
-                                <InputLeftRightGroup righticon={"pi pi-user"} placeholder={"username"} additionalclass={"xl:w-4 pb-2 "} />
-                                <InputLeftRightGroup lefticon={"pi pi-user"} placeholder={"username"} additionalclass={"xl:w-4 pb-2 "} />
-                                <InputGroup additionalclass={"xl:w-4 sm:w-full"} value={value} onChange={(e) => setValue(e.target.value)} onclick={handleIncrement} onclk={handleDecrement} lefticon={"pi pi-arrow-up-right"} righticon={"pi pi-arrow-down-right"} />
+                                <InputLeftRightGroup rightIcon={"pi pi-user"} placeholder={"username"} additionalClass={"xl:w-4 pb-2 "} />
+                                <InputLeftRightGroup type="password" leftIcon={"pi pi-user"} placeholder={"password"} additionalClass={"xl:w-4 pb-2 "} />
+                                <InputGroup type="number" additionalClass={"xl:w-4 sm:w-full"} value={value} onChange={(e) => setValue(e.target.value)} onClk={handleIncrement} onclick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
                             </div>
                             <div class="pt-3">
                                 <h2>TextArea</h2>
-                                <TextArea additionalclass={"w-full"} row={5} cols={10} />
+                                <TextArea additionalClass={"w-full"} row={5} cols={10} />
                             </div>
                             <div class="pt-3">
                                 <h2>Input and Dropdown</h2>
-                                <InputSelect value={selectedCity} onChange={(e) => setSelectedCity(e.value)} options={cities} optionlabel="name" />
+                                <InputSelect value={selectedCity} onChange={(e) => setSelectedCity(e.value)} options={cities} optionLabel="name" />
                             </div>
                             <div class="pt-3">
                                 <h2>Select</h2>
-                                <Select additionalclass={"custom_dropdown_items"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
+                                <Select additionalClass={"custom_dropdown_items"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
                             </div>
                             <div class="pt-3">
                                 <h2>Label</h2>
-                                <Label htmlFor="email" label={"email"} additionalclass={"font-18 text-primary"} />
+                                <Label htmlFor="email" label={"email"} additionalClass={"font-18 text-primary"} />
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
-                                <RadioBtn radioClass={"mr-1"} inputid={"ingredient1"} name={"chck"} value={"Cake"} onChange={(e) => setIngredient(e.value)} checked={ingredient === 'cake'} />
+                                <RadioBtn radioClass={"mr-1"} inputId={"ingredient1"} name={"chck"} value={"Cake"} onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Cake'} />
 
                             </div>
 
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
-                                <CheckBox addclass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
-                                <CheckBox addclass={"pr-1"} additionalclass={"pt-1"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
+                                <CheckBox addClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
+                                <CheckBox addClass={"pr-1"} additionalClass={"pt-1"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
                             </div>
 
+                        </div>
+                        <div class="card">
+                        <h2>Increment Decrment</h2>
+                        <IncrementDecrement value={5} additionalClass={"xl:w-4 sm:w-full"} />
                         </div>
                         <div class="card" >
                             <h2>Switch Component</h2>
                             <InputSwitcher checked={checked1} onChange={(e) => setChecked1(e.value)} /> <br />
-                            <TogglBtn checked={checked1} onlabel={"on"} offLabel={"off"} onChange={(e) => setChecked1(e.value)} />
+                            <TogglBtn checked={checked1} onLabel={"on"} offLabel={"off"} onChange={(e) => setChecked1(e.value)} />
                         </div>
                         <div class="card" >
                             <h2>Delete Modal</h2>
-                            <DeleteModal content1={"一度削除したデータは、元に戻せません"} content2={"削除してもよろしいでしょうか？"} btntext={"削除"} header={"確認情報"}text={"削除"} />
-                            <h2>Rnew Modal</h2>
-                            <DeleteModal header={"確認情報"} content={"避難所の満員状態を切り替えてもよろしいでしょうか？"} btntext={"更新"} checked={checked1} onChange={(e) => setChecked1(e.value)}/>
+                            <DeleteModal modalClass={"w-30rem"} content1={"一度削除したデータは、元に戻せません"} content2={"削除してもよろしいでしょうか？"} btnText={"削除"} header={"確認情報"} text={"削除"} />
+                            <h2>Renew Modal</h2>
+                            <DeleteModal modalClass={"w-50rem"} position={"top"} header={"確認情報"} content={"避難所の満員状態を切り替えてもよろしいでしょうか？"} btnText={"更新"} checked={checked1} onChange={(e) => setChecked1(e.value)} />
                         </div>
                         <div class="card">
                             <h2>DataTable with pagination</h2>
@@ -178,12 +194,22 @@ export default function ComponentsDemo() {
                             <TableData customActionsField="actions" value={customers} columns={columns} />
                         </div>
                         <div class="card">
+                        <h2> Link</h2>
+                            <Linker linkClass={"text-primary-600"} textWithUnderline={"PRIME"} link={"https://primereact.org/"}/>
+                            <Linker text={"PRIME"} link={"https://primereact.org/"}/>
+                        </div>
+                        <div class="card">
+                        <h2> Image</h2>
+                            <Images width={"250"} src={"https://images.ctfassets.net/23aumh6u8s0i/c04wENP3FnbevwdWzrePs/1e2739fa6d0aa5192cf89599e009da4e/nextjs"}/>
+                            <Images width={"250"} src={"https://images.ctfassets.net/23aumh6u8s0i/c04wENP3FnbevwdWzrePs/1e2739fa6d0aa5192cf89599e009da4e/nextjs"} preview="true"/>
+                        </div>
+                        <div class="card">
                             <h2> Divider Component </h2>
                             <DividerComponent width={"w-full"} />
                             <DividerComponent align={"top"} width={"w-2"} layout={"vertical"} />&nbsp;
                             <DividerComponent align={"center"} width={"w-25rem"} />
                         </div>
-
+                       
                     </section>
                 </div>
             </div>

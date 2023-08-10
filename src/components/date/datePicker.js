@@ -25,7 +25,7 @@ function Datepicker(props) {
     const formattedDateTime = currentDateTime.toLocaleString('ja-JP', options);
 
     return (
-        <div className={`${props.fontsize} ${props.bgcolor} ${props.fontweight} ${props.additionalclass}`}>
+        <div className={`${props.fontsize} ${props.bgColor} ${props.fontWeight} ${props.additionalClass}`}>
             {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
         </div>
     );

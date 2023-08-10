@@ -5,8 +5,8 @@ export default function Label(props) {
     return (
 
         
-        <label htmlFor={props.htmlFor} className={props.additionalclass}>
-            {props.label}<span className={props.spanclass}>{props.spantext}</span>
+        <label htmlFor={props.htmlFor} className={props.additionalClass}>
+            {props.label}<span className={props.spanClass}>{props.spanText}</span>
         </label>
 
     )

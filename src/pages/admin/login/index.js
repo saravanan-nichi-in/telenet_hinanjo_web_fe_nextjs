@@ -1,4 +1,4 @@
-import React, { useContext} from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
@@ -13,13 +13,14 @@ import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
+import ErrorBlock from '@/components/validation/errorBlock';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
-    
+
     /* Services */
     const { login } = AuthenticationAuthorizationService;
 
@@ -81,47 +82,26 @@ const LoginPage = () => {
                                                     name='email'
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
-                                                    rightico={<MailFilled />}
+                                                    antdRightIcon={<MailFilled />}
                                                     placeholder={translate(localeJson, 'mail_address')}
-                                                    additionalclass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
-
-                                                {/* <div className="p-inputgroup">
-                                                    <InputText
-                                                        name='email'
-                                                        placeholder={translate(localeJson, 'mail_address')}
-                                                        className={`w-full ${errors.email && touched.email && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.email}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <MailFilled />
-                                                    </span>
-                                                </div> */}
-                                                <small className="p-error block">
-                                                    {errors.email && touched.email && errors.email}
-                                                </small>
+                                                    additionalClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
+                                                <ErrorBlock errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">
                                                 <label htmlFor="password" className="block mb-2">
                                                     {translate(localeJson, 'password')}<span className='p-error'>*</span>
                                                 </label>
-                                                <div className="p-inputgroup">
-                                                    <Password
-                                                        name='password'
-                                                        placeholder={translate(localeJson, 'password')}
-                                                        className={`w-full ${errors.password && touched.password && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.password}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <LockFilled />
-                                                    </span>
-                                                </div>
-                                                <small className="p-error block">
-                                                    {errors.password && touched.password && errors.password}
-                                                </small>
+                                                <InputLeftRightGroup
+                                                    name='password'
+                                                    type="password"
+                                                    value={values.password}
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    antdRightIcon={<LockFilled />}
+                                                    placeholder={translate(localeJson, 'password')}
+                                                    additionalClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
+                                                {/* <PasswordInput antdRightIcon={<LockFilled />} value={values.password} onBlur={handleBlur} className={`w-full ${errors.password && touched.password && 'p-invalid'}`} placeholder={translate(localeJson, 'password')} onChange={handleChange} /> */}
+                                                <ErrorBlock errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
                                                 <Button type='submit' label={translate(localeJson, 'login')} className="custom_radiusBtn" severity="primary"></Button>
