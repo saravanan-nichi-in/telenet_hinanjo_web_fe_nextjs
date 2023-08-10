@@ -6,8 +6,78 @@ import { DataTable } from 'primereact/datatable';
 import { Menu } from 'primereact/menu';
 import Link from 'next/link';
 import { round } from 'lodash';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 
 export default function Dashboard() {
+    const { layoutConfig } = useContext(LayoutContext);
+    const [data, setChartData] = useState({});
+    const [options, setOptions] = useState({});
+
+    useEffect(() => {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+        const polarData = {
+            datasets: [
+                {
+                    data: [11, 16, 7, 3],
+                    backgroundColor: [documentStyle.getPropertyValue('--indigo-500'), documentStyle.getPropertyValue('--purple-500'), documentStyle.getPropertyValue('--teal-500'), documentStyle.getPropertyValue('--orange-500')],
+                    label: 'My dataset'
+                }
+            ],
+            labels: ['Indigo', 'Purple', 'Teal', 'Orange']
+        };
+
+        const polarOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    grid: {
+                        color: surfaceBorder
+                    }
+                }
+            }
+        };
+
+        const pieData = {
+            labels: ['収容状況', '要配慮者'],
+            datasets: [
+                {
+                    data: [200, 400],
+                    backgroundColor: [documentStyle.getPropertyValue('--indigo-500'), documentStyle.getPropertyValue('--teal-500')],
+                    hoverBackgroundColor: [documentStyle.getPropertyValue('--indigo-400'), documentStyle.getPropertyValue('--teal-400')]
+                }
+            ]
+        };
+
+        const pieOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        color: textColor
+                    }
+                }
+            }
+        };
+
+        setOptions({
+            polarOptions,
+            pieOptions,
+        });
+        setChartData({
+            polarData,
+            pieData,
+        });
+    }, [layoutConfig])
+
     return (
         <div className="grid">
             <div className="col-12 lg:col-6 xl:col-6">
@@ -278,6 +348,18 @@ export default function Dashboard() {
                     </ul>
                 </div>
             </div> */}
+            {/* <div className="col-12">
+                <div className="card flex flex-column align-items-center">
+                    <h5 className="text-left w-full">Polar Area Chart</h5>
+                    <Chart type="polarArea" data={data.polarData} options={options.polarOptions}></Chart>
+                </div>
+            </div> */}
+            <div className="col-12">
+                <div className="card flex flex-column align-items-center">
+                    <h5 className="text-left w-full">避難所の状況</h5>
+                    <Chart type="pie" data={data.pieData} options={options.pieOptions}></Chart>
+                </div>
+            </div>
         </div>
     )
 }
