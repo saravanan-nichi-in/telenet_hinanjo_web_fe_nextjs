@@ -1,15 +1,20 @@
 import React from "react";
-import { Image } from 'primereact/image';
-
+import Image from 'next/image'
 export default function Images(props) {
-    
+
+    const imageLoader = () => {
+        return `https://placehold.co/${props.width}x${props.height}`
+    }
+
     return (
         <div className={`${props.additionalClass}`}>
-            {props.preview ? (
-            <Image src={props.src} height={props.height} width={props.width} alt={props.alt} preview={props.preview}/>
-            ):(
-                <Image src={props.src} height={props.height} width={props.width} alt={props.alt} />
-            )}
+            <Image
+                loader={imageLoader}
+                src={props.src}
+                width={props.width}
+                height={props.height}
+            />
         </div>
-    )
+    );
 }
+

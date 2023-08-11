@@ -11,8 +11,8 @@ export default function IncrementDecrement(props) {
     
     return (
 
-        <div className={`${props.additionalClasses}`}>
-            <InputGroup additionalInputClass={"text-center"} additionalClass={props.additionalClass} value={value} onChange={(e) => setValue(parseInt(e.target.value))} onClk={handleIncrement} onclick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
+        <div className={`${props.parentClass}`}>
+            <InputGroup inputClass={"text-center"} parentClass={props.parentClass} value={value} onChange={(e) => setValue(parseInt(e.target.value))} onRightClick={handleIncrement} onLeftClick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
 
         </div>
 

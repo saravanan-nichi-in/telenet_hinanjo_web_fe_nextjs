@@ -21,18 +21,10 @@
             clear: 'クリア'
         });
 
-        const tokyoTime = () => {
-            if (date) {
-                const tokyoOffset = 9 * 60; // Tokyo timezone offset in minutes
-                const adjustedDate = new Date(date.getTime() + tokyoOffset * 60 * 1000);
-                return adjustedDate;
-            }
-            return null;
-        };
-
+       
         return (
-            <div className={`${props.additionalClass}`}>
-                <Calendar className={` ${props.width} ${props.height} ${props.additionalClasses}`} id="time24" value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" timeOnly readOnlyInput showSeconds showIcon placeholder={props.placeholder} hourFormat="24" />
+            <div className={`${props.parentClass}`}>
+                <Calendar className={` ${props.width} ${props.height} ${props.timeClass}`} id="time24" value={date} icon={props.icon?props.icon:"pi pi-clock"} showIcon iconPos={props.iconPos?props.iconPos:"right"} disabledDates={props.disabledDates} disabledDays={props.disabledDays} minDate={props.minDate} maxDate={props.maxDate} selectionMode={props.selectionMode?props.selectionMode:"single"} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" timeOnly readOnlyInput showSeconds placeholder={props.placeholder} hourFormat="24" />
             </div>
         );
 

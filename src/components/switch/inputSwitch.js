@@ -4,9 +4,9 @@ import { InputSwitch } from 'primereact/inputswitch';
 const InputSwitcher = (props) => {
 
     return (
-        <div>
+        <div className={`${props.parentClass}`}>
             
-                <InputSwitch className={`${props.bgColor} ${props.additionalClass}`} checked={props.checked} onChange={props.onChange} />          
+                <InputSwitch className={`${props.bgColor} ${props.switchClass}`} checked={props.checked} onChange={props.onChange} />          
         </div>
     );
 }
