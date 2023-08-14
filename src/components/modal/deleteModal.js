@@ -2,12 +2,12 @@ import React,{useState} from "react"
 import IconPosBtn from "../button/iconPositionBtn";
 import { Dialog } from 'primereact/dialog';
 import { InputSwitch } from "primereact/inputswitch";
-export default function DeleteModal(props) {
+const DeleteModal=(props)=> {
     const [visible, setVisible] = useState(false);
     const footer = (
         <div className="text-center">
-            <IconPosBtn additionalClasses={"h-3rem"} additionalClass={"inline"} text={"キャンセル"}/>
-            <IconPosBtn additionalClasses={"h-3rem"} additionalClass={"inline"} text={props.btnText} severity={"danger"}/> 
+            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={"キャンセル"}/>
+            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={props.btnText} severity={"danger"}/> 
         </div>
     );
     
@@ -24,7 +24,7 @@ export default function DeleteModal(props) {
             </Dialog> 
             </> ):(
                 <>
-                <InputSwitch className={`${props.bgColor} ${props.additionalClass}`} checked={props.checked} onChange={() => setVisible(true)}/>
+                <InputSwitch className={`${props.bgColor} ${props.parentClass}`} checked={props.checked} onChange={() => setVisible(true)}/>
                 <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
                 <div class="text-center">
                         <p>{props.content}</p>
@@ -34,3 +34,4 @@ export default function DeleteModal(props) {
         </div>
     ) 
 }
+export default DeleteModal

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-export default function Linker(props) {
+const Linker=(props)=> {
     const linkStyles = {
         textDecoration: "underline"
     };
@@ -20,3 +20,4 @@ export default function Linker(props) {
         </div>
     )
 }
+export default Linker

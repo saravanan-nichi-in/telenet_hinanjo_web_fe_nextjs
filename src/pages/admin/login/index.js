@@ -84,7 +84,7 @@ const LoginPage = () => {
                                                     onBlur={handleBlur}
                                                     antdRightIcon={<MailFilled />}
                                                     placeholder={translate(localeJson, 'mail_address')}
-                                                    additionalClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
+                                                    parentClass={`sm:w-full ${errors.email && touched.email && 'p-invalid'}`} />
                                                 <ErrorBlock errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">
@@ -99,7 +99,7 @@ const LoginPage = () => {
                                                     onBlur={handleBlur}
                                                     antdRightIcon={<LockFilled />}
                                                     placeholder={translate(localeJson, 'password')}
-                                                    additionalClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
+                                                    parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
                                                 {/* <PasswordInput antdRightIcon={<LockFilled />} value={values.password} onBlur={handleBlur} className={`w-full ${errors.password && touched.password && 'p-invalid'}`} placeholder={translate(localeJson, 'password')} onChange={handleChange} /> */}
                                                 <ErrorBlock errorBlock={errors.password && touched.password && errors.password} />
                                             </div>

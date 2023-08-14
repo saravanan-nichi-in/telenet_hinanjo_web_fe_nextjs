@@ -20,10 +20,14 @@ import DeleteModal from '@/components/modal/deleteModal';
 import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/services/service';
 import Linker from '@/components/link/link';
-import Images from '@/components/image/image';
 import Range from '@/components/date/range';
 import TimePicker from '@/components/date/time';
 import IncrementDecrement from '@/components/input/incrementDecrement';
+import UploadFile from '@/components/input/upload';
+import DateTimePicker from '@/components/date/dateTimePicker';
+import Avatar from '@/components/image/avatar';
+import ImageCropper from '@/pages/POC/CROP';
+import ImageComponent from '@/components/image/image';
 
 
 
@@ -64,7 +68,8 @@ export default function ComponentsDemo() {
     ];
     const [data, setData] = useState(options[0].value);
     const [customers, setCustomers] = useState([]);
-
+    let today = new Date();
+    let invalidDates = [today];
     useEffect(() => {
         CustomerService.getCustomersMedium().then((data) => setCustomers(data));
     }, []);
@@ -108,11 +113,11 @@ export default function ComponentsDemo() {
                         <div class="card ">
                             <h2> Buttons Component </h2>
                             <div>
-                                <IconPosBtn icon={"pi pi-star-fill"} radius={"border-round-lg"} additionalClass={"mb-1"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn additionalClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"left"} />
+                                <IconPosBtn icon={"pi pi-star-fill"} radius={"border-round-lg"} parentClass={"mb-1"} />
+                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} />
+                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
+                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
+                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"left"} />
                                 <RoundedBtn text={"避難者状況一覧"} mx={"mx-0"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-3xl"} bg={"bg-orange-500"} hoverBg={"hover:bg-orange-600"} borderColor={"border-cyan-800"} /> <hr />
                             </div>
                         </div>
@@ -120,32 +125,36 @@ export default function ComponentsDemo() {
                         < div class="card ">
                             <h2> Date Components</h2>
                             <h6>Current date and time component</h6>
-                            <Datepicker additionalClass={"pb-1"} />
+                            <Datepicker parentClass={"pb-1"} />
                             <h6>Date Picker</h6>
-                            <CalendarComponent placeholder={"yy-mm-dd"} width={"w-4"} />
+                            <CalendarComponent placeholder={"yy-mm-dd"} width={"xl:w-4 sm:w-full"} />
                             <h6>Date Range Picker</h6>
-                            <Range width={"w-4"}/>
+                            <Range width={"xl:w-4 sm:w-full"} />
                             <h6>Time Picker</h6>
-                            <TimePicker width={"w-4"}/>
-                            <h6>Date and Time</h6>
+                            <TimePicker width={"xl:w-4 sm:w-full"} />
+
+                            <h6>Disabled days </h6>
+                            <CalendarComponent width={"xl:w-4 sm:w-full"} disabledDates={invalidDates} disabledDays={[0, 6]} placeholder={"yy-mm-dd"} />
+                            <h6>Date and Time with range</h6>
+                            <DateTimePicker selectionMode="range" width={"xl:w-6 sm:w-full"} />
 
                         </div>
                         < div class="card ">
                             <h2>input icons</h2>
-                            <InputIcon additionalClass={"w-3"} placeholder="input-left-icon" icon="pi pi-search" iconPos="p-input-icon-left" /><br />
-                            <InputIcon additionalClass={"w-3"} placeholder="input-right-icon" icon="pi pi-search" iconPos="p-input-icon-right" />
-                            <InputIcon additionalClass={"mt-3 "} inputClassName={"w-3"} placeholder="input" />
-                            <InputIcon additionalClass={"mt-3 "} inputClassName={"w-3"} />
-                            <InputIcon additionalClass={"mt-3"} inputClassName={"w-3"} readOnly={"true"} value={20} />
+                            <InputIcon parentClass={"w-3"} placeholder="input-left-icon" icon="pi pi-search" iconPos="p-input-icon-left" /><br />
+                            <InputIcon parentClass={"w-3"} placeholder="input-right-icon" icon="pi pi-search" iconPos="p-input-icon-right" />
+                            <InputIcon parentClass={"mt-3  "} inputClass={"xl:w-3 sm:w-full"} placeholder="input" />
+                            <InputIcon parentClass={"mt-3 "} inputClass={"xl:w-3 sm:w-full"} />
+                            <InputIcon parentClass={"mt-3"} inputClass={"xl:w-3 sm:w-full"} readOnly={"true"} value={20} />
                             <div class="pt-3">
                                 <h2>input group</h2>
-                                <InputLeftRightGroup rightIcon={"pi pi-user"} placeholder={"username"} additionalClass={"xl:w-4 pb-2 "} />
-                                <InputLeftRightGroup type="password" leftIcon={"pi pi-user"} placeholder={"password"} additionalClass={"xl:w-4 pb-2 "} />
-                                <InputGroup type="number" additionalClass={"xl:w-4 sm:w-full"} value={value} onChange={(e) => setValue(e.target.value)} onClk={handleIncrement} onclick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
+                                <InputLeftRightGroup rightIcon={"pi pi-user"} placeholder={"username"} parentClass={"xl:w-4 pb-2 "} />
+                                <InputLeftRightGroup type="password" leftIcon={"pi pi-user"} placeholder={"password"} parentClass={"xl:w-4 pb-2 "} />
+                                <InputGroup type="number" parentClass={"xl:w-4 sm:w-full"} value={value} onChange={(e) => setValue(e.target.value)} onRightClick={handleIncrement} onLeftClick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
                             </div>
                             <div class="pt-3">
                                 <h2>TextArea</h2>
-                                <TextArea additionalClass={"w-full"} row={5} cols={10} />
+                                <TextArea textAreaClass={"w-full"} row={5} cols={10} />
                             </div>
                             <div class="pt-3">
                                 <h2>Input and Dropdown</h2>
@@ -153,11 +162,11 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2>Select</h2>
-                                <Select additionalClass={"custom_dropdown_items"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
+                                <Select parentClass={"custom_select"} selectClass={"custom_dropdown_items"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
                             </div>
                             <div class="pt-3">
                                 <h2>Label</h2>
-                                <Label htmlFor="email" label={"email"} additionalClass={"font-18 text-primary"} />
+                                <Label htmlFor="email" text={"email"} labelClass={"font-18 text-primary"} />
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
@@ -167,19 +176,29 @@ export default function ComponentsDemo() {
 
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
-                                <CheckBox addClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
-                                <CheckBox addClass={"pr-1"} additionalClass={"pt-1"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
+                                <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
+                                <CheckBox checkboxClass={"pr-1 "} parentClass={"pt-1"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
+                            </div>
+                            <div class="pt-3">
+                                <h2> upload</h2>
+                                <UploadFile auto="true" />
                             </div>
 
                         </div>
                         <div class="card">
-                        <h2>Increment Decrment</h2>
-                        <IncrementDecrement value={5} additionalClass={"xl:w-4 sm:w-full"} />
+                            <h2>Increment Decrment</h2>
+                            <IncrementDecrement value={5} parentClass={"xl:w-10 sm:w-full"} />
                         </div>
                         <div class="card" >
                             <h2>Switch Component</h2>
-                            <InputSwitcher checked={checked1} onChange={(e) => setChecked1(e.value)} /> <br />
-                            <TogglBtn checked={checked1} onLabel={"on"} offLabel={"off"} onChange={(e) => setChecked1(e.value)} />
+                            <InputSwitcher parentClass={"custom-switch"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> <br />
+                            <TogglBtn togglProps={{
+                                checked:checked1,
+                                onLabel:"on",
+                                offLabel:"off",
+                                onChange: (e) => setChecked1(e.value)
+                            }}
+                           />
                         </div>
                         <div class="card" >
                             <h2>Delete Modal</h2>
@@ -194,14 +213,29 @@ export default function ComponentsDemo() {
                             <TableData customActionsField="actions" value={customers} columns={columns} />
                         </div>
                         <div class="card">
-                        <h2> Link</h2>
-                            <Linker linkClass={"text-primary-600"} textWithUnderline={"PRIME"} link={"https://primereact.org/"}/>
-                            <Linker text={"PRIME"} link={"https://primereact.org/"}/>
+                            <h2> Link</h2>
+                            <Linker linkClass={"text-primary-600"} textWithUnderline={"PRIME"} link={"https://primereact.org/"} />
+                            <Linker text={"PRIME"} link={"https://primereact.org/"} />
                         </div>
                         <div class="card">
-                        <h2> Image</h2>
-                            <Images width={"250"} src={"https://images.ctfassets.net/23aumh6u8s0i/c04wENP3FnbevwdWzrePs/1e2739fa6d0aa5192cf89599e009da4e/nextjs"}/>
-                            <Images width={"250"} src={"https://images.ctfassets.net/23aumh6u8s0i/c04wENP3FnbevwdWzrePs/1e2739fa6d0aa5192cf89599e009da4e/nextjs"} preview="true"/>
+                            <h2> Image</h2>
+                            <ImageComponent width={"200"} height={"100"} src="/public/layout/images/perspective1.jpg" />
+                            {/* <Images src='/layout/images/jp.png'
+                                width={200}
+                                height={100}
+                            /> */}
+                            <h6>avatar with image</h6>
+                            <Avatar
+                                avatarProps={{
+                                    parentClass:"bg-orange-500",
+                                    avatarClass:"mr-3",
+                                    size: "xlarge",
+                                    image: "/layout/images/perspective1.jpg",
+                                    shape: "circle",
+                                    style:{backgroundColor:"#2196F3"}
+                                    
+                                }}
+                                 />
                         </div>
                         <div class="card">
                             <h2> Divider Component </h2>
@@ -209,7 +243,8 @@ export default function ComponentsDemo() {
                             <DividerComponent align={"top"} width={"w-2"} layout={"vertical"} />&nbsp;
                             <DividerComponent align={"center"} width={"w-25rem"} />
                         </div>
-                       
+                        <ImageCropper />
+
                     </section>
                 </div>
             </div>

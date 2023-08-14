@@ -1,9 +1,8 @@
 import React from 'react';
 
 const ErrorBlock = (props) => {
-
     return (
-        <small className={`p-error block ${props.additionalClass}`}>
+        <small className={`p-error block ${props.parentClass} ${props.fontWeight ? props.fontWeight:"font-medium"}`}>
                 {props.errorBlock}
         </small>
     );
