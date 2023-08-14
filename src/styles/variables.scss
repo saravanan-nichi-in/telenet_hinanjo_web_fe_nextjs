@@ -14,7 +14,7 @@ $transitionDuration: .2s;
 // $auth: rgb(100, 176, 242);
 $auth: var(--primary-color);
 /* font-size / PX */
-$fontSize-14px:14px;
+$fontSize-14px: 14px;
 $fontSize-15px: 15px;
 $fontSize-16px: 16px;
 $fontSize-18px: 18px;
@@ -24,9 +24,9 @@ $fontSize-22px: 22px;
 $fontSize-23px: 23px;
 $fontSize-24px: 24px;
 $fontSize-25px: 25px;
-$fontSize-26px:26px;
+$fontSize-26px: 26px;
 $fontSize-27px: 27px;
-$fontSize-28px:28px;
+$fontSize-28px: 28px;
 $fontSize-30px: 30px;
 $fontSize-32px: 32px;
 $fontSize-40px: 40px;
@@ -38,7 +38,7 @@ $width-15rem: 15rem;
 $width-20rem: 20rem;
 $width-30rem: 30rem;
 /* Queries variables*/
-/* Mobile large devices */
+/* Mobile */
 $mobile: 576px;
 /* Tablet */
 $tablet: 768px;

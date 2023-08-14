@@ -1,4 +1,4 @@
-Telnet : project that is developed using React.js, that uses Next.js (https://nextjs.org/).
+Telenet : project that is developed using React.js, that uses Next.js (https://nextjs.org/).
 
 # Web Application for Admin
 

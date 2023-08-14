@@ -14,6 +14,7 @@ const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
+    const user = !window.location.pathname.startsWith('/admin') && !window.location.pathname.startsWith('/staff');
 
     const router = useRouter();
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
@@ -119,20 +120,30 @@ const Layout = (props) => {
                 <link rel="icon" href={`/layout/images/favicon.ico`} type="image/x-icon"></link>
             </Head>
 
-            <div className={containerClass}>
-                <AppTopbar ref={topbarRef} />
-                <div className="layout-sidebar">
-                    <div ref={sidebarRef} className='layout_sidebar_scroll'>
-                        <AppSidebar />
+            {!user ? (
+                <div className={containerClass}>
+                    <AppTopbar ref={topbarRef} />
+                    <div className="layout-sidebar">
+                        <div ref={sidebarRef} className='layout_sidebar_scroll'>
+                            <AppSidebar />
+                        </div>
+                    </div>
+                    <div className="layout-main-container">
+                        <div className="layout-main">{props.children}</div>
+                        <AppFooter />
+                    </div>
+                    <AppConfig />
+                    <div className="layout-mask"></div>
+                </div>
+            ) : (
+                <div className={`layout-static-inactive`}>
+                    <AppTopbar ref={topbarRef} />
+                    <div className="layout-main-container">
+                        <div className="layout-main">{props.children}</div>
+                        <AppFooter />
                     </div>
                 </div>
-                <div className="layout-main-container">
-                    <div className="layout-main">{props.children}</div>
-                    <AppFooter />
-                </div>
-                <AppConfig />
-                <div className="layout-mask"></div>
-            </div>
+            )}
         </React.Fragment>
     );
 };
