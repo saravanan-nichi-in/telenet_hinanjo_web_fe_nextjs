@@ -1,8 +1,16 @@
-Telenet : project that is developed using React.js, that uses Next.js (https://nextjs.org/).
+Telenet : project that is developed using Next.js. (https://nextjs.org/).
 
-# Web Application for Admin
+# ReactJS
 
-Web application for Admin, Organization Admin to handle
+React is an open-source JavaScript library used for building user interfaces and UI components.
+# NextJS
+
+It is a extension of react or framework
+Next.js is a popular open-source framework / extension built on top of React that is used for building server-rendered React applications and static websites.
+
+# Web Application
+
+Web application for handle different roles ( Admin, Staff & User ) & other responsibilities
 
 # Folder Structure
 

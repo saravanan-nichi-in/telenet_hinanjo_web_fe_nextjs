@@ -17,7 +17,7 @@ import Select from '@/components/input/select';
 import Label from '@/components/input/label';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 import TableData from '@/components/datatable/datatable';
-import { CustomerService } from '@/helper/datatableService';
+import { CustomerService } from '@/helper/datatableservice';
 import Linker from '@/components/link/index.';
 import TimePicker from '@/components/date/time';
 import IncrementDecrement from '@/components/input/incrementDecrement';
