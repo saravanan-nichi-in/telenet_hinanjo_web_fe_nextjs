@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
 import { LogoutOutlined } from '@ant-design/icons';
 import Datepicker from '@/components/date/datePicker';
+import DropdownSelect from '@/components/input/dropdownSelect';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
@@ -92,7 +93,8 @@ const AppTopbar = forwardRef((props, ref) => {
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
 
                 <Datepicker fontsize={"mt-3"} />
-                <Dropdown
+                <DropdownSelect items={items} icon={"pi pi-cog"}/>
+                {/* <Dropdown
                     menu={{
                         items,
                     }}
@@ -102,7 +104,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         <i className="pi pi-cog "></i>
                         <span>Settings</span>
                     </button>
-                </Dropdown>
+                </Dropdown> */}
             </div>
         </div>
     );

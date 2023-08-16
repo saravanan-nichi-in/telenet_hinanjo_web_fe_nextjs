@@ -21,11 +21,25 @@ const DateTimePicker = (props) => {
         clear: 'クリア'
     });
 
-
-
     return (
         <div className={`${props.parentClass}`}>
-            <Calendar className={`${props.width} ${props.height} ${props.dateTimeClass}`} id="time24" showTime value={date} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" disabledDates={props.disabledDates} disabledDays={props.disabledDays} minDate={props.minDate} maxDate={props.maxDate} selectionMode={props.selectionMode?props.selectionMode:"single"} readOnlyInput icon={props.icon?props.icon:"pi pi-calendar"} iconPos={props.iconPos ?props.iconPos:"right"} showIcon placeholder={props.placeholder} />
+            <Calendar className={`${props.width} ${props.height ? props.height : 'custom_input'} ${props.dateTimeClass}`}
+                id="time24"
+                showTime
+                value={date}
+                onChange={(e) => setDate(e.value)}
+                dateFormat="yy年mm月dd日"
+                disabledDates={props.disabledDates}
+                disabledDays={props.disabledDays}
+                minDate={props.minDate}
+                maxDate={props.maxDate}
+                selectionMode={props.selectionMode ? props.selectionMode : "single"}
+                readOnlyInput
+                icon={props.icon ? props.icon : "pi pi-calendar"}
+                iconPos={props.iconPos ? props.iconPos : "right"}
+                showIcon
+                placeholder={props.placeholder}
+            />
         </div>
     );
 

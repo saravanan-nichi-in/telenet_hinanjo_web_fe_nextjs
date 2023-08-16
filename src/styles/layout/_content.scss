@@ -109,6 +109,16 @@
     border-radius: $borderRadius-28px;
 }
 
+.custom_input{
+    height:40px;
+}
+
+.custom_checkbox{
+    .p-checkbox .p-checkbox-box{
+        width:40px;
+    }
+}
+
 .page_header{
     font-size: $fontSize-26px;
     font-weight: 500;

@@ -84,7 +84,7 @@ const LoginPage = () => {
                                                     onBlur={handleBlur}
                                                     antdRightIcon={<MailFilled />}
                                                     placeholder={translate(localeJson, 'mail_address')}
-                                                    parentClass={`sm:w-full ${errors.email && touched.email && 'p-invalid'}`} />
+                                                    parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
                                                 <ErrorBlock errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">

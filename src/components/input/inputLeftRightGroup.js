@@ -6,11 +6,11 @@ export default function InputLeftRightGroup(props) {
     <div className={`p-inputgroup ${props.parentClass}`}>
       {props.antLeftIcon || props.leftIcon ? (
         <>
-          <span className={`p-inputgroup-addon ${props.leftClass}`}>
+          <span className={`p-inputgroup-addon ${props.leftClass} `}>
             <i className={`${props.leftIcon} `}>{props.antLeftIcon}</i>
           </span>
           <InputText
-          className={`${props.inputClass}`}
+          className={`${props.inputClass} ${props.height ? props.height : 'custom_input'}`}
             placeholder={props.placeholder}
             value={props.value}
             name={props.name}
@@ -22,7 +22,7 @@ export default function InputLeftRightGroup(props) {
       ) : (
         <>
           <InputText
-            className={`${props.inputClass}`}
+            className={`${props.inputClass} ${props.height ? props.height : 'custom_input'}`}
             placeholder={props.placeholder}
             name={props.name}
             value={props.value}

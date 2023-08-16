@@ -7,7 +7,7 @@ const CalendarComponent = (props) => {
     const [date, setDate] = useState(null);
 
     addLocale('en', {
-        firstDayOfWeek: 0, 
+        firstDayOfWeek: 0,
         dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
         dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
         dayNamesMin: ['日', '月', '火', '水', '木', '金', '土'],
@@ -23,7 +23,20 @@ const CalendarComponent = (props) => {
 
     return (
         <div className={`${props.parentClass}`}>
-            <Calendar className={` ${props.width} ${props.height} ${props.calendarClass}`} id="basic" value={date} icon={props.icon?props.icon:"pi pi-calendar"} iconPos={props.iconPos ?props.iconPos:"right"} disabledDates={props.disabledDates} disabledDays={props.disabledDays} onChange={(e) => setDate(e.value)} dateFormat="yy年mm月dd日" minDate={props.minDate} maxDate={props.maxDate} selectionMode={props.selectionMode?props.selectionMode:"single"} showIcon placeholder={props.placeholder} />
+            <Calendar className={` ${props.width} ${props.calendarClass} ${props.height ? props.height : 'custom_input'}`}
+                id="basic"
+                value={date}
+                icon={props.icon ? props.icon : "pi pi-calendar"}
+                iconPos={props.iconPos ? props.iconPos : "right"}
+                disabledDates={props.disabledDates}
+                disabledDays={props.disabledDays}
+                onChange={(e) => setDate(e.value)}
+                dateFormat="yy年mm月dd日" minDate={props.minDate}
+                maxDate={props.maxDate}
+                selectionMode={props.selectionMode ? props.selectionMode : "single"}
+                showIcon
+                placeholder={props.placeholder}
+            />
         </div>
     );
 

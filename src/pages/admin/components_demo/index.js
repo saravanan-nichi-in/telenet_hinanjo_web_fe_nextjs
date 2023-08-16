@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import IconPosBtn from '@/components/button/iconPositionBtn';
 import RoundedBtn from '@/components/button/roundedbtn';
-import DividerComponent from '@/components/divider/divider';
+import DividerComponent from '@/components/divider';
 import CalendarComponent from '@/components/date/calendar';
 import InputIcon from '@/components/input/inputIcon';
 import InputSwitcher from '@/components/switch/inputSwitch';
@@ -16,11 +16,9 @@ import CheckBox from '@/components/input/checkbox';
 import Select from '@/components/input/select';
 import Label from '@/components/input/label';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
-import DeleteModal from '@/components/modal/deleteModal';
 import TableData from '@/components/datatable/datatable';
-import { CustomerService } from '@/services/service';
-import Linker from '@/components/link/link';
-import Range from '@/components/date/range';
+import { CustomerService } from '@/helper/datatableService';
+import Linker from '@/components/link/index.';
 import TimePicker from '@/components/date/time';
 import IncrementDecrement from '@/components/input/incrementDecrement';
 import UploadFile from '@/components/input/upload';
@@ -28,7 +26,8 @@ import DateTimePicker from '@/components/date/dateTimePicker';
 import Avatar from '@/components/image/avatar';
 import ImageCropper from '@/pages/POC/CROP';
 import ImageComponent from '@/components/image/image';
-
+import BarcodeScanner from '@/components/qr';
+import Modal from '@/components/modal';
 
 
 export default function ComponentsDemo() {
@@ -68,11 +67,9 @@ export default function ComponentsDemo() {
     ];
     const [data, setData] = useState(options[0].value);
     const [customers, setCustomers] = useState([]);
+
     let today = new Date();
     let invalidDates = [today];
-    useEffect(() => {
-        CustomerService.getCustomersMedium().then((data) => setCustomers(data));
-    }, []);
 
     const columns = [
         { field: '避難所', header: '避難所' },
@@ -98,6 +95,30 @@ export default function ComponentsDemo() {
             ),
         },
     ];
+
+    const footer = (
+        <div className="text-center">
+            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={"cancel"} />
+            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={"delete"} severity={"danger"} />
+        </div>
+    );
+
+    const content = (
+        <div>
+            <p>modal demo</p>
+            <p>dynamic modal with header content and footer </p>
+        </div>
+
+    );
+
+
+    useEffect(() => {
+        CustomerService.getCustomersMedium().then((data) => setCustomers(data));
+
+    }, []);
+
+
+
     return (
         <div className="grid">
             <div className="col-12">
@@ -128,8 +149,7 @@ export default function ComponentsDemo() {
                             <Datepicker parentClass={"pb-1"} />
                             <h6>Date Picker</h6>
                             <CalendarComponent placeholder={"yy-mm-dd"} width={"xl:w-4 sm:w-full"} />
-                            <h6>Date Range Picker</h6>
-                            <Range width={"xl:w-4 sm:w-full"} />
+
                             <h6>Time Picker</h6>
                             <TimePicker width={"xl:w-4 sm:w-full"} />
 
@@ -170,14 +190,13 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
-                                <RadioBtn radioClass={"mr-1"} inputId={"ingredient1"} name={"chck"} value={"Cake"} onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Cake'} />
-
+                                <RadioBtn radioClass={"mr-1"} inputId={"ingredient1"} name={"chk"} value={"Cake"} onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Cake'} />
                             </div>
 
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
                                 <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
-                                <CheckBox checkboxClass={"pr-1 "} parentClass={"pt-1"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
+                                <CheckBox checkboxClass={"pr-1 h-10"} parentClass={"pt-1 custom_checkbox"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
                             </div>
                             <div class="pt-3">
                                 <h2> upload</h2>
@@ -193,18 +212,17 @@ export default function ComponentsDemo() {
                             <h2>Switch Component</h2>
                             <InputSwitcher parentClass={"custom-switch"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> <br />
                             <TogglBtn togglProps={{
-                                checked:checked1,
-                                onLabel:"on",
-                                offLabel:"off",
+                                checked: checked1,
+                                onLabel: "on",
+                                offLabel: "off",
                                 onChange: (e) => setChecked1(e.value)
                             }}
-                           />
+                            />
                         </div>
                         <div class="card" >
-                            <h2>Delete Modal</h2>
-                            <DeleteModal modalClass={"w-30rem"} content1={"一度削除したデータは、元に戻せません"} content2={"削除してもよろしいでしょうか？"} btnText={"削除"} header={"確認情報"} text={"削除"} />
-                            <h2>Renew Modal</h2>
-                            <DeleteModal modalClass={"w-50rem"} position={"top"} header={"確認情報"} content={"避難所の満員状態を切り替えてもよろしいでしょうか？"} btnText={"更新"} checked={checked1} onChange={(e) => setChecked1(e.value)} />
+                            <h2>Modal</h2>
+                            <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} />
+                            <Modal parentClass={"mt-3"} modalClass={"w-40rem"} content={content} footer={footer} position={"top"} header={"確認情報"} btnText={"更新"} checked={checked1} onChange={(e) => setChecked1(e.value)} />
                         </div>
                         <div class="card">
                             <h2>DataTable with pagination</h2>
@@ -212,6 +230,7 @@ export default function ComponentsDemo() {
                             <h2>DataTable without pagination</h2>
                             <TableData customActionsField="actions" value={customers} columns={columns} />
                         </div>
+
                         <div class="card">
                             <h2> Link</h2>
                             <Linker linkClass={"text-primary-600"} textWithUnderline={"PRIME"} link={"https://primereact.org/"} />
@@ -227,15 +246,19 @@ export default function ComponentsDemo() {
                             <h6>avatar with image</h6>
                             <Avatar
                                 avatarProps={{
-                                    parentClass:"bg-orange-500",
-                                    avatarClass:"mr-3",
+                                    // parentClass: "bg-orange-500",
+                                    avatarClass: "mr-3",
                                     size: "xlarge",
                                     image: "/layout/images/perspective1.jpg",
                                     shape: "circle",
-                                    style:{backgroundColor:"#2196F3"}
-                                    
+                                    style: { backgroundColor: "#2196F3" }
+
                                 }}
-                                 />
+                            />
+                        </div>
+                        <div class="card">
+                            <h2>Qr</h2>
+                            <BarcodeScanner />
                         </div>
                         <div class="card">
                             <h2> Divider Component </h2>
