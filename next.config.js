@@ -16,6 +16,9 @@ const nextConfig = {
             ? '' // development api
             : '' // production api
     },
+    images: {
+        unoptimized: true,
+    },
 }
 
 module.exports = nextConfig
