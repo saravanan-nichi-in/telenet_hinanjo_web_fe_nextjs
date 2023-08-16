@@ -7,13 +7,13 @@ const containerStyle = {
 };
 
 export const GoogleMapComponent = ({ initialPosition }) => {
-    const Key = process.env.NEXT_PUBLIC_GOGLE_API_KEY;
+    const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
     const [currentLocation, setCurrentLocation] = useState('');
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: Key
+        googleMapsApiKey: GOOGLE_API_KEY
     })
 
     const [map, setMap] = React.useState(null)

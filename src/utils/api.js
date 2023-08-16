@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'http://119.82.96.68:8000/api', // Replace with your API base URL
+  baseURL: API_URL, // Replace with your API base URL
 });
 
 // Request interceptor
