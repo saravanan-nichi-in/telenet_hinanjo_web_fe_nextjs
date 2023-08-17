@@ -62,7 +62,7 @@ Next.js is a popular open-source framework/extension built on top of React that 
 git clone https://github.com/saravanan-nichi-in/telenet_hinanjo_web_fe_nextjs.git
 ```
 
-2. Copy .env.local example -> .env.local & Update environments variables
+2. Copy .env.local.example -> .env.local & Update environments variables
 
 3. Install packages from package.json
 
