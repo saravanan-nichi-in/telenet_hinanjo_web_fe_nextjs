@@ -20,12 +20,14 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
     │ ├── layout                # Project layout with configuration    
     │ ├── middleware            # Contains redux saga config    
     │ └── pages                 # Contains all pages/file system routing information used in project   
-    │  ├── _app.js           # Entry point of the application   
-    ├── docs                    # Documentation files (alternatively `doc`)
-    ├── src                     # Source files (alternatively `lib` or `app`)
-    ├── test                    # Automated tests (alternatively `spec` or `tests`)
-    ├── tools                   # Tools and utilities
-    ├── LICENSE
+    │  ├── _app.js              # Entry point of the application   
+    │  ├── document.js          # Document structure of the application / Contains -> Stylesheets, Fonts, Scripts, SEO, SSR, GSM   
+    │  ├── _404.js              # Not found  
+    │  ├── _index.js            # Default route page of the application   
+    │  ├── admin                # Contains all admin related pages   
+    │  ├── staff                # Contains all staff related pages   
+    │  └── user                 # Contains all user related pages 
+    │ └── redux                 # Redux information & configuration   
     └── README.md
 
 ## Please follow the below steps
