@@ -13,26 +13,20 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 
 # Structure
 .  
-├── public......................# Public contains icons, favicons, background images  
+├── public......................# Public contains fonts, layout -> images, locales, themes  
 ├── src.........................# Project's source code  
-│ ├── app.....................# Routes with lading pages  
-│ ├── components..............# Contains Components used the project  
-│ ├── hooks...................# Helper react hooks  
-│ ├── middleware..............# Contains redux saga config  
-│ │ ├── features  
-│ │ └── rootSaga.js  
-│ ├── redux...................# Contains store, redux logics  
-│ │ ├── features  
-│ │ ├── hooks.js  
-│ │ ├── provider.js  
-│ │ ├── rootReduce  
-│ │ └── store.js  
+│ ├── components................# Components used in the project  
+│ ├── helper....................# Helper functions  
+│ ├── layout....................# Project layout with configuration  
+│ ├── middleware................# Contains redux saga config  
 │ └── utils...................# Projects js lib  
-├── .eslintrc.json..............# To define the configuration structure  
-├── .gitignore..................# Specifies intentionally untracked files to ignore  
+├── .env.local..................# Project environment variables
+├── .env.local.example..........# Example environment file
+├── .eslintrc.json..............# To define the configuration structure
+├── .gitignore..................# Specifies intentionally untracked files to ignore
+├── next.config.js..............# NextJS configuration file
 ├── package.json................# npm uses to install dependencies, run scripts  
 ├── postcss.config.js...........# PostCSS is a tool for transforming styles with JSplugins
-├── tailwind.config.............# configure the paths.
 └── README.md
 
 ## Please follow the below steps
