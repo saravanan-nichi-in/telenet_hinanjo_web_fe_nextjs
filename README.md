@@ -20,13 +20,11 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 │ ├── layout....................# Project layout with configuration  
 │ ├── middleware................# Contains redux saga config  
 │ └── utils...................# Projects js lib  
-├── .env.local..................# Project environment variables
-├── .env.local.example..........# Example environment file
-├── .eslintrc.json..............# To define the configuration structure
-├── .gitignore..................# Specifies intentionally untracked files to ignore
-├── next.config.js..............# NextJS configuration file
+├── .eslintrc.json..............# To define the configuration structure  
+├── .gitignore..................# Specifies intentionally untracked files to ignore  
 ├── package.json................# npm uses to install dependencies, run scripts  
 ├── postcss.config.js...........# PostCSS is a tool for transforming styles with JSplugins
+├── tailwind.config.............# configure the paths.
 └── README.md
 
 ## Please follow the below steps
