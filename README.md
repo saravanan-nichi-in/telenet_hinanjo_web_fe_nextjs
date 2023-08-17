@@ -13,9 +13,12 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 
 # Structure
     .
-    ├── build                   # Compiled files (alternatively `dist`)
+    ├── public                  # Public contains fonts, layout -> images, locales, themes
     ├── src                     # Project's source code  
     │ ├── components            # Components used in the project    
+    │ ├── helper                # Helper functions    
+    │ ├── layout                # Project layout with configuration    
+    │ ├── middleware            # Project layout with configuration    
     ├── docs                    # Documentation files (alternatively `doc`)
     ├── src                     # Source files (alternatively `lib` or `app`)
     ├── test                    # Automated tests (alternatively `spec` or `tests`)
