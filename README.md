@@ -13,28 +13,30 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 
 # Structure
     .
-    ├── public                  # Public contains fonts, layout -> images, locales, themes
-    ├── src                     # Project's source code  
-    │ ├── components            # Components used in the project    
-    │ ├── helper                # Helper functions    
-    │ ├── layout                # Project layout with configuration    
-    │ ├── middleware            # Contains redux saga config    
-    │ └── pages                 # Contains all pages/file system routing information used in project   
-    │  ├── _app.js              # Entry point of the application   
-    │  ├── document.js          # Document structure of the application / Contains -> Stylesheets, Fonts, Scripts, SEO, SSR, GSM   
-    │  ├── _404.js              # Not found  
-    │  ├── _index.js            # Default route page of the application   
-    │  ├── admin                # Contains all admin related pages   
-    │  ├── staff                # Contains all staff related pages   
-    │  └── user                 # Contains all user related pages 
-    │ └── redux                 # Redux information & configuration  
-    │  ├── auth....................# Contains authentication related redux logics
-    │  ├── features................# Contains features related redux logics  
-    │  ├── hooks.js................# Redux custom hooks
-    │  ├── provider.js.............# Redux provider  
-    │  ├── redux-persist-config.js.# Redux persist
-    │  ├── rootReducer.js..........# Redux root reducer
-    │  └── store.js................# Redux store  
+    ├── public                      # Public contains fonts, layout -> images, locales, themes
+    ├── src                         # Project's source code  
+    │ ├── components                # Components used in the project    
+    │ ├── helper                    # Helper functions    
+    │ ├── layout                    # Project layout with configuration    
+    │ ├── middleware                # Contains redux saga config    
+    │ └── pages                     # Contains all pages/file system routing information used in project   
+    │  ├── _app.js                  # Entry point of the application   
+    │  ├── document.js              # Document structure of the application / Contains -> Stylesheets, Fonts, Scripts, SEO, SSR, GSM   
+    │  ├── _404.js                  # Not found  
+    │  ├── _index.js                # Default route page of the application   
+    │  ├── admin                    # Contains all admin related pages   
+    │  ├── staff                    # Contains all staff related pages   
+    │  └── user                     # Contains all user related pages 
+    │ └── redux                     # Redux information & configuration  
+    │  ├── auth                     # Contains authentication related redux logics
+    │  ├── features                 # Contains features related redux logics  
+    │  ├── hooks.js                 # Redux custom hooks
+    │  ├── provider.js              # Redux provider  
+    │  ├── redux-persist-config.js  # Redux persist
+    │  ├── rootReducer.js           # Redux root reducer
+    │  └── store.js                 # Redux store
+    │ └── services                  # Global services  
+    │  └── authn_authz.services.js.# Contains authentication & authorization related global services 
     └── README.md
 
 ## Please follow the below steps
