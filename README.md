@@ -14,7 +14,7 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 # Structure
 .  
 ├── public......................# Public contains fonts, layout -> images, locales, themes
-
+├── src.........................# Project's source code  
 
 ## Please follow the below steps
 
