@@ -11,50 +11,10 @@ Next.js is a popular open-source framework/extension built on top of React that 
 
 Web application for handle different roles ( Admin, Staff & User ) & other responsibilities
 
-# Folder Structure
+# Structure
 .  
 ├── public......................# Public contains fonts, layout -> images, locales, themes
-├── src.........................# Project's source code  
-│ ├── components................# Components used in the project
-│ ├── helper....................# Helper functions
-│ ├── layout....................# Project layout with configuration
-│ ├── middleware................# Contains redux saga config  
-│ ├── pages.....................# Contains all pages/file system routing information used in project  
-│ │ ├── _app.js.................# Entry point of the application  
-│ │ ├──_document.js.............# Document structure of the application / Contains -> Stylesheets, Fonts, Scripts, SEO, SSR, GSM
-│ │ ├── _404.js.................# Not found
-│ │ ├──_index.js................# Default route page of the application
-│ │ ├── admin...................# Contains all admin related pages
-│ │ ├── staff...................# Contains all staff related pages
-│ │ └── user....................# Contains all user related pages  
-│ ├── redux.....................# Redux information & configuration
-│ │ ├── auth....................# Contains authentication related redux logics
-│ │ ├── features................# Contains features related redux logics  
-│ │ ├── hooks.js................# Redux custom hooks
-│ │ ├── provider.js.............# Redux provider  
-│ │ ├── redux-persist-config.js.# Redux persist
-│ │ ├── rootReducer.js..........# Redux root reducer
-│ │ └── store.js................# Redux store  
-│ ├── services..................# Redux information & configuration
-│ │ └── authn_authz.services.js.# Contains authentication & authorization related global services  
-│ ├── styles....................# Project styles
-│ │ ├── components..............# Components styles
-│ │ ├── layout..................# layout styles
-│ │ └── pages...................# pages styles  
-│ ├── utils.....................# Project utils/utilities information's  
-│ │ ├── js......................# Global/Custom js files
-│ │ ├── api.js..................# Global api/axios configuration
-│ │ └── constant.js.............# Contains static/dummy content  
-│ ├── validation................# Project global validation  
-│ │ ├── validationPattern.js....# Contains validation patterns.
-├── .env.local..................# Project environment variables
-├── .env.local.example..........# Example environment file
-├── .eslintrc.json..............# To define the configuration structure
-├── .gitignore..................# Specifies intentionally untracked files to ignore
-├── next.config.js..............# NextJS configuration file
-├── package.json................# npm uses to install dependencies, run scripts  
-├── postcss.config.js...........# PostCSS is a tool for transforming styles with JSplugins
-└── README.md
+
 
 ## Please follow the below steps
 
