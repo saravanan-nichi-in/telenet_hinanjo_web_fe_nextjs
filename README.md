@@ -13,30 +13,13 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 
 # Structure
 .  
-├── public......................# Public contains fonts, layout -> images, locales, themes  
+├── public......................# Public contains fonts, layout -> images, locales, themes
 ├── src.........................# Project's source code  
-│ ├── app.....................# Routes with lading pages  
-│ │ ├── contact  
-│ │ │ └── page.js  
-│ │ ├── emp  
-│ │ │ └── page.js  
-│ │ ├── forgot  
-│ │ │ └── page.js  
-│ │ ├── group  
-│ │ │ └── page.js  
-│ │ ├── help  
-│ │ │ └── page.js  
-│ │ ├── log  
-│ │ │ └── page.js  
-│ │ ├── login  
-│ │ │ └── page.js  
-│ │ ├── org  
-│ │ │ └── page.js  
-│ │ ├── reset  
-│ │ │ └── page.js  
-│ │ └── role  
-│ │ └── page.js  
-│ ├── components..............# Contains Components used the project  
+│ ├── components................# Components used in the project
+│ ├── helper....................# Helper functions
+│ ├── layout....................# Project layout with configuration
+│ ├── middleware................# Contains redux saga config  
+│ ├── pages.....................# Contains all pages/file system routing information used in project 
 │ ├── hooks...................# Helper react hooks  
 │ ├── middleware..............# Contains redux saga config  
 │ │ ├── features  
