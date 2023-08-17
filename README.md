@@ -20,7 +20,7 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
     │ ├── layout                # Project layout with configuration    
     │ ├── middleware            # Contains redux saga config    
     │ ├── pages                 # Contains all pages/file system routing information used in project   
-    │ ├── _app.js           # Entry point of the application   
+    │  ├── _app.js           # Entry point of the application   
     ├── docs                    # Documentation files (alternatively `doc`)
     ├── src                     # Source files (alternatively `lib` or `app`)
     ├── test                    # Automated tests (alternatively `spec` or `tests`)
