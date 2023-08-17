@@ -36,7 +36,24 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
     │  ├── rootReducer.js           # Redux root reducer
     │  └── store.js                 # Redux store
     │ └── services                  # Global services  
-    │  └── authn_authz.services.js.# Contains authentication & authorization related global services 
+    │  └── authn_authz.services.js  # Contains authentication & authorization related global services 
+    │ └── styles                    # Project styles
+    │  ├── components               # Components styles  
+    │  ├── layout                   # Layout styles
+    │  └── pages                    # Pages styles
+    │ └── utils                     # Project utils/utilities information's
+    │  ├── js                       # Global/Custom js files  
+    │  ├── api.js                   # Global api/axios configuration
+    │  └── constant.js              # Contains static/dummy content
+    │ └── validation                # Project global validation
+    │  └── validationPattern.js     # Contains validation patterns
+    ├── .env.local                  # Project environment variables    
+    ├── .env.local.example          # Example environment variables file   
+    ├── .eslintrc.json              # Eslint configuration
+    ├── .gitignore                  # Specifies intentionally untracked files to ignore    
+    ├── next.config.js              # NextJS configuration file    
+    ├── package.json                # Project dependenices & details file    
+    ├── postcss.config.js           # PostCSS is a tool for transforming styles with JSplugins    
     └── README.md
 
 ## Please follow the below steps
