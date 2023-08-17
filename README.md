@@ -11,7 +11,7 @@ Next.js is a popular open-source framework/extension built on top of React that 
 
 Web application for handle different roles ( Admin, Staff & User ) & other responsibilities
 
-# Structure
+# Project Structure
     .
     ├── public                      # Public contains fonts, layout -> images, locales, themes
     ├── src                         # Project's source code  
