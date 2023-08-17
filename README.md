@@ -13,8 +13,9 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 
 # Structure
 .  
-├── public......................# Public contains fonts, layout -> images, locales, themes
+├── public......................# Public contains icons, favicons, background images  
 ├── src.........................# Project's source code  
+│ ├── app.....................# Routes with lading pages  
 
 ## Please follow the below steps
 
