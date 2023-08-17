@@ -16,6 +16,44 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
 ├── public......................# Public contains icons, favicons, background images  
 ├── src.........................# Project's source code  
 │ ├── app.....................# Routes with lading pages  
+│ │ ├── contact  
+│ │ │ └── page.js  
+│ │ ├── emp  
+│ │ │ └── page.js  
+│ │ ├── forgot  
+│ │ │ └── page.js  
+│ │ ├── group  
+│ │ │ └── page.js  
+│ │ ├── help  
+│ │ │ └── page.js  
+│ │ ├── log  
+│ │ │ └── page.js  
+│ │ ├── login  
+│ │ │ └── page.js  
+│ │ ├── org  
+│ │ │ └── page.js  
+│ │ ├── reset  
+│ │ │ └── page.js  
+│ │ └── role  
+│ │ └── page.js  
+│ ├── components..............# Contains Components used the project  
+│ ├── hooks...................# Helper react hooks  
+│ ├── middleware..............# Contains redux saga config  
+│ │ ├── features  
+│ │ └── rootSaga.js  
+│ ├── redux...................# Contains store, redux logics  
+│ │ ├── features  
+│ │ ├── hooks.js  
+│ │ ├── provider.js  
+│ │ ├── rootReduce  
+│ │ └── store.js  
+│ └── utils...................# Projects js lib  
+├── .eslintrc.json..............# To define the configuration structure  
+├── .gitignore..................# Specifies intentionally untracked files to ignore  
+├── package.json................# npm uses to install dependencies, run scripts  
+├── postcss.config.js...........# PostCSS is a tool for transforming styles with JSplugins
+├── tailwind.config.............# configure the paths.
+└── README.md
 
 ## Please follow the below steps
 
