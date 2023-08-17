@@ -27,7 +27,14 @@ Web application for handle different roles ( Admin, Staff & User ) & other respo
     │  ├── admin                # Contains all admin related pages   
     │  ├── staff                # Contains all staff related pages   
     │  └── user                 # Contains all user related pages 
-    │ └── redux                 # Redux information & configuration   
+    │ └── redux                 # Redux information & configuration  
+    │ │ ├── auth....................# Contains authentication related redux logics
+    │ │ ├── features................# Contains features related redux logics  
+    │ │ ├── hooks.js................# Redux custom hooks
+    │ │ ├── provider.js.............# Redux provider  
+    │ │ ├── redux-persist-config.js.# Redux persist
+    │ │ ├── rootReducer.js..........# Redux root reducer
+    │ │ └── store.js................# Redux store  
     └── README.md
 
 ## Please follow the below steps
