@@ -12,20 +12,15 @@ Next.js is a popular open-source framework/extension built on top of React that 
 Web application for handle different roles ( Admin, Staff & User ) & other responsibilities
 
 # Structure
-.  
-├── public......................# Public contains fonts, layout -> images, locales, themes  
-├── src.........................# Project's source code  
-│ ├── components................# Components used in the project  
-│ ├── helper....................# Helper functions  
-│ ├── layout....................# Project layout with configuration  
-│ ├── middleware................# Contains redux saga config  
-│ └── utils...................# Projects js lib  
-├── .eslintrc.json..............# To define the configuration structure  
-├── .gitignore..................# Specifies intentionally untracked files to ignore  
-├── package.json................# npm uses to install dependencies, run scripts  
-├── postcss.config.js...........# PostCSS is a tool for transforming styles with JSplugins
-├── tailwind.config.............# configure the paths.
-└── README.md
+.
+├── ...
+├── docs                    # Documentation files (alternatively `doc`)
+│   ├── TOC.md              # Table of contents
+│   ├── faq.md              # Frequently asked questions
+│   ├── misc.md             # Miscellaneous information
+│   ├── usage.md            # Getting started guide
+│   └── ...                 # etc.
+└── ...
 
 ## Please follow the below steps
 
