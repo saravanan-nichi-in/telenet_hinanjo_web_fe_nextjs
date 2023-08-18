@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
         router.events.on('routeChangeStart', hideContent);
         // on route change complete - run auth check 
         router.events.on('routeChangeComplete', authCheck)
-        // unsubscribe from events in useEffect return function
+        // Unsubscribe from events in useEffect return function
         return () => {
             router.events.off('routeChangeStart', hideContent);
             router.events.off('routeChangeComplete', authCheck);
@@ -34,15 +34,24 @@ function MyApp({ Component, pageProps }) {
     }, []);
 
     function authCheck(url) {
-        // redirect to login page if accessing a private page and not logged in 
-        const publicPaths = ['/admin/login', '/staff/login', '/admin/forgot-password', '/staff/forgot-password', '/admin/reset-password', '/staff/reset-password'];
+        // Redirect to login page if accessing a private page and not logged in 
+        const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
+        const staffPublicPaths = ['/staff/login', '/staff/forgot-password', '/staff/reset-password'];
         const path = url.split('?')[0];
-        if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !publicPaths.includes(path)) {
+        if (AuthenticationAuthorizationService.adminValue && adminPublicPaths.includes(path)) {
+            router.push({
+                pathname: '/admin/dashboard',
+            });
+        } else if (AuthenticationAuthorizationService.staffValue && staffPublicPaths.includes(path)) {
+            router.push({
+                pathname: '/staff/dashboard',
+            });
+        } else if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path)) {
             setAuthorized(false);
             router.push({
                 pathname: '/admin/login',
             });
-        } else if (path.startsWith('/staff') && !AuthenticationAuthorizationService.staffValue && !publicPaths.includes(path)) {
+        } else if (path.startsWith('/staff') && !AuthenticationAuthorizationService.staffValue && !staffPublicPaths.includes(path)) {
             setAuthorized(false);
             router.push({
                 pathname: '/staff/login',

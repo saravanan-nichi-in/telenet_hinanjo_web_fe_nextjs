@@ -2,8 +2,6 @@ import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-console.log(API_URL);
-
 // Create an Axios instance
 const api = axios.create({
   baseURL: API_URL, // Replace with your API base URL

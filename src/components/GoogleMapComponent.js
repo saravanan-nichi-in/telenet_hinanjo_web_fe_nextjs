@@ -29,7 +29,6 @@ export const GoogleMapComponent = ({ initialPosition }) => {
 
     const onUnmount = React.useCallback(function callback(map) {
         setMap(null)
-
     }, [])
 
     const getLocation = () => {
@@ -37,7 +36,6 @@ export const GoogleMapComponent = ({ initialPosition }) => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
-                    console.log(latitude);
                     const current = {
                         lat: latitude,
                         lng: longitude
