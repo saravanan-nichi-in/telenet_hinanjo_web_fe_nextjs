@@ -1,47 +1,35 @@
-import React, { useState } from 'react';
-import { Calendar } from 'primereact/calendar';
-import { addLocale } from 'primereact/api';
+import React, { useState, useEffect } from 'react';
 
-const DateTimePicker = (props) => {
+function DateTimePicker(props) {
+    const{fontsize,bgColor,fontWeight,parentClass}=props
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
-    const [date, setDate] = useState(null);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 60000); // Update every minute
 
-    addLocale('en', {
-        firstDayOfWeek: 0,
-        dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
-        dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
-        dayNamesMin: ['日', '月', '火', '水', '木', '金', '土'],
-        monthNames: [
-            '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'
-        ],
-        monthNamesShort: [
-            '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'
-        ],
-        today: '今日',
-        clear: 'クリア'
-    });
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Tokyo'
+    };
+
+    const formattedDateTime = currentDateTime.toLocaleString('ja-JP', options);
 
     return (
-        <div className={`${props.parentClass}`}>
-            <Calendar className={`${props.width} ${props.height ? props.height : 'custom_input'} ${props.dateTimeClass}`}
-                id="time24"
-                showTime
-                value={date}
-                onChange={(e) => setDate(e.value)}
-                dateFormat="yy年mm月dd日"
-                disabledDates={props.disabledDates}
-                disabledDays={props.disabledDays}
-                minDate={props.minDate}
-                maxDate={props.maxDate}
-                selectionMode={props.selectionMode ? props.selectionMode : "single"}
-                readOnlyInput
-                icon={props.icon ? props.icon : "pi pi-calendar"}
-                iconPos={props.iconPos ? props.iconPos : "right"}
-                showIcon
-                placeholder={props.placeholder}
-            />
+        <div className={`${fontsize} ${bgColor} ${fontWeight} ${parentClass}`}>
+            {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
         </div>
     );
-
 }
-export default DateTimePicker             
+
+export default DateTimePicker;

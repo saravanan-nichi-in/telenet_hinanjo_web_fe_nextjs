@@ -18,7 +18,8 @@ const UploadFile = () => {
                 url="/api/upload"
                 accept="/*"
                 maxFileSize={1000000}
-                onUpload={onUpload} />
+                onUpload={onUpload}
+            />
 
         </div>
     );

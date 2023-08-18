@@ -7,7 +7,7 @@ import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
 import { LogoutOutlined } from '@ant-design/icons';
-import Datepicker from '@/components/date/datePicker';
+import DateTimePicker from '@/components/date/dateTimePicker';
 import DropdownSelect from '@/components/input/dropdownSelect';
 
 const AppTopbar = forwardRef((props, ref) => {
@@ -92,8 +92,9 @@ const AppTopbar = forwardRef((props, ref) => {
 
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
 
-                <Datepicker fontsize={"mt-3"} />
-                <DropdownSelect items={items} icon={"pi pi-cog"}/>
+                <DateTimePicker fontsize={"mt-3"} />
+                
+                <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"}/>
                 {/* <Dropdown
                     menu={{
                         items,

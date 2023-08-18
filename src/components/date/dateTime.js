@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-const CalendarComponent = (props) => {
-
+const DateTime = (props) => {
+    const { parentClass, dateTimeProps = {} } = props && props
+    const { height, dateTimeClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, placeholder } = dateTimeProps && dateTimeProps
     const [date, setDate] = useState(null);
 
     addLocale('en', {
@@ -22,23 +24,26 @@ const CalendarComponent = (props) => {
     });
 
     return (
-        <div className={`${props.parentClass}`}>
-            <Calendar className={` ${props.width} ${props.calendarClass} ${props.height ? props.height : 'custom_input'}`}
-                id="basic"
+        <div className={`${parentClass}`}>
+            <Calendar className={`${height || 'custom_input'} ${dateTimeClass}`}
+                id="time24"
+                showTime
                 value={date}
-                icon={props.icon ? props.icon : "pi pi-calendar"}
-                iconPos={props.iconPos ? props.iconPos : "right"}
-                disabledDates={props.disabledDates}
-                disabledDays={props.disabledDays}
                 onChange={(e) => setDate(e.value)}
-                dateFormat="yy年mm月dd日" minDate={props.minDate}
-                maxDate={props.maxDate}
-                selectionMode={props.selectionMode ? props.selectionMode : "single"}
+                dateFormat="yy年mm月dd日"
+                disabledDates={disabledDates}
+                disabledDays={disabledDays}
+                minDate={minDate}
+                maxDate={maxDate}
+                selectionMode={selectionMode || "single"}
+                readOnlyInput
+                icon={icon || "pi pi-calendar"}
+                iconPos={iconPos || "right"}
                 showIcon
-                placeholder={props.placeholder}
+                placeholder={placeholder}
             />
         </div>
     );
 
 }
-export default CalendarComponent             
+export default DateTime             

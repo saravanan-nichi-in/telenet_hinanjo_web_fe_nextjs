@@ -44,10 +44,11 @@ const map= (
     <ol>
     {data.map((item, index) => (
         <li key={index}>
-    <InputSwitcher parentClass={"custom-switch mr-2"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> 
-
-            {item.title}
-            <a href="#">Drag</a>
+    <InputSwitcher parentClass={"custom-switch mr-2"} checked={checked1} onChange={(e) => setChecked1(e.value)} />
+             {item.title}
+             <a href="#">
+                drag
+            </a>
         </li>
     ))}
     </ol>

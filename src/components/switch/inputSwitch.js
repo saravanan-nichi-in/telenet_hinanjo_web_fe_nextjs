@@ -2,13 +2,15 @@ import React from 'react';
 import { InputSwitch } from 'primereact/inputswitch';
 
 const InputSwitcher = (props) => {
-
+    const { parentClass, inputSwitchProps = {} } = props && props
+    const { switchClass, checked, onChange } = inputSwitchProps && inputSwitchProps
     return (
-        <div className={`${props.parentClass}`}>
+        <div className={`${parentClass}`}>
 
-            <InputSwitch className={`${props.bgColor} ${props.switchClass}`}
-                checked={props.checked}
-                onChange={props.onChange} />
+            <InputSwitch className={` ${switchClass}`}
+                checked={checked}
+                onChange={onChange}
+            />
         </div>
     );
 }

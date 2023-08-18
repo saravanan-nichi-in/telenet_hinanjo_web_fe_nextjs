@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown } from 'antd';
 export default function DropdownSelect(props) {
-    const items = props.items
+    const { items, icon, antdIcon, spanText } = props && props
 
     return (
         <div>
@@ -12,8 +12,8 @@ export default function DropdownSelect(props) {
                 trigger={['click']}
             >
                 <button type="button" className="p-link layout-topbar-button mt-1">
-                    <i className={props.icon}></i>
-                    <span>Settings</span>
+                    <i className={icon}>{antdIcon}</i>
+                    <span>{spanText}</span>
                 </button>
             </Dropdown>
         </div>

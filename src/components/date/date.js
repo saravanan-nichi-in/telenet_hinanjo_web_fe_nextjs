@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-
-const TimePicker = (props) => {
-    const { parentClass, timeProps = {} } = props
-    const { height, timeClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, placeholder } = timeProps
+const DateCalendar = (props) => {
+    const{parentClass,dateProps={}}=props && props
+    const{height,dateClass,icon,iconPos,disabledDates,
+        disabledDays,minDate,maxDate,selectionMode,placeholder}=dateProps && dateProps
     const [date, setDate] = useState(null);
 
     addLocale('en', {
@@ -26,26 +25,22 @@ const TimePicker = (props) => {
 
     return (
         <div className={`${parentClass}`}>
-            <Calendar className={` ${height || 'custom_input'} ${timeClass}`}
-                id="time24"
+            <Calendar className={` ${dateClass} ${height || 'custom_input'}`}
+                id="basic"
                 value={date}
-                icon={icon || "pi pi-clock"}
-                showIcon
+                icon={icon || "pi pi-calendar"}
                 iconPos={iconPos || "right"}
                 disabledDates={disabledDates}
                 disabledDays={disabledDays}
-                minDate={minDate} maxDate={maxDate}
-                selectionMode={selectionMode || "single"}
                 onChange={(e) => setDate(e.value)}
-                dateFormat="yy年mm月dd日"
-                timeOnly
-                readOnlyInput
-                showSeconds
+                dateFormat="yy年mm月dd日" minDate={minDate}
+                maxDate={maxDate}
+                selectionMode={selectionMode || "single"}
+                showIcon
                 placeholder={placeholder}
-                hourFormat="24"
             />
         </div>
     );
 
 }
-export default TimePicker             
+export default DateCalendar             

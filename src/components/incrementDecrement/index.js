@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputGroup from './inputGroup';
+import InputGroup from '../input/inputGroup';
 
 export default function IncrementDecrement(props) {
     const [value, setValue] = useState(props.value);

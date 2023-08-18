@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
-import ErrorBlock from '@/components/validation/errorBlock';
+import ValidationError from '@/components/error/validationError';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -78,30 +78,32 @@ const LoginPage = () => {
                                                     {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
                                                 </label>
 
-                                                <InputLeftRightGroup
-                                                    name='email'
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    antdRightIcon={<MailFilled />}
-                                                    placeholder={translate(localeJson, 'mail_address')}
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'email',
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <MailFilled />,
+                                                    placeholder: translate(localeJson, 'mail_address'),
+                                                }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
-                                                <ErrorBlock errorBlock={errors.email && touched.email && errors.email} />
+                                                <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">
                                                 <label htmlFor="password" className="block mb-2">
                                                     {translate(localeJson, 'password')}<span className='p-error'>*</span>
                                                 </label>
-                                                <InputLeftRightGroup
-                                                    name='password'
-                                                    type="password"
-                                                    value={values.password}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    antdRightIcon={<LockFilled />}
-                                                    placeholder={translate(localeJson, 'password')}
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'password',
+                                                    type: "password",
+                                                    value:values.password,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <LockFilled />,
+                                                    placeholder: translate(localeJson, 'password'),
+                                                }}
                                                     parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
                                                 {/* <PasswordInput antdRightIcon={<LockFilled />} value={values.password} onBlur={handleBlur} className={`w-full ${errors.password && touched.password && 'p-invalid'}`} placeholder={translate(localeJson, 'password')} onChange={handleChange} /> */}
-                                                <ErrorBlock errorBlock={errors.password && touched.password && errors.password} />
+                                                <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
                                                 <Button type='submit' label={translate(localeJson, 'login')} className="custom_radiusBtn" severity="primary"></Button>

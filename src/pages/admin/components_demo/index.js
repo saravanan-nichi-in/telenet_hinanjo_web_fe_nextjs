@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
-import IconPosBtn from '@/components/button/iconPositionBtn';
 import RoundedBtn from '@/components/button/roundedbtn';
 import DividerComponent from '@/components/divider';
-import CalendarComponent from '@/components/date/calendar';
 import InputIcon from '@/components/input/inputIcon';
 import InputSwitcher from '@/components/switch/inputSwitch';
 import TogglBtn from '@/components/switch/toglbtn';
-import Datepicker from '@/components/date/datePicker';
 import TextArea from '@/components/input/inputTextArea';
 import InputSelect from '@/components/input/dropDown';
 import RadioBtn from '@/components/input/radiobtn';
 import InputGroup from '@/components/input/inputGroup';
-import CheckBox from '@/components/input/checkbox';
+import CheckBox from '@/components/checkbox/index.';
 import Select from '@/components/input/select';
-import Label from '@/components/input/label';
+import Label from '@/components/label';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/helper/datatableservice';
@@ -22,12 +19,15 @@ import Linker from '@/components/link/index.';
 import TimePicker from '@/components/date/time';
 import IncrementDecrement from '@/components/input/incrementDecrement';
 import UploadFile from '@/components/input/upload';
-import DateTimePicker from '@/components/date/dateTimePicker';
 import Avatar from '@/components/image/avatar';
 import ImageCropper from '@/pages/POC/CROP';
 import ImageComponent from '@/components/image/image';
 import BarcodeScanner from '@/components/qr';
 import Modal from '@/components/modal';
+import DateCalendar from '@/components/date/date';
+import DateTime from '@/components/date/dateTime';
+import DateTimePicker from '@/components/date/dateTimePicker';
+import RectangularButton from '@/components/button/rectangularBtn';
 
 
 export default function ComponentsDemo() {
@@ -82,7 +82,7 @@ export default function ComponentsDemo() {
             header: 'Edit Actions',
             body: (rowData) => (
                 <div>
-                    <IconPosBtn text={"Edit"} />
+                    <RectangularButton rectangularButtonProps={{ text:"Edit"}} />
                 </div>
             ),
         }, {
@@ -90,7 +90,9 @@ export default function ComponentsDemo() {
             header: 'Delete Actions',
             body: (rowData) => (
                 <div>
-                    <IconPosBtn severity={"danger"} text={"delete"} />
+                    <RectangularButton rectangularButtonProps={{
+                        severity:"danger" ,text:"delete"
+                        }} />
                 </div>
             ),
         },
@@ -98,8 +100,15 @@ export default function ComponentsDemo() {
 
     const footer = (
         <div className="text-center">
-            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={"cancel"} />
-            <IconPosBtn buttonClass={"h-3rem"} parentClass={"inline"} text={"delete"} severity={"danger"} />
+            <RectangularButton rectangularButtonProps={{
+                 buttonClass:"h-3rem",
+                 text:"cancel" 
+            }} parentClass={"inline"} />
+            <RectangularButton rectangularButtonProps={{
+                 buttonClass:"h-3rem",
+                 text:"delete",
+                 severity:"danger" 
+            }} parentClass={"inline"}/>
         </div>
     );
 
@@ -134,55 +143,139 @@ export default function ComponentsDemo() {
                         <div class="card ">
                             <h2> Buttons Component </h2>
                             <div>
-                                <IconPosBtn icon={"pi pi-star-fill"} radius={"border-round-lg"} parentClass={"mb-1"} />
-                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} />
-                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-lg"} />
-                                <IconPosBtn parentClass={"mb-1"} text={"避難者状況一覧"} icon={"pi pi-star-fill"} iconPos={"left"} />
-                                <RoundedBtn text={"避難者状況一覧"} mx={"mx-0"} icon={"pi pi-star-fill"} iconPos={"right"} radius={"border-round-3xl"} bg={"bg-orange-500"} hoverBg={"hover:bg-orange-600"} borderColor={"border-cyan-800"} /> <hr />
+                                <RectangularButton rectangularButtonProps={{
+                                    icon:"pi pi-star-fill",      
+                                }}
+                               parentClass={"mb-1 border-round-lg"} />
+                                <RectangularButton rectangularButtonProps={{
+                                    text:"避難者状況一覧"
+                                }} 
+                                parentClass={"mb-1"} />
+                                <RectangularButton parentClass={"mb-1 border-round-lg"} 
+                                rectangularButtonProps={{
+                                    text:"避難者状況一覧",
+                                    icon:"pi pi-star-fill",
+                                    iconPos:"right"
+                                }}/>
+                                <RectangularButton parentClass={"mb-1"} rectangularButtonProps={{
+                                     text:"避難者状況一覧",
+                                     icon:"pi pi-star-fill",
+                                     iconPos:"left",
+                                     rounded:"true"
+                                }}
+                                 />
                             </div>
                         </div>
 
                         < div class="card ">
                             <h2> Date Components</h2>
                             <h6>Current date and time component</h6>
-                            <Datepicker parentClass={"pb-1"} />
+                            {/* <DateTimePicker parentClass={"pb-1"} /> */}
+                            <DateTimePicker/>
                             <h6>Date Picker</h6>
-                            <CalendarComponent placeholder={"yy-mm-dd"} width={"xl:w-4 sm:w-full"} />
+                            <DateCalendar dateProps={{placeholder:"yy-mm-dd"
+                            }} parentClass={"xl:w-4 sm:w-full"} />
 
                             <h6>Time Picker</h6>
-                            <TimePicker width={"xl:w-4 sm:w-full"} />
+                            <TimePicker parentClass={"xl:w-4 sm:w-full"} timeProps={{
+                                placeholder:"time"
+                            }} />
 
                             <h6>Disabled days </h6>
-                            <CalendarComponent width={"xl:w-4 sm:w-full"} disabledDates={invalidDates} disabledDays={[0, 6]} placeholder={"yy-mm-dd"} />
+                            <DateCalendar parentClass={"xl:w-4 sm:w-full"} dateProps={{
+                                disabledDates:invalidDates,
+                                disabledDays:[0,6],
+                                placeholder:"yy-mm-dd"
+                            }} />
                             <h6>Date and Time with range</h6>
-                            <DateTimePicker selectionMode="range" width={"xl:w-6 sm:w-full"} />
+                            <DateTime dateTimeProps={{
+                                selectionMode:"range"
+                            }} parentClass={"xl:w-6 sm:w-full"} />
 
                         </div>
                         < div class="card ">
                             <h2>input icons</h2>
-                            <InputIcon parentClass={"w-3"} placeholder="input-left-icon" icon="pi pi-search" iconPos="p-input-icon-left" /><br />
-                            <InputIcon parentClass={"w-3"} placeholder="input-right-icon" icon="pi pi-search" iconPos="p-input-icon-right" />
-                            <InputIcon parentClass={"mt-3  "} inputClass={"xl:w-3 sm:w-full"} placeholder="input" />
-                            <InputIcon parentClass={"mt-3 "} inputClass={"xl:w-3 sm:w-full"} />
-                            <InputIcon parentClass={"mt-3"} inputClass={"xl:w-3 sm:w-full"} readOnly={"true"} value={20} />
+                            <InputIcon parentClass={"w-3"} inputIconProps={{
+                                placeholder:"input-left-icon" ,
+                                icon:"pi pi-search",
+                                iconPos:"p-input-icon-left"
+                            }} /><br />
+                            <InputIcon parentClass={"w-3"} inputIconProps={{
+                                placeholder:"input-right-icon",
+                                icon:"pi pi-search",
+                                iconPos:"p-input-icon-right"
+                            }} />
+                            <InputIcon parentClass={"mt-3  "} inputIconProps={{
+                                inputClass:"xl:w-3 sm:w-full",
+                                placeholder:"input"
+                            }} />
+                            <InputIcon parentClass={"mt-3 "} inputIconProps={{
+                                inputClass:"xl:w-3 sm:w-full"
+                            }} />
+                            <InputIcon parentClass={"mt-3"} inputIconProps={{
+                                inputClass:"xl:w-3 sm:w-full",
+                                readOnly:"true",
+                                value:20
+                            }}/>
                             <div class="pt-3">
                                 <h2>input group</h2>
-                                <InputLeftRightGroup rightIcon={"pi pi-user"} placeholder={"username"} parentClass={"xl:w-4 pb-2 "} />
-                                <InputLeftRightGroup type="password" leftIcon={"pi pi-user"} placeholder={"password"} parentClass={"xl:w-4 pb-2 "} />
-                                <InputGroup type="number" parentClass={"xl:w-4 sm:w-full"} value={value} onChange={(e) => setValue(e.target.value)} onRightClick={handleIncrement} onLeftClick={handleDecrement} rightIcon={"pi pi-plus"} leftIcon={"pi pi-minus"} />
+                                <InputLeftRightGroup inputLrGroupProps={{
+                                    rightIcon: "pi pi-user",
+                                    placeholder: "username",
+                                }}
+                                    parentClass={"xl:w-4 pb-2 "}
+                                />
+                                <InputLeftRightGroup
+                                    inputLrGroupProps={{
+                                        type: "password",
+                                        leftIcon: "pi pi-user",
+                                        placeholder: "password",
+                                    }}
+                                    parentClass={"xl:w-4 pb-2 "}
+                                />
+                                <InputGroup inputGroupProps={{
+                                    type:"number",
+                                    value:value,
+                                    onChange:(e) => setValue(e.target.value),
+                                    onRightClick:handleIncrement,
+                                    onLeftClick:handleDecrement,
+                                    rightIcon:"pi pi-plus",
+                                    leftIcon:"pi pi-minus"
+                                }}
+                                parentClass={"xl:w-4 sm:w-full"} />
                             </div>
                             <div class="pt-3">
                                 <h2>TextArea</h2>
-                                <TextArea textAreaClass={"w-full"} row={5} cols={10} />
+                                <TextArea textAreaProps={{
+                                    textAreaClass: "w-full",
+                                    row: 5,
+                                    cols: 10
+                                }} />
                             </div>
                             <div class="pt-3">
                                 <h2>Input and Dropdown</h2>
-                                <InputSelect value={selectedCity} onChange={(e) => setSelectedCity(e.value)} options={cities} optionLabel="name" />
+                                <InputSelect dropdownProps={{
+                                    value: selectedCity,
+                                    onChange: (e) => setSelectedCity(e.value),
+                                    options: cities,
+                                    optionLabel: "name"
+                                }}
+
+
+
+                                />
                             </div>
                             <div class="pt-3">
                                 <h2>Select</h2>
-                                <Select parentClass={"custom_select"} selectClass={"custom_dropdown_items"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
+                                <Select selectProps={{
+                                    selectClass: "custom_dropdown_items",
+                                    value: data,
+                                    options: options,
+                                    onChange: (e) => setData(e.value),
+                                    placeholder: "Select a City"
+                                }}
+                                    parentClass={"custom_select"}
+                                />
                             </div>
                             <div class="pt-3">
                                 <h2>Label</h2>
@@ -190,13 +283,29 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
-                                <RadioBtn radioClass={"mr-1"} inputId={"ingredient1"} name={"chk"} value={"Cake"} onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Cake'} />
+                                <RadioBtn radioBtnProps={{
+                                    radioClass: "mr-1",
+                                    inputId: "ingredient1",
+                                    name: "chk",
+                                    value: "Cake",
+                                    onChange: (e) => setIngredient(e.value),
+                                    checked: ingredient === 'Cake'
+                                }}
+                                />
                             </div>
 
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
-                                <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} />
-                                <CheckBox checkboxClass={"pr-1 h-10"} parentClass={"pt-1 custom_checkbox"} inputId="ingredient1" name="pizza" value="Cheese" onChange={onIngredientsChange} checked={ingredients.includes('Cheese')} />
+                                {/* <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} /> */}
+                                <CheckBox checkBoxProps={{
+                                    checkboxClass: "pr-1 h-10",
+                                    inputId: "ingredient1",
+                                    name: "pizza",
+                                    value: "Cheese",
+                                    onChange: onIngredientsChange,
+                                    checked: ingredients.includes('Cheese')
+                                }}
+                                    parentClass={"pt-1 custom_checkbox"} />
                             </div>
                             <div class="pt-3">
                                 <h2> upload</h2>
@@ -210,7 +319,12 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card" >
                             <h2>Switch Component</h2>
-                            <InputSwitcher parentClass={"custom-switch"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> <br />
+                            <InputSwitcher parentClass={"custom-switch"}
+                                inputSwitchProps={{
+                                    checked: checked1,
+                                    onChange: (e) => setChecked1(e.value)
+                                }}
+                            />
                             <TogglBtn togglProps={{
                                 checked: checked1,
                                 onLabel: "on",
@@ -233,17 +347,40 @@ export default function ComponentsDemo() {
 
                         <div class="card">
                             <h2> Link</h2>
-                            <Linker linkClass={"text-primary-600"} textWithUnderline={"PRIME"} link={"https://primereact.org/"} />
-                            <Linker text={"PRIME"} link={"https://primereact.org/"} />
+                            <Linker linkProps={{
+                                linkClass: "text-primary-600",
+                                textWithUnderline: "PRIME",
+                                href: "https://primereact.org/"
+                            }}
+                            />
+                            <Linker linkProps={{
+                                text: "PRIME",
+                                href: "https://primereact.org/"
+                            }}
+                            />
                         </div>
                         <div class="card">
                             <h2> Image</h2>
-                            <ImageComponent width={"200"} height={"100"} src="/public/layout/images/perspective1.jpg" />
+                            <ImageComponent 
+                            imageProps={{
+                                width: "200",
+                                height: "200",
+                                src: "/layout/images/perspective1.jpg"
+                            }}
+                            />
+                            <h2>Image placeholder</h2>
+                            <ImageComponent 
+                            imageProps={{
+                                width: "200",
+                                height: "200",
+                                src: "/layout/images/perspective.jpg"
+                            }}
+                            />
                             {/* <Images src='/layout/images/jp.png'
                                 width={200}
                                 height={100}
                             /> */}
-                            <h6>avatar with image</h6>
+                            <h2>avatar with image</h2>
                             <Avatar
                                 avatarProps={{
                                     // parentClass: "bg-orange-500",
@@ -262,9 +399,16 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card">
                             <h2> Divider Component </h2>
-                            <DividerComponent width={"w-full"} />
-                            <DividerComponent align={"top"} width={"w-2"} layout={"vertical"} />&nbsp;
-                            <DividerComponent align={"center"} width={"w-25rem"} />
+                            <DividerComponent dividerProps={{
+                                 width:"w-full" 
+                            }}/>
+                            <DividerComponent dividerProps={{
+                                align:"top",
+                                width:"w-2",
+                                layout:"vertical"
+                            }}
+                            />&nbsp;
+                            <DividerComponent dividerProps={{align:"center", width:"w-25rem"}} />
                         </div>
                         <ImageCropper />
 

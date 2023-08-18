@@ -1,17 +1,20 @@
 import React from "react";
 import { Dropdown } from 'primereact/dropdown';
 
-export default function InputSelect(props) {
-
+const InputSelect = (props) => {
+    const { parentClass, dropdownProps = {} } = props && props
+    const { value, onChange, options, optionLabel, placeholder, inputSelectClass } = dropdownProps && dropdownProps
     return (
-        <div className={`${props.parentClass}`}>
-            <Dropdown value={props.value}
-                onChange={props.onChange}
-                options={props.options}
-                optionLabel={props.optionLabel}
+        <div className={`${parentClass}`}>
+            <Dropdown value={value}
+                onChange={onChange}
+                options={options}
+                optionLabel={optionLabel}
                 editable
-                placeholder={props.placeholder}
-                className={`${props.inputSelectClass}`} />
+                placeholder={placeholder}
+                className={`${inputSelectClass}`}
+            />
         </div>
     )
 }
+export default InputSelect

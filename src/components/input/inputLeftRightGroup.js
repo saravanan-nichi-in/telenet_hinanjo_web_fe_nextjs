@@ -1,41 +1,48 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
 
-export default function InputLeftRightGroup(props) {
+const InputLeftRightGroup = (props) => {
+  const { parentClass, inputLrGroupProps = {} } = props && props
+  const { antLeftIcon, leftIcon, leftClass, inputClass, height,
+    placeholder, value, name, onChange, onBlur, type,
+    keyfilter, rightClass, rightIcon, antdRightIcon } = inputLrGroupProps && inputLrGroupProps
+
   return (
-    <div className={`p-inputgroup ${props.parentClass}`}>
-      {props.antLeftIcon || props.leftIcon ? (
+    <div className={`p-inputgroup ${parentClass}`}>
+      {antLeftIcon || leftIcon ? (
         <>
-          <span className={`p-inputgroup-addon ${props.leftClass} `}>
-            <i className={`${props.leftIcon} `}>{props.antLeftIcon}</i>
+          <span className={`p-inputgroup-addon ${leftClass} `}>
+            <i className={`${leftIcon} `}>{antLeftIcon}</i>
           </span>
           <InputText
-          className={`${props.inputClass} ${props.height ? props.height : 'custom_input'}`}
-            placeholder={props.placeholder}
-            value={props.value}
-            name={props.name}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
-            type={props.type ? props.type:"text"}
+            className={`${inputClass} ${height || 'custom_input'}`}
+            placeholder={placeholder}
+            value={value}
+            name={name}
+            onChange={onChange}
+            onBlur={onBlur}
+            type={type || "text"}
+            keyfilter={keyfilter}
           />
         </>
       ) : (
         <>
           <InputText
-            className={`${props.inputClass} ${props.height ? props.height : 'custom_input'}`}
-            placeholder={props.placeholder}
-            name={props.name}
-            value={props.value}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
-            type={props.type ? props.type:"text"}
-            keyfilter={props.keyfilter}
+            className={`${inputClass} ${height || 'custom_input'}`}
+            placeholder={placeholder}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            type={type || "text"}
+            keyfilter={keyfilter}
           />
-          <span className={`p-inputgroup-addon ${props.rightClass}`}>
-            <i className={`${props.rightIcon} `}>{props.antdRightIcon}</i>
+          <span className={`p-inputgroup-addon ${rightClass}`}>
+            <i className={`${rightIcon} `}>{antdRightIcon}</i>
           </span>
         </>
       )}
     </div>
   );
 }
+export default InputLeftRightGroup

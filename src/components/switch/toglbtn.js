@@ -11,7 +11,8 @@ const TogglBtn = (props) => {
                 onIcon={onIcon}
                 offIcon={offIcon}
                 checked={checked}
-                onChange={onChange} />
+                onChange={onChange}
+            />
         </div>
     );
 }

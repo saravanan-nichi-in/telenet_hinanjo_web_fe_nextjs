@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from 'next/image'
-export default function Images(props) {
+const ImageComponent = (props) => {
+    const { parentClass, imageProps = {} } = props && props
+    const { src, width, height } = imageProps && imageProps
 
-    const imageLoader = () => {
-        return `https://placehold.co/${props.width}x${props.height}`
+    const [imageError, setImageError] = useState(false);
+
+    const imageLoader = ({ src }) => {
+        if (imageError || !src) {
+            return `https://placehold.co/${width}x${height}`;
+        }
+        return src;
+    }
+
+    const handleImageError = () => {
+        setImageError(true);
     }
 
     return (
-        <div className={`${props.additionalClass}`}>
+        <div className={`${parentClass}`}>
             <Image
+                src={src}
+                width={width}
+                height={height}
                 loader={imageLoader}
-                src={props.src}
-                width={props.width}
-                height={props.height}
+                onError={handleImageError}
             />
         </div>
     );
 }
 
+export default ImageComponent

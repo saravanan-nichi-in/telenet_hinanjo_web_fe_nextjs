@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import IconPosBtn from "../button/iconPositionBtn";
 import { Dialog } from 'primereact/dialog';
-import { InputSwitch } from "primereact/inputswitch";
+import InputSwitcher from "../switch/inputSwitch";
+import RectangularButton from "../button/rectangularBtn";
 const Modal = (props) => {
+
     const [visible, setVisible] = useState(false);
 
 
@@ -10,10 +11,11 @@ const Modal = (props) => {
         <div className={`${props.parentMainClass}`}>
             {props.text ? (
                 <>
-                    <IconPosBtn text={props.text}
-                        icon={props.icon}
-                        iconPos={props.iconPos}
-                        onClick={() => setVisible(true)} />
+                    <RectangularButton rectangularButtonProps={{
+                        text: props.text,
+                        iconPos: props.iconPos,
+                        onClick: () => setVisible(true)
+                    }} />
                     <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
                         <div class={`text-center ${props.contentClass}`}>
                             {props.content}
@@ -21,7 +23,10 @@ const Modal = (props) => {
                     </Dialog>
                 </>) : (
                 <>
-                    <InputSwitch className={`${props.bgColor} ${props.parentClass}`} checked={props.checked} onChange={() => setVisible(true)} />
+                    <InputSwitcher parentClass={props.parentClass} inputSwitchProps={{
+                        checked: props.checked,
+                        onChange: () => setVisible(true)
+                    }} />
                     <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
                         <div class={`text-center ${props.contentClass}`}>
                             {props.content}

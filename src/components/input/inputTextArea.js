@@ -2,15 +2,16 @@ import React from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 
 export default function TextArea(props) {
-
+    const { parentClass, textAreaProps = {} } = props && props
+    const { name, textAreaClass, value, onChange, row, cols } = textAreaProps && textAreaProps
     return (
-        <div className={`${props.parentClass}`}>
-            <InputTextarea name={props.name}
-                className={`${props.textAreaClass} `}
-                value={props.value}
-                onChange={props.onChange}
-                rows={props.row}
-                cols={props.cols}
+        <div className={`${parentClass}`}>
+            <InputTextarea name={name}
+                className={`${textAreaClass} `}
+                value={value}
+                onChange={onChange}
+                rows={row}
+                cols={cols}
             />
         </div>
     )
