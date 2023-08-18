@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
-import RoundedBtn from '@/components/button/roundedbtn';
 import DividerComponent from '@/components/divider';
 import InputIcon from '@/components/input/inputIcon';
 import InputSwitcher from '@/components/switch/inputSwitch';
@@ -17,7 +16,7 @@ import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/helper/datatableservice';
 import Linker from '@/components/link/index.';
 import TimePicker from '@/components/date/time';
-import IncrementDecrement from '@/components/input/incrementDecrement';
+import IncrementDecrement from '@/components/incrementDecrement';
 import UploadFile from '@/components/input/upload';
 import Avatar from '@/components/image/avatar';
 import ImageCropper from '@/pages/POC/CROP';
@@ -82,7 +81,7 @@ export default function ComponentsDemo() {
             header: 'Edit Actions',
             body: (rowData) => (
                 <div>
-                    <RectangularButton rectangularButtonProps={{ text:"Edit"}} />
+                    <RectangularButton rectangularButtonProps={{ text: "Edit" }} />
                 </div>
             ),
         }, {
@@ -91,8 +90,8 @@ export default function ComponentsDemo() {
             body: (rowData) => (
                 <div>
                     <RectangularButton rectangularButtonProps={{
-                        severity:"danger" ,text:"delete"
-                        }} />
+                        severity: "danger", text: "delete"
+                    }} />
                 </div>
             ),
         },
@@ -101,14 +100,14 @@ export default function ComponentsDemo() {
     const footer = (
         <div className="text-center">
             <RectangularButton rectangularButtonProps={{
-                 buttonClass:"h-3rem",
-                 text:"cancel" 
+                buttonClass: "h-3rem",
+                text: "cancel"
             }} parentClass={"inline"} />
             <RectangularButton rectangularButtonProps={{
-                 buttonClass:"h-3rem",
-                 text:"delete",
-                 severity:"danger" 
-            }} parentClass={"inline"}/>
+                buttonClass: "h-3rem",
+                text: "delete",
+                severity: "danger"
+            }} parentClass={"inline"} />
         </div>
     );
 
@@ -144,26 +143,26 @@ export default function ComponentsDemo() {
                             <h2> Buttons Component </h2>
                             <div>
                                 <RectangularButton rectangularButtonProps={{
-                                    icon:"pi pi-star-fill",      
+                                    icon: "pi pi-star-fill",
                                 }}
-                               parentClass={"mb-1 border-round-lg"} />
+                                    parentClass={"mb-1 border-round-lg"} />
                                 <RectangularButton rectangularButtonProps={{
-                                    text:"避難者状況一覧"
-                                }} 
-                                parentClass={"mb-1"} />
-                                <RectangularButton parentClass={"mb-1 border-round-lg"} 
-                                rectangularButtonProps={{
-                                    text:"避難者状況一覧",
-                                    icon:"pi pi-star-fill",
-                                    iconPos:"right"
-                                }}/>
-                                <RectangularButton parentClass={"mb-1"} rectangularButtonProps={{
-                                     text:"避難者状況一覧",
-                                     icon:"pi pi-star-fill",
-                                     iconPos:"left",
-                                     rounded:"true"
+                                    text: "避難者状況一覧"
                                 }}
-                                 />
+                                    parentClass={"mb-1"} />
+                                <RectangularButton parentClass={"mb-1 border-round-lg"}
+                                    rectangularButtonProps={{
+                                        text: "避難者状況一覧",
+                                        icon: "pi pi-star-fill",
+                                        iconPos: "right"
+                                    }} />
+                                <RectangularButton parentClass={"mb-1"} rectangularButtonProps={{
+                                    text: "避難者状況一覧",
+                                    icon: "pi pi-star-fill",
+                                    iconPos: "left",
+                                    rounded: "true"
+                                }}
+                                />
                             </div>
                         </div>
 
@@ -171,52 +170,53 @@ export default function ComponentsDemo() {
                             <h2> Date Components</h2>
                             <h6>Current date and time component</h6>
                             {/* <DateTimePicker parentClass={"pb-1"} /> */}
-                            <DateTimePicker/>
+                            <DateTimePicker />
                             <h6>Date Picker</h6>
-                            <DateCalendar dateProps={{placeholder:"yy-mm-dd"
+                            <DateCalendar dateProps={{
+                                placeholder: "yy-mm-dd"
                             }} parentClass={"xl:w-4 sm:w-full"} />
 
                             <h6>Time Picker</h6>
                             <TimePicker parentClass={"xl:w-4 sm:w-full"} timeProps={{
-                                placeholder:"time"
+                                placeholder: "time"
                             }} />
 
                             <h6>Disabled days </h6>
                             <DateCalendar parentClass={"xl:w-4 sm:w-full"} dateProps={{
-                                disabledDates:invalidDates,
-                                disabledDays:[0,6],
-                                placeholder:"yy-mm-dd"
+                                disabledDates: invalidDates,
+                                disabledDays: [0, 6],
+                                placeholder: "yy-mm-dd"
                             }} />
                             <h6>Date and Time with range</h6>
                             <DateTime dateTimeProps={{
-                                selectionMode:"range"
+                                selectionMode: "range"
                             }} parentClass={"xl:w-6 sm:w-full"} />
 
                         </div>
                         < div class="card ">
                             <h2>input icons</h2>
                             <InputIcon parentClass={"w-3"} inputIconProps={{
-                                placeholder:"input-left-icon" ,
-                                icon:"pi pi-search",
-                                iconPos:"p-input-icon-left"
+                                placeholder: "input-left-icon",
+                                icon: "pi pi-search",
+                                iconPos: "p-input-icon-left"
                             }} /><br />
                             <InputIcon parentClass={"w-3"} inputIconProps={{
-                                placeholder:"input-right-icon",
-                                icon:"pi pi-search",
-                                iconPos:"p-input-icon-right"
+                                placeholder: "input-right-icon",
+                                icon: "pi pi-search",
+                                iconPos: "p-input-icon-right"
                             }} />
                             <InputIcon parentClass={"mt-3  "} inputIconProps={{
-                                inputClass:"xl:w-3 sm:w-full",
-                                placeholder:"input"
+                                inputClass: "xl:w-3 sm:w-full",
+                                placeholder: "input"
                             }} />
                             <InputIcon parentClass={"mt-3 "} inputIconProps={{
-                                inputClass:"xl:w-3 sm:w-full"
+                                inputClass: "xl:w-3 sm:w-full"
                             }} />
                             <InputIcon parentClass={"mt-3"} inputIconProps={{
-                                inputClass:"xl:w-3 sm:w-full",
-                                readOnly:"true",
-                                value:20
-                            }}/>
+                                inputClass: "xl:w-3 sm:w-full",
+                                readOnly: "true",
+                                value: 20
+                            }} />
                             <div class="pt-3">
                                 <h2>input group</h2>
                                 <InputLeftRightGroup inputLrGroupProps={{
@@ -234,15 +234,15 @@ export default function ComponentsDemo() {
                                     parentClass={"xl:w-4 pb-2 "}
                                 />
                                 <InputGroup inputGroupProps={{
-                                    type:"number",
-                                    value:value,
-                                    onChange:(e) => setValue(e.target.value),
-                                    onRightClick:handleIncrement,
-                                    onLeftClick:handleDecrement,
-                                    rightIcon:"pi pi-plus",
-                                    leftIcon:"pi pi-minus"
+                                    type: "number",
+                                    value: value,
+                                    onChange: (e) => setValue(e.target.value),
+                                    onRightClick: handleIncrement,
+                                    onLeftClick: handleDecrement,
+                                    rightIcon: "pi pi-plus",
+                                    leftIcon: "pi pi-minus"
                                 }}
-                                parentClass={"xl:w-4 sm:w-full"} />
+                                    parentClass={"xl:w-4 sm:w-full"} />
                             </div>
                             <div class="pt-3">
                                 <h2>TextArea</h2>
@@ -361,20 +361,20 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card">
                             <h2> Image</h2>
-                            <ImageComponent 
-                            imageProps={{
-                                width: "200",
-                                height: "200",
-                                src: "/layout/images/perspective1.jpg"
-                            }}
+                            <ImageComponent
+                                imageProps={{
+                                    width: "200",
+                                    height: "200",
+                                    src: "/layout/images/perspective1.jpg"
+                                }}
                             />
                             <h2>Image placeholder</h2>
-                            <ImageComponent 
-                            imageProps={{
-                                width: "200",
-                                height: "200",
-                                src: "/layout/images/perspective.jpg"
-                            }}
+                            <ImageComponent
+                                imageProps={{
+                                    width: "200",
+                                    height: "200",
+                                    src: "/layout/images/perspective.jpg"
+                                }}
                             />
                             {/* <Images src='/layout/images/jp.png'
                                 width={200}
@@ -400,15 +400,15 @@ export default function ComponentsDemo() {
                         <div class="card">
                             <h2> Divider Component </h2>
                             <DividerComponent dividerProps={{
-                                 width:"w-full" 
-                            }}/>
+                                width: "w-full"
+                            }} />
                             <DividerComponent dividerProps={{
-                                align:"top",
-                                width:"w-2",
-                                layout:"vertical"
+                                align: "top",
+                                width: "w-2",
+                                layout: "vertical"
                             }}
                             />&nbsp;
-                            <DividerComponent dividerProps={{align:"center", width:"w-25rem"}} />
+                            <DividerComponent dividerProps={{ align: "center", width: "w-25rem" }} />
                         </div>
                         <ImageCropper />
 
