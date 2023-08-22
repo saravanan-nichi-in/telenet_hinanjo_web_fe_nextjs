@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 import Image from 'next/image'
 const ImageComponent = (props) => {
-    const { parentClass, imageProps = {} } = props && props
-    const { src, width, height } = imageProps && imageProps
+    const{parentClass,imageProps={}}=props && props
+    const{src,width,height}=imageProps && imageProps
 
     const [imageError, setImageError] = useState(false);
 
@@ -23,8 +23,10 @@ const ImageComponent = (props) => {
                 src={src}
                 width={width}
                 height={height}
-                loader={imageLoader}
                 onError={handleImageError}
+                loader={imageLoader}
+                placeholder='blur'
+                blurDataURL="https://placehold.co/100x200"
             />
         </div>
     );

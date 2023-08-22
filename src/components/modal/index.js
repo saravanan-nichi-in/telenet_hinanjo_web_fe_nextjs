@@ -16,23 +16,18 @@ const Modal = (props) => {
                         iconPos: props.iconPos,
                         onClick: () => setVisible(true)
                     }} />
-                    <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
-                        <div class={`text-center ${props.contentClass}`}>
-                            {props.content}
-                        </div>
-                    </Dialog>
                 </>) : (
                 <>
                     <InputSwitcher parentClass={props.parentClass} inputSwitchProps={{
                         checked: props.checked,
                         onChange: () => setVisible(true)
                     }} />
-                    <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
+                </>)}
+                <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
                         <div class={`text-center ${props.contentClass}`}>
                             {props.content}
                         </div>
                     </Dialog>
-                </>)}
         </div>
     )
 }

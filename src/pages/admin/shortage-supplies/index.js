@@ -7,6 +7,8 @@ import { Divider } from 'primereact/divider';
 import { Dialog } from 'primereact/dialog';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import DeleteModal from '@/components/modal/deleteModal';
+import DetailModal from '@/components/modal/detailModal';
 
 const sampleProducts = [
     { "避難所": "日本の避難所", "Test1(2)": "505", "Test2(2)": "3", "test3(3)": "2", "test6(5)": "1" },
@@ -69,7 +71,11 @@ function ShoratgeSupplies() {
         dt.current.exportCSV({ selectionOnly });
     };
 
-
+  const headContent=(
+    <div>
+    <h2>日本の避難所</h2>
+    </div>
+  )  
     return (
         <div className="grid">
             <div className="col-12">
@@ -132,15 +138,22 @@ function ShoratgeSupplies() {
                 </div>
             </div>
             <div>
-                <Dialog header={header} visible={showModal} onHide={() => setShowModal(false)} style={{ width: '600px', padding: "10px" }}>
+                {/* <Dialog header={header} visible={showModal} onHide={() => setShowModal(false)} style={{ width: '600px', padding: "10px" }}>
                     <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
                     <textarea className="w-full font-18 textarea-bgcolor" rows="5" readonly="">food</textarea>
                     <br /><br />
                     <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
                     <textarea className="w-full font-18 textarea-bgcolor " rows="5" readonly="">Chain</textarea>
 
-                </Dialog>
+                </Dialog> */}
+                <DetailModal detailModalProps={{
+                    headerContent:headContent,
+                    visible:showModal,
+                    onHide:()=>setShowModal(false),
+                    value1:"food",
+                    value2:"chain"
 
+                }}/>
             </div>
         </div>
     );

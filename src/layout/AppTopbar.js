@@ -7,7 +7,7 @@ import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
 import { LogoutOutlined } from '@ant-design/icons';
-import DateTimePicker from '@/components/date/dateTimePicker';
+import DateTimePicker from '@/components/date&time/dateTimePicker';
 import DropdownSelect from '@/components/input/dropdownSelect';
 
 const AppTopbar = forwardRef((props, ref) => {

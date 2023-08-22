@@ -15,7 +15,7 @@ import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/helper/datatableservice';
 import Linker from '@/components/link/index.';
-import TimePicker from '@/components/date/time';
+import TimePicker from '@/components/date&time/time';
 import IncrementDecrement from '@/components/incrementDecrement';
 import UploadFile from '@/components/input/upload';
 import Avatar from '@/components/image/avatar';
@@ -23,10 +23,11 @@ import ImageCropper from '@/pages/POC/CROP';
 import ImageComponent from '@/components/image/image';
 import BarcodeScanner from '@/components/qr';
 import Modal from '@/components/modal';
-import DateCalendar from '@/components/date/date';
-import DateTime from '@/components/date/dateTime';
-import DateTimePicker from '@/components/date/dateTimePicker';
+import DateCalendar from '@/components/date&time/date';
+import DateTime from '@/components/date&time/dateTime';
+import DateTimePicker from '@/components/date&time/dateTimePicker';
 import RectangularButton from '@/components/button/rectangularBtn';
+import DeleteModal from '@/components/modal/deleteModal';
 
 
 export default function ComponentsDemo() {
@@ -111,13 +112,7 @@ export default function ComponentsDemo() {
         </div>
     );
 
-    const content = (
-        <div>
-            <p>modal demo</p>
-            <p>dynamic modal with header content and footer </p>
-        </div>
 
-    );
 
 
     useEffect(() => {
@@ -139,7 +134,7 @@ export default function ComponentsDemo() {
                             不足物資一覧
                         </h5>
                         <Divider />
-                        <div class="card ">
+                        <div className="card ">
                             <h2> Buttons Component </h2>
                             <div>
                                 <RectangularButton rectangularButtonProps={{
@@ -279,7 +274,9 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2>Label</h2>
-                                <Label htmlFor="email" text={"email"} labelClass={"font-18 text-primary"} />
+                                <Label htmlFor="email" text={"email"} labelClass={"font-18 text-primary pr-2"} />
+                                <Label labelClass="w-full font-18 font-bold pt-0" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
+
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
@@ -335,8 +332,28 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card" >
                             <h2>Modal</h2>
-                            <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} />
-                            <Modal parentClass={"mt-3"} modalClass={"w-40rem"} content={content} footer={footer} position={"top"} header={"確認情報"} btnText={"更新"} checked={checked1} onChange={(e) => setChecked1(e.value)} />
+                            {/* <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} /> */}
+                            <h4>Delete Modal with switch</h4>
+                            <DeleteModal
+                                modalClass="w-50rem"
+                                header="確認情報"
+                                position="top"
+                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
+                                checked={checked1}
+                                onChange={(e) => setChecked1(e.value)}
+                                parentClass={"mb-3 custom-switch"}
+                            />
+                            <h4>Delete Modal with Button</h4>
+                            <DeleteModal
+                                modalClass="w-50rem"
+                                header="確認情報"
+                                text="delete"
+                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
+                                checked={checked1}
+
+                                onChange={(e) => setChecked1(e.value)}
+                                parentClass={"mt-3"}
+                            />
                         </div>
                         <div class="card">
                             <h2>DataTable with pagination</h2>
@@ -368,18 +385,6 @@ export default function ComponentsDemo() {
                                     src: "/layout/images/perspective1.jpg"
                                 }}
                             />
-                            <h2>Image placeholder</h2>
-                            <ImageComponent
-                                imageProps={{
-                                    width: "200",
-                                    height: "200",
-                                    src: "/layout/images/perspective.jpg"
-                                }}
-                            />
-                            {/* <Images src='/layout/images/jp.png'
-                                width={200}
-                                height={100}
-                            /> */}
                             <h2>avatar with image</h2>
                             <Avatar
                                 avatarProps={{
