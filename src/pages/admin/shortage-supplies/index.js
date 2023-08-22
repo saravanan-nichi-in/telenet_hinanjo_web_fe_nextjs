@@ -86,7 +86,7 @@ function ShoratgeSupplies() {
                         <Divider />
                         {/* Table */}
                         <div className="col-12">
-                            <div class="flex justify-content-end ">
+                            <div className="flex justify-content-end ">
                                 <Button className="btnprimary font-18" label={translate(localeJson, 'export')} rounded onClick={() => exportCSV(false)} />
                             </div>
                             {/* Table */}

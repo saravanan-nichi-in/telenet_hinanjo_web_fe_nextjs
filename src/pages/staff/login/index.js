@@ -66,11 +66,11 @@ const LoginPage = () => {
                             <div className="card w-full surface-card py-2 px-2" >
                                 <div className='auth_view py-4 px-4 auth_surface_ground_border'>
                                     <form onSubmit={handleSubmit}>
-                                        <div class="flex justify-content-center w-100 mt-3">
+                                        <div className="flex justify-content-center w-100 mt-3">
                                             <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
                                         </div>
                                         <br />
-                                        <div class="flex justify-content-center w-100 mb-5">
+                                        <div className="flex justify-content-center w-100 mb-5">
                                             {translate(localeJson, 'staff_login_screen')}
                                         </div>
                                         <div>

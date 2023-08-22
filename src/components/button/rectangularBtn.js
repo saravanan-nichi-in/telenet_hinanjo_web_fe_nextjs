@@ -1,8 +1,8 @@
 import { Button } from "primereact/button";
 
 export default function RectangularButton(props) {
-  const { parentClass, rectangularButtonProps = {} } = props && props
-  const { severity, hoverBg, fontWeight, buttonClass, text, iconPos, icon, onClick, bg, rounded } = rectangularButtonProps && rectangularButtonProps
+  const { parentClass, rectangularButtonProps = {} } = props && props;
+  const { severity, hoverBg, fontWeight, buttonClass, text, iconPos, icon, onClick, bg, rounded } = rectangularButtonProps && rectangularButtonProps;
 
   return (
     <div className={`${parentClass}`}>
