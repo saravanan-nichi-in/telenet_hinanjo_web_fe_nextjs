@@ -3,9 +3,9 @@ import { Checkbox } from "primereact/checkbox";
 import Label from "../label/";
 
 
-const CheckBox=(props)=> {
-    const{parentClass,checkBoxProps={}}=props && props
-    const {checkboxClass,id, name,value,onChange,checked,disabled,labelClass}=checkBoxProps && checkBoxProps
+const CheckBox = (props) => {
+    const { parentClass, checkBoxProps = {} } = props && props
+    const { checkboxClass, id, name, value, onChange, checked, disabled, labelClass } = checkBoxProps && checkBoxProps
     return (
         <div className={`${parentClass}`}>
             <Checkbox className={`${checkboxClass}`}

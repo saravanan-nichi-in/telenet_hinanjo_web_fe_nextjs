@@ -3,7 +3,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function TableData(props) {
-    const { paginator, rows, value, customActionsField } = props && props
+    const { paginator, rows, value, customActionsField, columns } = props && props
     return (
         <div>
             <DataTable value={value}
@@ -12,7 +12,7 @@ export default function TableData(props) {
                 tableStyle={{ minWidth: '50rem' }}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords}" >
-                {props.columns.map((col, index) => (
+                {columns.map((col, index) => (
                     <Column key={index}
                         field={col.field}
                         header={col.header}

@@ -1,13 +1,20 @@
 import { Button } from "primereact/button";
 
 export default function RoundedBtn(props) {
+  const { parentClass, roundedBtnProps = {} } = props && props
+  const { severity, hoverBg, fontWeight, buttonClass, text, iconPos, icon, onClick, bg } = roundedBtnProps && roundedBtnProps
+
   return (
-    <div className={`${props.parentClass}`}>
-        {props.severity ? (
-                <Button className={`${props.hoverBg} ${props.width} ${props.height} ${props?.textColor} ${props?.fontsize} ${props.border} ${props.borderColor}  ${props.borderWidth} ${props.radius} ${props.fontWeight ? props.fontWeight : "font-bold"} ${props.px} ${props.py} ${props.mx} ${props.my} ${props.buttonClass} `} label={props.text} severity={props.severity} iconPos={props.iconPos} icon={props.icon} rounded onClick={props.onClick} />
-        ):(
-      <Button className={`${props.bg} ${props.hoverBg} ${props.width} ${props.height} ${props?.textColor} ${props?.fontsize} ${props.border} ${props.borderColor}  ${props.borderWidth} ${props.radius} ${props.fontWeight ? props.fontWeight : "font-bold"} ${props.px} ${props.py} ${props.mx} ${props.my} ${props.buttonClass} `} label={props.text} iconPos={props.iconPos} icon={props.icon} rounded onClick={props.onClick} >
-      </Button> )}
-      </div>
+    <div className={`${parentClass}`}>
+      {severity ? (
+        <Button className={` ${hoverBg} ${fontWeight || "font-bold"} ${buttonClass}`}
+          label={text} iconPos={iconPos} rounded severity={severity} icon={icon} onClick={onClick}
+        />
+      ) : (
+        <Button className={`${bg} ${hoverBg} ${fontWeight || "font-bold"} ${buttonClass}`}
+          label={text} iconPos={iconPos} rounded icon={icon} onClick={onClick} >
+        </Button>
+      )}
+    </div>
   );
 }

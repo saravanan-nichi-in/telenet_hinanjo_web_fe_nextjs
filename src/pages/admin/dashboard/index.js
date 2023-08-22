@@ -44,12 +44,12 @@ function AdminDashboard() {
     useEffect(() => {
         setProducts(sampleProducts);
         axios.get('/admin/place')
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
     }, [])
 
     const toggleAll = () => {

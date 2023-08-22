@@ -23,11 +23,11 @@ const Modal = (props) => {
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-                <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
-                        <div class={`text-center ${props.contentClass}`}>
-                            {props.content}
-                        </div>
-                    </Dialog>
+            <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
+                <div class={`text-center ${props.contentClass}`}>
+                    {props.content}
+                </div>
+            </Dialog>
         </div>
     )
 }

@@ -6,8 +6,8 @@ export default function DividerComponent(props) {
     <main className={`${parentClass}`}>
       <Divider className={`${width} ${dividerClass} `}
         align={align}
-        layout={`${layout ? layout : "horizontal"}`}
-        type={`${type ? type : "solid"} `}
+        layout={`${layout||"horizontal"}`}
+        type={`${type||"solid"} `}
       />
     </main>
   );

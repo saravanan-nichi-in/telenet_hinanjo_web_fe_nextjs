@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 function DateTimePicker(props) {
-    const{fontsize,bgColor,fontWeight,parentClass}=props
+    const { fontsize, bgColor, fontWeight, parentClass } = props
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
     useEffect(() => {

@@ -18,16 +18,19 @@ const BarChartDemo = () => {
         labels: ['日本の避難所', '広島市中区東白島町', 'テスト', 'テスト日本大阪', '避難所B	', '<Test>モバイルアプリ1', 'Gose'],
         datasets: [
             {
+                type: 'bar',
                 label: '男',
                 backgroundColor: '#42A5F5',
                 data: [65, 59, 80, 81, 56, 55, 40]
             },
             {
+                type: 'bar',
                 label: '女',
                 backgroundColor: '#66BB6A',
                 data: [28, 48, 40, 19, 86, 27, 90]
             },
             {
+                type: 'bar',
                 label: '答えくない',
                 backgroundColor: '#FFA726',
                 data: [28, 48, 40, 19, 86, 27, 90]
@@ -37,11 +40,15 @@ const BarChartDemo = () => {
     const getLightTheme = () => {
 
 
-        let horizontalOptions = {
-            indexAxis: 'y',
+        let horizontalOptions = { 
             maintainAspectRatio: false,
-            aspectRatio: .8,
+            indexAxis: 'y',
+            aspectRatio: 0.8,
             plugins: {
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
                 legend: {
                     labels: {
                         color: '#495057'
@@ -50,20 +57,21 @@ const BarChartDemo = () => {
             },
             scales: {
                 x: {
-                    min: 0,
-                    max: 300,
+                    min:0,
+                    max:300, 
+                    stacked: true,
                     ticks: {
-                        color: '#495057',
-
+                        color: '#495057'
                     },
                     grid: {
                         color: '#ebedef'
                     }
                 },
                 y: {
+                     
+                    stacked: true,
                     ticks: {
-                        color: '#495057',
-
+                        color: '#495057'
                     },
                     grid: {
                         color: '#ebedef'
@@ -71,6 +79,39 @@ const BarChartDemo = () => {
                 }
             }
         };
+        //     indexAxis: 'y',
+        //     maintainAspectRatio: false,
+        //     aspectRatio: .8,
+        //     plugins: {
+        //         legend: {
+        //             labels: {
+        //                 color: '#495057'
+        //             }
+        //         }
+        //     },
+        //     scales: {
+        //         x: {
+        //             min: 0,
+        //             max: 300,
+        //             ticks: {
+        //                 color: '#495057',
+
+        //             },
+        //             grid: {
+        //                 color: '#ebedef'
+        //             }
+        //         },
+        //         y: {
+        //             ticks: {
+        //                 color: '#495057',
+
+        //             },
+        //             grid: {
+        //                 color: '#ebedef'
+        //             }
+        //         }
+        //     }
+        // };
 
 
 
@@ -96,6 +137,7 @@ const BarChartDemo = () => {
                 <Dropdown className={"dropdown_text"} value={data} options={options} onChange={(e) => setData(e.value)} placeholder="Select a City" />
 
                 <Chart type="bar" data={basicData} options={horizontalOptions} />
+                
             </div>
                 
 
