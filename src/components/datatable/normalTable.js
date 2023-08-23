@@ -1,9 +1,10 @@
 import React from 'react';
-import { DataTable as TableData} from 'primereact/datatable';
+import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function NormalTable(props) {
     const { paginator, rows, value, customActionsField, columns } = props && props
+
     return (
         <div>
             <TableData value={value}

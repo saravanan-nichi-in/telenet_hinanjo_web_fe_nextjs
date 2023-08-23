@@ -2,11 +2,10 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { DetailModal } from '@/components';
+import { Btn, DetailModal } from '@/components';
 
 
 const sampleProducts = [
@@ -86,7 +85,11 @@ function ShoratgeSupplies() {
                         {/* Table */}
                         <div className="col-12">
                             <div className="flex justify-content-end ">
-                                <Button className="btnprimary font-18" label={translate(localeJson, 'export')} rounded onClick={() => exportCSV(false)} />
+                                <Btn parentClass={"mb-1"} btnProps={{
+                                    text: translate(localeJson, 'export'),
+                                    rounded: "true",
+                                    onClick:() => exportCSV(false)
+                                }}/>
                             </div>
                             {/* Table */}
                             &nbsp;

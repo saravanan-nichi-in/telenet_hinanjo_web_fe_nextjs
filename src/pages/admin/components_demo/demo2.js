@@ -27,7 +27,6 @@ export default function ComponentDemo() {
 
     const [products, setProducts] = useState([]);
 
-
     useEffect(() => {
         NodeService.getTreeTableNodes().then((data) => setNodes(data));
         let prepareData = [];
@@ -38,7 +37,6 @@ export default function ComponentDemo() {
         }
         setData(prepareData);
         ProductService.getProductsWithOrdersSmall().then((data) => setProducts(data));
-
     }, []);
 
     const dragProps = {
@@ -60,7 +58,6 @@ export default function ComponentDemo() {
             setData(items);
         }
     };
-
 
     const handleMoveDown = (index) => {
         if (index < data.length - 1) {
@@ -89,6 +86,7 @@ export default function ComponentDemo() {
             ))}
         </ol>
     )
+
     return (
         <div className="grid">
             <div className="col-12">
@@ -100,7 +98,6 @@ export default function ComponentDemo() {
                         >
                             不足物資一覧
                         </h5>
-
                         <div class="card">
                             <h2>Tree Table with pagination</h2>
                             <TreeTable columns={columns} value={nodes} paginator="true" />

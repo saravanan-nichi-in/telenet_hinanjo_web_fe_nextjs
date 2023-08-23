@@ -4,6 +4,7 @@ import { Dropdown } from 'primereact/dropdown';
 const InputSelect = (props) => {
     const { parentClass, dropdownProps = {} } = props && props
     const { value, onChange, options, optionLabel, placeholder, inputSelectClass } = dropdownProps && dropdownProps
+
     return (
         <div className={`${parentClass}`}>
             <Dropdown value={value}

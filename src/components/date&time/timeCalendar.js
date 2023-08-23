@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-
 const TimeCalendar = (props) => {
     const { parentClass, timeProps = {} } = props
     const { height, timeClass, icon, iconPos, disabledDates,

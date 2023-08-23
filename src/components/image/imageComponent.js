@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Image from 'next/image'
+
 const ImageComponent = (props) => {
     const { parentClass, imageProps = {} } = props && props
     const { src, width, height } = imageProps && imageProps
-
     const [imageError, setImageError] = useState(false);
 
     const imageLoader = ({ src }) => {

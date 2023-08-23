@@ -2,9 +2,11 @@ import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import InputSwitch from "../switch/inputSwitch";
 import Btn from "../button/btn";
+
 const DeleteModal = (props) => {
     const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, position, header, contentClass, content } = props
     const [visible, setVisible] = useState(false);
+
     const footer = (
         <div className="text-center">
             <Btn btnProps={{

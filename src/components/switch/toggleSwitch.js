@@ -1,8 +1,9 @@
 import React from 'react';
-
 import { ToggleButton } from 'primereact/togglebutton';
+
 const ToggleSwitch = (props) => {
     const { bgColor, parentClass, onLabel, offLabel, onIcon, offIcon, checked, onChange } = props && props.togglProps;
+
     return (
         <div>
             <ToggleButton className={`${bgColor} ${parentClass}`}

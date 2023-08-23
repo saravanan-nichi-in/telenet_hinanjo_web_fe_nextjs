@@ -2,10 +2,10 @@ import React from "react";
 import { Checkbox } from "primereact/checkbox";
 import NormalLabel from "../label/NormalLabel";
 
-
 const NormalCheckBox = (props) => {
     const { parentClass, checkBoxProps = {} } = props && props
     const { checkboxClass, id, name, value, onChange, checked, disabled, labelClass } = checkBoxProps && checkBoxProps
+
     return (
         <div className={`${parentClass}`}>
             <Checkbox className={`${checkboxClass}`}

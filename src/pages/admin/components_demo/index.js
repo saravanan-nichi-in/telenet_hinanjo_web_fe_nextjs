@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import { CustomerService } from '@/helper/datatableservice';
 import ImageCropper from '@/pages/POC/CROP';
-import { NormalTable ,Counter,Linker,NormalLabel,DeleteModal,
-    ImageComponent,DateCalendar, TimeCalendar, DateTimeCalendar,
-    DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent, 
-    Btn, InputSelect, Select,AvatarComponent, RadioBtn, BarcodeScanner, FileUpload, InputIcon, InputLeftRightGroup, InputGroup, TextArea} from '@/components';
-
-
-
+import {
+    NormalTable, Counter, Linker, NormalLabel, DeleteModal,
+    ImageComponent, DateCalendar, TimeCalendar, DateTimeCalendar,
+    DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent,
+    Btn, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
+    InputIcon, InputLeftRightGroup, InputGroup, TextArea
+} from '@/components';
 
 export default function ComponentsDemo() {
     const [checked1, setChecked1] = useState(false);
+
     const [selectedCity, setSelectedCity] = useState(null);
+
     const cities = [
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' },
@@ -20,14 +22,19 @@ export default function ComponentsDemo() {
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
     ];
+
     const [ingredient, setIngredient] = useState('');
+
     const [value, setValue] = useState(501);
+
     const handleIncrement = () => {
         setValue(value + 1);
     };
+
     const handleDecrement = () => {
         setValue(value - 1);
     };
+
     const [ingredients, setIngredients] = useState([]);
 
     const onIngredientsChange = (e) => {
@@ -40,15 +47,19 @@ export default function ComponentsDemo() {
 
         setIngredients(_ingredients);
     }
+
     const options = [
         { label: '現在の避難者数', value: 'NY' },
         { label: '避難所の混雑率', value: 'RM' },
         { label: '要配慮者の避難者数', value: 'LDN' },
     ];
+
     const [data, setData] = useState(options[0].value);
+
     const [customers, setCustomers] = useState([]);
 
     let today = new Date();
+
     let invalidDates = [today];
 
     const columns = [
@@ -92,15 +103,10 @@ export default function ComponentsDemo() {
         </div>
     );
 
-
-
-
     useEffect(() => {
         CustomerService.getCustomersMedium().then((data) => setCustomers(data));
 
     }, []);
-
-
 
     return (
         <div className="grid">
@@ -144,18 +150,15 @@ export default function ComponentsDemo() {
                         < div class="card ">
                             <h2> Date Components</h2>
                             <h6>Current date and time component</h6>
-                            {/* <DateTimePicker parentClass={"pb-1"} /> */}
                             <DateTimePicker />
                             <h6>Date Picker</h6>
                             <DateCalendar dateProps={{
                                 placeholder: "yy-mm-dd"
                             }} parentClass={"xl:w-4 sm:w-full"} />
-
                             <h6>Time Picker</h6>
                             <TimeCalendar parentClass={"xl:w-4 sm:w-full"} timeProps={{
                                 placeholder: "time"
                             }} />
-
                             <h6>Disabled days </h6>
                             <DateCalendar parentClass={"xl:w-4 sm:w-full"} dateProps={{
                                 disabledDates: invalidDates,
@@ -235,9 +238,6 @@ export default function ComponentsDemo() {
                                     options: cities,
                                     optionLabel: "name"
                                 }}
-
-
-
                                 />
                             </div>
                             <div class="pt-3">
@@ -256,7 +256,6 @@ export default function ComponentsDemo() {
                                 <h2>Label</h2>
                                 <NormalLabel htmlFor="email" text={"email"} labelClass={"font-18 text-primary pr-2"} />
                                 <NormalLabel labelClass="w-full font-18 font-bold pt-0" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
-
                             </div>
                             <div class="pt-3">
                                 <h2>Radio button</h2>
@@ -270,7 +269,6 @@ export default function ComponentsDemo() {
                                 }}
                                 />
                             </div>
-
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
                                 {/* <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} /> */}
@@ -288,7 +286,6 @@ export default function ComponentsDemo() {
                                 <h2> upload</h2>
                                 <FileUpload auto="true" />
                             </div>
-
                         </div>
                         <div class="card">
                             <h2>Increment Decrment</h2>
@@ -310,7 +307,6 @@ export default function ComponentsDemo() {
                             }}
                             />
                         </div>
-                        
                         <div class="card">
                             <h2>DataTable with pagination</h2>
                             <NormalTable customActionsField="actions" paginator="true" value={customers} columns={columns} />
@@ -318,13 +314,8 @@ export default function ComponentsDemo() {
                             <NormalTable customActionsField="actions" value={customers} columns={columns} />
                         </div>
                         <div class="card" >
-
                             <h2>Modal</h2>
-
-                            {/* <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} /> */}
-
                             <h4>Delete Modal with switch</h4>
-
                             <DeleteModal
                                 modalClass="w-50rem"
                                 header="確認情報"
@@ -334,7 +325,6 @@ export default function ComponentsDemo() {
                                 onChange={(e) => setChecked1(e.value)}
                                 parentClass={"mb-3 custom-switch"}
                             />
-
                             <h4>Delete Modal with Button</h4>
                             <DeleteModal
                                 modalClass="w-50rem"
@@ -378,13 +368,12 @@ export default function ComponentsDemo() {
                                     image: "/layout/images/perspective1.jpg",
                                     shape: "circle",
                                     style: { backgroundColor: "#2196F3" }
-
                                 }}
                             />
                         </div>
                         <div class="card">
                             <h2>Qr</h2>
-                            <BarcodeScanner/>
+                            <BarcodeScanner />
                         </div>
                         <div class="card">
                             <h2> Divider Component </h2>
@@ -400,7 +389,6 @@ export default function ComponentsDemo() {
                             <DividerComponent dividerProps={{ align: "center", width: "w-25rem" }} />
                         </div>
                         <ImageCropper />
-
                     </section>
                 </div>
             </div>

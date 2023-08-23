@@ -5,8 +5,8 @@ export default function InputGroup(props) {
     const { height, parentClass, inputGroupProps = {} } = props && props
     const { leftClass, leftIcon, onLeftClick, antdLeftIcon, type, inputClass, value, name, keyfilter,
         placeholder, onChange, onBlur, rightClass, rightIcon, onRightClick, antdRightIcon } = inputGroupProps && inputGroupProps
-    return (
 
+    return (
         <div className={`p-inputgroup ${height || 'custom_input'} ${parentClass} `}>
             < span className={`p-inputgroup-addon ${leftClass}`}>
                 <i className={`${leftIcon} `} onClick={onLeftClick}>{antdLeftIcon}</i>
@@ -24,7 +24,5 @@ export default function InputGroup(props) {
                 <i className={`${rightIcon} `} onClick={onRightClick}>{antdRightIcon}</i>
             </span>
         </div>
-
-
     )
 }

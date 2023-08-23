@@ -1,12 +1,10 @@
 import React from "react";
 import Link from "next/link";
-const Linker = (props) => {
 
+const Linker = (props) => {
     const { ParentClass, linkProps = {} } = props && props
     const { textWithUnderline, linkClass, href, text } = linkProps && linkProps
-    const linkStyles = {
-        textDecoration: "underline"
-    };
+    const linkStyles = { textDecoration: "underline" };
 
     return (
         <div className={`${ParentClass}`}>

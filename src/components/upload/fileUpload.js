@@ -8,10 +8,9 @@ const FileUpload = () => {
     const onUpload = () => {
         toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     };
+
     return (
         <div>
-
-
             <Toast ref={toast}></Toast>
             <Upload mode="basic"
                 name="demo[]"
@@ -20,7 +19,6 @@ const FileUpload = () => {
                 maxFileSize={1000000}
                 onUpload={onUpload}
             />
-
         </div>
     );
 }

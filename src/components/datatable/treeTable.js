@@ -2,11 +2,11 @@ import React from 'react';
 import { TreeTable as TreeTab } from 'primereact/treetable';
 import { Column } from 'primereact/column';
 
- export default function TreeTable(props) {
+export default function TreeTable(props) {
     const { paginator, value, columns, rows } = props && props
+
     return (
         <div>
-
             <TreeTab value={value} paginator={paginator} rows={rows || 5} tableStyle={{ minWidth: '50rem' }}>
                 {columns.map((col, i) => (
                     <Column key={col.field}

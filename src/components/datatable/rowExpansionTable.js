@@ -9,15 +9,6 @@ export default function RowExpansionTable(props) {
     const [expandedRows, setExpandedRows] = useState(null);
     const toast = useRef(null);
 
-
-    // const onRowExpand = (event) => {
-    //     toast.current.show({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
-    // };
-
-    // const onRowCollapse = (event) => {
-    //     toast.current.show({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
-    // };
-
     const expandAll = () => {
         let _expandedRows = {};
 
@@ -29,7 +20,6 @@ export default function RowExpansionTable(props) {
     const collapseAll = () => {
         setExpandedRows(null);
     };
-
 
     const allowExpansion = (rowData) => {
         return rowData[rowExpansionField] && rowData[rowExpansionField].length > 0;

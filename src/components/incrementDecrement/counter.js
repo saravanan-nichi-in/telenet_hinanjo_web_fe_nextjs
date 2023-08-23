@@ -3,15 +3,16 @@ import InputGroup from '../input/inputGroup';
 
 export default function Counter(props) {
     const [value, setValue] = useState(props.value);
+
     const handleIncrement = () => {
         setValue(value + 1);
     };
+
     const handleDecrement = () => {
         setValue(value - 1);
     };
 
     return (
-
         <InputGroup inputGroupProps={{
             inputClass: "text-center",
             value: value,
@@ -21,8 +22,6 @@ export default function Counter(props) {
             rightIcon: "pi pi-plus",
             leftIcon: "pi pi-minus"
         }} parentClass={props.parentClass}
-
         />
-
     )
 }

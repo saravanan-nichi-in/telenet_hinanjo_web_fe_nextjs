@@ -2,12 +2,15 @@ import React from "react"
 import { Dialog } from 'primereact/dialog';
 import { NormalLabel } from "../label";
 import { TextArea } from "../input";
+
 const DetailModal = (props) => {
     const { parentMainClass, detailModalProps = {} } = props && props
     const { headerContent, value1, value2, modalClass, position, onHide, visible } = detailModalProps
+
     const header = (
         headerContent
     )
+
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass}`} draggable={false} position={position} header={header} visible={visible} onHide={onHide} style={{ width: '600px', padding: "10px" }}>
@@ -27,7 +30,6 @@ const DetailModal = (props) => {
                     value: value2
                 }} />
             </Dialog>
-
         </div>
     )
 }
