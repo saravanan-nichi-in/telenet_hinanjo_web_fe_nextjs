@@ -1,2 +1,2 @@
-export {default as ToggleSwitch} from '@/components/switch/toggleSwitch'
-export {default as InputSwitch} from '@/components/switch/inputSwitch'
+export {default as ToggleSwitch} from './toggleSwitch'
+export {default as InputSwitch} from './inputSwitch'

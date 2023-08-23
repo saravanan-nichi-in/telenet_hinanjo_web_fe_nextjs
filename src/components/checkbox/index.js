@@ -1,1 +1,1 @@
-export {default as NormalCheckBox} from '@/components/checkbox/NormalCheckbox'
+export {default as NormalCheckBox} from './normalCheckbox'

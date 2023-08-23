@@ -1,1 +1,1 @@
-export {default as Counter} from '@/components/incrementDecrement/counter'
+export {default as Counter} from './counter'

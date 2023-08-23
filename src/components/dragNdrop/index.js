@@ -1,1 +1,1 @@
-export {default as DND} from '@/components/dragNdrop/dnd'
+export {default as DND} from './dnd'

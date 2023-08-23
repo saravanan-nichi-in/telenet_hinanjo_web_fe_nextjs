@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
 import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import DateTimePicker from '@/components/date&time/dateTimePicker';
-import DropdownSelect from '@/components/input/dropdownSelect';
+import { DropdownSelect } from '@/components';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);

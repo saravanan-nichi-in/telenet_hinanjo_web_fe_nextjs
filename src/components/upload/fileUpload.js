@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { FileUpload } from 'primereact/fileupload';
+import { FileUpload as Upload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 
-const UploadFile = () => {
+const FileUpload = () => {
     const toast = useRef(null);
 
     const onUpload = () => {
@@ -13,7 +13,7 @@ const UploadFile = () => {
 
 
             <Toast ref={toast}></Toast>
-            <FileUpload mode="basic"
+            <Upload mode="basic"
                 name="demo[]"
                 url="/api/upload"
                 accept="/*"
@@ -24,4 +24,4 @@ const UploadFile = () => {
         </div>
     );
 }
-export default UploadFile
+export default FileUpload

@@ -6,7 +6,7 @@ const containerStyle = {
     height: '100vh',
 };
 
-export const GoogleMapComponent = ({ initialPosition }) => {
+const GoogleMapComponent = ({ initialPosition }) => {
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
     const [currentLocation, setCurrentLocation] = useState('');
@@ -71,3 +71,4 @@ export const GoogleMapComponent = ({ initialPosition }) => {
         </>
     ) : <></>
 };
+export default GoogleMapComponent

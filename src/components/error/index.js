@@ -1,1 +1,1 @@
-export {default as ValidationError} from '@/components/error/validationError'
+export {default as ValidationError} from './validationError'

@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
-import InputIcon from '@/components/input/inputIcon';
-import TextArea from '@/components/input/inputTextArea';
-import InputSelect from '@/components/input/dropDown';
-import RadioBtn from '@/components/input/radiobtn';
-import InputGroup from '@/components/input/inputGroup';
-import Select from '@/components/input/select';
-import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
 import { CustomerService } from '@/helper/datatableservice';
-import UploadFile from '@/components/input/upload';
-import Avatar from '@/components/image/avatar';
 import ImageCropper from '@/pages/POC/CROP';
-import BarcodeScanner from '@/components/qr';
-import RectangularButton from '@/components/button/rectangularBtn';
-import { NormalTable ,Counter,Linker,NormalLabel,DeleteModal,ImageComponent,DateCalendar, TimeCalendar, DateTimeCalendar,DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent} from '@/components';
+import { NormalTable ,Counter,Linker,NormalLabel,DeleteModal,
+    ImageComponent,DateCalendar, TimeCalendar, DateTimeCalendar,
+    DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent, 
+    Btn, InputSelect, Select,AvatarComponent, RadioBtn, BarcodeScanner, FileUpload, InputIcon, InputLeftRightGroup, InputGroup, TextArea} from '@/components';
+
+
 
 
 export default function ComponentsDemo() {
@@ -68,7 +62,7 @@ export default function ComponentsDemo() {
             header: 'Edit Actions',
             body: (rowData) => (
                 <div>
-                    <RectangularButton rectangularButtonProps={{ text: "Edit" }} />
+                    <Btn btnProps={{ text: "Edit" }} />
                 </div>
             ),
         }, {
@@ -76,7 +70,7 @@ export default function ComponentsDemo() {
             header: 'Delete Actions',
             body: (rowData) => (
                 <div>
-                    <RectangularButton rectangularButtonProps={{
+                    <Btn btnProps={{
                         severity: "danger", text: "delete"
                     }} />
                 </div>
@@ -86,11 +80,11 @@ export default function ComponentsDemo() {
 
     const footer = (
         <div className="text-center">
-            <RectangularButton rectangularButtonProps={{
+            <Btn btnProps={{
                 buttonClass: "h-3rem",
                 text: "cancel"
             }} parentClass={"inline"} />
-            <RectangularButton rectangularButtonProps={{
+            <Btn btnProps={{
                 buttonClass: "h-3rem",
                 text: "delete",
                 severity: "danger"
@@ -123,21 +117,21 @@ export default function ComponentsDemo() {
                         <div className="card ">
                             <h2> Buttons Component </h2>
                             <div>
-                                <RectangularButton rectangularButtonProps={{
+                                <Btn btnProps={{
                                     icon: "pi pi-star-fill",
                                 }}
                                     parentClass={"mb-1 border-round-lg"} />
-                                <RectangularButton rectangularButtonProps={{
+                                <Btn btnProps={{
                                     text: "避難者状況一覧"
                                 }}
                                     parentClass={"mb-1"} />
-                                <RectangularButton parentClass={"mb-1 border-round-lg"}
-                                    rectangularButtonProps={{
+                                <Btn parentClass={"mb-1 border-round-lg"}
+                                    btnProps={{
                                         text: "避難者状況一覧",
                                         icon: "pi pi-star-fill",
                                         iconPos: "right"
                                     }} />
-                                <RectangularButton parentClass={"mb-1"} rectangularButtonProps={{
+                                <Btn parentClass={"mb-1"} btnProps={{
                                     text: "避難者状況一覧",
                                     icon: "pi pi-star-fill",
                                     iconPos: "left",
@@ -196,7 +190,7 @@ export default function ComponentsDemo() {
                             <InputIcon parentClass={"mt-3"} inputIconProps={{
                                 inputClass: "xl:w-3 sm:w-full",
                                 readOnly: "true",
-                                value: 20
+                                value: 30
                             }} />
                             <div class="pt-3">
                                 <h2>input group</h2>
@@ -292,7 +286,7 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2> upload</h2>
-                                <UploadFile auto="true" />
+                                <FileUpload auto="true" />
                             </div>
 
                         </div>
@@ -323,7 +317,35 @@ export default function ComponentsDemo() {
                             <h2>DataTable without pagination</h2>
                             <NormalTable customActionsField="actions" value={customers} columns={columns} />
                         </div>
+                        <div class="card" >
 
+                            <h2>Modal</h2>
+
+                            {/* <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} /> */}
+
+                            <h4>Delete Modal with switch</h4>
+
+                            <DeleteModal
+                                modalClass="w-50rem"
+                                header="確認情報"
+                                position="top"
+                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
+                                checked={checked1}
+                                onChange={(e) => setChecked1(e.value)}
+                                parentClass={"mb-3 custom-switch"}
+                            />
+
+                            <h4>Delete Modal with Button</h4>
+                            <DeleteModal
+                                modalClass="w-50rem"
+                                header="確認情報"
+                                text="delete"
+                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
+                                checked={checked1}
+                                onChange={(e) => setChecked1(e.value)}
+                                parentClass={"mt-3"}
+                            />
+                        </div>
                         <div class="card">
                             <h2> Link</h2>
                             <Linker linkProps={{
@@ -348,7 +370,7 @@ export default function ComponentsDemo() {
                                 }}
                             />
                             <h2>avatar with image</h2>
-                            <Avatar
+                            <AvatarComponent
                                 avatarProps={{
                                     // parentClass: "bg-orange-500",
                                     avatarClass: "mr-3",
@@ -362,7 +384,7 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card">
                             <h2>Qr</h2>
-                            <BarcodeScanner />
+                            <BarcodeScanner/>
                         </div>
                         <div class="card">
                             <h2> Divider Component </h2>

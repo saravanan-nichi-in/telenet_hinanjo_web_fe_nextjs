@@ -1,1 +1,1 @@
-export {default as Linker} from '@/components/link/linker'
+export {default as Linker} from './linker'

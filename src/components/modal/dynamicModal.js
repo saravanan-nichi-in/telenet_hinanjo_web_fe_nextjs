@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import InputSwitcher from "../switch/inputSwitch";
-import RectangularButton from "../button/rectangularBtn";
+import InputSwitch from "../switch/inputSwitch";
+import Btn from "../button/btn";
 const DynamicModal = (props) => {
-
+    const{text,iconPos,parentClass,checked,modalClass,position,header,footer,contentClass,content}=props
     const [visible, setVisible] = useState(false);
 
 
@@ -11,21 +11,21 @@ const DynamicModal = (props) => {
         <div className={`${props.parentMainClass}`}>
             {props.text ? (
                 <>
-                    <RectangularButton rectangularButtonProps={{
-                        text: props.text,
-                        iconPos: props.iconPos,
+                    <Btn btnProps={{
+                        text: text,
+                        iconPos: iconPos,
                         onClick: () => setVisible(true)
                     }} />
                 </>) : (
                 <>
-                    <InputSwitcher parentClass={props.parentClass} inputSwitchProps={{
-                        checked: props.checked,
+                    <InputSwitch parentClass={parentClass} inputSwitchProps={{
+                        checked: checked,
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-            <Dialog className={`${props.modalClass}`} position={props.position} header={props.header} footer={props.footer} visible={visible} onHide={() => setVisible(false)}>
-                <div class={`text-center ${props.contentClass}`}>
-                    {props.content}
+            <Dialog className={`${modalClass}`} draggable={false} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+                <div class={`text-center ${contentClass}`}>
+                    {content}
                 </div>
             </Dialog>
         </div>

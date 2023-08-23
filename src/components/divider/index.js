@@ -1,1 +1,1 @@
-export {default as DividerComponent} from '@/components/divider/dividerComponent'
+export {default as DividerComponent} from './dividerComponent'

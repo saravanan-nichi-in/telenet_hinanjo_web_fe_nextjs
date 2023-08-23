@@ -4,11 +4,10 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { Dialog } from 'primereact/dialog';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import DeleteModal from '@/components/modal/deleteModal';
-import DetailModal from '@/components/modal/detailModal';
+import { DetailModal } from '@/components';
+
 
 const sampleProducts = [
     { "避難所": "日本の避難所", "Test1(2)": "505", "Test2(2)": "3", "test3(3)": "2", "test6(5)": "1" },

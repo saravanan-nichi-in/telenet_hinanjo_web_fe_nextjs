@@ -1,6 +1,7 @@
 import React from "react";
 import { RadioButton } from "primereact/radiobutton";
-import Label from "./label";
+import { NormalLabel } from "../label";
+
 
 export default function RadioBtn(props) {
     const { parentClass, radioBtnProps = {} } = props && props
@@ -17,7 +18,7 @@ export default function RadioBtn(props) {
                 checked={checked}
                 disabled={disabled}
             />
-            <Label htmlFor={inputId}
+            <NormalLabel htmlFor={inputId}
                 className={`${labelClass}`}
                 text={value}
             />

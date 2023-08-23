@@ -1,17 +1,17 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import InputSwitcher from "../switch/inputSwitch";
-import RectangularButton from "../button/rectangularBtn";
+import InputSwitch from "../switch/inputSwitch";
+import Btn from "../button/btn";
 const DeleteModal = (props) => {
     const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, position, header, contentClass, content } = props
     const [visible, setVisible] = useState(false);
     const footer = (
         <div className="text-center">
-            <RectangularButton rectangularButtonProps={{
+            <Btn btnProps={{
                 buttonClass: "w-50rem h-3rem",
                 text: "cancel"
             }} parentClass={"inline"} />
-            <RectangularButton rectangularButtonProps={{
+            <Btn btnProps={{
                 buttonClass: "w-40rem h-3rem",
                 text: "delete",
                 severity: "danger"
@@ -23,7 +23,7 @@ const DeleteModal = (props) => {
         <div className={`${parentMainClass}`}>
             {text ? (
                 <>
-                    <RectangularButton rectangularButtonProps={{
+                    <Btn btnProps={{
                         text: text,
                         iconPos: iconPos,
                         icon: icon,
@@ -32,7 +32,7 @@ const DeleteModal = (props) => {
                     }} />
                 </>) : (
                 <>
-                    <InputSwitcher parentClass={parentClass} inputSwitchProps={{
+                    <InputSwitch parentClass={parentClass} inputSwitchProps={{
                         checked: checked,
                         onChange: () => setVisible(true)
                     }} />

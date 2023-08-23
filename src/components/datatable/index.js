@@ -1,3 +1,3 @@
-export { default as NormalTable } from '@/components/datatable/normalTable'
-export { default as RowExpansionTable } from '@/components/datatable/rowExpansionTable'
-export {default as TreeTable} from '@/components/datatable/treeTable'
+export { default as NormalTable } from './normalTable'
+export { default as RowExpansionTable } from './rowExpansionTable'
+export {default as TreeTable} from './treeTable'
