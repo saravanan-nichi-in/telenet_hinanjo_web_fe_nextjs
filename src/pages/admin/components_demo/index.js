@@ -1,33 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
-import DividerComponent from '@/components/divider';
 import InputIcon from '@/components/input/inputIcon';
-import InputSwitcher from '@/components/switch/inputSwitch';
-import TogglBtn from '@/components/switch/toglbtn';
 import TextArea from '@/components/input/inputTextArea';
 import InputSelect from '@/components/input/dropDown';
 import RadioBtn from '@/components/input/radiobtn';
 import InputGroup from '@/components/input/inputGroup';
-import CheckBox from '@/components/checkbox/index.';
 import Select from '@/components/input/select';
-import Label from '@/components/label';
 import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
-import TableData from '@/components/datatable/datatable';
 import { CustomerService } from '@/helper/datatableservice';
-import Linker from '@/components/link/index.';
-import TimePicker from '@/components/date&time/time';
-import IncrementDecrement from '@/components/incrementDecrement';
 import UploadFile from '@/components/input/upload';
 import Avatar from '@/components/image/avatar';
 import ImageCropper from '@/pages/POC/CROP';
-import ImageComponent from '@/components/image/image';
 import BarcodeScanner from '@/components/qr';
-import Modal from '@/components/modal';
-import DateCalendar from '@/components/date&time/date';
-import DateTime from '@/components/date&time/dateTime';
-import DateTimePicker from '@/components/date&time/dateTimePicker';
 import RectangularButton from '@/components/button/rectangularBtn';
-import DeleteModal from '@/components/modal/deleteModal';
+import { NormalTable ,Counter,Linker,NormalLabel,DeleteModal,ImageComponent,DateCalendar, TimeCalendar, DateTimeCalendar,DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent} from '@/components';
 
 
 export default function ComponentsDemo() {
@@ -172,7 +158,7 @@ export default function ComponentsDemo() {
                             }} parentClass={"xl:w-4 sm:w-full"} />
 
                             <h6>Time Picker</h6>
-                            <TimePicker parentClass={"xl:w-4 sm:w-full"} timeProps={{
+                            <TimeCalendar parentClass={"xl:w-4 sm:w-full"} timeProps={{
                                 placeholder: "time"
                             }} />
 
@@ -183,7 +169,7 @@ export default function ComponentsDemo() {
                                 placeholder: "yy-mm-dd"
                             }} />
                             <h6>Date and Time with range</h6>
-                            <DateTime dateTimeProps={{
+                            <DateTimeCalendar dateTimeProps={{
                                 selectionMode: "range"
                             }} parentClass={"xl:w-6 sm:w-full"} />
 
@@ -274,8 +260,8 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2>Label</h2>
-                                <Label htmlFor="email" text={"email"} labelClass={"font-18 text-primary pr-2"} />
-                                <Label labelClass="w-full font-18 font-bold pt-0" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
+                                <NormalLabel htmlFor="email" text={"email"} labelClass={"font-18 text-primary pr-2"} />
+                                <NormalLabel labelClass="w-full font-18 font-bold pt-0" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
 
                             </div>
                             <div class="pt-3">
@@ -294,7 +280,7 @@ export default function ComponentsDemo() {
                             <div class="pt-3">
                                 <h2> Checkbox</h2>
                                 {/* <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} /> */}
-                                <CheckBox checkBoxProps={{
+                                <NormalCheckBox checkBoxProps={{
                                     checkboxClass: "pr-1 h-10",
                                     inputId: "ingredient1",
                                     name: "pizza",
@@ -312,17 +298,17 @@ export default function ComponentsDemo() {
                         </div>
                         <div class="card">
                             <h2>Increment Decrment</h2>
-                            <IncrementDecrement value={5} parentClass={"xl:w-10 sm:w-full"} />
+                            <Counter value={5} parentClass={"xl:w-10 sm:w-full"} />
                         </div>
                         <div class="card" >
                             <h2>Switch Component</h2>
-                            <InputSwitcher parentClass={"custom-switch"}
+                            <InputSwitch parentClass={"custom-switch"}
                                 inputSwitchProps={{
                                     checked: checked1,
                                     onChange: (e) => setChecked1(e.value)
                                 }}
                             />
-                            <TogglBtn togglProps={{
+                            <ToggleSwitch togglProps={{
                                 checked: checked1,
                                 onLabel: "on",
                                 offLabel: "off",
@@ -330,36 +316,12 @@ export default function ComponentsDemo() {
                             }}
                             />
                         </div>
-                        <div class="card" >
-                            <h2>Modal</h2>
-                            {/* <Modal parentClass={"mb-3"} modalClass={"w-40rem"} content={content} footer={footer} btnText={"削除"} header={"確認情報"} text={"削除"} /> */}
-                            <h4>Delete Modal with switch</h4>
-                            <DeleteModal
-                                modalClass="w-50rem"
-                                header="確認情報"
-                                position="top"
-                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
-                                checked={checked1}
-                                onChange={(e) => setChecked1(e.value)}
-                                parentClass={"mb-3 custom-switch"}
-                            />
-                            <h4>Delete Modal with Button</h4>
-                            <DeleteModal
-                                modalClass="w-50rem"
-                                header="確認情報"
-                                text="delete"
-                                content={"避難所の満員状態を切り替えてもよろしいでしょうか？"}
-                                checked={checked1}
-
-                                onChange={(e) => setChecked1(e.value)}
-                                parentClass={"mt-3"}
-                            />
-                        </div>
+                        
                         <div class="card">
                             <h2>DataTable with pagination</h2>
-                            <TableData customActionsField="actions" paginator="true" value={customers} columns={columns} />
+                            <NormalTable customActionsField="actions" paginator="true" value={customers} columns={columns} />
                             <h2>DataTable without pagination</h2>
-                            <TableData customActionsField="actions" value={customers} columns={columns} />
+                            <NormalTable customActionsField="actions" value={customers} columns={columns} />
                         </div>
 
                         <div class="card">
