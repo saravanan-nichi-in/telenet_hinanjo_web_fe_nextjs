@@ -1,0 +1,1 @@
+export {default as Linker} from '@/components/link/linker'

@@ -3,11 +3,8 @@ import { Dialog } from 'primereact/dialog';
 import InputSwitcher from "../switch/inputSwitch";
 import RectangularButton from "../button/rectangularBtn";
 const DeleteModal = (props) => {
-    const { parentMainClass,text,iconPos,icon,parentClass,checked,modalClass,position,header,contentClass,content } = props 
+    const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, position, header, contentClass, content } = props
     const [visible, setVisible] = useState(false);
-
-
-    
     const footer = (
         <div className="text-center">
             <RectangularButton rectangularButtonProps={{
@@ -22,7 +19,6 @@ const DeleteModal = (props) => {
         </div>
     );
 
-
     return (
         <div className={`${parentMainClass}`}>
             {text ? (
@@ -30,7 +26,7 @@ const DeleteModal = (props) => {
                     <RectangularButton rectangularButtonProps={{
                         text: text,
                         iconPos: iconPos,
-                        icon:icon,
+                        icon: icon,
 
                         onClick: () => setVisible(true)
                     }} />

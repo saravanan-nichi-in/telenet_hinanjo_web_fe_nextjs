@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ToggleButton } from 'primereact/togglebutton';
-const TogglBtn = (props) => {
+const ToggleSwitch = (props) => {
     const { bgColor, parentClass, onLabel, offLabel, onIcon, offIcon, checked, onChange } = props && props.togglProps;
     return (
         <div>
@@ -16,4 +16,4 @@ const TogglBtn = (props) => {
         </div>
     );
 }
-export default TogglBtn;
+export default ToggleSwitch;

@@ -1,12 +1,12 @@
 import React from 'react';
-import { DataTable } from 'primereact/datatable';
+import { DataTable as TableData  } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-export default function TableData(props) {
+export default function NormalTable(props) {
     const { paginator, rows, value, customActionsField, columns } = props && props
     return (
         <div>
-            <DataTable value={value}
+            <TableData value={value}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '50rem' }}
@@ -19,7 +19,7 @@ export default function TableData(props) {
                         style={{ width: '25%' }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}
-            </DataTable>
+            </TableData>
         </div>
     );
 }

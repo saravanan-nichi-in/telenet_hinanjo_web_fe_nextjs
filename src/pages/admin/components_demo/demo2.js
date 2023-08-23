@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import TreeTab from '@/components/datatable/treeTable';
+import { TreeTable, RowExpansionTable, DND } from '@/components';
 import { NodeService } from '@/helper/treeTableService';
-import DND from '@/components/dragNdrop';
-import RowExpansionTable from '@/components/datatable/rowExpansionTable';
 import { ProductService } from '@/helper/rowExpandTableService';
 
 export default function ComponentDemo() {
@@ -14,22 +12,22 @@ export default function ComponentDemo() {
         { field: 'size', header: 'Type' },
         { field: 'type', header: 'Size' }
     ];
-    
-    const Outercolumn=[
-        {field:"name",header:"name"},
-        {field:"price", header:"Price"},
-        {field:"description", header:"description"},
-        {field:"category", header:"category"}
+
+    const Outercolumn = [
+        { field: "name", header: "name" },
+        { field: "price", header: "Price" },
+        { field: "description", header: "description" },
+        { field: "category", header: "category" }
     ]
 
-    const innerColumn=[
-        {field:"productCode",header:"productCode"},
-        {field:"date", header:"date"}
+    const innerColumn = [
+        { field: "productCode", header: "productCode" },
+        { field: "date", header: "date" }
     ]
 
     const [products, setProducts] = useState([]);
-    
-  
+
+
     useEffect(() => {
         NodeService.getTreeTableNodes().then((data) => setNodes(data));
         let prepareData = [];
@@ -56,22 +54,22 @@ export default function ComponentDemo() {
 
     const handleMoveUp = (index) => {
         if (index > 0) {
-          const items = [...data];
-          const movedItem = items.splice(index, 1)[0];
-          items.splice(index - 1, 0, movedItem);
-          setData(items);
+            const items = [...data];
+            const movedItem = items.splice(index, 1)[0];
+            items.splice(index - 1, 0, movedItem);
+            setData(items);
         }
-      };
+    };
 
-      
-  const handleMoveDown = (index) => {
-    if (index < data.length - 1) {
-      const items = [...data];
-      const movedItem = items.splice(index, 1)[0];
-      items.splice(index + 1, 0, movedItem);
-      setData(items);
-    }
-  };
+
+    const handleMoveDown = (index) => {
+        if (index < data.length - 1) {
+            const items = [...data];
+            const movedItem = items.splice(index, 1)[0];
+            items.splice(index + 1, 0, movedItem);
+            setData(items);
+        }
+    };
 
     const map = (
         <ol>
@@ -80,13 +78,13 @@ export default function ComponentDemo() {
                     {/* <InputSwitcher parentClass={"custom-switch mr-2"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> */}
                     <button className="mr-4" onClick={() => handleMoveUp(index)}>▲</button>
                     <div className='xl:w-10 mr-4 '>
-                    {item.title}
+                        {item.title}
                     </div>
-                    <a href="#" style={{position:"inherit"}}>
+                    <a href="#" style={{ position: "inherit" }}>
                         drag
                     </a>
-                        <button className="arrow-button ml-19rem" onClick={() => handleMoveDown(index)}>▼</button>
-                
+                    <button className="arrow-button ml-19rem" onClick={() => handleMoveDown(index)}>▼</button>
+
                 </li>
             ))}
         </ol>
@@ -105,19 +103,19 @@ export default function ComponentDemo() {
 
                         <div class="card">
                             <h2>Tree Table with pagination</h2>
-                            <TreeTab columns={columns} value={nodes} paginator="true" />
+                            <TreeTable columns={columns} value={nodes} paginator="true" />
                         </div>
                         <div class="card">
                             <h2>Drag and Drop</h2>
                             <DND dragProps={dragProps}
-                                 >
-                                    {map}
-                                </DND>
+                            >
+                                {map}
+                            </DND>
                         </div>
                         <div class="card">
-                        <h2>Row expand table</h2>
-                            <RowExpansionTable paginator="true" rows={3} value={products} innerColumn={innerColumn} outerColumn={Outercolumn} rowExpansionField="orders"   />
-                            </div>
+                            <h2>Row expand table</h2>
+                            <RowExpansionTable paginator="true" rows={3} value={products} innerColumn={innerColumn} outerColumn={Outercolumn} rowExpansionField="orders" />
+                        </div>
                     </section>
                 </div>
             </div>

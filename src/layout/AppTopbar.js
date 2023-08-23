@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Dropdown } from 'antd';
 import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import DateTimePicker from '@/components/date&time/dateTimePicker';
 import DropdownSelect from '@/components/input/dropdownSelect';
 
@@ -75,7 +75,7 @@ const AppTopbar = forwardRef((props, ref) => {
             key: '2',
         },
     ];
-
+    const isStaffUser = router.pathname.startsWith('/staff');
     return (
         <div className="layout-topbar">
             <Link href="/" className="layout-topbar-logo">
@@ -92,9 +92,20 @@ const AppTopbar = forwardRef((props, ref) => {
 
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
 
-                <DateTimePicker fontsize={"mt-3"} />
                 
-                <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"}/>
+                {isStaffUser ? (
+                <><DateTimePicker parentClass={"mt-2 mr-3"} /><label className="clickable-label">
+                        <div className='mt-2 ml-3 ' onClick={() => logout()}>
+                            <span>
+                                <LoginOutlined />
+                            </span>
+                            ログアウト
+                        </div>
+                    </label></>
+                ):(
+                    <><DateTimePicker parentClass={"mt-3"} />
+                    <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"} /></>
+                )}
                 {/* <Dropdown
                     menu={{
                         items,

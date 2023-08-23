@@ -1,17 +1,17 @@
 import React from 'react';
-import { InputSwitch } from 'primereact/inputswitch';
+import { InputSwitch as InputSwitcher} from 'primereact/inputswitch';
 
-const InputSwitcher = (props) => {
+const InputSwitch = (props) => {
     const { parentClass, inputSwitchProps = {} } = props && props
     const { switchClass, checked, onChange } = inputSwitchProps && inputSwitchProps
     return (
         <div className={`${parentClass}`}>
 
-            <InputSwitch className={` ${switchClass}`}
+            <InputSwitcher className={` ${switchClass}`}
                 checked={checked}
                 onChange={onChange}
             />
         </div>
     );
 }
-export default InputSwitcher
+export default InputSwitch

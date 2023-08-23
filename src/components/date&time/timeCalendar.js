@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-const DateTime = (props) => {
-    const { parentClass, dateTimeProps = {} } = props && props
-    const { height, dateTimeClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, placeholder } = dateTimeProps && dateTimeProps
+
+const TimeCalendar = (props) => {
+    const { parentClass, timeProps = {} } = props
+    const { height, timeClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, placeholder } = timeProps
     const [date, setDate] = useState(null);
 
     addLocale('en', {
@@ -25,25 +26,26 @@ const DateTime = (props) => {
 
     return (
         <div className={`${parentClass}`}>
-            <Calendar className={`${height || 'custom_input'} ${dateTimeClass}`}
+            <Calendar className={` ${height || 'custom_input'} ${timeClass}`}
                 id="time24"
-                showTime
                 value={date}
-                onChange={(e) => setDate(e.value)}
-                dateFormat="yy年mm月dd日"
+                icon={icon || "pi pi-clock"}
+                showIcon
+                iconPos={iconPos || "right"}
                 disabledDates={disabledDates}
                 disabledDays={disabledDays}
-                minDate={minDate}
-                maxDate={maxDate}
+                minDate={minDate} maxDate={maxDate}
                 selectionMode={selectionMode || "single"}
+                onChange={(e) => setDate(e.value)}
+                dateFormat="yy年mm月dd日"
+                timeOnly
                 readOnlyInput
-                icon={icon || "pi pi-calendar"}
-                iconPos={iconPos || "right"}
-                showIcon
+                showSeconds
                 placeholder={placeholder}
+                hourFormat="24"
             />
         </div>
     );
 
 }
-export default DateTime             
+export default TimeCalendar             

@@ -14,7 +14,6 @@ const Layout = (props) => {
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
     const user = !window.location.pathname.startsWith('/admin') && !window.location.pathname.startsWith('/staff');
-
     const router = useRouter();
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',

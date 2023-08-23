@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-
-const TimePicker = (props) => {
-    const { parentClass, timeProps = {} } = props
-    const { height, timeClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, placeholder } = timeProps
+const DateTimeCalendar = (props) => {
+    const { parentClass, dateTimeProps = {} } = props && props
+    const { height, dateTimeClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, placeholder } = dateTimeProps && dateTimeProps
     const [date, setDate] = useState(null);
 
     addLocale('en', {
@@ -26,26 +25,25 @@ const TimePicker = (props) => {
 
     return (
         <div className={`${parentClass}`}>
-            <Calendar className={` ${height || 'custom_input'} ${timeClass}`}
+            <Calendar className={`${height || 'custom_input'} ${dateTimeClass}`}
                 id="time24"
+                showTime
                 value={date}
-                icon={icon || "pi pi-clock"}
-                showIcon
-                iconPos={iconPos || "right"}
-                disabledDates={disabledDates}
-                disabledDays={disabledDays}
-                minDate={minDate} maxDate={maxDate}
-                selectionMode={selectionMode || "single"}
                 onChange={(e) => setDate(e.value)}
                 dateFormat="yy年mm月dd日"
-                timeOnly
+                disabledDates={disabledDates}
+                disabledDays={disabledDays}
+                minDate={minDate}
+                maxDate={maxDate}
+                selectionMode={selectionMode || "single"}
                 readOnlyInput
-                showSeconds
+                icon={icon || "pi pi-calendar"}
+                iconPos={iconPos || "right"}
+                showIcon
                 placeholder={placeholder}
-                hourFormat="24"
             />
         </div>
     );
 
 }
-export default TimePicker             
+export default DateTimeCalendar             

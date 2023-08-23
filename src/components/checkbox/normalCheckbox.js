@@ -1,9 +1,9 @@
 import React from "react";
 import { Checkbox } from "primereact/checkbox";
-import Label from "../label/";
+import NormalLabel from "../label/NormalLabel";
 
 
-const CheckBox = (props) => {
+const NormalCheckBox = (props) => {
     const { parentClass, checkBoxProps = {} } = props && props
     const { checkboxClass, id, name, value, onChange, checked, disabled, labelClass } = checkBoxProps && checkBoxProps
     return (
@@ -16,11 +16,11 @@ const CheckBox = (props) => {
                 checked={checked}
                 disabled={disabled}
             />
-            <Label htmlFor={id}
+            <NormalLabel htmlFor={id}
                 className={`${labelClass}`}
                 text={value}
             />
         </div>
     )
 }
-export default CheckBox;
+export default NormalCheckBox;
