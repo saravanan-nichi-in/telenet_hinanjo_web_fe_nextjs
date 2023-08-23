@@ -1,6 +1,6 @@
 export * from '@/components/GoogleMapComponent';
-export  { NormalTable, RowExpansionTable, TreeTable } from './datatable';
-export  {ValidationError} from './error'
+export { NormalTable, RowExpansionTable, TreeTable } from './datatable';
+export {ValidationError} from './error'
 export {Counter} from './incrementDecrement'
 export {Linker} from './link'
 export {NormalLabel} from './label' 
