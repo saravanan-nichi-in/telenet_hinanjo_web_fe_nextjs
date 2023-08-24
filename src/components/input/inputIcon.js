@@ -2,7 +2,7 @@ import { InputText } from 'primereact/inputtext';
 
 const InputIcon = (props) => {
   const { parentClass, inputIconProps = {} } = props && props
-  const { iconPos, icon, inputClass, height, placeholder, keyfilter, value, name, onChange, onBlur, readOnly } = inputIconProps && inputIconProps
+  const { iconPos, icon, inputClass, height, placeholder, keyfilter, value, name, onChange, onBlur, readOnly,disabled } = inputIconProps && inputIconProps
 
   return (
     <div className={`${parentClass}`}>
@@ -16,6 +16,7 @@ const InputIcon = (props) => {
           onChange={onChange}
           onBlur={onBlur}
           readOnly={readOnly}
+          disabled={disabled}
         />
       </div>
     </div>

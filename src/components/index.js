@@ -17,4 +17,4 @@ export {AvatarComponent} from "./avatar"
 export {RadioBtn} from './radioButton'
 export {BarcodeScanner} from './qr'
 export {FileUpload} from "./upload"
-export {TextArea,InputLeftRightGroup,InputGroup,InputIcon} from "./input"
+export {TextArea,InputLeftRightGroup,InputGroup,InputIcon,InputNumber} from "./input"

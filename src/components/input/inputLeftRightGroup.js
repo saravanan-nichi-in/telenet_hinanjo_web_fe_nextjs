@@ -5,7 +5,7 @@ const InputLeftRightGroup = (props) => {
   const { parentClass, inputLrGroupProps = {} } = props && props
   const { antLeftIcon, leftIcon, leftClass, inputClass, height,
     placeholder, value, name, onChange, onBlur, type,
-    keyfilter, rightClass, rightIcon, antdRightIcon } = inputLrGroupProps && inputLrGroupProps
+    keyfilter, rightClass, rightIcon, antdRightIcon,disabled } = inputLrGroupProps && inputLrGroupProps
 
   return (
     <div className={`p-inputgroup ${parentClass}`}>
@@ -23,6 +23,7 @@ const InputLeftRightGroup = (props) => {
             onBlur={onBlur}
             type={type || "text"}
             keyfilter={keyfilter}
+            disabled={disabled}
           />
         </>
       ) : (

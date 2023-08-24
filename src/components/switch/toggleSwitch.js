@@ -2,7 +2,7 @@ import React from 'react';
 import { ToggleButton } from 'primereact/togglebutton';
 
 const ToggleSwitch = (props) => {
-    const { bgColor, parentClass, onLabel, offLabel, onIcon, offIcon, checked, onChange } = props && props.togglProps;
+    const { bgColor, parentClass, onLabel, offLabel, onIcon, offIcon, checked, onChange,disabled } = props && props.togglProps;
 
     return (
         <div>
@@ -13,6 +13,7 @@ const ToggleSwitch = (props) => {
                 offIcon={offIcon}
                 checked={checked}
                 onChange={onChange}
+                disabled={disabled}
             />
         </div>
     );

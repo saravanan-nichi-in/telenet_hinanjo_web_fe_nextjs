@@ -121,7 +121,7 @@ export default function ComponentsDemo() {
                         </h5>
                         <Divider />
                         <div className="card ">
-                            <h2> Buttons Component </h2>
+                            <h6 className='page_sub_header'> Buttons Component </h6>
                             <div>
                                 <Btn btnProps={{
                                     icon: "pi pi-star-fill",
@@ -148,7 +148,7 @@ export default function ComponentsDemo() {
                         </div>
 
                         < div class="card ">
-                            <h2> Date Components</h2>
+                            <h6 className='page_sub_header'> Date Components</h6>
                             <h6>Current date and time component</h6>
                             <DateTimePicker />
                             <h6>Date Picker</h6>
@@ -172,7 +172,7 @@ export default function ComponentsDemo() {
 
                         </div>
                         < div class="card ">
-                            <h2>input icons</h2>
+                            <h2 className='page_sub_header'>input icons</h2>
                             <InputIcon parentClass={"w-3"} inputIconProps={{
                                 placeholder: "input-left-icon",
                                 icon: "pi pi-search",
@@ -196,7 +196,7 @@ export default function ComponentsDemo() {
                                 value: 30
                             }} />
                             <div class="pt-3">
-                                <h2>input group</h2>
+                                <h2 className='page_sub_header'>input group</h2>
                                 <InputLeftRightGroup inputLrGroupProps={{
                                     rightIcon: "pi pi-user",
                                     placeholder: "username",
@@ -223,7 +223,7 @@ export default function ComponentsDemo() {
                                     parentClass={"xl:w-4 sm:w-full"} />
                             </div>
                             <div class="pt-3">
-                                <h2>TextArea</h2>
+                                <h2 className='page_sub_header'>TextArea</h2>
                                 <TextArea textAreaProps={{
                                     textAreaClass: "w-full",
                                     row: 5,
@@ -231,7 +231,7 @@ export default function ComponentsDemo() {
                                 }} />
                             </div>
                             <div class="pt-3">
-                                <h2>Input and Dropdown</h2>
+                                <h2 className='page_sub_header'>Input and Dropdown</h2>
                                 <InputSelect dropdownProps={{
                                     value: selectedCity,
                                     onChange: (e) => setSelectedCity(e.value),
@@ -241,7 +241,7 @@ export default function ComponentsDemo() {
                                 />
                             </div>
                             <div class="pt-3">
-                                <h2>Select</h2>
+                                <h2 className='page_sub_header'>Select</h2>
                                 <Select selectProps={{
                                     selectClass: "custom_dropdown_items",
                                     value: data,
@@ -253,12 +253,12 @@ export default function ComponentsDemo() {
                                 />
                             </div>
                             <div class="pt-3">
-                                <h2>Label</h2>
+                                <h2 className='page_sub_header'>Label</h2>
                                 <NormalLabel htmlFor="email" text={"email"} labelClass={"font-18 text-primary pr-2"} />
                                 <NormalLabel labelClass="w-full font-18 font-bold pt-0" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
                             </div>
                             <div class="pt-3">
-                                <h2>Radio button</h2>
+                                <h2 className='page_sub_header'>Radio button</h2>
                                 <RadioBtn radioBtnProps={{
                                     radioClass: "mr-1",
                                     inputId: "ingredient1",
@@ -270,7 +270,7 @@ export default function ComponentsDemo() {
                                 />
                             </div>
                             <div class="pt-3">
-                                <h2> Checkbox</h2>
+                                <h2 className='page_sub_header'> Checkbox</h2>
                                 {/* <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} /> */}
                                 <NormalCheckBox checkBoxProps={{
                                     checkboxClass: "pr-1 h-10",
@@ -283,16 +283,16 @@ export default function ComponentsDemo() {
                                     parentClass={"pt-1 custom_checkbox"} />
                             </div>
                             <div class="pt-3">
-                                <h2> upload</h2>
+                                <h2 className='page_sub_header'> upload</h2>
                                 <FileUpload auto="true" />
                             </div>
                         </div>
                         <div class="card">
-                            <h2>Increment Decrment</h2>
+                            <h2 className='page_sub_header'>Increment Decrment</h2>
                             <Counter value={5} parentClass={"xl:w-10 sm:w-full"} />
                         </div>
                         <div class="card" >
-                            <h2>Switch Component</h2>
+                            <h2 className='page_sub_header'>Switch Component</h2>
                             <InputSwitch parentClass={"custom-switch"}
                                 inputSwitchProps={{
                                     checked: checked1,
@@ -308,13 +308,13 @@ export default function ComponentsDemo() {
                             />
                         </div>
                         <div class="card">
-                            <h2>DataTable with pagination</h2>
+                            <h2 className='page_sub_header'>DataTable with pagination</h2>
                             <NormalTable customActionsField="actions" paginator="true" value={customers} columns={columns} />
-                            <h2>DataTable without pagination</h2>
+                            <h2 className='page_sub_header'>DataTable without pagination</h2>
                             <NormalTable customActionsField="actions" value={customers} columns={columns} />
                         </div>
                         <div class="card" >
-                            <h2>Modal</h2>
+                            <h2 className='page_sub_header'>Modal</h2>
                             <h4>Delete Modal with switch</h4>
                             <DeleteModal
                                 modalClass="w-50rem"
@@ -337,7 +337,7 @@ export default function ComponentsDemo() {
                             />
                         </div>
                         <div class="card">
-                            <h2> Link</h2>
+                            <h2 className='page_sub_header'> Link</h2>
                             <Linker linkProps={{
                                 linkClass: "text-primary-600",
                                 textWithUnderline: "PRIME",
@@ -351,7 +351,7 @@ export default function ComponentsDemo() {
                             />
                         </div>
                         <div class="card">
-                            <h2> Image</h2>
+                            <h2 className='page_sub_header'> Image</h2>
                             <ImageComponent
                                 imageProps={{
                                     width: "200",
@@ -359,7 +359,7 @@ export default function ComponentsDemo() {
                                     src: "/layout/images/perspective1.jpg"
                                 }}
                             />
-                            <h2>avatar with image</h2>
+                            <h2 className='page_sub_header'>avatar with image</h2>
                             <AvatarComponent
                                 avatarProps={{
                                     // parentClass: "bg-orange-500",
@@ -372,11 +372,11 @@ export default function ComponentsDemo() {
                             />
                         </div>
                         <div class="card">
-                            <h2>Qr</h2>
+                            <h2 className='page_sub_header'>Qr</h2>
                             <BarcodeScanner />
                         </div>
                         <div class="card">
-                            <h2> Divider Component </h2>
+                            <h2 className='page_sub_header'> Divider Component </h2>
                             <DividerComponent dividerProps={{
                                 width: "w-full"
                             }} />

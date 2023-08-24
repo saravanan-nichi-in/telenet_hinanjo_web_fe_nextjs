@@ -20,7 +20,9 @@ export default function Counter(props) {
             onRightClick: handleIncrement,
             onLeftClick: handleDecrement,
             rightIcon: "pi pi-plus",
-            leftIcon: "pi pi-minus"
+            leftIcon: "pi pi-minus",
+            readOnly:props.readOnly,
+            disabled:props.disabled
         }} parentClass={props.parentClass}
         />
     )
