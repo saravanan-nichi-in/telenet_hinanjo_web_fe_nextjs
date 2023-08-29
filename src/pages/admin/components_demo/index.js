@@ -7,7 +7,7 @@ import {
     ImageComponent, DateCalendar, TimeCalendar, DateTimeCalendar,
     DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent,
     Btn, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
-    InputIcon, InputLeftRightGroup, InputGroup, TextArea
+    InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneBtn
 } from '@/components';
 
 export default function ComponentsDemo() {
@@ -49,12 +49,11 @@ export default function ComponentsDemo() {
     }
 
     const options = [
-        { label: '現在の避難者数', value: 'NY' },
-        { label: '避難所の混雑率', value: 'RM' },
-        { label: '要配慮者の避難者数', value: 'LDN' },
+        { label: 'Japanese', image: '/layout/images/jp.png' },
+        { label: 'English', image: '/layout/images/us.png' }
     ];
 
-    const [data, setData] = useState(options[0].value);
+    const [selectedOption, setSelectedOption] = useState(options[0]);
 
     const [customers, setCustomers] = useState([]);
 
@@ -144,6 +143,7 @@ export default function ComponentsDemo() {
                                     rounded: "true"
                                 }}
                                 />
+                                < MicroPhoneBtn size="2xl" />
                             </div>
                         </div>
 
@@ -240,17 +240,23 @@ export default function ComponentsDemo() {
                                 }}
                                 />
                             </div>
-                            <div class="pt-3">
+                            <div className="pt-3  ">
                                 <h2 className='page_sub_header'>Select</h2>
-                                <Select selectProps={{
-                                    selectClass: "custom_dropdown_items",
-                                    value: data,
-                                    options: options,
-                                    onChange: (e) => setData(e.value),
-                                    placeholder: "Select a City"
-                                }}
-                                    parentClass={"custom_select"}
-                                />
+                                <div className='flex'>
+                                    <img src={selectedOption.image} height={20} width={20} alt="Selected Option" className='mr-1' />
+                                    <Select selectProps={{
+                                        selectClass: "custom_dropdown_items",
+                                        value: selectedOption,
+                                        options: options,
+                                        onChange: (e) => setSelectedOption(e.value),
+                                        placeholder: "Select a Language"
+                                    }}
+                                        parentClass={"custom_select"}
+                                    />
+                                </div>
+                                {/* Display the select ed option's image */}
+
+
                             </div>
                             <div class="pt-3">
                                 <h2 className='page_sub_header'>Label</h2>
@@ -359,6 +365,14 @@ export default function ComponentsDemo() {
                                     src: "/layout/images/perspective1.jpg"
                                 }}
                             />
+                            <h2 className='page_sub_header'> Image placeholder</h2>
+                            <ImageComponent
+                                imageProps={{
+                                    width: "200",
+                                    height: "200",
+                                    src: "/layout/images/perspective.jpg"
+                                }}
+                            />
                             <h2 className='page_sub_header'>avatar with image</h2>
                             <AvatarComponent
                                 avatarProps={{
@@ -395,4 +409,3 @@ export default function ComponentsDemo() {
         </div>
     );
 }
-

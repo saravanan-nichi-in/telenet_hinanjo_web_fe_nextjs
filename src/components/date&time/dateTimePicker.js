@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 function DateTimePicker(props) {
-    const { fontsize, bgColor, fontWeight, parentClass } = props
+    const { fontsize, bgColor, fontWeight, parentClass, id } = props
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
     useEffect(() => {
@@ -26,10 +26,9 @@ function DateTimePicker(props) {
     const formattedDateTime = currentDateTime.toLocaleString('ja-JP', options);
 
     return (
-        <div className={`${fontsize} ${bgColor} ${fontWeight} ${parentClass}`}>
+        <div className={`${fontsize} ${bgColor} ${fontWeight} ${parentClass}`} id={id}>
             {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
         </div>
     );
 }
-
 export default DateTimePicker;

@@ -16,6 +16,7 @@ const FileUpload = (props) => {
                 name="demo[]"
                 url="/api/upload"
                 accept="/*"
+                id={props.id}
                 maxFileSize={1000000}
                 onUpload={onUpload}
                 className={`${props.uploadClassName}`}

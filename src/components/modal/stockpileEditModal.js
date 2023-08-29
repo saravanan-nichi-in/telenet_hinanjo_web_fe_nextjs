@@ -4,11 +4,12 @@ import Btn from "../button/btn";
 import { NormalLabel } from "../label";
 import { Select } from "../dropdown";
 import { InputIcon } from "../input";
-import { FileUpload } from "../upload";
-const StockSignupModal = (props) => {
+import { DateCalendar } from "../date&time";
+
+const StockPileEditModal = (props) => {
     const { parentMainClass, modalClass, draggable,
-        position, contentClass, value, options, onChange, placeholder,
-        selectParentClass, onClickTop, OnClickAddition } = props
+        position, contentClass, value, options,
+        onChange, placeholder, selectParentClass, onClickTop, OnClickAddition } = props
     const [visible, setVisible] = useState(false);
 
     const header = (
@@ -18,7 +19,7 @@ const StockSignupModal = (props) => {
     )
 
     const footer = (
-        <div className="text-center">
+        <div className="text-center pt-1">
             <Btn btnProps={{
                 bg: "surface-500",
                 hoverBg: "w-50 h-4rem hover:surface-700",
@@ -36,11 +37,10 @@ const StockSignupModal = (props) => {
     return (
         <div className={`${parentMainClass}`}>
             <Btn btnProps={{
-                text: "新規登録",
-                rounded: "true",
-                buttonClass: "border-green-500",
-                bg: "bg-green-500",
-                hoverBg: "hover:bg-green-600",
+                text: " 編集",
+                buttonClass: "text-primary",
+                bg: "bg-white",
+                hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => setVisible(true)
             }} />
             <Dialog className={`${modalClass}`} draggable={draggable} position={"top" || position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
@@ -51,9 +51,11 @@ const StockSignupModal = (props) => {
                             <Select selectProps={{
                                 selectClass: "dropdown_select_stock",
                                 value: value,
-                                options: options,
+                                options: [options],
                                 onChange: onChange,
-                                placeholder: placeholder
+                                placeholder: placeholder,
+                                readOnly: "true",
+                                disabled: "true"
                             }} parentClass={selectParentClass} />
 
                         </div>
@@ -64,7 +66,9 @@ const StockSignupModal = (props) => {
                                 value: value,
                                 options: options,
                                 onChange: onChange,
-                                placeholder: placeholder
+                                placeholder: placeholder,
+                                readOnly: "true",
+                                disabled: "true"
                             }} parentClass={selectParentClass} />
 
                         </div>
@@ -72,12 +76,42 @@ const StockSignupModal = (props) => {
                             <NormalLabel labelClass="w-full pt-1" text={"保管期間"} spanText={"(日)"} />
                             <InputIcon inputIconProps={{
                                 keyfilter: "num",
-                                inputClass: "input_stock"
+                                inputClass: "input_stock",
+                                disabled: "true"
                             }} />
                         </div>
                         <div className="stock_modal pt-3">
-                            <NormalLabel labelClass="w-full pt-1" text={"画像"} />
-                            <FileUpload />
+                            <NormalLabel labelClass="w-full pt-1" text={"数量"} spanClass={"text-red-500"} spanText={"*"} />
+                            <InputIcon inputIconProps={{
+                                keyfilter: "num",
+                                inputClass: "input_stock",
+                            }} />
+                        </div>
+                        <div className="stock_modal pt-3">
+                            <NormalLabel labelClass="w-full pt-1" text={"棚卸日"} spanClass={"text-red-500"} spanText={"*"} />
+                            <DateCalendar dateProps={{
+                                placeholder: "yy-mm-dd",
+                                dateClass: "input_stock"
+                            }} />
+                        </div>
+                        <div className="stock_modal pt-3">
+                            <NormalLabel labelClass="w-full pt-1" text={"数量"} />
+                            <InputIcon inputIconProps={{
+                                inputClass: "input_stock",
+                            }} />
+                        </div>
+                        <div className="stock_modal pt-3">
+                            <NormalLabel labelClass="w-full pt-1" text={"有効期限"} spanClass={"text-red-500"} spanText={"*"} />
+                            <DateCalendar dateProps={{
+                                placeholder: "yy-mm-dd",
+                                dateClass: "input_stock"
+                            }} />
+                        </div>
+                        <div className="stock_modal pt-3">
+                            <NormalLabel labelClass="w-full pt-1" text={"備考"} />
+                            <InputIcon inputIconProps={{
+                                inputClass: "input_stock",
+                            }} />
                         </div>
                     </form>
                 </div>
@@ -85,4 +119,4 @@ const StockSignupModal = (props) => {
         </div>
     )
 }
-export default StockSignupModal
+export default StockPileEditModal

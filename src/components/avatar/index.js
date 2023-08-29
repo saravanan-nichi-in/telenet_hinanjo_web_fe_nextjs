@@ -1,1 +1,1 @@
-export {default as AvatarComponent} from './avatarComponent' 
+export { default as AvatarComponent } from './avatarComponent' 

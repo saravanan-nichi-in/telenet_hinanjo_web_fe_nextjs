@@ -4,8 +4,8 @@ import { InputText } from "primereact/inputtext";
 const InputLeftRightGroup = (props) => {
   const { parentClass, inputLrGroupProps = {} } = props && props
   const { antLeftIcon, leftIcon, leftClass, inputClass, height,
-    placeholder, value, name, onChange, onBlur, type,
-    keyfilter, rightClass, rightIcon, antdRightIcon,disabled } = inputLrGroupProps && inputLrGroupProps
+    placeholder, id, value, name, onChange, onBlur, type,
+    keyfilter, rightClass, rightIcon, antdRightIcon, disabled } = inputLrGroupProps && inputLrGroupProps
 
   return (
     <div className={`p-inputgroup ${parentClass}`}>
@@ -17,6 +17,7 @@ const InputLeftRightGroup = (props) => {
           <InputText
             className={`${inputClass} ${height || 'custom_input'}`}
             placeholder={placeholder}
+            id={id}
             value={value}
             name={name}
             onChange={onChange}
@@ -31,6 +32,7 @@ const InputLeftRightGroup = (props) => {
           <InputText
             className={`${inputClass} ${height || 'custom_input'}`}
             placeholder={placeholder}
+            id={id}
             name={name}
             value={value}
             onChange={onChange}

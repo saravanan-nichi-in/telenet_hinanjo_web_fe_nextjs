@@ -1,1 +1,1 @@
-export {default as ImageComponent} from './imageComponent'
+export { default as ImageComponent } from './imageComponent'

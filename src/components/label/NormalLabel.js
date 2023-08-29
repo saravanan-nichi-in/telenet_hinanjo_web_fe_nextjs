@@ -1,10 +1,10 @@
 import React from "react";
 
 export default function NormalLabel(props) {
-    const { htmlFor, labelClass, text, spanClass, spanText,style } = props && props
+    const { htmlFor, labelClass, text, spanClass, spanText, style, id } = props && props
 
     return (
-        <label htmlFor={htmlFor} className={labelClass} style={style}>
+        <label htmlFor={htmlFor} className={labelClass} style={style} id={id}>
             {text}<span className={spanClass}>{spanText}</span>
         </label>
     )

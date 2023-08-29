@@ -4,9 +4,9 @@ import { addLocale } from 'primereact/api';
 
 const DateCalendar = (props) => {
     const { parentClass, dateProps = {} } = props && props
-    const { height, dateClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode,showIcon,disabled,readOnlyInput,placeholder } = dateProps && dateProps
-    const [date, setDate] = useState(null);
+    const { height, id, dateClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, showIcon, disabled, readOnlyInput, placeholder } = dateProps && dateProps
+    const [date, setDate] = useState(props.date);
 
     addLocale('en', {
         firstDayOfWeek: 0,
@@ -26,7 +26,7 @@ const DateCalendar = (props) => {
     return (
         <div className={`${parentClass}`}>
             <Calendar className={` ${dateClass} ${height || 'custom_input'}`}
-                id="basic"
+                id={id}
                 value={date}
                 icon={icon || "pi pi-calendar"}
                 iconPos={iconPos || "right"}
@@ -43,6 +43,5 @@ const DateCalendar = (props) => {
             />
         </div>
     );
-
 }
 export default DateCalendar             

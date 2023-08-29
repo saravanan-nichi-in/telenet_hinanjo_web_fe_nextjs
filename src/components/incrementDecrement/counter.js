@@ -15,14 +15,15 @@ export default function Counter(props) {
     return (
         <InputGroup inputGroupProps={{
             inputClass: "text-center",
+            id: props.id,
             value: value,
             onChange: (e) => setValue(parseInt(e.target.value)),
             onRightClick: handleIncrement,
             onLeftClick: handleDecrement,
             rightIcon: "pi pi-plus",
             leftIcon: "pi pi-minus",
-            readOnly:props.readOnly,
-            disabled:props.disabled
+            readOnly: props.readOnly,
+            disabled: props.disabled
         }} parentClass={props.parentClass}
         />
     )

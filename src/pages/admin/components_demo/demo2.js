@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TreeTable, RowExpansionTable, DND } from '@/components';
+import { TreeTable, RowExpansionTable, DND, StockSignupModal, StockPileEditModal } from '@/components';
 import { NodeService } from '@/helper/treeTableService';
 import { ProductService } from '@/helper/rowExpandTableService';
-import { StockPileEditModal, StockSignupModal } from '@/components/modal';
 
 export default function ComponentDemo() {
     const [nodes, setNodes] = useState([]);
@@ -14,7 +13,7 @@ export default function ComponentDemo() {
         { field: 'type', header: 'Size' }
     ];
 
-    const Outercolumn = [
+    const outerColumn = [
         { field: "name", header: "name" },
         { field: "price", header: "Price" },
         { field: "description", header: "description" },
@@ -112,13 +111,15 @@ export default function ComponentDemo() {
                         </div>
                         <div className="card">
                             <h2>Row expand table</h2>
-                            <RowExpansionTable paginator="true" rows={3} value={products} innerColumn={innerColumn} outerColumn={Outercolumn} rowExpansionField="orders" />
+                            <RowExpansionTable paginator="true" rows={3} value={products} innerColumn={innerColumn} outerColumn={outerColumn} rowExpansionField="orders" />
                         </div>
                         <div className='card'>
-                            <StockSignupModal/>
+                            <h2>staff stock signup modal</h2>
+                            <StockSignupModal />
                         </div>
                         <div className='card'>
-                            <StockPileEditModal/>
+                            <h2>staff stock edit modal</h2>
+                            <StockPileEditModal />
                         </div>
                     </section>
                 </div>
@@ -126,4 +127,3 @@ export default function ComponentDemo() {
         </div>
     );
 }
-

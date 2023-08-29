@@ -3,11 +3,11 @@ import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function NormalTable(props) {
-    const { paginator, rows, value, customActionsField, columns } = props && props
+    const { paginator, rows, value, customActionsField, columns, id } = props && props
 
     return (
         <div>
-            <TableData value={value}
+            <TableData id={id} value={value}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '50rem' }}

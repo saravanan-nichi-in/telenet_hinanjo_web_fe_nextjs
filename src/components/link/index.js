@@ -1,1 +1,1 @@
-export {default as Linker} from './linker'
+export { default as Linker } from './linker'

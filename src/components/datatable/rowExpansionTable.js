@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 
 export default function RowExpansionTable(props) {
-    const { rowExpansionField, outerColumn, innerColumn, value, paginator, rows } = props
+    const { rowExpansionField, outerColumn, innerColumn, value, id, paginator, rows } = props
     const [expandedRows, setExpandedRows] = useState(null);
     const toast = useRef(null);
 
@@ -29,7 +29,7 @@ export default function RowExpansionTable(props) {
         return (
             <div className="p-3">
 
-                <DataTable value={data[rowExpansionField]} tableStyle={{ minWidth: '20rem' }}>
+                <DataTable id={id} value={data[rowExpansionField]} tableStyle={{ minWidth: '20rem' }}>
                     {innerColumn.map((column, index) => (
                         <Column
                             key={index}

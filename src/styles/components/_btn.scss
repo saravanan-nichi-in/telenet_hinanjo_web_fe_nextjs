@@ -1,14 +1,3 @@
 .custom-button{
     font-size:$fontSize-14px;
 }
-
-
-.dropdown_select {
-    padding-left: 200px;
-}
-
-@media screen and (max-width:400px){
-    .dropdown_select {
-        padding-left: 100px;
-    }
-}

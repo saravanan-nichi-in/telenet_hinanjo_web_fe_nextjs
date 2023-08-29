@@ -17,8 +17,6 @@ const DND = (props) => {
                 </ReactDragListView>
             </div>
         </div>
-
     );
 };
-
 export default DND;

@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const ImageComponent = (props) => {
     const { parentClass, imageProps = {} } = props && props
-    const { src, width, height } = imageProps && imageProps
+    const { src, width, height, alt } = imageProps && imageProps
     const [imageError, setImageError] = useState(false);
 
     const imageLoader = ({ src }) => {
@@ -20,8 +20,9 @@ const ImageComponent = (props) => {
     return (
         <div className={`${parentClass}`}>
             <Image
-                src={src}
+                src={imageLoader({ src })}
                 width={width}
+                alt={alt}
                 height={height}
                 onError={handleImageError}
                 loader={imageLoader}
@@ -29,5 +30,4 @@ const ImageComponent = (props) => {
         </div>
     );
 }
-
 export default ImageComponent

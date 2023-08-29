@@ -1,1 +1,1 @@
-export {default as NormalLabel} from './NormalLabel'
+export { default as NormalLabel } from './NormalLabel'

@@ -4,7 +4,7 @@ import InputSwitch from "../switch/inputSwitch";
 import Btn from "../button/btn";
 
 const DeleteModal = (props) => {
-    const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, position, header, contentClass, content } = props
+    const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, draggable, position, header, contentClass, content } = props
     const [visible, setVisible] = useState(false);
 
     const footer = (
@@ -39,7 +39,7 @@ const DeleteModal = (props) => {
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-            <Dialog className={`${modalClass}`} draggable={false} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+            <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
                 <div class={`text-center ${contentClass} text-lg`}>
                     {content}
                 </div>

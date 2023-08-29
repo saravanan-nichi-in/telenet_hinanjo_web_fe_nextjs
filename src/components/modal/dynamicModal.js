@@ -4,7 +4,7 @@ import InputSwitch from "../switch/inputSwitch";
 import Btn from "../button/btn";
 
 const DynamicModal = (props) => {
-    const { text, iconPos, parentClass, checked, modalClass, position, header, footer, contentClass, content } = props
+    const { text, iconPos, parentClass, checked, modalClass, draggable, position, header, footer, contentClass, content } = props
     const [visible, setVisible] = useState(false);
 
     return (
@@ -23,7 +23,7 @@ const DynamicModal = (props) => {
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-            <Dialog className={`${modalClass}`} draggable={false} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+            <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
                 <div class={`text-center ${contentClass}`}>
                     {content}
                 </div>

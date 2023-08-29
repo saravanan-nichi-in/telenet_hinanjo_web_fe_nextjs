@@ -1,1 +1,1 @@
-export {default as NormalCheckBox} from './normalCheckbox'
+export { default as NormalCheckBox } from './normalCheckbox'

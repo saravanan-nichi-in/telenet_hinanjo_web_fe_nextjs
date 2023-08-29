@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
 import Image from 'next/image'
@@ -95,7 +94,7 @@ const LoginPage = () => {
                                                 <InputLeftRightGroup inputLrGroupProps={{
                                                     name: 'password',
                                                     type: "password",
-                                                    value:values.password,
+                                                    value: values.password,
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <LockFilled />,
