@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TreeTable, RowExpansionTable, DND, StockSignupModal, StockPileEditModal } from '@/components';
+import { TreeTable, RowExpansionTable, DND, StockPileEditModal, StockPileSignupModal } from '@/components';
 import { NodeService } from '@/helper/treeTableService';
 import { ProductService } from '@/helper/rowExpandTableService';
+import { LanguageDropdown } from '@/components/dropdown';
 
 export default function ComponentDemo() {
     const [nodes, setNodes] = useState([]);
@@ -98,28 +99,32 @@ export default function ComponentDemo() {
                         >
                             不足物資一覧
                         </h5>
-                        <div className="card">
+                        <div>
                             <h2>Tree Table with pagination</h2>
                             <TreeTable columns={columns} value={nodes} paginator="true" />
                         </div>
-                        <div className="card">
+                        <div>
                             <h2>Drag and Drop</h2>
                             <DND dragProps={dragProps}
                             >
                                 {map}
                             </DND>
                         </div>
-                        <div className="card">
+                        <div>
                             <h2>Row expand table</h2>
                             <RowExpansionTable paginator="true" rows={3} value={products} innerColumn={innerColumn} outerColumn={outerColumn} rowExpansionField="orders" />
                         </div>
-                        <div className='card'>
+                        <div>
                             <h2>staff stock signup modal</h2>
-                            <StockSignupModal />
+                            <StockPileSignupModal />
                         </div>
-                        <div className='card'>
+                        <div>
                             <h2>staff stock edit modal</h2>
                             <StockPileEditModal />
+                        </div>
+                        <div>
+                            <h2>Language selection dropdown</h2>
+                            <LanguageDropdown />
                         </div>
                     </section>
                 </div>

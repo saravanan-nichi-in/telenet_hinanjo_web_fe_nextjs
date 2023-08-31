@@ -3,8 +3,7 @@ import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function NormalTable(props) {
-    const { paginator, rows, value, customActionsField, columns, id } = props && props
-
+    const { paginator, rows, value, customActionsField, columns, id } = props
     return (
         <div>
             <TableData id={id} value={value}

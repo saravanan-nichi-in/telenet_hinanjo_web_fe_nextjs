@@ -43,7 +43,7 @@ const StockSignupModal = (props) => {
                 hoverBg: "hover:bg-green-600",
                 onClick: () => setVisible(true)
             }} />
-            <Dialog className={`${modalClass}`} draggable={draggable} position={"top" || position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
+            <Dialog className={`${modalClass}`} draggable={draggable} position={position || "top"} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
                 <div class={`${contentClass}`}>
                     <form>
                         <div className="stock_modal">

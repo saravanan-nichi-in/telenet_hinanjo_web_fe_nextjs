@@ -3,6 +3,7 @@ import { FileUpload as Upload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 
 const FileUpload = (props) => {
+    const { parentClass, parentStyle, id, uploadClass, style } = props;
     const toast = useRef(null);
 
     const onUpload = () => {
@@ -10,17 +11,17 @@ const FileUpload = (props) => {
     };
 
     return (
-        <div className={`${props.parentClassName}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Toast ref={toast}></Toast>
             <Upload mode="basic"
                 name="demo[]"
                 url="/api/upload"
                 accept="/*"
-                id={props.id}
+                id={id}
                 maxFileSize={1000000}
                 onUpload={onUpload}
-                className={`${props.uploadClassName}`}
-                style={props.style}
+                className={`${uploadClass}`}
+                style={style}
             />
         </div>
     );

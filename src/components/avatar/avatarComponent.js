@@ -2,11 +2,11 @@ import React from 'react';
 import { Avatar } from 'primereact/avatar';
 
 const AvatarComponent = (props) => {
-    const { parentClass, avatarProps = {} } = props && props
+    const { parentClass, parentStyle, avatarProps = {} } = props;
     const { avatarClass, label, id, size, icon, image, shape, style } = avatarProps;
 
     return (
-        <div className={`${parentClass}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Avatar className={avatarClass}
                 label={label}
                 id={id}

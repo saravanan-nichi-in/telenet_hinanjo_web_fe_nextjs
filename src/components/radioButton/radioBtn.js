@@ -3,15 +3,16 @@ import { RadioButton } from "primereact/radiobutton";
 import { NormalLabel } from "../label";
 
 export default function RadioBtn(props) {
-    const { parentClass, radioBtnProps = {} } = props && props
-    const { radioClass, inputId, name, value, onChange, checked, disabled, labelClass } = radioBtnProps && radioBtnProps
+    const { parentClass, parentStyle, radioBtnProps = {} } = props;
+    const { radioClass, inputId, name, value, style, onChange, checked, disabled, labelClass } = radioBtnProps;
 
     return (
-        <div className={`${parentClass}`} >
+        <div className={`${parentClass}`} style={parentStyle} >
             <RadioButton className={`${radioClass}`}
                 inputId={inputId}
                 name={name}
                 value={value}
+                style={style}
                 onChange={onChange}
                 checked={checked}
                 disabled={disabled}

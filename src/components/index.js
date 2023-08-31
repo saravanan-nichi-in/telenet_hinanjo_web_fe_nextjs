@@ -3,7 +3,7 @@ export { ValidationError } from './error'
 export { Counter } from './incrementDecrement'
 export { Linker } from './link'
 export { NormalLabel } from './label'
-export { DeleteModal, DynamicModal, DetailModal, StockSignupModal, StockPileEditModal } from './modal'
+export { DeleteModal, DynamicModal, DetailModal, StockPileSignupModal, StockPileEditModal } from './modal'
 export { ImageComponent } from './image'
 export { DateCalendar, TimeCalendar, DateTimePicker, DateTimeCalendar } from './date&time'
 export { NormalCheckBox } from "./checkbox"
@@ -12,7 +12,7 @@ export { DividerComponent } from "./divider"
 export { DND } from "./dragNdrop"
 export { GoogleMapComponent } from "./map"
 export { Btn, MicroPhoneBtn } from "./button"
-export { InputSelect, DropdownSelect, Select } from "./dropdown"
+export { InputSelect, DropdownSelect, Select, LanguageDropdown } from "./dropdown"
 export { AvatarComponent } from "./avatar"
 export { RadioBtn } from './radioButton'
 export { BarcodeScanner } from './qr'

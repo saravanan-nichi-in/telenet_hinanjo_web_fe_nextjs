@@ -4,8 +4,8 @@ import { NormalLabel } from "../label";
 import { TextArea } from "../input";
 
 const DetailModal = (props) => {
-    const { parentMainClass, detailModalProps = {} } = props && props
-    const { headerContent, value1, value2, modalClass, draggable, position, onHide, visible } = detailModalProps
+    const { parentMainClass, detailModalProps = {} } = props;
+    const { headerContent, value1, value2, modalClass, draggable, position, onHide, visible } = detailModalProps;
 
     const header = (
         headerContent

@@ -2,11 +2,11 @@ import React from "react";
 import { Dropdown } from 'primereact/dropdown';
 
 const InputSelect = (props) => {
-    const { parentClass, dropdownProps = {} } = props && props
-    const { value, onChange, id, style, options, optionLabel, placeholder, inputSelectClass, disabled } = dropdownProps && dropdownProps
+    const { parentClass, parentStyle, dropdownProps = {} } = props
+    const { value, onChange, id, style, options, optionLabel, readOnly, placeholder, inputSelectClass, disabled } = dropdownProps
 
     return (
-        <div className={`${parentClass}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Dropdown value={value}
                 onChange={onChange}
                 id={id}
@@ -14,6 +14,7 @@ const InputSelect = (props) => {
                 options={options}
                 optionLabel={optionLabel}
                 editable
+                readOnly={readOnly}
                 placeholder={placeholder}
                 disabled={disabled}
                 className={`${inputSelectClass}`}

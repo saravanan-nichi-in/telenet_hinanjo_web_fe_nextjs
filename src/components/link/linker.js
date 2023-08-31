@@ -2,8 +2,8 @@ import React from "react";
 import Link from "next/link";
 
 const Linker = (props) => {
-    const { ParentClass, linkProps = {} } = props && props
-    const { textWithUnderline, linkClass, href, text } = linkProps && linkProps
+    const { ParentClass, linkProps = {} } = props;
+    const { textWithUnderline, linkClass, href, text } = linkProps;
     const linkStyles = { textDecoration: "underline" };
 
     return (

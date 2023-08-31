@@ -3,10 +3,10 @@ import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
 const TimeCalendar = (props) => {
-    const { parentClass, timeProps = {} } = props
-    const { height, timeClass, id, icon, showIcon, iconPos, disabledDates,
+    const { parentClass, parentStyle, timeProps = {} } = props
+    const { height, timeClass, id, style, icon, showIcon, iconPos, disabledDates,
         disabledDays, minDate, maxDate, selectionMode, readOnlyInput, disabled, placeholder } = timeProps
-    const [date, setDate] = useState(null);
+    const [date, setDate] = useState(props.date);
 
     addLocale('en', {
         firstDayOfWeek: 0,
@@ -24,9 +24,10 @@ const TimeCalendar = (props) => {
     });
 
     return (
-        <div className={`${parentClass}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Calendar className={` ${height || 'custom_input'} ${timeClass}`}
                 id={id}
+                style={style}
                 value={date}
                 icon={icon || "pi pi-clock"}
                 showIcon={showIcon}

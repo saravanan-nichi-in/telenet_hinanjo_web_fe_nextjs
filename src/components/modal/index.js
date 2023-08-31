@@ -1,5 +1,5 @@
 export { default as DeleteModal } from './deleteModal'
 export { default as DynamicModal } from './dynamicModal'
 export { default as DetailModal } from './detailModal'
-export { default as StockSignupModal } from './stockpileSignupModal'
+export { default as StockPileSignupModal } from './stockpileSignupModal'
 export { default as StockPileEditModal } from './stockpileEditModal'

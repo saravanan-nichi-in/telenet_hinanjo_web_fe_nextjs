@@ -2,10 +2,10 @@ import React from "react";
 import { Dropdown } from 'antd';
 
 export default function DropdownSelect(props) {
-    const { items, icon, antdIcon, spanText } = props && props
+    const { parentClass, parentStyle, items, icon, antdIcon, spanText } = props;
 
     return (
-        <div>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Dropdown
                 menu={{
                     items,

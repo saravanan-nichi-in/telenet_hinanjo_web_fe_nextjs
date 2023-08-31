@@ -2,22 +2,23 @@ import React from "react";
 import { InputText } from "primereact/inputtext";
 
 const InputLeftRightGroup = (props) => {
-  const { parentClass, inputLrGroupProps = {} } = props && props
-  const { antLeftIcon, leftIcon, leftClass, inputClass, height,
-    placeholder, id, value, name, onChange, onBlur, type,
-    keyfilter, rightClass, rightIcon, antdRightIcon, disabled } = inputLrGroupProps && inputLrGroupProps
+  const { parentClass, parentStyle, inputLrGroupProps = {} } = props;
+  const { antLeftIcon, leftIcon, leftClass, leftStyle, inputClass, height,
+    placeholder, id, style, value, name, onChange, onBlur, type,
+    keyfilter, disabled, readOnly, rightClass, rightStyle, rightIcon, antdRightIcon } = inputLrGroupProps;
 
   return (
-    <div className={`p-inputgroup ${parentClass}`}>
+    <div className={`p-inputgroup ${parentClass}`} style={parentStyle}>
       {antLeftIcon || leftIcon ? (
         <>
-          <span className={`p-inputgroup-addon ${leftClass} `}>
+          <span className={`p-inputgroup-addon ${leftClass} `} style={leftStyle}>
             <i className={`${leftIcon} `}>{antLeftIcon}</i>
           </span>
           <InputText
             className={`${inputClass} ${height || 'custom_input'}`}
             placeholder={placeholder}
             id={id}
+            style={style}
             value={value}
             name={name}
             onChange={onChange}
@@ -25,6 +26,7 @@ const InputLeftRightGroup = (props) => {
             type={type || "text"}
             keyfilter={keyfilter}
             disabled={disabled}
+            readOnly={readOnly}
           />
         </>
       ) : (
@@ -39,8 +41,10 @@ const InputLeftRightGroup = (props) => {
             onBlur={onBlur}
             type={type || "text"}
             keyfilter={keyfilter}
+            disabled={disabled}
+            readOnly={readOnly}
           />
-          <span className={`p-inputgroup-addon ${rightClass}`}>
+          <span className={`p-inputgroup-addon ${rightClass}`} style={rightStyle}>
             <i className={`${rightIcon} `}>{antdRightIcon}</i>
           </span>
         </>

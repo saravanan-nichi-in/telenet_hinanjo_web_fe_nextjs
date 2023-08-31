@@ -1,8 +1,26 @@
 {
     "cSpell.words": [
         "antd",
+        "bluegray",
         "datatable",
+        "datatableservice",
+        "higlight",
+        "inputgroup",
+        "inputnumber",
+        "inputswitch",
+        "inputtext",
+        "inputtextarea",
+        "keyfilter",
+        "layoutcontext",
+        "listview",
         "Ndrop",
-        "primereact"
+        "primereact",
+        "radiobutton",
+        "toggl",
+        "togglebutton",
+        "top",
+        "topbar",
+        "treetable",
+        "xlarge"
     ]
 }

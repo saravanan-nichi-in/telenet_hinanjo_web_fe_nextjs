@@ -3,7 +3,7 @@ import { TreeTable as TreeTab } from 'primereact/treetable';
 import { Column } from 'primereact/column';
 
 export default function TreeTable(props) {
-    const { paginator, value, columns, rows, id } = props && props
+    const { paginator, value, columns, rows, id } = props;
 
     return (
         <div>

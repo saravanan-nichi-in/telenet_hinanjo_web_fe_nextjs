@@ -2,11 +2,11 @@ import React from "react";
 import { Dropdown } from 'primereact/dropdown';
 
 export default function Select(props) {
-    const { parentClass, selectProps = {} } = props && props
-    const { selectClass, value, id, options, onChange, placeholder, style, readOnly, disabled } = selectProps && selectProps
+    const { parentClass, parentStyle, selectProps = {} } = props;
+    const { selectClass, value, id, options, onChange, placeholder, style, readOnly, disabled, onBlur } = selectProps;
 
     return (
-        <div className={`${parentClass}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Dropdown className={`${selectClass}`}
                 value={value}
                 id={id}
@@ -14,6 +14,7 @@ export default function Select(props) {
                 onChange={onChange}
                 placeholder={placeholder}
                 style={style}
+                onBlur={onBlur}
                 readOnly={readOnly}
                 disabled={disabled}
             />

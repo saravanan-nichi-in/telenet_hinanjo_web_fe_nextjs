@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Image from 'next/image'
 
 const ImageComponent = (props) => {
-    const { parentClass, imageProps = {} } = props && props
-    const { src, width, height, alt } = imageProps && imageProps
+    const { parentClass, parentStyle, imageProps = {} } = props;
+    const { src, width, height, alt, style } = imageProps;
     const [imageError, setImageError] = useState(false);
 
     const imageLoader = ({ src }) => {
@@ -18,11 +18,12 @@ const ImageComponent = (props) => {
     }
 
     return (
-        <div className={`${parentClass}`}>
+        <div className={`${parentClass}`} style={parentStyle}>
             <Image
                 src={imageLoader({ src })}
                 width={width}
                 alt={alt}
+                style={style}
                 height={height}
                 onError={handleImageError}
                 loader={imageLoader}
