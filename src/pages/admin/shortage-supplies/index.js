@@ -2,10 +2,9 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Divider } from 'primereact/divider';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Btn, DetailModal } from '@/components';
+import { Button, DetailModal, DividerComponent } from '@/components';
 
 
 const sampleProducts = [
@@ -22,11 +21,9 @@ function ShoratgeSupplies() {
         <>
             <div>
                 <h5 style={{
-                    fontSize: "22px",
+                    fontSize: "16px",
                     // borderBottom: "1px solid black",
                 }}>日本の避難所</h5>
-
-
             </div>
             <hr />
         </>
@@ -69,11 +66,11 @@ function ShoratgeSupplies() {
         dt.current.exportCSV({ selectionOnly });
     };
 
-  const headContent=(
-    <div>
-    <h2>日本の避難所</h2>
-    </div>
-  )  
+    const headContent = (
+        <div>
+            <h2 style={{ fontSize: "16px" }}>日本の避難所</h2>
+        </div>
+    )
     return (
         <div className="grid">
             <div className="col-12">
@@ -81,15 +78,15 @@ function ShoratgeSupplies() {
                     <section className='col-12'>
                         {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
-                        <Divider />
+                        <DividerComponent />
                         {/* Table */}
                         <div className="col-12">
                             <div className="flex justify-content-end ">
-                                <Btn parentClass={"mb-1"} btnProps={{
+                                <Button parentClass={"mb-1"} buttonProps={{
                                     text: translate(localeJson, 'export'),
                                     rounded: "true",
-                                    onClick:() => exportCSV(false)
-                                }}/>
+                                    onClick: () => exportCSV(false)
+                                }} />
                             </div>
                             {/* Table */}
                             &nbsp;
@@ -106,11 +103,12 @@ function ShoratgeSupplies() {
 
                                 emptyMessage="No customers found."
                                 style={{
-                                    fontSize: "18px",
+                                    fontSize: "14px",
 
                                 }}
                                 size={"small"}
                                 stripedRows
+
                                 onRowClick={onRowClick}
                                 rowsPerPageOptions={[5, 10, 25, 50]}
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
@@ -149,13 +147,13 @@ function ShoratgeSupplies() {
 
                 </Dialog> */}
                 <DetailModal detailModalProps={{
-                    headerContent:headContent,
-                    visible:showModal,
-                    onHide:()=>setShowModal(false),
-                    value1:"food",
-                    value2:"chain"
+                    headerContent: headContent,
+                    visible: showModal,
+                    onHide: () => setShowModal(false),
+                    value1: "food",
+                    value2: "chain"
 
-                }}/>
+                }} />
             </div>
         </div>
     );

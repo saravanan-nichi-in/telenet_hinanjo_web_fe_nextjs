@@ -62,12 +62,12 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'staff_management'),
                     icon: <ImUser size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/staff-management'
                 },
                 {
                     label: translate(localeJson, 'admin_management'),
                     icon: <RiAdminFill size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/admin-management'
                 }
             ]
         },
@@ -77,12 +77,12 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'places'),
                     icon: <MdPlace size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/place'
                 },
                 {
                     label: translate(localeJson, 'material'),
                     icon: <BiSolidPurchaseTagAlt size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/material'
                 },
                 {
                     label: translate(localeJson, 'stockpile_master_management'),
@@ -91,7 +91,7 @@ const AppMenu = () => {
                 }, {
                     label: translate(localeJson, 'special_care_list'),
                     icon: <ImUser size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/special/care'
                 }, {
                     label: translate(localeJson, 'questionnaire'),
                     icon: <FaUserPlus size={15} />,

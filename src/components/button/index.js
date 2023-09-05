@@ -1,2 +1,2 @@
-export { default as Btn } from './btn'
-export { default as MicroPhoneBtn } from './microPhoneBtn'
+export { default as Button } from './button'
+export { default as MicroPhoneButton } from './microPhoneBtn'

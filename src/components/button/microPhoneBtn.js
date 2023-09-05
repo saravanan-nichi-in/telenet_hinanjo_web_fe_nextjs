@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { HiMicrophone } from "react-icons/hi";
-import Btn from "./btn";
+import Button from "./button";
 
-const MicroPhoneBtn = (props) => {
+const MicroPhoneButton = (props) => {
     const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
@@ -43,7 +43,7 @@ const MicroPhoneBtn = (props) => {
 
     return (
         <div>
-            <Btn parentClass={props.parentClass} btnProps={{
+            <Button parentClass={props.parentClass} buttonProps={{
                 onClick: handleMicrophoneClick,
                 bg: "bg-white",
                 buttonClass: "border-none border-white",
@@ -52,4 +52,4 @@ const MicroPhoneBtn = (props) => {
         </div>
     );
 };
-export default MicroPhoneBtn;
+export default MicroPhoneButton;

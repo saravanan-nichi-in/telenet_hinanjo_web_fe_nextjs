@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import InputSwitch from "../switch/inputSwitch";
-import Btn from "../button/btn";
+import Button from "../button/button";
 
 const DynamicModal = (props) => {
     const { text, iconPos, parentClass, checked, modalClass, draggable, position, header, footer, contentClass, content } = props
@@ -11,7 +11,7 @@ const DynamicModal = (props) => {
         <div className={`${props.parentMainClass}`}>
             {props.text ? (
                 <>
-                    <Btn btnProps={{
+                    <Button buttonProps={{
                         text: text,
                         iconPos: iconPos,
                         onClick: () => setVisible(true)

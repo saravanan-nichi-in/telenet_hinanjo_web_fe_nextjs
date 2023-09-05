@@ -1,10 +1,6 @@
 import React, { useContext } from 'react';
-import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
-import Image from 'next/image'
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
@@ -13,6 +9,8 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
+import { ImageComponent, NormalLabel, Button, InputLeftRightGroup, ValidationError } from '@/components';
+
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -67,7 +65,12 @@ const LoginPage = () => {
                                 <div className='auth_view py-4 px-4 auth_surface_ground_border'>
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
-                                            <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
+                                            <ImageComponent imageProps={{
+                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 150,
+                                                height: 35,
+                                                alt: "logo"
+                                            }} />
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5">
@@ -75,52 +78,57 @@ const LoginPage = () => {
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="email" className="block mb-2">
-                                                    {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
-                                                </label>
-                                                <div className="p-inputgroup">
-                                                    <InputText
-                                                        name='email'
-                                                        placeholder={translate(localeJson, 'mail_address')}
-                                                        className={`w-full ${errors.email && touched.email && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.email}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <MailFilled />
-                                                    </span>
-                                                </div>
-                                                <small className="p-error block">
-                                                    {errors.email && touched.email && errors.email}
-                                                </small>
+                                                <NormalLabel htmlFor="email"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'mail_address')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'email',
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <MailFilled />,
+                                                    placeholder: translate(localeJson, 'mail_address'),
+                                                    value: values.email
+                                                }}
+                                                    parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
+                                                <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="password" className="block mb-2">
-                                                    {translate(localeJson, 'password')}<span className='p-error'>*</span>
-                                                </label>
-                                                <div className="p-inputgroup">
-                                                    <Password
-                                                        name='password'
-                                                        placeholder={translate(localeJson, 'password')}
-                                                        className={`w-full ${errors.password && touched.password && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.password}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <LockFilled />
-                                                    </span>
-                                                </div>
-                                                <small className="p-error block">
-                                                    {errors.password && touched.password && errors.password}
-                                                </small>
+                                                <NormalLabel htmlFor="password"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'password')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'password',
+                                                    type: "password",
+                                                    value: values.password,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <LockFilled />,
+                                                    placeholder: translate(localeJson, 'password'),
+                                                }}
+                                                    parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
+                                                <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
-                                                <Button type='submit' label={translate(localeJson, 'login')} className="custom_radiusBtn" severity="primary"></Button>
+                                                <Button buttonProps={{
+                                                    type: 'submit',
+                                                    text: translate(localeJson, 'login'),
+                                                    buttonClass: "custom_radiusBtn",
+                                                    severity: "primary"
+                                                }} />
                                             </div>
                                             <div className='flex justify-content-center' onClick={() => router.push('/staff/forgot-password')}>
-                                                <Button label={translate(localeJson, 'forgot_password_caption')} link></Button>
+                                                <Button buttonProps={{
+                                                    text: translate(localeJson, 'forgot_password_caption'),
+                                                    buttonClass: "custom_radiusBtn",
+                                                    link: "true",
+                                                    onClick: () => router.push('/staff/forgot-password'),
+                                                    severity: "primary"
+                                                }} />
                                             </div>
                                         </div>
                                     </form>

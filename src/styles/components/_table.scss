@@ -16,3 +16,15 @@
 .clickable-row {
     cursor: pointer;
 }
+
+@media (max-width:540px){
+.table-paginator{
+.p-paginator .p-paginator-pages .p-paginator-page{
+    min-width: 1.5rem;
+}
+.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last{
+    min-width: 1.5rem; 
+}
+}
+}
+

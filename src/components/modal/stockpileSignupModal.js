@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import Btn from "../button/btn";
+import Button from "../button/button";
 import { NormalLabel } from "../label";
 import { Select } from "../dropdown";
 import { InputIcon } from "../input";
 import { FileUpload } from "../upload";
-const StockSignupModal = (props) => {
+const StockPileSignupModal = (props) => {
     const { parentMainClass, modalClass, draggable,
         position, contentClass, value, options, onChange, placeholder,
         selectParentClass, onClickTop, OnClickAddition } = props
@@ -19,14 +19,14 @@ const StockSignupModal = (props) => {
 
     const footer = (
         <div className="text-center">
-            <Btn btnProps={{
+            <Button buttonProps={{
                 bg: "surface-500",
                 hoverBg: "w-50 h-4rem hover:surface-700",
                 buttonClass: "border-white",
                 text: "キャンセル",
                 onClick: onClickTop
             }} parentClass={"inline"} />
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "w-50 h-4rem button_stock",
                 text: "追加",
                 onClick: OnClickAddition
@@ -35,7 +35,7 @@ const StockSignupModal = (props) => {
     );
     return (
         <div className={`${parentMainClass}`}>
-            <Btn btnProps={{
+            <Button buttonProps={{
                 text: "新規登録",
                 rounded: "true",
                 buttonClass: "border-green-500",
@@ -85,4 +85,4 @@ const StockSignupModal = (props) => {
         </div>
     )
 }
-export default StockSignupModal
+export default StockPileSignupModal

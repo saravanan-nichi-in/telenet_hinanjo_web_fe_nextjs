@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
+import { Button, DividerComponent } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import axios from '@/utils/api';
@@ -60,7 +59,6 @@ function AdminDashboard() {
     const expandAll = () => {
         let _expandedRows = {};
         products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
         setExpandedRows(_expandedRows);
         setAllExpanded(true);
     };
@@ -80,7 +78,6 @@ function AdminDashboard() {
             'font-bold': data.避難所 === '合計'
         };
     };
-
 
     const rowExpansionTemplate = (data) => {
         return (
@@ -134,7 +131,6 @@ function AdminDashboard() {
                 const data = new Blob([buffer], {
                     type: EXCEL_TYPE
                 });
-
                 module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
             }
         });
@@ -149,17 +145,44 @@ function AdminDashboard() {
     };
 
     const searchBodyTemplate = () => {
-        return <Button icon="pi pi-search" />;
+        return <Button buttonProps={{ icon: "pi pi-search" }} />;
     };
 
-    const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
-    const paginatorRight = <Button type="button" icon="pi pi-download" text />;
+    const paginatorLeft = <Button buttonProps={{
+        type: "button",
+        icon: "pi pi-refresh"
+    }} />;
 
+    const paginatorRight = <Button buttonProps={{
+        type: "button",
+        icon: "pi pi-download"
+    }} />;
+    
     const header = (
         <div className="flex align-items-center justify-content-end gap-2 py-2">
-            <Button type="button" icon="pi pi-file" rounded onClick={() => exportCSV(false)} data-pr-tooltip="CSV" />
-            <Button type="button" icon="pi pi-file-excel" severity="success" rounded onClick={exportExcel} data-pr-tooltip="XLS" />
-            <Button type="button" icon="pi pi-file-pdf" severity="warning" rounded onClick={exportPdf} data-pr-tooltip="PDF" />
+            <Button buttonProps={{
+                type: "button",
+                icon: "pi pi-file",
+                rounded: "true",
+                onClick: () => exportCSV(false),
+                dataPrToolTip: "CSV"
+            }} />
+            <Button buttonProps={{
+                type: "button",
+                icon: "pi pi-file-excel",
+                severity: "success",
+                rounded: "true",
+                onClick: exportExcel,
+                dataPrToolTip: "XLS"
+            }} />
+            <Button buttonProps={{
+                type: "button",
+                icon: "pi pi-file-pdf",
+                severity: "warning",
+                rounded: "true",
+                onClick: exportPdf,
+                dataPrToolTip: "PDF"
+            }} />
         </div>
     );
 
@@ -172,7 +195,7 @@ function AdminDashboard() {
                         <h5 className='page_header'>
                             {translate(localeJson, 'evacuation_status_list')}
                         </h5>
-                        <Divider />
+                        <DividerComponent />
 
                         {/* Table */}
                         <div className="col-12">
@@ -191,8 +214,9 @@ function AdminDashboard() {
                                 filterDisplay="menu"
                                 emptyMessage="No customers found."
                                 style={{
-                                    fontSize: "18px",
+                                    fontSize: "14px",
                                 }}
+
                                 size={"small"}
                                 stripedRows
                                 rowsPerPageOptions={[5, 10, 25, 50]}
@@ -208,6 +232,7 @@ function AdminDashboard() {
                                     }} />
                                 ))}
                             </DataTable>
+                           
                         </div>
                     </section>
                 </div>
@@ -215,7 +240,5 @@ function AdminDashboard() {
         </div>
     );
 }
-
-
 
 export default AdminDashboard;

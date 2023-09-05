@@ -1,26 +1,25 @@
 /*eslint no-undef: 0*/
-export const CustomerService = {
+export const AdminManagementService = {
     getData() {
         return [
             { "No.": "2", 
-            "氏名":<a href="#">Staff 2</a>,
-             "メール": "staff2@gmail.com", 
-             "電話番号": "0900000000"}
+            "氏名":<a href="#">Admin 1</a>,
+             "メール": "admin1@gmail.com"}
         ]
     },
-    getCustomersSmall() {
+    getAdminsSmall() {
         return Promise.resolve(this.getData().slice(0, 10));
     },
 
-    getCustomersMedium() {
+    getAdminsMedium() {
         return Promise.resolve(this.getData().slice(0, 50));
     },
 
-    getCustomersLarge() {
+    getAdminsLarge() {
         return Promise.resolve(this.getData().slice(0, 200));
     },
 
-    getCustomersXLarge() {
+    getAdminsXLarge() {
         return Promise.resolve(this.getData());
     },
 

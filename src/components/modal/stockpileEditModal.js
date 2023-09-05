@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import Btn from "../button/btn";
+import Button from "../button/button";
 import { NormalLabel } from "../label";
 import { Select } from "../dropdown";
 import { InputIcon } from "../input";
@@ -20,14 +20,14 @@ const StockPileEditModal = (props) => {
 
     const footer = (
         <div className="text-center pt-1">
-            <Btn btnProps={{
+            <Button buttonProps={{
                 bg: "surface-500",
                 hoverBg: "w-50 h-4rem hover:surface-700",
                 buttonClass: "border-white",
                 text: "キャンセル",
                 onClick: onClickTop
             }} parentClass={"inline"} />
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "w-50 h-4rem button_stock",
                 text: "追加",
                 onClick: OnClickAddition
@@ -36,7 +36,7 @@ const StockPileEditModal = (props) => {
     );
     return (
         <div className={`${parentMainClass}`}>
-            <Btn btnProps={{
+            <Button buttonProps={{
                 text: " 編集",
                 buttonClass: "text-primary",
                 bg: "bg-white",

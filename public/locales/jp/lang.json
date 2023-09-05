@@ -25,9 +25,19 @@
             "Other_shortage_supplies": "その他不足物資"
         },
         "buttons": {
-            "export": "エクスポート"
+            "import":"インポート",
+            "export": "エクスポート",
+            "search":"検索",
+            "signup":"新規登録",
+            "cancel":"キャンセル",
+            "renew":"更新"
         },
-        "footer": {}
+        "footer": {},
+        "form":{
+            "evacuation_site":"避難場所",
+            "household_number":"世帯番号" ,
+            "full_name":"氏名"     
+        }
     },
     "staff": {
         "header": {},

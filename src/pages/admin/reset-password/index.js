@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
-import { Button } from 'primereact/button';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
-import Image from 'next/image'
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
 import { LockFilled } from '@ant-design/icons';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { Password } from 'primereact/password';
+import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
 
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -49,7 +47,13 @@ const ResetPasswordPage = () => {
                                 <div className='auth_view py-4 px-4 auth_surface_ground_border'>
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
-                                            <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
+                                            <ImageComponent imageProps={{
+                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 150,
+                                                height: 35,
+                                                alt: "logo"
+                                            }} />
+                                            {/* <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" /> */}
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5">
@@ -57,49 +61,47 @@ const ResetPasswordPage = () => {
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="password" className="block mb-2">
-                                                    {translate(localeJson, 'new_password')}<span className='p-error'>*</span>
-                                                </label>
-                                                <div className="p-inputgroup">
-                                                    <Password
-                                                        name='password'
-                                                        placeholder={translate(localeJson, 'new_password')}
-                                                        className={`w-full ${errors.password && touched.password && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.password}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <LockFilled />
-                                                    </span>
-                                                </div>
-                                                <small className="p-error block">
-                                                    {errors.password && touched.password && errors.password}
-                                                </small>
+                                                <NormalLabel htmlFor="password"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'new_password')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'password',
+                                                    type: "password",
+                                                    value: values.password,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <LockFilled />,
+                                                    placeholder: translate(localeJson, 'new_password'),
+                                                }}
+                                                    parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
+                                                <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="confirmPassword" className="block mb-2">
-                                                    {translate(localeJson, 'new_password_confirm')}<span className='p-error'>*</span>
-                                                </label>
-                                                <div className="p-inputgroup">
-                                                    <Password
-                                                        name='confirmPassword'
-                                                        placeholder={translate(localeJson, 'new_password_confirm')}
-                                                        className={`w-full ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.confirmPassword}
-                                                    />
-                                                    <span className="p-inputgroup-addon">
-                                                        <LockFilled />
-                                                    </span>
-                                                </div>
-                                                <small className="p-error block">
-                                                    {errors.confirmPassword && touched.confirmPassword && errors.confirmPassword}
-                                                </small>
+                                                <NormalLabel htmlFor="confirmPassword"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'new_password_confirm')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
+                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                    name: 'confirmPassword',
+                                                    value: values.confirmPassword,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    antdRightIcon: <LockFilled />,
+                                                    placeholder: translate(localeJson, 'new_password_confirm'),
+                                                }}
+                                                    parentClass={`w-full ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`} />
+                                                <ValidationError errorBlock={errors.confirmPassword && touched.confirmPassword && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
-                                                <Button type='submit' label={translate(localeJson, 'save')} className="custom_radiusBtn" severity="primary"></Button>
+                                                <Button buttonProps={{
+                                                    type: 'submit',
+                                                    text: translate(localeJson, 'save'),
+                                                    buttonClass: "custom_radiusBtn",
+                                                    severity: "primary"
+                                                }} />
                                             </div>
                                         </div>
                                     </form>

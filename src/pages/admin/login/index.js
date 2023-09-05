@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
-import { Button } from 'primereact/button';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
-import Image from 'next/image'
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthenticationAuthorizationService } from '@/services';
@@ -11,8 +9,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
-import InputLeftRightGroup from '@/components/input/inputLeftRightGroup';
-import ValidationError from '@/components/error/validationError';
+import { ImageComponent, NormalLabel, Button, ValidationError, InputLeftRightGroup } from '@/components';
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -65,7 +62,13 @@ const LoginPage = () => {
                                 <div className='auth_view py-4 px-4 auth_surface_ground_border'>
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
-                                            <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
+                                            <ImageComponent imageProps={{
+                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 150,
+                                                height: 35,
+                                                alt: "logo"
+                                            }} />
+                                            {/* <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" /> */}
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5">
@@ -73,9 +76,14 @@ const LoginPage = () => {
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="email" className="block mb-2">
+                                                <NormalLabel htmlFor="email"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'mail_address')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
+                                                {/* <label htmlFor="email" className="block mb-2">
                                                     {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
-                                                </label>
+                                                </label> */}
 
                                                 <InputLeftRightGroup inputLrGroupProps={{
                                                     name: 'email',
@@ -83,14 +91,17 @@ const LoginPage = () => {
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <MailFilled />,
                                                     placeholder: translate(localeJson, 'mail_address'),
+                                                    value: values.email
                                                 }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className="field custom_inputText">
-                                                <label htmlFor="password" className="block mb-2">
-                                                    {translate(localeJson, 'password')}<span className='p-error'>*</span>
-                                                </label>
+                                                <NormalLabel htmlFor="password"
+                                                    labelClass={"block mb-2"}
+                                                    text={translate(localeJson, 'password')}
+                                                    spanClass={"p-error"}
+                                                    spanText={"*"} />
                                                 <InputLeftRightGroup inputLrGroupProps={{
                                                     name: 'password',
                                                     type: "password",
@@ -105,10 +116,21 @@ const LoginPage = () => {
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
-                                                <Button type='submit' label={translate(localeJson, 'login')} className="custom_radiusBtn" severity="primary"></Button>
+                                                <Button buttonProps={{
+                                                    type: 'submit',
+                                                    text: translate(localeJson, 'login'),
+                                                    buttonClass: "custom_radiusBtn",
+                                                    severity: "primary"
+                                                }} />
                                             </div>
                                             <div className='flex justify-content-center'>
-                                                <Button label={translate(localeJson, 'forgot_password_caption')} link onClick={() => router.push('/admin/forgot-password')}></Button>
+                                                <Button buttonProps={{
+                                                    text: translate(localeJson, 'forgot_password_caption'),
+                                                    buttonClass: "custom_radiusBtn",
+                                                    link: "true",
+                                                    onClick: () => router.push('/admin/forgot-password'),
+                                                    severity: "primary"
+                                                }} />
                                             </div>
                                         </div>
                                     </form>

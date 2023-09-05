@@ -25,9 +25,19 @@
             "Other_shortage_supplies": "Other shortage supplies"
         },
         "buttons": {
-            "export": "export"
+            "import":"import",
+            "export": "export",
+            "search":"search",
+            "signup":"signup",
+            "cancel":"cancel",
+            "update":"update"
         },
-        "footer": {}
+        "footer": {},
+        "form":{
+            "evacuation_site":"Evacuation Site",
+            "household_number":"Household Number",
+            "full_name":"Full Name"
+        }
     },
     "staff": {
         "header": {},

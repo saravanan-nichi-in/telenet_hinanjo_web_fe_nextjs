@@ -11,7 +11,7 @@ export { ToggleSwitch, InputSwitch } from "./switch"
 export { DividerComponent } from "./divider"
 export { DND } from "./dragNdrop"
 export { GoogleMapComponent } from "./map"
-export { Btn, MicroPhoneBtn } from "./button"
+export { Button, MicroPhoneButton } from "./button"
 export { InputSelect, DropdownSelect, Select, LanguageDropdown } from "./dropdown"
 export { AvatarComponent } from "./avatar"
 export { RadioBtn } from './radioButton'

@@ -5,7 +5,7 @@ const InputLeftRightGroup = (props) => {
   const { parentClass, parentStyle, inputLrGroupProps = {} } = props;
   const { antLeftIcon, leftIcon, leftClass, leftStyle, inputClass, height,
     placeholder, id, style, value, name, onChange, onBlur, type,
-    keyfilter, disabled, readOnly, rightClass, rightStyle, rightIcon, antdRightIcon } = inputLrGroupProps;
+    keyfilter, ref, required, disabled, readOnly, rightClass, rightStyle, rightIcon, antdRightIcon, maxLength, minLength } = inputLrGroupProps;
 
   return (
     <div className={`p-inputgroup ${parentClass}`} style={parentStyle}>
@@ -27,6 +27,8 @@ const InputLeftRightGroup = (props) => {
             keyfilter={keyfilter}
             disabled={disabled}
             readOnly={readOnly}
+            maxLength={maxLength}
+            minLength={minLength}
           />
         </>
       ) : (
@@ -41,8 +43,12 @@ const InputLeftRightGroup = (props) => {
             onBlur={onBlur}
             type={type || "text"}
             keyfilter={keyfilter}
+            ref={ref}
+            required={required}
             disabled={disabled}
             readOnly={readOnly}
+            maxLength={maxLength}
+            minLength={minLength}
           />
           <span className={`p-inputgroup-addon ${rightClass}`} style={rightStyle}>
             <i className={`${rightIcon} `}>{antdRightIcon}</i>

@@ -1,21 +1,24 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import InputSwitch from "../switch/inputSwitch";
-import Btn from "../button/btn";
+import Button from "../button/button";
+import { getValueByKeyRecursively as translate } from "@/helper";
+import { LayoutContext } from "@/layout/context/layoutcontext";
 
 const DeleteModal = (props) => {
-    const { parentMainClass, text, iconPos, icon, parentClass, checked, modalClass, draggable, position, header, contentClass, content } = props
+    const { parentMainClass, text, iconPos, icon, parentClass, checked,
+        modalClass, draggable, position, header, style, contentClass, content, bg, hoverBg, severity,buttonClass } = props
     const [visible, setVisible] = useState(false);
-
+    const { layoutConfig, localeJson } = useContext(LayoutContext);
     const footer = (
         <div className="text-center">
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "w-50rem h-3rem",
-                text: "cancel"
+                text: translate(localeJson, 'cancel')
             }} parentClass={"inline"} />
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "w-40rem h-3rem",
-                text: "delete",
+                text: translate(localeJson, 'renew'),
                 severity: "danger"
             }} parentClass={"inline"} />
         </div>
@@ -25,11 +28,14 @@ const DeleteModal = (props) => {
         <div className={`${parentMainClass}`}>
             {text ? (
                 <>
-                    <Btn btnProps={{
+                    <Button buttonProps={{
                         text: text,
                         iconPos: iconPos,
                         icon: icon,
-
+                        bg: bg,
+                        hoverBg: hoverBg,
+                        severity: severity,
+                        buttonClass:buttonClass,
                         onClick: () => setVisible(true)
                     }} />
                 </>) : (
@@ -39,7 +45,7 @@ const DeleteModal = (props) => {
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-            <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)}>
+            <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} footer={footer} visible={visible} style={style} onHide={() => setVisible(false)}>
                 <div class={`text-center ${contentClass} text-lg`}>
                     {content}
                 </div>

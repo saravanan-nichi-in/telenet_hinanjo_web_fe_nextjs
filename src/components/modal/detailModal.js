@@ -14,21 +14,24 @@ const DetailModal = (props) => {
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} visible={visible} onHide={onHide} style={{ width: '600px', padding: "10px" }}>
-                <NormalLabel labelClass="w-full font-18 font-bold pt-0" text={"その他不足物資"} />
+                <div>
+                <NormalLabel labelClass="w-full font-bold pt-0" text={"その他不足物資"} />
                 <TextArea textAreaProps={{
-                    textAreaClass: "w-full font-18 bg-bluegray-50",
+                    textAreaClass: "w-full bg-bluegray-50",
                     rows: 5,
                     readOnly: "true",
                     value: value1
                 }} />
-                <br /><br />
-                <NormalLabel labelClass="w-full font-18 font-bold pt-0" text={"その他不足物資"} />
+                </div>
+                <div className="mt-1">
+                <NormalLabel labelClass="w-full font-bold pt-0" text={"その他不足物資"} />
                 <TextArea textAreaProps={{
-                    textAreaClass: "w-full font-18 bg-bluegray-50",
+                    textAreaClass: "w-full bg-bluegray-50",
                     rows: 5,
                     readOnly: "true",
                     value: value2
                 }} />
+                </div>
             </Dialog>
         </div>
     )

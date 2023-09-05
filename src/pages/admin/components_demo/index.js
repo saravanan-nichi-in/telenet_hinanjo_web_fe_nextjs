@@ -6,8 +6,8 @@ import {
     NormalTable, Counter, Linker, NormalLabel, DeleteModal,
     ImageComponent, DateCalendar, TimeCalendar, DateTimeCalendar,
     DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent,
-    Btn, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
-    InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneBtn
+    Button, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
+    InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneButton
 } from '@/components';
 
 export default function ComponentsDemo() {
@@ -72,7 +72,7 @@ export default function ComponentsDemo() {
             header: 'Edit Actions',
             body: (rowData) => (
                 <div>
-                    <Btn btnProps={{ text: "Edit" }} />
+                    <Button buttonProps={{ text: "Edit" }} />
                 </div>
             ),
         }, {
@@ -80,7 +80,7 @@ export default function ComponentsDemo() {
             header: 'Delete Actions',
             body: (rowData) => (
                 <div>
-                    <Btn btnProps={{
+                    <Button buttonProps={{
                         severity: "danger", text: "delete"
                     }} />
                 </div>
@@ -90,11 +90,11 @@ export default function ComponentsDemo() {
 
     const footer = (
         <div className="text-center">
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "h-3rem",
                 text: "cancel"
             }} parentClass={"inline"} />
-            <Btn btnProps={{
+            <Button buttonProps={{
                 buttonClass: "h-3rem",
                 text: "delete",
                 severity: "danger"
@@ -122,28 +122,28 @@ export default function ComponentsDemo() {
                         <div>
                             <h6 className='page_sub_header'> Buttons Component </h6>
                             <div>
-                                <Btn btnProps={{
+                                <Button buttonProps={{
                                     icon: "pi pi-star-fill",
                                 }}
                                     parentClass={"mb-1 border-round-lg"} />
-                                <Btn btnProps={{
+                                <Button buttonProps={{
                                     text: "避難者状況一覧"
                                 }}
                                     parentClass={"mb-1"} />
-                                <Btn parentClass={"mb-1 border-round-lg"}
-                                    btnProps={{
+                                <Button parentClass={"mb-1 border-round-lg"}
+                                    buttonProps={{
                                         text: "避難者状況一覧",
                                         icon: "pi pi-star-fill",
                                         iconPos: "right"
                                     }} />
-                                <Btn parentClass={"mb-1"} btnProps={{
+                                <Button parentClass={"mb-1"} buttonProps={{
                                     text: "避難者状況一覧",
                                     icon: "pi pi-star-fill",
                                     iconPos: "left",
                                     rounded: "true"
                                 }}
                                 />
-                                < MicroPhoneBtn size="2xl" />
+                                < MicroPhoneButton size="2xl" />
                             </div>
                         </div>
 
@@ -294,7 +294,7 @@ export default function ComponentsDemo() {
                             </div>
                         </div>
                         <div >
-                            <h2 className='page_sub_header'>Increment Decrment</h2>
+                            <h2 className='page_sub_header'>Increment Decrement</h2>
                             <Counter value={5} parentClass={"xl:w-10 sm:w-full"} />
                         </div>
                         <div >
@@ -381,6 +381,27 @@ export default function ComponentsDemo() {
                                     avatarClass: "mr-3",
                                     size: "xlarge",
                                     image: "/layout/images/perspective1.jpg",
+                                    shape: "circle",
+                                    style: { backgroundColor: "#2196F3" }
+                                }}
+                            />
+                             <h2 className='page_sub_header'>avatar with text</h2>
+                            <AvatarComponent
+                                avatarProps={{
+                                    // parentClass: "bg-orange-500",
+                                    avatarClass: "mr-3",
+                                    size: "xlarge",
+                                    label:"TR",
+                                    shape: "circle",
+                                }}
+                            />
+                             <h2 className='page_sub_header'>avatar with icon</h2>
+                            <AvatarComponent
+                                avatarProps={{
+                                    // parentClass: "bg-orange-500",
+                                    avatarClass: "mr-3",
+                                    size: "xlarge",
+                                    icon:"pi pi-calendar",
                                     shape: "circle",
                                     style: { backgroundColor: "#2196F3" }
                                 }}

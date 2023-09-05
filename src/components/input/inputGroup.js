@@ -4,7 +4,7 @@ import { InputText } from 'primereact/inputtext';
 export default function InputGroup(props) {
     const { height, parentClass, parentStyle, inputGroupProps = {} } = props;
     const { leftClass, leftStyle, leftIcon, onLeftClick, antdLeftIcon, type, inputClass, value, id, name, style, keyfilter,
-        placeholder, onChange, onBlur, readOnly, disabled, rightClass, rightStyle, rightIcon, onRightClick, antdRightIcon } = inputGroupProps;
+        placeholder, onChange, onBlur, ref, required, readOnly, disabled, rightClass, rightStyle, rightIcon, onRightClick, antdRightIcon, maxLength, minLength } = inputGroupProps;
 
     return (
         <div className={`p-inputgroup ${height || 'custom_input'} ${parentClass} `} style={parentStyle}>
@@ -21,8 +21,12 @@ export default function InputGroup(props) {
                 placeholder={placeholder}
                 onChange={onChange}
                 onBlur={onBlur}
+                ref={ref}
+                required={required}
                 readOnly={readOnly}
                 disabled={disabled}
+                maxLength={maxLength}
+                minLength={minLength}
             />
             < span className={`p-inputgroup-addon ${rightClass}`} style={rightStyle} onClick={onRightClick}>
                 <i className={`${rightIcon} `} >{antdRightIcon}</i>

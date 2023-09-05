@@ -1,0 +1,22 @@
+.evacuation_dropdown{
+        width:250px;    
+}
+
+.evacuation_label{
+    width: 150px;
+}
+@media(max-width:450px){
+    .evacuation_dropdown{
+        width:170px;    
+}
+}
+
+@media (min-width:476px){
+    .evacuation_form{
+        display: flex;
+}
+}
+
+.evacuation_button_height{
+    height:40px;
+}
