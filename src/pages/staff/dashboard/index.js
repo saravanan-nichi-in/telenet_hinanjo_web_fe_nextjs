@@ -63,11 +63,6 @@ export default function Dashboard() {
                        <h4 className='page_sub_header' style={{textAlign:"center"}}> 収容状況</h4>
                             <span className="block text-500 font-medium mb-3">避難可能人数</span>
                             <div className="page_sub_header">20000人</div>
-                            <Divider/>
-                            <span className="block text-500 font-medium mb-3">現在の避難者数</span>
-                            <div className="page_sub_header">1569人</div>
-                            <span className="block text-500 font-medium mb-3">現在の避難者数</span>
-                            <div className="page_sub_header">1569人</div>
                             <div>
                             <Chart type="pie" data={chartData} options={chartOptions}/>
                             </div>
