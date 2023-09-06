@@ -48,7 +48,6 @@ export default function AdminSpecialCarePage() {
 
     useEffect(() => {
         AdminSpecialCareService.getAdminsSpecialCareMedium().then((data) => setAdmins(data));
-
     }, []);
 
     return (

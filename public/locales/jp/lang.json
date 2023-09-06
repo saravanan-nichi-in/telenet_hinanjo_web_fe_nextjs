@@ -22,7 +22,22 @@
             "setting_systems": "環境設定"
         },
         "pages": {
-            "Other_shortage_supplies": "その他不足物資"
+            "Other_shortage_supplies": "その他不足物資",
+            "staff_information_registration":"スタッフ情報登録",
+            "staff_management_edit":"スタッフ管理編集",
+            "admin_management_edit":"管理者詳細情報",
+            "admin_information_registration":"管理者情報の登録",
+            "material_information_registration":"物資情報登録",
+            "special_care_registration":"要配慮者事項登録",
+            "edit_material_information":"物資情報編集"
+        },
+        "validation":{
+            "admin_name_required":"管理者名が必要です。",
+            "supplies_necessary":"物資は必須です。",
+            "phone_min10_required":"電話番号には10または11桁の半角数字を入力してください。",
+            "phone_no_required":"電話番号は必須です。",
+            "matters_to_consider_required":"要配慮者事項は必須です。",
+            "things_to_consider_required":"要配慮者事項（英語）は必須です。"
         },
         "buttons": {
             "import":"インポート",
@@ -30,13 +45,19 @@
             "search":"検索",
             "signup":"新規登録",
             "cancel":"キャンセル",
-            "renew":"更新"
+            "renew":"更新",
+            "registration":"登録"
         },
         "footer": {},
         "form":{
             "evacuation_site":"避難場所",
             "household_number":"世帯番号" ,
-            "full_name":"氏名"     
+            "full_name":"氏名" ,
+            "email":"メール" ,
+            "telephone_number":"電話番号",
+            "supplies":"物資",
+            "unit":"単位",
+            "things_to_consider":"要配慮者事項（英語)" 
         }
     },
     "staff": {

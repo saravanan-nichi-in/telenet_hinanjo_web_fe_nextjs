@@ -22,7 +22,23 @@
             "setting_systems": "Setting Systems"
         },
         "pages": {
-            "Other_shortage_supplies": "Other shortage supplies"
+            "Other_shortage_supplies": "Other shortage supplies",
+            "staff_information_registration":"Staff information registration",
+            "staff_management_edit":"Staff Management Edit",
+            "admin_management_edit":"Admin Management Edit",
+            "admin_information_registration":"Admin Information registration",
+            "material_information_registration":"Material Information registration",
+            "special_care_registration":"Registration of matters requiring consideration",
+            "edit_material_information":"Edit material information"
+            
+        },
+        "validation":{
+            "admin_name_required":"Admin Name required",
+            "supplies_necessary":"Supplies are necessary",
+            "phone_min10_required":"Enter 10 or 11 digits for The phone number",
+            "phone_no_required":"phone number required",
+            "matters_to_consider_required":"Information on persons requiring special consideration is required.",
+            "things_to_consider_required":"Persons requiring special care (English) is required."
         },
         "buttons": {
             "import":"import",
@@ -30,13 +46,19 @@
             "search":"search",
             "signup":"signup",
             "cancel":"cancel",
-            "update":"update"
+            "renew":"renew",
+            "registration":"登録"
         },
         "footer": {},
         "form":{
             "evacuation_site":"Evacuation Site",
             "household_number":"Household Number",
-            "full_name":"Full Name"
+            "full_name":"Full Name",
+            "email":"email",
+            "telephone_number":"telephone number",
+            "supplies":"Supplies",
+            "unit":"Unit" ,
+            "things_to_consider":"Matters requiring special care (English)"
         }
     },
     "staff": {

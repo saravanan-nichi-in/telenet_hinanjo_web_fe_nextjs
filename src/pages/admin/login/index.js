@@ -68,7 +68,6 @@ const LoginPage = () => {
                                                 height: 35,
                                                 alt: "logo"
                                             }} />
-                                            {/* <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" /> */}
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5">
@@ -81,10 +80,6 @@ const LoginPage = () => {
                                                     text={translate(localeJson, 'mail_address')}
                                                     spanClass={"p-error"}
                                                     spanText={"*"} />
-                                                {/* <label htmlFor="email" className="block mb-2">
-                                                    {translate(localeJson, 'mail_address')}<span className='p-error'>*</span>
-                                                </label> */}
-
                                                 <InputLeftRightGroup inputLrGroupProps={{
                                                     name: 'email',
                                                     onChange: handleChange,

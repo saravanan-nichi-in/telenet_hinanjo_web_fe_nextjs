@@ -6,7 +6,6 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal, DividerComponent } from '@/components';
 
-
 const sampleProducts = [
     { "避難所": "日本の避難所", "Test1(2)": "505", "Test2(2)": "3", "test3(3)": "2", "test6(5)": "1" },
     { "避難所": "広島市中区東白島町", "Test1(2)": "201", "Test2(2)": "16", "test3(3)": "9", "test6(5)": "0" },
@@ -35,8 +34,10 @@ function ShoratgeSupplies() {
     const onRowClick = (event) => {
         setShowModal(true);
     };
+
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
+
     const cols = [
         { field: '避難所', header: '避難所', minWidth: '20rem' },
         { field: 'Test1(2)', header: 'Test1(2)', minWidth: '12rem' },
@@ -45,22 +46,19 @@ function ShoratgeSupplies() {
         { field: 'test6(5)', header: 'Test6(5)', minWidth: '12rem' },
 
     ];
+
     useEffect(() => {
         setProducts(sampleProducts);
     }, [])
 
     const rowClass = (data) => {
         return {
-
-
             'last-row': data.避難所 === '不足合計',
             'font-bold': data.避難所 === '不足合計',
-
             // 'text-higlight':data.避難所 === '日本の避難所',
             'clickable-row': true,
         };
     };
-
 
     const exportCSV = (selectionOnly) => {
         dt.current.exportCSV({ selectionOnly });
@@ -76,10 +74,8 @@ function ShoratgeSupplies() {
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <DividerComponent />
-                        {/* Table */}
                         <div className="col-12">
                             <div className="flex justify-content-end ">
                                 <Button parentClass={"mb-1"} buttonProps={{
@@ -88,9 +84,7 @@ function ShoratgeSupplies() {
                                     onClick: () => exportCSV(false)
                                 }} />
                             </div>
-                            {/* Table */}
                             &nbsp;
-
                             <DataTable
                                 ref={dt}
                                 value={products}
@@ -138,14 +132,6 @@ function ShoratgeSupplies() {
                 </div>
             </div>
             <div>
-                {/* <Dialog header={header} visible={showModal} onHide={() => setShowModal(false)} style={{ width: '600px', padding: "10px" }}>
-                    <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
-                    <textarea className="w-full font-18 textarea-bgcolor" rows="5" readonly="">food</textarea>
-                    <br /><br />
-                    <label className='w-full font-18 font-bold pt-0'>{translate(localeJson, 'Other_shortage_supplies')}</label><br />
-                    <textarea className="w-full font-18 textarea-bgcolor " rows="5" readonly="">Chain</textarea>
-
-                </Dialog> */}
                 <DetailModal detailModalProps={{
                     headerContent: headContent,
                     visible: showModal,

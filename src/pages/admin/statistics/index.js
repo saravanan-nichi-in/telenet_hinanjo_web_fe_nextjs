@@ -10,6 +10,7 @@ const BarChartDemo = () => {
         { label: '避難所の混雑率', value: 'RM' },
         { label: '要配慮者の避難者数', value: 'LDN' },
     ];
+
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [data, setData] = useState(options[0].value);
 
@@ -36,6 +37,7 @@ const BarChartDemo = () => {
             }
         ]
     });
+
     const getLightTheme = () => {
         let horizontalOptions = {
             maintainAspectRatio: false,

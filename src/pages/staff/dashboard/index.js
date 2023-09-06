@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button } from 'primereact/button';
+import React, { useContext, useEffect, useState } from 'react';
 import { Chart } from 'primereact/chart';
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { Menu } from 'primereact/menu';
-import Link from 'next/link';
-import { round } from 'lodash';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DividerComponent } from '@/components';
-import { Divider } from 'antd';
+
 
 export default function Dashboard() {
     const { layoutConfig } = useContext(LayoutContext);
@@ -23,13 +17,13 @@ export default function Dashboard() {
                 {
                     data: [20000, 1569, 18431],
                     backgroundColor: [
-                        documentStyle.getPropertyValue('--green-500'), 
-                        documentStyle.getPropertyValue('--yellow-500'), 
+                        documentStyle.getPropertyValue('--green-500'),
+                        documentStyle.getPropertyValue('--yellow-500'),
                         documentStyle.getPropertyValue('--blue-500')
                     ],
                     hoverBackgroundColor: [
-                        documentStyle.getPropertyValue('--green-400'), 
-                        documentStyle.getPropertyValue('--yellow-400'), 
+                        documentStyle.getPropertyValue('--green-400'),
+                        documentStyle.getPropertyValue('--yellow-400'),
                         documentStyle.getPropertyValue('--blue-400')
                     ]
                 }
@@ -51,45 +45,43 @@ export default function Dashboard() {
 
     return (
         <div className='card'>
-            <h2 className='page_header' style={{textAlign:"left"}}>スタッフ用のダッシュボード（TOP）</h2>
-            <DividerComponent/>
-            <h3 className='page_header' style={{textAlign:"center"}}>避難所の状況</h3>
-        <div className="grid">
-            <div className="col-12 lg:col-6 xl:col-6">
-                <div className="card mb-0">
-                    
-                    <div className="flex justify-content-between mb-3">
-                        <div>
-                       <h4 className='page_sub_header' style={{textAlign:"center"}}> 収容状況</h4>
-                            <span className="block text-500 font-medium mb-3">避難可能人数</span>
-                            <div className="page_sub_header">20000人</div>
+            <h2 className='page_header' style={{ textAlign: "left" }}>スタッフ用のダッシュボード（TOP）</h2>
+            <DividerComponent />
+            <h3 className='page_header' style={{ textAlign: "center" }}>避難所の状況</h3>
+            <div className="grid">
+                <div className="col-12 lg:col-6 xl:col-6">
+                    <div className="card mb-0">
+
+                        <div className="flex justify-content-between mb-3">
                             <div>
-                            <Chart type="pie" data={chartData} options={chartOptions}/>
+                                <h4 className='page_sub_header' style={{ textAlign: "center" }}> 収容状況</h4>
+                                <span className="block text-500 font-medium mb-3">避難可能人数</span>
+                                <div className="page_sub_header">20000人</div>
+                                <div>
+                                    <Chart type="pie" data={chartData} options={chartOptions} />
+                                </div>
+                            </div>
+                            <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                                <i className="pi pi-map-marker text-blue-500 text-xl" />
                             </div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-map-marker text-blue-500 text-xl" />
-                        </div>
                     </div>
-                    {/* <span className="text-green-500 font-medium">24 new </span>
-                    <span className="text-500">since last visit</span> */}
                 </div>
-            </div>
-            <div className="col-12 lg:col-6 xl:col-6">
-                <div className="card mb-0">
-                    <div className="flex justify-content-between mb-3">
-                        <div>
-                            <span className="block text-500 font-medium mb-3">世帯数</span>
-                            <div className="text-900 font-medium text-xl">61 世帯</div>
+                <div className="col-12 lg:col-6 xl:col-6">
+                    <div className="card mb-0">
+                        <div className="flex justify-content-between mb-3">
+                            <div>
+                                <span className="block text-500 font-medium mb-3">世帯数</span>
+                                <div className="text-900 font-medium text-xl">61 世帯</div>
+                            </div>
+                            <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                                <i className="pi pi-map-marker text-orange-500 text-xl" />
+                            </div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-map-marker text-orange-500 text-xl" />
-                        </div>
-                    </div>
-                    {/* <span className="text-green-500 font-medium">%52+ </span>
+                        {/* <span className="text-green-500 font-medium">%52+ </span>
                     <span className="text-500">since last week</span> */}
+                    </div>
                 </div>
-            </div>
             </div>
             {/* <div className="col-12 lg:col-6 xl:col-3">
                 <div className="card mb-0">

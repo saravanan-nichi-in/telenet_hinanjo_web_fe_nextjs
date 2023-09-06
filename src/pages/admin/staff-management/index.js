@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
+import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable } from '@/components';
 import { CustomerService } from '@/helper/datatableservice';
+
 export default function StaffManagementPage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [customers, setCustomers] = useState([]);
@@ -11,7 +12,7 @@ export default function StaffManagementPage() {
 
     const columns = [
         { field: 'No.', header: 'No.' },
-        { field: '氏名', header: '氏名' },
+        { field: '氏名', header: '氏名', minWidth: "15rem" },
         { field: 'メール', header: 'メール' },
         { field: '電話番号', header: '電話番号' },
         {
@@ -19,9 +20,12 @@ export default function StaffManagementPage() {
             header: '編集',
             body: (rowData) => (
                 <div>
-                    <Button buttonProps={ {text: "編集",buttonClass: "text-primary",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white", }}/>
+                    <Button buttonProps={{
+                        text: "編集", buttonClass: "text-primary",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => router.push('/admin/staff-management/edit/1'),
+                    }} />
                 </div>
             ),
         }, {
@@ -30,17 +34,17 @@ export default function StaffManagementPage() {
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
-                         text: "削除",buttonClass: "text-primary",
-                         bg: "bg-white",
-                         hoverBg: "hover:bg-primary hover:text-white",
+                        text: "削除", buttonClass: "text-primary",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
                     }} />
                 </div>
             ),
         },
     ];
+
     useEffect(() => {
         CustomerService.getCustomersMedium().then((data) => setCustomers(data));
-
     }, []);
 
     return (
@@ -48,7 +52,6 @@ export default function StaffManagementPage() {
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'staff_management')}</h5>
                         <DividerComponent />
                         <div className="col-12">
@@ -98,7 +101,7 @@ export default function StaffManagementPage() {
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
                             </div>
-                            <NormalTable columnStyle={{textAlign: 'center'}} customActionsField="actions" value={customers} columns={columns} />
+                            <NormalTable showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={customers} columns={columns} />
                         </div>
                     </section>
                 </div>

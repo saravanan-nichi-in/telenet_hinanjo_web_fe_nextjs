@@ -1,9 +1,11 @@
+import Link from "next/link";
 /*eslint no-undef: 0*/
+
 export const CustomerService = {
     getData() {
         return [
             { "No.": "2", 
-            "氏名":<a href="#">Staff 2</a>,
+            "氏名":<Link href="#">Staff 2</Link>,
              "メール": "staff2@gmail.com", 
              "電話番号": "0900000000"}
         ]

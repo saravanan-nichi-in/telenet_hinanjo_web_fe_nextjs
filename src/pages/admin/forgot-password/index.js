@@ -49,7 +49,6 @@ const ForgotPasswordPage = () => {
                                                 height: 35,
                                                 alt: "logo"
                                             }} />
-                                            {/* <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" /> */}
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5">

@@ -4,6 +4,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminPlaceService } from '@/helper/adminPlaceService';
+
 export default function AdminPlacePage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
@@ -36,18 +37,16 @@ export default function AdminPlacePage() {
             ),
         }
     ];
+
     useEffect(() => {
         AdminPlaceService.getAdminsPlaceMedium().then((data) => setAdmins(data));
-
     }, []);
-
 
     return (
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'places')}</h5>
                         <DividerComponent />
                         <div className="col-12">

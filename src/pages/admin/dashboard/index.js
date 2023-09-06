@@ -21,7 +21,6 @@ const sampleProducts = [
 ]
 
 function AdminDashboard() {
-
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
     const [expandedRows, setExpandedRows] = useState(null);
@@ -157,7 +156,7 @@ function AdminDashboard() {
         type: "button",
         icon: "pi pi-download"
     }} />;
-    
+
     const header = (
         <div className="flex align-items-center justify-content-end gap-2 py-2">
             <Button buttonProps={{
@@ -196,8 +195,6 @@ function AdminDashboard() {
                             {translate(localeJson, 'evacuation_status_list')}
                         </h5>
                         <DividerComponent />
-
-                        {/* Table */}
                         <div className="col-12">
                             <DataTable
                                 ref={dt}
@@ -232,7 +229,6 @@ function AdminDashboard() {
                                     }} />
                                 ))}
                             </DataTable>
-                           
                         </div>
                     </section>
                 </div>

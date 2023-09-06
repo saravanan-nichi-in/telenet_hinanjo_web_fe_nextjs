@@ -4,25 +4,28 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminMaterialService } from '@/helper/adminMaterialService';
+
 export default function AdminMaterialPage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
-    const content=(
+
+    const content = (
         <div>
             <p>一度削除したデータは、元に戻せません </p>
             <p>削除してもよろしいでしょうか？</p>
         </div>
     )
+
     const columns = [
-        { field: 'ID', header: 'ID'},
-        { field: '物資', header: '物資',minWidth:"20rem"},
-        { field: '単位', header: '単位'},
+        { field: 'ID', header: 'ID' },
+        { field: '物資', header: '物資', minWidth: "20rem" },
+        { field: '単位', header: '単位' },
         {
             field: 'actions',
             header: '削除',
-            minWidth:"7rem",
+            minWidth: "7rem",
             body: (rowData) => (
                 <div>
                     <DeleteModal
@@ -42,18 +45,16 @@ export default function AdminMaterialPage() {
             ),
         }
     ];
+
     useEffect(() => {
         AdminMaterialService.getAdminsMaterialMedium().then((data) => setAdmins(data));
-
     }, []);
-
 
     return (
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'material')}</h5>
                         <DividerComponent />
                         <div className="col-12">
@@ -83,9 +84,9 @@ export default function AdminMaterialPage() {
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
                             <div className='mt-3'>
-                                <NormalTable paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{textAlign: 'center'}} customActionsField="actions" value={admins} columns={columns} />
+                                <NormalTable paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
                             </div>
-                        </div>  
+                        </div>
                     </section>
                 </div>
             </div>

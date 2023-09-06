@@ -1,9 +1,11 @@
+import Link from "next/link";
 /*eslint no-undef: 0*/
+
 export const AdminManagementService = {
     getData() {
         return [
             { "No.": "2", 
-            "氏名":<a href="#">Admin 1</a>,
+            "氏名":<Link href="#">Admin 1</Link>,
              "メール": "admin1@gmail.com"}
         ]
     },
