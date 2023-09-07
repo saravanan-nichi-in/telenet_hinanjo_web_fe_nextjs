@@ -5,10 +5,12 @@ import { Column } from 'primereact/column';
 export default function NormalTable(props) {
     const { parentClass, paginator, rows, value, customActionsField, columns, id,
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage,
-        tableStyle, responsiveLayout, columnStyle, rowsPerPageOptions, showGridlines } = props
+        tableStyle, responsiveLayout, columnStyle, rowsPerPageOptions, showGridlines, className, onRowClick } = props
+
     return (
         <div className={`${parentClass}`} >
             <TableData id={id} value={value}
+                className={`${className}`}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={rowsPerPageOptions}
                 rowClassName={rowClassName}
@@ -16,6 +18,7 @@ export default function NormalTable(props) {
                 emptyMessage={emptyMessage}
                 style={style}
                 size={size}
+                onRowClick={onRowClick}
                 showGridlines={showGridlines}
                 stripedRows={stripedRows}
                 responsiveLayout={responsiveLayout}
@@ -26,7 +29,8 @@ export default function NormalTable(props) {
                     <Column key={index}
                         field={col.field}
                         header={col.header}
-                        style={{minWidth: col.minWidth && col.minWidth,...columnStyle}}
+                        sortable={col.sortable}
+                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}
             </TableData>

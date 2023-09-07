@@ -2,26 +2,29 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
+import { Button, DividerComponent, InputIcon, InputSelect, NormalLabel, ValidationError } from '@/components';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { InputFile } from '@/components/upload';
 
-export default function AdminMaterialEditPage() {
+export default function AdminStockpileCreatePage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
 
     const schema = Yup.object().shape({
-        supplies: Yup.string()
-            .required(translate(localeJson, 'supplies_necessary'))
+        type: Yup.string()
+            .required(translate(localeJson, 'type_required')),
+        stockpileName: Yup.string()
+            .required(translate(localeJson, 'stockpile_name_required')),
     });
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ supplies: "" }}
+                initialValues={{ type: "", stockpileName: "" }}
                 onSubmit={() => {
-                    router.push("/admin/material")
+                    router.push("/admin/stockpile/master")
                 }}
             >
                 {({
@@ -45,36 +48,58 @@ export default function AdminMaterialEditPage() {
                                                     <div className='pb-1'>
                                                         <NormalLabel spanClass={"p-error"}
                                                             spanText={"*"}
-                                                            labelClass="pt-1 pr-5 evacuation_label"
-                                                            text={translate(localeJson, 'supplies')} />
+                                                            text={"種別"} />
                                                     </div>
-                                                    <InputIcon inputIconProps={{
-                                                        name: "supplies",
-                                                        value: values.supplies,
-                                                        inputClass: "create_input_stock",
+                                                    <InputSelect dropdownProps={{
+                                                        name: "type",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.supplies && touched.supplies && 'p-invalid'}`} />
-                                                    <ValidationError errorBlock={errors.supplies && touched.supplies && errors.supplies} />
+                                                        value: values.type,
+                                                        inputSelectClass: "create_input_stock"
+                                                    }} parentClass={`${errors.type && touched.type && 'p-invalid'}`} />
+                                                    <ValidationError errorBlock={errors.type && touched.type && errors.type} />
                                                 </div>
-                                                <div className='pt-3'>
+                                                <div className="pt-3 ">
                                                     <div className='pb-1'>
-                                                        <NormalLabel
-                                                            labelClass="pt-1 pr-5 evacuation_label"
-                                                            text={translate(localeJson, 'unit')} />
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            text={"備蓄品名"} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
-                                                        name: 'email',
+                                                        name: "stockpileName",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        value: values.stockpileName,
+                                                        inputClass: "create_input_stock",
+                                                    }} parentClass={`${errors.stockpileName && touched.stockpileName && 'p-invalid'}`} />
+                                                    <ValidationError errorBlock={errors.stockpileName && touched.stockpileName && errors.stockpileName} />
+                                                </div>
+                                                <div className="pt-3 ">
+                                                    <div className='pb-1'>
+                                                        <NormalLabel
+                                                            text={"保管期間 (日)"} />
+                                                    </div>
+                                                    <InputIcon inputIconProps={{
+                                                        keyfilter: "num",
                                                         inputClass: "create_input_stock",
                                                     }} />
+                                                </div>
+                                                <div className="pt-3 ">
+                                                    <div className='pb-1'>
+                                                        <NormalLabel
+                                                            text={"画像"} />
+                                                    </div>
+                                                    <InputFile inputFileProps={{
+                                                        inputFileStyle: { fontSize: "12px" }
+                                                    }} parentClass={"create_input_stock"} />
                                                 </div>
                                                 <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                     <div>
                                                         <Button buttonProps={{
                                                             buttonClass: "text-600 border-500 evacuation_button_height",
                                                             bg: "bg-white",
+                                                            type: "button",
                                                             hoverBg: "hover:surface-500 hover:text-white",
-                                                            type: 'button',
                                                             text: translate(localeJson, 'cancel'),
                                                             rounded: "true",
                                                             severity: "primary"
@@ -84,7 +109,7 @@ export default function AdminMaterialEditPage() {
                                                         <Button buttonProps={{
                                                             buttonClass: "evacuation_button_height",
                                                             type: 'submit',
-                                                            text: translate(localeJson, 'registration'),
+                                                            text: translate(localeJson, 'renew'),
                                                             rounded: "true",
                                                             severity: "primary"
                                                         }} parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }} />

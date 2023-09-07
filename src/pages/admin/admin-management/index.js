@@ -53,54 +53,60 @@ export default function AdminManagementPage() {
                     <section className='col-12'>
                         <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
                         <DividerComponent />
-                        <div className="col-12">
+                        <div >
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
+
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'signup'),
+                                    onClick: () => router.push('/admin/admin-management/create'),
+                                    severity: "success"
+                                }} parentClass={"mr-1 mt-1"} />
+                            </div>
+                        </div>
+                        <div>
                             <div>
                                 <form>
-                                    <div className="evacuation_form pt-3 ">
-                                        <NormalLabel labelClass="pt-1 pr-5 evacuation_label" text={translate(localeJson, 'full_name')} />
+                                    <div className="pt-3 ">
+                                        <div className='pb-1'>
+                                            <NormalLabel labelClass="pt-1" text={translate(localeJson, 'full_name')} />
+                                        </div>
                                         <InputIcon inputIconProps={{
-                                            inputClass: "evacuation_dropdown"
+                                            inputClass: "create_input_stock"
                                         }} />
                                     </div>
-                                    <div>
-                                        <Button buttonProps={{
-                                            type: 'submit',
-                                            text: "検索",
-                                            rounded: "true",
-                                            severity: "primary"
-                                        }} parentStyle={{ paddingTop: "10px", paddingLeft: "60px" }} />
+                                    <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                        <div >
+                                            <Button buttonProps={{
+                                                buttonClass: "evacuation_button_height",
+                                                type: 'submit',
+                                                text: "検索",
+                                                rounded: "true",
+                                                severity: "primary"
+                                            }} parentStyle={{ paddingLeft: "10px" }} />
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                             <div>
                             </div>
-                            <div className='col-12'>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
 
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'signup'),
-                                        onClick: () => router.push('/admin/admin-management/create'),
-                                        severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                </div>
-                            </div>
                             <NormalTable showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
                         </div>
                     </section>

@@ -45,14 +45,16 @@ export default function AdminManagementCreatePage() {
                                     <div>
                                         <div>
                                             <form onSubmit={handleSubmit}>
-                                                <div className="">
-                                                    <NormalLabel spanClass={"p-error"}
-                                                        spanText={"*"}
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'full_name')} />
+                                                <div className="pt-3">
+                                                    <div className='pb-1'>
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            text={translate(localeJson, 'full_name')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "fullName",
                                                         value: values.fullName,
+                                                        inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
 
@@ -60,19 +62,21 @@ export default function AdminManagementCreatePage() {
                                                     <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
                                                 </div>
                                                 <div className="pt-3 ">
-                                                    <NormalLabel spanClass={"p-error"}
-                                                        spanText={"*"}
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'email')} />
+                                                    <div className='pb-1'>
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            text={translate(localeJson, 'email')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
                                                         name: 'email',
                                                         value: values.email,
+                                                        inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                     }} parentClass={`${errors.email && touched.email && 'p-invalid'}`} />
                                                     <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                                 </div>
-                                                <div className='flex' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                                <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                     <div>
                                                         <Button buttonProps={{
                                                             buttonClass: "text-600 border-500 evacuation_button_height",

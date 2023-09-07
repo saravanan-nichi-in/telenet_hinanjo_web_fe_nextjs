@@ -1,31 +1,15 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button, DividerComponent } from '@/components';
+import { DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import axios from '@/utils/api';
-
-const sampleProducts = [
-    { "番号": "", "避難所": "合計", "避難可能人数": "66920人", "現在の避難者数": "2124人	", "避難者数": "15.77%", "避難中の世帯数": "443世帯", "個人情報なしの避難者数": "1555人", "男": "153人" },
-    { "番号": "1", "避難所": "避難所A", "避難可能人数": "20000人", "現在の避難者数": "4078人", "避難者数": "20%", "避難中の世帯数": "62世帯", "個人情報なしの避難者数": "4000人", "男": "42人" },
-    {
-        "番号": "2", "避難所": "Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町Test 広島市中区東白島町",
-        "避難可能人数": "32000人", "現在の避難者数": "4007人", "避難者数": "12.5%", "避難中の世帯数": "7世帯", "個人情報なしの避難者数": "4000人", "男": "2人"
-    },
-    { "番号": "3", "避難所": "テスト", "避難可能人数": "100人", "現在の避難者数": "11人", "避難者数": "10%", "避難中の世帯数": "1世帯", "個人情報なしの避難者数": "10人", "男": "1人" },
-    { "番号": "4", "避難所": "テスト日本大阪", "避難可能人数": "100人", "現在の避難者数": "99人", "避難者数": "99%", "避難中の世帯数": "0世帯", "個人情報なしの避難者数": "99人", "男": "0人" },
-    { "番号": "5", "避難所": "sasdasdsad", "避難可能人数": "33人", "現在の避難者数": "0人", "避難者数": "0%", "避難中の世帯数": "0世帯", "個人情報なしの避難者数": "0人", "男": "0人" },
-    { "番号": "6", "避難所": "ddsdsds", "避難可能人数": "33人", "現在の避難者数": "0人", "避難者数": "0%", "避難中の世帯数": "0世帯", "個人情報なしの避難者数": "0人", "男": "0人" },
-]
+import { AdminDashboardService } from '@/helper/adminDashboardService';
 
 function AdminDashboard() {
-    const dt = useRef(null);
-    const [products, setProducts] = useState([]);
-    const [expandedRows, setExpandedRows] = useState(null);
-    const [allExpanded, setAllExpanded] = useState(false);
+    const [checked1, setChecked1] = useState(false);
     const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const [admins, setAdmins] = useState([]);
     const cols = [
         { field: '番号', header: '番号', minWidth: '8rem' },
         { field: '避難所', header: '避難所', minWidth: '15rem' },
@@ -35,12 +19,30 @@ function AdminDashboard() {
         { field: '避難中の世帯数', header: '避難中の世帯数', minWidth: '15rem' },
         { field: '個人情報なしの避難者数', header: '個人情報なしの避難者数', minWidth: '20rem' },
         { field: '男', header: '男', minWidth: '15rem' },
+        {
+            field: 'actions',
+            header: '削除',
+            minWidth: "7rem",
+            body: (rowData) => (
+                <div>
+                    <DeleteModal
+                        parentMainClass={"mt-2"}
+                        style={{ minWidth: "50px" }}
+                        modalClass="w-50rem"
+                        header="確認情報"
+                        position="top"
+                        content={"避難所の運営状態を変更しますか？"}
+                        checked={checked1}
+                        onChange={(e) => setChecked1(e.value)}
+                        parentClass={"custom-switch"}
+                    />
+                </div>
+            ),
+        }
     ];
 
-    const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
-
     useEffect(() => {
-        setProducts(sampleProducts);
+        // setProducts(sampleProducts);
         axios.get('/admin/place')
             .then((response) => {
                 console.log(response);
@@ -48,28 +50,10 @@ function AdminDashboard() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
+
+        AdminDashboardService.getAdminsDashboardMedium().then((data) => setAdmins(data));
     }, [])
 
-    const toggleAll = () => {
-        if (allExpanded) collapseAll();
-        else expandAll();
-    };
-
-    const expandAll = () => {
-        let _expandedRows = {};
-        products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-        setExpandedRows(_expandedRows);
-        setAllExpanded(true);
-    };
-
-    const collapseAll = () => {
-        setExpandedRows(null);
-        setAllExpanded(false);
-    };
-
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
 
     const rowClass = (data) => {
         return {
@@ -77,113 +61,6 @@ function AdminDashboard() {
             'font-bold': data.避難所 === '合計'
         };
     };
-
-    const rowExpansionTemplate = (data) => {
-        return (
-            <div className="orders-subtable">
-                <h5>Orders for {data.name}</h5>
-                <DataTable value={data.orders} responsiveLayout="scroll">
-                    <Column field="id" header="Id" sortable></Column>
-                    <Column field="customer" header="Customer" sortable></Column>
-                    <Column field="date" header="Date" sortable></Column>
-                    <Column field="amount" header="Amount" body={amountBodyTemplate} sortable></Column>
-                    <Column field="status" header="Status" body={statusOrderBodyTemplate} sortable></Column>
-                    <Column headerStyle={{ width: '4rem' }} body={searchBodyTemplate}></Column>
-                </DataTable>
-            </div>
-        );
-    };
-
-    const exportCSV = (selectionOnly) => {
-        dt.current.exportCSV({ selectionOnly });
-    };
-
-    const exportPdf = () => {
-        import('jspdf').then((jsPDF) => {
-            import('jspdf-autotable').then(() => {
-                const doc = new jsPDF.default(0, 0);
-
-                doc.autoTable(exportColumns, products);
-                doc.save('products.pdf');
-            });
-        });
-    };
-
-    const exportExcel = () => {
-        import('xlsx').then((xlsx) => {
-            const worksheet = xlsx.utils.json_to_sheet(products);
-            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-            const excelBuffer = xlsx.write(workbook, {
-                bookType: 'xlsx',
-                type: 'array'
-            });
-
-            saveAsExcelFile(excelBuffer, 'products');
-        });
-    };
-
-    const saveAsExcelFile = (buffer, fileName) => {
-        import('file-saver').then((module) => {
-            if (module && module.default) {
-                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-                let EXCEL_EXTENSION = '.xlsx';
-                const data = new Blob([buffer], {
-                    type: EXCEL_TYPE
-                });
-                module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-            }
-        });
-    };
-
-    const amountBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.amount);
-    };
-
-    const statusOrderBodyTemplate = (rowData) => {
-        return <span className={`order-badge order-${rowData.status.toLowerCase()}`}>{rowData.status}</span>;
-    };
-
-    const searchBodyTemplate = () => {
-        return <Button buttonProps={{ icon: "pi pi-search" }} />;
-    };
-
-    const paginatorLeft = <Button buttonProps={{
-        type: "button",
-        icon: "pi pi-refresh"
-    }} />;
-
-    const paginatorRight = <Button buttonProps={{
-        type: "button",
-        icon: "pi pi-download"
-    }} />;
-
-    const header = (
-        <div className="flex align-items-center justify-content-end gap-2 py-2">
-            <Button buttonProps={{
-                type: "button",
-                icon: "pi pi-file",
-                rounded: "true",
-                onClick: () => exportCSV(false),
-                dataPrToolTip: "CSV"
-            }} />
-            <Button buttonProps={{
-                type: "button",
-                icon: "pi pi-file-excel",
-                severity: "success",
-                rounded: "true",
-                onClick: exportExcel,
-                dataPrToolTip: "XLS"
-            }} />
-            <Button buttonProps={{
-                type: "button",
-                icon: "pi pi-file-pdf",
-                severity: "warning",
-                rounded: "true",
-                onClick: exportPdf,
-                dataPrToolTip: "PDF"
-            }} />
-        </div>
-    );
 
     return (
         <div className="grid">
@@ -195,40 +72,22 @@ function AdminDashboard() {
                             {translate(localeJson, 'evacuation_status_list')}
                         </h5>
                         <DividerComponent />
-                        <div className="col-12">
-                            <DataTable
-                                ref={dt}
-                                value={products}
-                                header={header}
-                                responsiveLayout="scroll"
-                                rowExpansionTemplate={rowExpansionTemplate}
-                                dataKey="id"
-                                paginator
+                        <div>
+                            <NormalTable
                                 rowClassName={rowClass}
-                                className="p-datatable-gridlines"
-                                showGridlines
-                                rows={5}
+                                showGridlines={"true"}
+                                paginator={"true"}
+                                rows={10}
+                                columnStyle={{ textAlign: 'center' }}
+                                customActionsField="actions"
+                                value={admins}
+                                columns={cols}
                                 filterDisplay="menu"
                                 emptyMessage="No customers found."
                                 style={{
                                     fontSize: "14px",
                                 }}
-
-                                size={"small"}
-                                stripedRows
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                                currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                                paginatorLeft={paginatorLeft}
-                                paginatorRight={paginatorRight}
-                            >
-                                {cols.map((col, index) => (
-                                    <Column key={index} field={col.field} header={col.header} sortable style={{
-                                        minWidth: col.minWidth && col.minWidth,
-                                        textAlign: 'center',
-                                    }} />
-                                ))}
-                            </DataTable>
+                                size={"small"} />
                         </div>
                     </section>
                 </div>

@@ -90,11 +90,23 @@
             "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
             "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
         },
+        "form":{
+            "type":"種別",
+            "stockpile_item_name":"備蓄品名",
+            "storage_period":"保管期間",
+            "days":"(日)",
+            "image":"画像"
+        },
+        "validation":{
+            "type_required":"種別は必須です。",
+            "stockpile_name_required":"備蓄品名は必須です。"
+        },
         "buttons": {
             "login": "ログイン",
             "forgot_password_caption": "パスワードがわからない場合",
             "send": "送信",
-            "save": "保存"
+            "save": "保存",
+            "addition":"追加"
         },
         "footer": {}
     },

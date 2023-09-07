@@ -49,7 +49,7 @@ export default function AdminPlacePage() {
                     <section className='col-12'>
                         <h5 className='page_header'>{translate(localeJson, 'places')}</h5>
                         <DividerComponent />
-                        <div className="col-12">
+                        <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     rounded: "true",

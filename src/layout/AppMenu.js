@@ -87,7 +87,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'stockpile_master_management'),
                     icon: <BiSolidPurchaseTagAlt size={15} />,
-                    to: '/auth/register'
+                    to: '/admin/stockpile/master'
                 }, {
                     label: translate(localeJson, 'special_care_list'),
                     icon: <ImUser size={15} />,

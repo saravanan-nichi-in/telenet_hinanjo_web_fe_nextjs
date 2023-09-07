@@ -45,32 +45,38 @@ export default function AdminSpecialCareEditPage() {
                                         <div>
                                             <form onSubmit={handleSubmit}>
                                                 <div >
-                                                    <NormalLabel spanClass={"p-error"}
-                                                        spanText={"*"}
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'special_care_list')} />
+                                                    <div className='pb-1'>
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            labelClass="pt-1"
+                                                            text={translate(localeJson, 'special_care_list')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "mattersToConsider",
                                                         value: values.mattersToConsider,
+                                                        inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                     }} parentClass={`${errors.mattersToConsider && touched.mattersToConsider && 'p-invalid'}`} />
                                                     <ValidationError errorBlock={errors.mattersToConsider && touched.mattersToConsider && errors.mattersToConsider} />
                                                 </div>
                                                 <div className='pt-3 pb-1' >
-                                                    <NormalLabel spanClass={"p-error"}
-                                                        spanText={"*"}
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'things_to_consider')} />
+                                                    <div className='pb-1'>
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            labelClass="pt-1"
+                                                            text={translate(localeJson, 'things_to_consider')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "thingsToConsider",
                                                         value: values.thingsToConsider,
+                                                        inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                     }} parentClass={`${errors.thingsToConsider && touched.thingsToConsider && 'p-invalid'}`} />
                                                     <ValidationError errorBlock={errors.thingsToConsider && touched.thingsToConsider && errors.thingsToConsider} />
                                                 </div>
-                                                <div className='flex' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                                <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                     <div>
                                                         <Button buttonProps={{
                                                             buttonClass: "text-600 border-500 evacuation_button_height",

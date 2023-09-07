@@ -43,10 +43,10 @@ const StockPileEditModal = (props) => {
                 hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => setVisible(true)
             }} />
-            <Dialog className={`${modalClass}`} draggable={draggable} position={position || "top"} header={header} footer={footer} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
+            <Dialog className={`${modalClass}`} draggable={draggable} position={position || "top"} header={header} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
                 <div class={`${contentClass}`}>
                     <form>
-                        <div className="stock_modal">
+                        <div className="">
                             <NormalLabel labelClass="w-full pt-1" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
                             <Select selectProps={{
                                 selectClass: "dropdown_select_stock",
@@ -59,7 +59,7 @@ const StockPileEditModal = (props) => {
                             }} parentClass={selectParentClass} />
 
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"備蓄品名"} spanClass={"text-red-500"} spanText={"*"} />
                             <Select selectProps={{
                                 selectClass: "dropdown_select_stock",
@@ -72,7 +72,7 @@ const StockPileEditModal = (props) => {
                             }} parentClass={selectParentClass} />
 
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"保管期間"} spanText={"(日)"} />
                             <InputIcon inputIconProps={{
                                 keyfilter: "num",
@@ -80,38 +80,54 @@ const StockPileEditModal = (props) => {
                                 disabled: "true"
                             }} />
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"数量"} spanClass={"text-red-500"} spanText={"*"} />
                             <InputIcon inputIconProps={{
                                 keyfilter: "num",
                                 inputClass: "input_stock",
                             }} />
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"棚卸日"} spanClass={"text-red-500"} spanText={"*"} />
                             <DateCalendar dateProps={{
                                 placeholder: "yy-mm-dd",
                                 dateClass: "input_stock"
                             }} />
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"数量"} />
                             <InputIcon inputIconProps={{
                                 inputClass: "input_stock",
                             }} />
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"有効期限"} spanClass={"text-red-500"} spanText={"*"} />
                             <DateCalendar dateProps={{
                                 placeholder: "yy-mm-dd",
                                 dateClass: "input_stock"
                             }} />
                         </div>
-                        <div className="stock_modal pt-3">
+                        <div className="pt-3">
                             <NormalLabel labelClass="w-full pt-1" text={"備考"} />
                             <InputIcon inputIconProps={{
                                 inputClass: "input_stock",
                             }} />
+                        </div>
+                        <div className="p-dialog-footer pt-3">
+                            <div className="text-center">
+                                <Button buttonProps={{
+                                    bg: "surface-500",
+                                    hoverBg: "w-50 h-4rem hover:surface-700",
+                                    buttonClass: "border-white",
+                                    text: "キャンセル",
+                                    onClick: onClickTop
+                                }} parentClass={"inline"} />
+                                <Button buttonProps={{
+                                    buttonClass: "w-50 h-4rem button_stock",
+                                    text: "追加",
+                                    onClick: OnClickAddition
+                                }} parentClass={"inline"} />
+                            </div>
                         </div>
                     </form>
                 </div>

@@ -3,12 +3,13 @@ import { Dropdown } from 'primereact/dropdown';
 
 export default function Select(props) {
     const { parentClass, parentStyle, selectProps = {} } = props;
-    const { selectClass, value, id, options, onChange, placeholder, style, readOnly, disabled, onBlur } = selectProps;
+    const { selectClass, value, name, id, options, onChange, placeholder, style, readOnly, disabled, onBlur } = selectProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
             <Dropdown className={`${selectClass}`}
                 value={value}
+                name={name}
                 id={id}
                 options={options}
                 onChange={onChange}

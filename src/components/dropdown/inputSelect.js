@@ -3,7 +3,7 @@ import { Dropdown } from 'primereact/dropdown';
 
 const InputSelect = (props) => {
     const { parentClass, parentStyle, dropdownProps = {} } = props
-    const { value, onChange, id, style, options, optionLabel, readOnly, placeholder, inputSelectClass, disabled } = dropdownProps
+    const { value, onChange, id, style, options, onBlur, name, optionLabel, readOnly, placeholder, inputSelectClass, disabled } = dropdownProps
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -14,6 +14,8 @@ const InputSelect = (props) => {
                 options={options}
                 optionLabel={optionLabel}
                 editable
+                name={name}
+                onBlur={onBlur}
                 readOnly={readOnly}
                 placeholder={placeholder}
                 disabled={disabled}

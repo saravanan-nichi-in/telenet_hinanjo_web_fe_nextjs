@@ -3,6 +3,7 @@ import { TreeTable, RowExpansionTable, DND, StockPileEditModal, StockPileSignupM
 import { NodeService } from '@/helper/treeTableService';
 import { ProductService } from '@/helper/rowExpandTableService';
 import { LanguageDropdown } from '@/components/dropdown';
+import { FileInputComponent } from '@/components/upload';
 
 export default function ComponentDemo() {
     const [nodes, setNodes] = useState([]);
@@ -78,6 +79,19 @@ export default function ComponentDemo() {
                     <div className='xl:w-10 mr-4 '>
                         {item.title}
                     </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className="text-left" style={{ width: '20%', verticalAlign: 'middle' }}>項目</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>項目タイトル *</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <a href="#" style={{ position: "inherit" }}>
                         drag
                     </a>

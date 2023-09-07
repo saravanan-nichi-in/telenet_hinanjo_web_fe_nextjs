@@ -41,28 +41,32 @@ export default function AdminMaterialCreatePage() {
                                     <div>
                                         <div>
                                             <form onSubmit={handleSubmit}>
-                                                <div className="">
-                                                    <NormalLabel spanClass={"p-error"}
-                                                        spanText={"*"}
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'supplies')} />
+                                                <div className="pt-3">
+                                                    <div className='pb-1'>
+                                                        <NormalLabel spanClass={"p-error"}
+                                                            spanText={"*"}
+                                                            text={translate(localeJson, 'supplies')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "supplies",
                                                         value: values.supplies,
+                                                        inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                     }} parentClass={`${errors.supplies && touched.supplies && 'p-invalid'}`} />
                                                     <ValidationError errorBlock={errors.supplies && touched.supplies && errors.supplies} />
                                                 </div>
-                                                <div className='pt-3 pb-1'>
-                                                    <NormalLabel
-                                                        labelClass="pt-1 pr-5 evacuation_label"
-                                                        text={translate(localeJson, 'unit')} />
+                                                <div className='pt-3'>
+                                                    <div className='pb-1'>
+                                                        <NormalLabel
+                                                            text={translate(localeJson, 'unit')} />
+                                                    </div>
                                                     <InputIcon inputIconProps={{
-                                                        name: 'email'
+                                                        name: 'email',
+                                                        inputClass: "create_input_stock",
                                                     }} />
                                                 </div>
-                                                <div className='flex' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                                <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                     <div>
                                                         <Button buttonProps={{
                                                             buttonClass: "text-600 border-500 evacuation_button_height",
