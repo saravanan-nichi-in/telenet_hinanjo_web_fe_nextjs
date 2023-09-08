@@ -3,7 +3,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 export default function TextArea(props) {
     const { parentClass, parentStyle, textAreaProps = {} } = props;
-    const { name, textAreaClass, value, id, style, onChange, rows, cols, readOnly, disabled } = textAreaProps;
+    const { name, textAreaClass, value, id, style, onChange, rows, cols, readOnly,
+        disabled, ...restProps } = textAreaProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -17,6 +18,7 @@ export default function TextArea(props) {
                 cols={cols}
                 readOnly={readOnly}
                 disabled={disabled}
+                {...restProps}
             />
         </div>
     )

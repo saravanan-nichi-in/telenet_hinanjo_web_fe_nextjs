@@ -15,7 +15,7 @@ import { ValidationError } from "../error";
 const StockPileSignupModal = (props) => {
     const { parentMainClass, modalClass, draggable,
         position, contentClass, value, options, onChange, placeholder,
-        selectParentClass, onClickTop, OnClickAddition } = props
+        selectParentClass, onClickTop, OnClickAddition, ...restProps } = props
     const [visible, setVisible] = useState(false);
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
@@ -60,8 +60,15 @@ const StockPileSignupModal = (props) => {
                             hoverBg: "hover:bg-green-600",
                             onClick: () => setVisible(true)
                         }} />
-                        <Dialog className={`${modalClass}`} draggable={draggable} position={position || "top"} header={header} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
-
+                        <Dialog className={`${modalClass}`}
+                            draggable={draggable}
+                            position={position || "top"}
+                            header={header}
+                            visible={visible}
+                            onHide={() => setVisible(false)}
+                            style={{ width: '600px', padding: "10px" }}
+                            {...restProps}
+                        >
                             <div class={`${contentClass}`}>
                                 <form onSubmit={handleSubmit}>
                                     <div className="">

@@ -3,9 +3,9 @@ import { InputText } from "primereact/inputtext";
 
 const InputLeftRightGroup = (props) => {
   const { parentClass, parentStyle, inputLrGroupProps = {} } = props;
-  const { antLeftIcon, leftIcon, leftClass, leftStyle, inputClass, height,
-    placeholder, id, style, value, name, onChange, onBlur, type,
-    keyfilter, ref, required, disabled, readOnly, rightClass, rightStyle, rightIcon, antdRightIcon, maxLength, minLength } = inputLrGroupProps;
+  const { antLeftIcon, leftIcon, leftClass, leftStyle, inputClass, height, placeholder, id, style,
+    value, name, onChange, onBlur, type, keyfilter, ref, required, disabled, readOnly, rightClass,
+    rightStyle, rightIcon, antdRightIcon, maxLength, minLength, ...restProps } = inputLrGroupProps;
 
   return (
     <div className={`p-inputgroup ${parentClass}`} style={parentStyle}>
@@ -29,6 +29,7 @@ const InputLeftRightGroup = (props) => {
             readOnly={readOnly}
             maxLength={maxLength}
             minLength={minLength}
+            {...restProps}
           />
         </>
       ) : (
@@ -49,6 +50,7 @@ const InputLeftRightGroup = (props) => {
             readOnly={readOnly}
             maxLength={maxLength}
             minLength={minLength}
+            {...restProps}
           />
           <span className={`p-inputgroup-addon ${rightClass}`} style={rightStyle}>
             <i className={`${rightIcon} `}>{antdRightIcon}</i>

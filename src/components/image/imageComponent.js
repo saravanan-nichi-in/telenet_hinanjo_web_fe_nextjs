@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const ImageComponent = (props) => {
     const { parentClass, parentStyle, imageProps = {} } = props;
-    const { src, width, height, alt, style } = imageProps;
+    const { src, width, height, alt, style, ...restProps } = imageProps;
     const [imageError, setImageError] = useState(false);
 
     const imageLoader = ({ src }) => {
@@ -27,6 +27,7 @@ const ImageComponent = (props) => {
                 height={height}
                 onError={handleImageError}
                 loader={imageLoader}
+                {...restProps}
             />
         </div>
     );

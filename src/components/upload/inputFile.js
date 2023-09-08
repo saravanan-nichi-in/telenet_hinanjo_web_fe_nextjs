@@ -2,7 +2,9 @@ import React from 'react';
 
 const InputFile = (props) => {
     const { parentClass, parentStyle, inputFileProps = {} } = props;
-    const { name, inputFileClass, accept, onChange, onBlur, ref, inputFileStyle, value, required, readOnly, disabled } = inputFileProps;
+    const { name, inputFileClass, accept, onChange, onBlur, ref, inputFileStyle, value,
+        required, readOnly, disabled, ...restProps } = inputFileProps;
+
     const divStyle = {
         border: '1px solid #ccc', // You can adjust the border style as needed
         padding: '10px', // Add padding for spacing
@@ -22,6 +24,7 @@ const InputFile = (props) => {
                 required={required}
                 readOnly={readOnly}
                 disabled={disabled}
+                {...restProps}
             />
         </div>
     );

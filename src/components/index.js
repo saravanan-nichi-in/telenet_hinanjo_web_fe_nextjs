@@ -16,5 +16,5 @@ export { InputSelect, DropdownSelect, Select, LanguageDropdown } from "./dropdow
 export { AvatarComponent } from "./avatar"
 export { RadioBtn } from './radioButton'
 export { BarcodeScanner } from './qr'
-export { FileUpload } from "./upload"
+export { FileUpload, InputFile } from "./upload"
 export { TextArea, InputLeftRightGroup, InputGroup, InputIcon, InputNumber } from "./input"

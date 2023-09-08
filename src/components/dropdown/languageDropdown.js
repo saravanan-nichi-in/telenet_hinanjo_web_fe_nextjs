@@ -3,7 +3,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const LanguageDropdown = (props) => {
-    const { parentClass, parentStyle, style, disabled, readOnly } = props;
+    const { parentClass, parentStyle, style, disabled, readOnly,...restProps } = props;
     const { onChangeLocale } = useContext(LayoutContext);
 
     const languageOptions = [
@@ -68,6 +68,7 @@ const LanguageDropdown = (props) => {
                 itemTemplate={customOptionTemplate}
                 placeholder="Select a language"
                 className='border-none'
+                {...restProps}
             />
         </div>
     );

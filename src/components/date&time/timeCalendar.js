@@ -5,7 +5,7 @@ import { addLocale } from 'primereact/api';
 const TimeCalendar = (props) => {
     const { parentClass, parentStyle, timeProps = {} } = props
     const { height, timeClass, id, style, icon, showIcon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, readOnlyInput, disabled, placeholder } = timeProps
+        disabledDays, minDate, maxDate, selectionMode, readOnlyInput, disabled, placeholder, ...restProps } = timeProps
     const [date, setDate] = useState(props.date);
 
     addLocale('en', {
@@ -44,6 +44,7 @@ const TimeCalendar = (props) => {
                 disabled={disabled}
                 placeholder={placeholder}
                 hourFormat="24"
+                {...restProps}
             />
         </div>
     );

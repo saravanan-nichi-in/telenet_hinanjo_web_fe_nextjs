@@ -2,7 +2,8 @@ import { InputNumber as InputNum } from 'primereact/inputnumber';
 
 const InputNumber = (props) => {
   const { parentClass, inputNumberProps = {} } = props
-  const { inputNumberClass, height, id, value, name, onValueChange, showButtons, mode, ref, required, readOnly, disabled, currency } = inputNumberProps
+  const { inputNumberClass, height, id, value, name, onValueChange, showButtons, mode, ref, required,
+    readOnly, disabled, currency, ...restProps } = inputNumberProps
 
   return (
     <div className={`${parentClass}`}>
@@ -17,7 +18,8 @@ const InputNumber = (props) => {
         required={required}
         readOnly={readOnly}
         disabled={disabled}
-        currency={currency} />
+        currency={currency}
+        {...restProps} />
     </div>
   )
 }

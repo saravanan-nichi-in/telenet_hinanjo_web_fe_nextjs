@@ -9,7 +9,7 @@ import { DateCalendar } from "../date&time";
 const StockPileEditModal = (props) => {
     const { parentMainClass, modalClass, draggable,
         position, contentClass, value, options,
-        onChange, placeholder, selectParentClass, onClickTop, OnClickAddition } = props
+        onChange, placeholder, selectParentClass, onClickTop, OnClickAddition, ...restProps } = props
     const [visible, setVisible] = useState(false);
 
     const header = (
@@ -43,7 +43,15 @@ const StockPileEditModal = (props) => {
                 hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => setVisible(true)
             }} />
-            <Dialog className={`${modalClass}`} draggable={draggable} position={position || "top"} header={header} visible={visible} onHide={() => setVisible(false)} style={{ width: '600px', padding: "10px" }} >
+            <Dialog className={`${modalClass}`}
+                draggable={draggable}
+                position={position || "top"}
+                header={header}
+                visible={visible}
+                onHide={() => setVisible(false)}
+                style={{ width: '600px', padding: "10px" }}
+                {...restProps}
+            >
                 <div class={`${contentClass}`}>
                     <form>
                         <div className="">

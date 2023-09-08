@@ -3,7 +3,7 @@ import { FileUpload as Upload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 
 const FileUpload = (props) => {
-    const { parentClass, parentStyle, id, uploadClass, style } = props;
+    const { parentClass, parentStyle, id, uploadClass, style, ...restProps } = props;
     const toast = useRef(null);
 
     const onUpload = () => {
@@ -22,6 +22,7 @@ const FileUpload = (props) => {
                 onUpload={onUpload}
                 className={`${uploadClass}`}
                 style={style}
+                {...restProps}
             />
         </div>
     );

@@ -3,7 +3,7 @@ import { Avatar } from 'primereact/avatar';
 
 const AvatarComponent = (props) => {
     const { parentClass, parentStyle, avatarProps = {} } = props;
-    const { avatarClass, label, id, size, icon, image, shape, style } = avatarProps;
+    const { avatarClass, label, id, size, icon, image, shape, style, ...restProps } = avatarProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -15,6 +15,7 @@ const AvatarComponent = (props) => {
                 image={image}
                 shape={shape}
                 style={style}
+                {...restProps}
             />
         </div>
     )

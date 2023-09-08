@@ -3,7 +3,7 @@ import { Button as Btn } from "primereact/button";
 export default function Button(props) {
   const { parentClass, parentStyle, buttonProps = {} } = props;
   const { severity, hoverBg, fontWeight, fontSize, buttonClass,
-    style, text, iconPos, icon, type, link, dataPrToolTip, onClick, bg, rounded } = buttonProps;
+    style, text, iconPos, icon, type, link, dataPrToolTip, onClick, bg, rounded, ...restProps } = buttonProps;
 
   return (
     <div className={`${parentClass}`} style={parentStyle}>
@@ -18,6 +18,7 @@ export default function Button(props) {
         link={link}
         data-pr-tooltip={dataPrToolTip}
         onClick={onClick}
+        {...restProps}
       />
     </div>
   );

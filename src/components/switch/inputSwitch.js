@@ -3,7 +3,7 @@ import { InputSwitch as InputSwitcher } from 'primereact/inputswitch';
 
 const InputSwitch = (props) => {
     const { parentClass, parentStyle, inputSwitchProps = {} } = props;
-    const { switchClass, id, style, checked, onChange,readOnly, disabled } = inputSwitchProps;
+    const { switchClass, id, style, checked, onChange, readOnly, disabled, ...restProps } = inputSwitchProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -14,6 +14,7 @@ const InputSwitch = (props) => {
                 onChange={onChange}
                 readOnly={readOnly}
                 disabled={disabled}
+                {...restProps}
             />
         </div>
     );

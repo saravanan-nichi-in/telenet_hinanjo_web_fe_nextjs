@@ -4,7 +4,7 @@ import NormalLabel from "../label/NormalLabel";
 
 const NormalCheckBox = (props) => {
     const { parentClass, parentStyle, checkBoxProps = {} } = props;
-    const { checkboxClass, id, name, value, onChange, checked, disabled, style, labelClass } = checkBoxProps;
+    const { checkboxClass, id, name, value, onChange, checked, disabled, style, labelClass, ...restProps } = checkBoxProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -16,6 +16,7 @@ const NormalCheckBox = (props) => {
                 checked={checked}
                 disabled={disabled}
                 style={style}
+                {...restProps}
             />
             <NormalLabel htmlFor={id}
                 className={`${labelClass}`}

@@ -7,7 +7,8 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 
 const DeleteModal = (props) => {
     const { parentMainClass, text, iconPos, icon, parentClass, checked,
-        modalClass, draggable, position, header, style, contentClass, content, bg, hoverBg, severity,buttonClass } = props
+        modalClass, draggable, position, header, style, contentClass, content, bg, hoverBg,
+        severity, buttonClass, ...restProps } = props
     const [visible, setVisible] = useState(false);
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const footer = (
@@ -35,7 +36,7 @@ const DeleteModal = (props) => {
                         bg: bg,
                         hoverBg: hoverBg,
                         severity: severity,
-                        buttonClass:buttonClass,
+                        buttonClass: buttonClass,
                         onClick: () => setVisible(true)
                     }} />
                 </>) : (
@@ -45,7 +46,16 @@ const DeleteModal = (props) => {
                         onChange: () => setVisible(true)
                     }} />
                 </>)}
-            <Dialog className={`${modalClass}`} draggable={draggable} position={position} header={header} footer={footer} visible={visible} style={style} onHide={() => setVisible(false)}>
+            <Dialog className={`${modalClass}`}
+                draggable={draggable}
+                position={position}
+                header={header}
+                footer={footer}
+                visible={visible}
+                style={style}
+                onHide={() => setVisible(false)}
+                {...restProps}
+            >
                 <div class={`text-center ${contentClass} text-lg`}>
                     {content}
                 </div>
