@@ -14,7 +14,7 @@ export default function AdminPlacePage() {
     const columns = [
         { field: 'ID', header: 'ID' },
         { field: '避難所', header: '避難所', minWidth: "20rem" },
-        { field: '住所', header: '住所' },
+        { field: '住所', header: '住所',minWidth:"10rem" },
         { field: '避難可 能人数', header: '避難可  能人数', minWidth: "10rem" },
         { field: '電話番号', header: '電話番号' },
         {

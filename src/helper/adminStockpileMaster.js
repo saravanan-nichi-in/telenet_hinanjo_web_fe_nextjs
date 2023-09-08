@@ -1,5 +1,4 @@
 /*eslint no-undef: 0*/
-
 import Link from "next/link";
 
 export const AdminStockpileMasterService = {

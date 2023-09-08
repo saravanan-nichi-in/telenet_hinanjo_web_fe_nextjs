@@ -1,5 +1,5 @@
-import Link from "next/link";
 /*eslint no-undef: 0*/
+import Link from "next/link";
 
 export const AdminMaterialService = {
     getData() {

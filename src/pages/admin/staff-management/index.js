@@ -11,7 +11,7 @@ export default function StaffManagementPage() {
     const router = useRouter();
 
     const columns = [
-        { field: 'No.', header: 'No.' },
+        { field: 'No', header: 'No.' },
         { field: '氏名', header: '氏名', minWidth: "15rem" },
         { field: 'メール', header: 'メール' },
         { field: '電話番号', header: '電話番号' },

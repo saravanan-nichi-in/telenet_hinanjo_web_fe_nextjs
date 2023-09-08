@@ -6,7 +6,7 @@ import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } fro
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-export default function AdminSpecialCareCreatePage() {
+export default function AdminSpecialCareEditPage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
 

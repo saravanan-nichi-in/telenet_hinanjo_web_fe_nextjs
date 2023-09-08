@@ -1,4 +1,3 @@
-import Link from "next/link";
 /*eslint no-undef: 0*/
 
 export const AdminDashboardService = {

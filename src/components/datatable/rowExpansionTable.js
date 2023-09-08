@@ -9,7 +9,7 @@ export default function RowExpansionTable(props) {
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage, tableStyle, rowExpansionStyle,
         rowExpansionTableStyle, rowExpansionSize, responsiveLayout, columnStyle, rowExpansionColumnStyle,
         rowsPerPageOptions, showGridlines, rowExpanisonGridlines, className, rowExpansionClassName,
-        rowExpansionOnRowClick, onRowClick } = props;
+        rowExpansionOnRowClick, onRowClick, ...restProps } = props;
 
     const [expandedRows, setExpandedRows] = useState(null);
     const toast = useRef(null);
@@ -34,16 +34,16 @@ export default function RowExpansionTable(props) {
         return (
             <div className="p-3">
 
-                <DataTable className={rowExpansionClassName} id={id} showGridlines={rowExpanisonGridlines} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={{ minWidth: '20rem' } || rowExpansionTableStyle}>
+                <DataTable className={rowExpansionClassName} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={{ minWidth: '20rem' } || rowExpansionTableStyle}>
                     {innerColumn.map((column, index) => (
                         <Column
                             key={index}
                             field={column.field}
                             header={column.header}
                             sortable={column.sortable}
-                            body={column.body}
                             style={{ minWidth: column.minWidth && column.minWidth, ...rowExpansionColumnStyle }}
                             headerStyle={column.headerStyle}
+                            body={column.field === props.customRowExpansionActionsField ? column.body : undefined}
                         />
                     ))}
                 </DataTable>
@@ -80,7 +80,8 @@ export default function RowExpansionTable(props) {
                 showGridlines={showGridlines}
                 onRowClick={onRowClick}
                 responsiveLayout={responsiveLayout}
-                tableStyle={{ minWidth: '50rem' } || tableStyle}>
+                tableStyle={{ minWidth: '50rem' } || tableStyle}
+                {...restProps}>
                 <Column expander={allowExpansion} style={{ maxWidth: '10px' }} />
                 {outerColumn.map((col, index) => (
                     <Column key={index}

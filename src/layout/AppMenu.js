@@ -57,7 +57,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'qr_code_create'),
                     icon: <FaQrcode size={15} />,
-                    to: '/pages/empty'
+                    to: '/admin/qrcode/csv/import'
                 },
                 {
                     label: translate(localeJson, 'staff_management'),
