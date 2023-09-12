@@ -4,8 +4,8 @@ import { addLocale } from 'primereact/api';
 
 const DateCalendar = (props) => {
     const { parentClass, dateProps = {} } = props;
-    const { height, id, dateClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, showIcon, disabled, readOnlyInput, placeholder, ...restProps } = dateProps;
+    const { height, id, name, onBlur, dateClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, onChange, showIcon, disabled, readOnlyInput, placeholder, ...restProps } = dateProps;
     const [date, setDate] = useState(props.date);
 
     addLocale('en', {
@@ -27,12 +27,20 @@ const DateCalendar = (props) => {
         <div className={`${parentClass}`}>
             <Calendar className={` ${dateClass} ${height || 'custom_input'}`}
                 id={id}
+                name={name}
                 value={date}
                 icon={icon || "pi pi-calendar"}
                 iconPos={iconPos || "right"}
                 disabledDates={disabledDates}
                 disabledDays={disabledDays}
-                onChange={(e) => setDate(e.value)}
+                onBlur={onBlur}
+                onChange={(e) => {
+                    setDate(e.value);
+                    if (onChange) {
+                        onChange(e); // Call the onChange prop if provided
+                    }
+                }
+                }
                 dateFormat="yy年mm月dd日" minDate={minDate}
                 maxDate={maxDate}
                 selectionMode={selectionMode || "single"}

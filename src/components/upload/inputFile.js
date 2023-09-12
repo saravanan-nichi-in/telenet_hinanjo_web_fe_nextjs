@@ -2,7 +2,7 @@ import React from 'react';
 
 const InputFile = (props) => {
     const { parentClass, parentStyle, inputFileProps = {} } = props;
-    const { name, inputFileClass, accept, onChange, onBlur, ref, inputFileStyle, value,
+    const { name, height, inputFileClass, accept, onChange, onBlur, ref, inputFileStyle, value,
         required, readOnly, disabled, ...restProps } = inputFileProps;
 
     const divStyle = {
@@ -14,7 +14,7 @@ const InputFile = (props) => {
         <div className={`${parentClass}`} style={divStyle}>
             <input type="file"
                 name={name}
-                className={`${inputFileClass}`}
+                className={`${inputFileClass} ${height || 'custom_input'}`}
                 accept={accept}
                 onChange={onChange}
                 onBlur={onBlur}

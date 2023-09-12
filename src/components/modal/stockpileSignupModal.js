@@ -5,7 +5,7 @@ import Button from "../button/button";
 import { NormalLabel } from "../label";
 import { Select } from "../dropdown";
 import { InputIcon } from "../input";
-import { FileUpload } from "../upload";
+import { InputFile } from "../upload";
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Formik } from "formik";
@@ -106,7 +106,9 @@ const StockPileSignupModal = (props) => {
                                     </div>
                                     <div className="pt-3">
                                         <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'image')} />
-                                        <FileUpload />
+                                        <InputFile inputFileProps={{
+                                            inputFileStyle: { fontSize: "12px" }
+                                        }} parentClass={"input_stock"} />
                                     </div>
                                     <div className="p-dialog-footer pt-3">
                                         <div className="text-center">
