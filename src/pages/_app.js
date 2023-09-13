@@ -9,6 +9,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css'; // Import PrimeFlex CSS
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
 import '@/styles/pages/pages.scss';
