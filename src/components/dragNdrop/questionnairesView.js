@@ -113,7 +113,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                 </div>
                 {/* Questionnaires options */}
                 {[0, 1, 2].map((arr, i) => (
-                    <div className="flex" style={{
+                    <div key={i} className="flex" style={{
                         borderRight: "1px solid #000",
                         borderBottom: "1px solid #000",
                         borderLeft: "1px solid #000",
