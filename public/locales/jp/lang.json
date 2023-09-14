@@ -4,6 +4,7 @@
         "sidebar": {
             "vault_info": "避難所情報",
             "evacuation_status_list": "避難者状況一覧",
+            "history_place":"避難所状況履歴",
             "list_of_evacuees": "避難者一覧",
             "shortage_supplies_list": "不足物資一覧",
             "stockpile_summary": "備蓄品集計",

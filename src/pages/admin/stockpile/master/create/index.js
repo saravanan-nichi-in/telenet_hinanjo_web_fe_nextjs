@@ -56,7 +56,7 @@ export default function AdminStockpileCreatePage() {
                                                         onBlur: handleBlur,
                                                         value: values.type,
                                                         inputSelectClass: "create_input_stock"
-                                                    }} parentClass={`${errors.type && touched.type && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.type && touched.type && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.type && touched.type && errors.type} />
                                                 </div>
                                                 <div className="pt-3 ">
@@ -71,7 +71,7 @@ export default function AdminStockpileCreatePage() {
                                                         onBlur: handleBlur,
                                                         value: values.stockpileName,
                                                         inputClass: "create_input_stock",
-                                                    }} parentClass={`${errors.stockpileName && touched.stockpileName && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.stockpileName && touched.stockpileName && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.stockpileName && touched.stockpileName && errors.stockpileName} />
                                                 </div>
                                                 <div className="pt-3 ">

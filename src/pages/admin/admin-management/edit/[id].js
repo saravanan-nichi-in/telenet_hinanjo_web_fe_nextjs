@@ -58,7 +58,7 @@ export default function AdminManagementCreatePage() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
 
-                                                    }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
                                                 </div>
                                                 <div className="pt-3 ">
@@ -73,7 +73,7 @@ export default function AdminManagementCreatePage() {
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.email && touched.email && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                                 </div>
                                                 <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>

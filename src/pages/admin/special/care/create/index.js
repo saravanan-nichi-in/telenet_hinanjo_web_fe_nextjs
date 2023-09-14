@@ -57,7 +57,7 @@ export default function AdminSpecialCareCreatePage() {
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.mattersToConsider && touched.mattersToConsider && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.mattersToConsider && touched.mattersToConsider && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.mattersToConsider && touched.mattersToConsider && errors.mattersToConsider} />
                                                 </div>
                                                 <div className='pt-3' >
@@ -73,7 +73,7 @@ export default function AdminSpecialCareCreatePage() {
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.thingsToConsider && touched.thingsToConsider && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.thingsToConsider && touched.thingsToConsider && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.thingsToConsider && touched.thingsToConsider && errors.thingsToConsider} />
                                                 </div>
                                                 <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>

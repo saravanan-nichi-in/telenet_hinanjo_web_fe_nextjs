@@ -27,27 +27,38 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'evacuation_status_list'),
                     icon: <ImUsers size={15} />,
-                    to: '/admin/dashboard'
+                    to: '/admin/dashboard',
+                    active: router.pathname.startsWith('/admin/dashboard')
+                },
+                {
+                    label: translate(localeJson, 'history_place'),
+                    icon: <HiDocumentText size={15} />, 
+                    to: '/admin/history/place',
+                    active: router.pathname.startsWith('/admin/history/place')
                 },
                 {
                     label: translate(localeJson, 'list_of_evacuees'),
                     icon: <HiDocumentText size={15} />,
-                    to: '/admin/evacuation'
+                    to: '/admin/evacuation',
+                    active: router.pathname.startsWith('/admin/evacuation')
                 },
                 {
                     label: translate(localeJson, 'shortage_supplies_list'),
                     icon: <IoMdToday size={15} />,
-                    to: '/admin/shortage-supplies'
+                    to: '/admin/shortage-supplies',
+                    active: router.pathname.startsWith('/admin/shortage-supplies')
                 },
                 {
                     label: translate(localeJson, 'stockpile_summary'),
                     icon: <IoMdToday size={15} />,
-                    to: '/admin/stockpile/summary'
+                    to: '/admin/stockpile/summary',
+                    active: router.pathname.startsWith('/admin/stockpile/summary')
                 },
                 {
                     label: translate(localeJson, 'statistics'),
                     icon: <AiOutlineAreaChart size={15} />,
-                    to: '/admin/statistics'
+                    to: '/admin/statistics',
+                    active: router.pathname.startsWith('/admin/statistics')
                 }
             ]
         },
@@ -57,17 +68,20 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'qr_code_create'),
                     icon: <FaQrcode size={15} />,
-                    to: '/admin/qrcode/csv/import'
+                    to: '/admin/qrcode/csv/import',
+                    active: router.pathname.startsWith('/admin/qrcode/csv/import')
                 },
                 {
                     label: translate(localeJson, 'staff_management'),
                     icon: <ImUser size={15} />,
-                    to: '/admin/staff-management'
+                    to: '/admin/staff-management',                    
+                    active: router.pathname.startsWith('/admin/staff-management')
                 },
                 {
                     label: translate(localeJson, 'admin_management'),
                     icon: <RiAdminFill size={15} />,
-                    to: '/admin/admin-management'
+                    to: '/admin/admin-management',
+                    active: router.pathname.startsWith('/admin/admin-management')
                 }
             ]
         },
@@ -77,7 +91,8 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'places'),
                     icon: <MdPlace size={15} />,
-                    to: '/admin/place'
+                    to: '/admin/place',
+                    active: router.pathname.startsWith('/admin/place')
                 },
                 {
                     label: translate(localeJson, 'material'),
@@ -141,7 +156,7 @@ const AppMenu = () => {
                 {
                     label: translate(localeJson, 'stockpile_list'),
                     icon: <HiDocumentText size={15} />,
-                    to: '/staff/stockpile/dashboard'
+                    to: '/staff/stockpile/dashboard',
                 },
                 {
                     label: translate(localeJson, 'stockpile_history'),
@@ -182,7 +197,7 @@ const AppMenu = () => {
         <MenuProvider>
             <ul className="layout-menu">
                 {!_.isEmpty(model) && model.map((item, i) => {
-                    return !item.seperator ? <AppMenuitem item={item} root={true} index={i} key={i} /> : <li className="menu-separator"></li>;
+                    return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
                 })}
             </ul>
         </MenuProvider>

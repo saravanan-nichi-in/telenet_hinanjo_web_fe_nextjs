@@ -5,7 +5,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, NormalTable } from '@/components';
 import { AdminManagementService } from '@/helper/adminManagementService';
 
-export default function StaffManagementEditPage() {
+export default function AdminManagementDetailPage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [admin, setAdmins] = useState([]);
     const router = useRouter();

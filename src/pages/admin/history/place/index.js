@@ -2,50 +2,35 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable } from '@/components';
-import { AdminManagementService } from '@/helper/adminManagementService';
+import { Button, DateTimeCalendar, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
+import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
 
-export default function AdminManagementPage() {
+export default function AdminHistoryPlacePage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
 
     const columns = [
-        { field: 'No.', header: 'No.' },
-        { field: '氏名', header: <span data-tip="Tooltip text for 氏名">氏名</span>, minWidth: "15rem" },
+        { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
+        { field: '報告日時', header: '報告日時', minWidth: "15rem" },
+        { field: '地区', header: '地区', minWidth: "6rem" },
+        { field: '避難所名', header: '避難所名', minWidth: "12rem" },
+        { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem" },
+        { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem" },
+        { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem" },
+        { field: "所在地（経度1）", header: "所在地（経度）", minWidth: "10rem" },
+        { field: "外部公開", header: "外部公開", minWidth: "8rem" },
+        { field: "開設状況", header: "開設状況", minWidth: "8rem" },
+        { field: "避難者数", header: "避難者数", minWidth: "7rem" },
+        { field: "満空状況", header: "満空状況", minWidth: "7rem" },
+        { field: "開設日時", header: "開設日時", minWidth: "15rem" },
+        { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem" },
+        { field: "備考", header: "備考", minWidth: "5rem" },
 
-        // { field: '氏名', header: '氏名', minWidth: "15rem" },
-        { field: 'メール', header: 'メール' },
-        {
-            field: 'actions',
-            header: '編集',
-            body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
-                        text: "編集", buttonClass: "text-primary",
-                        bg: "bg-white",
-                        onClick: () => router.push('/admin/admin-management/edit/1'),
-                        hoverBg: "hover:bg-primary hover:text-white",
-                    }} />
-                </div>
-            ),
-        }, {
-            field: 'actions',
-            header: '削除',
-            body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
-                        text: "削除", buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                    }} />
-                </div>
-            ),
-        },
     ];
 
     useEffect(() => {
-        AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
+        AdminHistoryPlaceService.getAdminsHistoryPlaceMedium().then((data) => setAdmins(data));
     }, []);
 
     return (
@@ -61,13 +46,6 @@ export default function AdminManagementPage() {
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'import'),
-                                    severity: "primary"
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
                                     severity: "primary"
                                 }} parentClass={"mr-1 mt-1"} />
@@ -76,7 +54,7 @@ export default function AdminManagementPage() {
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'signup'),
+                                    text: "メール設定",
                                     onClick: () => router.push('/admin/admin-management/create'),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
@@ -87,11 +65,22 @@ export default function AdminManagementPage() {
                                 <form>
                                     <div className="pt-3 ">
                                         <div className='pb-1'>
-                                            <NormalLabel labelClass="pt-1" text={translate(localeJson, 'full_name')} />
+                                            <NormalLabel labelClass="pt-1" text={"開設日"} />
                                         </div>
-                                        <InputIcon inputIconProps={{
-                                            inputClass: "create_input_stock"
+                                        <DateTimeCalendar dateTimeProps={{
+                                            selectionMode: "range",
+                                            dateTimeClass: "create_input_stock"
                                         }} />
+                                        <div className='pt-3'>
+                                            <div className='pb-1'>
+                                                <NormalLabel labelClass="pt-1" text={"避難所名"} />
+                                            </div>
+                                            <Select selectProps={{
+                                                selectClass: "custom_dropdown_items create_input_stock",
+                                            }}
+
+                                            />
+                                        </div>
                                     </div>
                                     <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                         <div >
@@ -109,7 +98,7 @@ export default function AdminManagementPage() {
                             <div>
                             </div>
 
-                            <NormalTable showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                            <NormalTable rows={10} paginator={"true"} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} value={admins} columns={columns} />
                         </div>
                     </section>
                 </div>

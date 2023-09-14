@@ -53,7 +53,7 @@ export default function AdminMaterialCreatePage() {
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.supplies && touched.supplies && 'p-invalid'}`} />
+                                                    }} parentClass={`${errors.supplies && touched.supplies && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.supplies && touched.supplies && errors.supplies} />
                                                 </div>
                                                 <div className='pt-3'>

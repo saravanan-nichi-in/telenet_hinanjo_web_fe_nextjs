@@ -27,8 +27,7 @@ export default function AdminQrCodeCreatePage() {
                     values,
                     errors,
                     touched,
-                    handleChange,
-                    handleBlur,
+                    setFieldValue,
                     handleSubmit,
                 }) => (
                     <div className="grid">
@@ -55,10 +54,14 @@ export default function AdminQrCodeCreatePage() {
                                                 <div className="pt-3 ">
                                                     <InputFile inputFileProps={{
                                                         inputFileStyle: { fontSize: "12px" },
-                                                        onChange: handleChange,
-                                                        onBlur: handleBlur,
-                                                    }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid'}`} />
+                                                        onChange: (event) => {
+                                                            // Set the file value in Formik
+                                                            setFieldValue("file", event.currentTarget.files[0]);
+                                                        },
+                                                    }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
+                                                    <div className='pt-1'>
                                                     <ValidationError errorBlock={errors.file && touched.file && errors.file} />
+                                                    </div>
                                                 </div>
                                                 <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                     <div >

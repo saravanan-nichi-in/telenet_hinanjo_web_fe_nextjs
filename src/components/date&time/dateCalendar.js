@@ -37,7 +37,7 @@ const DateCalendar = (props) => {
                 onChange={(e) => {
                     setDate(e.value);
                     if (onChange) {
-                        onChange(e); // Call the onChange prop if provided
+                        onChange(e); 
                     }
                 }
                 }

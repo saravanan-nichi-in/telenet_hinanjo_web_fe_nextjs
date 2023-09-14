@@ -81,15 +81,17 @@ const StockPileEditModal = (props) => {
                             header={header}
                             visible={visible}
                             onHide={() => setVisible(false)}
-                            style={{ width: '600px', padding: "10px" }}
+                            style={{ width: '600px' }}
                             {...restProps}
                         >
                             <div class={`${contentClass}`}>
                                 <form onSubmit={handleSubmit}>
                                     <div className="">
-                                        <NormalLabel labelClass="w-full pt-1" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full" text={"種別"} spanClass={"text-red-500"} spanText={"*"} />
+                                        </div>
                                         <Select selectProps={{
-                                            selectClass: "dropdown_select_stock",
+                                            selectClass: "w-full",
                                             value: value,
                                             options: [options],
                                             onChange: onChange,
@@ -100,9 +102,11 @@ const StockPileEditModal = (props) => {
 
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"備蓄品名"} spanClass={"p-error"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"備蓄品名"} spanClass={"p-error"} spanText={"*"} />
+                                        </div>
                                         <Select selectProps={{
-                                            selectClass: "dropdown_select_stock",
+                                            selectClass: "w-full",
                                             value: value,
                                             options: options,
                                             onChange: onChange,
@@ -113,71 +117,83 @@ const StockPileEditModal = (props) => {
 
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"保管期間"} spanText={"(日)"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"保管期間"} spanText={"(日)"} />
+                                        </div>
                                         <InputIcon inputIconProps={{
                                             keyfilter: "num",
-                                            inputClass: "input_stock",
+                                            inputClass: "w-full",
                                             disabled: "true"
                                         }} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"数量"} spanClass={"p-error"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"数量"} spanClass={"p-error"} spanText={"*"} />
+                                        </div>
                                         <InputIcon inputIconProps={{
                                             name: 'quantity',
                                             keyfilter: "num",
                                             value: values.quantity,
                                             onChange: handleChange,
                                             onBlur: handleBlur,
-                                            inputClass: "input_stock",
-                                        }} parentClass={`${errors.quantity && touched.quantity && 'p-invalid'} selectParentClass`} />
+                                            inputClass: "w-full",
+                                        }} parentClass={`${errors.quantity && touched.quantity && 'p-invalid'} selectParentClass pb-1`} />
                                         <ValidationError errorBlock={errors.quantity && touched.quantity && errors.quantity} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"棚卸日"} spanClass={"text-red-500"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"棚卸日"} spanClass={"text-red-500"} spanText={"*"} />
+                                        </div>
                                         <DateCalendar dateProps={{
                                             placeholder: "yy-mm-dd",
                                             name: "inventoryDate",
                                             onChange: handleChange,
                                             onBlur: handleBlur,
-                                            dateClass: "input_stock"
-                                        }} parentClass={`${errors.inventoryDate && touched.inventoryDate && 'p-invalid'} selectParentClass`} />
+                                            dateClass: "w-full"
+                                        }} parentClass={`${errors.inventoryDate && touched.inventoryDate && 'p-invalid'} selectParentClass pb-1`} />
                                         <ValidationError errorBlock={errors.inventoryDate && touched.inventoryDate && errors.inventoryDate} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"数量"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"数量"} />
+                                        </div>
                                         <InputIcon inputIconProps={{
-                                            inputClass: "input_stock",
+                                            inputClass: "w-full",
                                         }} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"有効期限"} spanClass={"text-red-500"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"有効期限"} spanClass={"text-red-500"} spanText={"*"} />
+                                        </div>
                                         <DateCalendar dateProps={{
                                             name: "expirationDate",
                                             onChange: handleChange,
                                             onBlur: handleBlur,
                                             placeholder: "yy-mm-dd",
-                                            dateClass: "input_stock"
-                                        }} parentClass={`${errors.expirationDate && touched.expirationDate && 'p-invalid'} selectParentClass`} />
+                                            dateClass: "w-full"
+                                        }} parentClass={`${errors.expirationDate && touched.expirationDate && 'p-invalid'} selectParentClass pb-1`} />
                                         <ValidationError errorBlock={errors.expirationDate && touched.expirationDate && errors.expirationDate} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={"備考"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={"備考"} />
+                                        </div>
                                         <InputIcon inputIconProps={{
-                                            inputClass: "input_stock",
+                                            inputClass: "w-full",
                                         }} />
                                     </div>
                                     <div className="p-dialog-footer pt-3">
                                         <div className="text-center">
                                             <Button buttonProps={{
                                                 bg: "surface-500",
-                                                hoverBg: "w-50 h-4rem hover:surface-700",
-                                                buttonClass: "border-white",
+                                                hoverBg: "hover:surface-700",
+                                                buttonClass: "evacuation_button_height border-white ",
                                                 type: "button",
                                                 text: "キャンセル",
                                                 onClick: onClickTop
                                             }} parentClass={"inline"} />
                                             <Button buttonProps={{
-                                                buttonClass: "w-50 h-4rem button_stock",
+                                                buttonClass: "evacuation_button_height",
                                                 text: "追加",
                                                 type: "submit",
                                                 onClick: OnClickAddition

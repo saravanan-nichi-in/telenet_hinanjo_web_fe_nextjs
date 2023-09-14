@@ -51,7 +51,7 @@ const StockPileSignupModal = (props) => {
                     handleBlur,
                     handleSubmit,
                 }) => (
-                    <div className={`${parentMainClass}`}>
+                    <div className={`${parentMainClass} modal-staff`}>
                         <Button buttonProps={{
                             text: translate(localeJson, 'signup'),
                             rounded: "true",
@@ -60,55 +60,64 @@ const StockPileSignupModal = (props) => {
                             hoverBg: "hover:bg-green-600",
                             onClick: () => setVisible(true)
                         }} />
+                        <div >
                         <Dialog className={`${modalClass}`}
                             draggable={draggable}
                             position={position || "top"}
                             header={header}
                             visible={visible}
                             onHide={() => setVisible(false)}
-                            style={{ width: '600px', padding: "10px" }}
+                            style={{ width: '600px' }}
                             {...restProps}
                         >
                             <div class={`${contentClass}`}>
                                 <form onSubmit={handleSubmit}>
                                     <div className="">
-                                        <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'type')} spanClass={"p-error"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'type')} spanClass={"p-error"} spanText={"*"} />
+                                        </div>
                                         <Select selectProps={{
-                                            selectClass: "dropdown_select_stock",
+                                            selectClass: "w-full",
                                             value: values.type,
                                             options: options,
                                             name: "type",
                                             onChange: handleChange,
                                             onBlur: handleBlur,
                                             placeholder: placeholder
-                                        }} parentClass={`${errors.type && touched.type && 'p-invalid'} selectParentClass`} />
+                                        }} parentClass={`${errors.type && touched.type && 'p-invalid'} selectParentClass pb-1`} />
                                         <ValidationError errorBlock={errors.type && touched.type && errors.type} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'stockpile_item_name')} spanClass={"p-error"} spanText={"*"} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'stockpile_item_name')} spanClass={"p-error"} spanText={"*"} />
+                                        </div>
                                         <Select selectProps={{
-                                            selectClass: "dropdown_select_stock",
+                                            selectClass: "w-full",
                                             value: values.stockpileItemName,
                                             options: options,
                                             name: "stockpileItemName",
                                             onChange: handleChange,
                                             onBlur: handleBlur,
                                             placeholder: placeholder
-                                        }} parentClass={`${errors.stockpileItemName && touched.stockpileItemName && 'p-invalid'} selectParentClass`} />
+                                        }} parentClass={`${errors.stockpileItemName && touched.stockpileItemName && 'p-invalid'} selectParentClass pb-1`} />
                                         <ValidationError errorBlock={errors.stockpileItemName && touched.stockpileItemName && errors.stockpileItemName} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'storage_period')} spanText={translate(localeJson, 'days')} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'storage_period')} spanText={translate(localeJson, 'days')} />
+                                        </div>
                                         <InputIcon inputIconProps={{
                                             keyfilter: "num",
-                                            inputClass: "input_stock"
+                                            inputClass: "w-full"
                                         }} />
                                     </div>
                                     <div className="pt-3">
-                                        <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'image')} />
+                                        <div className="pb-1">
+                                            <NormalLabel labelClass="w-full pt-1" text={translate(localeJson, 'image')} />
+                                        </div>
                                         <InputFile inputFileProps={{
                                             inputFileStyle: { fontSize: "12px" }
-                                        }} parentClass={"input_stock"} />
+                                        }} parentClass={"w-full"} />
                                     </div>
                                     <div className="p-dialog-footer pt-3">
                                         <div className="text-center">
@@ -131,6 +140,7 @@ const StockPileSignupModal = (props) => {
                                 </form>
                             </div>
                         </Dialog>
+                        </div>
                     </div>
                 )}
             </Formik>

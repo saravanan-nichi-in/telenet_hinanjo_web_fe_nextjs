@@ -301,8 +301,7 @@ export default function ComponentsDemo() {
                             <h2 className='page_sub_header'>Switch Component</h2>
                             <InputSwitch parentClass={"custom-switch"}
                                 inputSwitchProps={{
-                                    checked: checked1,
-                                    onChange: (e) => setChecked1(e.value)
+                                  
                                 }}
 
                             />

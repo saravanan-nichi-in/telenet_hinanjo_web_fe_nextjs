@@ -4,6 +4,7 @@
         "sidebar": {
             "vault_info": "Evacuation Information",
             "evacuation_status_list": "Evacuation Status List",
+            "history_place":"Evacuation center status history",
             "list_of_evacuees": "List of Evacuees",
             "shortage_supplies_list": "Shortage Supplies List",
             "stockpile_summary": "Stockpile Summary",
