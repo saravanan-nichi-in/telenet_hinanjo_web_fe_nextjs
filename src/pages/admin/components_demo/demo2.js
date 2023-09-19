@@ -79,25 +79,13 @@ export default function ComponentDemo() {
                     <div className='xl:w-10 mr-4 '>
                         {item.title}
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="text-left" style={{ width: '20%', verticalAlign: 'middle' }}>項目</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>項目タイトル *</td>
-                            </tr>
-                        </tbody>
-                    </table>
                     <a href="#" style={{ position: "inherit" }}>
                         drag
                     </a>
                     <button className="arrow-button ml-19rem" onClick={() => handleMoveDown(index)}>▼</button>
 
                 </li>
+                
             ))}
         </ol>
     )
