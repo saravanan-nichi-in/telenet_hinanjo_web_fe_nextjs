@@ -64,3 +64,39 @@ ul {
         }
     }
 }
+
+@media(min-width:576px){
+   .mobile_questionaries{
+    display: none;
+   }   
+}
+
+.mobile_accordion{
+.p-accordion .p-accordion-content{
+    padding:0rem;
+}
+}
+
+.custom_orderlist{
+.p-orderlist-controls{
+    justify-content: start;
+}
+}
+
+@media (max-width:960px){
+.custom_orderlist{
+    .p-orderlist-controls{
+        justify-content: center;
+        }
+    }
+}
+
+.content-align{
+    margin-left: 7px;
+}
+
+@media(min-width:531px){
+.switch-align{
+margin-right: 7px;
+}
+}

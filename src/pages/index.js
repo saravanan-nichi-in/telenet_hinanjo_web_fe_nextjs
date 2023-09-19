@@ -16,6 +16,6 @@ MainDashboard.getLayout = function getLayout(page) {
         <React.Fragment>
             {page}
         </React.Fragment>
-    );
+    );  
 };
 export default MainDashboard;
