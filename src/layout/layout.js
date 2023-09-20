@@ -103,30 +103,20 @@ const Layout = (props) => {
 
     return (
         <React.Fragment>
-            {!user ? (
-                <div className={containerClass}>
-                    <AppTopbar ref={topbarRef} />
-                    <div className="layout-sidebar">
-                        <div ref={sidebarRef} className='layout_sidebar_scroll'>
-                            <AppSidebar />
-                        </div>
-                    </div>
-                    <div className="layout-main-container">
-                        <div className="layout-main">{props.children}</div>
-                        <AppFooter />
-                    </div>
-                    <AppConfig />
-                    <div className="layout-mask"></div>
-                </div>
-            ) : (
-                <div className={`layout-static-inactive`}>
-                    <AppTopbar ref={topbarRef} />
-                    <div className="layout-main-container">
-                        <div className="layout-main">{props.children}</div>
-                        <AppFooter />
+            <div className={containerClass}>
+                <AppTopbar ref={topbarRef} />
+                <div className="layout-sidebar">
+                    <div ref={sidebarRef} className='layout_sidebar_scroll'>
+                        <AppSidebar />
                     </div>
                 </div>
-            )}
+                <div className="layout-main-container">
+                    <div className="layout-main">{props.children}</div>
+                    <AppFooter />
+                </div>
+                {/* <AppConfig /> */}
+                {/* <div className="layout-mask"></div> */}
+            </div>
         </React.Fragment>
     );
 };

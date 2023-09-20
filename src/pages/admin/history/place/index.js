@@ -4,27 +4,38 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DateTimeCalendar, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
 import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
+import { Dropdown } from 'primereact/dropdown';
+import { InputText } from "primereact/inputtext";
+import { Button as DemoButton } from 'primereact/button';
 
 export default function AdminHistoryPlacePage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
+    const [selectedCity, setSelectedCity] = useState(null);
+    const cities = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
 
     const columns = [
-        { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
-        { field: '報告日時', header: '報告日時', minWidth: "15rem" },
-        { field: '地区', header: '地区', minWidth: "6rem" },
-        { field: '避難所名', header: '避難所名', minWidth: "12rem" },
-        { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem" },
-        { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem" },
-        { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem" },
-        { field: "所在地（経度1）", header: "所在地（経度）", minWidth: "10rem" },
-        { field: "外部公開", header: "外部公開", minWidth: "8rem" },
-        { field: "開設状況", header: "開設状況", minWidth: "8rem" },
-        { field: "避難者数", header: "避難者数", minWidth: "7rem" },
-        { field: "満空状況", header: "満空状況", minWidth: "7rem" },
-        { field: "開設日時", header: "開設日時", minWidth: "15rem" },
-        { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem" },
+        { field: 'Sl No', header: 'Sl No', minWidth: "8rem", sortable: true, textAlign: 'center' },
+        { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
+        { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
+        { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
+        { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: true },
+        { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
+        { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem", sortable: true },
+        { field: "所在地（経度1）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
+        { field: "外部公開", header: "外部公開", minWidth: "8rem", sortable: true },
+        { field: "開設状況", header: "開設状況", minWidth: "8rem", sortable: true },
+        { field: "避難者数", header: "避難者数", minWidth: "7rem", sortable: true },
+        { field: "満空状況", header: "満空状況", minWidth: "7rem", sortable: true },
+        { field: "開設日時", header: "開設日時", minWidth: "15rem", sortable: true },
+        { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem", sortable: true },
         { field: "備考", header: "備考", minWidth: "5rem" },
 
     ];
@@ -38,17 +49,18 @@ export default function AdminHistoryPlacePage() {
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
-                        <DividerComponent />
-                        <div >
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'>
+                            <div className='flex justify-content-center align-items-center gap-2'>
+                                <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
+                            </div>
+                            <div className='w-full md:w-auto flex flex-grow justify-content-end align-items-center gap-2'>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
                                     severity: "primary"
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} />
 
                                 <Button buttonProps={{
                                     type: 'submit',
@@ -57,48 +69,49 @@ export default function AdminHistoryPlacePage() {
                                     text: "メール設定",
                                     onClick: () => router.push('/admin/admin-management/create'),
                                     severity: "success"
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} />
                             </div>
                         </div>
+                        <hr />
                         <div>
                             <div>
                                 <form>
-                                    <div className="pt-3 ">
-                                        <div className='pb-1'>
-                                            <NormalLabel labelClass="pt-1" text={"開設日"} />
-                                        </div>
-                                        <DateTimeCalendar dateTimeProps={{
-                                            selectionMode: "range",
-                                            dateTimeClass: "create_input_stock"
-                                        }} />
-                                        <div className='pt-3'>
-                                            <div className='pb-1'>
-                                                <NormalLabel labelClass="pt-1" text={"避難所名"} />
-                                            </div>
-                                            <Select selectProps={{
-                                                selectClass: "custom_dropdown_items create_input_stock",
-                                            }}
-
+                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2'>
+                                        <div className="p-float-label">
+                                            <InputText
+                                                inputId="dd-datePicker"
+                                                id="開設日"
+                                                className="w-full md:w-14rem"
+                                                style={{
+                                                    height: "40px"
+                                                }}
                                             />
+                                            <label htmlFor="dd-datePicker">開設日</label>
                                         </div>
-                                    </div>
-                                    <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
-                                        <div >
-                                            <Button buttonProps={{
-                                                buttonClass: "evacuation_button_height",
-                                                type: 'submit',
-                                                text: "検索",
-                                                rounded: "true",
-                                                severity: "primary"
-                                            }} parentStyle={{ paddingLeft: "10px" }} />
+                                        <div>
+                                            <span className="p-float-label">
+                                                <Dropdown
+                                                    inputId="dd-city"
+                                                    value={selectedCity}
+                                                    onChange={(e) => setSelectedCity(e.value)}
+                                                    options={cities}
+                                                    optionLabel="name"
+                                                    className="w-full md:w-14rem"
+                                                    style={{
+                                                        height: "40px"
+                                                    }} />
+                                                <label htmlFor="dd-city">避難所名</label>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <DemoButton label="検索" icon="pi pi-search" severity="primary" style={{
+                                                height: "40px",
+                                            }} />
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div>
-                            </div>
-
-                            <NormalTable rows={10} paginator={"true"} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} value={admins} columns={columns} />
+                            <NormalTable size={"small"} stripedRows={true} rows={5} paginator={"true"} showGridlines={"true"} value={admins} columns={columns} paginatorLeft={true} />
                         </div>
                     </section>
                 </div>
