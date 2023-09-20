@@ -13,7 +13,7 @@ export default function NormalTable(props) {
             <TableData id={id} value={value}
                 className={`${className}`}
                 paginator={paginator} rows={rows || 5}
-                rowsPerPageOptions={rowsPerPageOptions}
+                rowsPerPageOptions={[5, 10, 25, 50]}
                 rowClassName={rowClassName}
                 filterDisplay={filterDisplay}
                 emptyMessage={emptyMessage}
@@ -27,8 +27,9 @@ export default function NormalTable(props) {
                 paginatorClassName={paginatorClassName}
                 paginatorLeft={paginatorLeft}
                 paginatorRight={paginatorRight}
-                paginatorTemplate="RowsPerPageDropdown PrevPageLink CurrentPageReport NextPageLink"
-                currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                // paginatorTemplate="RowsPerPageDropdown PrevPageLink CurrentPageReport NextPageLink"
+                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                currentPageReportTemplate="{first} - {last} / {totalRecords}"
                 {...restProps}
             >
                 {columns.map((col, index) => (
