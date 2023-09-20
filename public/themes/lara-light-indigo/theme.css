@@ -7,7 +7,8 @@
   --surface-f:#ffffff;
   --text-color:#495057;
   --text-color-secondary:#6c757d;
-  --primary-color:#6366F1;
+  /* --primary-color:#6366F1; */
+  --primary-color:#4b6cb3;
   --primary-color-text:#ffffff;
   --font-family: Noto Sans JP Hiragino Kaku Gothic Pro Arial sans-serif;
   --surface-0: #ffffff;
@@ -1864,7 +1865,7 @@
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 .p-button.p-button-rounded {
-  border-radius: 2rem;
+  border-radius: 5px;
 }
 .p-button.p-button-icon-only {
   width: 3rem;
@@ -2626,7 +2627,7 @@
 }
 .p-datatable .p-datatable-thead > tr > th {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
   font-weight: 700;
@@ -2636,7 +2637,7 @@
 }
 .p-datatable .p-datatable-tfoot > tr > td {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
   font-weight: 700;
@@ -2690,7 +2691,7 @@
   text-align: left;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,

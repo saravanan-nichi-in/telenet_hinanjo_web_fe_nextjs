@@ -25,16 +25,16 @@ const AppMenu = () => {
             label: translate(localeJson, 'vault_info'), icon: <MdDashboard size={15} />,
             items: [
                 {
-                    label: translate(localeJson, 'evacuation_status_list'),
-                    icon: <ImUsers size={15} />,
-                    to: '/admin/dashboard',
-                    active: router.pathname.startsWith('/admin/dashboard')
-                },
-                {
                     label: translate(localeJson, 'history_place'),
                     icon: <HiDocumentText size={15} />, 
                     to: '/admin/history/place',
                     active: router.pathname.startsWith('/admin/history/place')
+                },
+                {
+                    label: translate(localeJson, 'evacuation_status_list'),
+                    icon: <ImUsers size={15} />,
+                    to: '/admin/dashboard',
+                    active: router.pathname.startsWith('/admin/dashboard')
                 },
                 {
                     label: translate(localeJson, 'list_of_evacuees'),

@@ -22,16 +22,17 @@ function MyApp({ Component, pageProps }) {
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        authCheck(router.asPath);
-        const hideContent = () => setAuthorized(false);
-        router.events.on('routeChangeStart', hideContent);
-        // on route change complete - run auth check 
-        router.events.on('routeChangeComplete', authCheck)
-        // Unsubscribe from events in useEffect return function
-        return () => {
-            router.events.off('routeChangeStart', hideContent);
-            router.events.off('routeChangeComplete', authCheck);
-        }
+        // authCheck(router.asPath);
+        // const hideContent = () => setAuthorized(false);
+        // router.events.on('routeChangeStart', hideContent);
+        // // on route change complete - run auth check 
+        // router.events.on('routeChangeComplete', authCheck)
+        // // Unsubscribe from events in useEffect return function
+        // return () => {
+        //     router.events.off('routeChangeStart', hideContent);
+        //     router.events.off('routeChangeComplete', authCheck);
+        // }
+        setAuthorized(true);
     }, []);
 
     function authCheck(url) {
@@ -41,7 +42,8 @@ function MyApp({ Component, pageProps }) {
         const path = url.split('?')[0];
         if (AuthenticationAuthorizationService.adminValue && adminPublicPaths.includes(path)) {
             router.push({
-                pathname: '/admin/dashboard',
+                // pathname: '/admin/dashboard',
+                pathname: '/admin/history/place',
             });
         } else if (AuthenticationAuthorizationService.staffValue && staffPublicPaths.includes(path)) {
             router.push({

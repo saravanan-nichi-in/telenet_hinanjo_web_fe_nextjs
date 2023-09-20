@@ -27,7 +27,7 @@ export default function NormalTable(props) {
                 paginatorClassName={paginatorClassName}
                 paginatorLeft={paginatorLeft}
                 paginatorRight={paginatorRight}
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                paginatorTemplate="RowsPerPageDropdown PrevPageLink CurrentPageReport NextPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                 {...restProps}
             >
@@ -36,7 +36,7 @@ export default function NormalTable(props) {
                         field={col.field}
                         header={col.header}
                         sortable={col.sortable}
-                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
+                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle, textAlign: col.textAlign && col.textAlign }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}
             </TableData>

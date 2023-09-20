@@ -7,7 +7,12 @@ const AppFooter = () => {
 
     return (
         <div className="layout-footer">
-                        <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={20} alt="logo"/>
+            <div>
+                © 2023 避難所管理システム
+            </div>
+            <div className='flex flex-grow sm:justify-center align-items-center'>
+                Terms of Use | Privacy Policy
+            </div>
         </div>
     );
 };
