@@ -48,72 +48,70 @@ export default function AdminHistoryPlacePage() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <section className='col-12'>
-                        <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'>
-                            <div className='flex justify-content-center align-items-center gap-2'>
-                                <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
-                            </div>
-                            <div className='w-full md:w-auto flex flex-grow justify-content-end align-items-center gap-2'>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    severity: "primary"
-                                }} />
-
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: "メール設定",
-                                    onClick: () => router.push('/admin/admin-management/create'),
-                                    severity: "success"
-                                }} />
-                            </div>
+                    <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'>
+                        <div className='flex justify-content-center align-items-center gap-2'>
+                            <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
                         </div>
-                        <hr />
+                        <div className='w-full md:w-auto flex flex-grow justify-content-end align-items-center gap-2'>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'export'),
+                                severity: "primary"
+                            }} />
+
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: "メール設定",
+                                onClick: () => router.push('/admin/admin-management/create'),
+                                severity: "success"
+                            }} />
+                        </div>
+                    </div>
+                    <hr />
+                    <div>
                         <div>
-                            <div>
-                                <form>
-                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2'>
-                                        <div className="p-float-label">
-                                            <InputText
-                                                inputId="dd-datePicker"
-                                                id="開設日"
+                            <form>
+                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2'>
+                                    <div className="p-float-label">
+                                        <InputText
+                                            inputId="dd-datePicker"
+                                            id="開設日"
+                                            className="w-full md:w-14rem"
+                                            style={{
+                                                height: "40px"
+                                            }}
+                                        />
+                                        <label htmlFor="dd-datePicker">開設日</label>
+                                    </div>
+                                    <div>
+                                        <span className="p-float-label">
+                                            <Dropdown
+                                                inputId="dd-city"
+                                                value={selectedCity}
+                                                onChange={(e) => setSelectedCity(e.value)}
+                                                options={cities}
+                                                optionLabel="name"
                                                 className="w-full md:w-14rem"
                                                 style={{
                                                     height: "40px"
-                                                }}
-                                            />
-                                            <label htmlFor="dd-datePicker">開設日</label>
-                                        </div>
-                                        <div>
-                                            <span className="p-float-label">
-                                                <Dropdown
-                                                    inputId="dd-city"
-                                                    value={selectedCity}
-                                                    onChange={(e) => setSelectedCity(e.value)}
-                                                    options={cities}
-                                                    optionLabel="name"
-                                                    className="w-full md:w-14rem"
-                                                    style={{
-                                                        height: "40px"
-                                                    }} />
-                                                <label htmlFor="dd-city">避難所名</label>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <DemoButton label="検索" icon="pi pi-search" severity="primary" style={{
-                                                height: "40px",
-                                            }} />
-                                        </div>
+                                                }} />
+                                            <label htmlFor="dd-city">避難所名</label>
+                                        </span>
                                     </div>
-                                </form>
-                            </div>
-                            <NormalTable size={"small"} stripedRows={true} rows={5} paginator={"true"} showGridlines={"true"} value={admins} columns={columns} paginatorLeft={true} />
+                                    <div>
+                                        <DemoButton label="検索" icon="pi pi-search" severity="primary" style={{
+                                            height: "40px",
+                                        }} />
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </section>
+                        <NormalTable size={"small"} stripedRows={true} rows={10} paginator={"true"} showGridlines={"true"} value={admins} columns={columns} paginatorLeft={true} />
+                    </div>
                 </div>
             </div>
         </div>
