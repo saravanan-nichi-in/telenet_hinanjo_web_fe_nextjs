@@ -110,7 +110,16 @@ export default function AdminHistoryPlacePage() {
                                 </div>
                             </form>
                         </div>
-                        <NormalTable size={"small"} stripedRows={true} rows={10} paginator={"true"} showGridlines={"true"} value={admins} columns={columns} paginatorLeft={true} />
+                        <NormalTable
+                            size={"small"}
+                            stripedRows={true}
+                            rows={10}
+                            paginator={"true"}
+                            showGridlines={"true"}
+                            value={admins}
+                            columns={columns}
+                            paginatorLeft={true}
+                        />
                     </div>
                 </div>
             </div>
