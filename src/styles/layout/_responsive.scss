@@ -14,6 +14,7 @@
             .layout-main-container {
                 margin-left: 0;
                 padding-left: .5rem;
+                padding-bottom: 0;
             }
 
             .layout-sidebar {
@@ -44,6 +45,7 @@
 
             &.layout-static-inactive {
                 .layout-sidebar {
+                    // transform: translateX(-70%);
                     transform: translateX(-100%);
                     left: 0;
                 }
@@ -55,7 +57,20 @@
 
                 .layout-main-container {
                     margin-left: 0;
+                    // margin-left: 90px;
                     padding-left: .5rem;
+                }
+
+                .layout-topbar {
+                    .logo-details {
+                        display: none;
+                    }
+                }
+
+                .layout-topbar {
+                    .header-details {
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -110,6 +125,18 @@
             .layout-mask {
                 display: block;
                 animation: fadein $transitionDuration;
+            }
+        }
+
+        .layout-topbar {
+            .logo-details {
+                display: none;
+            }
+        }
+
+        .layout-topbar {
+            .header-details {
+                width: 100%;
             }
         }
     }

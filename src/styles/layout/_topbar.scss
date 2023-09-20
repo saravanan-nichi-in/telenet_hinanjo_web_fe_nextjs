@@ -98,7 +98,7 @@
 
         .layout-menu-button {
             margin-left: 0;
-            order: 1;
+            // order: 1;    
         }
 
         .layout-topbar-menu-button {
@@ -161,6 +161,7 @@
     justify-content: space-between;
     border-right: 1px solid darkgray;
     padding-left: .5rem;
+    padding-right: .5rem;
 }
 
 .layout-topbar .logo-view {
@@ -185,8 +186,8 @@
     display: flex;
     height: 100%;
     width: calc(100% - 300px);
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
     align-items: center;
     justify-content: space-between;
 }
