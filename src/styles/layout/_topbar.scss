@@ -5,7 +5,6 @@
     left: 0;
     top: 0;
     width: 100%;
-    // background-color: var(--surface-card);
     background-color: #2b3d51;
     transition: left $transitionDuration;
     display: flex;
@@ -178,7 +177,7 @@
 }
 
 .layout-topbar .logo-details .logo_name {
-    font-size: 22px;
+    font-size: 21px;
     color: white;
     font-weight: 600;
     padding-left: 0.5rem;
