@@ -87,7 +87,7 @@
 .p-link:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-component-overlay-enter {
@@ -1763,22 +1763,22 @@
 
 .p-button {
   color: #ffffff;
-  background: #6366F1;
-  border: 1px solid #6366F1;
+  background: #2b3d51;
+  border: 1px solid #2b3d51;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 6px;
 }
 .p-button:enabled:hover, .p-button:not(button):not(a):not(.p-disabled):hover {
-  background: #4F46E5;
+  background: #2b3d51;
   color: #ffffff;
-  border-color: #4F46E5;
+  border-color: #2b3d51;
 }
 .p-button:enabled:active, .p-button:not(button):not(a):not(.p-disabled):active {
-  background: #4338CA;
+  background: #2b3d51;
   color: #ffffff;
-  border-color: #4338CA;
+  border-color: #2b3d51;
 }
 .p-button.p-button-outlined {
   background-color: transparent;
@@ -3509,7 +3509,8 @@
 }
 .p-paginator .p-dropdown {
   margin-left: 0.5rem;
-  height: 3rem;
+  height: 40px;
+  line-height: 15px;
 }
 .p-paginator .p-dropdown .p-dropdown-label {
   padding-right: 0;

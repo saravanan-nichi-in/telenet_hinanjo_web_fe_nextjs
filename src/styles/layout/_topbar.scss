@@ -5,7 +5,7 @@
     left: 0;
     top: 0;
     width: 100%;
-    background-color: var(--surface-card);
+    background-color: #2b3d51;
     transition: left $transitionDuration;
     display: flex;
     align-items: center;
@@ -16,7 +16,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--surface-900);
+        // color: var(--surface-900);
+        color: white;
         font-size: 1.5rem;
         font-weight: 500;
         width: 250px;
@@ -37,7 +38,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        color: black;
+        color: white;
         border-radius: 50%;
         width: 3rem;
         height: 3rem;
@@ -50,7 +51,7 @@
         }
 
         &:focus {
-            @include focused();
+            // @include focused();
         }
 
         i {
@@ -171,13 +172,13 @@
 }
 
 .layout-topbar .logo-icon {
-    color: black;
+    color: white;
     font-weight: bold;
 }
 
 .layout-topbar .logo-details .logo_name {
-    font-size: 22px;
-    color: black;
+    font-size: 21px;
+    color: white;
     font-weight: 600;
     padding-left: 0.5rem;
 }
@@ -195,5 +196,5 @@
 .layout-topbar .header-details-first {
     font-size: 21px;
     font-weight: 500;
-    color: black;
+    color: white;
 }

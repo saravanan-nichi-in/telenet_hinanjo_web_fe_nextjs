@@ -82,17 +82,14 @@ const AppTopbar = forwardRef((props, ref) => {
             <div class="logo-details">
                 <div className='logo-view'>
                     <DiAtom size={35} className='logo-icon' />
-                    {/* <span class="logo_name">避難所管理システム</span> */}
                 </div>
-                {/* <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                    <i className="pi pi-bars" />
-                </button> */}
             </div>
-
             <div className='header-details'>
-                <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                    <i className="pi pi-bars" />
-                </button>
+                <div className='hamburger'>
+                    <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                        <i className="pi pi-bars" />
+                    </button>
+                </div>
                 <div className='header-details-first'>
                     避難所管理システム
                 </div>

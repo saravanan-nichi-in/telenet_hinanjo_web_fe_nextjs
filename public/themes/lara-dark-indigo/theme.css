@@ -1762,7 +1762,8 @@
 
 .p-button {
   color: #1c2127;
-  background: #A5B4FC;
+  /* background: #A5B4FC; */
+  background: #2b3d51;
   border: 1px solid #A5B4FC;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
