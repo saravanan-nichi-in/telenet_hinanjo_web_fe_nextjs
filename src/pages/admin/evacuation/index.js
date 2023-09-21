@@ -1,13 +1,38 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, Select } from '@/components';
+import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
+import { AdminEvacueesListService } from '@/helper/adminEvacueesListService';
 
 export default function EvacuationPage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const options = ["--", "日比谷公園避難所", "芝公園避難所", "避難所1", "避難所A", "らくらく避難所", "八代総合会館", "芦川小学校", "笛吹市役所(避難場所連絡)", "EvacutionNew", "避難所避難所避難所避難所避難所避難所避難所避難所"];
+    const options = ["--", "Vacant Test", "Starting To get Crowded", "Crowded", "Closed", "InActiveClosedDateNotPresent", "Nara"];
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(options[0]);
+    const [admins, setAdmins] = useState([]);
+    const columns = [
+        { field: 'ID', header: 'ID', minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: '世帯人数', header: '世帯人数', minWidth: "15rem", sortable: false, textAlign: 'center' },
+        { field: '世帯番号', header: '世帯番号', minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: '代表者', header: '代表者', minWidth: "12rem", sortable: false, textAlign: 'center' },
+        { field: '氏名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: false, textAlign: 'center' },
+        { field: "氏名 (漢字)", header: "氏名 (漢字)", minWidth: "10rem", sortable: false, textAlign: 'center' },
+        { field: "性別", header: "性別", minWidth: "10rem", sortable: false, textAlign: 'center' },
+        { field: "生年月日", header: "生年月日", minWidth: "10rem", sortable: false, textAlign: 'center' },
+        { field: "年齢", header: "年齢", minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: "年齢_月", header: "年齢_月", minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: "紐付コード", header: "紐付コード", minWidth: "8rem", sortable: false, textAlign: 'center' },
+        { field: "備考", header: "備考", minWidth: "7rem", sortable: false, textAlign: 'center' },
+        { field: "避難所", header: "避難所", minWidth: "15rem", sortable: false, textAlign: 'center' },
+        { field: "退所日時", header: "退所日時", minWidth: "15rem", sortable: false, textAlign: 'center' },
+        { field: "現在の滞在場所", header: "現在の滞在場所", minWidth: "10rem", textAlign: 'center' },
+
+    ];
+
+    useEffect(() => {
+        AdminEvacueesListService.getAdminsEvacueesListMedium().then((data) => setAdmins(data));
+    }, []);
 
     return (
         <div className="grid">
@@ -16,7 +41,8 @@ export default function EvacuationPage() {
                     <section className='col-12'>
                         {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
-                        <DividerComponent />
+                        {/* <DividerComponent /> */}
+                        <hr />
                         <div>
                             <div>
                                 <form>
@@ -59,23 +85,26 @@ export default function EvacuationPage() {
                                                 text: "検索",
                                                 rounded: "true",
                                                 severity: "primary"
-                                            }} parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }} />
+                                            }} parentClass={"mt-1"} />
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div>
-                                <p className='pt-5' style={{ fontSize: "14px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
-                            </div>
-                            <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <div>
+                                    <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
+                                </div>
+                                <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                }} parentClass={"mb-2"} />
+                                }} parentClass={"mb-3"} />
+                                </div>
                             </div>
                         </div>
+                        <NormalTable size={"small"} stripedRows={true} rows={10} paginator={"true"} showGridlines={"true"} value={admins} columns={columns} paginatorLeft={true} alignHeader={'center'}  />
                     </section>
                 </div>
             </div>

@@ -6,7 +6,6 @@ import { TextArea } from "../input";
 const DetailModal = (props) => {
     const { parentMainClass, detailModalProps = {} } = props;
     const { headerContent, value1, value2, modalClass, draggable, position, onHide, visible, ...restProps } = detailModalProps;
-
     const header = (
         headerContent
     )
@@ -21,7 +20,7 @@ const DetailModal = (props) => {
                 onHide={onHide}
                 style={{ width: '600px', padding: "10px" }}
                 {...restProps}
-            >
+            > <hr />
                 <div>
                     <NormalLabel labelClass="w-full font-bold pt-0" text={"その他不足物資"} />
                     <TextArea textAreaProps={{
