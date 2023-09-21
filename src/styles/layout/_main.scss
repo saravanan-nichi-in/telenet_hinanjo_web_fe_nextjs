@@ -32,6 +32,24 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+    scrollbar-color: rgb(210, 210, 210) rgb(46, 54, 69);
+    scrollbar-width: thin;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(46, 54, 69);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(210, 210, 210);
+}
+
 a {
     text-decoration: none;
     color: var(--primary-color);
