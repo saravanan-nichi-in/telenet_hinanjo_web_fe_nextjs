@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { AuthenticationAuthorizationService } from '@/services';
+import { classNames } from 'primereact/utils';
 import { MailFilled, LockFilled } from '@ant-design/icons';
-import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
+
+import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { AuthenticationAuthorizationService } from '@/services';
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
 import { ImageComponent, NormalLabel, Button, InputLeftRightGroup, ValidationError } from '@/components';
-
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -149,4 +149,5 @@ LoginPage.getLayout = function getLayout(page) {
         </React.Fragment>
     );
 };
+
 export default LoginPage;

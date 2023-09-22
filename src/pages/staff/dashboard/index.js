@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart } from 'primereact/chart';
-import { LayoutContext } from '@/layout/context/layoutcontext';
+
 import { DividerComponent } from '@/components';
 
-
 export default function Dashboard() {
-    const { layoutConfig } = useContext(LayoutContext);
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
 
@@ -38,7 +36,6 @@ export default function Dashboard() {
                 }
             }
         };
-
         setChartData(data);
         setChartOptions(options);
     }, []);

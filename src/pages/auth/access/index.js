@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { Button } from 'primereact/button';
-import Image from 'next/image'
+import Image from 'next/image';
+
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 
 const AccessDeniedPage = () => {

@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import Image from 'next/image'
+
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 
 const NotFoundPage = () => {
     const { layoutConfig } = useContext(LayoutContext);
+
     return (
         <div className="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
             <div className="card flex flex-column align-items-center justify-content-center">

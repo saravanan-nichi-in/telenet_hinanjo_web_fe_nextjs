@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { DividerComponent, RowExpansionTable, Button, InputIcon, NormalLabel, InputSelect } from '@/components';
-import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { FaEyeSlash } from 'react-icons/fa';
+
+import { DividerComponent, RowExpansionTable, Button, NormalLabel, InputSelect } from '@/components';
+import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 function AdminStockpileSummary() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const outerColumn = [
         { field: "避難所", header: "避難所", minWidth: "10rem" },
         { field: "通知先", header: "通知先" },
     ]
-
     const innerColumn = [
         { field: "種別", header: "種別" },
         { field: "備蓄品名", header: "備蓄品名" },
@@ -27,21 +27,17 @@ function AdminStockpileSummary() {
             ),
         },
     ]
-
     const [stockpileSummary, setStockpileSummary] = useState([]);
 
     useEffect(() => {
         StockpileSummaryService.getStockpileSummaryWithOrdersSmall().then((data) => setStockpileSummary(data));
     }, []);
 
-
-
     return (
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>
                             備蓄品集計
                         </h5>
@@ -69,9 +65,6 @@ function AdminStockpileSummary() {
                                             optionLabel: "name"
                                         }}
                                         />
-                                        {/* <InputIcon inputIconProps={{
-                                            inputClass: "create_input_stock"
-                                        }} /> */}
                                     </div>
                                     <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                         <div >

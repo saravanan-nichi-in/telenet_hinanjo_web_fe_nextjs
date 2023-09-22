@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputIcon, NormalLabel, Select } from '@/components';
 
 export default function EvacuationPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const options = ["--", "日比谷公園避難所", "芝公園避難所", "避難所1", "避難所A", "らくらく避難所", "八代総合会館", "芦川小学校", "笛吹市役所(避難場所連絡)", "EvacutionNew", "避難所避難所避難所避難所避難所避難所避難所避難所"];
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(options[0]);

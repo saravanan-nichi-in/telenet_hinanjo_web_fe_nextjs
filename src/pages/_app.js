@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { OpenCvProvider } from 'opencv-react';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useRouter } from 'next/router';
+import { PersistGate } from 'redux-persist/integration/react';
+
+import { persistor } from '@/redux/store';
 import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
-import { OpenCvProvider } from 'opencv-react';
-import { useRouter } from 'next/router';
 import { AuthenticationAuthorizationService } from '@/services';
-import { ProgressSpinner } from 'primereact/progressspinner';
+
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css'; // Import PrimeFlex CSS
+import 'primeflex/primeflex.css';
 import '@/styles/layout/layout.scss';
 import '@/styles/components/components.scss';
 import '@/styles/pages/pages.scss';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistor } from '@/redux/store'; // Your Redux store
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
-    const [user, setUser] = useState(null);
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
