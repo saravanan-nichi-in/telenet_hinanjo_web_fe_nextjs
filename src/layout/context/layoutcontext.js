@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import jpJson from '../../../public/locales/jp/lang.json'
 import enJson from '../../../public/locales/en/lang.json'
 

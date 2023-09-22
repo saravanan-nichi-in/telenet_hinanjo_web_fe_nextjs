@@ -1,22 +1,23 @@
 import React, { useState, useContext, useEffect } from 'react';
-import AppMenuitem from './AppMenuitem';
-import { LayoutContext } from './context/layoutcontext';
-import { MenuProvider } from './context/menucontext';
-import { useRouter } from 'next/router';
-import { getValueByKeyRecursively as translate } from '@/helper';
 import _ from 'lodash';
+import { useRouter } from 'next/router';
 import { MdDashboard, MdManageAccounts, MdSettings } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";
 import { RiUserSharedFill, RiAdminFill } from "react-icons/ri";
-import { FaQrcode, FaBox, FaUserPlus, FaUsers } from "react-icons/fa";
+import { FaQrcode, FaUserPlus, FaUsers } from "react-icons/fa";
 import { ImUser, ImUsers } from "react-icons/im";
 import { IoMdToday } from "react-icons/io";
 import { AiOutlineAreaChart, AiFillSetting } from "react-icons/ai";
 import { MdPlace } from "react-icons/md";
 import { BiSolidPurchaseTagAlt } from "react-icons/bi";
 
+import AppMenuitem from './AppMenuitem';
+import { LayoutContext } from './context/layoutcontext';
+import { MenuProvider } from './context/menucontext';
+import { getValueByKeyRecursively as translate } from '@/helper';
+
 const AppMenu = () => {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const [model, setModel] = useState([]);
 
@@ -24,12 +25,10 @@ const AppMenu = () => {
         {
             label: translate(localeJson, 'vault_info'),
             icon: <MdDashboard size={20} />,
-            active: true,
             items: [
                 {
                     label: translate(localeJson, 'vault_info'),
                     icon: <MdDashboard size={20} />,
-                    active: true,
                     items: [
                         {
                             label: translate(localeJson, 'evacuation_status_list'),
