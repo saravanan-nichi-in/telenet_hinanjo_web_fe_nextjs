@@ -4,9 +4,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Webcam from "react-webcam";
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import Cropper from './react-cropper'
 import { Spin, Upload } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+
+import Cropper from './react-cropper'
 
 import './crop.module.css'
 
@@ -137,14 +138,9 @@ const ImageCropper = () => {
     }
 
     const onImgSelection = async (e) => {
-        console.log(e);
-        // if (e.target.files && e.target.files.length > 0) {
-        //     // it can also be a http or base64 string for example
-        //     setImg(e.target.files[0])
-        // }
         setLoader(true);
         if (e.file) {
-            // it can also be a http or base64 string for example
+            // It can also be a http or base64 string for example
             setTimeout(() => {
                 setLoader(false);
                 setImg(e.file.originFileObj);
@@ -164,7 +160,6 @@ const ImageCropper = () => {
                 <div className="card dialogDemo">
                     <h5 className='text-3xl font-bold'>PERSPECTIVE IMAGE CROPPING</h5>
                     <hr />
-
                     <Button label="Webcam" onClick={() => onClickOpenModal('displayPosition', 'top')} />
                     <Dialog className='dialogDemo' header="Perspective Image Cropping" maximizable visible={displayPosition} position={position} onHide={() => onHide('displayPosition')} breakpoints={{ '960px': '95vw' }} style={{ width: '50vw', height: img ? '100vw' : 'auto' }} footer={renderFooter('displayPosition')}>
                         {loader ? (

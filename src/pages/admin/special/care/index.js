@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminSpecialCareService } from '@/helper/adminSpecialCareService';
 
 export default function AdminSpecialCarePage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
-
     const content = (
         <div>
             <p>一度削除したデータは、元に戻せません。</p>
             <p>削除してもよろしいでしょうか？</p>
         </div>
     )
-
     const columns = [
         { field: 'ID', header: 'ID' },
         { field: '要配慮者事項', header: '要配慮者事項', minWidth: "20rem" },
@@ -55,7 +54,6 @@ export default function AdminSpecialCarePage() {
             <div className="col-12">
                 <div className='card'>
                     <section className='col-12'>
-                        {/* Header */}
                         <h5 className='page_header'>{translate(localeJson, 'special_care_list')}</h5>
                         <DividerComponent />
                         <div className="col-12">

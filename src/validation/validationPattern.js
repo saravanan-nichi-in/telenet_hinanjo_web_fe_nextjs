@@ -1,5 +1,5 @@
-import intl from "./../utils/locales/jp/jp.json";
 /* eslint-disable no-useless-escape */
+import intl from "./../utils/locales/jp/jp.json";
 export const EMAIL_PATTERN = {
     regex: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     message: intl.validation_check_email

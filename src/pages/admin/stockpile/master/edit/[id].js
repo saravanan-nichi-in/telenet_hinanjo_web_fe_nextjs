@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputIcon, InputSelect, NormalLabel, ValidationError } from '@/components';
-import { Formik } from "formik";
-import * as Yup from "yup";
 import { InputFile } from '@/components/upload';
 
 export default function AdminStockpileEditPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
-
     const schema = Yup.object().shape({
         type: Yup.string()
             .required(translate(localeJson, 'type_required')),

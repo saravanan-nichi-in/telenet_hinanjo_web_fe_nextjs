@@ -1,6 +1,7 @@
 import React from 'react'
-import Canvas from '@/utils/js/crop/lib/Canvas'
 import T from 'prop-types'
+
+import Canvas from '@/utils/js/crop/lib/Canvas'
 
 const Cropper = React.forwardRef((props, ref) => {
     if (!props.image) {

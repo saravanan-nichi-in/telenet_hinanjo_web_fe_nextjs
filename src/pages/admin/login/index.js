@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
-import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled, LockFilled } from '@ant-design/icons';
-import { getValueByKeyRecursively as translate } from '@/helper'
 import { useRouter } from 'next/router';
+
+import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
+import { AuthenticationAuthorizationService } from '@/services';
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, NormalLabel, Button, ValidationError, InputLeftRightGroup } from '@/components';
 
 const LoginPage = () => {
@@ -16,10 +17,6 @@ const LoginPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
-
-    /* Services */
-    const { login } = AuthenticationAuthorizationService;
-
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
@@ -29,13 +26,16 @@ const LoginPage = () => {
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
 
+    /* Services */
+    const { login } = AuthenticationAuthorizationService;
+
     const onLoginSuccess = (values) => {
         if (AuthenticationAuthorizationService.adminValue) {
             localStorage.setItem('admin', JSON.stringify(values.data));
             dispatch(setAdminValue({
                 admin: values.data
             }));
-            router.push("/admin/history/place");
+            router.push("/admin/dashboard");
         }
     };
 
@@ -107,7 +107,6 @@ const LoginPage = () => {
                                                     placeholder: translate(localeJson, 'password'),
                                                 }}
                                                     parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
-                                                {/* <PasswordInput antdRightIcon={<LockFilled />} value={values.password} onBlur={handleBlur} className={`w-full ${errors.password && touched.password && 'p-invalid'}`} placeholder={translate(localeJson, 'password')} onChange={handleChange} /> */}
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
@@ -146,4 +145,5 @@ LoginPage.getLayout = function getLayout(page) {
         </React.Fragment>
     );
 };
+
 export default LoginPage;

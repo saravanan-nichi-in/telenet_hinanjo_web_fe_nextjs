@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-export default function AdminMaterialEditPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const router = useRouter();
+import { getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 
+export default function AdminMaterialEditPage() {
+    const { localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const schema = Yup.object().shape({
         supplies: Yup.string()
             .required(translate(localeJson, 'supplies_necessary'))

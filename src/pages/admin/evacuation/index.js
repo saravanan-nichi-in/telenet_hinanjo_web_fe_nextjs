@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, NormalTable } from '@/components';
+import { Button, NormalTable } from '@/components';
 import { AdminEvacueesListService } from '@/helper/adminEvacueesListService';
 import { InputFloatLabel } from '@/components/input';
 import { SelectFloatLabel } from '@/components/dropdown';
 
 export default function EvacuationPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const {localeJson } = useContext(LayoutContext);
     const options = [
         {name:"Vacant Test", code:"VT"},
         {name:"Starting To get Crowded", code:"SGT"},
@@ -16,7 +17,6 @@ export default function EvacuationPage() {
         {name:"Closed", code:"CLD"},
         {name:"Nara", code:"NR"}
     ];
-
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(null);
     const [admins, setAdmins] = useState([]);
@@ -50,7 +50,6 @@ export default function EvacuationPage() {
                 <div className='card'>
                     <section className='col-12'>
                         <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
-                        {/* <DividerComponent /> */}
                         <hr />
                         <div>
                         <div>

@@ -1,19 +1,18 @@
+import React, { useContext, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useEventListener, useMountEffect, useUnmountEffect } from 'primereact/hooks';
 import { classNames, DomHandler } from 'primereact/utils';
-import React, { useContext, useEffect, useRef } from 'react';
+import PrimeReact from 'primereact/api';
+
 import AppFooter from './AppFooter';
 import AppSidebar from './AppSidebar';
 import AppTopbar from './AppTopbar';
 import { LayoutContext } from './context/layoutcontext';
-import PrimeReact from 'primereact/api';
-import AppConfig from './AppConfig';
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
-    const user = !window.location.pathname.startsWith('/admin') && !window.location.pathname.startsWith('/staff');
     const router = useRouter();
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',
@@ -114,8 +113,7 @@ const Layout = (props) => {
                     <div className="layout-main">{props.children}</div>
                     <AppFooter />
                 </div>
-                {/* <AppConfig /> */}
-                {/* <div className="layout-mask"></div> */}
+                <div className="layout-mask"></div>
             </div>
         </React.Fragment>
     );

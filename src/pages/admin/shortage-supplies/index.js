@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DetailModal, DividerComponent } from '@/components';
+import { Button, DetailModal } from '@/components';
 
 const sampleProducts = [
     { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3"},
@@ -15,20 +15,17 @@ const sampleProducts = [
 ]
 
 function ShoratgeSupplies() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const {localeJson } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [lockedSupplies, setLockedSupplies] = useState([]);
-
-    const onRowClick = (event) => {
-        console.log(event.data);
-        setSelectedRow(event.data.避難所)
-        setShowModal(true);
-    };
-
+    const headContent = (
+        <div>
+            <h2 style={{ fontSize: "16px" }}>{selectedRow}</h2>
+        </div>
+    )
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
-
     const cols = [
         { field: '避難所', header: '避難所', minWidth: '20rem' },
         { field: 'Test1(2)', header: 'Test1(2)', minWidth: '12rem' },
@@ -46,24 +43,21 @@ function ShoratgeSupplies() {
           ]);
     }, [])
 
-    const rowClass = (data) => {
-        return {
-            'last-row': data.避難所 === '不足合計',
-            'font-bold': data.避難所 === '不足合計',
-            // 'text-higlight':data.避難所 === '日本の避難所',
-            'clickable-row': data.避難所 === '不足合計' ? false : true,
-        };
-    };
-
     const exportCSV = (selectionOnly) => {
         dt.current.exportCSV({ selectionOnly });
     };
 
-    const headContent = (
-        <div>
-            <h2 style={{ fontSize: "16px" }}>{selectedRow}</h2>
-        </div>
-    )
+    const onRowClick = (event) => {
+        setShowModal(true);
+    };
+
+    const rowClass = (data) => {
+        return {
+            'last-row': data.避難所 === '不足合計',
+            'font-bold': data.避難所 === '不足合計',
+            'clickable-row': data.避難所 === '不足合計' ? false : true,
+        };
+    };
     return (
         <div className="grid">
             <div className="col-12">
@@ -71,7 +65,6 @@ function ShoratgeSupplies() {
                     <section className='col-12'>
                         <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <hr />
-                        {/* <DividerComponent /> */}
                         <div className="col-12">
                             <div className="flex justify-content-end ">
                             <Button buttonProps={{
