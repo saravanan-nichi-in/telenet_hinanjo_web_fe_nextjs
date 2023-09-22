@@ -34,13 +34,15 @@ export default function RowExpansionTable(props) {
         return (
             <div className="p-3">
 
-                <DataTable className={rowExpansionClassName} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={{ minWidth: '20rem' } || rowExpansionTableStyle}>
+                <DataTable className={rowExpansionClassName} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
                     {innerColumn.map((column, index) => (
                         <Column
                             key={index}
                             field={column.field}
                             header={column.header}
                             sortable={column.sortable}
+                            className={column.className}
+                            headerClassName={column.headerClassName}
                             style={{ minWidth: column.minWidth && column.minWidth, ...rowExpansionColumnStyle }}
                             headerStyle={column.headerStyle}
                             body={column.field === props.customRowExpansionActionsField ? column.body : undefined}
@@ -59,7 +61,7 @@ export default function RowExpansionTable(props) {
     );
 
     return (
-        <div className={`${parentClass} table-paginator`}>
+        <div className={`${parentClass} `}>
             <Toast ref={toast} />
             <DataTable paginator={paginator}
                 rows={rows || 5}
@@ -80,7 +82,7 @@ export default function RowExpansionTable(props) {
                 showGridlines={showGridlines}
                 onRowClick={onRowClick}
                 responsiveLayout={responsiveLayout}
-                tableStyle={{ minWidth: '50rem' } || tableStyle}
+                tableStyle={tableStyle || { minWidth: '50rem' }}
                 {...restProps}>
                 <Column expander={allowExpansion} style={{ maxWidth: '10px' }} />
                 {outerColumn.map((col, index) => (
@@ -88,6 +90,8 @@ export default function RowExpansionTable(props) {
                         field={col.field}
                         header={col.header}
                         sortable={col.sortable}
+                        className={col.className}
+                        headerClassName={col.headerClassName}
                         style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
                         body={col.field === props.customActionsField ? col.body : undefined} />
                 ))}

@@ -1,11 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
-import { Checkbox } from 'primereact/checkbox';
-import { InputSwitch } from 'primereact/inputswitch';
-import { RadioButton } from 'primereact/radiobutton';
 import { OrderList } from 'primereact/orderlist';
-import { InputText } from "primereact/inputtext";
-import { Button } from 'primereact/button';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Button } from '../button';
+import { NormalCheckBox } from '../checkbox';
+import { InputSwitch } from '../switch';
+import { Input } from '../input';
+import { RadioBtn } from '../radioButton';
 
 const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
     const dragProps = {
@@ -24,145 +25,304 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
     const itemTemplate = (item) => {
         return (
             <div>
-                {/* Questionnaires header */}
-                <div className="grid" style={{
-                    backgroundColor: "#afe1f9",
-                    border: "1px solid #000",
-                }}>
-                    <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                        項目{item.title}
-                    </div>
-                    <div className="col" style={{
-                        borderLeft: "1px solid #000"
-                    }}>
-                        <div className='flex'>
-                            <div className='col-8 flex gap-2 align-items-center justify-content-start'>
-                                <Checkbox
-                                    checked={true}
-                                ></Checkbox>
-                                必須
-                            </div>
-                            <div className='col-4 flex gap-2 align-items-center justify-content-center'>
-                                <InputSwitch
-                                    checked={true}
-                                />
-                                避難者登録画面表示
-                            </div>
-                        </div>
-                        <div className='flex align-items-center justify-content-between'>
-                            <div className='col-8 flex gap-3'>
-                                <div className='flex gap-2 align-items-center justify-content-center'>
-                                    <RadioButton
-                                        checked={true}
-                                    />
-                                    選択形式
+                <div className='mobile_questionaries mobile_accordion '>
+                    {/* mobile device */}
+                    <Accordion>
+                        <AccordionTab header={`項目${item.title}`}>
+                            {/* Questionnaires header */}
+                            <div style={{
+                                backgroundColor: "#afe1f9"
+                            }}>
+                                <div className="col flex" style={{
+                                    flexWrap: "wrap"
+                                }}>
+                                    <div className=' '>
+                                        <div className='align-items-center pb-2'>
+                                            <NormalCheckBox checkBoxProps={{
+                                                checked: true,
+                                                value: "必須"
+                                            }} />
+                                        </div>
+                                        <div className='flex align-items-center pt-2 pb-2 switch-align' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                            <InputSwitch inputSwitchProps={{
+                                                checked: true
+                                            }} />
+                                            避難者登録画面表示
+                                        </div>
+                                    </div>
+                                    <div className='align-items-center pt-2 pb-2'>
+                                        <div className=''>
+                                            <div className=" pb-2 flex align-items-center">
+                                                <RadioBtn radioBtnProps={{
+                                                    checked: true
+                                                }}
+                                                />
+                                                選択形式
+                                            </div>
+                                            <div className='pb-2 flex align-items-center '>
+                                                <RadioBtn radioBtnProps={{
+                                                    checked: true
+                                                }}
+                                                />
+                                                記述形式
+                                            </div>
+                                            <div className='pb-2 flex align-items-center'>
+                                                <RadioBtn radioBtnProps={{
+                                                    checked: true
+                                                }}
+                                                />
+                                                数値形式
+                                            </div>
+                                        </div>
+                                        <div className='pt-2 flex align-items-center justify-content-start' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                            <InputSwitch inputSwitchProps={{
+                                                checked: true
+                                            }} />
+                                            避難者登録画面表示
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='flex gap-2 align-items-center justify-content-center'>
-                                    <RadioButton
-                                        checked={true}
-                                    />
-                                    記述形式
+                            </div>
+                            {/* Questionnaires */}
+                            <div className="p-2">
+                                <div className="align-items-center justify-content-center content-align">
+                                    項目タイトル
                                 </div>
-                                <div className='flex gap-2 align-items-center justify-content-center'>
-                                    <RadioButton
-                                        checked={true}
-                                    />
-                                    数値形式
+                                <div >
+                                    <div className='col-12 align-items-center'>
+                                        <Input inputProps={{
+                                            inputClass: "col-12 p-inputtext-sm",
+                                            value: ""
+                                        }} />
+                                    </div>
+                                    <div className='col-12 align-items-center'>
+                                        <Input inputProps={{
+                                            inputClass: "col-12 p-inputtext-sm",
+                                            placeholder: "項目（英語）",
+                                            value: ""
+                                        }} />
+                                    </div>
+                                </div>
+                                <div className='align-items-center justify-content-center content-align' >
+                                    <Button buttonProps={{
+                                        text: "－ 項目削除",
+                                        severity: "danger",
+                                        rounded: "true"
+                                    }} />
                                 </div>
                             </div>
-                            <div className='col-4 flex gap-2 align-items-center justify-content-center'>
-                                <InputSwitch
-                                    checked={true}
-                                />
-                                避難者登録画面表示
-                            </div>
-                        </div>
-                    </div>
+                            {/* Questionnaires options */}
+                            {[0, 1, 2].map((arr, i) => (
+                                <div key={i} className="p-2">
+                                    <div className=" align-items-center content-align">
+                                        選択肢{i}<span style={{
+                                            color: "red"
+                                        }}>*</span>
+                                    </div>
+                                    <div>
+                                        <div className='col-12 align-items-center'>
+                                            <Input inputProps={{
+                                                inputClass: "col-12 p-inputtext-sm mb-3",
+                                                value: ""
+                                            }} />
+                                            <Input inputProps={{
+                                                placeholder: "項目（英語）",
+                                                inputClass: "col-12 p-inputtext-sm",
+                                                value: `選択肢${i}（英語）`
+                                            }} />
+                                        </div>
+                                    </div>
+                                    <div className='align-items-center content-align'>
+                                        {i < 2 ? (
+                                            <Button buttonProps={{
+                                                text: " － 項目削除",
+                                                severity: "danger",
+                                                rounded: "true"
+                                            }}
+                                            />
+                                        ) : (
+                                            <Button buttonProps={{
+                                                text: "＋ 選択肢追加",
+                                                severity: "success",
+                                                rounded: "true"
+                                            }}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </AccordionTab>
+                    </Accordion>
                 </div>
-                {/* Questionnaires */}
-                <div className="flex" style={{
-                    borderRight: "1px solid #000",
-                    borderBottom: "1px solid #000",
-                    borderLeft: "1px solid #000",
-                }}>
-                    <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                        項目タイトル
-                    </div>
-                    <div className="col-7" style={{
-                        borderLeft: "1px solid #000",
+
+
+
+                {/* /// */}
+                <div className='hidden sm:block'>
+                    {/* Questionnaires header */}
+                    <div className="flex " style={{
+                        backgroundColor: "#afe1f9",
+                        border: "1px solid #000",
                     }}>
-                        <div className='col-12 flex align-items-center'>
-                            <InputText
-                                value={""}
-                                className='col-12 p-inputtext-lg'
-                            />
+                        <div className="col-fixed col-2 flex align-items-center justify-content-center">
+                            項目{item.title}
                         </div>
-                        <div className='col-12 flex align-items-center'>
-                            <InputText
-                                value={""}
-                                placeholder='項目（英語）'
-                                className='col-12 p-inputtext-lg'
-                            />
+                        <div className="col" style={{
+                            borderLeft: "1px solid #000"
+                        }}>
+                            <div className='flex'>
+                                <div className='col-6 flex gap-2 align-items-center justify-content-start'>
+                                    <NormalCheckBox checkBoxProps={{
+                                        checked: true,
+
+                                    }} />
+                                    必須
+                                </div>
+                                <div className='col-6 flex  gap-2 align-items-center justify-content-end '>
+                                    <InputSwitch inputSwitchProps={{
+                                        checked: true
+                                    }}
+
+                                    />
+                                    避難者登録画面表示
+                                </div>
+                            </div>
+                            <div className='flex align-items-center justify-content-between'>
+                                <div className='col-6 xl:flex gap-3'>
+                                    <div className='flex pb-2 gap-2 align-items-center justify-content-start'>
+                                        <RadioBtn radioBtnProps={{
+                                            checked: true
+                                        }}
+                                        />
+                                        選択形式
+                                    </div>
+                                    <div className='flex  pb-2 gap-2 align-items-center justify-content-start'>
+                                        <RadioBtn radioBtnProps={{
+                                            checked: true
+                                        }}
+                                        />
+                                        記述形式
+                                    </div>
+                                    <div className='flex pb-2 gap-2 align-items-center justify-content-start'>
+                                        <RadioBtn radioBtnProps={{
+                                            checked: true
+                                        }}
+                                        />
+                                        数値形式
+                                    </div>
+                                </div>
+                                <div className='col-6 flex gap-2 align-items-center justify-content-end'>
+                                    <InputSwitch inputSwitchProps={{
+                                        checked: true
+                                    }} />
+                                    避難者登録画面表示
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className='col-3 flex align-items-center justify-content-center' style={{
-                        borderLeft: "1px solid #000",
-                    }}>
-                        <Button className='col-10' label=" － 項目削除" severity="danger" rounded />
-                    </div>
-                </div>
-                {/* Questionnaires options */}
-                {[0, 1, 2].map((arr, i) => (
-                    <div key={i} className="flex" style={{
+                    {/* Questionnaires */}
+                    <div className="flex" style={{
                         borderRight: "1px solid #000",
                         borderBottom: "1px solid #000",
                         borderLeft: "1px solid #000",
                     }}>
                         <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                            選択肢{i}<span style={{
-                                color: "red"
-                            }}>*</span>
+                            項目タイトル
                         </div>
                         <div className="col-7" style={{
                             borderLeft: "1px solid #000",
                         }}>
-                            <div className='col-12 flex gap-3 align-items-center'>
-                                <InputText
-                                    value={""}
-                                    className='col p-inputtext-lg'
-                                />
-                                <InputText
-                                    value={""}
-                                    placeholder={`選択肢${i}（英語）`}
-                                    className='col p-inputtext-lg'
-                                />
+                            <div className='col-12'>
+                                <Input inputProps={{
+                                    inputClass: "col-12 p-inputtext-lg",
+                                    value: ""
+                                }} />
+                            </div>
+                            <div className='col-12 align-items-center'>
+                                <Input inputProps={{
+                                    inputClass: "col-12 p-inputtext-lg",
+                                    value: "",
+                                    placeholder: '項目（英語）'
+                                }} />
                             </div>
                         </div>
                         <div className='col-3 flex align-items-center justify-content-center' style={{
                             borderLeft: "1px solid #000",
                         }}>
-                            {i < 2 ? (
-                                <Button className='col-10' label=" － 項目削除" severity="danger" rounded />
-                            ) : (
-                                <Button className='col-10' label=" ＋ 選択肢追加" severity="success" rounded />
-                            )}
+                            <Button buttonProps={{
+                                text: "－ 項目削除",
+                                severity: "danger",
+                                rounded: "true"
+                            }} />
                         </div>
                     </div>
-                ))}
+                    {/* Questionnaires options */}
+                    {[0, 1, 2].map((arr, i) => (
+                        <div key={i} className="flex" style={{
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
+                            borderLeft: "1px solid #000",
+                        }}>
+                            <div className="col-fixed col-2 flex align-items-center justify-content-center">
+                                選択肢{i}<span style={{
+                                    color: "red"
+                                }}>*</span>
+                            </div>
+                            <div className="col-7" style={{
+                                borderLeft: "1px solid #000",
+                            }}>
+                                <div className='col-12 xl:flex gap-3 p-0 align-items-center ' style={{ justifyContent: "start", flexWrap: "wrap" }}>
+                                    <Input inputProps={{
+                                        value: "",
+                                        inputClass: "w-full"
+                                    }} parentClass="col p-inputtext-lg md:w-full" />
+
+                                    <Input inputProps={{
+                                        value: "",
+                                        placeholder: `選択肢${i}（英語）`,
+                                        inputClass: "w-full"
+                                    }} parentClass="col p-inputtext-lg md:w-full " />
+                                </div>
+                            </div>
+                            <div className='col-3 flex align-items-center justify-content-center' style={{
+                                borderLeft: "1px solid #000",
+                            }}>
+                                {i < 2 ? (
+                                    <Button buttonProps={{
+                                        text: " － 項目削除",
+                                        severity: "danger",
+                                        rounded: "true",
+
+                                    }}
+                                    />
+                                ) : (
+                                    <Button buttonProps={{
+                                        text: "＋ 選択肢追加",
+                                        severity: "success",
+                                        rounded: "true",
+                                    }}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     };
 
+
     return (
         questionnaires && (
-            <div className="grid">
+            <div className="grid custom_orderlist">
                 <div className="col-12 mb-4">
                     <div className='xl:flex xl:justify-content-center"'>
+
                         <OrderList
                             value={questionnaires}
                             onChange={(e) => handleOnDrag(e)}
                             itemTemplate={itemTemplate}
-                            dragdrop
+                            dragdrop="true"
                             className='col questionnaires_orderList'
                         >
                         </OrderList>

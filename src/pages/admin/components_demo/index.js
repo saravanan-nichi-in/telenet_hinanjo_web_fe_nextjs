@@ -9,6 +9,7 @@ import {
     Button, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
     InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneButton
 } from '@/components';
+import { Input } from '@/components/input';
 
 export default function ComponentsDemo() {
     const [checked1, setChecked1] = useState(false);
@@ -424,6 +425,28 @@ export default function ComponentsDemo() {
                             <DividerComponent dividerProps={{ align: "center", width: "w-25rem" }} />
                         </div>
                         <ImageCropper />
+                        <div className='col-12 flex gap-3 align-items-center ' style={{ justifyContent: "start", flexWrap: "wrap" }}>
+                                    {/* <div className='col-6  align-items-center'> */}
+                                    <InputIcon inputIconProps={{
+                                    inputClass: "col p-inputtext-lg md:w-full content-width ",
+                                    
+                                }} />
+                                    {/* </div> */}
+                                    {/* <InputText
+                                        value={""}
+                                        className='col p-inputtext-lg md:w-full content-width'
+                                    /> */}
+                                    <Input inputProps={{
+                                inputClass: "w-full",
+                                    value: "",
+                                    placeholder:`選択肢（英語）`
+                                }} parentClass="col p-inputtext-lg md:w-full content-width" />
+                                    {/* <InputText
+                                        value={""}
+                                        placeholder={`選択肢${i}（英語）`}
+                                        className=' col p-inputtext-lg md:w-full content-width'
+                                    /> */}
+                                </div>
                     </section>
                 </div>
             </div>

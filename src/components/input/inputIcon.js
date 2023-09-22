@@ -2,14 +2,14 @@ import { InputText } from 'primereact/inputtext';
 
 const InputIcon = (props) => {
   const { parentClass, parentStyle, inputIconProps = {} } = props;
-  const { iconPos, icon, inputClass, height, type, antdIcon, placeholder, id, style, keyfilter, value,
+  const { iconPos, icon, inputClass, custom, type, antdIcon, placeholder, id, style, keyfilter, value,
     name, onChange, onBlur, ref, required, readOnly, disabled, maxLength, minLength, ...restProps } = inputIconProps;
 
   return (
     <div className={`${parentClass}`} style={parentStyle}>
       <div className={`${iconPos}`}>
         <i className={`${icon}`} >{antdIcon}</i>
-        <InputText className={`${inputClass} ${height || 'custom_input'}`}
+        <InputText className={`${inputClass} ${custom || 'custom_input'}`}
           placeholder={placeholder}
           id={id}
           style={style}
