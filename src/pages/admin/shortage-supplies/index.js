@@ -11,14 +11,14 @@ const sampleProducts = [
     { "避難所": "Starting to get Crowded", "Test1(2)": "201", "Test2(2)": "16" },
     { "避難所": "crowded", "Test1(2)": "2999993", "Test2(2)": "6" },
     { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1"},
-    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33"},
-    { "避難所": "不足合計", "Test1(2)": "3981574", "Test2(2)": "33"}
+    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33"}
 ]
 
 function ShoratgeSupplies() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
+    const [lockedSupplies, setLockedSupplies] = useState([]);
 
     const onRowClick = (event) => {
         console.log(event.data);
@@ -33,11 +33,17 @@ function ShoratgeSupplies() {
         { field: '避難所', header: '避難所', minWidth: '20rem' },
         { field: 'Test1(2)', header: 'Test1(2)', minWidth: '12rem' },
         { field: 'Test2(2)', header: 'Test2(2)', minWidth: '12rem' }
-
     ];
 
     useEffect(() => {
         setProducts(sampleProducts);
+        setLockedSupplies([
+            {
+              "避難所": "不足合計",
+              "Test1(2)": "3981574",
+              "Test2(2)": "33",
+            }
+          ]);
     }, [])
 
     const rowClass = (data) => {
@@ -85,10 +91,10 @@ function ShoratgeSupplies() {
                                 showGridlines
                                 rows={5}
                                 rowClassName={rowClass}
+                                frozenValue={lockedSupplies}
                                 emptyMessage="No customers found."
                                 style={{
                                     fontSize: "14px",
-
                                 }}
                                 size={"small"}
                                 stripedRows
@@ -96,14 +102,14 @@ function ShoratgeSupplies() {
                                 rowsPerPageOptions={[5, 10, 25, 50]}
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                             >
-
                                 {cols.map((col, index) => (
-                                    <Column key={index} field={col.field} header={col.header} style={{
+                                    <Column key={index} field={col.field} sortable header={col.header} style={{
                                         minWidth: col.minWidth && col.minWidth,
                                         textAlign: 'center',
-                                    }} 
+                                    }}
                                     alignHeader={'center'}
                                     body={(rowData) => {
+                                        console.log(col.field);
                                         if (col.field === '避難所') {
                                             return (
                                                 <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''}>
@@ -116,7 +122,6 @@ function ShoratgeSupplies() {
                                     }} />
                                 ))}
                             </DataTable>
-
                         </div>
                     </section>
 
@@ -129,7 +134,6 @@ function ShoratgeSupplies() {
                     onHide: () => setShowModal(false),
                     value1: "food",
                     value2: "chain"
-
                 }} />
             </div>
         </div>
