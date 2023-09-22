@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import { DeleteModal, DividerComponent, NormalTable } from '@/components';
+import { DeleteModal, NormalTable } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import axios from '@/utils/api';
@@ -34,17 +34,16 @@ function AdminDashboard() {
         { field: 's', header: 'S', minWidth: '4rem', sortable: true, headerClassName: "custom-header" },
         { field: '余力人数', header: '余力人数', minWidth: '7rem', sortable: true, headerClassName: "custom-header" },
         { field: '食糧等支援の人数', header: '食糧等支援の人数', minWidth: '11rem', sortable: true, headerClassName: "custom-header" },
-
         {
             field: 'actions',
             header: '満員切替',
             minWidth: "7rem",
-            headerClassName:"custom-header" ,
+            headerClassName: "custom-header",
+            textAlign: 'center',
+            sortable: true,
             body: (rowData) => (
                 <div className='input-switch-dashboard'>
                     <DeleteModal
-                        // parentMainClass={"mt-2"}
-                        // style={{ minWidth: "50px" }}
                         modalClass="w-50rem"
                         header="確認情報"
                         position="top"
@@ -52,7 +51,7 @@ function AdminDashboard() {
                         checked={checked1}
                         onChange={(e) => setChecked1(e.value)}
                         parentClass={"custom-switch"}
-                    /> 
+                    />
                 </div>
             ),
         }
@@ -73,43 +72,40 @@ function AdminDashboard() {
                 console.error('Error fetching data:', error);
             });
 
-            AdminDashboardService.getAdminDashboardsMedium().then((data) => setAdmins(data));
-            setLockedCustomers([
-                {
-                    "番号": '',
-                    "避難所":'合計',
-                   "避難可能人数": '66920人',
-                    "現在の避難者数": '2134人',
-                    "避難者数": '15.77%',
-                    "避難中の世帯数": '450世帯'	,
-                    "個人情報なしの避難者数":'1555人',
-                    "男":'160人',
-                    '女':'371人',
-                    '答えたくない':'48人',
-                    '妊産婦':'248人',
-                    '乳幼児':'173人',
-                    '障がい者':'86人',
-                    '要介護者':'39人',
-                    '医療機器利用者':'38人',
-                    'アレルギー':'26人',
-                    '外国籍':'36人',
-                    'その他':'35人',
-                    'テーブル':'71人',
-                    's':'0人',
-                    '余力人数':'64786人',
-                    '食糧等支援の人数':'0人',
-                    '満員切替':''
-    
-                }
-            ]);
+        AdminDashboardService.getAdminDashboardsMedium().then((data) => setAdmins(data));
+        setLockedCustomers([
+            {
+                "番号": '',
+                "避難所": '合計',
+                "避難可能人数": '66920人',
+                "現在の避難者数": '2134人',
+                "避難者数": '15.77%',
+                "避難中の世帯数": '450世帯',
+                "個人情報なしの避難者数": '1555人',
+                "男": '160人',
+                '女': '371人',
+                '答えたくない': '48人',
+                '妊産婦': '248人',
+                '乳幼児': '173人',
+                '障がい者': '86人',
+                '要介護者': '39人',
+                '医療機器利用者': '38人',
+                'アレルギー': '26人',
+                '外国籍': '36人',
+                'その他': '35人',
+                'テーブル': '71人',
+                's': '0人',
+                '余力人数': '64786人',
+                '食糧等支援の人数': '0人',
+                '満員切替': ''
+
+            }
+        ]);
     }, [])
 
     return (
         <div className="grid">
             <div className="col-12">
-
-                {/* Header */}
-
                 <div className='card'>
                     <div>
                         <h5>
@@ -125,7 +121,6 @@ function AdminDashboard() {
                             rows={10}
                             paginator={"true"}
                             showGridlines={"true"}
-                            // columnStyle={{ textAlign: 'center',color:"#3c4b64" }}
                             customActionsField="actions"
                             value={admins}
                             frozenValue={lockedCustomers}

@@ -9,7 +9,7 @@ export default function RowExpansionTable(props) {
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage, tableStyle, rowExpansionStyle,
         rowExpansionTableStyle, rowExpansionSize, responsiveLayout, columnStyle, rowExpansionColumnStyle,
         rowsPerPageOptions, showGridlines, rowExpanisonGridlines, className, rowExpansionClassName,
-        rowExpansionOnRowClick, onRowClick, ...restProps } = props;
+        rowExpansionOnRowClick, custom, onRowClick, ...restProps } = props;
 
     const [expandedRows, setExpandedRows] = useState(null);
     const toast = useRef(null);
@@ -61,7 +61,7 @@ export default function RowExpansionTable(props) {
     );
 
     return (
-        <div className={`${parentClass} `}>
+        <div className={`${parentClass}  ${custom || 'custom-table'} `}>
             <Toast ref={toast} />
             <DataTable paginator={paginator}
                 rows={rows || 5}

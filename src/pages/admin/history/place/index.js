@@ -7,7 +7,6 @@ import { Button, NormalTable } from '@/components';
 import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
 import { SelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
-import { InputText } from 'primereact/inputtext';
 
 export default function AdminHistoryPlacePage() {
     const { localeJson } = useContext(LayoutContext);
@@ -22,10 +21,10 @@ export default function AdminHistoryPlacePage() {
         { name: 'Paris', code: 'PRS' }
     ];
     const columns = [
-        { field: 'Sl No', header: 'No', minWidth: "8rem", sortable: true, textAlign: 'center' },
-        { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
+        { field: 'Sl No', header: '番号', minWidth: "5rem", sortable: true, textAlign: 'center' },
+        { field: '報告日時', header: '報告日時', minWidth: "10rem", sortable: true },
         { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
-        { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
+        { field: '避難所名', header: '避難所名', minWidth: "9rem", sortable: true },
         { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: true },
         { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
         { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem", sortable: true },
@@ -34,10 +33,9 @@ export default function AdminHistoryPlacePage() {
         { field: "開設状況", header: "開設状況", minWidth: "8rem", sortable: true },
         { field: "避難者数", header: "避難者数", minWidth: "7rem", sortable: true },
         { field: "満空状況", header: "満空状況", minWidth: "7rem", sortable: true },
-        { field: "開設日時", header: "開設日時", minWidth: "15rem", sortable: true },
-        { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem", sortable: true },
-        { field: "備考", header: "備考", minWidth: "5rem" },
-
+        { field: "開設日時", header: "開設日時", minWidth: "10rem", sortable: true },
+        { field: "閉鎖日時", header: "閉鎖日時", minWidth: "10rem", sortable: true },
+        { field: "備考", header: "備考", minWidth: "4rem" },
     ];
 
     useEffect(() => {
@@ -62,7 +60,6 @@ export default function AdminHistoryPlacePage() {
                                 text: translate(localeJson, 'export'),
                                 severity: "primary"
                             }} />
-
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
@@ -77,16 +74,14 @@ export default function AdminHistoryPlacePage() {
                     <div>
                         <div>
                             <form>
-                                {/* <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'> */}
-
                                 <div className='mt-5 mb-3 flex flex-wrap flex-grow align-items-center justify-content-end gap-2' >
-                                    <div  className='w-50'>
+                                    <div className='w-50'>
                                         <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
                                             inputId: "開設日",
                                             selectionMode: "range",
                                             text: "開設日",
                                             dateTimeClass: ""
-                                        }} parentClass={"custom-margin"} />
+                                        }} parentClass={"custom-margin input-align"} />
                                     </div>
                                     <div>
                                         <SelectFloatLabel selectFloatLabelProps={{
