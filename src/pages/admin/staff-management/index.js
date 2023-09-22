@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
+
+import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable } from '@/components';
 import { CustomerService } from '@/helper/datatableservice';
 
 export default function StaffManagementPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [customers, setCustomers] = useState([]);
     const router = useRouter();
-
     const columns = [
         { field: 'No', header: 'No.' },
         { field: '氏名', header: '氏名', minWidth: "15rem" },

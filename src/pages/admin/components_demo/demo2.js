@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from 'react';
+
 import { TreeTable, RowExpansionTable, DND, StockPileEditModal, StockPileSignupModal } from '@/components';
 import { NodeService } from '@/helper/treeTableService';
 import { ProductService } from '@/helper/rowExpandTableService';
 import { LanguageDropdown } from '@/components/dropdown';
-import { FileInputComponent } from '@/components/upload';
 
 export default function ComponentDemo() {
     const [nodes, setNodes] = useState([]);
     const [data, setData] = useState([]);
-
     const columns = [
         { field: 'name', header: 'Name', expander: true },
         { field: 'size', header: 'Type' },
         { field: 'type', header: 'Size' }
     ];
-
     const outerColumn = [
         { field: "name", header: "name" },
         { field: "price", header: "Price" },
         { field: "description", header: "description" },
         { field: "category", header: "category" }
     ]
-
     const innerColumn = [
         { field: "productCode", header: "productCode" },
         { field: "date", header: "date" }
     ]
-
     const [products, setProducts] = useState([]);
+    const dragProps = {
+        onDragEnd(fromIndex, toIndex) {
+            const prepareData = [...data];
+            const item = prepareData.splice(fromIndex, 1)[0];
+            prepareData.splice(toIndex, 0, item);
+            setData(prepareData);
+        },
+        nodeSelector: 'li',
+        handleSelector: 'a'
+    };
 
     useEffect(() => {
         NodeService.getTreeTableNodes().then((data) => setNodes(data));
@@ -40,17 +46,6 @@ export default function ComponentDemo() {
         setData(prepareData);
         ProductService.getProductsWithOrdersSmall().then((data) => setProducts(data));
     }, []);
-
-    const dragProps = {
-        onDragEnd(fromIndex, toIndex) {
-            const prepareData = [...data];
-            const item = prepareData.splice(fromIndex, 1)[0];
-            prepareData.splice(toIndex, 0, item);
-            setData(prepareData);
-        },
-        nodeSelector: 'li',
-        handleSelector: 'a'
-    };
 
     const handleMoveUp = (index) => {
         if (index > 0) {
@@ -74,7 +69,6 @@ export default function ComponentDemo() {
         <ol>
             {data.map((item, index) => (
                 <li key={index}>
-                    {/* <InputSwitcher parentClass={"custom-switch mr-2"} checked={checked1} onChange={(e) => setChecked1(e.value)} /> */}
                     <button className="mr-4" onClick={() => handleMoveUp(index)}>▲</button>
                     <div className='xl:w-10 mr-4 '>
                         {item.title}
@@ -108,9 +102,7 @@ export default function ComponentDemo() {
                 <div className='card'>
                     <section className='col-12'>
                         {/* Header */}
-                        <h5 className={"page_header"}
-                        // borderBottom: "1px solid black",
-                        >
+                        <h5 className={"page_header"}>
                             不足物資一覧
                         </h5>
                         <div>

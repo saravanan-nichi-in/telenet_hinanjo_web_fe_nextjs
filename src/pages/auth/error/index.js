@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { Button } from 'primereact/button';
 import Image from 'next/image'
+
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 
 const ErrorPage = () => {
@@ -26,9 +27,7 @@ const ErrorPage = () => {
             </div>
         </div>
     );
-
 };
-
 
 ErrorPage.getLayout = function getLayout(page) {
     return (

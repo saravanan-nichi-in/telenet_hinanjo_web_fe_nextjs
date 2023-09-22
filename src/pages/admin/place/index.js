@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminPlaceService } from '@/helper/adminPlaceService';
 
 export default function AdminPlacePage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
-
     const columns = [
         { field: 'ID', header: 'ID' },
         { field: '避難所', header: '避難所', minWidth: "20rem" },
-        { field: '住所', header: '住所',minWidth:"10rem" },
+        { field: '住所', header: '住所', minWidth: "10rem" },
         { field: '避難可 能人数', header: '避難可  能人数', minWidth: "10rem" },
         { field: '電話番号', header: '電話番号' },
         {

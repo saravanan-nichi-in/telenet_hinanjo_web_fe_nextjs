@@ -1,19 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { Chart } from 'primereact/chart';
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DividerComponent, Select } from '@/components';
 
 const BarChartDemo = () => {
+    const { localeJson } = useContext(LayoutContext);
     const options = [
         { label: '現在の避難者数', value: 'NY' },
         { label: '避難所の混雑率', value: 'RM' },
         { label: '要配慮者の避難者数', value: 'LDN' },
     ];
-
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
     const [data, setData] = useState(options[0].value);
-
     const [basicData] = useState({
         labels: ['日本の避難所', '広島市中区東白島町', 'テスト', 'テスト日本大阪', '避難所B	', '<Test>モバイルアプリ1', 'Gose'],
         datasets: [
@@ -37,7 +36,6 @@ const BarChartDemo = () => {
             }
         ]
     });
-
     const getLightTheme = () => {
         let horizontalOptions = {
             maintainAspectRatio: false,
@@ -78,39 +76,6 @@ const BarChartDemo = () => {
                 }
             }
         };
-        //     indexAxis: 'y',
-        //     maintainAspectRatio: false,
-        //     aspectRatio: .8,
-        //     plugins: {
-        //         legend: {
-        //             labels: {
-        //                 color: '#495057'
-        //             }
-        //         }
-        //     },
-        //     scales: {
-        //         x: {
-        //             min: 0,
-        //             max: 300,
-        //             ticks: {
-        //                 color: '#495057',
-
-        //             },
-        //             grid: {
-        //                 color: '#ebedef'
-        //             }
-        //         },
-        //         y: {
-        //             ticks: {
-        //                 color: '#495057',
-
-        //             },
-        //             grid: {
-        //                 color: '#ebedef'
-        //             }
-        //         }
-        //     }
-        // };
         return {
             horizontalOptions
         }
@@ -136,4 +101,5 @@ const BarChartDemo = () => {
         </div>
     )
 }
+
 export default BarChartDemo

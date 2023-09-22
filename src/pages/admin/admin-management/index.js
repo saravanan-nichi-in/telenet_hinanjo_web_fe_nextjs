@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputIcon, NormalLabel, NormalTable } from '@/components';
 import { AdminManagementService } from '@/helper/adminManagementService';
 
 export default function AdminManagementPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
-
     const columns = [
         { field: 'No.', header: 'No.' },
         { field: '氏名', header: <span data-tip="Tooltip text for 氏名">氏名</span>, minWidth: "15rem" },
-
-        // { field: '氏名', header: '氏名', minWidth: "15rem" },
         { field: 'メール', header: 'メール' },
         {
             field: 'actions',

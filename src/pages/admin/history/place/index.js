@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DateTimeCalendar, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
-import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from "primereact/inputtext";
 import { Button as DemoButton } from 'primereact/button';
 
+import { getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, NormalTable } from '@/components';
+import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
+
 export default function AdminHistoryPlacePage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const [selectedCity, setSelectedCity] = useState(null);
@@ -20,7 +21,6 @@ export default function AdminHistoryPlacePage() {
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
     ];
-
     const columns = [
         { field: 'Sl No', header: 'Sl No', minWidth: "8rem", sortable: true, textAlign: 'center' },
         { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },

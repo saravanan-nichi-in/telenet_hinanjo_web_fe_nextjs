@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
+
 import { CustomerService } from '@/helper/datatableservice';
 import ImageCropper from '@/pages/POC/CROP';
 import {
@@ -12,9 +13,7 @@ import {
 
 export default function ComponentsDemo() {
     const [checked1, setChecked1] = useState(false);
-
     const [selectedCity, setSelectedCity] = useState(null);
-
     const cities = [
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' },
@@ -22,21 +21,15 @@ export default function ComponentsDemo() {
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
     ];
-
     const [ingredient, setIngredient] = useState('');
-
     const [value, setValue] = useState(501);
-
     const handleIncrement = () => {
         setValue(value + 1);
     };
-
     const handleDecrement = () => {
         setValue(value - 1);
     };
-
     const [ingredients, setIngredients] = useState([]);
-
     const onIngredientsChange = (e) => {
         let _ingredients = [...ingredients];
 
@@ -47,20 +40,14 @@ export default function ComponentsDemo() {
 
         setIngredients(_ingredients);
     }
-
     const options = [
         { label: 'Japanese', image: '/layout/images/jp.png' },
         { label: 'English', image: '/layout/images/us.png' }
     ];
-
     const [selectedOption, setSelectedOption] = useState(options[0]);
-
     const [customers, setCustomers] = useState([]);
-
     let today = new Date();
-
     let invalidDates = [today];
-
     const columns = [
         { field: '避難所', header: '避難所' },
         { field: 'Test1(2)', header: 'Test1(2)' },
@@ -88,23 +75,8 @@ export default function ComponentsDemo() {
         },
     ];
 
-    const footer = (
-        <div className="text-center">
-            <Button buttonProps={{
-                buttonClass: "h-3rem",
-                text: "cancel"
-            }} parentClass={"inline"} />
-            <Button buttonProps={{
-                buttonClass: "h-3rem",
-                text: "delete",
-                severity: "danger"
-            }} parentClass={"inline"} />
-        </div>
-    );
-
     useEffect(() => {
         CustomerService.getCustomersMedium().then((data) => setCustomers(data));
-
     }, []);
 
     return (
@@ -113,9 +85,7 @@ export default function ComponentsDemo() {
                 <div className='card'>
                     <section className='col-12'>
                         {/* Header */}
-                        <h5 className={"page_header"}
-                        // borderBottom: "1px solid black",
-                        >
+                        <h5 className={"page_header"}>
                             不足物資一覧
                         </h5>
                         <Divider />
@@ -254,9 +224,6 @@ export default function ComponentsDemo() {
                                         parentClass={"custom_select"}
                                     />
                                 </div>
-                                {/* Display the select ed option's image */}
-
-
                             </div>
                             <div class="pt-3">
                                 <h2 className='page_sub_header'>Label</h2>
@@ -277,7 +244,6 @@ export default function ComponentsDemo() {
                             </div>
                             <div class="pt-3">
                                 <h2 className='page_sub_header'> Checkbox</h2>
-                                {/* <CheckBox checkboxClass={"pr-1"} inputId="ingredient2" name="pizza" value="Mushroom" onChange={onIngredientsChange} checked={ingredients.includes('Mushroom')} /> */}
                                 <NormalCheckBox checkBoxProps={{
                                     checkboxClass: "pr-1 h-10",
                                     inputId: "ingredient1",
@@ -301,7 +267,7 @@ export default function ComponentsDemo() {
                             <h2 className='page_sub_header'>Switch Component</h2>
                             <InputSwitch parentClass={"custom-switch"}
                                 inputSwitchProps={{
-                                  
+
                                 }}
 
                             />
@@ -376,7 +342,6 @@ export default function ComponentsDemo() {
                             <h2 className='page_sub_header'>avatar with image</h2>
                             <AvatarComponent
                                 avatarProps={{
-                                    // parentClass: "bg-orange-500",
                                     avatarClass: "mr-3",
                                     size: "xlarge",
                                     image: "/layout/images/perspective1.jpg",
@@ -384,23 +349,21 @@ export default function ComponentsDemo() {
                                     style: { backgroundColor: "#2196F3" }
                                 }}
                             />
-                             <h2 className='page_sub_header'>avatar with text</h2>
+                            <h2 className='page_sub_header'>avatar with text</h2>
                             <AvatarComponent
                                 avatarProps={{
-                                    // parentClass: "bg-orange-500",
                                     avatarClass: "mr-3",
                                     size: "xlarge",
-                                    label:"TR",
+                                    label: "TR",
                                     shape: "circle",
                                 }}
                             />
-                             <h2 className='page_sub_header'>avatar with icon</h2>
+                            <h2 className='page_sub_header'>avatar with icon</h2>
                             <AvatarComponent
                                 avatarProps={{
-                                    // parentClass: "bg-orange-500",
                                     avatarClass: "mr-3",
                                     size: "xlarge",
-                                    icon:"pi pi-calendar",
+                                    icon: "pi pi-calendar",
                                     shape: "circle",
                                     style: { backgroundColor: "#2196F3" }
                                 }}
