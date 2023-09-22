@@ -12,18 +12,18 @@ export const transform = (
   const tR = cropPoints['right-top']
   const tL = cropPoints['left-top']
 
-  // create source coordinates matrix
+  // Create source coordinates matrix
   const sourceCoordinates = [tL, tR, bR, bL].map((point) => [
     point.x / imageResizeRatio,
     point.y / imageResizeRatio
   ])
 
-  // get max width
+  // Get max width
   const maxWidth = Math.max(bR.x - bL.x, tR.x - tL.x) / imageResizeRatio
-  // get max height
+  // Get max height
   const maxHeight = Math.max(bL.y - tL.y, bR.y - tR.y) / imageResizeRatio
 
-  // create dest coordinates matrix
+  // Create dest coordinates matrix
   const destCoordinates = [
     [0, 0],
     [maxWidth - 1, 0],
@@ -31,13 +31,13 @@ export const transform = (
     [0, maxHeight - 1]
   ]
 
-  // convert to open cv matrix objects
+  // Convert to open cv matrix objects
   const Ms = cv.matFromArray(4, 1, cv.CV_32FC2, [].concat(...sourceCoordinates))
   const Md = cv.matFromArray(4, 1, cv.CV_32FC2, [].concat(...destCoordinates))
   const transformMatrix = cv.getPerspectiveTransform(Ms, Md)
-  // set new image size
+  // Set new image size
   const dsize = new cv.Size(maxWidth, maxHeight)
-  // perform warp
+  // Perform warp
   cv.warpPerspective(
     dst,
     dst,
@@ -58,7 +58,7 @@ export const transform = (
 }
 
 export const applyFilter = async (cv, docCanvas, filterCvParams) => {
-  // default options
+  // Default options
   const options = {
     blur: false,
     th: true,

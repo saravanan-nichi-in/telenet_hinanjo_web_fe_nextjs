@@ -1,4 +1,4 @@
-# Telenet
+# 避難所管理システム
 
 It's Web Application which is developed using Next.js. (https://nextjs.org/), to handle evacuation centers through different roles ( Admin, Staff & User ) & responsibilities
 
