@@ -1,5 +1,4 @@
 /*eslint no-undef: 0*/
-
 export const readFile = (file) => {
   if (file instanceof File) {
     return new Promise((resolve, reject) => {
