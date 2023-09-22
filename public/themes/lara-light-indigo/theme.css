@@ -1771,14 +1771,14 @@
   border-radius: 6px;
 }
 .p-button:enabled:hover, .p-button:not(button):not(a):not(.p-disabled):hover {
-  background: #2b3d51;
+  background: #556373;
   color: #ffffff;
-  border-color: #2b3d51;
+  border-color: #556373;
 }
 .p-button:enabled:active, .p-button:not(button):not(a):not(.p-disabled):active {
-  background: #2b3d51;
+  background: #556373;
   color: #ffffff;
-  border-color: #2b3d51;
+  border-color: #556373;
 }
 .p-button.p-button-outlined {
   background-color: transparent;

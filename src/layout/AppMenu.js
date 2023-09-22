@@ -32,16 +32,16 @@ const AppMenu = () => {
                     active: true,
                     items: [
                         {
-                            label: translate(localeJson, 'history_place'),
-                            icon: <HiDocumentText size={20} />,
-                            to: '/admin/history/place',
-                            active: router.pathname.startsWith('/admin/history/place'),
-                        },
-                        {
                             label: translate(localeJson, 'evacuation_status_list'),
                             icon: <ImUsers size={20} />,
                             to: '/admin/dashboard',
                             active: router.pathname.startsWith('/admin/dashboard')
+                        },
+                        {
+                            label: translate(localeJson, 'history_place'),
+                            icon: <HiDocumentText size={20} />,
+                            to: '/admin/history/place',
+                            active: router.pathname.startsWith('/admin/history/place'),
                         },
                         {
                             label: translate(localeJson, 'list_of_evacuees'),
