@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { AuthenticationAuthorizationService } from '@/services';
 import { LockFilled } from '@ant-design/icons';
+
+import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
 
@@ -20,9 +20,6 @@ const ResetPasswordPage = () => {
             .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
-
-    /* Services */
-    const { login } = AuthenticationAuthorizationService;
 
     return (
         <>
@@ -121,4 +118,5 @@ ResetPasswordPage.getLayout = function getLayout(page) {
         </React.Fragment>
     );
 };
+
 export default ResetPasswordPage;

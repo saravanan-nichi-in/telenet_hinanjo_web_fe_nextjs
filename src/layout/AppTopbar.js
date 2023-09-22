@@ -1,22 +1,17 @@
-import Link from 'next/link';
-import { classNames } from 'primereact/utils';
 import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
+import { classNames } from 'primereact/utils';
+import { LogoutOutlined } from '@ant-design/icons';
+import { DiAtom } from "react-icons/di";
+
 import { LayoutContext } from './context/layoutcontext';
-import Image from 'next/image'
-import { Dropdown } from 'antd';
-import { useRouter } from 'next/router'
 import { AuthenticationAuthorizationService } from '@/services';
-import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
-import DateTimePicker from '@/components/date&time/dateTimePicker';
 import { DropdownSelect } from '@/components';
 
 const AppTopbar = forwardRef((props, ref) => {
-    const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
-
-    const router = useRouter();
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
@@ -75,48 +70,31 @@ const AppTopbar = forwardRef((props, ref) => {
             key: '2',
         },
     ];
-    const isStaffUser = router.pathname.startsWith('/staff');
+
     return (
         <div className="layout-topbar">
-            <Link href="/" className="layout-topbar-logo">
-                <Image src={`/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`} width={150} height={35} widt={'true'} alt="logo" />
-            </Link>
-
-            <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                <i className="pi pi-bars" />
-            </button>
-
-            <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                <i className="pi pi-ellipsis-v" />
-            </button>
-
-            <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
-
-                
-                {isStaffUser ? (
-                <><DateTimePicker parentClass={"mt-2 mr-3"} /><label className="clickable-label">
-                        <div className='mt-2 ml-3 ' onClick={() => logout()}>
-                            <span>
-                                <LoginOutlined />
-                            </span>
-                            ログアウト
-                        </div>
-                    </label></>
-                ):(
-                    <><DateTimePicker parentClass={"mt-3"} />
-                    <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"} /></>
-                )}
-                {/* <Dropdown
-                    menu={{
-                        items,
-                    }}
-                    trigger={['click']}
-                >
-                    <button type="button" className="p-link layout-topbar-button mt-1">
-                        <i className="pi pi-cog "></i>
-                        <span>Settings</span>
+            <div className="logo-details">
+                <div className='logo-view'>
+                    <DiAtom size={35} className='logo-icon' />
+                </div>
+            </div>
+            <div className='header-details'>
+                <div className='hamburger'>
+                    <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                        <i className="pi pi-bars" />
                     </button>
-                </Dropdown> */}
+                </div>
+                <div className='header-details-first'>
+                    避難所管理システム
+                </div>
+                <div className='header-details-second'>
+                    <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
+                        <i className="pi pi-ellipsis-v" />
+                    </button>
+                    <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
+                        <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"} />
+                    </div>
+                </div>
             </div>
         </div>
     );

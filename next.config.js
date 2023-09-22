@@ -14,8 +14,8 @@ const nextConfig = {
     },
     publicRuntimeConfig: {
         apiUrl: process.env.NODE_ENV === 'development'
-            ? '' // development api
-            : '' // production api
+            ? '' // Development api
+            : '' // Production api
     },
     images: {
         unoptimized: true,

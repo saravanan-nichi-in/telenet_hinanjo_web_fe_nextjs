@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import CropPoint from './CropPoint'
 import T from 'prop-types'
 

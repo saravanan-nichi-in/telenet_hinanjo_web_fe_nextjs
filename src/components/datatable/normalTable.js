@@ -3,17 +3,17 @@ import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function NormalTable(props) {
-    const { parentClass, paginator, rows, value, customActionsField, columns, id,
+    const { parentClass, custom, paginator, rows, value, customActionsField, columns, id,
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage,
         tableStyle, responsiveLayout, columnStyle, rowsPerPageOptions, showGridlines, className,
-        onRowClick, paginatorClassName, paginatorLeft, paginatorRight, ...restProps } = props
+        onRowClick, paginatorClassName, paginatorLeft, paginatorRight, alignHeader, ...restProps } = props
 
     return (
-        <div className={`${parentClass}`} >
+        <div className={`${parentClass} ${custom || 'custom-table'}`} >
             <TableData id={id} value={value}
                 className={`${className}`}
                 paginator={paginator} rows={rows || 5}
-                rowsPerPageOptions={rowsPerPageOptions}
+                rowsPerPageOptions={[5, 10, 25, 50]}
                 rowClassName={rowClassName}
                 filterDisplay={filterDisplay}
                 emptyMessage={emptyMessage}
@@ -27,8 +27,9 @@ export default function NormalTable(props) {
                 paginatorClassName={paginatorClassName}
                 paginatorLeft={paginatorLeft}
                 paginatorRight={paginatorRight}
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                // paginatorTemplate="RowsPerPageDropdown PrevPageLink CurrentPageReport NextPageLink"
+                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                currentPageReportTemplate="{first} - {last} / {totalRecords}"
                 {...restProps}
             >
                 {columns.map((col, index) => (
@@ -36,7 +37,8 @@ export default function NormalTable(props) {
                         field={col.field}
                         header={col.header}
                         sortable={col.sortable}
-                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
+                        alignHeader={alignHeader}
+                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle, textAlign: col.textAlign && col.textAlign }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}
             </TableData>

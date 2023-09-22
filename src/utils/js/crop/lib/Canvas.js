@@ -1,5 +1,4 @@
 /*eslint no-undef: 0*/
-
 import React, {
   useCallback,
   useEffect,
@@ -8,7 +7,6 @@ import React, {
   useState,
   Fragment
 } from 'react'
-import { useOpenCv } from 'opencv-react'
 import T from 'prop-types'
 
 import { calcDims, readFile, isCrossOriginURL } from './utils'
@@ -40,8 +38,6 @@ const Canvas = ({
 
   var newCv = window.cv;
   var cvLoaded = true;
-
-  console.log("OpenCV loaded ???", newCv, cvLoaded);
 
   const canvasRef = useRef()
   const previewCanvasRef = useRef()
@@ -85,7 +81,7 @@ const Canvas = ({
   }, [mode])
 
   const setPreviewPaneDimensions = () => {
-    // set preview pane dimensions
+    // Set preview pane dimensions
     const newPreviewDims = calcDims(
       canvasRef.current.width,
       canvasRef.current.height,
@@ -104,7 +100,7 @@ const Canvas = ({
     return new Promise((resolve, reject) => {
       const img = document.createElement('img')
       img.onload = async () => {
-        // set edited image canvas and dimensions
+        // Set edited image canvas and dimensions
         canvasRef.current = document.createElement('canvas')
         canvasRef.current.width = img.width
         canvasRef.current.height = img.height
@@ -140,11 +136,11 @@ const Canvas = ({
   const detectContours = () => {
     const dst = newCv.imread(canvasRef.current)
     const ksize = new newCv.Size(5, 5)
-    // convert the image to grayscale, blur it, and find edges in the image
+    // Convert the image to grayscale, blur it, and find edges in the image
     newCv.cvtColor(dst, dst, newCv.COLOR_RGBA2GRAY, 0)
     newCv.GaussianBlur(dst, dst, ksize, 0, 0, newCv.BORDER_DEFAULT)
     newCv.Canny(dst, dst, 75, 200)
-    // find contours
+    // Find contours
     newCv.threshold(dst, dst, 120, 200, newCv.THRESH_BINARY)
     const contours = new newCv.MatVector()
     const hierarchy = new newCv.Mat()
@@ -159,7 +155,7 @@ const Canvas = ({
     dst.delete()
     hierarchy.delete()
     contours.delete()
-    // transform the rectangle into a set of points
+    // Transform the rectangle into a set of points
     Object.keys(rect).forEach((key) => {
       rect[key] = rect[key] * imageResizeRatio
     })
@@ -216,7 +212,7 @@ const Canvas = ({
     clearMagnifier()
 
     // TODO we should make those 5, 10 and 20 values proportionate
-    // to the point size
+    // To the point size
     magnCtx.drawImage(
       previewCanvasRef.current,
       x - (pointSize - 10),

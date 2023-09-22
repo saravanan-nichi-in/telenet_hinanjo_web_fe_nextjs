@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+
+import { getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputFile, ValidationError } from '@/components';
 
 export default function AdminQrCodeCreatePage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
-
     const schema = Yup.object().shape({
         file: Yup.mixed().required('CSVファイルを选択してください.'),
     })
@@ -24,7 +24,6 @@ export default function AdminQrCodeCreatePage() {
                 }}
             >
                 {({
-                    values,
                     errors,
                     touched,
                     setFieldValue,
@@ -55,12 +54,11 @@ export default function AdminQrCodeCreatePage() {
                                                     <InputFile inputFileProps={{
                                                         inputFileStyle: { fontSize: "12px" },
                                                         onChange: (event) => {
-                                                            // Set the file value in Formik
                                                             setFieldValue("file", event.currentTarget.files[0]);
                                                         },
                                                     }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
                                                     <div className='pt-1'>
-                                                    <ValidationError errorBlock={errors.file && touched.file && errors.file} />
+                                                        <ValidationError errorBlock={errors.file && touched.file && errors.file} />
                                                     </div>
                                                 </div>
                                                 <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>

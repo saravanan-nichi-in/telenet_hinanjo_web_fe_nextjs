@@ -7,7 +7,8 @@
   --surface-f:#ffffff;
   --text-color:#495057;
   --text-color-secondary:#6c757d;
-  --primary-color:#6366F1;
+  /* --primary-color:#6366F1; */
+  --primary-color:#4b6cb3;
   --primary-color-text:#ffffff;
   --font-family: Noto Sans JP Hiragino Kaku Gothic Pro Arial sans-serif;
   --surface-0: #ffffff;
@@ -86,7 +87,7 @@
 .p-link:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-component-overlay-enter {
@@ -1082,8 +1083,8 @@
 .p-inputtext:enabled:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
-  border-color: #6366F1;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
+  /* border-color: #6366F1; */
 }
 .p-inputtext.p-invalid.p-component {
   border-color: #e24c4c;
@@ -1762,22 +1763,22 @@
 
 .p-button {
   color: #ffffff;
-  background: #6366F1;
-  border: 1px solid #6366F1;
+  background: #2b3d51;
+  border: 1px solid #2b3d51;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 6px;
 }
 .p-button:enabled:hover, .p-button:not(button):not(a):not(.p-disabled):hover {
-  background: #4F46E5;
+  background: #556373;
   color: #ffffff;
-  border-color: #4F46E5;
+  border-color: #556373;
 }
 .p-button:enabled:active, .p-button:not(button):not(a):not(.p-disabled):active {
-  background: #4338CA;
+  background: #556373;
   color: #ffffff;
-  border-color: #4338CA;
+  border-color: #556373;
 }
 .p-button.p-button-outlined {
   background-color: transparent;
@@ -1864,7 +1865,7 @@
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 .p-button.p-button-rounded {
-  border-radius: 2rem;
+  border-radius: 5px;
 }
 .p-button.p-button-icon-only {
   width: 3rem;
@@ -2626,7 +2627,7 @@
 }
 .p-datatable .p-datatable-thead > tr > th {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
   font-weight: 700;
@@ -2636,7 +2637,7 @@
 }
 .p-datatable .p-datatable-tfoot > tr > td {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
   font-weight: 700;
@@ -2690,7 +2691,7 @@
   text-align: left;
   border: 1px solid #dee2e6;
   border-width: 0 0 1px 0;
-  padding: 1rem 1rem;
+  padding: .5rem .5rem;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -3508,7 +3509,8 @@
 }
 .p-paginator .p-dropdown {
   margin-left: 0.5rem;
-  height: 3rem;
+  height: 40px;
+  line-height: 15px;
 }
 .p-paginator .p-dropdown .p-dropdown-label {
   padding-right: 0;

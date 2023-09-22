@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { AuthenticationAuthorizationService } from '@/services';
 import { MailFilled } from '@ant-design/icons';
+
+import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
 
@@ -17,16 +17,12 @@ const ForgotPasswordPage = () => {
             .email(translate(localeJson, 'email_valid')),
     });
 
-    /* Services */
-    const { login } = AuthenticationAuthorizationService;
-
     return (
         <>
             <Formik
                 validationSchema={schema}
                 initialValues={{ email: "" }}
                 onSubmit={(values) => {
-                    console.log(values);
                 }}
             >
                 {({
@@ -99,4 +95,5 @@ ForgotPasswordPage.getLayout = function getLayout(page) {
         </React.Fragment>
     );
 };
+
 export default ForgotPasswordPage;

@@ -25,6 +25,9 @@ export default function TreeTable(props) {
                         header={col.header}
                         sortable={col.sortable}
                         expander={col.expander}
+                        frozen={col.frozen}
+                        headerClassName={col.headerClassName}
+                        className={col.className}
                         style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}

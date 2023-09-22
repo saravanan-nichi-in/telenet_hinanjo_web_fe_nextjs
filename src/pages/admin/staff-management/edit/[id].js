@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-export default function StaffManagementEditPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const router = useRouter();
+import { getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 
+export default function StaffManagementEditPage() {
+    const { localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
@@ -42,7 +42,6 @@ export default function StaffManagementEditPage() {
                         <div className="col-12">
                             <div className='card'>
                                 <section className='col-12'>
-                                    {/* Header */}
                                     <h5 className='page_header'>{translate(localeJson, 'staff_management_edit')}</h5>
                                     <DividerComponent />
                                     <div>

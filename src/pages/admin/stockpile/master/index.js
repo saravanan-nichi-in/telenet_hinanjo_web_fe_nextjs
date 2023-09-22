@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DeleteModal, DividerComponent, InputIcon, InputSelect, NormalLabel, NormalTable } from '@/components';
-import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
+import { useRouter } from 'next/router';
 import { FaEyeSlash } from 'react-icons/fa';
 
+import { getValueByKeyRecursively as translate } from '@/helper';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable } from '@/components';
+import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
+
 export default function AdminStockPileMaster() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
-
     const columns = [
         { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
         { field: '備蓄品名', header: '備蓄品名', minWidth: "30rem" },
@@ -119,7 +119,6 @@ export default function AdminStockPileMaster() {
                                     </div>
                                 </form>
                             </div>
-
                             <div className='mt-3'>
                                 <NormalTable responsiveLayout={"scrollable"} showGridlines={"true"} rows={10} paginator={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
                             </div>

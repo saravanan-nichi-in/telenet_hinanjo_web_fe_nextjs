@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
+
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, NormalTable } from '@/components';
@@ -7,11 +8,10 @@ import { CustomerService } from '@/helper/datatableservice';
 import { AdminStaffDetailService } from '@/helper/adminStaffDetail';
 
 export default function StaffManagementEditPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [customers, setCustomers] = useState([]);
     const [admin, setAdmin] = useState([]);
     const router = useRouter();
-
     const columns = [
         {
             field: '氏名',
@@ -20,7 +20,6 @@ export default function StaffManagementEditPage() {
         },
         { field: '電話番号', header: '電話番号', minWidth: "2rem" },
     ];
-
     const cols = [
         { field: 'No', header: 'No.', minWidth: "1rem" },
         { field: '避難所', header: '避難所', minWidth: "20rem" },
@@ -31,10 +30,6 @@ export default function StaffManagementEditPage() {
         CustomerService.getCustomersMedium().then((data) => setCustomers(data));
         AdminStaffDetailService.getAdminsStaffDetailMedium().then((data) => setAdmin(data));
     }, []);
-
-    const additionalProps = {
-        header: "false"
-    };
 
     return (
         <div className="grid">

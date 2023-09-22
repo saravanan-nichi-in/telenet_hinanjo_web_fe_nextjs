@@ -4,7 +4,7 @@ import { addLocale } from 'primereact/api';
 
 const DateTimeCalendar = (props) => {
     const { parentClass, dateTimeProps = {} } = props;
-    const { height, id, name, onBlur, onChange, dateTimeClass, icon, iconPos, disabledDates,
+    const { custom, id, name, onBlur, onChange, dateTimeClass, icon, iconPos, disabledDates,
         disabledDays, minDate, maxDate, selectionMode, readOnlyInput, showIcon, disabled, placeholder, ...restProps } = dateTimeProps;
     const [date, setDate] = useState(props.date);
 
@@ -24,8 +24,8 @@ const DateTimeCalendar = (props) => {
     });
 
     return (
-        <div className={`${parentClass}`}>
-            <Calendar className={`${height || 'custom_input'} ${dateTimeClass}`}
+        <div className={`${parentClass} ${custom || 'custom_input'}`}>
+            <Calendar className={` ${dateTimeClass}`}
                 id={id}
                 showTime
                 value={date}

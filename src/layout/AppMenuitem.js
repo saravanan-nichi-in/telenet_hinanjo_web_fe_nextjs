@@ -1,9 +1,10 @@
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Ripple } from 'primereact/ripple';
 import { classNames } from 'primereact/utils';
-import React, { useEffect, useContext } from 'react';
 import { CSSTransition } from 'react-transition-group';
+
 import { MenuContext } from './context/menucontext';
 
 const AppMenuitem = (props) => {
@@ -33,18 +34,18 @@ const AppMenuitem = (props) => {
     }, []);
 
     const itemClick = (event) => {
-        //avoid processing disabled items
+        // Avoid processing disabled items
         if (item.disabled) {
             event.preventDefault();
             return;
         }
 
-        //execute command
+        // Execute command
         if (item.command) {
             item.command({ originalEvent: event, item: item });
         }
 
-        // toggle active state
+        // Toggle active state
         if (item.items) setActiveMenu(active ? props.parentKey : key);
         else setActiveMenu(key);
     };
@@ -61,7 +62,7 @@ const AppMenuitem = (props) => {
 
     return (
         <li className={classNames({ 'layout-root-menuitem': props.root, 'active-menuitem': active })}>
-            {props.root && item.visible !== false && <div className="layout-menuitem-root-text">{item.label}</div>}
+            {/* {props.root && item.visible !== false && <div className="layout-menuitem-root-text">{item.label}</div>} */}
             {(!item.to || item.items) && item.visible !== false ? (
                 <a href={item.url} onClick={(e) => itemClick(e)} className={classNames(item.class, 'p-ripple')} target={item.target} tabIndex="0">
                     <span className={classNames('layout-menuitem-icon', item.icon)}>

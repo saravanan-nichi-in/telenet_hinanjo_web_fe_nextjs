@@ -1,48 +1,21 @@
 .layout-sidebar {
     position: fixed;
     width: 300px;
-    height: calc(100vh - 9rem);
-    // padding: 0.5rem 1.5rem;
+    height: 100%;
     z-index: 999;
-    // overflow-y: auto;
     user-select: none;
-    top: 7rem;
-    left: 2rem;
+    top: 4rem;
     transition: transform $transitionDuration, left $transitionDuration;
-    background-color: var(--surface-overlay);
-    border-radius: $borderRadius-12px;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
+    background: #2b3d51;
+    border-right: 1px solid darkgray;
 }
 
 .layout_sidebar_scroll {
-    height: calc(100vh - 11rem);
+    height: calc(100vh - 4rem);
     overflow-y: auto;
-    padding: 0.5rem 1.5rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-.layout_sidebar_scroll::-webkit-scrollbar {
-    width: 0.5em;
-    height: 0.5em;
-    background-color: transparent !important;
-}
-
-.layout_sidebar_scroll::-webkit-scrollbar-thumb {
-    background-color: transparent !important;
-  }
-
-.layout_sidebar_scroll::-webkit-scrollbar-track {
-    -webkit-box-shadow: none !important;
-    background-color: transparent;
-}
-
-.layout_sidebar_scroll::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Change this to the desired thumb color on hover */
-  }
-
-.layout_sidebar_scroll::-webkit-scrollbar-thumb {
-    background: #ccc;
+    /* For Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(210, 210, 210) rgb(46, 54, 69) !important;
 }
 
 .layout-menu {
@@ -53,11 +26,12 @@
 
     .layout-root-menuitem {
         >.layout-menuitem-root-text {
-            font-size: .857rem;
+            font-size: 15px;
             text-transform: uppercase;
             font-weight: 700;
-            color: var(--surface-900);
+            color: white;
             margin: .75rem 0;
+            padding-left: 1rem;
         }
 
         >a {
@@ -70,6 +44,9 @@
             .layout-submenu-toggler {
                 transform: rotate(-180deg);
             }
+
+            background-color: rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid #2b3d51;
         }
 
         >ul {
@@ -80,6 +57,7 @@
     ul {
         margin: 0;
         padding: 0;
+        padding-left: 0rem;
         list-style-type: none;
 
         a {
@@ -87,18 +65,16 @@
             align-items: center;
             position: relative;
             outline: 0 none;
-            color: var(--text-color);
+            color: white;
             cursor: pointer;
             padding: .75rem 1rem;
-            border-radius: $borderRadius-12px;
-            ;
             transition: background-color $transitionDuration, box-shadow $transitionDuration;
 
             .layout-menuitem-icon {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
-                margin-right: .5rem;
+                margin-right: 1rem;
             }
 
             .layout-submenu-toggler {
@@ -114,28 +90,30 @@
             }
 
             &.active-route {
-                font-weight: 700;
-                color: var(--primary-color);
+                font-weight: 500;
+                background-color: #556373;
+                color: white;
+                border: 0;
             }
 
             &:hover {
-                background-color: var(--surface-hover);
+                background-color: #556373;
+                color: white;
             }
 
-            &:focus {
-                @include focused-inset();
-            }
+            // &:focus {
+            //     @include focused-inset();
+            // }
         }
 
         ul {
             overflow: hidden;
             max-height: 0;
-            border-radius: $borderRadius-12px;
-            ;
+            // border-radius: $borderRadius-12px;
 
             li {
                 a {
-                    margin-left: 1rem;
+                    // margin-left: 1rem;
                 }
 
                 li {

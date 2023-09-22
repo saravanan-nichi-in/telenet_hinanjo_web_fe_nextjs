@@ -1,4 +1,5 @@
 import React from 'react';
+
 import NotFound from '../pages/pages/notfound/index';
 
 const Custom404 = () => {

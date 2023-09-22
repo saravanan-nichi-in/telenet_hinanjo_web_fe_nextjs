@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router'
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-export default function AdminSpecialCareEditPage() {
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const router = useRouter();
+import { getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, DividerComponent, InputIcon, NormalLabel, ValidationError } from '@/components';
 
+export default function AdminSpecialCareEditPage() {
+    const { localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const schema = Yup.object().shape({
         mattersToConsider: Yup.string()
             .required(translate(localeJson, 'matters_to_consider_required')),
@@ -38,7 +38,6 @@ export default function AdminSpecialCareEditPage() {
                         <div className="col-12">
                             <div className='card'>
                                 <section className='col-12'>
-                                    {/* Header */}
                                     <h5 className='page_header'>{translate(localeJson, 'special_care_registration')}</h5>
                                     <DividerComponent />
                                     <div>

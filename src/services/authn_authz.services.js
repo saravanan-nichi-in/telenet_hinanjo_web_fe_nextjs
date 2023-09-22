@@ -1,11 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
-import getConfig from 'next/config';
-import { profiles } from '@/utils/constant';
-import { Toast } from 'primereact/toast';
+
 import axios from '@/utils/api';
 
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
 const admin = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('admin')));
 const staff = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('staff')));
 
@@ -15,11 +11,6 @@ export const AuthenticationAuthorizationService = {
     get staffValue() { return staff.value },
     login: _login,
     logout: _logout,
-    register: _register,
-    getAll: _getAll,
-    getById: _getById,
-    update: _update,
-    delete: _delete
 };
 
 function _login(key, values, callBackFun) {
@@ -42,7 +33,7 @@ function _login(key, values, callBackFun) {
                 console.log(response);
                 if (response && response.data) {
                     staff.next(response.data);
-                    callBackFun(response.data);    
+                    callBackFun(response.data);
                 }
             })
             .catch((error) => {
@@ -63,19 +54,4 @@ function _logout() {
         admin.next(null);
         window.location.href = "/staff/login?hinan=1";
     }
-}
-
-function _register(user) {
-}
-
-function _getAll() {
-}
-
-function _getById(id) {
-}
-
-function _update(id, params) {
-}
-
-function _delete(id) {
 }
