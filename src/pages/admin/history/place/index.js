@@ -7,6 +7,7 @@ import { Button, NormalTable } from '@/components';
 import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
 import { SelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
+import { InputText } from 'primereact/inputtext';
 
 export default function AdminHistoryPlacePage() {
     const { localeJson } = useContext(LayoutContext);
@@ -43,6 +44,8 @@ export default function AdminHistoryPlacePage() {
         AdminHistoryPlaceService.getAdminsHistoryPlaceMedium().then((data) => setAdmins(data));
     }, []);
 
+    console.log(localeJson, translate(localeJson, 'search_label'));
+
     return (
         <div className="grid">
             <div className="col-12">
@@ -76,14 +79,14 @@ export default function AdminHistoryPlacePage() {
                             <form>
                                 {/* <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'> */}
 
-                                <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2' >
-                                    <div  >
+                                <div className='mt-5 mb-3 flex flex-wrap flex-grow align-items-center justify-content-end gap-2' >
+                                    <div  className='w-50'>
                                         <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
                                             inputId: "開設日",
                                             selectionMode: "range",
                                             text: "開設日",
                                             dateTimeClass: ""
-                                        }} parentClass={"custom-margin w-50"} />
+                                        }} parentClass={"custom-margin"} />
                                     </div>
                                     <div>
                                         <SelectFloatLabel selectFloatLabelProps={{
@@ -99,7 +102,7 @@ export default function AdminHistoryPlacePage() {
                                     <div>
                                         <Button buttonProps={{
                                             buttonClass: "w-12 search-button",
-                                            text: "検索",
+                                            text: translate(localeJson, 'search_label'),
                                             icon: "pi pi-search",
                                             severity: "primary"
                                         }} />

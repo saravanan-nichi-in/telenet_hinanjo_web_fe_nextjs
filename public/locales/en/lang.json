@@ -44,7 +44,7 @@
         "buttons": {
             "import":"import",
             "export": "export",
-            "search":"search",
+            "search_label":"search",
             "signup":"signup",
             "cancel":"cancel",
             "renew":"renew",

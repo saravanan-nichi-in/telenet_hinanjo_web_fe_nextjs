@@ -43,11 +43,11 @@
         "buttons": {
             "import":"インポート",
             "export": "エクスポート",
-            "search":"検索",
             "signup":"新規登録",
             "cancel":"キャンセル",
             "renew":"更新",
-            "registration":"登録"
+            "registration":"登録",
+            "search_label":"検索"
         },
         "footer": {},
         "form":{
