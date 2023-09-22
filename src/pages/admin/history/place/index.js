@@ -7,11 +7,6 @@ import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
 import { SelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable } from '@/components';
-import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
-
 export default function AdminHistoryPlacePage() {
     const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
@@ -78,7 +73,7 @@ export default function AdminHistoryPlacePage() {
                     <div>
                         <div>
                             <form>
-                            {/* <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'> */}
+                                {/* <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'> */}
 
                                 <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2' >
                                     <div  >
