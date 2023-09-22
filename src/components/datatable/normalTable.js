@@ -6,7 +6,7 @@ export default function NormalTable(props) {
     const { parentClass, custom, paginator, rows, value, customActionsField, columns, id,
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage,
         tableStyle, responsiveLayout, columnStyle, rowsPerPageOptions, showGridlines, className,
-        onRowClick, paginatorClassName, paginatorLeft, paginatorRight, ...restProps } = props
+        onRowClick, paginatorClassName, paginatorLeft, paginatorRight, alignHeader, ...restProps } = props
 
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`} >
@@ -37,6 +37,7 @@ export default function NormalTable(props) {
                         field={col.field}
                         header={col.header}
                         sortable={col.sortable}
+                        alignHeader={alignHeader}
                         style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle, textAlign: col.textAlign && col.textAlign }}
                         body={col.field === customActionsField ? col.body : undefined} />
                 ))}
