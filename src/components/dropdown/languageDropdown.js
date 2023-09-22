@@ -3,7 +3,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const LanguageDropdown = (props) => {
-    const { parentClass, parentStyle, style, disabled, readOnly,...restProps } = props;
+    const { parentClass, custom, parentStyle, style, disabled, readOnly, ...restProps } = props;
     const { onChangeLocale } = useContext(LayoutContext);
 
     const languageOptions = [
@@ -55,7 +55,7 @@ const LanguageDropdown = (props) => {
     const selectedOption = languageOptions.find(option => option.value === selectedLanguage);
 
     return (
-        <div className={`${parentClass}`} style={parentStyle}>
+        <div className={`${parentClass}  ${custom || 'custom-select'}`} style={parentStyle}>
             <Dropdown
                 value={selectedOption}
                 options={languageOptions}

@@ -1083,8 +1083,8 @@
 .p-inputtext:enabled:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
-  border-color: #6366F1;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
+  /* border-color: #6366F1; */
 }
 .p-inputtext.p-invalid.p-component {
   border-color: #e24c4c;

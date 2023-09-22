@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-const TimeCalendar = (props) => {
-    const { parentClass, parentStyle, timeProps = {} } = props
-    const { custom, timeClass, id, style, icon, showIcon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, name, onBlur, onChange, readOnlyInput, disabled, placeholder, ...restProps } = timeProps
+const DateTimeCalendarFloatLabel = (props) => {
+    const { parentClass, dateTimeFloatLabelProps = {} } = props;
+    const { custom, id, inputId, name, onBlur, onChange, style, dateTimeClass, icon, iconPos, disabledDates,
+        disabledDays, minDate, maxDate, selectionMode, readOnlyInput, showIcon, disabled, placeholder, text, ...restProps } = dateTimeFloatLabelProps;
     const [date, setDate] = useState(props.date);
 
     addLocale('en', {
@@ -24,19 +24,14 @@ const TimeCalendar = (props) => {
     });
 
     return (
-        <div className={`${parentClass} ${custom || 'custom_input'}`} style={parentStyle}>
-            <Calendar className={` ${timeClass}`}
+        <div className={`${parentClass} ${custom || 'custom_input'} p-float-label`}>
+            <Calendar className={` custom-dateCalendar ${dateTimeClass}`}
                 id={id}
-                style={style}
+                showTime
+                inputId={inputId}
                 value={date}
-                icon={icon || "pi pi-clock"}
-                showIcon={showIcon}
-                iconPos={iconPos || "right"}
-                disabledDates={disabledDates}
-                disabledDays={disabledDays}
-                minDate={minDate} maxDate={maxDate}
-                selectionMode={selectionMode || "single"}
                 name={name}
+                style={style}
                 onBlur={onBlur}
                 onChange={(e) => {
                     setDate(e.value);
@@ -46,15 +41,21 @@ const TimeCalendar = (props) => {
                 }
                 }
                 dateFormat="yy年mm月dd日"
-                timeOnly
+                disabledDates={disabledDates}
+                disabledDays={disabledDays}
+                minDate={minDate}
+                maxDate={maxDate}
+                selectionMode={selectionMode || "single"}
                 readOnlyInput={readOnlyInput}
-                showSeconds
+                icon={icon || "pi pi-calendar"}
+                iconPos={iconPos || "right"}
+                showIcon={showIcon}
                 disabled={disabled}
                 placeholder={placeholder}
-                hourFormat="24"
                 {...restProps}
             />
+            <label htmlFor={inputId}>{text}</label>
         </div>
     );
 }
-export default TimeCalendar             
+export default DateTimeCalendarFloatLabel             

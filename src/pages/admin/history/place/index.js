@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DateTimeCalendar, DividerComponent, InputIcon, NormalLabel, NormalTable, Select } from '@/components';
+import { Button, NormalTable } from '@/components';
 import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
-import { Dropdown } from 'primereact/dropdown';
-import { InputText } from "primereact/inputtext";
-import { Button as DemoButton } from 'primereact/button';
+import { SelectFloatLabel } from '@/components/dropdown';
+import { DateTimeCalendarFloatLabel } from '@/components/date&time';
 
 export default function AdminHistoryPlacePage() {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -22,7 +21,7 @@ export default function AdminHistoryPlacePage() {
     ];
 
     const columns = [
-        { field: 'Sl No', header: 'Sl No', minWidth: "8rem", sortable: true, textAlign: 'center' },
+        { field: 'Sl No', header: 'No', minWidth: "8rem", sortable: true, textAlign: 'center' },
         { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
         { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
         { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
@@ -56,7 +55,7 @@ export default function AdminHistoryPlacePage() {
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
+                                buttonClass: "w-50",
                                 text: translate(localeJson, 'export'),
                                 severity: "primary"
                             }} />
@@ -64,7 +63,7 @@ export default function AdminHistoryPlacePage() {
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
+                                buttonClass: "w-50",
                                 text: "メール設定",
                                 onClick: () => router.push('/admin/admin-management/create'),
                                 severity: "success"
@@ -75,36 +74,34 @@ export default function AdminHistoryPlacePage() {
                     <div>
                         <div>
                             <form>
-                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2'>
-                                    <div className="p-float-label">
-                                        <InputText
-                                            inputId="dd-datePicker"
-                                            id="開設日"
-                                            className="w-full md:w-14rem"
-                                            style={{
-                                                height: "40px"
-                                            }}
-                                        />
-                                        <label htmlFor="dd-datePicker">開設日</label>
+                            {/* <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'> */}
+
+                                <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2' >
+                                    <div  >
+                                        <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
+                                            inputId: "開設日",
+                                            selectionMode: "range",
+                                            text: "開設日",
+                                            dateTimeClass: ""
+                                        }} parentClass={"custom-margin w-50"} />
                                     </div>
                                     <div>
-                                        <span className="p-float-label">
-                                            <Dropdown
-                                                inputId="dd-city"
-                                                value={selectedCity}
-                                                onChange={(e) => setSelectedCity(e.value)}
-                                                options={cities}
-                                                optionLabel="name"
-                                                className="w-full md:w-14rem"
-                                                style={{
-                                                    height: "40px"
-                                                }} />
-                                            <label htmlFor="dd-city">避難所名</label>
-                                        </span>
+                                        <SelectFloatLabel selectFloatLabelProps={{
+                                            inputId: "dd-city",
+                                            selectClass: "dropdown_width",
+                                            value: selectedCity,
+                                            options: cities,
+                                            optionLabel: "name",
+                                            onChange: (e) => setSelectedCity(e.value),
+                                            text: "避難所名"
+                                        }} parentClass="w-full" />
                                     </div>
                                     <div>
-                                        <DemoButton label="検索" icon="pi pi-search" severity="primary" style={{
-                                            height: "40px",
+                                        <Button buttonProps={{
+                                            buttonClass: "w-12 search-button",
+                                            text: "検索",
+                                            icon: "pi pi-search",
+                                            severity: "primary"
                                         }} />
                                     </div>
                                 </div>

@@ -2,12 +2,12 @@ import { Button as Btn } from "primereact/button";
 
 export default function Button(props) {
   const { parentClass, parentStyle, buttonProps = {} } = props;
-  const { severity, hoverBg, fontWeight, fontSize, buttonClass,
+  const { severity, hoverBg,custom,fontWeight, fontSize, buttonClass,
     style, text, iconPos, icon, type, link, dataPrToolTip, onClick, bg, rounded, ...restProps } = buttonProps;
 
   return (
     <div className={`${parentClass}`} style={parentStyle}>
-      <Btn className={`${bg} ${hoverBg} ${fontWeight || "font-bold"} ${buttonClass}  ${fontSize || "custom-button"}`}
+      <Btn className={`${bg} ${hoverBg} ${custom || 'custom-button'}  ${buttonClass} font-medium`}
         style={style}
         label={text}
         iconPos={iconPos}

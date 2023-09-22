@@ -1,3 +1,16 @@
 .custom-button{
-    font-size:$fontSize-14px;
+    font-size:$fontSize-16px;
+    height: 40px;
+    border-radius: 5px;
+    
+    .p-button-label{
+        font-weight: 500 ;
+    }
 }
+
+.search-button{
+    .p-button-label{
+        margin-left: 5px;
+    }
+}
+
