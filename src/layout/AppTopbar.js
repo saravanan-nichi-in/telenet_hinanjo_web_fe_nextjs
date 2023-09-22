@@ -1,23 +1,17 @@
-import Link from 'next/link';
-import { classNames } from 'primereact/utils';
 import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
-import { LayoutContext } from './context/layoutcontext';
-import Image from 'next/image'
-import { Dropdown } from 'antd';
-import { useRouter } from 'next/router'
-import { AuthenticationAuthorizationService } from '@/services';
-import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
-import DateTimePicker from '@/components/date&time/dateTimePicker';
-import { DropdownSelect } from '@/components';
+import { classNames } from 'primereact/utils';
+import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
 
+import { LayoutContext } from './context/layoutcontext';
+import { AuthenticationAuthorizationService } from '@/services';
+import { DropdownSelect } from '@/components';
+
 const AppTopbar = forwardRef((props, ref) => {
-    const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
-
-    const router = useRouter();
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
@@ -79,7 +73,7 @@ const AppTopbar = forwardRef((props, ref) => {
 
     return (
         <div className="layout-topbar">
-            <div class="logo-details">
+            <div className="logo-details">
                 <div className='logo-view'>
                     <DiAtom size={35} className='logo-icon' />
                 </div>
