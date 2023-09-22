@@ -42,8 +42,7 @@ function MyApp({ Component, pageProps }) {
         const path = url.split('?')[0];
         if (AuthenticationAuthorizationService.adminValue && adminPublicPaths.includes(path)) {
             router.push({
-                // pathname: '/admin/dashboard',
-                pathname: '/admin/history/place',
+                pathname: '/admin/dashboard',
             });
         } else if (AuthenticationAuthorizationService.staffValue && staffPublicPaths.includes(path)) {
             router.push({

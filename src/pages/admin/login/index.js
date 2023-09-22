@@ -35,7 +35,7 @@ const LoginPage = () => {
             dispatch(setAdminValue({
                 admin: values.data
             }));
-            router.push("/admin/history/place");
+            router.push("/admin/dashboard");
         }
     };
 
