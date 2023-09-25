@@ -13,104 +13,36 @@
 }
 
 .auth_surface_ground_border {
-    border: $borderWidth-5px solid $auth;
-    border-radius: $borderRadius-025rem;
+    border: 5px solid var(--primary-color);
+    border-radius: 0.25rem;
 }
 
 .auth_surface_ground {
-    background-color: $auth;
+    background-color: var(--primary-color);
 }
 
 /* Font */
-.font-90 {
-    font-size: $fontSize-90px;
-
-}
-
-.font-70 {
-    font-size: $fontSize-70px;
-
-}
-
-.font-48 {
-    font-size: $fontSize-48px;
-
-}
-
-.font-40 {
-    font-size: $fontSize-40px;
-
-}
-
-.font-32 {
-    font-size: $fontSize-32px;
-
-}
-
-.font-30 {
-    font-size: $fontSize-30px;
-
-}
-
-.font-28 {
-    font-size: $fontSize-28px;
-
-}
-
-.font-27 {
-    font-size: $fontSize-27px;
-
-}
-
-.font-26 {
-    font-size: $fontSize-26px;
-
-}
-
-.font-25 {
-    font-size: $fontSize-25px;
-
-}
-
 .font-18 {
-    font-size: $fontSize-18px;
-}
-
-.font-16 {
-    font-size: $fontSize-16px;
-}
-
-.font-15 {
-    font-size: $fontSize-15px;
-}
-
-.font-14 {
-    font-size: $fontSize-14px;
-
-}
-
-/* Radius */
-.radius-28 {
-    border-radius: 28px;
+    font-size: 18px;
 }
 
 /* Custom */
 .custom_inputText {
     .p-inputtext {
-        font-size: $fontSize-15px;
+        font-size: 15px;
     }
 }
 
 .dropdown_text {
     .p-inputtext {
-        font-size: $fontSize-22px ;
+        font-size: 22px;
     }
 }
 
 
 .custom_radiusBtn {
-    width: $width-15rem;
-    border-radius: $borderRadius-28px;
+    width: 15rem;
+    border-radius: 28px;
 }
 
 .custom_checkbox {
@@ -120,10 +52,10 @@
 }
 
 .page_header {
-    font-size: $fontSize-21px;
+    font-size: 21px;
     font-weight: 500;
 }
 
 .page_sub_header {
-    font-size: $fontSize-18px;
+    font-size: 18px;
 }
