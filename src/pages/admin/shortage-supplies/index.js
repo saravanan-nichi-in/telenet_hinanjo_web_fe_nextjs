@@ -99,9 +99,7 @@ function ShoratgeSupplies() {
                                     <Column key={index} field={col.field} sortable header={col.header} style={{
                                         minWidth: col.minWidth && col.minWidth,
                                         textAlign: 'center',
-                                    }}
-                                    alignHeader={'center'}
-                                    
+                                    }}                                    
                                     body={(rowData) => {
                                         console.log(col.field);
                                         if (col.field === '避難所') {
