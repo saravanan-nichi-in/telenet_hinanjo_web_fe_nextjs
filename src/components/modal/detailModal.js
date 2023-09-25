@@ -1,10 +1,13 @@
-import React from "react"
+import React, { useContext } from 'react';
 import { Dialog } from 'primereact/dialog';
 
 import { NormalLabel } from "../label";
 import { TextArea } from "../input";
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { getValueByKeyRecursively as translate } from '@/helper'
 
 const DetailModal = (props) => {
+    const { localeJson } = useContext(LayoutContext);
     const {
         parentMainClass,
         detailModalProps = {}
@@ -38,7 +41,7 @@ const DetailModal = (props) => {
             >
                 <div className="pt-2">
                     <NormalLabel labelClass="w-full font-bold pt-0 mb-1"
-                        text={"その他不足物資"} 
+                        text={translate(localeJson, 'Other_shortage_supplies')} 
                         style={{
                             fontSize: "14px",
                             marginBottom: "10px"
@@ -52,7 +55,7 @@ const DetailModal = (props) => {
                 </div>
                 <div className="mt-1">
                     <NormalLabel labelClass="w-full font-bold pt-0"
-                        text={"その他不足物資"}
+                        text={translate(localeJson, 'Other_shortage_supplies')}
                         style={{
                             fontSize: "14px"
                         }} />
