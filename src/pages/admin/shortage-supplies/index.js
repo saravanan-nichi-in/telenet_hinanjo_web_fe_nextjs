@@ -5,35 +5,28 @@ import { Column } from 'primereact/column';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal } from '@/components';
+import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/constant';
 
-const sampleProducts = [
-    { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3"},
-    { "避難所": "Starting to get Crowded", "Test1(2)": "201", "Test2(2)": "16" },
-    { "避難所": "crowded", "Test1(2)": "2999993", "Test2(2)": "6" },
-    { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1"},
-    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33"}
-]
+/**
+ * Display list of supplies shortage in the various `避難所` 
+ * @returns Table view
+ */
 
 function ShoratgeSupplies() {
     const {localeJson } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [lockedSupplies, setLockedSupplies] = useState([]);
-    const headContent = (
-        <div>
-            <h2 style={{ fontSize: "16px" }}>{selectedRow}</h2>
-        </div>
-    )
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
-    const cols = [
-        { field: '避難所', header: '避難所', minWidth: '20rem' },
-        { field: 'Test1(2)', header: 'Test1(2)', minWidth: '12rem' },
-        { field: 'Test2(2)', header: 'Test2(2)', minWidth: '12rem' }
-    ];
+    const headContent = (
+        <div>
+            <h2 style={{ fontSize: "1rem", fontWeight: "bold" }}>{selectedRow}</h2>
+        </div>
+    )
 
     useEffect(() => {
-        setProducts(sampleProducts);
+        setProducts(suppliesShortageData);
         setLockedSupplies([
             {
               "避難所": "不足合計",
@@ -48,7 +41,13 @@ function ShoratgeSupplies() {
     };
 
     const onRowClick = (event) => {
-        setShowModal(true);
+        if(event.data.避難所 == "不足合計"){
+            return;
+        }
+        else {
+            setSelectedRow(event.data.避難所)
+            setShowModal(true);
+        }
     };
 
     const rowClass = (data) => {
@@ -78,13 +77,14 @@ function ShoratgeSupplies() {
                             <DataTable
                                 ref={dt}
                                 value={products}
-                                responsiveLayout="scroll"
+                                scrollable
                                 dataKey="id"
                                 className="p-datatable-gridlines"
                                 showGridlines
                                 rows={5}
                                 rowClassName={rowClass}
                                 frozenValue={lockedSupplies}
+                                frozenWidth='3'
                                 emptyMessage="No customers found."
                                 style={{
                                     fontSize: "14px",
@@ -95,17 +95,16 @@ function ShoratgeSupplies() {
                                 rowsPerPageOptions={[5, 10, 25, 50]}
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                             >
-                                {cols.map((col, index) => (
+                                {suppliesShortageHeaderColumn.map((col, index) => (
                                     <Column key={index} field={col.field} sortable header={col.header} style={{
                                         minWidth: col.minWidth && col.minWidth,
                                         textAlign: 'center',
-                                    }}
-                                    alignHeader={'center'}
+                                    }}                                    
                                     body={(rowData) => {
                                         console.log(col.field);
                                         if (col.field === '避難所') {
                                             return (
-                                                <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''}>
+                                                <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={()=>setSelectedRow(rowData[col.field])}>
                                                     {rowData[col.field]}
                                                 </span>
                                             );
@@ -124,9 +123,11 @@ function ShoratgeSupplies() {
                 <DetailModal detailModalProps={{
                     headerContent: headContent,
                     visible: showModal,
+                    style:{ width: '600px' },
+                    position: 'top',
                     onHide: () => setShowModal(false),
-                    value1: "food",
-                    value2: "chain"
+                    value1: "無し",
+                    value2: "無し"
                 }} />
             </div>
         </div>
