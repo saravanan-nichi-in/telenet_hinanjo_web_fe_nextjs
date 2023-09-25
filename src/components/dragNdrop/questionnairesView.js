@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import { OrderList } from 'primereact/orderlist';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
