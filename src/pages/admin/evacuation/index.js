@@ -15,7 +15,7 @@ import { evacuationStatusOptions, evacuationTableColumns } from '@/utils/constan
  */
 
 export default function EvacuationPage() {
-    const {localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(null);
     const [admins, setAdmins] = useState([]);
@@ -32,51 +32,51 @@ export default function EvacuationPage() {
                         <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
                         <hr />
                         <div>
-                        <div>
-                            <form>
-                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2'>
-                                    <SelectFloatLabel 
-                                        selectFloatLabelProps = {{
-                                            inputId:"evacuationCity",
-                                            value: selectedOption,
-                                            options: evacuationStatusOptions,
-                                            optionLabel:"name",
-                                            selectClass : "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style: {height: "40px"},
-                                            onChange: (e) => setSelectedOption(e.value),
-                                            text: translate(localeJson, 'evacuation_site')
-                                        }}
-                                        parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
-                                    />
-                                    <InputFloatLabel 
-                                        inputFloatLabelProps={{
-                                            id:'householdNumber',
-                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style:{height: "40px"},
-                                            text: translate(localeJson, 'household_number')
-                                        }}
-                                    />
-                                    <InputFloatLabel 
-                                        inputFloatLabelProps={{
-                                            id:'fullName',
-                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style:{height: "40px"},
-                                            text: translate(localeJson, 'full_name'),
-                                            custom: "mobile-input"
-                                        }}
-                                    />
-                                    <div className="">
-                                        <Button buttonProps={{
-                                            buttonClass: "w-12 search-button ",
-                                            text: "検索",
-                                            icon: "pi pi-search",
-                                            severity: "primary"
-                                        }} />
+                            <div>
+                                <form>
+                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
+                                        <SelectFloatLabel
+                                            selectFloatLabelProps={{
+                                                inputId: "evacuationCity",
+                                                value: selectedOption,
+                                                options: evacuationStatusOptions,
+                                                optionLabel: "name",
+                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                                style: { height: "40px" },
+                                                onChange: (e) => setSelectedOption(e.value),
+                                                text: translate(localeJson, 'evacuation_site')
+                                            }}
+                                            parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
+                                        />
+                                        <InputFloatLabel
+                                            inputFloatLabelProps={{
+                                                id: 'householdNumber',
+                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                                style: { height: "40px" },
+                                                text: translate(localeJson, 'household_number')
+                                            }}
+                                        />
+                                        <InputFloatLabel
+                                            inputFloatLabelProps={{
+                                                id: 'fullName',
+                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                                style: { height: "40px" },
+                                                text: translate(localeJson, 'full_name'),
+                                                custom: "mobile-input"
+                                            }}
+                                        />
+                                        <div className="">
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button mobile-input ",
+                                                text: translate(localeJson, "search_text"),
+                                                icon: "pi pi-search",
+                                                severity: "primary"
+                                            }} />
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                </form>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
                                 <div>
                                     <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
                                 </div>
@@ -90,14 +90,14 @@ export default function EvacuationPage() {
                                 </div>
                             </div>
                         </div>
-                        <NormalTable 
-                            size={"small"} 
-                            stripedRows={true} 
-                            rows={10} 
-                            paginator={"true"} 
-                            showGridlines={"true"} 
-                            value={admins} 
-                            columns={evacuationTableColumns} 
+                        <NormalTable
+                            size={"small"}
+                            stripedRows={true}
+                            rows={10}
+                            paginator={"true"}
+                            showGridlines={"true"}
+                            value={admins}
+                            columns={evacuationTableColumns}
                             paginatorLeft={true} />
                     </section>
                 </div>

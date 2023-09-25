@@ -102,7 +102,7 @@ function ShoratgeSupplies() {
                                     }}                                    
                                     body={(rowData) => {
                                         console.log(col.field);
-                                        if (col.field === '避難所') {
+                                        if (col.field === translate(localeJson, 'shelter_place')) {
                                             return (
                                                 <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={()=>setSelectedRow(rowData[col.field])}>
                                                     {rowData[col.field]}
@@ -126,8 +126,8 @@ function ShoratgeSupplies() {
                     style:{ width: '600px' },
                     position: 'top',
                     onHide: () => setShowModal(false),
-                    value1: "無し",
-                    value2: "無し"
+                    value1: translate(localeJson, 'not'),
+                    value2: translate(localeJson, 'not')
                 }} />
             </div>
         </div>
