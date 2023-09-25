@@ -3,9 +3,33 @@ import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
 const DateTimeCalendarFloatLabel = (props) => {
-    const { parentClass, dateTimeFloatLabelProps = {} } = props;
-    const { custom, id, inputId, name, onBlur, onChange, style, dateTimeClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, readOnlyInput, showIcon, disabled, placeholder, text, ...restProps } = dateTimeFloatLabelProps;
+    const {
+        parentClass,
+        dateTimeFloatLabelProps = {}
+    } = props;
+    const {
+        custom,
+        id,
+        inputId,
+        name,
+        onBlur,
+        onChange,
+        style,
+        dateTimeClass,
+        icon,
+        iconPos,
+        disabledDates,
+        disabledDays,
+        minDate,
+        maxDate,
+        selectionMode,
+        readOnlyInput,
+        showIcon,
+        disabled,
+        placeholder,
+        text,
+        ...restProps
+    } = dateTimeFloatLabelProps;
     const [date, setDate] = useState(props.date);
 
     addLocale('en', {
@@ -58,4 +82,5 @@ const DateTimeCalendarFloatLabel = (props) => {
         </div>
     );
 }
+
 export default DateTimeCalendarFloatLabel             

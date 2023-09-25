@@ -3,7 +3,6 @@ import { OpenCvProvider } from 'opencv-react';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useRouter } from 'next/router';
 import { PersistGate } from 'redux-persist/integration/react';
-
 import { persistor } from '@/redux/store';
 import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';

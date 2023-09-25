@@ -1,42 +1,8 @@
 /* General */
-/* border radius */
-$borderRadius-12px: 12px;
-$borderRadius-12px: 12px;
-$borderRadius-15px: 15px;
-$borderRadius-28px: 28px;
-/* border radius / REM */
-$borderRadius-025rem: 0.25rem;
-/* border width / PX */
-$borderWidth-5px: 5px;
-/* transition duration */
+
+/* Transition duration */
 $transitionDuration: .2s;
-/* colors */
-// $auth: rgb(100, 176, 242);
-$auth: var(--primary-color);
-/* font-size / PX */
-$fontSize-14px: 14px;
-$fontSize-15px: 15px;
-$fontSize-16px: 16px;
-$fontSize-18px: 18px;
-$fontSize-20px: 20px;
-$fontSize-21px: 21px;
-$fontSize-22px: 22px;
-$fontSize-23px: 23px;
-$fontSize-24px: 24px;
-$fontSize-25px: 25px;
-$fontSize-26px: 26px;
-$fontSize-27px: 27px;
-$fontSize-28px: 28px;
-$fontSize-30px: 30px;
-$fontSize-32px: 32px;
-$fontSize-40px: 40px;
-$fontSize-48px: 48px;
-$fontSize-70px: 70px;
-$fontSize-90px: 90px;
-/* width / REM *8 */
-$width-15rem: 15rem;
-$width-20rem: 20rem;
-$width-30rem: 30rem;
+
 /* Queries variables*/
 /* Mobile */
 $mobile: 576px;

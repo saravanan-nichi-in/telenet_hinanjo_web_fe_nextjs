@@ -7,7 +7,7 @@ import {
     NormalTable, Counter, Linker, NormalLabel, DeleteModal,
     ImageComponent, DateCalendar, TimeCalendar, DateTimeCalendar,
     DateTimePicker, NormalCheckBox, InputSwitch, ToggleSwitch, DividerComponent,
-    Button, InputSelect, Select, AvatarComponent, RadioBtn, BarcodeScanner, FileUpload,
+    Button, InputSelect, Select, ProfileAvatar, RadioBtn, BarcodeScanner, FileUpload,
     InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneButton
 } from '@/components';
 import { Input } from '@/components/input';
@@ -341,7 +341,7 @@ export default function ComponentsDemo() {
                                 }}
                             />
                             <h2 className='page_sub_header'>avatar with image</h2>
-                            <AvatarComponent
+                            <ProfileAvatar
                                 avatarProps={{
                                     avatarClass: "mr-3",
                                     size: "xlarge",
@@ -351,7 +351,7 @@ export default function ComponentsDemo() {
                                 }}
                             />
                             <h2 className='page_sub_header'>avatar with text</h2>
-                            <AvatarComponent
+                            <ProfileAvatar
                                 avatarProps={{
                                     avatarClass: "mr-3",
                                     size: "xlarge",
@@ -360,7 +360,7 @@ export default function ComponentsDemo() {
                                 }}
                             />
                             <h2 className='page_sub_header'>avatar with icon</h2>
-                            <AvatarComponent
+                            <ProfileAvatar
                                 avatarProps={{
                                     avatarClass: "mr-3",
                                     size: "xlarge",

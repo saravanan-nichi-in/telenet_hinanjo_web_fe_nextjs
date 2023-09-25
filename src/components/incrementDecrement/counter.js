@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
+
 import InputGroup from '../input/inputGroup';
 
 export default function Counter(props) {
-    const { name, readOnly, disabled, parentClass } = props;
+    const {
+        name,
+        readOnly,
+        disabled,
+        parentClass
+    } = props;
     const [value, setValue] = useState(props.value);
 
     const handleIncrement = () => {

@@ -2,10 +2,39 @@ import React from "react";
 import { InputText } from "primereact/inputtext";
 
 const InputLeftRightGroup = (props) => {
-  const { parentClass, parentStyle, inputLrGroupProps = {} } = props;
-  const { antLeftIcon, leftIcon, leftClass, leftStyle, inputClass, custom, placeholder, id, style,
-    value, name, onChange, onBlur, type, keyfilter, ref, required, disabled, readOnly, rightClass,
-    rightStyle, rightIcon, antdRightIcon, maxLength, minLength, ...restProps } = inputLrGroupProps;
+  const {
+    parentClass,
+    parentStyle,
+    inputLrGroupProps = {}
+  } = props;
+  const {
+    antLeftIcon,
+    leftIcon,
+    leftClass,
+    leftStyle,
+    inputClass,
+    custom,
+    placeholder,
+    id,
+    style,
+    value,
+    name,
+    onChange,
+    onBlur,
+    type,
+    keyfilter,
+    ref,
+    required,
+    disabled,
+    readOnly,
+    rightClass,
+    rightStyle,
+    rightIcon,
+    antdRightIcon,
+    maxLength,
+    minLength,
+    ...restProps
+  } = inputLrGroupProps;
 
   return (
     <div className={`p-inputgroup ${parentClass}`} style={parentStyle}>
@@ -60,4 +89,5 @@ const InputLeftRightGroup = (props) => {
     </div>
   );
 }
+
 export default InputLeftRightGroup

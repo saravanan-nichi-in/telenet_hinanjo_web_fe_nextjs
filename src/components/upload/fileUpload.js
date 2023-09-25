@@ -3,7 +3,14 @@ import { FileUpload as Upload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 
 const FileUpload = (props) => {
-    const { parentClass, parentStyle, id, uploadClass, style, ...restProps } = props;
+    const {
+        parentClass,
+        parentStyle,
+        id,
+        uploadClass,
+        style,
+        ...restProps
+    } = props;
     const toast = useRef(null);
 
     const onUpload = () => {
@@ -26,5 +33,6 @@ const FileUpload = (props) => {
             />
         </div>
     );
-}
-export default FileUpload
+};
+
+export default FileUpload;

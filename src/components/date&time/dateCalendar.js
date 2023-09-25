@@ -3,9 +3,30 @@ import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
 const DateCalendar = (props) => {
-    const { parentClass, dateProps = {} } = props;
-    const { custom, id, name, onBlur, dateClass, icon, iconPos, disabledDates,
-        disabledDays, minDate, maxDate, selectionMode, onChange, showIcon, disabled, readOnlyInput, placeholder, ...restProps } = dateProps;
+    const {
+        parentClass,
+        dateProps = {}
+    } = props;
+    const {
+        custom,
+        id,
+        name,
+        onBlur,
+        dateClass,
+        icon,
+        iconPos,
+        disabledDates,
+        disabledDays,
+        minDate,
+        maxDate,
+        selectionMode,
+        onChange,
+        showIcon,
+        disabled,
+        readOnlyInput,
+        placeholder,
+        ...restProps
+    } = dateProps;
     const [date, setDate] = useState(props.date);
 
     addLocale('en', {
@@ -53,4 +74,5 @@ const DateCalendar = (props) => {
         </div>
     );
 }
+
 export default DateCalendar 

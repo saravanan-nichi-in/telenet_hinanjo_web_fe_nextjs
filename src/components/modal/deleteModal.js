@@ -1,14 +1,32 @@
 import React, { useState, useContext } from "react"
 import { Dialog } from 'primereact/dialog';
+
 import InputSwitch from "../switch/inputSwitch";
 import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
 const DeleteModal = (props) => {
-    const { parentMainClass, text, iconPos, icon, parentClass, checked,
-        modalClass, draggable, position, header, style, contentClass, content, bg, hoverBg,
-        severity, buttonClass, ...restProps } = props
+    const {
+        parentMainClass,
+        text,
+        iconPos,
+        icon,
+        parentClass,
+        checked,
+        modalClass,
+        draggable,
+        position,
+        header,
+        style,
+        contentClass,
+        content,
+        bg,
+        hoverBg,
+        severity,
+        buttonClass,
+        ...restProps
+    } = props;
     const [visible, setVisible] = useState(false);
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const footer = (
@@ -61,6 +79,7 @@ const DeleteModal = (props) => {
                 </div>
             </Dialog>
         </div>
-    )
+    );
 }
-export default DeleteModal
+
+export default DeleteModal;

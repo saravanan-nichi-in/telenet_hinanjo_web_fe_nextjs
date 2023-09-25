@@ -10,20 +10,16 @@ const GoogleMapComponent = ({ initialPosition }) => {
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
     const [currentLocation, setCurrentLocation] = useState('');
-
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
     })
-
     const [map, setMap] = React.useState(null)
 
     const onLoad = React.useCallback(function callback(map) {
         getLocation();
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
         const bounds = new window.google.maps.LatLngBounds(center);
         map.fitBounds(bounds);
-
         setMap(map)
     }, [])
 
@@ -51,10 +47,6 @@ const GoogleMapComponent = ({ initialPosition }) => {
         }
     };
 
-    const updatePosition = () => {
-        setCenter(currentLocation);
-    };
-
     return isLoaded ? (
         <>
             <GoogleMap
@@ -67,8 +59,8 @@ const GoogleMapComponent = ({ initialPosition }) => {
                 { /* Child components, such as markers, info windows, etc. */}
                 <></>
             </GoogleMap>
-            {/* <button onClick={updatePosition}>Update Map</button> */}
         </>
     ) : <></>
 };
-export default GoogleMapComponent
+
+export default GoogleMapComponent;

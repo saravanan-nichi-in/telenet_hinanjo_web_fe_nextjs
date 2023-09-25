@@ -2,8 +2,19 @@ import React, { useState } from "react";
 import Image from 'next/image'
 
 const ImageComponent = (props) => {
-    const { parentClass, parentStyle, imageProps = {} } = props;
-    const { src, width, height, alt, style, ...restProps } = imageProps;
+    const {
+        parentClass,
+        parentStyle,
+        imageProps = {}
+    } = props;
+    const {
+        src,
+        width,
+        height,
+        alt,
+        style,
+        ...restProps
+    } = imageProps;
     const [imageError, setImageError] = useState(false);
 
     const imageLoader = ({ src }) => {
@@ -32,4 +43,5 @@ const ImageComponent = (props) => {
         </div>
     );
 }
-export default ImageComponent
+
+export default ImageComponent;

@@ -3,8 +3,23 @@ import { TreeTable as TreeTab } from 'primereact/treetable';
 import { Column } from 'primereact/column';
 
 export default function TreeTable(props) {
-    const { parentClass, paginator, value, columns, rows, id, rowClassName,
-        emptyMessage, style, size, stripedRows, tableStyle, customActionsField, columnStyle, ...restProps } = props;
+    const {
+        parentClass,
+        paginator,
+        value,
+        columns,
+        rows,
+        id,
+        rowClassName,
+        emptyMessage,
+        style,
+        size,
+        stripedRows,
+        tableStyle,
+        customActionsField,
+        columnStyle,
+        ...restProps
+    } = props;
 
     return (
         <div className={`${parentClass} table-paginator`} >
