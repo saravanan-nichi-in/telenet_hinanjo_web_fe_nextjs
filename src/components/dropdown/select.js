@@ -2,8 +2,28 @@ import React from "react";
 import { Dropdown } from 'primereact/dropdown';
 
 export default function Select(props) {
-    const { parentClass, parentStyle, selectProps = {} } = props;
-    const { selectClass, custom, value, name, inputId, id, options, optionLabel, onChange, placeholder, style, readOnly, disabled, onBlur, ...restProps } = selectProps;
+    const {
+        parentClass,
+        parentStyle,
+        selectProps = {}
+    } = props;
+    const {
+        selectClass,
+        custom,
+        value,
+        name,
+        inputId,
+        id,
+        options,
+        optionLabel,
+        onChange,
+        placeholder,
+        style,
+        readOnly,
+        disabled,
+        onBlur,
+        ...restProps
+    } = selectProps;
 
     return (
         <div className={`${parentClass}  ${custom || 'custom-select'} `} style={parentStyle}>

@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDragListView from 'react-drag-listview';
 
 const DND = (props) => {
-    const { dragProps, children } = props
+    const {
+        dragProps,
+        children
+    } = props;
 
     return (
         <div className="col-12 dargDrop_view">
@@ -19,4 +22,5 @@ const DND = (props) => {
         </div>
     );
 };
+
 export default DND;

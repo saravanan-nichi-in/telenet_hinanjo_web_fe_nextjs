@@ -2,9 +2,41 @@ import React from 'react';
 import { InputText } from 'primereact/inputtext';
 
 export default function InputGroup(props) {
-    const { custom, parentClass, parentStyle, inputGroupProps = {} } = props;
-    const { leftClass, leftStyle, leftIcon, onLeftClick, antdLeftIcon, type, inputClass, value, id, name, style, keyfilter,
-        placeholder, onChange, onBlur, ref, required, readOnly, disabled, rightClass, rightStyle, rightIcon, onRightClick, antdRightIcon, maxLength, minLength, ...restProps } = inputGroupProps;
+    const {
+        custom,
+        parentClass,
+        parentStyle,
+        inputGroupProps = {}
+    } = props;
+    const {
+        leftClass,
+        leftStyle,
+        leftIcon,
+        onLeftClick,
+        antdLeftIcon,
+        type,
+        inputClass,
+        value,
+        id,
+        name,
+        style,
+        keyfilter,
+        placeholder,
+        onChange,
+        onBlur,
+        ref,
+        required,
+        readOnly,
+        disabled,
+        rightClass,
+        rightStyle,
+        rightIcon,
+        onRightClick,
+        antdRightIcon,
+        maxLength,
+        minLength,
+        ...restProps
+    } = inputGroupProps;
 
     return (
         <div className={`p-inputgroup ${custom || 'custom_input'} ${parentClass} `} style={parentStyle}>

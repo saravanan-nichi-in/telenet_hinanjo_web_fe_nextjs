@@ -2,8 +2,22 @@ import React from 'react';
 import { Avatar } from 'primereact/avatar';
 
 const AvatarComponent = (props) => {
-    const { parentClass, parentStyle, avatarProps = {} } = props;
-    const { avatarClass, label, id, size, icon, image, shape, style, ...restProps } = avatarProps;
+    const {
+        parentClass,
+        parentStyle,
+        avatarProps = {}
+    } = props;
+    const {
+        avatarClass,
+        label,
+        id,
+        size,
+        icon,
+        image,
+        shape,
+        style,
+        ...restProps
+    } = avatarProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -20,4 +34,5 @@ const AvatarComponent = (props) => {
         </div>
     )
 }
+
 export default AvatarComponent

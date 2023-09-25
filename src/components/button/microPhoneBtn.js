@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { HiMicrophone } from "react-icons/hi";
+
 import Button from "./button";
 
 const MicroPhoneButton = (props) => {
@@ -52,4 +53,5 @@ const MicroPhoneButton = (props) => {
         </div>
     );
 };
+
 export default MicroPhoneButton;

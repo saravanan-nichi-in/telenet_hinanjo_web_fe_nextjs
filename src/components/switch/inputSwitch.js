@@ -2,8 +2,21 @@ import React from 'react';
 import { InputSwitch as InputSwitcher } from 'primereact/inputswitch';
 
 const InputSwitch = (props) => {
-    const { parentClass, parentStyle, inputSwitchProps = {} } = props;
-    const { switchClass, id, style, checked, onChange, readOnly, disabled, ...restProps } = inputSwitchProps;
+    const {
+        parentClass,
+        parentStyle,
+        inputSwitchProps = {}
+    } = props;
+    const {
+        switchClass,
+        id,
+        style,
+        checked,
+        onChange,
+        readOnly,
+        disabled,
+        ...restProps
+    } = inputSwitchProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>
@@ -18,5 +31,6 @@ const InputSwitch = (props) => {
             />
         </div>
     );
-}
-export default InputSwitch
+};
+
+export default InputSwitch;
