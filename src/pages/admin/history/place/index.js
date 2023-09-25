@@ -51,6 +51,7 @@ export default function AdminHistoryPlacePage() {
                         <div className='flex justify-content-center align-items-center gap-2'>
                             <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
                         </div>
+
                         <div className='w-full md:w-auto flex flex-grow justify-content-end align-items-center gap-2'>
                             <Button buttonProps={{
                                 type: 'submit',
@@ -74,6 +75,7 @@ export default function AdminHistoryPlacePage() {
                     <div>
                         <div>
                             <form>
+                                
                                 <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2' >
                                     <div>
                                         <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
@@ -81,7 +83,7 @@ export default function AdminHistoryPlacePage() {
                                             selectionMode: "range",
                                             text: "開設日",
                                             dateTimeClass: ""
-                                        }} parentClass={"custom-margin w-50"} />
+                                        }} parentClass={"custom-margin text-alignment w-50"} />
                                     </div>
                                     <div>
                                         <SelectFloatLabel selectFloatLabelProps={{

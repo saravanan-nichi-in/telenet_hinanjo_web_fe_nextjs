@@ -16,6 +16,7 @@ export default function NormalTable(props) {
         filterDisplay,
         style,
         size,
+        frozenValue,
         stripedRows,
         emptyMessage,
         tableStyle,
@@ -43,6 +44,7 @@ export default function NormalTable(props) {
                 emptyMessage={emptyMessage}
                 style={style}
                 size={size}
+                frozenValue={frozenValue}
                 onRowClick={onRowClick}
                 showGridlines={showGridlines}
                 stripedRows={stripedRows}

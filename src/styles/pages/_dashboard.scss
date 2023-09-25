@@ -1,0 +1,22 @@
+.input-switch-dashboard{
+    .p-inputswitch{
+        height: 20px;
+    width: 40px;
+    }
+
+    .p-inputswitch .p-inputswitch-slider:before{
+        width: 15px;
+        height: 16px;
+     padding-top: 2px;
+     padding-bottom: 2px;
+        right: 1.35rem;
+        left:0.1rem;
+    }
+
+}
+
+.input-align{
+    .p-inputtext{
+        padding-top: 12px;
+    }
+}
