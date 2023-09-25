@@ -18,6 +18,7 @@ const DetailModal = (props) => {
         position,
         onHide,
         visible,
+        style,
         ...restProps
     } = detailModalProps;
     const header = (
@@ -32,26 +33,35 @@ const DetailModal = (props) => {
                 header={header}
                 visible={visible}
                 onHide={onHide}
-                style={{ width: '600px', padding: "10px" }}
+                style={style}
                 {...restProps}
-            > <hr />
-                <div>
-                    <NormalLabel labelClass="w-full font-bold pt-0" text={"その他不足物資"} />
+            >
+                <div className="pt-2">
+                    <NormalLabel labelClass="w-full font-bold pt-0 mb-1"
+                        text={"その他不足物資"} 
+                        style={{
+                            fontSize: "14px",
+                            marginBottom: "10px"
+                        }} />
                     <TextArea textAreaProps={{
                         textAreaClass: "w-full bg-bluegray-50",
                         rows: 5,
                         readOnly: "true",
                         value: value1
-                    }} />
+                    }} parentStyle={{paddingTop: "0.2rem"}} />
                 </div>
                 <div className="mt-1">
-                    <NormalLabel labelClass="w-full font-bold pt-0" text={"その他不足物資"} />
+                    <NormalLabel labelClass="w-full font-bold pt-0"
+                        text={"その他不足物資"}
+                        style={{
+                            fontSize: "14px"
+                        }} />
                     <TextArea textAreaProps={{
-                        textAreaClass: "w-full bg-bluegray-50",
+                        textAreaClass: "w-full bg-bluegray-50 pt-1",
                         rows: 5,
                         readOnly: "true",
                         value: value2
-                    }} />
+                    }} parentStyle={{paddingTop: "0.2rem"}}/>
                 </div>
             </Dialog>
         </div>
