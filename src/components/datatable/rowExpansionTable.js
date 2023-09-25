@@ -2,23 +2,56 @@ import React, { useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
+
 import { Button } from '../button';
 
 export default function RowExpansionTable(props) {
+<<<<<<< HEAD
     const { parentClass, rowExpansionField, outerColumn, innerColumn, value, id, paginator, rows,
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage, tableStyle, rowExpansionStyle,
         rowExpansionTableStyle, rowExpansionSize, responsiveLayout, columnStyle, rowExpansionColumnStyle,
         rowsPerPageOptions, showGridlines, rowExpanisonGridlines, className, rowExpansionClassName,
         rowExpansionOnRowClick, custom, onRowClick, ...restProps } = props;
 
+=======
+    const {
+        parentClass,
+        rowExpansionField,
+        outerColumn,
+        innerColumn,
+        value,
+        id,
+        paginator,
+        rows,
+        rowClassName,
+        filterDisplay,
+        style,
+        size,
+        stripedRows,
+        emptyMessage,
+        tableStyle,
+        rowExpansionStyle,
+        rowExpansionTableStyle,
+        rowExpansionSize,
+        responsiveLayout,
+        columnStyle,
+        rowExpansionColumnStyle,
+        rowsPerPageOptions,
+        showGridlines,
+        rowExpanisonGridlines,
+        className,
+        rowExpansionClassName,
+        rowExpansionOnRowClick,
+        onRowClick,
+        ...restProps
+    } = props;
+>>>>>>> 6a0f1d1a79093d654356055a94c9f437f0bc79dd
     const [expandedRows, setExpandedRows] = useState(null);
     const toast = useRef(null);
 
     const expandAll = () => {
         let _expandedRows = {};
-
         value.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
         setExpandedRows(_expandedRows);
     };
 

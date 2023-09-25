@@ -28,14 +28,19 @@
     cursor: pointer;
 }
 
-.custom-table{
-    .p-datatable .p-datatable-thead > tr > th{
+.custom-table {
+    .p-datatable .p-datatable-thead>tr>th {
         font-size: 16px;
-        font-weight:700;
+        font-weight: 700;
     }
 
+<<<<<<< HEAD
     .p-datatable .p-datatable-tbody > tr > td{
         font-size: 14px;
+=======
+    .p-datatable .p-datatable-tbody>tr>td {
+        font-size: 15px;
+>>>>>>> 6a0f1d1a79093d654356055a94c9f437f0bc79dd
         font-weight: 500;
     }
 }

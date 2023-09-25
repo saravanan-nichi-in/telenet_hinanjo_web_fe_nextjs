@@ -1,10 +1,24 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
+
 import InputSwitch from "../switch/inputSwitch";
 import Button from "../button/button";
 
 const DynamicModal = (props) => {
-    const { text, iconPos, parentClass, checked, modalClass, draggable, position, header, footer, contentClass, content, ...restProps } = props
+    const {
+        text,
+        iconPos,
+        parentClass,
+        checked,
+        modalClass,
+        draggable,
+        position,
+        header,
+        footer,
+        contentClass,
+        content,
+        ...restProps
+    } = props;
     const [visible, setVisible] = useState(false);
 
     return (
@@ -37,6 +51,7 @@ const DynamicModal = (props) => {
                 </div>
             </Dialog>
         </div>
-    )
+    );
 }
-export default DynamicModal
+
+export default DynamicModal;

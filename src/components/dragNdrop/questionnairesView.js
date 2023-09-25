@@ -1,7 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import { OrderList } from 'primereact/orderlist';
 import { Accordion, AccordionTab } from 'primereact/accordion';
+
 import { Button } from '../button';
 import { NormalCheckBox } from '../checkbox';
 import { InputSwitch } from '../switch';
@@ -9,24 +9,10 @@ import { Input } from '../input';
 import { RadioBtn } from '../radioButton';
 
 const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
-    const dragProps = {
-        onDragEnd(fromIndex, toIndex) {
-            const prepareData = [...questionnaires];
-            const item = prepareData.splice(fromIndex, 1)[0];
-            prepareData.splice(toIndex, 0, item);
-            if (!_.isEmpty(questionnaires) && _.isFunction(handleOnDrag)) {
-                handleOnDrag(prepareData);
-            }
-        },
-        nodeSelector: 'li',
-        handleSelector: 'a'
-    };
-
     const itemTemplate = (item) => {
         return (
             <div>
                 <div className='mobile_questionaries mobile_accordion '>
-                    {/* mobile device */}
                     <Accordion>
                         <AccordionTab header={`項目${item.title}`}>
                             {/* Questionnaires header */}
@@ -154,10 +140,6 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                         </AccordionTab>
                     </Accordion>
                 </div>
-
-
-
-                {/* /// */}
                 <div className='hidden sm:block'>
                     {/* Questionnaires header */}
                     <div className="flex " style={{
@@ -311,13 +293,11 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
         );
     };
 
-
     return (
         questionnaires && (
             <div className="grid custom_orderlist">
                 <div className="col-12 mb-4">
                     <div className='xl:flex xl:justify-content-center"'>
-
                         <OrderList
                             value={questionnaires}
                             onChange={(e) => handleOnDrag(e)}

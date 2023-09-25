@@ -1,11 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { Dropdown } from 'primereact/dropdown';
+
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const LanguageDropdown = (props) => {
-    const { parentClass, custom, parentStyle, style, disabled, readOnly, ...restProps } = props;
+    const {
+        parentClass,
+        custom,
+        parentStyle,
+        style,
+        disabled,
+        readOnly,
+        ...restProps
+    } = props;
     const { onChangeLocale } = useContext(LayoutContext);
-
     const languageOptions = [
         {
             value: 'JP',
@@ -22,7 +30,6 @@ const LanguageDropdown = (props) => {
             name: 'English'
         },
     ];
-
     const [selectedLanguage, setSelectedLanguage] = useState('JP');
 
     const handleLanguageChange = (event) => {
@@ -73,4 +80,5 @@ const LanguageDropdown = (props) => {
         </div>
     );
 };
+
 export default LanguageDropdown;

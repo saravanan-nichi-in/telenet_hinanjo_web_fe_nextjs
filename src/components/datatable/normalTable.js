@@ -3,10 +3,41 @@ import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
 export default function NormalTable(props) {
+<<<<<<< HEAD
     const { parentClass, custom, paginator, rows, value, customActionsField, columns, id,
         rowClassName, filterDisplay, style, size, stripedRows, emptyMessage,
         tableStyle, responsiveLayout, columnStyle, rowsPerPageOptions, showGridlines, className,
         onRowClick, paginatorClassName, paginatorLeft, paginatorRight, alignHeader, frozenValue, ...restProps } = props
+=======
+    const {
+        parentClass,
+        custom,
+        paginator,
+        rows,
+        value,
+        customActionsField,
+        columns,
+        id,
+        rowClassName,
+        filterDisplay,
+        style,
+        size,
+        stripedRows,
+        emptyMessage,
+        tableStyle,
+        responsiveLayout,
+        columnStyle,
+        rowsPerPageOptions,
+        showGridlines,
+        className,
+        onRowClick,
+        paginatorClassName,
+        paginatorLeft,
+        paginatorRight,
+        alignHeader,
+        ...restProps
+    } = props
+>>>>>>> 6a0f1d1a79093d654356055a94c9f437f0bc79dd
 
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`} >

@@ -1,9 +1,35 @@
 import { InputText } from 'primereact/inputtext';
 
 const InputFloatLabel = (props) => {
-    const { inputFloatLabelProps = {} } = props;
-    const { inputClass, custom, type, placeholder, id, style, keyfilter, value,
-        name, onChange, onBlur, ref, required, readOnly, disabled, maxLength, minLength, htmlFor, inputId, labelClass, text, spanClass, spanText, ...restProps } = inputFloatLabelProps;
+    const {
+        inputFloatLabelProps = {}
+    } = props;
+    const {
+        inputClass,
+        custom,
+        type,
+        placeholder,
+        id,
+        style,
+        keyfilter,
+        value,
+        name,
+        onChange,
+        onBlur,
+        ref,
+        required,
+        readOnly,
+        disabled,
+        maxLength,
+        minLength,
+        htmlFor,
+        inputId,
+        labelClass,
+        text,
+        spanClass,
+        spanText,
+        ...restProps
+    } = inputFloatLabelProps;
 
     return (
         <div className={`${custom || 'custom_input'} p-float-label`}>
@@ -27,4 +53,5 @@ const InputFloatLabel = (props) => {
         </div>
     );
 }
+
 export default InputFloatLabel;

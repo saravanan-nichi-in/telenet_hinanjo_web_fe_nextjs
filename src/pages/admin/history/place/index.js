@@ -74,8 +74,13 @@ export default function AdminHistoryPlacePage() {
                     <div>
                         <div>
                             <form>
+<<<<<<< HEAD
                                 <div className='mt-5 mb-3 flex flex-wrap flex-grow align-items-center justify-content-end gap-2' >
                                     <div className='w-50'>
+=======
+                                <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2' >
+                                    <div>
+>>>>>>> 6a0f1d1a79093d654356055a94c9f437f0bc79dd
                                         <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
                                             inputId: "開設日",
                                             selectionMode: "range",

@@ -1,10 +1,26 @@
 import React from "react";
 import { RadioButton } from "primereact/radiobutton";
+
 import { NormalLabel } from "../label";
 
 export default function RadioBtn(props) {
-    const { parentClass, parentStyle, radioBtnProps = {} } = props;
-    const { radioClass, inputId, name, value, style, onChange, checked, disabled, labelClass, ...restProps } = radioBtnProps;
+    const {
+        parentClass,
+        parentStyle,
+        radioBtnProps = {}
+    } = props;
+    const {
+        radioClass,
+        inputId,
+        name,
+        value,
+        style,
+        onChange,
+        checked,
+        disabled,
+        labelClass,
+        ...restProps
+    } = radioBtnProps;
 
     return (
         <div className={`${parentClass}`} style={parentStyle} >

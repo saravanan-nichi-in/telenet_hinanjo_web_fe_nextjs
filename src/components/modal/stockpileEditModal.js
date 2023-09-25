@@ -1,26 +1,39 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
+
 import Button from "../button/button";
 import { NormalLabel } from "../label";
 import { Select } from "../dropdown";
 import { InputIcon } from "../input";
 import { DateCalendar } from "../date&time";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { useRouter } from "next/router";
 import { ValidationError } from "../error";
 
 const StockPileEditModal = (props) => {
-    const { parentMainClass, modalClass, draggable,
-        position, contentClass, value, options,
-        onChange, placeholder, selectParentClass, onClickTop, OnClickAddition, ...restProps } = props
+    const {
+        parentMainClass,
+        modalClass,
+        draggable,
+        position,
+        contentClass,
+        value,
+        options,
+        onChange,
+        placeholder,
+        selectParentClass,
+        onClickTop,
+        OnClickAddition,
+        ...restProps
+    } = props;
     const [visible, setVisible] = useState(false);
     const router = useRouter();
     const header = (
         <div>
             <h6 style={{ fontWeight: "600" }} className="page_header">新規登録</h6>
         </div>
-    )
+    );
     const schema = Yup.object().shape({
         quantity: Yup.number()
             .required("数量は必須です。")
@@ -34,22 +47,6 @@ const StockPileEditModal = (props) => {
 
     });
 
-    const footer = (
-        <div className="text-center pt-1">
-            <Button buttonProps={{
-                bg: "surface-500",
-                hoverBg: "w-50 h-4rem hover:surface-700",
-                buttonClass: "border-white",
-                text: "キャンセル",
-                onClick: onClickTop
-            }} parentClass={"inline"} />
-            <Button buttonProps={{
-                buttonClass: "w-50 h-4rem button_stock",
-                text: "追加",
-                onClick: OnClickAddition
-            }} parentClass={"inline"} />
-        </div>
-    );
     return (
         <>
             <Formik
@@ -207,6 +204,7 @@ const StockPileEditModal = (props) => {
                 )}
             </Formik>
         </>
-    )
+    );
 }
-export default StockPileEditModal
+
+export default StockPileEditModal;

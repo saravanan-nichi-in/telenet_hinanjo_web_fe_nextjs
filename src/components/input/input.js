@@ -1,9 +1,31 @@
 import { InputText } from 'primereact/inputtext';
 
 const Input = (props) => {
-    const { parentClass, parentStyle, inputProps = {} } = props;
-    const { inputClass, custom, type, placeholder, id, style, keyfilter, value,
-        name, onChange, onBlur, ref, required, readOnly, disabled, maxLength, minLength, ...restProps } = inputProps;
+    const {
+        parentClass,
+        parentStyle,
+        inputProps = {}
+    } = props;
+    const {
+        inputClass,
+        custom,
+        type,
+        placeholder,
+        id,
+        style,
+        keyfilter,
+        value,
+        name,
+        onChange,
+        onBlur,
+        ref,
+        required,
+        readOnly,
+        disabled,
+        maxLength,
+        minLength,
+        ...restProps
+    } = inputProps;
 
     return (
         <div className={`${parentClass || ''}  `} style={parentStyle}>
@@ -28,4 +50,5 @@ const Input = (props) => {
         </div>
     );
 }
+
 export default Input;

@@ -2,8 +2,29 @@ import React from "react";
 import { Dropdown } from 'primereact/dropdown';
 
 export default function SelectFloatLabel(props) {
-    const { parentClass, parentStyle, selectFloatLabelProps = {} } = props;
-    const { selectClass, custom, value, name, inputId, id, options, optionLabel, onChange, placeholder, style, readOnly, disabled, onBlur, text, ...restProps } = selectFloatLabelProps;
+    const {
+        parentClass,
+        parentStyle,
+        selectFloatLabelProps = {}
+    } = props;
+    const {
+        selectClass,
+        custom,
+        value,
+        name,
+        inputId,
+        id,
+        options,
+        optionLabel,
+        onChange,
+        placeholder,
+        style,
+        readOnly,
+        disabled,
+        onBlur,
+        text,
+        ...restProps
+    } = selectFloatLabelProps;
 
     return (
         <div className={`p-float-label ${parentClass}  ${custom || 'custom-select'} `} style={parentStyle}>

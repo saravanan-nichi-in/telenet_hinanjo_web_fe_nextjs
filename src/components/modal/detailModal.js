@@ -1,14 +1,28 @@
 import React from "react"
 import { Dialog } from 'primereact/dialog';
+
 import { NormalLabel } from "../label";
 import { TextArea } from "../input";
 
 const DetailModal = (props) => {
-    const { parentMainClass, detailModalProps = {} } = props;
-    const { headerContent, value1, value2, modalClass, draggable, position, onHide, visible, ...restProps } = detailModalProps;
+    const {
+        parentMainClass,
+        detailModalProps = {}
+    } = props;
+    const {
+        headerContent,
+        value1,
+        value2,
+        modalClass,
+        draggable,
+        position,
+        onHide,
+        visible,
+        ...restProps
+    } = detailModalProps;
     const header = (
         headerContent
-    )
+    );
 
     return (
         <div className={`${parentMainClass}`}>
@@ -41,6 +55,7 @@ const DetailModal = (props) => {
                 </div>
             </Dialog>
         </div>
-    )
+    );
 }
-export default DetailModal
+
+export default DetailModal;
