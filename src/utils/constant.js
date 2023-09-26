@@ -14,12 +14,12 @@ const profiles = [
 ];
 
 const evacuationStatusOptions = [
-    {name:"Vacant Test", code:"VT"},
-    {name:"Starting To get Crowded", code:"SGT"},
-    {name:"InActiveClosedDateNotPresent", code:"ICDP"},
-    {name:"Crowded", code:"CD"},
-    {name:"Closed", code:"CLD"},
-    {name:"Nara", code:"NR"}
+    { name: "Vacant Test", code: "VT" },
+    { name: "Starting To get Crowded", code: "SGT" },
+    { name: "InActiveClosedDateNotPresent", code: "ICDP" },
+    { name: "Crowded", code: "CD" },
+    { name: "Closed", code: "CLD" },
+    { name: "Nara", code: "NR" }
 ];
 
 const evacuationTableColumns = [
@@ -43,11 +43,11 @@ const evacuationTableColumns = [
 ];
 
 const suppliesShortageData = [
-    { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3"},
+    { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3" },
     { "避難所": "Starting to get Crowded", "Test1(2)": "201", "Test2(2)": "16" },
     { "避難所": "crowded", "Test1(2)": "2999993", "Test2(2)": "6" },
-    { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1"},
-    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33"}
+    { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1" },
+    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33" }
 ];
 
 const suppliesShortageHeaderColumn = [
@@ -114,6 +114,12 @@ const dashboardTableColumns = [
 ];
 
 export {
-    profiles, evacuationStatusOptions, evacuationTableColumns, suppliesShortageData, suppliesShortageHeaderColumn,
-    historyTableColumns, historyPageCities, dashboardTableColumns
+    profiles,
+    evacuationStatusOptions,
+    evacuationTableColumns,
+    suppliesShortageData,
+    suppliesShortageHeaderColumn,
+    historyTableColumns,
+    historyPageCities,
+    dashboardTableColumns
 }

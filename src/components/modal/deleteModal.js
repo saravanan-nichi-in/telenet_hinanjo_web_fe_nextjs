@@ -74,7 +74,7 @@ const DeleteModal = (props) => {
                 onHide={() => setVisible(false)}
                 {...restProps}
             >
-                <div class={`text-center ${contentClass} text-lg`}>
+                <div class={`text-center ${contentClass} text-1rem`}>
                     {content}
                 </div>
             </Dialog>

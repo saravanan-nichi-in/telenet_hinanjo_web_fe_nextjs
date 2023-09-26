@@ -31,7 +31,7 @@ export default function NormalTable(props) {
         paginatorRight,
         alignHeader,
         ...restProps
-    } = props
+    } = props;
 
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`} >
