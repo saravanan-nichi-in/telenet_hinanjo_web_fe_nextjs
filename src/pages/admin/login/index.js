@@ -117,10 +117,9 @@ const LoginPage = () => {
                                                     severity: "primary"
                                                 }} />
                                             </div>
-                                            <div className='flex justify-content-center'>
+                                            <div className='w-full flex justify-content-center mt-0'>
                                                 <Button buttonProps={{
                                                     text: translate(localeJson, 'forgot_password_caption'),
-                                                    buttonClass: "custom_radiusBtn",
                                                     link: "true",
                                                     onClick: () => router.push('/admin/forgot-password'),
                                                     severity: "primary"
