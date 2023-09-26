@@ -28,78 +28,76 @@ export default function EvacuationPage() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <section className='col-12'>
-                        <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
-                        <hr />
+                    <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
+                    <hr />
+                    <div>
                         <div>
-                            <div>
-                                <form>
-                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                        <SelectFloatLabel
-                                            selectFloatLabelProps={{
-                                                inputId: "evacuationCity",
-                                                value: selectedOption,
-                                                options: evacuationStatusOptions,
-                                                optionLabel: "name",
-                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                onChange: (e) => setSelectedOption(e.value),
-                                                text: translate(localeJson, 'evacuation_site')
-                                            }}
-                                            parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
-                                        />
-                                        <InputFloatLabel
-                                            inputFloatLabelProps={{
-                                                id: 'householdNumber',
-                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                text: translate(localeJson, 'household_number')
-                                            }}
-                                        />
-                                        <InputFloatLabel
-                                            inputFloatLabelProps={{
-                                                id: 'fullName',
-                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                text: translate(localeJson, 'full_name'),
-                                                custom: "mobile-input"
-                                            }}
-                                        />
-                                        <div className="">
-                                            <Button buttonProps={{
-                                                buttonClass: "w-12 search-button mobile-input ",
-                                                text: translate(localeJson, "search_text"),
-                                                icon: "pi pi-search",
-                                                severity: "primary"
-                                            }} />
-                                        </div>
+                            <form>
+                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
+                                    <SelectFloatLabel
+                                        selectFloatLabelProps={{
+                                            inputId: "evacuationCity",
+                                            value: selectedOption,
+                                            options: evacuationStatusOptions,
+                                            optionLabel: "name",
+                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            style: { height: "40px" },
+                                            onChange: (e) => setSelectedOption(e.value),
+                                            text: translate(localeJson, 'evacuation_site')
+                                        }}
+                                        parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
+                                    />
+                                    <InputFloatLabel
+                                        inputFloatLabelProps={{
+                                            id: 'householdNumber',
+                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                            style: { height: "40px" },
+                                            text: translate(localeJson, 'household_number')
+                                        }}
+                                    />
+                                    <InputFloatLabel
+                                        inputFloatLabelProps={{
+                                            id: 'fullName',
+                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                            style: { height: "40px" },
+                                            text: translate(localeJson, 'full_name'),
+                                            custom: "mobile-input"
+                                        }}
+                                    />
+                                    <div className="">
+                                        <Button buttonProps={{
+                                            buttonClass: "w-12 search-button mobile-input ",
+                                            text: translate(localeJson, "search_text"),
+                                            icon: "pi pi-search",
+                                            severity: "primary"
+                                        }} />
                                     </div>
-                                </form>
+                                </div>
+                            </form>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div>
+                                <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
                             </div>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div>
-                                    <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
-                                </div>
-                                <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                    }} parentClass={"mb-3"} />
-                                </div>
+                            <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                }} parentClass={"mb-3"} />
                             </div>
                         </div>
-                        <NormalTable
-                            size={"small"}
-                            stripedRows={true}
-                            rows={10}
-                            paginator={"true"}
-                            showGridlines={"true"}
-                            value={admins}
-                            columns={evacuationTableColumns}
-                            paginatorLeft={true} />
-                    </section>
+                    </div>
+                    <NormalTable
+                        size={"small"}
+                        stripedRows={true}
+                        rows={10}
+                        paginator={"true"}
+                        showGridlines={"true"}
+                        value={admins}
+                        columns={evacuationTableColumns}
+                        paginatorLeft={true} />
                 </div>
             </div>
         </div>

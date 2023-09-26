@@ -13,7 +13,7 @@ import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/cons
  */
 
 function ShoratgeSupplies() {
-    const {localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [lockedSupplies, setLockedSupplies] = useState([]);
@@ -29,11 +29,11 @@ function ShoratgeSupplies() {
         setProducts(suppliesShortageData);
         setLockedSupplies([
             {
-              "避難所": "不足合計",
-              "Test1(2)": "3981574",
-              "Test2(2)": "33",
+                "避難所": "不足合計",
+                "Test1(2)": "3981574",
+                "Test2(2)": "33",
             }
-          ]);
+        ]);
     }, [])
 
     const exportCSV = (selectionOnly) => {
@@ -41,7 +41,7 @@ function ShoratgeSupplies() {
     };
 
     const onRowClick = (event) => {
-        if(event.data.避難所 == "不足合計"){
+        if (event.data.避難所 == "不足合計") {
             return;
         }
         else {
@@ -61,50 +61,50 @@ function ShoratgeSupplies() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <section className='col-12'>
-                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
-                        <hr />
-                        <div className="col-12">
-                            <div className="flex justify-content-end ">
+                    <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                    <hr />
+                    <div className="col-12">
+                        <div className="flex justify-content-end ">
                             <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    onClick: () => exportCSV(false)
-                                }} parentClass={"mb-3"} />
-                            </div>
-                            <DataTable
-                                ref={dt}
-                                value={products}
-                                scrollable
-                                dataKey="id"
-                                className="p-datatable-gridlines"
-                                showGridlines
-                                rows={5}
-                                rowClassName={rowClass}
-                                frozenValue={lockedSupplies}
-                                frozenWidth='3'
-                                emptyMessage="No customers found."
-                                style={{
-                                    fontSize: "14px",
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'export'),
+                                onClick: () => exportCSV(false)
+                            }} parentClass={"mb-3"} />
+                        </div>
+                        <DataTable
+                            ref={dt}
+                            value={products}
+                            scrollable
+                            dataKey="id"
+                            className="p-datatable-gridlines"
+                            showGridlines
+                            rows={5}
+                            rowClassName={rowClass}
+                            frozenValue={lockedSupplies}
+                            frozenWidth='3'
+                            emptyMessage="No customers found."
+                            style={{
+                                fontSize: "16px",
+
+                            }}
+                            size={"small"}
+                            stripedRows
+                            onRowClick={onRowClick}
+                            rowsPerPageOptions={[5, 10, 25, 50]}
+                            currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                        >
+                            {suppliesShortageHeaderColumn.map((col, index) => (
+                                <Column key={index} field={col.field} sortable header={col.header} style={{
+                                    minWidth: col.minWidth && col.minWidth,
+                                    textAlign: 'center',
                                 }}
-                                size={"small"}
-                                stripedRows
-                                onRowClick={onRowClick}
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                            >
-                                {suppliesShortageHeaderColumn.map((col, index) => (
-                                    <Column key={index} field={col.field} sortable header={col.header} style={{
-                                        minWidth: col.minWidth && col.minWidth,
-                                        textAlign: 'center',
-                                    }}                                    
                                     body={(rowData) => {
                                         console.log(col.field);
                                         if (col.field === translate(localeJson, 'shelter_place')) {
                                             return (
-                                                <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={()=>setSelectedRow(rowData[col.field])}>
+                                                <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={() => setSelectedRow(rowData[col.field])}>
                                                     {rowData[col.field]}
                                                 </span>
                                             );
@@ -112,18 +112,16 @@ function ShoratgeSupplies() {
                                             return rowData[col.field];
                                         }
                                     }} />
-                                ))}
-                            </DataTable>
-                        </div>
-                    </section>
-
+                            ))}
+                        </DataTable>
+                    </div>
                 </div>
             </div>
             <div>
                 <DetailModal detailModalProps={{
                     headerContent: headContent,
                     visible: showModal,
-                    style:{ width: '600px' },
+                    style: { width: '600px' },
                     position: 'top',
                     onHide: () => setShowModal(false),
                     value1: translate(localeJson, 'not'),
