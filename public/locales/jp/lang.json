@@ -3,9 +3,10 @@
         "header": {},
         "sidebar": {
             "vault_info": "避難所情報",
-            "evacuation_status_list": "避難者状況一覧",
-            "history_place":"避難所状況履歴",
+            "evacuation_status_list": "避難所状況一覧",
+            "history_place": "避難所状況履歴",
             "list_of_evacuees": "避難者一覧",
+            "external_evacuees_tally": "外部避難者集計",
             "shortage_supplies_list": "不足物資一覧",
             "stockpile_summary": "備蓄品集計",
             "statistics": "統計",
@@ -16,7 +17,7 @@
             "setting": "設定",
             "places": "避難所マスタ管理",
             "material": "物資マスタ管理",
-            "stockpile_master_management": "S備蓄品マスタ管理",
+            "stockpile_master_management": "備蓄品マスタ管理",
             "special_care_list": "要配慮者事項",
             "questionnaire": "個別項目追加表示(世带全体)",
             "individual_questionnaire": "個別項目追加表示(個人ごと)",
@@ -24,43 +25,43 @@
         },
         "pages": {
             "Other_shortage_supplies": "その他不足物資",
-            "staff_information_registration":"スタッフ情報登録",
-            "staff_management_edit":"スタッフ管理編集",
-            "admin_management_edit":"管理者詳細情報",
-            "admin_information_registration":"管理者情報の登録",
-            "material_information_registration":"物資情報登録",
-            "special_care_registration":"要配慮者事項登録",
-            "edit_material_information":"物資情報編集"
+            "staff_information_registration": "スタッフ情報登録",
+            "staff_management_edit": "スタッフ管理編集",
+            "admin_management_edit": "管理者詳細情報",
+            "admin_information_registration": "管理者情報の登録",
+            "material_information_registration": "物資情報登録",
+            "special_care_registration": "要配慮者事項登録",
+            "edit_material_information": "物資情報編集"
         },
-        "validation":{
-            "admin_name_required":"管理者名が必要です。",
-            "supplies_necessary":"物資は必須です。",
-            "phone_min10_required":"電話番号には10または11桁の半角数字を入力してください。",
-            "phone_no_required":"電話番号は必須です。",
-            "matters_to_consider_required":"要配慮者事項は必須です。",
-            "things_to_consider_required":"要配慮者事項（英語）は必須です。"
+        "validation": {
+            "admin_name_required": "管理者名が必要です。",
+            "supplies_necessary": "物資は必須です。",
+            "phone_min10_required": "電話番号には10または11桁の半角数字を入力してください。",
+            "phone_no_required": "電話番号は必須です。",
+            "matters_to_consider_required": "要配慮者事項は必須です。",
+            "things_to_consider_required": "要配慮者事項（英語）は必須です。"
         },
         "buttons": {
-            "import":"インポート",
+            "import": "インポート",
             "export": "エクスポート",
-            "search":"検索",
-            "signup":"新規登録",
-            "cancel":"キャンセル",
-            "renew":"更新",
-            "registration":"登録"
+            "search": "検索",
+            "signup": "新規登録",
+            "cancel": "キャンセル",
+            "renew": "更新",
+            "registration": "登録"
         },
         "footer": {},
-        "form":{
-            "evacuation_site":"避難場所",
-            "household_number":"世帯番号" ,
-            "full_name":"氏名" ,
-            "email":"メール" ,
-            "telephone_number":"電話番号",
-            "supplies":"物資",
-            "unit":"単位",
-            "things_to_consider":"要配慮者事項（英語)" 
-        }, 
-        "others":{
+        "form": {
+            "evacuation_site": "避難場所",
+            "household_number": "世帯番号",
+            "full_name": "氏名",
+            "email": "メール",
+            "telephone_number": "電話番号",
+            "supplies": "物資",
+            "unit": "単位",
+            "things_to_consider": "要配慮者事項（英語)"
+        },
+        "others": {
             "not": "無し",
             "shelter_place": "避難所",
             "setting_start_date": "開設日",
@@ -100,23 +101,23 @@
             "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
             "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
         },
-        "form":{
-            "type":"種別",
-            "stockpile_item_name":"備蓄品名",
-            "storage_period":"保管期間",
-            "days":"(日)",
-            "image":"画像"
+        "form": {
+            "type": "種別",
+            "stockpile_item_name": "備蓄品名",
+            "storage_period": "保管期間",
+            "days": "(日)",
+            "image": "画像"
         },
-        "validation":{
-            "type_required":"種別は必須です。",
-            "stockpile_name_required":"備蓄品名は必須です。"
+        "validation": {
+            "type_required": "種別は必須です。",
+            "stockpile_name_required": "備蓄品名は必須です。"
         },
         "buttons": {
             "login": "ログイン",
             "forgot_password_caption": "パスワードがわからない場合",
             "send": "送信",
             "save": "保存",
-            "addition":"追加"
+            "addition": "追加"
         },
         "footer": {}
     },
