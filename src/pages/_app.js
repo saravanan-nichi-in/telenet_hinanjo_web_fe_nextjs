@@ -22,17 +22,17 @@ function MyApp({ Component, pageProps }) {
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        // authCheck(router.asPath);
-        // const hideContent = () => setAuthorized(false);
-        // router.events.on('routeChangeStart', hideContent);
-        // // on route change complete - run auth check 
-        // router.events.on('routeChangeComplete', authCheck)
-        // // Unsubscribe from events in useEffect return function
-        // return () => {
-        //     router.events.off('routeChangeStart', hideContent);
-        //     router.events.off('routeChangeComplete', authCheck);
-        // }
-        setAuthorized(true);
+        authCheck(router.asPath);
+        const hideContent = () => setAuthorized(false);
+        router.events.on('routeChangeStart', hideContent);
+        // on route change complete - run auth check 
+        router.events.on('routeChangeComplete', authCheck)
+        // Unsubscribe from events in useEffect return function
+        return () => {
+            router.events.off('routeChangeStart', hideContent);
+            router.events.off('routeChangeComplete', authCheck);
+        }
+        // setAuthorized(true);
     }, []);
 
     function authCheck(url) {
@@ -46,7 +46,8 @@ function MyApp({ Component, pageProps }) {
             });
         } else if (AuthenticationAuthorizationService.staffValue && staffPublicPaths.includes(path)) {
             router.push({
-                pathname: '/staff/dashboard',
+                // pathname: '/staff/dashboard',
+                pathname: '/admin/dashboard',
             });
         } else if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path)) {
             setAuthorized(false);
@@ -56,8 +57,9 @@ function MyApp({ Component, pageProps }) {
         } else if (path.startsWith('/staff') && !AuthenticationAuthorizationService.staffValue && !staffPublicPaths.includes(path)) {
             setAuthorized(false);
             router.push({
-                pathname: '/staff/login',
-                query: { hinan: 1 }
+                // pathname: '/staff/login',
+                pathname: '/admin/login',
+                // query: { hinan: 1 }
             });
         } else {
             setAuthorized(true);

@@ -7,8 +7,7 @@
   --surface-f: #ffffff;
   --text-color: #495057;
   --text-color-secondary: #6c757d;
-  /* --primary-color:#6366F1; */
-  --primary-color: #4b6cb3;
+  --primary-color: #2b3d51;
   --primary-color-text: #ffffff;
   --font-family: Noto Sans JP Hiragino Kaku Gothic Pro Arial sans-serif;
   --surface-0: #ffffff;
@@ -2955,7 +2954,7 @@
 }
 
 .p-button.p-button-link {
-  color: #4338CA;
+  color: #2b3d51;
   background: transparent;
   border: transparent;
 }
@@ -2963,7 +2962,7 @@
 .p-button.p-button-link:enabled:hover,
 .p-button.p-button-link:not(button):not(a):not(.p-disabled):hover {
   background: transparent;
-  color: #4338CA;
+  color: #2b3d51;
   border-color: transparent;
 }
 
