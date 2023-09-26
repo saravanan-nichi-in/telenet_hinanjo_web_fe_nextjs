@@ -4,8 +4,9 @@
         "sidebar": {
             "vault_info": "Evacuation Information",
             "evacuation_status_list": "Evacuation Status List",
-            "history_place":"Evacuation center status history",
+            "history_place": "Evacuation center status history",
             "list_of_evacuees": "List of Evacuees",
+            "external_evacuees_tally": "External Evacuees Tally",
             "shortage_supplies_list": "Shortage Supplies List",
             "stockpile_summary": "Stockpile Summary",
             "statistics": "Statistics",
@@ -24,42 +25,41 @@
         },
         "pages": {
             "Other_shortage_supplies": "Other shortage supplies",
-            "staff_information_registration":"Staff information registration",
-            "staff_management_edit":"Staff Management Edit",
-            "admin_management_edit":"Admin Management Edit",
-            "admin_information_registration":"Admin Information registration",
-            "material_information_registration":"Material Information registration",
-            "special_care_registration":"Registration of matters requiring consideration",
-            "edit_material_information":"Edit material information"
-            
+            "staff_information_registration": "Staff information registration",
+            "staff_management_edit": "Staff Management Edit",
+            "admin_management_edit": "Admin Management Edit",
+            "admin_information_registration": "Admin Information registration",
+            "material_information_registration": "Material Information registration",
+            "special_care_registration": "Registration of matters requiring consideration",
+            "edit_material_information": "Edit material information"
         },
-        "validation":{
-            "admin_name_required":"Admin Name required",
-            "supplies_necessary":"Supplies are necessary",
-            "phone_min10_required":"Enter 10 or 11 digits for The phone number",
-            "phone_no_required":"phone number required",
-            "matters_to_consider_required":"Information on persons requiring special consideration is required.",
-            "things_to_consider_required":"Persons requiring special care (English) is required."
+        "validation": {
+            "admin_name_required": "Admin Name required",
+            "supplies_necessary": "Supplies are necessary",
+            "phone_min10_required": "Enter 10 or 11 digits for The phone number",
+            "phone_no_required": "phone number required",
+            "matters_to_consider_required": "Information on persons requiring special consideration is required.",
+            "things_to_consider_required": "Persons requiring special care (English) is required."
         },
         "buttons": {
-            "import":"import",
+            "import": "import",
             "export": "export",
-            "search":"search",
-            "signup":"signup",
-            "cancel":"cancel",
-            "renew":"renew",
-            "registration":"登録"
+            "search": "search",
+            "signup": "signup",
+            "cancel": "cancel",
+            "renew": "renew",
+            "registration": "登録"
         },
         "footer": {},
-        "form":{
-            "evacuation_site":"Evacuation Site",
-            "household_number":"Household Number",
-            "full_name":"Full Name",
-            "email":"email",
-            "telephone_number":"telephone number",
-            "supplies":"Supplies",
-            "unit":"Unit" ,
-            "things_to_consider":"Matters requiring special care (English)"
+        "form": {
+            "evacuation_site": "Evacuation Site",
+            "household_number": "Household Number",
+            "full_name": "Full Name",
+            "email": "email",
+            "telephone_number": "telephone number",
+            "supplies": "Supplies",
+            "unit": "Unit",
+            "things_to_consider": "Matters requiring special care (English)"
         }
     },
     "staff": {
@@ -91,23 +91,23 @@
             "forgot_password_failure": "An error has occurred Please try again.",
             "forgot_password_success": "A password reset email has been sent to the email address you entered."
         },
-        "form":{
-            "type":"type",
-            "stockpile_item_name":"Stockpile item name",
-            "storage_period":"Storage period",
-            "days":"days",
-            "image":"Image"
+        "form": {
+            "type": "type",
+            "stockpile_item_name": "Stockpile item name",
+            "storage_period": "Storage period",
+            "days": "days",
+            "image": "Image"
         },
-        "validation":{
-            "type_required":"Type is required.",
-            "stockpile_name_required":"stockpile name is required."
+        "validation": {
+            "type_required": "Type is required.",
+            "stockpile_name_required": "stockpile name is required."
         },
         "buttons": {
             "login": "Login",
             "forgot_password_caption": "If you don't know your password",
             "send": "Send",
             "save": "Save",
-            "addition":"addition"
+            "addition": "addition"
         },
         "footer": {}
     },

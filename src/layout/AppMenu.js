@@ -49,6 +49,12 @@ const AppMenu = () => {
                             active: router.pathname.startsWith('/admin/evacuation')
                         },
                         {
+                            label: translate(localeJson, 'external_evacuees_tally'),
+                            icon: <HiDocumentText size={20} />,
+                            to: '/admin/external/family',
+                            active: router.pathname.startsWith('/admin/external/family')
+                        },
+                        {
                             label: translate(localeJson, 'shortage_supplies_list'),
                             icon: <IoMdToday size={20} />,
                             to: '/admin/shortage-supplies',
