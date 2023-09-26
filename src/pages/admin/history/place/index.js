@@ -56,13 +56,13 @@ export default function AdminHistoryPlacePage() {
                                 }} />
                             </div>
                             <form>
-                                <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input' >
+                                <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                     <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
                                         inputId: "settingStartDate",
                                         selectionMode: "range",
                                         text: translate(localeJson, "setting_start_date"),
-                                        dateTimeClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem"
-                                    }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                        dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem "
+                                    }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                     <SelectFloatLabel selectFloatLabelProps={{
                                         inputId: "shelterCity",
                                         selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",

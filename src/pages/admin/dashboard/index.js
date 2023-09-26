@@ -15,6 +15,7 @@ import { dashboardTableColumns } from '@/utils/constant';
 function AdminDashboard() {
     const [checked1, setChecked1] = useState(false);
     const { localeJson } = useContext(LayoutContext);
+    const [lockedCustomers, setLockedCustomers] = useState([]);
     const [admins, setAdmins] = useState([]);
     
     const rowClass = (data) => {
@@ -33,7 +34,35 @@ function AdminDashboard() {
                 console.error('Error fetching data:', error);
             });
 
-        AdminDashboardService.getAdminsDashboardMedium().then((data) => setAdmins(data));
+        AdminDashboardService.getAdminDashboardsMedium().then((data) => setAdmins(data));
+        setLockedCustomers([
+            {
+                "番号": '',
+                "避難所": '合計',
+                "避難可能人数": '66920人',
+                "現在の避難者数": '2134人',
+                "避難者数": '15.77%',
+                "避難中の世帯数": '450世帯',
+                "個人情報なしの避難者数": '1555人',
+                "男": '160人',
+                '女': '371人',
+                '答えたくない': '48人',
+                '妊産婦': '248人',
+                '乳幼児': '173人',
+                '障がい者': '86人',
+                '要介護者': '39人',
+                '医療機器利用者': '38人',
+                'アレルギー': '26人',
+                '外国籍': '36人',
+                'その他': '35人',
+                'テーブル': '71人',
+                's': '0人',
+                '余力人数': '64786人',
+                '食糧等支援の人数': '0人',
+                '満員切替': ''
+
+            }
+        ]);
     }, [])
 
     return (
@@ -56,6 +85,7 @@ function AdminDashboard() {
                             showGridlines={"true"}
                             customActionsField="actions"
                             value={admins}
+                            frozenValue={lockedCustomers}
                             columns={dashboardTableColumns}
                             filterDisplay="menu"
                             emptyMessage="No customers found."

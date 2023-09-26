@@ -1,3 +1,5 @@
+import { DeleteModal } from "@/components";
+
 const profiles = [
     {
         profile: 'admin',
@@ -12,12 +14,12 @@ const profiles = [
 ];
 
 const evacuationStatusOptions = [
-    {name:"Vacant Test", code:"VT"},
-    {name:"Starting To get Crowded", code:"SGT"},
-    {name:"InActiveClosedDateNotPresent", code:"ICDP"},
-    {name:"Crowded", code:"CD"},
-    {name:"Closed", code:"CLD"},
-    {name:"Nara", code:"NR"}
+    { name: "Vacant Test", code: "VT" },
+    { name: "Starting To get Crowded", code: "SGT" },
+    { name: "InActiveClosedDateNotPresent", code: "ICDP" },
+    { name: "Crowded", code: "CD" },
+    { name: "Closed", code: "CLD" },
+    { name: "Nara", code: "NR" }
 ];
 
 const evacuationTableColumns = [
@@ -41,11 +43,11 @@ const evacuationTableColumns = [
 ];
 
 const suppliesShortageData = [
-    { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3"},
+    { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3" },
     { "避難所": "Starting to get Crowded", "Test1(2)": "201", "Test2(2)": "16" },
     { "避難所": "crowded", "Test1(2)": "2999993", "Test2(2)": "6" },
-    { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1"},
-    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33"}
+    { "避難所": "避難所B", "Test1(2)": "980766", "Test2(2)": "1" },
+    { "避難所": "Nara", "Test1(2)": "3981574", "Test2(2)": "33" }
 ];
 
 const suppliesShortageHeaderColumn = [
@@ -63,7 +65,7 @@ const historyPageCities = [
 ];
 
 const historyTableColumns = [
-    { field: 'Sl No', header: 'No', minWidth: "8rem", sortable: true, textAlign: 'center' },
+    { field: 'Sl No', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'center' },
     { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
     { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
     { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
@@ -88,10 +90,36 @@ const dashboardTableColumns = [
     { field: '避難者数', header: '避難者数', minWidth: '7rem', sortable: true, headerClassName: "custom-header" },
     { field: '避難中の世帯数', header: '避難中の世帯数', minWidth: '10rem', sortable: true, headerClassName: "custom-header" },
     { field: '個人情報なしの避難者数', header: '個人情報なしの避難者数', minWidth: '15rem', sortable: true, headerClassName: "custom-header" },
-    { field: '男', header: '男', minWidth: '5rem', sortable: true, headerClassName: "custom-header" }
+    { field: '男', header: '男', minWidth: '5rem', sortable: true, headerClassName: "custom-header" },
+    {
+        field: 'actions',
+        header: '満員切替',
+        minWidth: "7rem",
+        headerClassName: "custom-header",
+        textAlign: 'center',
+        sortable: true,
+        body: (rowData) => (
+            <div className='input-switch-dashboard'>
+                <DeleteModal
+                    modalClass="w-50rem"
+                    header="確認情報"
+                    position="top"
+                    content={"避難所の運営状態を変更しますか？"}
+                    checked={false}
+                    parentClass={"custom-switch"}
+                />
+            </div>
+        ),
+    }
 ];
 
 export {
-    profiles, evacuationStatusOptions, evacuationTableColumns, suppliesShortageData, suppliesShortageHeaderColumn,
-    historyTableColumns, historyPageCities, dashboardTableColumns
+    profiles,
+    evacuationStatusOptions,
+    evacuationTableColumns,
+    suppliesShortageData,
+    suppliesShortageHeaderColumn,
+    historyTableColumns,
+    historyPageCities,
+    dashboardTableColumns
 }
