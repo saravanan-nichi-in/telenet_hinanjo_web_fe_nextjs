@@ -65,7 +65,7 @@ const historyPageCities = [
 ];
 
 const historyTableColumns = [
-    { field: 'Sl No', header: 'No', minWidth: "8rem", sortable: true, textAlign: 'center' },
+    { field: 'Sl No', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'center' },
     { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
     { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
     { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
