@@ -31,7 +31,7 @@ export default function AdminHistoryPlacePage() {
                 <div className='card'>
                     <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'>
                         <div className='flex justify-content-center align-items-center gap-2'>
-                            <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
+                            <h5 className='page_header'>{translate(localeJson, 'history_place')}</h5>
                         </div>
                     </div>
                     <hr />
@@ -51,7 +51,7 @@ export default function AdminHistoryPlacePage() {
                                     rounded: "true",
                                     buttonClass: "w-50",
                                     text: translate(localeJson, 'mail_setting'),
-                                    onClick: () => router.push('/admin/admin-management/create'),
+                                    onClick: () => router.push('/admin/history/place/email/configuration'),
                                     severity: "success"
                                 }} />
                             </div>

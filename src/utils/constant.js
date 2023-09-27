@@ -113,6 +113,26 @@ const dashboardTableColumns = [
     }
 ];
 
+const MailSettingsOption1 = [
+    { name: 'なし'},
+    { name: '2時間毎' },
+    { name: '3時間毎'},
+    { name: '4時間毎'},
+    { name: '6時間毎'},
+    { name: '毎日'},
+    { name: '毎日2回'},
+
+];
+
+const MailSettingsOption2 = [
+    { name: '--'},
+    { name: '北海道' },
+    { name: '福島県'},
+    { name: '千葉県'},
+    { name: '東京都'},
+
+];
+
 export {
     profiles,
     evacuationStatusOptions,
@@ -121,5 +141,7 @@ export {
     suppliesShortageHeaderColumn,
     historyTableColumns,
     historyPageCities,
-    dashboardTableColumns
+    dashboardTableColumns,
+    MailSettingsOption1,
+    MailSettingsOption2,
 }

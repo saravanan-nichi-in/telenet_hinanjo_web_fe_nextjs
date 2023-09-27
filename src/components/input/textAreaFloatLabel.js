@@ -1,16 +1,14 @@
-import React from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 
-export default function TextArea(props) {
+const TextAreaFloatLabel = (props) => {
     const {
         parentClass,
         parentStyle,
-        textAreaProps = {}
+        textAreaFloatLabelProps = {}
     } = props;
     const {
         name,
         textAreaClass,
-        custom,
         value,
         id,
         style,
@@ -19,23 +17,32 @@ export default function TextArea(props) {
         cols,
         readOnly,
         disabled,
+        text,
+        custom,
+        spanClass,
+        spanText,
+        onBlur,
         ...restProps
-    } = textAreaProps;
+    } = textAreaFloatLabelProps;
 
     return (
-        <div className={`${parentClass}`} style={parentStyle}>
+            <div className={`${parentClass} ${custom || 'custom-textArea'} p-float-label`} style={parentStyle}>
             <InputTextarea name={name}
-                className={`${textAreaClass} ${custom || 'custom-textArea'}`}
+                className={`${textAreaClass} `}
                 value={value}
                 id={id}
                 style={style}
                 onChange={onChange}
+                onBlur={onBlur}
                 rows={rows}
                 cols={cols}
                 readOnly={readOnly}
                 disabled={disabled}
                 {...restProps}
             />
+            <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>
-    )
+    );
 }
+
+export default TextAreaFloatLabel;

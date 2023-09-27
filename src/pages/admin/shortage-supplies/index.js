@@ -21,7 +21,7 @@ function ShoratgeSupplies() {
     const [products, setProducts] = useState([]);
     const headContent = (
         <div>
-            <h2 style={{ fontSize: "1rem", fontWeight: "bold" }}>{selectedRow}</h2>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{selectedRow}</h2>
         </div>
     )
 
@@ -63,7 +63,7 @@ function ShoratgeSupplies() {
                 <div className='card'>
                     <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                     <hr />
-                    <div className="col-12">
+                    <div className="col-12 custom-table">
                         <div className="flex justify-content-end ">
                             <Button buttonProps={{
                                 type: 'submit',
@@ -78,17 +78,13 @@ function ShoratgeSupplies() {
                             value={products}
                             scrollable
                             dataKey="id"
-                            className="p-datatable-gridlines"
+                            className={"custom-table-cell p-datatable-gridlines"}
                             showGridlines
                             rows={5}
                             rowClassName={rowClass}
                             frozenValue={lockedSupplies}
                             frozenWidth='3'
                             emptyMessage="No customers found."
-                            style={{
-                                fontSize: "16px",
-
-                            }}
                             size={"small"}
                             stripedRows
                             onRowClick={onRowClick}

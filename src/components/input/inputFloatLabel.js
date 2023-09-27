@@ -48,7 +48,8 @@ const InputFloatLabel = (props) => {
                 readOnly={readOnly}
                 disabled={disabled}
                 maxLength={maxLength}
-                minLength={minLength} />
+                minLength={minLength}
+                {...restProps} />
             <label htmlFor={id}>{text}</label>
         </div>
     );
