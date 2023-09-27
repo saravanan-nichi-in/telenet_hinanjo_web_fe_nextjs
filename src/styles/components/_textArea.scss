@@ -1,7 +1,7 @@
-.custom-textArea{
-.p-inputtextarea{
-    font-weight: 500;
-    font-size: 16px;
-    border-radius: 5px;
-}
+.custom-textArea {
+    .p-inputtextarea {
+        font-weight: $commonFontWeight;
+        font-size: $commonFontSize;
+        border-radius: $commonRadius;
+    }
 }

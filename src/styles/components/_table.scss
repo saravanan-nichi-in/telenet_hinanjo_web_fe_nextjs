@@ -18,12 +18,12 @@
 
 .custom-table {
     .p-datatable .p-datatable-thead>tr>th {
-        font-size: 16px;
-        font-weight: 700;
+        font-size: $tableHeaderFontSize;
+        font-weight: $tableHeaderFontWeight ;
     }
 
     .p-datatable .p-datatable-tbody>tr>td {
-        font-size: 14px;
-        font-weight: 500;
+        font-size: $tableDataFontSize;
+        font-weight: $commonFontWeight;
     }
 }

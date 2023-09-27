@@ -64,7 +64,16 @@
             "things_to_consider":"Matters requiring special care (English)",
             "notification_email_id":"Notificaion email id",
             "transmission_interval":"Transmission interval" ,
-            "output_target_area":"Output target area",
+            "output_target_area":"Output target area"
+        },
+        "others":{
+            "not": "Not",
+            "shelter_place": "Shelter place",
+            "setting_start_date": "Setting start date",
+            "shelter_place_name": "Sheter place name",
+            "mail_setting": "Mail setting",
+            "total": "Total",
+            "search_text": "Search",
             "history_mail_message":"*If you specify multiple email IDs, please separate them with commas."
         }
     },

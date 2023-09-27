@@ -5455,8 +5455,8 @@
 }
 
 .p-dialog .p-dialog-header .p-dialog-title {
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-weight: 500;
+  font-size: 21px;
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon {
@@ -5479,7 +5479,7 @@
 .p-dialog .p-dialog-header .p-dialog-header-icon:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon:last-child {
