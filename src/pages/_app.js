@@ -40,6 +40,7 @@ function MyApp({ Component, pageProps }) {
         const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
         const staffPublicPaths = ['/staff/login', '/staff/forgot-password', '/staff/reset-password'];
         const path = url.split('?')[0];
+        console.log(path);
         if (AuthenticationAuthorizationService.adminValue && adminPublicPaths.includes(path)) {
             console.log("1");
             router.push({
@@ -52,7 +53,7 @@ function MyApp({ Component, pageProps }) {
                 pathname: '/admin/dashboard',
             });
         } else if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path)) {
-            console.log("3");
+            console.log("3",path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path));
             setAuthorized(false);
             router.push({
                 pathname: '/admin/login',
@@ -66,7 +67,7 @@ function MyApp({ Component, pageProps }) {
                 // query: { hinan: 1 }
             });
         } else {
-            console.log("5");
+            console.log("5", !adminPublicPaths.includes(path));
             setAuthorized(true);
         }
     }
