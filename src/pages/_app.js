@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }) {
                 pathname: '/admin/dashboard',
             });
         } else if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path)) {
-            console.log("3",path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path));
+            console.log("3",path.startsWith('/admin'), !AuthenticationAuthorizationService.adminValue, !adminPublicPaths.includes(path));
             setAuthorized(false);
             router.push({
                 pathname: '/admin/login',
