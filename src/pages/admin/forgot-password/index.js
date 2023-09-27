@@ -3,13 +3,16 @@ import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MailFilled } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
+import { AuthenticationAuthorizationService } from '@/services';
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -17,12 +20,28 @@ const ForgotPasswordPage = () => {
             .email(translate(localeJson, 'email_valid')),
     });
 
+    /* Services */
+    const { forgot } = AuthenticationAuthorizationService;
+
+    /**
+     * Forgot success
+     * @param {*} response 
+    */
+    const onForgotSuccess = (response) => {
+        if (response && response.data.success) {
+            router.push("/admin/login");
+        } else {
+            console.log(response.data);
+        }
+    };
+
     return (
         <>
             <Formik
                 validationSchema={schema}
                 initialValues={{ email: "" }}
                 onSubmit={(values) => {
+                    forgot('admin', values, onForgotSuccess);
                 }}
             >
                 {({

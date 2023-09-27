@@ -3,13 +3,16 @@ import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { LockFilled } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
+import { AuthenticationAuthorizationService } from '@/services';
 
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         password: Yup.string()
@@ -21,12 +24,22 @@ const ResetPasswordPage = () => {
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
 
+    /* Services */
+    const { reset } = AuthenticationAuthorizationService;
+
+    const onResetSuccess = () => {
+        router.push("/admin/login");
+    };
+
     return (
         <>
             <Formik
                 validationSchema={schema}
                 initialValues={{ password: "", confirmPassword: '' }}
                 onSubmit={(values) => {
+                    let valuesUpdate = values;
+                    valuesUpdate['query'] = router.query;
+                    reset('admin', valuesUpdate, onResetSuccess);
                 }}
             >
                 {({
@@ -81,6 +94,7 @@ const ResetPasswordPage = () => {
                                                     spanText={"*"} />
                                                 <InputLeftRightGroup inputLrGroupProps={{
                                                     name: 'confirmPassword',
+                                                    type: "password",
                                                     value: values.confirmPassword,
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,

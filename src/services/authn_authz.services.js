@@ -11,10 +11,12 @@ export const AuthenticationAuthorizationService = {
     get staffValue() { return staff.value },
     login: _login,
     logout: _logout,
+    forgot: _forgot,
+    reset: _reset,
 };
 
 function _login(key, values, callBackFun) {
-    if (key === 'admin') {
+    if (key === 'admin' && values && callBackFun) {
         axios.post('/auth/admin/login', values)
             .then((response) => {
                 console.log(response);
@@ -53,5 +55,40 @@ function _logout() {
         localStorage.removeItem('staff');
         admin.next(null);
         window.location.href = "/staff/login?hinan=1";
+    }
+}
+
+function _forgot(key, values, callBackFun) {
+    if (key === 'admin' && values && callBackFun) {
+        axios.post('/auth/forgot/password', values)
+            .then((response) => {
+                if (response) {
+                    callBackFun(response);
+                }
+            })
+            .catch((error) => {
+                // Handle errors here
+                console.error('Error fetching data:', error);
+            });
+    }
+}
+
+function _reset(key, values, callBackFun) {
+    if (key === 'admin' && values && callBackFun) {
+        let payload = {
+            new_password: values.password,
+            confirm_password: values.confirmPassword,
+            token: values.query.token
+        }
+        axios.post('/auth/reset/password', payload)
+            .then((response) => {
+                if (response) {
+                    callBackFun();
+                }
+            })
+            .catch((error) => {
+                // Handle errors here
+                console.error('Error fetching data:', error);
+            });
     }
 }
