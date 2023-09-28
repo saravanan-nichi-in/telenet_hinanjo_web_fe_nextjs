@@ -43,7 +43,7 @@ const evacuationTableColumns = [
 ];
 
 const evacueeFamilyDetailColumns = [
-    { field: '番号', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'center' },
+    { field: 'id', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'center' },
     { field: '代表者', header: '代表者', minWidth: "15rem", sortable: true, textAlign: 'left' },
     { field: '氏名 (フリガナ)', header: '氏名 (フリガナ)', minWidth: "12rem", sortable: true, textAlign: 'left' },
     { field: '氏名 (漢字)', header: '氏名 (漢字)', minWidth: "8rem", sortable: true, textAlign: 'left' },
@@ -62,6 +62,14 @@ const familyDetailColumns = [
     { field: '電話番号(代表者)', header: '電話番号(代表者)', minWidth: "10rem", textAlign: 'left' },
     { field: '登録言語環境', header: '登録言語環境', minWidth: "10rem", textAlign: 'left' },
 ];
+
+const familyDetailRowExpansionColumns =[
+    { field: '住所', header: '住所', minWidth: "10rem",  textAlign: 'center' },
+    { field: '要配慮者番号', header: '要配慮者番号', minWidth: "10rem", textAlign: 'left' },
+    { field: '紐付コード', header: '紐付コード', minWidth: "10rem", textAlign: 'left' },
+    { field: '備考', header: '備考', minWidth: "10rem", textAlign: 'left' },
+    { field: '現在の滞在場所 *', header: '現在の滞在場所 *', minWidth: "10rem", textAlign: 'left' },
+]
 
 const familyDetailData = [
     {
@@ -169,6 +177,7 @@ export {
     evacuationTableColumns,
     evacueeFamilyDetailColumns,
     familyDetailColumns,
+    familyDetailRowExpansionColumns,
     familyDetailData,
     suppliesShortageData,
     suppliesShortageHeaderColumn,

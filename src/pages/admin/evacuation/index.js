@@ -51,15 +51,13 @@ export default function EvacuationPage() {
                                         inputFloatLabelProps={{
                                             id: 'householdNumber',
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style: { height: "40px" },
-                                            text: translate(localeJson, 'household_number')
+                                            text: translate(localeJson, 'household_number'),
                                         }}
                                     />
                                     <InputFloatLabel
                                         inputFloatLabelProps={{
                                             id: 'fullName',
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style: { height: "40px" },
                                             text: translate(localeJson, 'full_name'),
                                             custom: "mobile-input"
                                         }}

@@ -8,6 +8,7 @@ import { Button } from '../button';
 export default function RowExpansionTable(props) {
     const {
         parentClass,
+        custom,
         rowExpansionField,
         outerColumn,
         innerColumn,
@@ -68,7 +69,7 @@ export default function RowExpansionTable(props) {
                             sortable={column.sortable}
                             className={column.className}
                             headerClassName={column.headerClassName}
-                            style={{ minWidth: column.minWidth && column.minWidth, ...rowExpansionColumnStyle }}
+                            style={{ minWidth: column.minWidth && column.minWidth,textAlign:column.textAlign && column.textAlign, ...rowExpansionColumnStyle }}
                             headerStyle={column.headerStyle}
                             body={column.field === props.customRowExpansionActionsField ? column.body : undefined}
                         />
@@ -86,9 +87,11 @@ export default function RowExpansionTable(props) {
     );
 
     return (
-        <div className={`${parentClass} `}>
+        <div className={`${parentClass} ${custom || 'custom-table'}`}>
             <Toast ref={toast} />
             <DataTable paginator={paginator}
+            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}"
                 rows={rows || 5}
                 className={`${className}`}
                 value={props.value}
@@ -117,7 +120,7 @@ export default function RowExpansionTable(props) {
                         sortable={col.sortable}
                         className={col.className}
                         headerClassName={col.headerClassName}
-                        style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle }}
+                        style={{ minWidth: col.minWidth && col.minWidth, textAlign:col.textAlign && col.textAlign,...columnStyle }}
                         body={col.field === props.customActionsField ? col.body : undefined} />
                 ))}
             </DataTable>
