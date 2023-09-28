@@ -17,7 +17,7 @@ function AdminDashboard() {
     const { localeJson } = useContext(LayoutContext);
     const [lockedCustomers, setLockedCustomers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    
+
     const rowClass = (data) => {
         return {
             'last-row': data.避難所 === translate(localeJson, 'total'),

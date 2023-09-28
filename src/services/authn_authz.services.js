@@ -19,7 +19,6 @@ function _login(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         axios.post('/auth/admin/login', values)
             .then((response) => {
-                console.log(response);
                 if (response && response.data) {
                     admin.next(response.data);
                     callBackFun(response.data);
@@ -32,7 +31,6 @@ function _login(key, values, callBackFun) {
     } else {
         axios.post('/auth/staff/login', values)
             .then((response) => {
-                console.log(response);
                 if (response && response.data) {
                     staff.next(response.data);
                     callBackFun(response.data);

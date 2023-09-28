@@ -10,6 +10,9 @@ import Layout from '../layout/layout';
 import { AuthenticationAuthorizationService } from '@/services';
 import _ from 'lodash';
 
+/**
+ * Import global CSS for entire application
+*/
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
@@ -22,6 +25,9 @@ function MyApp({ Component, pageProps }) {
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
 
+    /**
+     * Check authorization & authentication
+    */
     useEffect(() => {
         authCheck(router.asPath);
         router.events.on('routeChangeComplete', () => {
@@ -29,10 +35,14 @@ function MyApp({ Component, pageProps }) {
         })
     }, []);
 
+    /**
+     * Function will help to redirect specific location
+     * @param {*} url 
+    */
     function authCheck(url) {
+        const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
-
         if (path.startsWith('/admin')) {
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
                 router.push({
@@ -40,12 +50,19 @@ function MyApp({ Component, pageProps }) {
                     query: queryString
                 });
             } else {
-                router.push({
-                    pathname: '/admin/dashboard',
-                });
+                if (adminPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/admin/dashboard',
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
             }
         }
-    }
+    };
 
     return (
         <OpenCvProvider>
