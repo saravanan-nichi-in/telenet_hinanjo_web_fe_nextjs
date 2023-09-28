@@ -9,11 +9,12 @@ export default function NormalLabel(props) {
         spanText,
         style,
         id,
+        custom,
         ...restProps
     } = props;
 
     return (
-        <label htmlFor={htmlFor} className={labelClass} style={style} id={id} {...restProps}>
+        <label htmlFor={htmlFor} className={`${labelClass} ${custom || 'custom-label'}`} style={style} id={id} {...restProps}>
             {text}<span className={spanClass}>{spanText}</span>
         </label>
     )

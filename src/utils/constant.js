@@ -81,9 +81,9 @@ const suppliesShortageData = [
 ];
 
 const suppliesShortageHeaderColumn = [
-    { field: '避難所', header: '避難所', minWidth: '20rem' },
-    { field: 'Test1(2)', header: 'Test1(2)', minWidth: '12rem' },
-    { field: 'Test2(2)', header: 'Test2(2)', minWidth: '12rem' }
+    { field: '避難所', header: '避難所', minWidth: '10rem',textAlign:"left" },
+    { field: 'Test1(2)', header: 'Test1(2)', minWidth: '10rem',textAlign:"left"},
+    { field: 'Test2(2)', header: 'Test2(2)', minWidth: '10rem',textAlign:"left" }
 ];
 
 const historyPageCities = [
