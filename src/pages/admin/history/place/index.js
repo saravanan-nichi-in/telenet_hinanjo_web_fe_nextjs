@@ -39,10 +39,7 @@ export default function AdminHistoryPlacePage() {
      * @param {*} values 
      */
     const onRegister = (values) => {
-        console.log(values);
-
         setEmailSettingsOpen(false);
-
     };
 
     return (

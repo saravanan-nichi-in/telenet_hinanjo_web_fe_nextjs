@@ -21,7 +21,7 @@ function ShoratgeSupplies() {
     const [products, setProducts] = useState([]);
     const headContent = (
         <div>
-            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{selectedRow}</h2>
+            {selectedRow}
         </div>
     )
 
@@ -40,6 +40,14 @@ function ShoratgeSupplies() {
         dt.current.exportCSV({ selectionOnly });
     };
 
+    const rowClass = (data) => {
+        return {
+            'last-row': data.避難所 === '不足合計',
+            'font-bold': data.避難所 === '不足合計',
+            'clickable-row': data.避難所 === '不足合計' ? false : true,
+        };
+    };
+
     const onRowClick = (event) => {
         if (event.data.避難所 == "不足合計") {
             return;
@@ -50,13 +58,7 @@ function ShoratgeSupplies() {
         }
     };
 
-    const rowClass = (data) => {
-        return {
-            'last-row': data.避難所 === '不足合計',
-            'font-bold': data.避難所 === '不足合計',
-            'clickable-row': data.避難所 === '不足合計' ? false : true,
-        };
-    };
+
     return (
         <div className="grid">
             <div className="col-12">
