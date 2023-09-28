@@ -75,12 +75,13 @@ function AdminDashboard() {
                         </h5>
                     </div>
                     <hr />
-                    <div className='mt-3'>
+                    <div className='mt-3 '>
                         <NormalTable
                             rowClassName={rowClass}
                             size={"small"}
                             stripedRows={true}
                             rows={10}
+                            className={"custom-table-cell"}
                             paginator={"true"}
                             showGridlines={"true"}
                             customActionsField="actions"

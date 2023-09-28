@@ -31,35 +31,52 @@
             "admin_information_registration": "Admin Information registration",
             "material_information_registration": "Material Information registration",
             "special_care_registration": "Registration of matters requiring consideration",
-            "edit_material_information": "Edit material information"
+            "edit_material_information": "Edit material information",
+            "house_hold_information_details":"Household Information Details"
         },
-        "validation": {
-            "admin_name_required": "Admin Name required",
-            "supplies_necessary": "Supplies are necessary",
-            "phone_min10_required": "Enter 10 or 11 digits for The phone number",
-            "phone_no_required": "phone number required",
-            "matters_to_consider_required": "Information on persons requiring special consideration is required.",
-            "things_to_consider_required": "Persons requiring special care (English) is required."
+        "validation":{
+            "admin_name_required":"Admin Name required",
+            "supplies_necessary":"Supplies are necessary",
+            "phone_min10_required":"Enter 10 or 11 digits for The phone number",
+            "phone_no_required":"phone number required",
+            "matters_to_consider_required":"Information on persons requiring special consideration is required.",
+            "things_to_consider_required":"Persons requiring special care (English) is required.",
+            "notification_email_id_required":"Notification email ID is required.",
+            "format_notification":"format of the notification email ID is incorrect."
         },
         "buttons": {
             "import": "import",
             "export": "export",
-            "search": "search",
-            "signup": "signup",
-            "cancel": "cancel",
-            "renew": "renew",
-            "registration": "登録"
+            "search":"search",
+            "signup":"signup",
+            "cancel":"cancel",
+            "renew":"renew",
+            "registration":"registration"
         },
         "footer": {},
-        "form": {
-            "evacuation_site": "Evacuation Site",
-            "household_number": "Household Number",
-            "full_name": "Full Name",
-            "email": "email",
-            "telephone_number": "telephone number",
-            "supplies": "Supplies",
-            "unit": "Unit",
-            "things_to_consider": "Matters requiring special care (English)"
+        "form":{
+            "evacuation_site":"Evacuation Site",
+            "household_number":"Household Number",
+            "full_name":"Full Name",
+            "email":"email",
+            "telephone_number":"telephone number",
+            "supplies":"Supplies",
+            "unit":"Unit" ,
+            "things_to_consider":"Matters requiring special care (English)",
+            "notification_email_id":"Notificaion email id",
+            "transmission_interval":"Transmission interval" ,
+            "output_target_area":"Output target area"
+        },
+        "others":{
+            "not": "Not",
+            "shelter_place": "Shelter place",
+            "setting_start_date": "Setting start date",
+            "shelter_place_name": "Sheter place name",
+            "mail_setting": "Mail setting",
+            "total": "Total",
+            "search_text": "Search",
+            "history_mail_message":"*If you specify multiple email IDs, please separate them with commas.",
+            "household_list": "HouseholdList"
         }
     },
     "staff": {

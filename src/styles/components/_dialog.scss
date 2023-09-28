@@ -1,4 +1,21 @@
-.textarea-bgcolor {
-    background-color: #f8f9fa;
-    color: black;
+.custom-modal.p-dialog .p-dialog-header {
+    border-bottom: $commonBorder;
+    padding: $commonPadding;
+    border-top-left-radius: $commonRadius;
+    border-top-right-radius: $commonRadius;
+}
+
+.custom-modal.p-dialog .p-dialog-footer {
+    border-top: $commonBorder;
+    padding: 1rem $commonPadding;
+    border-bottom-left-radius: $commonRadius;
+    border-bottom-right-radius: $commonRadius;
+}
+
+.custom-modal.p-dialog .p-dialog-content {
+    padding: $commonPadding;
+}
+
+.custom-modal {
+    border-radius: $commonRadius;
 }
