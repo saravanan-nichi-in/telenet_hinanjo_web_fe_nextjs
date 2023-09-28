@@ -50,6 +50,7 @@ function MyApp({ Component, pageProps }) {
                 console.log("aaaa");
                 router.push({
                     pathname: path,
+                    query: router.query
                 });
             } else {
                 console.log("bbb");
