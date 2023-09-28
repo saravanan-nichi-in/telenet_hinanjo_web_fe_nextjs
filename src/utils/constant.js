@@ -42,6 +42,36 @@ const evacuationTableColumns = [
 
 ];
 
+const evacueeFamilyDetailColumns = [
+    { field: '番号', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'center' },
+    { field: '代表者', header: '代表者', minWidth: "15rem", sortable: true, textAlign: 'left' },
+    { field: '氏名 (フリガナ)', header: '氏名 (フリガナ)', minWidth: "12rem", sortable: true, textAlign: 'left' },
+    { field: '氏名 (漢字)', header: '氏名 (漢字)', minWidth: "8rem", sortable: true, textAlign: 'left' },
+    { field: '生年月日', header: '生年月日', minWidth: "12rem", sortable: true, textAlign: 'left' },
+    { field: "年齢", header: "年齢", minWidth: "10rem", sortable: true, textAlign: 'left' },
+    { field: "年齢_月", header: "年齢_月", minWidth: "10rem", sortable: true, textAlign: 'left' },
+    { field: "性別", header: "性別", minWidth: "8rem", sortable: true, textAlign: 'left' },
+    { field: "作成日", header: "作成日", minWidth: "8rem", sortable: true, textAlign: 'left' },
+    { field: "更新日", header: "更新日", minWidth: "8rem", sortable: true, textAlign: 'left' },
+    { field: "orders", header: "", minWidth: "5rem", textAlign: 'center' }
+];
+
+const familyDetailColumns = [
+    { field: '避難日時', header: '避難日時', minWidth: "10rem",  textAlign: 'center' },
+    { field: '住所', header: '住所', minWidth: "10rem", textAlign: 'left' },
+    { field: '電話番号(代表者)', header: '電話番号(代表者)', minWidth: "10rem", textAlign: 'left' },
+    { field: '登録言語環境', header: '登録言語環境', minWidth: "10rem", textAlign: 'left' },
+];
+
+const familyDetailData = [
+    {
+        "避難日時": "2023年09月14日 (木) 22:17",
+        "住所": "〒100-0001 東京都 千代田区千代田",
+        "電話番号(代表者)": "0994872377",
+        "登録言語環境": "日本語"
+    }
+];
+
 const suppliesShortageData = [
     { "避難所": "Vacant Test", "Test1(2)": "505", "Test2(2)": "3" },
     { "避難所": "Starting to get Crowded", "Test1(2)": "201", "Test2(2)": "16" },
@@ -137,6 +167,9 @@ export {
     profiles,
     evacuationStatusOptions,
     evacuationTableColumns,
+    evacueeFamilyDetailColumns,
+    familyDetailColumns,
+    familyDetailData,
     suppliesShortageData,
     suppliesShortageHeaderColumn,
     historyTableColumns,
