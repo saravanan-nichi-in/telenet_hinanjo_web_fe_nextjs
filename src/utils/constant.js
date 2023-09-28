@@ -57,7 +57,7 @@ const evacueeFamilyDetailColumns = [
 ];
 
 const familyDetailColumns = [
-    { field: '避難日時', header: '避難日時', minWidth: "10rem",  textAlign: 'center' },
+    { field: '避難日時', header: '避難日時', minWidth: "10rem", textAlign: 'center' },
     { field: '住所', header: '住所', minWidth: "10rem", textAlign: 'left' },
     { field: '電話番号(代表者)', header: '電話番号(代表者)', minWidth: "10rem", textAlign: 'left' },
     { field: '登録言語環境', header: '登録言語環境', minWidth: "10rem", textAlign: 'left' },
@@ -144,22 +144,22 @@ const dashboardTableColumns = [
 ];
 
 const MailSettingsOption1 = [
-    { name: 'なし'},
+    { name: 'なし' },
     { name: '2時間毎' },
-    { name: '3時間毎'},
-    { name: '4時間毎'},
-    { name: '6時間毎'},
-    { name: '毎日'},
-    { name: '毎日2回'},
+    { name: '3時間毎' },
+    { name: '4時間毎' },
+    { name: '6時間毎' },
+    { name: '毎日' },
+    { name: '毎日2回' },
 
 ];
 
 const MailSettingsOption2 = [
-    { name: '--'},
+    { name: '--' },
     { name: '北海道' },
-    { name: '福島県'},
-    { name: '千葉県'},
-    { name: '東京都'},
+    { name: '福島県' },
+    { name: '千葉県' },
+    { name: '東京都' },
 
 ];
 
