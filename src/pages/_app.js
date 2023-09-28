@@ -44,13 +44,15 @@ function MyApp({ Component, pageProps }) {
         const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
         const staffPublicPaths = ['/staff/login', '/staff/forgot-password', '/staff/reset-password'];
         const path = url.split('?')[0];
+        const queryString = url.split('?')[1];
+
         if (path.startsWith('/admin')) {
             console.log("1", path, AuthenticationAuthorizationService.adminValue, adminPublicPaths.includes(path));
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
-                console.log("aaaa");
+                console.log("aaaa", url);
                 router.push({
                     pathname: path,
-                    query: router.query
+                    query: queryString
                 });
             } else {
                 console.log("bbb");
