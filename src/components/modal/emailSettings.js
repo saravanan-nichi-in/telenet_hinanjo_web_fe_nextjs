@@ -105,7 +105,6 @@ export default function EmailSettings(props) {
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                            {/* <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' > */}
                                             <div className='mt-5 mb-5 custom-align-label'>
                                                 <TextAreaFloatLabel textAreaFloatLabelProps={{
                                                     textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
@@ -118,10 +117,9 @@ export default function EmailSettings(props) {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                 }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />
-                                                <ValidationError parentClass={"ml-2"} errorBlock={errors.email && touched.email && errors.email} />
-
+                                                <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
-                                            <div className='mt-5'>
+                                            <div className='mt-5 custom-align-label'>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "shelterCity",
                                                     selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
@@ -133,7 +131,7 @@ export default function EmailSettings(props) {
 
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
-                                            <div className='mt-6'>
+                                            <div className='mt-5 custom-align-label'>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "shelterCity",
                                                     selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
