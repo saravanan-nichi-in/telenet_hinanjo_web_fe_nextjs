@@ -30,13 +30,18 @@ export default function NormalTable(props) {
         paginatorLeft,
         paginatorRight,
         alignHeader,
+        expander,
+        rowExpansionTemplate,
+        expandedRows,
+        onRowToggle,
         ...restProps
     } = props;
-
+    
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`} >
             <TableData id={id} value={value}
                 className={`${className}`}
+                expandedRows={expandedRows}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 rowClassName={rowClassName}
@@ -46,6 +51,7 @@ export default function NormalTable(props) {
                 size={size}
                 frozenValue={frozenValue}
                 onRowClick={onRowClick}
+                onRowToggle={onRowToggle}
                 showGridlines={showGridlines}
                 stripedRows={stripedRows}
                 responsiveLayout={responsiveLayout}
@@ -53,6 +59,7 @@ export default function NormalTable(props) {
                 paginatorClassName={paginatorClassName}
                 paginatorLeft={paginatorLeft}
                 paginatorRight={paginatorRight}
+                rowExpansionTemplate={rowExpansionTemplate}
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 currentPageReportTemplate="{first} - {last} / {totalRecords}"
                 {...restProps}

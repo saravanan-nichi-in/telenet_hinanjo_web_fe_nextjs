@@ -30,7 +30,8 @@
             "admin_information_registration":"Admin Information registration",
             "material_information_registration":"Material Information registration",
             "special_care_registration":"Registration of matters requiring consideration",
-            "edit_material_information":"Edit material information"
+            "edit_material_information":"Edit material information",
+            "house_hold_information_details":"Household Information Details"
             
         },
         "validation":{
@@ -60,6 +61,16 @@
             "supplies":"Supplies",
             "unit":"Unit" ,
             "things_to_consider":"Matters requiring special care (English)"
+        },
+        "others":{
+            "not": "No",
+            "shelter_place": "ShelterPlace",
+            "setting_start_date": "SettingStartDate",
+            "shelter_place_name": "ShelterPlaceName",
+            "mail_setting": "MailSetting",
+            "total": "Total",
+            "search_text": "search",
+            "household_list": "HouseholdList"
         }
     },
     "staff": {

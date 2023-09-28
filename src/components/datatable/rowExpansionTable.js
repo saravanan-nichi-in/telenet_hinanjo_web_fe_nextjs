@@ -35,6 +35,7 @@ export default function RowExpansionTable(props) {
         rowExpansionClassName,
         rowExpansionOnRowClick,
         onRowClick,
+        expandAllButtonProps,
         ...restProps
     } = props;
     const [expandedRows, setExpandedRows] = useState(null);
@@ -95,7 +96,7 @@ export default function RowExpansionTable(props) {
                 onRowToggle={(e) => setExpandedRows(e.data)}
                 rowExpansionTemplate={rowExpansionTemplate}
                 dataKey="id"
-                header={header}
+                header={expandAllButtonProps}
                 rowsPerPageOptions={rowsPerPageOptions}
                 rowClassName={rowClassName}
                 filterDisplay={filterDisplay}

@@ -30,7 +30,8 @@
             "admin_information_registration":"管理者情報の登録",
             "material_information_registration":"物資情報登録",
             "special_care_registration":"要配慮者事項登録",
-            "edit_material_information":"物資情報編集"
+            "edit_material_information":"物資情報編集",
+            "house_hold_information_details":"世帯情報詳細"
         },
         "validation":{
             "admin_name_required":"管理者名が必要です。",
@@ -67,7 +68,8 @@
             "shelter_place_name": "避難所名",
             "mail_setting": "メール設定",
             "total": "合計",
-            "search_text": "検索"
+            "search_text": "検索",
+            "household_list": "世帯名簿"
         }
     },
     "staff": {
