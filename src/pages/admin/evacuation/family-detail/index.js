@@ -22,6 +22,10 @@ export default function EvacueeFamilyDetail() {
         );
     }
 
+    const setExpandedRows = (data) => {
+        console.log("Data", data);
+    }
+
     return (
         <div className="grid">
             <div className="col-12">
@@ -53,12 +57,12 @@ export default function EvacueeFamilyDetail() {
                     <RowExpansionTable
                         id="evacuee-family-detail"
                         size={"small"}
-                        rows={10} 
+                        rows={10}
                         rowExpansionColumnStyle={{ textAlign: 'center' }}
-                        columnStyle={{ textAlign: 'center' }} 
-                        paginator={true} 
+                        columnStyle={{ textAlign: 'center' }}
+                        paginator={true}
                         showGridlines={true}
-                        customRowExpansionActionsField="actions" 
+                        customRowExpansionActionsField="actions"
                         value={admins}
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
@@ -68,7 +72,7 @@ export default function EvacueeFamilyDetail() {
                         expander={true}
                         onRowToggle={(e) => setExpandedRows(e.data)}
                         expandAllButtonProps={false}
-                        />
+                    />
                 </div>
             </div>
         </div>
