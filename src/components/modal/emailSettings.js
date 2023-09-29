@@ -15,9 +15,8 @@ import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 import { useContext, useState } from 'react';
 
 export default function EmailSettings(props) {
-    const [visible, setVisible] = useState(false);
     const router = useRouter();
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
     const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
     const schema = Yup.object().shape({
@@ -87,15 +86,16 @@ export default function EmailSettings(props) {
                                     }} parentClass={"inline"} />
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",
+                                        type: "submit",
                                         text: translate(localeJson, 'registration'),
                                         severity: "primary",
                                         onClick: () => {
-                                            handleSubmit();
                                             register({
                                                 transmissionInterval,
                                                 outputTargetArea,
                                                 email: values.email
                                             });
+                                            handleSubmit();
                                         },
                                     }} parentClass={"inline"} />
                                 </div>
@@ -105,7 +105,7 @@ export default function EmailSettings(props) {
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                            <div className='mt-5 mb-5 custom-align-label'>
+                                            <div className='mt-5 mb-5'>
                                                 <TextAreaFloatLabel textAreaFloatLabelProps={{
                                                     textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                                                     row: 5,
@@ -119,7 +119,7 @@ export default function EmailSettings(props) {
                                                 }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
-                                            <div className='mt-5 custom-align-label'>
+                                            <div className='mt-5 '>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "shelterCity",
                                                     selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
@@ -131,7 +131,7 @@ export default function EmailSettings(props) {
 
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
-                                            <div className='mt-5 custom-align-label'>
+                                            <div className='mt-5'>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "shelterCity",
                                                     selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
@@ -146,7 +146,6 @@ export default function EmailSettings(props) {
                                             <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
                                                 <NormalLabel text={translate(localeJson, 'history_mail_message')} />
                                             </div>
-
                                         </div>
                                     </form>
                                 </div>

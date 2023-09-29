@@ -28,7 +28,7 @@ export default function EvacuationPage() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
+                    <h5 className='page-header1'>{translate(localeJson, 'list_of_evacuees')}</h5>
                     <hr />
                     <div>
                         <div>
@@ -51,17 +51,15 @@ export default function EvacuationPage() {
                                         inputFloatLabelProps={{
                                             id: 'householdNumber',
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style: { height: "40px" },
-                                            text: translate(localeJson, 'household_number')
+                                            text: translate(localeJson, 'household_number'),
                                         }}
                                     />
                                     <InputFloatLabel
                                         inputFloatLabelProps={{
                                             id: 'fullName',
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            style: { height: "40px" },
                                             text: translate(localeJson, 'full_name'),
-                                            custom: "mobile-input"
+                                            custom: "mobile-input custom_input"
                                         }}
                                     />
                                     <div className="">
@@ -77,7 +75,7 @@ export default function EvacuationPage() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
+                                <p className='pt-4 page-header2'>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
                             </div>
                             <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{

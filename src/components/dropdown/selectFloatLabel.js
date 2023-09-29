@@ -27,7 +27,8 @@ export default function SelectFloatLabel(props) {
     } = selectFloatLabelProps;
 
     return (
-        <div className={`p-float-label ${parentClass}  ${custom || 'custom-select'} `} style={parentStyle}>
+        <div className="custom-align-label">
+        <div className={`p-float-label ${parentClass} ${custom || 'custom-select'} `} style={parentStyle}>
             <Dropdown className={`${selectClass}  `}
                 value={value}
                 name={name}
@@ -44,6 +45,7 @@ export default function SelectFloatLabel(props) {
                 {...restProps}
             />
             <label htmlFor={inputId}>{text}</label>
+        </div>
         </div>
     )
 }

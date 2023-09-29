@@ -36,10 +36,20 @@ function ShoratgeSupplies() {
         ]);
     }, [])
 
+
+    /**
+     *for export the table in csv format  
+     * @param {*} selectionOnly 
+    */
     const exportCSV = (selectionOnly) => {
         dt.current.exportCSV({ selectionOnly });
     };
 
+    /**
+     * to make specific row clickable and font bold
+     * @param {*} data 
+     * @returns 
+     */
     const rowClass = (data) => {
         return {
             'last-row': data.避難所 === '不足合計',
@@ -48,6 +58,11 @@ function ShoratgeSupplies() {
         };
     };
 
+    /**
+     * On row click modal appears
+     * @param {*} event 
+     * @returns 
+     */
     const onRowClick = (event) => {
         if (event.data.避難所 == "不足合計") {
             return;
@@ -58,75 +73,76 @@ function ShoratgeSupplies() {
         }
     };
 
-
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
-                    <hr />
-                    <div className="col-12 custom-table">
-                        <div className="flex justify-content-end ">
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'export'),
-                                onClick: () => exportCSV(false)
-                            }} parentClass={"mb-3"} />
+        <React.Fragment>
+            <DetailModal detailModalProps={{
+                headerContent: headContent,
+                visible: showModal,
+                style: { width: '600px' },
+                position: 'top',
+                onHide: () => setShowModal(false),
+                value1: translate(localeJson, 'not'),
+                value2: translate(localeJson, 'not')
+            }} />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                        <hr />
+                        <div className="col-12 custom-table">
+                            <div className="flex justify-content-end ">
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    onClick: () => exportCSV(false)
+                                }} parentClass={"mb-3"} />
+                            </div>
+                            <DataTable
+                                ref={dt}
+                                value={products}
+                                scrollable
+                                dataKey="id"
+                                className={"custom-table custom-table-cell p-datatable-gridlines"}
+                                showGridlines
+                                rows={5}
+                                rowClassName={rowClass}
+                                frozenValue={lockedSupplies}
+                                frozenWidth='3'
+                                emptyMessage="No customers found."
+                                size={"small"}
+                                stripedRows
+                                onRowClick={onRowClick}
+                                rowsPerPageOptions={[5, 10, 25, 50]}
+                                currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                            >
+                                {suppliesShortageHeaderColumn.map((col, index) => (
+                                    <Column key={index} field={col.field} sortable header={col.header} style={{
+                                        minWidth: col.minWidth && col.minWidth,
+                                        textAlign: col.textAlign,
+                                    }}
+                                        body={(rowData) => {
+                                            console.log(col.field);
+                                            if (col.field === translate(localeJson, 'shelter_place')) {
+                                                return (
+                                                    <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={() => setSelectedRow(rowData[col.field])}>
+                                                        {rowData[col.field]}
+                                                    </span>
+                                                );
+                                            } else {
+                                                return rowData[col.field];
+                                            }
+                                        }} />
+                                ))}
+                            </DataTable>
                         </div>
-                        <DataTable
-                            ref={dt}
-                            value={products}
-                            scrollable
-                            dataKey="id"
-                            className={"custom-table-cell p-datatable-gridlines"}
-                            showGridlines
-                            rows={5}
-                            rowClassName={rowClass}
-                            frozenValue={lockedSupplies}
-                            frozenWidth='3'
-                            emptyMessage="No customers found."
-                            size={"small"}
-                            stripedRows
-                            onRowClick={onRowClick}
-                            rowsPerPageOptions={[5, 10, 25, 50]}
-                            currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                        >
-                            {suppliesShortageHeaderColumn.map((col, index) => (
-                                <Column key={index} field={col.field} sortable header={col.header} style={{
-                                    minWidth: col.minWidth && col.minWidth,
-                                    textAlign: 'center',
-                                }}
-                                    body={(rowData) => {
-                                        console.log(col.field);
-                                        if (col.field === translate(localeJson, 'shelter_place')) {
-                                            return (
-                                                <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={() => setSelectedRow(rowData[col.field])}>
-                                                    {rowData[col.field]}
-                                                </span>
-                                            );
-                                        } else {
-                                            return rowData[col.field];
-                                        }
-                                    }} />
-                            ))}
-                        </DataTable>
                     </div>
                 </div>
+                <div>
+                </div>
             </div>
-            <div>
-                <DetailModal detailModalProps={{
-                    headerContent: headContent,
-                    visible: showModal,
-                    style: { width: '600px' },
-                    position: 'top',
-                    onHide: () => setShowModal(false),
-                    value1: translate(localeJson, 'not'),
-                    value2: translate(localeJson, 'not')
-                }} />
-            </div>
-        </div>
+        </React.Fragment>
     );
 }
 

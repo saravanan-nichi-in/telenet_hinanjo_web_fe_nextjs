@@ -44,7 +44,7 @@ export default function NormalTable(props) {
                 expandedRows={expandedRows}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
-                rowClassName={rowClassName}
+                rowClassName={rowClassName} 
                 filterDisplay={filterDisplay}
                 emptyMessage={emptyMessage}
                 style={style}

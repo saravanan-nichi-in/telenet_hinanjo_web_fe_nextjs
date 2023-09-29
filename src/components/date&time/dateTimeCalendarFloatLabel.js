@@ -48,6 +48,7 @@ const DateTimeCalendarFloatLabel = (props) => {
     });
 
     return (
+        <div className='custom-align-label'>
         <div className={`${parentClass} ${custom || 'custom_input'} p-float-label`}>
             <Calendar className={` custom-dateCalendar ${dateTimeClass}`}
                 id={id}
@@ -79,6 +80,7 @@ const DateTimeCalendarFloatLabel = (props) => {
                 {...restProps}
             />
             <label htmlFor={inputId}>{text}</label>
+        </div>
         </div>
     );
 }

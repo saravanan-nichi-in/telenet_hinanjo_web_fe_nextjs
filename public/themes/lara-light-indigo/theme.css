@@ -3579,7 +3579,7 @@
 .p-datatable .p-datatable-tbody>tr>td .p-row-editor-cancel:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-datatable .p-datatable-tbody>tr>td .p-row-editor-save {

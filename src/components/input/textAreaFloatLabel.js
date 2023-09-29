@@ -26,7 +26,8 @@ const TextAreaFloatLabel = (props) => {
     } = textAreaFloatLabelProps;
 
     return (
-            <div className={`${parentClass} ${custom || 'custom-textArea'} p-float-label`} style={parentStyle}>
+        <div className="custom-align-label">
+            <div className={`${parentClass}  ${custom || 'custom-textArea'} p-float-label`} style={parentStyle}>
             <InputTextarea name={name}
                 className={`${textAreaClass} `}
                 value={value}
@@ -41,6 +42,7 @@ const TextAreaFloatLabel = (props) => {
                 {...restProps}
             />
             <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
+        </div>
         </div>
     );
 }

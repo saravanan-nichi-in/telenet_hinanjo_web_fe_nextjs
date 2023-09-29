@@ -55,7 +55,7 @@ export default function AdminHistoryPlacePage() {
                     <div className='card'>
                         <div className='w-full flex flex-wrap sm:flex-no-wrap align-items-center justify-content-between gap-2'>
                             <div className='flex justify-content-center align-items-center gap-2'>
-                                <h5 className='page_header'>{translate(localeJson, 'history_place')}</h5>
+                                <h5 className='page-header1'>{translate(localeJson, 'history_place')}</h5>
                             </div>
                         </div>
                         <hr />
