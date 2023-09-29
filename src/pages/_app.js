@@ -10,6 +10,9 @@ import Layout from '../layout/layout';
 import { AuthenticationAuthorizationService } from '@/services';
 import _ from 'lodash';
 
+/**
+ * Import global CSS for entire application
+*/
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
@@ -22,75 +25,44 @@ function MyApp({ Component, pageProps }) {
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
 
+    /**
+     * Check authorization & authentication
+    */
     useEffect(() => {
         authCheck(router.asPath);
-        // const hideContent = () => setAuthorized(false);
-        // router.events.on('routeChangeStart', () => {
-        //     setAuthorized(false);
-        // });
-        // // on route change complete - run auth check 
         router.events.on('routeChangeComplete', () => {
             setAuthorized(true);
         })
-        // // Unsubscribe from events in useEffect return function
-        // return () => {
-        //     router.events.off('routeChangeStart', hideContent);
-        //     router.events.off('routeChangeComplete', authCheck);
-        // }
     }, []);
 
+    /**
+     * Function will help to redirect specific location
+     * @param {*} url 
+    */
     function authCheck(url) {
-        // Redirect to login page if accessing a private page and not logged in 
         const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
-        const staffPublicPaths = ['/staff/login', '/staff/forgot-password', '/staff/reset-password'];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
-
         if (path.startsWith('/admin')) {
-            console.log("1", path, AuthenticationAuthorizationService.adminValue, adminPublicPaths.includes(path));
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
-                console.log("aaaa", url);
                 router.push({
                     pathname: path,
                     query: queryString
                 });
             } else {
-                console.log("bbb");
-                router.push({
-                    pathname: '/admin/dashboard',
-                });
+                if (adminPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/admin/dashboard',
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
             }
         }
-        // if (AuthenticationAuthorizationService.adminValue && adminPublicPaths.includes(path)) {
-        //     console.log("1");
-        //     router.push({
-        //         pathname: '/admin/dashboard',
-        //     });
-        // } else if (AuthenticationAuthorizationService.staffValue && staffPublicPaths.includes(path)) {
-        //     console.log("2");
-        //     router.push({
-        //         // pathname: '/staff/dashboard',
-        //         pathname: '/admin/dashboard',
-        //     });
-        // } else if (path.startsWith('/admin') && !AuthenticationAuthorizationService.adminValue && !adminPublicPaths.includes(path)) {
-        //     console.log("3",path.startsWith('/admin'), !AuthenticationAuthorizationService.adminValue, !adminPublicPaths.includes(path));
-        //     setAuthorized(false);
-        //     router.push({
-        //         pathname: '/admin/login',
-        //     });
-        // } else if (path.startsWith('/staff') && !AuthenticationAuthorizationService.staffValue && !staffPublicPaths.includes(path)) {
-        //     console.log("4");
-        //     setAuthorized(false);
-        //     router.push({
-        //         // pathname: '/staff/login',
-        //         pathname: '/admin/login',
-        //         // query: { hinan: 1 }
-        //     });
-        // } else {
-        //     console.log("5",path.startsWith('/admin'), !AuthenticationAuthorizationService.adminValue, !adminPublicPaths.includes(path));
-        //     setAuthorized(true);
-        // }
-    }
+    };
 
     return (
         <OpenCvProvider>
@@ -122,7 +94,7 @@ function MyApp({ Component, pageProps }) {
                 </PersistGate>
             </Providers>
         </OpenCvProvider>
-    )
-}
+    );
+};
 
 export default MyApp;
