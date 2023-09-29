@@ -28,7 +28,7 @@ export default function EvacuationPage() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <h5 className='page_header'>{translate(localeJson, 'list_of_evacuees')}</h5>
+                    <h5 className='page-header1'>{translate(localeJson, 'list_of_evacuees')}</h5>
                     <hr />
                     <div>
                         <div>
@@ -59,7 +59,7 @@ export default function EvacuationPage() {
                                             id: 'fullName',
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             text: translate(localeJson, 'full_name'),
-                                            custom: "mobile-input"
+                                            custom: "mobile-input custom_input"
                                         }}
                                     />
                                     <div className="">

@@ -69,10 +69,8 @@ function AdminDashboard() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <div>
-                        <h5>
-                            {translate(localeJson, 'evacuation_status_list')}
-                        </h5>
+                    <div className=''>
+                         <h5 className='page-header1'>  {translate(localeJson, 'evacuation_status_list')}</h5> 
                     </div>
                     <hr />
                     <div className='mt-3 '>

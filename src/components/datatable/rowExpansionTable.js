@@ -58,9 +58,9 @@ export default function RowExpansionTable(props) {
 
     const rowExpansionTemplate = (data) => {
         return (
-            <div className="p-3">
+            <div className='rowExpansionTable'>
 
-                <DataTable className={rowExpansionClassName} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
+                <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
                     {innerColumn.map((column, index) => (
                         <Column
                             key={index}
@@ -107,22 +107,24 @@ export default function RowExpansionTable(props) {
                 style={style}
                 size={size}
                 stripedRows={stripedRows}
-                showGridlines={showGridlines}
+                showGridlines={showGridlines || 'true'}
                 onRowClick={onRowClick}
                 responsiveLayout={responsiveLayout}
                 tableStyle={tableStyle || { minWidth: '50rem' }}
                 {...restProps}>
-                <Column expander={allowExpansion} style={{ maxWidth: '10px' }} />
+                
                 {outerColumn.map((col, index) => (
                     <Column key={index}
                         field={col.field}
                         header={col.header}
                         sortable={col.sortable}
+                        expander={col.expander}
                         className={col.className}
                         headerClassName={col.headerClassName}
                         style={{ minWidth: col.minWidth && col.minWidth, textAlign:col.textAlign && col.textAlign,...columnStyle }}
                         body={col.field === props.customActionsField ? col.body : undefined} />
                 ))}
+                <Column expander={allowExpansion} style={{ width: '5rem' }} />
             </DataTable>
         </div>
     );
