@@ -51,7 +51,8 @@
             "signup":"signup",
             "cancel":"cancel",
             "renew":"renew",
-            "registration":"registration"
+            "registration":"registration",
+            "return":"return"
         },
         "footer": {},
         "form":{
@@ -76,7 +77,9 @@
             "total": "Total",
             "search_text": "Search",
             "history_mail_message":"*If you specify multiple email IDs, please separate them with commas.",
-            "household_list": "HouseholdList"
+            "household_list": "HouseholdList",
+            "totalSummary":"Total (Summary)",
+            "household_number":"Household number"
         }
     },
     "staff": {

@@ -51,7 +51,7 @@ const InputFloatLabel = (props) => {
                 maxLength={maxLength}
                 minLength={minLength}
                 {...restProps} />
-            <label className='custom-align-label'  htmlFor={id}>{text}</label>
+            <label className='custom-align-label' htmlFor={id}>{text}</label>
         </div>
         </div>
     );

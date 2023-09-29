@@ -75,7 +75,7 @@ export default function EvacuationPage() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                <p className='pt-4' style={{ fontSize: "18px", fontWeight: "bold" }}>合計（サマリ）: {totalSamari}</p>
+                                <p className='pt-4 page-header2'>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
                             </div>
                             <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{

@@ -1,9 +1,14 @@
-.page-header1{
+.page-header1 {
     font-size: $pageHeaderFontSize1 ;
     font-weight: $commonFontWeight;
 }
 
-.auth-header{
+.page-header2 {
+    font-size: $pageHeaderFontSize2;
+    font-weight: $commonFontWeight;
+}
+
+.auth-header {
     font-size: $commonFontSize;
     font-weight: $commonFontWeight;
 }
