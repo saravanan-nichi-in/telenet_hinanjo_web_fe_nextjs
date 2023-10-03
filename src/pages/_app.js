@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps }) {
                 }
             }
         }
-    };
+    }
 
     return (
         <OpenCvProvider>
@@ -95,6 +95,6 @@ function MyApp({ Component, pageProps }) {
             </Providers>
         </OpenCvProvider>
     );
-};
+}
 
 export default MyApp;
