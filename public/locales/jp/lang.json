@@ -79,7 +79,9 @@
             "history_mail_message":"※ 複数メールIDを指定する場合は、コンマ区切りで指定してください。",
             "household_list": "世帯名簿",
             "totalSummary":"合計（サマリ）",
-            "household_number":"世帯番号"
+            "household_number":"世帯番号",
+            "external_evacuees_count":"食糧等支援人数",
+            "external_evacuee_details":"外部避難者詳細"
         }
     },
     "staff": {

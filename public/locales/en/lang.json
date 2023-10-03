@@ -79,7 +79,8 @@
             "history_mail_message":"*If you specify multiple email IDs, please separate them with commas.",
             "household_list": "HouseholdList",
             "totalSummary":"Total (Summary)",
-            "household_number":"Household number"
+            "household_number":"Household number",
+            "external_evacuees_count":"External Evacuees Count"
         }
     },
     "staff": {
