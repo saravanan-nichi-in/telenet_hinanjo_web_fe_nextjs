@@ -32,7 +32,8 @@
             "material_information_registration": "物資情報登録",
             "special_care_registration": "要配慮者事項登録",
             "edit_material_information": "物資情報編集",
-            "house_hold_information_details":"世帯情報詳細"
+            "house_hold_information_details":"世帯情報詳細",
+            "admin_details":"管理者詳細情"
         },
         "validation":{
             "admin_name_required":"管理者名が必要です。",
@@ -79,7 +80,8 @@
             "history_mail_message":"※ 複数メールIDを指定する場合は、コンマ区切りで指定してください。",
             "household_list": "世帯名簿",
             "totalSummary":"合計（サマリ）",
-            "household_number":"世帯番号"
+            "household_number":"世帯番号",
+            "notification_settings":"通知設定"
         }
     },
     "staff": {

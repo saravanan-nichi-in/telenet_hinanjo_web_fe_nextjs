@@ -6,7 +6,7 @@ export const AdminManagementService = {
         return [
             {
                 "No.": "2",
-                "氏名": <Link href="/admin/admin-management/detail/1">Admin 1</Link>,
+                "氏名": <Link href="#">Admin 1</Link>,
                 "メール": "admin1@gmail.com"
             }
         ]

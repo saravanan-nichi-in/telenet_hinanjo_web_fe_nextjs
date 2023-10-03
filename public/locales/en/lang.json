@@ -32,7 +32,8 @@
             "material_information_registration": "Material Information registration",
             "special_care_registration": "Registration of matters requiring consideration",
             "edit_material_information": "Edit material information",
-            "house_hold_information_details":"Household Information Details"
+            "house_hold_information_details":"Household Information Details",
+            "admin_details":"Admin Details"
         },
         "validation":{
             "admin_name_required":"Admin Name required",
@@ -79,7 +80,8 @@
             "history_mail_message":"*If you specify multiple email IDs, please separate them with commas.",
             "household_list": "HouseholdList",
             "totalSummary":"Total (Summary)",
-            "household_number":"Household number"
+            "household_number":"Household number",
+            "notification_settings":"Notificaion settings"
         }
     },
     "staff": {

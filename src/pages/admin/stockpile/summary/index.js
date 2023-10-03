@@ -1,92 +1,160 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FaEyeSlash } from 'react-icons/fa';
 
-import { DividerComponent, RowExpansionTable, Button, NormalLabel, InputSelect } from '@/components';
+import { DividerComponent, RowExpansionTable, Button, NormalLabel, InputSelect, InputSwitch } from '@/components';
 import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { InputSelectFloatLabel } from '@/components/dropdown';
+import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
+import { AiFillEye } from 'react-icons/ai';
+import { summaryShelterOptions } from '@/utils/constant';
 
 function AdminStockpileSummary() {
     const { localeJson } = useContext(LayoutContext);
-    const outerColumn = [
-        { field: "避難所", header: "避難所", minWidth: "10rem" },
+    const [emailModal, setEmailModal] = useState(false);
+    const [imageModal, setImageModal] = useState(false);
+    const [stockpileSummary, setStockpileSummary] = useState([]);
+    const [shelterSelect, setShelterSelect] = useState(summaryShelterOptions[0]);
+    const stockPilerMainRow = [
+        {
+            field: "避難所", header: "避難所", minWidth: "10rem", textAlign: "left", body: (rowData) => (
+                <a className='text-decoration' style={{ color: "grren" }} onClick={() => setEmailModal(true)}>
+                    {rowData['避難所']}
+                </a>
+            )
+        },
         { field: "通知先", header: "通知先" },
     ]
-    const innerColumn = [
+    const stockPileRowExpansionColumn = [
+        { field: "種別", header: "種別" },
+        { field: "備蓄品名", header: "備蓄品名" },
+        { field: "数量", header: "数量" },
+        {
+            field: 'actions',
+            header: '画像',
+            textAlign: "center",
+            minWidth: "5rem",
+            body: (rowData) => (
+                <div>
+                    <AiFillEye style={{ fontSize: '20px' }} onClick={() => setImageModal(true)} />
+                </div>
+            ),
+        },
+    ]
+    const innerColumn1 = [
         { field: "種別", header: "種別" },
         { field: "備蓄品名", header: "備蓄品名" },
         { field: "数量", header: "有効期限" },
         {
             field: 'actions',
             header: '画像',
+            textAlign: "center",
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    <FaEyeSlash style={{ fontSize: '20px' }} />
+                    <AiFillEye style={{ fontSize: '20px' }} onClick={() => setImageModal(true)} />
                 </div>
             ),
         },
     ]
-    const [stockpileSummary, setStockpileSummary] = useState([]);
+
 
     useEffect(() => {
         StockpileSummaryService.getStockpileSummaryWithOrdersSmall().then((data) => setStockpileSummary(data));
     }, []);
 
+    const onImageModalClose = () => {
+        setImageModal(!imageModal);
+    };
+    const onEmailModalClose = () => {
+        setEmailModal(!emailModal);
+    };
+    const onRegister = (values) => {
+        setEmailModal(false);
+    };
+
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <section className='col-12'>
-                        <h5 className='page_header'>
-                            備蓄品集計
-                        </h5>
-                        <DividerComponent />
-                        <div >
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    severity: "primary"
-                                }} parentClass={"mr-1 mt-1"} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <form>
-                                    <div className="pt-3 ">
-                                        <div className='pb-1'>
-                                            <NormalLabel labelClass="pt-1" text={"避難所"} />
-                                        </div>
-                                        <InputSelect dropdownProps={{
-                                            inputSelectClass: "create_input_stock",
-                                            optionLabel: "name"
+        <React.Fragment>
+            {/* Place history email settings modal */}
+            <StockpileSummaryImageModal
+                open={imageModal}
+                close={onImageModalClose}
+            />
+            <StockPileSummaryMailSettingsModal
+                open={emailModal}
+                close={onEmailModalClose}
+                register={onRegister}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <section className='col-12'>
+                            <h5 className='page-header1'>
+                                {translate(localeJson, 'stockpile_summary')}
+                            </h5>
+                            <hr />
+                            <div >
+                                {/* <div class="mb-3" style={{ display: "flex", justifyContent: "space-between", flexWrap: "nowrap" }} > */}
+                                <div class="mb-3" >
+
+                                    <div class="summary_flex input-switch-summary w-13rem">
+                                        {/* <!-- Buttons section --> */}
+
+                                        避難者登録画面表示          <InputSwitch inputSwitchProps={{
+                                            checked: false,
+                                            text: "避難者登録画面表示"
                                         }}
+
                                         />
                                     </div>
-                                    <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
-                                        <div >
-                                            <Button buttonProps={{
-                                                buttonClass: "evacuation_button_height",
-                                                type: 'submit',
-                                                text: "検索",
-                                                rounded: "true",
-                                                severity: "success"
-                                            }} parentStyle={{ paddingLeft: "10px" }} />
-                                        </div>
+                                    <div>
+                                        {/* <!-- Search section --> */}
+                                        <form>
+                                            <div class="summary_flex_search float-right mt-5" >
+                                                <div class="flex flex-row justify-content-end" >
+                                                    <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                        text: translate(localeJson, 'shelter_place'),
+                                                        inputId: "float label",
+                                                        optionLabel: "name",
+                                                        options: summaryShelterOptions,
+                                                        value: shelterSelect,
+                                                        onChange: (e) => setShelterSelect(e.value),
+                                                        inputSelectClass: "w-full lg:w-13rem md:w-20rem sm:w-14rem"
+                                                    }} parentClass={"w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem"}
+                                                    />
+
+                                                </div>
+                                                <div>
+                                                    <Button buttonProps={{
+                                                        buttonClass: "w-12 search-button",
+                                                        text: translate(localeJson, "search_text"),
+                                                        icon: "pi pi-search",
+                                                        severity: "primary"
+                                                    }} />
+                                                </div>
+                                                <div class="flex justify-content-end">
+                                                    <Button buttonProps={{
+                                                        type: 'submit',
+                                                        rounded: "true",
+                                                        buttonClass: "",
+                                                        text: translate(localeJson, 'export'),
+                                                        severity: "primary"
+                                                    }} parentClass={"mr-1 mt-2 mb-2"} />
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <RowExpansionTable rows={10} rowExpansionColumnStyle={{ textAlign: 'center' }} columnStyle={{ textAlign: 'center' }} paginator="true" customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn={innerColumn} outerColumn={outerColumn} rowExpansionField="orders" />
-                        </div>
-                    </section>
+                            <div>
+                                <RowExpansionTable rows={10} columnStyle={{ textAlign: 'left' }} paginator="true" paginatorLeft={true} customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn1={innerColumn1} innerColumn={stockPileRowExpansionColumn} outerColumn={stockPilerMainRow} rowExpansionField1="orders1" rowExpansionField="orders" />
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </div>
+        </React.Fragment>
     );
 }
 
