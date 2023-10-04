@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /**
  * 
  * @param {*} data 
@@ -9,7 +11,6 @@ export const getValueByKeyRecursively = (data, key) => {
     if (typeof data !== 'object' || data[key] !== undefined) {
         return data[key];
     }
-
     // Recursively traverse the nested object
     for (const nestedKey in data) {
         // data.hasOwnProperty(nestedKey)
@@ -19,8 +20,43 @@ export const getValueByKeyRecursively = (data, key) => {
                 return value;
             }
         }
-    }
-
+    };
     // Key not found in the nested object
     return undefined;
+};
+
+/**
+ * Total count get from array with specific key
+ * @param {*} array 
+ * @param {*} key 
+ */
+export const getTotalCountFromArray = (array, key, trimKeyLength) => {
+    return _.sumBy(array, (item) => {
+        if (trimKeyLength && item[key]) {
+            let trimKeyData = _.trimEnd(item[key], item[key].slice(-`${trimKeyLength}`));
+            return Number(trimKeyData);
+        } else if (item[key]) {
+            return Number(item[key]);
+        } else {
+            return 0; // Treat invalid as 0
+        }
+    });
+};
+
+/**
+ * Get average percentage
+ * @param {*} array 
+ * @param {*} key 
+ * @returns 
+ */
+export const getAveragePercentage = (array, key) => {
+    // Extract numeric values and convert them to numbers
+    const values = array.map(item => parseFloat(item[key]));
+    // Calculate the average
+    const sum = values.reduce((acc, val) => acc + val, 0);
+    const average = sum / values.length;
+    // Format the result as a percentage
+    const formattedAverage = `${average.toFixed(2)}%`;
+
+    return formattedAverage;
 };
