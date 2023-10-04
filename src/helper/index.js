@@ -20,7 +20,7 @@ export const getValueByKeyRecursively = (data, key) => {
                 return value;
             }
         }
-    };
+    }
     // Key not found in the nested object
     return undefined;
 };

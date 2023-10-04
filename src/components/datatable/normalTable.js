@@ -81,4 +81,4 @@ export default function NormalTable(props) {
             </TableData>
         </div>
     );
-};
+}
