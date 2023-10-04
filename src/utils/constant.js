@@ -178,7 +178,7 @@ const historyTableColumns = [
 ];
 
 const dashboardTableColumns = [
-    { field: '番号', header: '番号', minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
+    { field: 'id', header: '番号', minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
     { field: '避難所', header: '避難所', minWidth: '20rem', sortable: true, headerClassName: "custom-header" },
     { field: '避難可能人数', header: '避難可能人数', sortable: true, minWidth: '9rem', headerClassName: "custom-header" },
     { field: '現在の避難者数', header: '現在の避難者数', sortable: true, minWidth: '10rem', headerClassName: "custom-header" },
