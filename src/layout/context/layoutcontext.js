@@ -14,7 +14,6 @@ export const LayoutProvider = (props) => {
         theme: 'lara-light-indigo',
         scale: 14
     });
-
     const [layoutState, setLayoutState] = useState({
         staticMenuDesktopInactive: false,
         overlayMenuActive: false,
@@ -23,12 +22,15 @@ export const LayoutProvider = (props) => {
         staticMenuMobileActive: false,
         menuHoverActive: false
     });
-
     const [localeJson, setLocaleJson] = useState(jpJson);
 
-
     useEffect(() => {
-        localStorage.setItem('locale', 'ja');
+        const locale = localStorage.getItem("locale");
+        if (locale == 'ja') {
+            setLocaleJson(jpJson);
+        } else {
+            setLocaleJson(enJson);
+        }
     }, [])
 
     const onMenuToggle = () => {

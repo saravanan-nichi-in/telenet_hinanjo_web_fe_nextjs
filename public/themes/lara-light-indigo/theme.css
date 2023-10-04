@@ -1200,7 +1200,6 @@
   width: 1.25rem;
   height: 1.25rem;
   left: 0.25rem;
-  margin-top: -0.625rem;
   border-radius: 50%;
   transition-duration: 0.2s;
 }
@@ -1212,7 +1211,7 @@
 .p-inputswitch.p-focus .p-inputswitch-slider {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
