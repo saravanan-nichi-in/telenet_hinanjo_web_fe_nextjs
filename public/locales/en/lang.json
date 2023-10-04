@@ -89,6 +89,13 @@
             "household_list": "HouseholdList",
             "totalSummary":"Total (Summary)",
             "household_number":"Household number",
+            "external_evacuees_count":"External Evacuees Count",
+            "external_evacuees_food_support": "External Evacuees Food Support",
+            "external_evacuee_details":"External Evacuees Details",
+            "food_support": "Food Support",
+            "shelter_site_type": "Sheletr Site Type",
+            "food_support_calculation": "Food Support Calculation",
+            "evacuation_location_aggregation": "Evacuation Location Aggregation",
             "notification_settings":"Notificaion settings"
         }
     },

@@ -52,6 +52,20 @@ const evacueeFamilyDetailColumns = [
     
    
 ]
+
+const externalEvacueesDetailColumns = [
+    { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
+    { field: "避難場所種別", header: "避難場所種別", minWidth: "10rem", sortable: true },
+    { field: "場所", header: "場所", minWidth: "7rem", sortable: true },
+    { field: "食料等の支援", header: "食料等の支援", minWidth: "10rem", sortable: true },
+    { field: "人数", header: "人数", minWidth: "5rem", sortable: true },
+    { field: "避難所", header: "避難所", minWidth: "10rem", sortable: true },
+    { field: "メールアドレス", header: "メールアドレス", minWidth: "10rem", sortable: true },
+    { field: "郵便番号", header: "郵便番号", minWidth: "8rem", sortable: true },
+    { field: "県", header: "県", minWidth: "5rem", sortable: true },
+    { field: "住所", header: "住所", minWidth: "12rem", sortable: true }
+]
+
 const evacueeFamilyDetailRowExpansionColumns = [
     { field: "作成日", header: "作成日", minWidth: "10rem" },
     { field: "更新日", header: "更新日", minWidth: "10rem" },
@@ -59,9 +73,7 @@ const evacueeFamilyDetailRowExpansionColumns = [
     { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
     { field: "紐付コード", header: "紐付コード" , minWidth: "7rem" },
     { field: "備考", header: "紐付コード", minWidth: "7rem"},
-    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem"},
-
-
+    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem"}
 ]
 
 const familyDetailColumns = [
@@ -127,6 +139,18 @@ const historyPageCities = [
     { name: 'Paris', code: 'PRS' }
 ];
 
+const evacuationSiteType = [
+    { name: '市内', code: 'CITY_IN' },
+    { name: '市外', code: 'CITY_OUT' },
+    { name: '県外', code: 'PREF_OUT' }
+];
+
+const evacuationFoodSupport = [
+    { name: 'はい', code: '1' },
+    { name: 'いいえ', code: '0' },
+];
+
+
 const historyTableColumns = [
     { field: 'Sl No', header: '番号', minWidth: "5rem", sortable: true, textAlign: 'left' },
     { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
@@ -177,6 +201,196 @@ const MailSettingsOption2 = [
 
 ];
 
+const externalEvacueesTallyChartData = {
+    datasets: [{
+        label: 'Vacant test',
+        data: [{ x: 1, y: 32 }],
+        backgroundColor: 'rgba(31, 119, 180, 1)',
+        borderColor: 'rgb(31, 119, 180)',
+        borderWidth: 1,
+        categoryPercentage: 1
+    },
+    {
+        label: 'Starting To get crowded',
+        data: [{ x: 2, y: 2 }],
+        backgroundColor: 'rgba(255, 127, 14, 1)',
+        borderColor: 'rgb(255, 127, 14)',
+        borderWidth: 1,
+        categoryPercentage: 1
+    },
+    {
+        label: 'Crowded',
+        data: [{ x: 3, y: 1 }],
+        backgroundColor: 'rgba(44, 160, 44, 1)',
+        borderColor: 'rgb(44, 160, 44)',
+        borderWidth: 1,
+        categoryPercentage: 1
+    },
+    {
+        label: 'Nara',
+        data: [{ x: 4, y: 1 }],
+        backgroundColor: 'rgba(214, 39, 40, 0.2)',
+        borderColor: 'rgb(214, 39, 40)',
+        borderWidth: 1,
+        categoryPercentage: 1
+    }]
+};
+
+const externalEvacueesPieChartData = {
+    labels: ['市内', '市外', '県外'],
+    datasets: [
+        {
+            data: [29, 2, 2],
+            backgroundColor: [
+                'rgba(31, 119, 180, 1)',
+                'rgba(255, 127, 14, 1)',
+                'rgba(44, 160, 44, 1)',
+            ],
+            hoverBackgroundColor: [
+                'rgba(31, 119, 180, 0.6)',
+                'rgba(255, 127, 14, 0.6)',
+                'rgba(44, 160, 44, 0.6)',
+            ]
+        }
+    ]
+};
+
+const externalEvacueesPieChartQuestionData = {
+    labels: ['はい', 'いいえ'],
+    datasets: [
+        {
+            data: [35, 2],
+            backgroundColor: [
+                'rgba(31, 119, 180, 1)',
+                'rgba(255, 127, 14, 1)',
+                'rgba(44, 160, 44, 1)',
+            ],
+            hoverBackgroundColor: [
+                'rgba(31, 119, 180, 0.6)',
+                'rgba(255, 127, 14, 0.6)',
+                'rgba(44, 160, 44, 0.6)',
+            ]
+        }
+    ]
+};
+
+const externalEvacueesTallyChartOptions = {
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            },
+            gridLines: {
+                display: false
+            }
+        }],
+        xAxes: [{
+            display: false,
+            gridLines: {
+                display: false
+            }
+        },
+        {
+            offset: true,
+            gridLines: {
+                display: false
+            }
+        }],
+        x: {
+            title: {
+                display: true,
+                text: "避難所",
+                align: "end"
+            }
+        },
+        y: {
+            title: {
+                display: true,
+                text: "人数",
+                align: "end"
+            }
+        },
+    },
+    maintainAspectRatio: false,
+    plugins: {
+        tooltip: {
+            callbacks: {
+                title: () => null,
+            }
+        },
+        legend: {
+            position: "bottom",
+            textAlign: "start",
+            labels: {
+                usePointStyle: true,
+                pointStyle: "rect",
+            },
+        },
+        beforeLayout: chart => chart.chart.options.scales.xAxes[1].labels = chart.chart.data.datasets.filter(ds => !ds._meta[0].hidden).map(ds => ds.label),
+    }
+};
+
+const externalEvacueesPieChartOptions = {
+    plugins: {
+        legend: {
+            position: "bottom",
+            labels: {
+                usePointStyle: true
+            }
+        },
+        tooltip: {
+            callbacks: {
+                title: () => null,
+                label: function (context) {
+                    const dataset = context.dataset;
+                    const index = context.dataIndex;
+                    const value = dataset.data[index];
+                    const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                    const percentage = ((value / total) * 100).toFixed(2) + '%';
+                    return " " + context.label + ': ' + percentage;
+                },
+            },
+        },
+        subtitle: {
+            position: "bottom",
+            display: true,
+            text: '(避難している場所ごとの集計)',
+            fontWeight: "light"
+        }
+    },
+    maintainAspectRatio: false
+};
+
+const externalEvacueesPieChartQuestionOptions = {
+    plugins: {
+        legend: {
+            position: "bottom",
+            labels: {
+                usePointStyle: true
+            },
+        },
+        tooltip: {
+            callbacks: {
+                title: () => null,
+                label: function (context) {
+                    const dataset = context.dataset;
+                    const index = context.dataIndex;
+                    const value = dataset.data[index];
+                    const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                    const percentage = ((value / total) * 100).toFixed(2) + '%';
+                    return " " + context.label + ': ' + percentage;
+                },
+            },
+        },
+        subtitle: {
+            position: "bottom",
+            display: true,
+            text: '(食糧等支援の有無集計)'
+        }
+    },
+    maintainAspectRatio: false
+};
+
 const summaryShelterOptions = [
     { name: "--"},
     { name: "Vacant test"},
@@ -192,6 +406,9 @@ export {
     evacueeFamilyDetailColumns,
     familyDetailColumns,
     evacueeFamilyDetailRowExpansionColumns,
+    externalEvacueesDetailColumns,
+    evacuationSiteType,
+    evacuationFoodSupport,
     familyDetailColumns1,
     familyDetailData1,
     familyDetailData,
@@ -204,5 +421,11 @@ export {
     dashboardTableColumns,
     MailSettingsOption1,
     MailSettingsOption2,
+    externalEvacueesTallyChartData,
+    externalEvacueesPieChartData,
+    externalEvacueesPieChartQuestionData,
+    externalEvacueesTallyChartOptions,
+    externalEvacueesPieChartOptions,
+    externalEvacueesPieChartQuestionOptions,
     summaryShelterOptions
 }
