@@ -12,6 +12,7 @@ export default function RowExpansionTable(props) {
         rowExpansionField,
         outerColumn,
         innerColumn,
+        innerColumn1,
         value,
         id,
         paginator,
@@ -21,6 +22,8 @@ export default function RowExpansionTable(props) {
         style,
         size,
         stripedRows,
+        paginatorLeft,
+        paginatorRight,
         emptyMessage,
         tableStyle,
         rowExpansionStyle,
@@ -39,7 +42,9 @@ export default function RowExpansionTable(props) {
         expandAllButtonProps,
         ...restProps
     } = props;
+
     const [expandedRows, setExpandedRows] = useState(null);
+
     const toast = useRef(null);
 
     const expandAll = () => {
@@ -59,7 +64,6 @@ export default function RowExpansionTable(props) {
     const rowExpansionTemplate = (data) => {
         return (
             <div className='rowExpansionTable'>
-
                 <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
                     {innerColumn.map((column, index) => (
                         <Column
@@ -69,9 +73,9 @@ export default function RowExpansionTable(props) {
                             sortable={column.sortable}
                             className={column.className}
                             headerClassName={column.headerClassName}
-                            style={{ minWidth: column.minWidth && column.minWidth,textAlign:column.textAlign && column.textAlign, ...rowExpansionColumnStyle }}
+                            style={{ minWidth: column.minWidth && column.minWidth, textAlign: column.textAlign && column.textAlign, ...rowExpansionColumnStyle }}
                             headerStyle={column.headerStyle}
-                            body={column.field === props.customRowExpansionActionsField ? column.body : undefined}
+                            body={column.field === props.customRowExpansionActionsField ? column.body : column.body}
                         />
                     ))}
                 </DataTable>
@@ -90,8 +94,8 @@ export default function RowExpansionTable(props) {
         <div className={`${parentClass} ${custom || 'custom-table'}`}>
             <Toast ref={toast} />
             <DataTable paginator={paginator}
-            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-            currentPageReportTemplate="{first} - {last} / {totalRecords}"
+                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                currentPageReportTemplate="{first} - {last} / {totalRecords}"
                 rows={rows || 5}
                 className={`${className}`}
                 value={props.value}
@@ -100,19 +104,21 @@ export default function RowExpansionTable(props) {
                 rowExpansionTemplate={rowExpansionTemplate}
                 dataKey="id"
                 header={expandAllButtonProps}
-                rowsPerPageOptions={rowsPerPageOptions}
                 rowClassName={rowClassName}
                 filterDisplay={filterDisplay}
                 emptyMessage={emptyMessage}
                 style={style}
                 size={size}
+                paginatorLeft={paginatorLeft}
+                paginatorRight={paginatorRight}
                 stripedRows={stripedRows}
                 showGridlines={showGridlines || 'true'}
                 onRowClick={onRowClick}
                 responsiveLayout={responsiveLayout}
+                rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={tableStyle || { minWidth: '50rem' }}
                 {...restProps}>
-                
+
                 {outerColumn.map((col, index) => (
                     <Column key={index}
                         field={col.field}
@@ -121,10 +127,10 @@ export default function RowExpansionTable(props) {
                         expander={col.expander}
                         className={col.className}
                         headerClassName={col.headerClassName}
-                        style={{ minWidth: col.minWidth && col.minWidth, textAlign:col.textAlign && col.textAlign,...columnStyle }}
-                        body={col.field === props.customActionsField ? col.body : undefined} />
+                        style={{ minWidth: col.minWidth && col.minWidth, textAlign: col.textAlign && col.textAlign, ...columnStyle }}
+                        body={col.field === props.customActionsField ? col.body : col.body} />
                 ))}
-                <Column expander={allowExpansion} style={{ width: '5rem' }} />
+                <Column expander={allowExpansion} style={{ width: '5rem', textAlign: "center" }} />
             </DataTable>
         </div>
     );

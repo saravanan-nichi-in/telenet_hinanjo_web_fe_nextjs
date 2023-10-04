@@ -76,8 +76,7 @@ export default function NormalTable(props) {
                         sortable={col.sortable}
                         alignHeader={alignHeader}
                         style={{ minWidth: col.minWidth && col.minWidth, ...columnStyle, textAlign: col.textAlign && col.textAlign }}
-                        body={col.field === customActionsField ? customBody : undefined}
-                    />
+                        body={col.field === customActionsField ? col.body:col.body} />
                 ))}
             </TableData>
         </div>

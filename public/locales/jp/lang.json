@@ -32,9 +32,14 @@
             "material_information_registration": "物資情報登録",
             "special_care_registration": "要配慮者事項登録",
             "edit_material_information": "物資情報編集",
-            "house_hold_information_details": "世帯情報詳細",
+            "house_hold_information_details":"世帯情報詳細",
+            "admin_details":"管理者詳細情",
             "number": "番号",
-            "evacuation_place": "避難所"
+            "evacuation_place": "避難所",
+            "confirmation":"確認情報",
+            "admin_management_import":"管理者管理CSVインポート",
+            "admin_registration_information":"管理者情報の登録",
+            "evacuee_registration_screen_display":"避難者登録画面表示"
         },
         "validation": {
             "admin_name_required": "管理者名が必要です。",
@@ -54,7 +59,9 @@
             "cancel": "キャンセル",
             "renew": "更新",
             "registration": "登録",
-            "return": "戻る"
+            "return": "戻る",
+            "delete":"削除",
+            "edit":"編集"
         },
         "footer": {},
         "form": {
@@ -88,7 +95,8 @@
             "food_support": "食料等の支援",
             "shelter_site_type": "避難場所種別",
             "food_support_calculation": "(食糧等支援の有無集計)",
-            "evacuation_location_aggregation": "(避難している場所ごとの集計)"
+            "evacuation_location_aggregation": "(避難している場所ごとの集計)",
+            "notification_settings":"通知設定"
         }
     },
     "staff": {
