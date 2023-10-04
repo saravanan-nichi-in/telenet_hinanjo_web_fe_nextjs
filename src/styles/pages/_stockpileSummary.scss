@@ -1,0 +1,36 @@
+.hide-col{
+    @media (min-width: 575.98px) {
+        display: none;
+    }
+}
+.summary_flex_search {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+}
+.summary_flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+.input-switch-summary {
+    .p-inputswitch {
+    height: 1rem;
+    }
+    .p-inputswitch-slider {
+        height: 20px;
+        width: 40px;
+    }
+
+    .p-inputswitch .p-inputswitch-slider:before {
+        width: 14px;
+        height: 16px;
+        top: 10px;
+    
+    }
+}

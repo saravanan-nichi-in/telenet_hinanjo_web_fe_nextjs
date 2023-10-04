@@ -46,20 +46,20 @@ const evacueeFamilyDetailColumns = [
     { field: "氏名 (フリガナ)", header: "氏名 (フリガナ)", minWidth: "10rem" },
     { field: "氏名 (漢字)", header: "氏名 (フリガナ)", minWidth: "10rem" },
     { field: "生年月日", header: "生年月日", minWidth: "10rem" },
-    { field: "年齢", header: "年齢", minWidth: "10rem" },
+    { field: "年齢", header: "年齢", minWidth: "4rem" },
     { field: "年齢_月", header: "年齢_月", minWidth: "5rem" },
     { field: "性別", header: "性別", minWidth: "5rem" },
-    { field: "性別", header: "性別", minWidth: "5rem" },
-    { field: "作成日", header: "作成日", minWidth: "12rem" },
-    { field: "更新日", header: "更新日", minWidth: "12rem" },
-
+    
+   
 ]
 const evacueeFamilyDetailRowExpansionColumns = [
+    { field: "作成日", header: "作成日", minWidth: "10rem" },
+    { field: "更新日", header: "更新日", minWidth: "10rem" },
     { field: "住所", header: "種別", minWidth: "10rem" },
-    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "5rem" },
-    { field: "紐付コード", header: "紐付コード" },
-    { field: "備考", header: "紐付コード" },
-    { field: "現在の滞在場所 *", header: "現在の滞在場所 *" },
+    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
+    { field: "紐付コード", header: "紐付コード" , minWidth: "7rem" },
+    { field: "備考", header: "紐付コード", minWidth: "7rem"},
+    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem"},
 
 
 ]
@@ -128,7 +128,7 @@ const historyPageCities = [
 ];
 
 const historyTableColumns = [
-    { field: 'Sl No', header: '番号', minWidth: "8rem", sortable: true, textAlign: 'left' },
+    { field: 'Sl No', header: '番号', minWidth: "5rem", sortable: true, textAlign: 'left' },
     { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
     { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
     { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
@@ -146,7 +146,7 @@ const historyTableColumns = [
 ];
 
 const dashboardTableColumns = [
-    { field: '番号', header: '番号', minWidth: '6rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
+    { field: '番号', header: '番号', minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
     { field: '避難所', header: '避難所', minWidth: '20rem', sortable: true, headerClassName: "custom-header" },
     { field: '避難可能人数', header: '避難可能人数', sortable: true, minWidth: '9rem', headerClassName: "custom-header" },
     { field: '現在の避難者数', header: '現在の避難者数', sortable: true, minWidth: '10rem', headerClassName: "custom-header" },
@@ -177,6 +177,14 @@ const MailSettingsOption2 = [
 
 ];
 
+const summaryShelterOptions = [
+    { name: "--"},
+    { name: "Vacant test"},
+    { name: "Starting to get crowded" },
+    { name: "Crowded"},
+    { name: "Nara" }
+];
+
 export {
     profiles,
     evacuationStatusOptions,
@@ -196,4 +204,5 @@ export {
     dashboardTableColumns,
     MailSettingsOption1,
     MailSettingsOption2,
+    summaryShelterOptions
 }
