@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 

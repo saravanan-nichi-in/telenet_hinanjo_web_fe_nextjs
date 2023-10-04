@@ -52,7 +52,9 @@
             "admin_management_import": "Administrator managed CSV import",
             "admin_registration_information": "Admin registration information",
             "evacuee_registration_screen_display": "Evacuee registration screen display",
-            "login_history": "Login History"
+            "login_history": "Login History",
+            "confirmation_information": "Confirmation Information",
+            "change_active_place": "Do you want change status active place?"
         },
         "validation": {
             "staff_name_required": "Staff Name required",
