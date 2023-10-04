@@ -28,6 +28,7 @@ const DeleteModal = (props) => {
         ...restProps
     } = props;
     const [visible, setVisible] = useState(false);
+    const [checkedSwitch, setCheckedSwitch] = useState(false);
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const footer = (
         <div className="text-center">
@@ -60,8 +61,8 @@ const DeleteModal = (props) => {
                 </>) : (
                 <>
                     <InputSwitch parentClass={parentClass} inputSwitchProps={{
-                        checked: checked,
-                        onChange: () => setVisible(true)
+                        checked: checkedSwitch,
+                        onChange: () => setCheckedSwitch(!checkedSwitch)
                     }} />
                 </>)}
             <Dialog className={`${modalClass}`}

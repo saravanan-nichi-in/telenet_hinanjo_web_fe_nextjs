@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { getValueByKeyRecursively as translate } from '@/helper'
+
 export default function NormalTable(props) {
+    const { localeJson } = useContext(LayoutContext);
     const {
         parentClass,
         custom,
@@ -10,6 +14,7 @@ export default function NormalTable(props) {
         rows,
         value,
         customActionsField,
+        customBody,
         columns,
         id,
         rowClassName,
@@ -36,7 +41,7 @@ export default function NormalTable(props) {
         onRowToggle,
         ...restProps
     } = props;
-    
+
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`} >
             <TableData id={id} value={value}
@@ -44,7 +49,7 @@ export default function NormalTable(props) {
                 expandedRows={expandedRows}
                 paginator={paginator} rows={rows || 5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
-                rowClassName={rowClassName} 
+                rowClassName={rowClassName}
                 filterDisplay={filterDisplay}
                 emptyMessage={emptyMessage}
                 style={style}

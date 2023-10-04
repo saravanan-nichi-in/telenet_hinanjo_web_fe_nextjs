@@ -85,7 +85,6 @@ const LoginPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <MailFilled />,
-                                                    placeholder: translate(localeJson, 'mail_address'),
                                                     value: values.email
                                                 }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
@@ -104,7 +103,6 @@ const LoginPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <LockFilled />,
-                                                    placeholder: translate(localeJson, 'password'),
                                                 }}
                                                     parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />

@@ -45,10 +45,17 @@ function MyApp({ Component, pageProps }) {
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
-                router.push({
-                    pathname: path,
-                    query: queryString
-                });
+                if (!adminPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/admin/login',
+                        query: queryString
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
             } else {
                 if (adminPublicPaths.includes(path)) {
                     router.push({
@@ -61,6 +68,8 @@ function MyApp({ Component, pageProps }) {
                     });
                 }
             }
+        } else {
+            setAuthorized(true);
         }
     }
 

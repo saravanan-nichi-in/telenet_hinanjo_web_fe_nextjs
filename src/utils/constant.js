@@ -1,5 +1,3 @@
-import { DeleteModal } from "@/components";
-
 const profiles = [
     {
         profile: 'admin',
@@ -156,26 +154,7 @@ const dashboardTableColumns = [
     { field: '避難中の世帯数', header: '避難中の世帯数', minWidth: '10rem', sortable: true, headerClassName: "custom-header" },
     { field: '個人情報なしの避難者数', header: '個人情報なしの避難者数', minWidth: '15rem', sortable: true, headerClassName: "custom-header" },
     { field: '男', header: '男', minWidth: '5rem', sortable: true, headerClassName: "custom-header" },
-    {
-        field: 'actions',
-        header: '満員切替',
-        minWidth: "7rem",
-        headerClassName: "custom-header",
-        textAlign: 'center',
-        sortable: true,
-        body: (rowData) => (
-            <div className='input-switch-dashboard'>
-                <DeleteModal
-                    modalClass="w-50rem"
-                    header="確認情報"
-                    position="top"
-                    content={"避難所の運営状態を変更しますか？"}
-                    checked={false}
-                    parentClass={"custom-switch"}
-                />
-            </div>
-        ),
-    }
+    { field: 'actions', header: '満員切替', minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', sortable: true }
 ];
 
 const MailSettingsOption1 = [

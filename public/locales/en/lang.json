@@ -33,7 +33,9 @@
             "special_care_registration": "Registration of matters requiring consideration",
             "edit_material_information": "Edit material information",
             "house_hold_information_details":"Household Information Details",
-            "admin_details":"Admin Details"
+            "admin_details":"Admin Details",
+            "number": "number",
+            "evacuation_place": "Evacuation place"
         },
         "validation":{
             "admin_name_required":"Admin Name required",
