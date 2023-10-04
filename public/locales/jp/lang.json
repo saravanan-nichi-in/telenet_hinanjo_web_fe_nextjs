@@ -86,7 +86,9 @@
             "external_evacuees_food_support": "食糧等支援人数",
             "external_evacuee_details":"外部避難者詳細",
             "food_support": "食料等の支援",
-            "shelter_site_type": "避難場所種別"
+            "shelter_site_type": "避難場所種別",
+            "food_support_calculation": "(食糧等支援の有無集計)",
+            "evacuation_location_aggregation": "(避難している場所ごとの集計)"
         }
     },
     "staff": {

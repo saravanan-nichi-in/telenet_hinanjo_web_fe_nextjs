@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { SelectFloatLabel } from '@/components/dropdown';
@@ -9,6 +10,7 @@ import { AdminExternalEvacueesDetails } from '@/helper/adminExternalEvacueesDeta
 
 export default function EvacuationPage() {
     const { localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedSiteType, setSelectedSiteType] = useState(null);
     const [selectedFoodSupport, setSelectedFoodSupport] = useState(null);
@@ -112,6 +114,7 @@ export default function EvacuationPage() {
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'return'),
+                                onClick: () => router.push('/admin/external/family'),
                             }} parentClass={"mb-3"} />
                         </div>
                     </div>
