@@ -23,9 +23,9 @@ export const LayoutProvider = (props) => {
         menuHoverActive: false
     });
     const [localeJson, setLocaleJson] = useState(jpJson);
+    const [locale, setLocale] = useState(localStorage.getItem("locale"));
 
     useEffect(() => {
-        const locale = localStorage.getItem("locale");
         if (locale == 'ja') {
             setLocaleJson(jpJson);
         } else {
@@ -51,9 +51,11 @@ export const LayoutProvider = (props) => {
 
     const onChangeLocale = (props) => {
         if (props === "en") {
+            setLocale("en");
             setLocaleJson(enJson);
             localStorage.setItem('locale', 'en');
         } else {
+            setLocale("ja");
             setLocaleJson(jpJson);
             localStorage.setItem('locale', 'ja');
         }
@@ -74,6 +76,7 @@ export const LayoutProvider = (props) => {
         setLayoutState,
         onMenuToggle,
         showProfileSidebar,
+        locale,
         onChangeLocale,
         localeJson
     };

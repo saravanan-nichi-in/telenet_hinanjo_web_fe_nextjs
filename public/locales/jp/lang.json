@@ -52,7 +52,9 @@
             "admin_management_import": "管理者管理CSVインポート",
             "admin_registration_information": "管理者情報の登録",
             "evacuee_registration_screen_display": "避難者登録画面表示",
-            "login_history": "ログイン履歴"
+            "login_history": "ログイン履歴",
+            "confirmation_information": "確認情報",
+            "change_active_place": "避難所の運営状態を変更しますか？"
         },
         "validation": {
             "admin_name_required": "管理者名が必要です。",

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 
 import InputSwitch from "../switch/inputSwitch";
@@ -13,6 +13,7 @@ const DeleteModal = (props) => {
         iconPos,
         icon,
         parentClass,
+        data,
         checked,
         modalClass,
         draggable,
@@ -25,29 +26,62 @@ const DeleteModal = (props) => {
         hoverBg,
         severity,
         buttonClass,
+        deleteButton,
+        reNewButton,
+        reNewCalBackFunction,
         ...restProps
     } = props;
+    const { localeJson } = useContext(LayoutContext);
     const [visible, setVisible] = useState(false);
-    const [checkedSwitch, setCheckedSwitch] = useState(false);
-    const { layoutConfig, localeJson } = useContext(LayoutContext);
-    const footer = (
-        <div className="text-center">
-            <Button buttonProps={{
-                buttonClass: "w-50rem h-3rem",
-                text: translate(localeJson, 'cancel')
-            }} parentClass={"inline"} />
-            <Button buttonProps={{
-                buttonClass: "w-40rem h-3rem",
-                text: translate(localeJson, 'renew'),
-                severity: "danger"
-            }} parentClass={"inline"} />
-        </div>
-    );
+    const [checkedSwitch, setCheckedSwitch] = useState(checked);
+    const footer = () => {
+        if (deleteButton || reNewButton) {
+            return (
+                <div className="text-center">
+                    {/* Delete button */}
+                    {deleteButton && (
+                        <Button buttonProps={{
+                            buttonClass: "text-600 w-8rem",
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            text: translate(localeJson, 'cancel'),
+                            onClick: () => setVisible(false),
+                        }} parentClass={"inline"} />
+                    )}
+                    {/* Renew button */}
+                    {reNewButton && (
+                        <Button buttonProps={{
+                            buttonClass: "w-8rem",
+                            type: "submit",
+                            text: translate(localeJson, 'renew'),
+                            severity: "danger",
+                            onClick: () => onClickRenewButton(data),
+                        }} parentClass={"inline"} />
+                    )}
+                </div>
+            );
+        }
+        return false;
+    }
+
+    useEffect(() => {
+        setCheckedSwitch(checked);
+    }, [checked]);
+
+    /**
+     * Return id to the parent function
+     * @param {*} rowData 
+     */
+    const onClickRenewButton = (rowData) => {
+        reNewCalBackFunction(rowData);
+        setVisible(false);
+    }
 
     return (
         <div className={`${parentMainClass}`}>
             {text ? (
                 <>
+                    {/* Check box */}
                     <Button buttonProps={{
                         text: text,
                         iconPos: iconPos,
@@ -60,26 +94,28 @@ const DeleteModal = (props) => {
                     }} />
                 </>) : (
                 <>
+                    {/* Switch */}
                     <InputSwitch parentClass={parentClass} inputSwitchProps={{
                         checked: checkedSwitch,
-                        onChange: () => setCheckedSwitch(!checkedSwitch)
+                        onChange: () => setVisible(true)
                     }} />
-                </>)}
-            <Dialog className={`${modalClass}`}
-                draggable={draggable}
-                position={position}
+                </>)
+            }
+            <Dialog
+                className="custom-modal"
                 header={header}
-                footer={footer}
                 visible={visible}
-                style={style}
+                draggable={false}
                 onHide={() => setVisible(false)}
-                {...restProps}
+                footer={footer()}
             >
-                <div class={`text-center ${contentClass} text-1rem`}>
-                    {content}
+                <div className={`text-center modal-content`}>
+                    <div>
+                        <p>{content}</p>
+                    </div>
                 </div>
             </Dialog>
-        </div>
+        </div >
     );
 }
 
