@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 
-export const AdminExternalEvacueesDetails = {
+export const AdminExternalEvacueesList = {
     getData() {
         return [
             {
@@ -10,7 +10,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -22,7 +22,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -34,7 +34,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -46,7 +46,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -58,7 +58,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -70,7 +70,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -82,7 +82,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -94,7 +94,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -106,7 +106,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -118,7 +118,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -130,7 +130,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -142,7 +142,7 @@ export const AdminExternalEvacueesDetails = {
                 "避難場所種別": '市内',
                 "場所": "秋葉原",
                 "食料等の支援": "はい",
-                "人数": <Link className="text-higlight" href="/admin/evacuation/family-detail">2</Link>,
+                "人数": <Link className="text-higlight" href="/admin/external/family/detail">2</Link>,
                 "避難所": "Vacant test",
                 "メールアドレス": "testuser45@gmail.com",
                 "郵便番号": "190-0012",
@@ -151,19 +151,19 @@ export const AdminExternalEvacueesDetails = {
             },
         ]
     },
-    getAdminsExternalEvacueesDetailSmall() {
+    getAdminsExternalEvacueesListSmall() {
         return Promise.resolve(this.getData().slice(0, 10));
     },
 
-    getAdminsExternalEvacueesDetailMedium() {
+    getAdminsExternalEvacueesListMedium() {
         return Promise.resolve(this.getData().slice(0, 50));
     },
 
-    getAdminsExternalEvacueesDetailLarge() {
+    getAdminsExternalEvacueesListLarge() {
         return Promise.resolve(this.getData().slice(0, 200));
     },
 
-    getAdminsExternalEvacueesDetailXLarge() {
+    getAdminsExternalEvacueesListXLarge() {
         return Promise.resolve(this.getData());
     },
 
