@@ -10,7 +10,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { InputFloatLabel } from "../input";
 
-export default function AdmiinManagementEditModal(props) {
+export default function AdminManagementEditModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
@@ -48,7 +48,7 @@ export default function AdmiinManagementEditModal(props) {
                     handleSubmit,
                 }) => (
                     <div>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <Dialog
                                 className="custom-modal"
                                 header={header}

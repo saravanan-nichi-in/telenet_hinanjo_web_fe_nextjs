@@ -10,13 +10,13 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { InputFile } from "../upload";
 
-export default function AdmiinManagemenImportModal(props) {
+export default function AdminManagementImportModal(props) {
     const { localeJson } = useContext(LayoutContext);
-    const { open, close, register } = props && props;
+    const { open, close, register,modalHeaderText } = props && props;
     const router=useRouter();
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'admin_management_import')}
+            {modalHeaderText}
         </div>
     );
 
@@ -30,10 +30,11 @@ export default function AdmiinManagemenImportModal(props) {
                 validationSchema={schema}
                 initialValues={{ file: null }}
                 onSubmit={() => {
-                    router.push("/admin/dashboard")
+                    router.push("#")
                 }}
             >
                 {({
+                    values,
                     errors,
                     touched,
                     setFieldValue,
@@ -54,7 +55,12 @@ export default function AdmiinManagemenImportModal(props) {
                                             buttonClass: "w-8rem",
                                             text: translate(localeJson, 'import'),
                                             severity: "primary",
-                                            onClick: handleSubmit
+                                            onClick: () => {
+                                                handleSubmit();
+                                                register({
+                                                    file: values.file,
+                                                });
+                                            },
                                         }} parentClass={"inline"} />
                                     </div>
                                 }

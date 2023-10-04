@@ -10,28 +10,25 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { InputFloatLabel } from "../input";
 
-export default function AdminManagementCreateModal(props) {
+export default function StaffManagementEditModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
             .email(translate(localeJson, 'email_valid')),
-        password: Yup.string()
-            .required(translate(localeJson, 'password_required'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
         fullName: Yup.string()
-            .required(translate(localeJson, 'admin_name_required'))
+            .required(translate(localeJson, 'staff_name_required')),
+        phoneNumber: Yup.string()
+            .required(translate(localeJson, 'phone_no_required'))
+            .min(10, translate(localeJson, 'phone_min10_required    ')),
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register } = props && props;
 
+    const { open, close, register,modalHeaderText } = props && props;
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'admin_registration_information')}
+            {modalHeaderText}
         </div>
     );
 
@@ -40,7 +37,7 @@ export default function AdminManagementCreateModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "", password: "", fullName: "" }}
+                initialValues={{ email: "", phoneNumber: "", fullName: "" }}
                 onSubmit={() => {
                     router.push("/admin/admin-management")
                 }}
@@ -80,7 +77,7 @@ export default function AdminManagementCreateModal(props) {
                                                 register({
                                                     fullName: values.fullName,
                                                     email: values.email,
-                                                    password: values.password
+                                                    password: values.phoneNumber
                                                 });
 
                                             },
@@ -118,20 +115,19 @@ export default function AdminManagementCreateModal(props) {
                                             }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                         </div>
-                                        <div className="mt-5">
+                                        <div className="mt-5 ">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 spanText: "*",
-                                                name: 'password',
-                                                type: 'password',
+                                                name: 'phoneNumber',
+                                                value: values.phoneNumber,
                                                 spanClass: "p-error",
-                                                value: values.password,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'password'),
+                                                text: translate(localeJson, 'telephone_number'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} parentClass={`${errors.password && touched.password && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+                                            }} parentClass={`w-full ${errors.phoneNumber && touched.phoneNumber && 'p-invalid pb-1'}`} />
+                                            <ValidationError errorBlock={errors.phoneNumber && touched.phoneNumber && errors.phoneNumber} />
                                         </div>
                                     </div>
                                 </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 
-import { CustomerService } from '@/helper/datatableservice';
+import { StaffDetailService } from '@/helper/StaffDetailService';
 import ImageCropper from '@/pages/POC/CROP';
 import {
     NormalTable, Counter, Linker, NormalLabel, DeleteModal,
@@ -77,7 +77,7 @@ export default function ComponentsDemo() {
     ];
 
     useEffect(() => {
-        CustomerService.getCustomersMedium().then((data) => setCustomers(data));
+        StaffDetailService.getStaffMedium().then((data) => setCustomers(data));
     }, []);
 
     return (
