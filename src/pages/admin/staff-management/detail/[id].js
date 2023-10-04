@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, NormalTable } from '@/components';
-import { CustomerService } from '@/helper/datatableservice';
+import { CustomerService } from '@/helper/StaffDetailService';
 import { AdminStaffDetailService } from '@/helper/adminStaffDetail';
 
 export default function StaffManagementEditPage() {

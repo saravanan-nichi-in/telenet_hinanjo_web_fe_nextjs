@@ -38,11 +38,14 @@
             "evacuation_place": "避難所",
             "confirmation":"確認情報",
             "admin_management_import":"管理者管理CSVインポート",
+            "staff_management_import":"スタッフ管理CSVインポート",
             "admin_registration_information":"管理者情報の登録",
-            "evacuee_registration_screen_display":"避難者登録画面表示"
+            "evacuee_registration_screen_display":"避難者登録画面表示",
+            "login_history":"ログイン履歴"
         },
         "validation": {
             "admin_name_required": "管理者名が必要です。",
+            "staff_name_required":"スタッフ名が必要です。",
             "supplies_necessary": "物資は必須です。",
             "phone_min10_required": "電話番号には10または11桁の半角数字を入力してください。",
             "phone_no_required": "電話番号は必須です。",

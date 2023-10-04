@@ -407,6 +407,21 @@ const summaryShelterOptions = [
     { name: "Nara" }
 ];
 
+const loginHistory = [
+    { field: 'No', header: 'No.', minWidth: "3rem" },
+    { field: '避難所', header: '避難所', minWidth: "5rem" },
+    { field: "ログイン日時", header: "ログイン日時", minWidth: "5rem" }
+];
+
+const staffDetailData = [
+    {
+        field: '氏名',
+        header: '氏名',
+        minWidth: "5rem"
+    },
+    { field: '電話番号', header: '電話番号', minWidth: "5rem" },
+];
+
 export {
     profiles,
     evacuationStatusOptions,
@@ -436,5 +451,7 @@ export {
     externalEvacueesTallyChartOptions,
     externalEvacueesPieChartOptions,
     externalEvacueesPieChartQuestionOptions,
-    summaryShelterOptions
+    summaryShelterOptions,
+    loginHistory,
+    staffDetailData
 }

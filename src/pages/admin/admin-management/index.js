@@ -5,7 +5,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { AdminManagementService } from '@/helper/adminManagementService';
-import { AdmiinManagemenImportModal, AdmiinManagementDeleteModal, AdmiinManagementDetailModal, AdmiinManagementEditModal, AdminManagementCreateModal } from '@/components/modal';
+import { AdminManagementCreateModal, AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementEditModal, AdminManagementImportModal } from '@/components/modal';
 
 export default function AdminManagementPage() {
     const { localeJson } = useContext(LayoutContext);
@@ -62,9 +62,9 @@ export default function AdminManagementPage() {
     };
 
     const Listcolumn = [
-        { field: 'No.', header: 'No.', minWidth: "5rem" },
+        { field: 'No.', header: 'No', minWidth: "3rem" },
         {
-            field: '氏名', header: <span data-tip="Tooltip text for 氏名">氏名</span>, minWidth: "15rem", body: (rowData) => (
+            field: '氏名', header:"氏名", minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setAdminDetailsOpen(true)}>
                     {rowData['氏名']}
                 </a>
@@ -106,23 +106,24 @@ export default function AdminManagementPage() {
 
     return (
         <React.Fragment>
-            <AdmiinManagementEditModal
+            <AdminManagementEditModal
                 open={editAdminOpen}
                 close={onAdminClose}
                 register={onRegister}
             />
-            <AdmiinManagementDetailModal
+            <AdminManagementDetailModal
                 open={adminDetailsOpen}
                 close={onAdminDetailClose}
             />
-            <AdmiinManagementDeleteModal
+            <AdminManagementDeleteModal
                 open={deleteAdminOpen}
                 close={onAdminDeleteClose}
             />
-            <AdmiinManagemenImportModal
+            <AdminManagementImportModal
                 open={importAdminOpen}
                 close={onAdminImportClose}
                 register={onRegister}
+                modalHeaderText={translate(localeJson, 'admin_management_import')}
             />
             <AdminManagementCreateModal
                 open={createAdminOpen}

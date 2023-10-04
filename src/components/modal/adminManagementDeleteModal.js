@@ -5,7 +5,7 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
-export default function AdmiinManagementDeleteModal(props) {
+export default function AdminManagementDeleteModal(props) {
     const { localeJson } = useContext(LayoutContext);
     const { open, close } = props && props;
     const header = (

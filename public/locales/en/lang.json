@@ -38,11 +38,14 @@
             "evacuation_place": "Evacuation place",
             "confirmation":"Confirmation",
             "admin_management_import":"Administrator managed CSV import",
+            "staff_management_import":"Staff management CSV import",
             "admin_registration_information":"Admin registration information",
-            "evacuee_registration_screen_display":"Evacuee registration screen display"
+            "evacuee_registration_screen_display":"Evacuee registration screen display",
+            "login_history":"Login History"
         },
         "validation":{
             "admin_name_required":"Admin Name required",
+            "staff_name_required":"Staff Name required",
             "supplies_necessary":"Supplies are necessary",
             "phone_min10_required":"Enter 10 or 11 digits for The phone number",
             "phone_no_required":"phone number required",

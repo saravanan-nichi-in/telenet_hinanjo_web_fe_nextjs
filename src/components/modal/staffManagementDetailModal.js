@@ -1,35 +1,34 @@
-import React, { useEffect } from "react"
+import React, { useEffect,useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { useRouter } from 'next/router'
 
 import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useContext, useState } from 'react';
-import { AdminManagementService } from '@/helper/adminManagementService';
+import { StaffDetailService } from '@/helper/StaffDetailService';
+import { AdminStaffDetailService } from '@/helper/adminStaffDetail';
 import { NormalTable } from "../datatable";
-import AdmiinManagementEditModal from "./adminManagementEditModal";
+import { loginHistory,staffDetailData } from "@/utils/constant";
+import StaffManagementEditModal from "./StaffManagementEditModal";
 
-
-export default function AdminManagementDetailModal(props) {
+export default function StaffManagementDetailModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const [admin, setAdmins] = useState([]);
-    const columns = [
-        { field: '氏名', header: '氏名', minWidth: "8rem" },
-        { field: 'メール', header: 'メール', minWidth: "8rem" },
-    ];
     const { open, close } = props && props;
-    const [editAdminOpen, setEditAdminOpen] = useState(false);
-    const onAdminClose = () => {
-        setEditAdminOpen(!editAdminOpen);
+    const [staffDetail, setStaffDetail] = useState([]);
+
+    const [editStaffOpen, setEditStaffOpen] = useState(false);
+    const onStaffClose = () => {
+        setEditStaffOpen(!editStaffOpen);
     };
     const onRegister = (values) => {
-        setEditAdminOpen(false);
-    };
+        setEditStaffOpen(false);
+    };  
 
     useEffect(() => {
-        AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
+        StaffDetailService.getStaffMedium().then((data) => setStaffDetail(data));
+        AdminStaffDetailService.getAdminsStaffDetailMedium().then((data) => setAdmins(data));
     }, []);
 
     const header = (
@@ -40,9 +39,9 @@ export default function AdminManagementDetailModal(props) {
 
     return (
         <React.Fragment>
-            <AdmiinManagementEditModal
-                open={editAdminOpen}
-                close={onAdminClose}
+            <StaffManagementEditModal
+                open={editStaffOpen}
+                close={onStaffClose}
                 register={onRegister}
             />
             <div>
@@ -67,14 +66,22 @@ export default function AdminManagementDetailModal(props) {
                                 type: "submit",
                                 text: translate(localeJson, 'renew'),
                                 severity: "primary",
-                                onClick: () => setEditAdminOpen(true)
+                                onClick: () => setEditStaffOpen(true)
                             }} parentClass={"inline"} />
                         </div>
                     }
                 >
                     <div className={`modal-content`}>
-                        <div>
-                            <NormalTable tableStyle={{ maxWidth: "30rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admin} columns={columns} />
+                    <div>
+                            <div className="flex justify-content-center overflow-x-auto">
+                                <NormalTable tableStyle={{ maxWidth: "20rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staffDetail} columns={staffDetailData} />
+                            </div>
+                            <div >
+                                <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson,'login_history')}</h5>
+                                <div>
+                                    <NormalTable tableStyle={{ maxWidth: "30rem" }} paginator={"true"} paginatorLeft={true} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} value={admin} columns={loginHistory} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Dialog>
