@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,17 +8,12 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
-import { SelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { InputFloatLabel, TextAreaFloatLabel } from "../input";
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
-import { useContext, useState } from 'react';
 
 export default function StockPileSummaryMailSettingsModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
-    const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
-    const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
@@ -71,7 +66,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                     <div>
                         <Dialog
                             className="custom-modal"
-                            header={translate(localeJson,'notification_settings')}
+                            header={translate(localeJson, 'notification_settings')}
                             visible={open}
                             draggable={false}
                             onHide={() => close()}
@@ -91,8 +86,6 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                         severity: "primary",
                                         onClick: () => {
                                             register({
-                                                transmissionInterval,
-                                                outputTargetArea,
                                                 email: values.email
                                             });
                                             handleSubmit();
@@ -101,25 +94,25 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                 </div>
                             }
                         >
-                            <div class={`text-1rem`}>
+                            <div className={`modal-content`}>
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                        <div className='mt-5 mb-5'>
-                                        <InputFloatLabel
-                                        inputFloatLabelProps={{
-                                            id: 'householdNumber',
-                                            readOnly:"true",
-                                            value:"日比谷公園避難所",
-                                            spanClass:"p-error",
-                                            spanText: "*",
-                                            disabled:"true",
-                                            inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                            text: translate(localeJson, 'shelter_place'),
-                                        }}
-                                    />
-                                        </div>
                                             <div className='mt-5 mb-5'>
+                                                <InputFloatLabel
+                                                    inputFloatLabelProps={{
+                                                        id: 'householdNumber',
+                                                        readOnly: "true",
+                                                        value: "日比谷公園避難所",
+                                                        spanClass: "p-error",
+                                                        spanText: "*",
+                                                        disabled: "true",
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                        text: translate(localeJson, 'shelter_place'),
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className='mt-5'>
                                                 <TextAreaFloatLabel textAreaFloatLabelProps={{
                                                     textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                                                     row: 5,
@@ -133,30 +126,6 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                                 }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
-                                            {/* <div className='mt-5 '>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                    value: transmissionInterval,
-                                                    options: MailSettingsOption1,
-                                                    optionLabel: "name",
-                                                    onChange: (e) => setTransmissionInterval(e.value),
-                                                    text: translate(localeJson, "transmission_interval"),
-
-                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
-                                            </div>
-                                            <div className='mt-5'>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                    value: outputTargetArea,
-                                                    options: MailSettingsOption2,
-                                                    optionLabel: "name",
-                                                    onChange: (e) => setOutputTargetArea(e.value),
-                                                    text: translate(localeJson, "output_target_area"),
-
-                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
-                                            </div> */}
                                             <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
                                                 <NormalLabel text={translate(localeJson, 'history_mail_message')} />
                                             </div>

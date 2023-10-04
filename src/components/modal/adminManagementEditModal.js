@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,7 +8,6 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
-import { useContext, useState } from 'react';
 import { InputFloatLabel } from "../input";
 
 export default function AdmiinManagementEditModal(props) {
@@ -21,11 +20,8 @@ export default function AdmiinManagementEditModal(props) {
         fullName: Yup.string()
             .required(translate(localeJson, 'admin_name_required'))
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register } = props && props;
 
+    const { open, close, register } = props && props;
 
     const header = (
         <div className="custom-modal">
@@ -76,18 +72,18 @@ export default function AdmiinManagementEditModal(props) {
                                             onClick: () => {
                                                 handleSubmit();
                                                 register({
-                                                    fullName:values.fullName,
+                                                    fullName: values.fullName,
                                                     email: values.email
                                                 });
-                                               
+
                                             },
                                         }} parentClass={"inline"} />
                                     </div>
                                 }
                             >
-                                <div class={`text-1rem`}>
-                                    <div>
-                                        <div className="mt-5 mb-5">
+                                <div className={`modal-content`}>
+                                    <div className="mt-5 mb-3">
+                                        <div className="mb-5">
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 name: "fullName",

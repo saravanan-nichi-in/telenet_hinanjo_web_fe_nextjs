@@ -28,16 +28,15 @@ export default function AdmiinManagementDetailModal(props) {
         setEditAdminOpen(false);
     };
 
-
     useEffect(() => {
         AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
     }, []);
+
     const header = (
         <div className="custom-modal">
             {translate(localeJson, 'admin_details')}
         </div>
     );
-
 
     return (
         <React.Fragment>
@@ -51,6 +50,7 @@ export default function AdmiinManagementDetailModal(props) {
                     className="custom-modal"
                     header={header}
                     visible={open}
+                    style={{ minWidth: "20rem" }}
                     draggable={false}
                     onHide={() => close()}
                     footer={
@@ -72,7 +72,7 @@ export default function AdmiinManagementDetailModal(props) {
                         </div>
                     }
                 >
-                    <div class={`text-1rem`}>
+                    <div className={`modal-content`}>
                         <div>
                             <NormalTable tableStyle={{ maxWidth: "30rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admin} columns={columns} />
                         </div>

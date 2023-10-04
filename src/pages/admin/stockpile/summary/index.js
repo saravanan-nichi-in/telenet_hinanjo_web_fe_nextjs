@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaEyeSlash } from 'react-icons/fa';
+import { AiFillEye } from 'react-icons/ai';
 
-import { DividerComponent, RowExpansionTable, Button, NormalLabel, InputSelect, InputSwitch } from '@/components';
+import { RowExpansionTable, Button,InputSwitch } from '@/components';
 import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
-import { AiFillEye } from 'react-icons/ai';
 import { summaryShelterOptions } from '@/utils/constant';
 
 function AdminStockpileSummary() {
@@ -64,19 +63,28 @@ function AdminStockpileSummary() {
         StockpileSummaryService.getStockpileSummaryWithOrdersSmall().then((data) => setStockpileSummary(data));
     }, []);
 
+    /**
+    * Image setting modal close
+   */
     const onImageModalClose = () => {
         setImageModal(!imageModal);
     };
+    /**
+    * Email setting modal close
+   */
     const onEmailModalClose = () => {
         setEmailModal(!emailModal);
     };
+    /**
+     * 
+     * @param {*} values 
+     */
     const onRegister = (values) => {
         setEmailModal(false);
     };
 
     return (
         <React.Fragment>
-            {/* Place history email settings modal */}
             <StockpileSummaryImageModal
                 open={imageModal}
                 close={onImageModalClose}
@@ -95,13 +103,9 @@ function AdminStockpileSummary() {
                             </h5>
                             <hr />
                             <div >
-                                {/* <div class="mb-3" style={{ display: "flex", justifyContent: "space-between", flexWrap: "nowrap" }} > */}
                                 <div class="mb-3" >
-
                                     <div class="summary_flex input-switch-summary w-13rem">
-                                        {/* <!-- Buttons section --> */}
-
-                                        避難者登録画面表示          <InputSwitch inputSwitchProps={{
+                                        {translate(localeJson, 'evacuee_registration_screen_display')}<InputSwitch inputSwitchProps={{
                                             checked: false,
                                             text: "避難者登録画面表示"
                                         }}
@@ -109,7 +113,6 @@ function AdminStockpileSummary() {
                                         />
                                     </div>
                                     <div>
-                                        {/* <!-- Search section --> */}
                                         <form>
                                             <div class="summary_flex_search float-right mt-5" >
                                                 <div class="flex flex-row justify-content-end" >

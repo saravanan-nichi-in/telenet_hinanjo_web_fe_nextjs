@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, InputFloatLabel, InputIcon, NormalLabel, NormalTable } from '@/components';
+import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { AdminManagementService } from '@/helper/adminManagementService';
-import { AdmiinManagementDetailModal, AdmiinManagementEditModal } from '@/components/modal';
+import { AdmiinManagemenImportModal, AdmiinManagementDeleteModal, AdmiinManagementDetailModal, AdmiinManagementEditModal, AdminManagementCreateModal } from '@/components/modal';
 
 export default function AdminManagementPage() {
     const { localeJson } = useContext(LayoutContext);
@@ -13,7 +13,9 @@ export default function AdminManagementPage() {
     const router = useRouter();
     const [editAdminOpen, setEditAdminOpen] = useState(false);
     const [adminDetailsOpen, setAdminDetailsOpen] = useState(false);
-
+    const [deleteAdminOpen, setDeleteAdminOpen] = useState(false);
+    const [importAdminOpen, setImportAdminOpen] = useState(false);
+    const [createAdminOpen, setCreateAdminOpen] = useState(false);
 
     useEffect(() => {
         AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
@@ -24,9 +26,29 @@ export default function AdminManagementPage() {
     const onAdminClose = () => {
         setEditAdminOpen(!editAdminOpen);
     };
-
+    /**
+        * Detail setting modal close
+       */
     const onAdminDetailClose = () => {
         setAdminDetailsOpen(!adminDetailsOpen);
+    };
+    /**
+        * Delete setting modal close
+       */
+    const onAdminDeleteClose = () => {
+        setDeleteAdminOpen(!deleteAdminOpen);
+    };
+    /**
+    * Import setting modal close
+   */
+    const onAdminImportClose = () => {
+        setImportAdminOpen(!importAdminOpen);
+    };
+    /**
+    * Delete setting modal close
+   */
+    const onAdminCreateClose = () => {
+        setCreateAdminOpen(!createAdminOpen);
     };
 
     /**
@@ -35,10 +57,12 @@ export default function AdminManagementPage() {
      */
     const onRegister = (values) => {
         setEditAdminOpen(false);
+        setImportAdminOpen(false);
+        setCreateAdminOpen(false);
     };
 
-    const columns = [
-        { field: 'No.', header: 'No.' },
+    const Listcolumn = [
+        { field: 'No.', header: 'No.', minWidth: "5rem" },
         {
             field: '氏名', header: <span data-tip="Tooltip text for 氏名">氏名</span>, minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setAdminDetailsOpen(true)}>
@@ -50,10 +74,11 @@ export default function AdminManagementPage() {
         {
             field: 'actions',
             header: '編集',
+            textAlign: "center",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
-                        text: "編集", buttonClass: "text-primary",
+                        text: translate(localeJson, 'edit'), buttonClass: "text-primary",
                         bg: "bg-white",
                         onClick: () => setEditAdminOpen(true),
                         hoverBg: "hover:bg-primary hover:text-white",
@@ -63,12 +88,14 @@ export default function AdminManagementPage() {
         }, {
             field: 'actions',
             header: '削除',
+            textAlign: "center",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
-                        text: "削除", buttonClass: "text-primary",
+                        text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => setDeleteAdminOpen(true)
                     }} />
                 </div>
             ),
@@ -79,7 +106,6 @@ export default function AdminManagementPage() {
 
     return (
         <React.Fragment>
-            {/* Place history email settings modal */}
             <AdmiinManagementEditModal
                 open={editAdminOpen}
                 close={onAdminClose}
@@ -89,17 +115,32 @@ export default function AdminManagementPage() {
                 open={adminDetailsOpen}
                 close={onAdminDetailClose}
             />
+            <AdmiinManagementDeleteModal
+                open={deleteAdminOpen}
+                close={onAdminDeleteClose}
+            />
+            <AdmiinManagemenImportModal
+                open={importAdminOpen}
+                close={onAdminImportClose}
+                register={onRegister}
+            />
+            <AdminManagementCreateModal
+                open={createAdminOpen}
+                close={onAdminCreateClose}
+                register={onRegister}
+            />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
                         <section className='col-12'>
                             <h5 className='page-header1'>{translate(localeJson, 'admin_management')}</h5>
-                            <hr/>
+                            <hr />
                             <div >
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
                                         type: 'submit',
                                         rounded: "true",
+                                        onClick: () => setImportAdminOpen(true),
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'import'),
                                         severity: "primary"
@@ -117,7 +158,7 @@ export default function AdminManagementPage() {
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'signup'),
-                                        onClick: () => router.push('/admin/admin-management/create'),
+                                        onClick: () => setCreateAdminOpen(true),
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
@@ -148,7 +189,7 @@ export default function AdminManagementPage() {
                                 </div>
                                 <div>
                                 </div>
-                                <NormalTable showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                                <NormalTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} customActionsField="actions" value={admins} columns={Listcolumn} />
                             </div>
                         </section>
                     </div>

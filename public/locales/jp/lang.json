@@ -35,7 +35,11 @@
             "house_hold_information_details":"世帯情報詳細",
             "admin_details":"管理者詳細情",
             "number": "番号",
-            "evacuation_place": "避難所"
+            "evacuation_place": "避難所",
+            "confirmation":"確認情報",
+            "admin_management_import":"管理者管理CSVインポート",
+            "admin_registration_information":"管理者情報の登録",
+            "evacuee_registration_screen_display":"避難者登録画面表示"
         },
         "validation": {
             "admin_name_required": "管理者名が必要です。",
@@ -55,7 +59,9 @@
             "cancel": "キャンセル",
             "renew": "更新",
             "registration": "登録",
-            "return": "戻る"
+            "return": "戻る",
+            "delete":"削除",
+            "edit":"編集"
         },
         "footer": {},
         "form": {

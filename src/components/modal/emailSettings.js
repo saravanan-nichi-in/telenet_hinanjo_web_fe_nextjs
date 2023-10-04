@@ -1,4 +1,4 @@
-import React from "react"
+import React,{ useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -12,7 +12,6 @@ import { SelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { TextAreaFloatLabel } from "../input";
 import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
-import { useContext, useState } from 'react';
 
 export default function EmailSettings(props) {
     const router = useRouter();
@@ -101,7 +100,7 @@ export default function EmailSettings(props) {
                                 </div>
                             }
                         >
-                            <div class={`text-1rem`}>
+                            <div className={`modal-content`}>
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >

@@ -35,7 +35,11 @@
             "house_hold_information_details":"Household Information Details",
             "admin_details":"Admin Details",
             "number": "number",
-            "evacuation_place": "Evacuation place"
+            "evacuation_place": "Evacuation place",
+            "confirmation":"Confirmation",
+            "admin_management_import":"Administrator managed CSV import",
+            "admin_registration_information":"Admin registration information",
+            "evacuee_registration_screen_display":"Evacuee registration screen display"
         },
         "validation":{
             "admin_name_required":"Admin Name required",
@@ -55,7 +59,9 @@
             "cancel":"cancel",
             "renew":"renew",
             "registration":"registration",
-            "return":"return"
+            "return":"return",
+            "delete":"Delete",
+            "edit":"Edit"
         },
         "footer": {},
         "form":{
