@@ -53,7 +53,7 @@ const evacueeFamilyDetailColumns = [
    
 ]
 
-const externalEvacueesDetailColumns = [
+const externalEvacueesListColumns = [
     { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
     { field: "避難場所種別", header: "避難場所種別", minWidth: "10rem", sortable: true },
     { field: "場所", header: "場所", minWidth: "7rem", sortable: true },
@@ -64,6 +64,14 @@ const externalEvacueesDetailColumns = [
     { field: "郵便番号", header: "郵便番号", minWidth: "8rem", sortable: true },
     { field: "県", header: "県", minWidth: "5rem", sortable: true },
     { field: "住所", header: "住所", minWidth: "12rem", sortable: true }
+]
+
+const externalEvacueesDetailColumns = [
+    { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
+    { field: "氏名 (フリガナ)", header: "氏名 (フリガナ)", minWidth: "10rem", sortable: true },
+    { field: "生年月日", header: "生年月日", minWidth: "7rem", sortable: true },
+    { field: "年齢", header: "年齢", minWidth: "10rem", sortable: true },
+    { field: "性別", header: "性別", minWidth: "5rem", sortable: true }
 ]
 
 const evacueeFamilyDetailRowExpansionColumns = [
@@ -406,6 +414,7 @@ export {
     evacueeFamilyDetailColumns,
     familyDetailColumns,
     evacueeFamilyDetailRowExpansionColumns,
+    externalEvacueesListColumns,
     externalEvacueesDetailColumns,
     evacuationSiteType,
     evacuationFoodSupport,

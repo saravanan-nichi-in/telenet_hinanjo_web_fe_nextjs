@@ -5,8 +5,8 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { SelectFloatLabel } from '@/components/dropdown';
-import { evacuationFoodSupport, evacuationSiteType, evacuationStatusOptions, externalEvacueesDetailColumns } from '@/utils/constant';
-import { AdminExternalEvacueesDetails } from '@/helper/adminExternalEvacueesDetailService';
+import { evacuationFoodSupport, evacuationSiteType, evacuationStatusOptions, externalEvacueesListColumns } from '@/utils/constant';
+import { AdminExternalEvacueesList } from '@/helper/adminExternalEvacueesListService';
 
 export default function EvacuationPage() {
     const { localeJson } = useContext(LayoutContext);
@@ -17,7 +17,7 @@ export default function EvacuationPage() {
     const [admins, setAdmins] = useState([]);
 
     useEffect(() => {
-        AdminExternalEvacueesDetails.getAdminsExternalEvacueesDetailMedium().then((data) => setAdmins(data));
+        AdminExternalEvacueesList.getAdminsExternalEvacueesListMedium().then((data) => setAdmins(data));
     }, []);
 
     return (
@@ -103,7 +103,7 @@ export default function EvacuationPage() {
                         paginator={"true"}
                         showGridlines={"true"}
                         value={admins}
-                        columns={externalEvacueesDetailColumns}
+                        columns={externalEvacueesListColumns}
                         paginatorLeft={true}
                     />
 
