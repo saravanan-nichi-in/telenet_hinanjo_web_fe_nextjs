@@ -32,17 +32,19 @@
             "material_information_registration": "物資情報登録",
             "special_care_registration": "要配慮者事項登録",
             "edit_material_information": "物資情報編集",
-            "house_hold_information_details":"世帯情報詳細"
+            "house_hold_information_details": "世帯情報詳細",
+            "number": "番号",
+            "evacuation_place": "避難所"
         },
-        "validation":{
-            "admin_name_required":"管理者名が必要です。",
-            "supplies_necessary":"物資は必須です。",
-            "phone_min10_required":"電話番号には10または11桁の半角数字を入力してください。",
-            "phone_no_required":"電話番号は必須です。",
-            "matters_to_consider_required":"要配慮者事項は必須です。",
-            "things_to_consider_required":"要配慮者事項（英語）は必須です。",
-            "notification_email_id_required":"通知先メールIDは必須です",
-            "format_notification":"通知先メールIDの形式が正しくありません。"
+        "validation": {
+            "admin_name_required": "管理者名が必要です。",
+            "supplies_necessary": "物資は必須です。",
+            "phone_min10_required": "電話番号には10または11桁の半角数字を入力してください。",
+            "phone_no_required": "電話番号は必須です。",
+            "matters_to_consider_required": "要配慮者事項は必須です。",
+            "things_to_consider_required": "要配慮者事項（英語）は必須です。",
+            "notification_email_id_required": "通知先メールIDは必須です",
+            "format_notification": "通知先メールIDの形式が正しくありません。"
         },
         "buttons": {
             "import": "インポート",
@@ -52,23 +54,23 @@
             "cancel": "キャンセル",
             "renew": "更新",
             "registration": "登録",
-            "return":"戻る"
+            "return": "戻る"
         },
         "footer": {},
-        "form":{
-            "evacuation_site":"避難場所",
-            "household_number":"世帯番号" ,
-            "full_name":"氏名" ,
-            "email":"メール" ,
-            "telephone_number":"電話番号",
-            "supplies":"物資",
-            "unit":"単位",
-            "things_to_consider":"要配慮者事項（英語)",
-            "notification_email_id":"通知先メールID",
-            "transmission_interval":"送信間隔" ,
-            "output_target_area":"出力対象地域"
-        }, 
-        "others":{
+        "form": {
+            "evacuation_site": "避難場所",
+            "household_number": "世帯番号",
+            "full_name": "氏名",
+            "email": "メール",
+            "telephone_number": "電話番号",
+            "supplies": "物資",
+            "unit": "単位",
+            "things_to_consider": "要配慮者事項（英語)",
+            "notification_email_id": "通知先メールID",
+            "transmission_interval": "送信間隔",
+            "output_target_area": "出力対象地域"
+        },
+        "others": {
             "not": "無し",
             "shelter_place": "避難所",
             "setting_start_date": "開設日",
@@ -76,10 +78,10 @@
             "mail_setting": "メール設定",
             "total": "合計",
             "search_text": "検索",
-            "history_mail_message":"※ 複数メールIDを指定する場合は、コンマ区切りで指定してください。",
+            "history_mail_message": "※ 複数メールIDを指定する場合は、コンマ区切りで指定してください。",
             "household_list": "世帯名簿",
-            "totalSummary":"合計（サマリ）",
-            "household_number":"世帯番号"
+            "totalSummary": "合計（サマリ）",
+            "household_number": "世帯番号"
         }
     },
     "staff": {

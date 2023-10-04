@@ -1,39 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
+import _ from 'lodash';
 
-import { NormalTable } from '@/components';
+import { NormalTable, DeleteModal } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import axios from '@/utils/api';
 import { AdminDashboardService } from '@/helper/adminDashboardService';
 import { dashboardTableColumns } from '@/utils/constant';
-
-/**
- * Shelter user status List
- * @returns Table View 
- */
+import { DashboardServices } from '@/services';
 
 function AdminDashboard() {
-    const [checked1, setChecked1] = useState(false);
     const { localeJson } = useContext(LayoutContext);
     const [lockedCustomers, setLockedCustomers] = useState([]);
     const [admins, setAdmins] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
 
-    const rowClass = (data) => {
-        return {
-            'last-row': data.避難所 === translate(localeJson, 'total'),
-            'font-bold': data.避難所 === translate(localeJson, 'total')
-        };
-    };
+    /* Services */
+    const { getList } = DashboardServices;
 
     useEffect(() => {
-        axios.get('/admin/place')
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-
         AdminDashboardService.getAdminDashboardsMedium().then((data) => setAdmins(data));
         setLockedCustomers([
             {
@@ -59,11 +44,34 @@ function AdminDashboard() {
                 's': '0人',
                 '余力人数': '64786人',
                 '食糧等支援の人数': '0人',
-                '満員切替': ''
-
+                '満員切替': null
             }
         ]);
+
+        let getListPayload = {
+            filters: {
+                start: 0,
+                limit: 50,
+                sort_by: "",
+                order_by: "desc",
+            },
+            search: "",
+        }
+
+        // Get dashboard list
+        getList(getListPayload, onGetDashboardList);
     }, [])
+
+    /**
+     * Function will get data & update dashboard list
+     * @param {*} data 
+    */
+    const onGetDashboardList = (response) => {
+        if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
+            setList(response.data.list);
+            setTotalCount(response.data.total);
+        }
+    }
 
     return (
         <div className="grid">
@@ -75,12 +83,8 @@ function AdminDashboard() {
                     <hr />
                     <div className='mt-3 '>
                         <NormalTable
-                            rowClassName={rowClass}
-                            size={"small"}
                             stripedRows={true}
-                            rows={10}
                             className={"custom-table-cell"}
-                            paginator={"true"}
                             showGridlines={"true"}
                             customActionsField="actions"
                             value={admins}
@@ -88,7 +92,18 @@ function AdminDashboard() {
                             columns={dashboardTableColumns}
                             filterDisplay="menu"
                             emptyMessage="No customers found."
-                            paginatorLeft={true}
+                            customBody={(rowData, { rowIndex, column }) => (
+                                <div className='input-switch-parent'>
+                                    <DeleteModal
+                                        modalClass="w-50rem"
+                                        header="確認情報"
+                                        position="top"
+                                        content={"避難所の運営状態を変更しますか？"}
+                                        checked={false}
+                                        parentClass={"custom-switch"}
+                                    />
+                                </div>
+                            )}
                         />
                     </div>
                 </div>
