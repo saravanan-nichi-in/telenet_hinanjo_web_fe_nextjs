@@ -5,7 +5,7 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { externalEvacueesDetailColumns } from '@/utils/constant';
-import { AdminExternalEvacueesDetail } from '@/helper/adminExternalEvacueeDetailService';
+import { AdminExternalEvacueeDetailService } from '@/helper/adminExternalEvacueeDetailService';
 
 export default function EvacuationPage() {
     const { localeJson } = useContext(LayoutContext);
@@ -13,7 +13,7 @@ export default function EvacuationPage() {
     const [admins, setAdmins] = useState([]);
 
     useEffect(() => {
-        AdminExternalEvacueesDetail.getAdminsExternalEvacueesDetailMedium().then((data) => setAdmins(data));
+        AdminExternalEvacueeDetailService.getAdminsExternalEvacueeDetailMedium().then((data) => setAdmins(data));
     }, []);
 
     return (

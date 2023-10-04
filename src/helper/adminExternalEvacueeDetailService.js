@@ -1,5 +1,5 @@
-
-export const AdminExternalEvacueesDetail = {
+/*eslint no-undef: 0*/
+export const AdminExternalEvacueeDetailService = {
     getData() {
         return [
             {
@@ -19,20 +19,20 @@ export const AdminExternalEvacueesDetail = {
             
         ]
     },
-    getAdminsExternalEvacueesDetailSmall() {
+
+    getAdminsExternalEvacueeDetailSmall() {
         return Promise.resolve(this.getData().slice(0, 10));
     },
 
-    getAdminsExternalEvacueesDetailMedium() {
+    getAdminsExternalEvacueeDetailMedium() {
         return Promise.resolve(this.getData().slice(0, 50));
     },
 
-    getAdminsExternalEvacueesDetailLarge() {
+    getAdminsExternalEvacueeDetailLarge() {
         return Promise.resolve(this.getData().slice(0, 200));
     },
 
-    getAdminsExternalEvacueesDetailXLarge() {
+    getAdminsExternalEvacueeDetailXLarge() {
         return Promise.resolve(this.getData());
-    },
-
+    }
 }
