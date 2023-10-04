@@ -17,74 +17,142 @@ export default function ExternalEvacuees() {
 
     useEffect(() => {
         const data = {
-            datasets: [
-                {
-                    label: 'Vacant test',
-                    data: [32, 1, 1, 1],
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 159, 64)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)'
-
-                    ],
-                    borderWidth: 1,
-                }
-            ],
-
+            datasets: [{
+                label: 'Vacant test',
+                data: [{ x: 1, y: 32 }],
+                backgroundColor: 'rgba(31, 119, 180, 1)',
+                borderColor: 'rgb(31, 119, 180)',
+                borderWidth: 1,
+                categoryPercentage: 1
+            },
+            {
+                label: 'Starting To get crowded',
+                data: [{ x: 2, y: 2 }],
+                backgroundColor: 'rgba(255, 127, 14, 1)',
+                borderColor: 'rgb(255, 127, 14)',
+                borderWidth: 1,
+                categoryPercentage: 1
+            },
+            {
+                label: 'Crowded',
+                data: [{ x: 3, y: 1 }],
+                backgroundColor: 'rgba(44, 160, 44, 1)',
+                borderColor: 'rgb(44, 160, 44)',
+                borderWidth: 1,
+                categoryPercentage: 1
+            },
+            {
+                label: 'Nara',
+                data: [{ x: 4, y: 1 }],
+                backgroundColor: 'rgba(214, 39, 40, 0.2)',
+                borderColor: 'rgb(214, 39, 40)',
+                borderWidth: 1,
+                categoryPercentage: 1
+            }]
         };
 
         const options = {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    label: "人数"
-                },
-                x: {
-                    label: "避難所"
+            tooltips: {
+                callbacks: {
+                    title: () => "fgdFGH"
                 }
             },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                xAxes: [{
+                    display: false,
+                    gridLines: {
+                        display: false
+                    }
+                },
+                {
+                    offset: true,
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                x: {
+                    title: {
+                        display: true,
+                        text: "避難所",
+                        align: "end"
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "人数",
+                        align: "end"
+                    }
+                },
+            },
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
+                    position: "bottom",
+                    textAlign: "start",
                     labels: {
-                        usePointStyle: true
-                    }
-                }
+                        usePointStyle: true,
+                        pointStyle: "rect",
+                    },
+                },
+                beforeLayout: chart => chart.chart.options.scales.xAxes[1].labels = chart.chart.data.datasets.filter(ds => !ds._meta[0].hidden).map(ds => ds.label),
             }
         };
-        const documentStyle = getComputedStyle(document.documentElement);
+
         const pieChartData = {
             labels: ['市内', '市外', '県外'],
             datasets: [
                 {
                     data: [29, 2, 2],
                     backgroundColor: [
-                        documentStyle.getPropertyValue('--blue-500'),
-                        documentStyle.getPropertyValue('--yellow-500'),
-                        documentStyle.getPropertyValue('--green-500')
+                        'rgba(31, 119, 180, 1)',
+                        'rgba(255, 127, 14, 1)',
+                        'rgba(44, 160, 44, 1)',
                     ],
                     hoverBackgroundColor: [
-                        documentStyle.getPropertyValue('--blue-400'),
-                        documentStyle.getPropertyValue('--yellow-400'),
-                        documentStyle.getPropertyValue('--green-400')
+                        'rgba(31, 119, 180, 0.6)',
+                        'rgba(255, 127, 14, 0.6)',
+                        'rgba(44, 160, 44, 0.6)',
                     ]
                 }
             ]
         }
         const pieChartOptions = {
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        const dataset = data.datasets[tooltipItem.datasetIndex];
+                        const index = tooltipItem.index;
+                        const value = dataset.data[index];
+                        const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                        const percentage = ((value / total) * 100).toFixed(2) + '%';
+                        return data.labels[index] + ': ' + percentage;
+                    },
+                },
+            },
             plugins: {
                 legend: {
+                    position: "bottom",
                     labels: {
                         usePointStyle: true
                     }
+                },
+                subtitle: {
+                    position: "bottom",
+                    display: true,
+                    text: '(避難している場所ごとの集計)',
+                    fontWeight: "light"
                 }
-            }
+            },
+            maintainAspectRatio: false
         };
         const pieChartQuestionData = {
             labels: ['はい', 'いいえ'],
@@ -92,14 +160,14 @@ export default function ExternalEvacuees() {
                 {
                     data: [35, 2],
                     backgroundColor: [
-                        documentStyle.getPropertyValue('--blue-500'),
-                        documentStyle.getPropertyValue('--yellow-500'),
-                        documentStyle.getPropertyValue('--green-500')
+                        'rgba(31, 119, 180, 1)',
+                        'rgba(255, 127, 14, 1)',
+                        'rgba(44, 160, 44, 1)',
                     ],
                     hoverBackgroundColor: [
-                        documentStyle.getPropertyValue('--blue-400'),
-                        documentStyle.getPropertyValue('--yellow-400'),
-                        documentStyle.getPropertyValue('--green-400')
+                        'rgba(31, 119, 180, 0.6)',
+                        'rgba(255, 127, 14, 0.6)',
+                        'rgba(44, 160, 44, 0.6)',
                     ]
                 }
             ]
@@ -107,11 +175,18 @@ export default function ExternalEvacuees() {
         const pieChartQuestionOptions = {
             plugins: {
                 legend: {
+                    position: "bottom",
                     labels: {
                         usePointStyle: true
-                    }
+                    },
+                },
+                subtitle: {
+                    position: "bottom",
+                    display: true,
+                    text: '(食糧等支援の有無集計)'
                 }
-            }
+            },
+            maintainAspectRatio: false
         };
         setChartData(data);
         setChartOptions(options);
@@ -127,7 +202,7 @@ export default function ExternalEvacuees() {
                 <div className='card'>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                         <h5 className='page-header1'>{translate(localeJson, 'external_evacuees_tally')}</h5>
-                        <span>{translate(localeJson, 'external_evacuees_count') + ": 39人"}</span>
+                        <span>{translate(localeJson, 'external_evacuees_food_support') + ": 39人"}</span>
                     </div>
                     <hr />
                     <div className='flex justify-content-end pt-2'>
@@ -136,15 +211,13 @@ export default function ExternalEvacuees() {
                             severity: "primary"
                         }} />
                     </div>
-                    <div className='mb-2'>
-                        <Chart type="bar" data={chartData} options={chartOptions} />
+                    <div className='mb-2 mt-2'>
+                        <Chart type="bar" data={chartData} options={chartOptions} style={{ height: '400px' }} />
                     </div>
-
-                    <div className='mb-2' style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                        <Chart type="pie" data={pieChartData} options={pieChartOptions} className="w-full md:w-30rem" />
-                        <Chart type="pie" data={pieChartQuestionData} options={pieChartQuestionOptions} className="w-full md:w-30rem" />
+                    <div className='mt-4 mb-2 flex flex-column sm:flex-row md:flex-row justify-content-around'>
+                        <Chart type="pie" data={pieChartData} options={pieChartOptions} />
+                        <Chart type="pie" data={pieChartQuestionData} options={pieChartQuestionOptions} />
                     </div>
-
                 </div>
             </div>
         </div>
