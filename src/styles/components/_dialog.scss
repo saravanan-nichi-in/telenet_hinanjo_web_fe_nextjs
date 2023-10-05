@@ -1,12 +1,14 @@
 .custom-modal.p-dialog .p-dialog-header {
     border-bottom: $commonBorder;
+    border-color: #e9ecef;
     padding: $commonPadding;
     border-top-left-radius: $commonRadius;
     border-top-right-radius: $commonRadius;
 }
 
 .custom-modal.p-dialog .p-dialog-footer {
-    border-top: $commonBorder;
+    border-top: $commonBorder ;
+    border-color: #e9ecef;
     padding: 1rem $commonPadding;
     border-bottom-left-radius: $commonRadius;
     border-bottom-right-radius: $commonRadius;

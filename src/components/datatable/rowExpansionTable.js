@@ -12,6 +12,7 @@ export default function RowExpansionTable(props) {
         rowExpansionField,
         outerColumn,
         innerColumn,
+        inner1Column,
         innerColumn1,
         value,
         id,
@@ -79,6 +80,23 @@ export default function RowExpansionTable(props) {
                         />
                     ))}
                 </DataTable>
+                {inner1Column && inner1Column.length > 0 && (
+                <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
+                    {inner1Column.map((columnw, index) => (
+                        <Column
+                            key={index}
+                            field={columnw.field}
+                            header={columnw.header}
+                            sortable={columnw.sortable}
+                            className={columnw.className}
+                            headerClassName={columnw.headerClassName}
+                            style={{ minWidth: columnw.minWidth && columnw.minWidth, textAlign: columnw.textAlign && columnw.textAlign, ...rowExpansionColumnStyle }}
+                            headerStyle={columnw.headerStyle}
+                            body={columnw.field === props.customRowExpansionActionsField ? columnw.body : columnw.body}
+                        />
+                    ))}
+                </DataTable>
+            )}
             </div>
         );
     };

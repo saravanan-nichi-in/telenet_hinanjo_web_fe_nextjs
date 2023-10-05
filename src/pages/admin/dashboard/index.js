@@ -22,19 +22,19 @@ function AdminDashboard() {
     const [totalCount, setTotalCount] = useState(0);
     const [columns, setColumns] = useState(
         [
-            { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
-            { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', sortable: true, headerClassName: "custom-header" },
-            { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), sortable: true, minWidth: '10rem', headerClassName: "custom-header" },
-            { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), sortable: true, minWidth: '10rem', headerClassName: "custom-header" },
-            { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', sortable: true, headerClassName: "custom-header" },
-            { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', sortable: true, headerClassName: "custom-header" },
-            { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', sortable: true, headerClassName: "custom-header" },
-            { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', sortable: true, headerClassName: "custom-header" },
-            { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', sortable: true },
-            { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'center', sortable: true },
-            { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', sortable: true },
-            { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'center', sortable: true },
-            { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', sortable: true },
+            { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", textAlign: 'left' },
+            { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header" },
+            { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header" },
+            { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header",fontWeight:"bold" },
+            { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header" },
+            { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header" },
+            { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header" },
+            { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header" },
+            { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
+            { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'center'},
+            { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
+            { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'center'},
+            { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
         ]);
 
     /* Services */
@@ -69,7 +69,7 @@ function AdminDashboard() {
             // Prepare table dynamic columns
             if (dataOfFirstObj) {
                 dataOfFirstObj.map((obj, i) => {
-                    let preparedColumnObjToMerge = { field: obj.name_en, header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', sortable: true };
+                    let preparedColumnObjToMerge = { field: obj.name_en, header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'};
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.splice(insertIndex + i, 0, preparedColumnObjToMerge);
                 })
@@ -77,8 +77,8 @@ function AdminDashboard() {
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
-                    number: i,
-                    evacuation_place: locale == "ja" ? obj.name : obj.name_en,
+                    number: i + 1,
+                    evacuation_place: locale === "ja" || locale === "en" ? obj.name : obj.name_en,
                     max_capacity: `${obj.total_place}${translate(localeJson, 'people')}`,
                     number_of_evacuees: `${obj.totalPerson + obj.countPerson}${translate(localeJson, 'people')}`,
                     accommodation_rate: obj.full_status == 1 ? "100%" : obj.rateSheltered >= 100 ? "100%" : `${obj.rateSheltered}%`,
@@ -118,7 +118,7 @@ function AdminDashboard() {
             // Update prepared list to the state
             setColumns(additionalColumnsArrayWithOldData);
             setFrozenArray([frozenObj]);
-            setList(preparedList);
+            setList([...preparedList]);
             setTotalCount(response.data.total);
         }
     };
@@ -137,7 +137,7 @@ function AdminDashboard() {
                     data={obj}
                     checked={obj.full_status == 1 ? true : false}
                     parentClass={"custom-switch"}
-                    deleteButton={true}
+                    cancelButton={true}
                     reNewButton={true}
                     reNewCalBackFunction={(rowDataReceived) => getDataFromRenewButtonOnClick(rowDataReceived)}
                 />

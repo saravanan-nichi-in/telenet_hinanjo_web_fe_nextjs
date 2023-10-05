@@ -1,6 +1,9 @@
 {
     "admin": {
-        "header": {},
+        "header": {
+            "logout":"ログアウト",
+            "change_password":"パスワード変更"
+        },
         "sidebar": {
             "vault_info": "避難所情報",
             "evacuation_status_list": "避難所状況一覧",
@@ -51,10 +54,10 @@
             "staff_management_import": "スタッフ管理CSVインポート",
             "admin_management_import": "管理者管理CSVインポート",
             "admin_registration_information": "管理者情報の登録",
-            "evacuee_registration_screen_display": "避難者登録画面表示",
             "login_history": "ログイン履歴",
             "confirmation_information": "確認情報",
-            "change_active_place": "避難所の運営状態を変更しますか？"
+            "change_active_place": "避難所の運営状態を変更しますか？",
+            "display_in_registration_screen":"避難者登録画面表示"
         },
         "validation": {
             "admin_name_required": "管理者名が必要です。",

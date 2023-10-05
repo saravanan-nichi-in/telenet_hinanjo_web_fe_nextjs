@@ -19,11 +19,25 @@
 .custom-table {
     .p-datatable .p-datatable-thead>tr>th {
         font-size: $tableHeaderFontSize;
-        font-weight: $tableHeaderFontWeight ;
+        font-weight: $tableHeaderFontWeight;
+    }
+
+    .p-datatable .p-datatable-tbody.p-datatable-frozen-tbody>tr>td {
+        font-size: $tableFrozenFontSize;
+        font-weight: $tableFrozenFontWeight;
     }
 
     .p-datatable .p-datatable-tbody>tr>td {
         font-size: $tableDataFontSize;
         font-weight: $commonFontWeight;
+    }
+
+    .p-datatable-frozen-tbody tr {
+        background-color: #1bb99a;
+        color: white;
+
+        .input-switch-parent {
+            display: none;
+        }
     }
 }

@@ -102,78 +102,76 @@ export default function StaffManagementPage() {
                 close={onStaffDeleteClose}
             />
             <StaffManagementEditModal
-            open={editStaffOpen}
-            close={onStaffEditClose}
-            register={onRegister}
-            modalHeaderText={translate(localeJson, 'staff_management_edit')}
+                open={editStaffOpen}
+                close={onStaffEditClose}
+                register={onRegister}
+                modalHeaderText={translate(localeJson, 'staff_management_edit')}
             />
             <StaffManagementEditModal
-            open={CreateStaffOpen}
-            close={onStaffCreateClose}
-            register={onRegister}
-            modalHeaderText={translate(localeJson, 'staff_information_registration')}
+                open={CreateStaffOpen}
+                close={onStaffCreateClose}
+                register={onRegister}
+                modalHeaderText={translate(localeJson, 'staff_information_registration')}
             />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
-                            <h5 className='page_header1'>{translate(localeJson, 'staff_management')}</h5>
-                            <hr />
-                            <div>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        onClick: () => setImportStaffOpen(true),
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'signup'),
-                                        onClick: () => setCreateStaffOpen(true),
-                                        severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                </div>
+                        <h5 className='page_header1'>{translate(localeJson, 'staff_management')}</h5>
+                        <hr />
+                        <div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    onClick: () => setImportStaffOpen(true),
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'signup'),
+                                    onClick: () => setCreateStaffOpen(true),
+                                    severity: "success"
+                                }} parentClass={"mr-1 mt-1"} />
                             </div>
+                        </div>
+                        <div>
                             <div>
-                                <div>
-                                    <form>
-                                        <div class="flex justify-content-end gap-3 flex-wrap float-right mt-5 mb-3" >
-                                            <div class="" >
-                                                <InputFloatLabel inputFloatLabelProps={{
-                                                    id: 'householdNumber',
-                                                    text: translate(localeJson, 'full_name'),
-                                                    inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
-                                                }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
-                                                />
-                                            </div>
-                                            <div>
-                                                <Button buttonProps={{
-                                                    buttonClass: "w-12 search-button",
-                                                    text: translate(localeJson, "search_text"),
-                                                    icon: "pi pi-search",
-                                                    severity: "primary"
-                                                }} />
-                                            </div>
+                                <form>
+                                    <div class="flex justify-content-end gap-3 flex-wrap float-right mt-5 mb-3" >
+                                        <div class="" >
+                                            <InputFloatLabel inputFloatLabelProps={{
+                                                id: 'householdNumber',
+                                                text: translate(localeJson, 'full_name'),
+                                                inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
+                                            }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
+                                            />
                                         </div>
-                                    </form>
-                                </div>
-                                <div>
-                                </div>
-                                <NormalTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staff} columns={staffs} />
+                                        <div>
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button",
+                                                text: translate(localeJson, "search_text"),
+                                                icon: "pi pi-search",
+                                                severity: "primary"
+                                            }} />
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </section>
+                            <div>
+                            </div>
+                            <NormalTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staff} columns={staffs} />
+                        </div>
                     </div>
                 </div>
             </div>
