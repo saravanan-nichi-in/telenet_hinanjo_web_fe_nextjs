@@ -27,8 +27,10 @@ export const LayoutProvider = (props) => {
 
     useEffect(() => {
         if (locale == 'ja') {
+            setLocale("ja");
             setLocaleJson(jpJson);
         } else {
+            setLocale("en");
             setLocaleJson(enJson);
         }
     }, [])
@@ -54,12 +56,18 @@ export const LayoutProvider = (props) => {
             setLocale("en");
             setLocaleJson(enJson);
             localStorage.setItem('locale', 'en');
+            handleReload();
         } else {
             setLocale("ja");
             setLocaleJson(jpJson);
             localStorage.setItem('locale', 'ja');
+            handleReload();
         }
     }
+
+    const handleReload = () => {
+        window.location.reload();
+    };
 
     const isOverlay = () => {
         return layoutConfig.menuMode === 'overlay';

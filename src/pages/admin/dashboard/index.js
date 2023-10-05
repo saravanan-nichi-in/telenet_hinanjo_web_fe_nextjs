@@ -9,6 +9,15 @@ import { DashboardServices } from '@/services';
 function AdminDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);
     const [frozenArray, setFrozenArray] = useState([]);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 5,
+            sort_by: "",
+            order_by: "desc",
+        },
+        search: "",
+    });
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [columns, setColumns] = useState(
@@ -39,15 +48,6 @@ function AdminDashboard() {
      * Get dashboard list on mounting
      */
     const onGetDashboardListOnMounting = () => {
-        let getListPayload = {
-            filters: {
-                start: 0,
-                limit: 50,
-                sort_by: "",
-                order_by: "desc",
-            },
-            search: "",
-        }
         // Get dashboard list
         getList(getListPayload, onGetDashboardList);
     }
@@ -150,7 +150,6 @@ function AdminDashboard() {
      * @param {*} rowDataReceived 
      */
     const getDataFromRenewButtonOnClick = (rowDataReceived) => {
-        console.log(rowDataReceived);
         if (rowDataReceived) {
             let updateFullStatusPayload = {
                 id: rowDataReceived.id
@@ -177,6 +176,9 @@ function AdminDashboard() {
                             columns={columns}
                             filterDisplay="menu"
                             emptyMessage="No data found."
+                            paginator={true}
+                            rows={5}
+                            paginatorLeft={true}
                         />
                     </div>
                 </div>

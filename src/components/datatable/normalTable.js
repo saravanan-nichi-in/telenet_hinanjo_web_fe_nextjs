@@ -1,12 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { DataTable as TableData } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate } from '@/helper'
-
 export default function NormalTable(props) {
-    const { localeJson } = useContext(LayoutContext);
     const {
         parentClass,
         custom,
