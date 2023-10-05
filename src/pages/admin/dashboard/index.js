@@ -25,7 +25,7 @@ function AdminDashboard() {
             { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", textAlign: 'left' },
             { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header" },
             { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header" },
-            { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header" },
+            { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header",fontWeight:"bold" },
             { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header" },
             { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header" },
             { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header" },
@@ -78,7 +78,7 @@ function AdminDashboard() {
             data.map((obj, i) => {
                 let preparedObj = {
                     number: i + 1,
-                    evacuation_place: locale == "ja" ? obj.name : obj.name_en,
+                    evacuation_place: locale === "ja" || locale === "en" ? obj.name : obj.name_en,
                     max_capacity: `${obj.total_place}${translate(localeJson, 'people')}`,
                     number_of_evacuees: `${obj.totalPerson + obj.countPerson}${translate(localeJson, 'people')}`,
                     accommodation_rate: obj.full_status == 1 ? "100%" : obj.rateSheltered >= 100 ? "100%" : `${obj.rateSheltered}%`,

@@ -15,16 +15,10 @@ export default function EvacueeFamilyDetail() {
     const { localeJson } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
-    const inner1Column = [
-        { field: 'sandeep', header: '町内会名 *', minWidth: "10rem" },
-        { field: 'sanjay', header: '町内会名 *', minWidth: "10rem" },
-    ];
 
     useEffect(() => {
         AdminEvacueeFamilyDetailService.getEvacueeFamilyDetailWithOrdersSmall().then((data) => setAdmins(data));
     }, []);
-
-
 
     return (
         <div className="grid">
@@ -56,7 +50,6 @@ export default function EvacueeFamilyDetail() {
                         paginator="true"
                         customRowExpansionActionsField="actions"
                         value={admins}
-                        inner1Column={inner1Column}
                         innerColumn={evacueeFamilyDetailRowExpansionColumns}
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
