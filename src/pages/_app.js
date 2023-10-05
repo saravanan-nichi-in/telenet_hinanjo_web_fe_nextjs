@@ -29,10 +29,23 @@ function MyApp({ Component, pageProps }) {
      * Check authorization & authentication
     */
     useEffect(() => {
+        console.log("HI");
         authCheck(router.asPath);
         router.events.on('routeChangeComplete', () => {
             setAuthorized(true);
         })
+        const handleBackNavigation = () => {
+            // This code will be executed when the user clicks the back button
+            console.log('Back button clicked');
+            authCheck(router.asPath);
+            // You can put your code here to handle the back navigation
+        };
+        // Add an event listener for the popstate event
+        window.addEventListener('popstate', handleBackNavigation);
+        // Cleanup: remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('popstate', handleBackNavigation);
+        };
     }, []);
 
     /**

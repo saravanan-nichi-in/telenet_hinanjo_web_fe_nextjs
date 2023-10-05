@@ -81,7 +81,6 @@ const ResetPasswordPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <LockFilled />,
-                                                    placeholder: translate(localeJson, 'new_password'),
                                                 }}
                                                     parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
@@ -99,7 +98,6 @@ const ResetPasswordPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <LockFilled />,
-                                                    placeholder: translate(localeJson, 'new_password_confirm'),
                                                 }}
                                                     parentClass={`w-full ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`} />
                                                 <ValidationError errorBlock={errors.confirmPassword && touched.confirmPassword && errors.password} />
