@@ -64,7 +64,7 @@ export default function AdminManagementPage() {
     const Listcolumn = [
         { field: 'No.', header: 'No', minWidth: "3rem" },
         {
-            field: '氏名', header:"氏名", minWidth: "15rem", body: (rowData) => (
+            field: '氏名', header: "氏名", minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setAdminDetailsOpen(true)}>
                     {rowData['氏名']}
                 </a>
@@ -133,66 +133,64 @@ export default function AdminManagementPage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
-                            <h5 className='page-header1'>{translate(localeJson, 'admin_management')}</h5>
-                            <hr />
-                            <div >
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        onClick: () => setImportAdminOpen(true),
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
+                        <h5 className='page-header1'>{translate(localeJson, 'admin_management')}</h5>
+                        <hr />
+                        <div >
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    onClick: () => setImportAdminOpen(true),
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary"
+                                }} parentClass={"mr-1 mt-1"} />
 
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'signup'),
-                                        onClick: () => setCreateAdminOpen(true),
-                                        severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                </div>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'signup'),
+                                    onClick: () => setCreateAdminOpen(true),
+                                    severity: "success"
+                                }} parentClass={"mr-1 mt-1"} />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <form>
+                                    <div class="flex justify-content-end gap-3 flex-wrap float-right mt-5 mb-3" >
+                                        <div class="" >
+                                            <InputFloatLabel inputFloatLabelProps={{
+                                                id: 'householdNumber',
+                                                text: translate(localeJson, 'full_name'),
+                                                inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
+                                            }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
+                                            />
+
+                                        </div>
+                                        <div>
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button",
+                                                text: translate(localeJson, "search_text"),
+                                                icon: "pi pi-search",
+                                                severity: "primary"
+                                            }} />
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div>
-                                <div>
-                                    <form>
-                                        <div class="flex justify-content-end gap-3 flex-wrap float-right mt-5 mb-3" >
-                                            <div class="" >
-                                                <InputFloatLabel inputFloatLabelProps={{
-                                                    id: 'householdNumber',
-                                                    text: translate(localeJson, 'full_name'),
-                                                    inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
-                                                }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
-                                                />
-
-                                            </div>
-                                            <div>
-                                                <Button buttonProps={{
-                                                    buttonClass: "w-12 search-button",
-                                                    text: translate(localeJson, "search_text"),
-                                                    icon: "pi pi-search",
-                                                    severity: "primary"
-                                                }} />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div>
-                                </div>
-                                <NormalTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} customActionsField="actions" value={admins} columns={Listcolumn} />
                             </div>
-                        </section>
+                            <NormalTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} customActionsField="actions" value={admins} columns={Listcolumn} />
+                        </div>
                     </div>
                 </div>
             </div>

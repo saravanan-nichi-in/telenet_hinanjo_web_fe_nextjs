@@ -34,7 +34,9 @@ export const AdminEvacueeFamilyDetailService = {
                     要配慮者番号: '--',
                     紐付コード: '--',
                     備考: '--',
-                    '現在の滞在場所 *': '-'
+                    '現在の滞在場所 *': '-',
+                    "sandeep":"*",
+                    "sanjay":"*",
                 },
                 ]
             }

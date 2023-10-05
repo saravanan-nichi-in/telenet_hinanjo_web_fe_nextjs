@@ -26,7 +26,7 @@ const DeleteModal = (props) => {
         hoverBg,
         severity,
         buttonClass,
-        deleteButton,
+        cancelButton,
         reNewButton,
         reNewCalBackFunction,
         ...restProps
@@ -35,11 +35,11 @@ const DeleteModal = (props) => {
     const [visible, setVisible] = useState(false);
     const [checkedSwitch, setCheckedSwitch] = useState(checked);
     const footer = () => {
-        if (deleteButton || reNewButton) {
+        if (cancelButton || reNewButton) {
             return (
                 <div className="text-center">
                     {/* Delete button */}
-                    {deleteButton && (
+                    {cancelButton && (
                         <Button buttonProps={{
                             buttonClass: "text-600 w-8rem",
                             bg: "bg-white",

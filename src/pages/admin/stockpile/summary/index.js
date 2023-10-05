@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AiFillEye } from 'react-icons/ai';
 
-import { RowExpansionTable, Button,InputSwitch } from '@/components';
+import { RowExpansionTable, Button, InputSwitch } from '@/components';
 import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -97,63 +97,61 @@ function AdminStockpileSummary() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
-                            <h5 className='page-header1'>
-                                {translate(localeJson, 'stockpile_summary')}
-                            </h5>
-                            <hr />
-                            <div >
-                                <div class="mb-3" >
-                                    <div class="summary_flex input-switch-summary w-13rem">
-                                        {translate(localeJson, 'evacuee_registration_screen_display')}<InputSwitch inputSwitchProps={{
-                                            checked: false,
-                                            text: "避難者登録画面表示"
-                                        }}
+                        <h5 className='page-header1'>
+                            {translate(localeJson, 'stockpile_summary')}
+                        </h5>
+                        <hr />
+                        <div >
+                            <div class="mb-3" >
+                                <div class="summary_flex input-switch-summary w-13rem">
+                                    {translate(localeJson, 'evacuee_registration_screen_display')}<InputSwitch inputSwitchProps={{
+                                        checked: false,
+                                        text: "避難者登録画面表示"
+                                    }}
 
-                                        />
-                                    </div>
-                                    <div>
-                                        <form>
-                                            <div class="summary_flex_search float-right mt-5" >
-                                                <div class="flex flex-row justify-content-end" >
-                                                    <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                        text: translate(localeJson, 'shelter_place'),
-                                                        inputId: "float label",
-                                                        optionLabel: "name",
-                                                        options: summaryShelterOptions,
-                                                        value: shelterSelect,
-                                                        onChange: (e) => setShelterSelect(e.value),
-                                                        inputSelectClass: "w-full lg:w-13rem md:w-20rem sm:w-14rem"
-                                                    }} parentClass={"w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem"}
-                                                    />
+                                    />
+                                </div>
+                                <div>
+                                    <form>
+                                        <div class="summary_flex_search float-right mt-5" >
+                                            <div class="flex flex-row justify-content-end" >
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    text: translate(localeJson, 'shelter_place'),
+                                                    inputId: "float label",
+                                                    optionLabel: "name",
+                                                    options: summaryShelterOptions,
+                                                    value: shelterSelect,
+                                                    onChange: (e) => setShelterSelect(e.value),
+                                                    inputSelectClass: "w-full lg:w-13rem md:w-20rem sm:w-14rem"
+                                                }} parentClass={"w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem"}
+                                                />
 
-                                                </div>
-                                                <div>
-                                                    <Button buttonProps={{
-                                                        buttonClass: "w-12 search-button",
-                                                        text: translate(localeJson, "search_text"),
-                                                        icon: "pi pi-search",
-                                                        severity: "primary"
-                                                    }} />
-                                                </div>
-                                                <div class="flex justify-content-end">
-                                                    <Button buttonProps={{
-                                                        type: 'submit',
-                                                        rounded: "true",
-                                                        buttonClass: "",
-                                                        text: translate(localeJson, 'export'),
-                                                        severity: "primary"
-                                                    }} parentClass={"mr-1 mt-2 mb-2"} />
-                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                            <div>
+                                                <Button buttonProps={{
+                                                    buttonClass: "w-12 search-button",
+                                                    text: translate(localeJson, "search_text"),
+                                                    icon: "pi pi-search",
+                                                    severity: "primary"
+                                                }} />
+                                            </div>
+                                            <div class="flex justify-content-end">
+                                                <Button buttonProps={{
+                                                    type: 'submit',
+                                                    rounded: "true",
+                                                    buttonClass: "",
+                                                    text: translate(localeJson, 'export'),
+                                                    severity: "primary"
+                                                }} parentClass={"mr-1 mt-2 mb-2"} />
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div>
-                                <RowExpansionTable rows={10} columnStyle={{ textAlign: 'left' }} paginator="true" paginatorLeft={true} customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn1={innerColumn1} innerColumn={stockPileRowExpansionColumn} outerColumn={stockPilerMainRow} rowExpansionField1="orders1" rowExpansionField="orders" />
-                            </div>
-                        </section>
+                        </div>
+                        <div>
+                            <RowExpansionTable rows={10} columnStyle={{ textAlign: 'left' }} paginator="true" paginatorLeft={true} customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn1={innerColumn1} innerColumn={stockPileRowExpansionColumn} outerColumn={stockPilerMainRow} rowExpansionField1="orders1" rowExpansionField="orders" />
+                        </div>
                     </div>
                 </div>
             </div>

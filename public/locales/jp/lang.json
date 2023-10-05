@@ -1,6 +1,9 @@
 {
     "admin": {
-        "header": {},
+        "header": {
+            "logout":"ログアウト",
+            "change_password":"パスワード変更"
+        },
         "sidebar": {
             "vault_info": "避難所情報",
             "evacuation_status_list": "避難所状況一覧",

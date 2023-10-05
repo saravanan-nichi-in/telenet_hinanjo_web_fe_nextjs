@@ -2,16 +2,20 @@ import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'reac
 import { classNames } from 'primereact/utils';
 import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
+import Link from 'next/link';
 
 import { LayoutContext } from './context/layoutcontext';
+import { getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
 import { DropdownSelect } from '@/components';
+import { MdOutlineResetTv } from 'react-icons/md';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
+    const { localeJson } = useContext(LayoutContext);
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
@@ -25,8 +29,8 @@ const AppTopbar = forwardRef((props, ref) => {
     const selectedCountryTemplate = (option, props) => {
         if (option) {
             return (
-                <div className="flex align-items-center px-2" onClick={() => onChangeLocale(option.name === "JP" ? "jp" : "en")}>
-                    <img alt={option.name} src={option.image} className={`mr-3`} style={{ width: '18px' }} />
+                <div className="flex align-items-center" onClick={() => onChangeLocale(option.name === "JP" ? "jp" : "en")}>
+                    <img alt={option.name} src={option.image} className={`mr-1`} style={{ width: '14px' }} />
                     <div>{option.name}</div>
                 </div>
             );
@@ -37,14 +41,15 @@ const AppTopbar = forwardRef((props, ref) => {
 
     const items = [
         {
-            label: (
-                <div onClick={() => logout()}>
-                    Logout
-                </div>
-            ),
-            icon: <LogoutOutlined />,
+            label: selectedCountryTemplate({
+                name: 'JP',
+                code: 'JP',
+                placeholder: '',
+                image: "/layout/images/jp.png"
+            }),
             key: '0',
         },
+        
         {
             type: 'divider',
         },
@@ -60,15 +65,29 @@ const AppTopbar = forwardRef((props, ref) => {
         {
             type: 'divider',
         },
+      
         {
-            label: selectedCountryTemplate({
-                name: 'JP',
-                code: 'JP',
-                placeholder: '',
-                image: "/layout/images/jp.png"
-            }),
+            label: (
+                <div>
+                    <Link href="#">{translate(localeJson,'change_password')}</Link>
+                </div>
+            ),
+            icon: <MdOutlineResetTv style={{fontSize:"14px"}}/>,
             key: '2',
         },
+        {
+            type: 'divider',
+        },
+        {
+            label: (
+                <div onClick={() => logout()}>
+                    {translate(localeJson, 'logout')}
+                </div>
+            ),
+            icon: <LogoutOutlined />,
+            key: '3',
+        },
+          
     ];
 
     return (
@@ -92,7 +111,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         <i className="pi pi-ellipsis-v" />
                     </button>
                     <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
-                        <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"settings"} />
+                        <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
                     </div>
                 </div>
             </div>

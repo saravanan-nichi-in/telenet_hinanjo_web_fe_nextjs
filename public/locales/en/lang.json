@@ -1,6 +1,9 @@
 {
     "admin": {
-        "header": {},
+        "header": {
+            "logout":"Logout",
+            "change_password":"Change password"
+        },
         "sidebar": {
             "vault_info": "Evacuation Information",
             "evacuation_status_list": "Evacuation Status List",
