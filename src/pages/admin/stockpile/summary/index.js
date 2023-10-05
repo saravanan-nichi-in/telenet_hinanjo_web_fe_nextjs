@@ -104,11 +104,9 @@ function AdminStockpileSummary() {
                         <div >
                             <div class="mb-3" >
                                 <div class="summary_flex input-switch-summary w-13rem">
-                                    {translate(localeJson, 'evacuee_registration_screen_display')}<InputSwitch inputSwitchProps={{
+                                    {translate(localeJson, 'display_in_registration_screen')}<InputSwitch inputSwitchProps={{
                                         checked: false,
-                                        text: "避難者登録画面表示"
                                     }}
-
                                     />
                                 </div>
                                 <div>
