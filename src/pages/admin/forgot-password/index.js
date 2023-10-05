@@ -81,7 +81,6 @@ const ForgotPasswordPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <MailFilled />,
-                                                    placeholder: translate(localeJson, 'mail_address'),
                                                     value: values.email
                                                 }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />

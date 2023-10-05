@@ -138,7 +138,7 @@
             "password": "Password",
             "password_required": "The password must be required.",
             "password_atLeast_8_characters": "Password must be at least 8 characters.",
-            "admin_login_screen": "Admin login screen",
+            "admin_login_screen": "Administrator login",
             "password_reset": "Password reset",
             "new_password": "New password",
             "new_password_confirm": "New password (confirmation)",
