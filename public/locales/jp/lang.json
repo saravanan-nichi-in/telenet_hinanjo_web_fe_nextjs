@@ -56,7 +56,7 @@
             "admin_registration_information": "管理者情報の登録",
             "login_history": "ログイン履歴",
             "confirmation_information": "確認情報",
-            "change_active_place": "避難所の運営状態を変更しますか？",
+            "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
             "display_in_registration_screen":"避難者登録画面表示"
         },
         "validation": {
@@ -76,7 +76,7 @@
             "search": "検索",
             "signup": "新規登録",
             "cancel": "キャンセル",
-            "renew": "更新",
+            "update": "更新",
             "registration": "登録",
             "return": "戻る",
             "delete": "削除",

@@ -12,8 +12,18 @@ export default function AdminQrCodeCreatePage() {
     const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const schema = Yup.object().shape({
-        file: Yup.mixed().required('CSVファイルを選択してください.'),
-    })
+        file: Yup.mixed()
+          .required('CSVファイルを選択してください.')
+          .test('is-csv', 'ファイルはCSV形式である必要があります.', (value) => {
+            if (!value) return true; // If no file is selected, the validation passes.
+            
+            const allowedExtensions = ['csv']; // Define the allowed file extensions (in this case, just 'csv').
+            const fileExtension = value.name.split('.').pop(); // Get the file extension from the file name.
+      
+            // Check if the file extension is in the list of allowed extensions.
+            return allowedExtensions.includes(fileExtension.toLowerCase());
+          }),
+      });
 
     const [successMessage, setSuccessMessage] = useState('');
     const [zipFile, setZipFile] = useState(false);
@@ -43,35 +53,23 @@ export default function AdminQrCodeCreatePage() {
                             <div className='card'>
                                 <section className='col-12'>
                                     <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
-                                    <hr/>
-                                    {/* <div>
-                                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                            <Button buttonProps={{
-                                                type: 'submit',
-                                                buttonClass: "evacuation_button_height",
-                                                text: "サンプルCSVのダウンロード",
-                                                onClick: () => router.push('/admin/admin-management/create'),
-                                                link: "true",
-                                                style: { whiteSpace: 'nowrap' }
-                                            }} parentClass={"mr-1 mt-1"} />
-                                        </div>
-                                    </div> */}
+                                    <hr />
                                     <div>
                                         <div>
                                             {!successMessage ? ( // Conditionally render the form when successMessage is empty
                                                 <form onSubmit={handleSubmit}>
                                                     <div>
-                                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                            <Button buttonProps={{
-                                                type: 'submit',
-                                                buttonClass: "evacuation_button_height",
-                                                text: "サンプルCSVのダウンロード",
-                                                onClick: () => router.push('/admin/admin-management/create'),
-                                                link: "true",
-                                                style: { whiteSpace: 'nowrap' }
-                                            }} parentClass={"mr-1 mt-1"} />
-                                        </div>
-                                    </div>
+                                                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                                            <Button buttonProps={{
+                                                                type: 'submit',
+                                                                buttonClass: "evacuation_button_height",
+                                                                text: "サンプルCSVのダウンロード",
+                                                                onClick: () => router.push('/admin/admin-management/create'),
+                                                                link: "true",
+                                                                style: { whiteSpace: 'nowrap' }
+                                                            }} parentClass={"mr-1 mt-1"} />
+                                                        </div>
+                                                    </div>
                                                     <div className="pt-3 ">
                                                         <InputFile inputFileProps={{
                                                             inputFileStyle: { fontSize: "12px" },
@@ -102,28 +100,28 @@ export default function AdminQrCodeCreatePage() {
                                             {successMessage && (
                                                 <div>
                                                     <p>{successMessage}</p>
-                                                    <ProgressBar className='mb-3' value={100}/>
+                                                    <ProgressBar className='mb-3' value={100} />
                                                     {!zipFile ? ( // Conditionally render buttons when zipFile is false
                                                         <>
-                                                        <div className="text-center">
-                                        <Button buttonProps={{
-                                            buttonClass: "text-600 w-8rem",
-                                            bg: "bg-white",
-                                            hoverBg: "hover:surface-500 hover:text-white",
-                                            text: translate(localeJson, 'cancel'),
-                                            onClick: () => {
-                                                setSuccessMessage('');
-                                                setZipFile(false);
-                                            },
-                                        }} parentClass={"inline"} parentStyle={{paddingRight:"10px"}} />
-                                        <Button buttonProps={{
-                                            buttonClass: "w-8rem",
-                                            type: "submit",
-                                            text: "Zip file",
-                                            severity: "primary",
-                                            onClick: () => setZipFile(true),
-                                        }} parentClass={"inline"} />
-                                    </div>
+                                                            <div className="text-center">
+                                                                <Button buttonProps={{
+                                                                    buttonClass: "text-600 w-8rem",
+                                                                    bg: "bg-white",
+                                                                    hoverBg: "hover:surface-500 hover:text-white",
+                                                                    text: translate(localeJson, 'cancel'),
+                                                                    onClick: () => {
+                                                                        setSuccessMessage('');
+                                                                        setZipFile(false);
+                                                                    },
+                                                                }} parentClass={"inline"} parentStyle={{ paddingRight: "10px" }} />
+                                                                <Button buttonProps={{
+                                                                    buttonClass: "w-8rem",
+                                                                    type: "submit",
+                                                                    text: "Zip file",
+                                                                    severity: "primary",
+                                                                    onClick: () => setZipFile(true),
+                                                                }} parentClass={"inline"} />
+                                                            </div>
                                                         </>
                                                     ) : null}
                                                 </div>

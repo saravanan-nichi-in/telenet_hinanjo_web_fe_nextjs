@@ -109,7 +109,7 @@ export default function AdminStockpileEditPage() {
                                                         <Button buttonProps={{
                                                             buttonClass: "evacuation_button_height",
                                                             type: 'submit',
-                                                            text: translate(localeJson, 'renew'),
+                                                            text: translate(localeJson, 'update'),
                                                             rounded: "true",
                                                             severity: "primary"
                                                         }} parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }} />
