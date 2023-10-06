@@ -30,10 +30,10 @@ function AdminDashboard() {
             { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header" },
             { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header" },
             { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header" },
-            { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
-            { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'center'},
-            { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
-            { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'center'},
+            { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left'},
+            { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left'},
+            { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left'},
+            { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'left'},
             { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'},
         ]);
 
@@ -69,7 +69,7 @@ function AdminDashboard() {
             // Prepare table dynamic columns
             if (dataOfFirstObj) {
                 dataOfFirstObj.map((obj, i) => {
-                    let preparedColumnObjToMerge = { field: obj.name_en, header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'};
+                    let preparedColumnObjToMerge = { field: obj.name_en, header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left'};
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.splice(insertIndex + i, 0, preparedColumnObjToMerge);
                 })
@@ -78,7 +78,7 @@ function AdminDashboard() {
             data.map((obj, i) => {
                 let preparedObj = {
                     number: i + 1,
-                    evacuation_place: locale === "ja" || locale === "en" ? obj.name : obj.name_en,
+                    evacuation_place:  locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
                     max_capacity: `${obj.total_place}${translate(localeJson, 'people')}`,
                     number_of_evacuees: `${obj.totalPerson + obj.countPerson}${translate(localeJson, 'people')}`,
                     accommodation_rate: obj.full_status == 1 ? "100%" : obj.rateSheltered >= 100 ? "100%" : `${obj.rateSheltered}%`,
@@ -138,8 +138,8 @@ function AdminDashboard() {
                     checked={obj.full_status == 1 ? true : false}
                     parentClass={"custom-switch"}
                     cancelButton={true}
-                    reNewButton={true}
-                    reNewCalBackFunction={(rowDataReceived) => getDataFromRenewButtonOnClick(rowDataReceived)}
+                    updateButton={true}
+                    updateCalBackFunction={(rowDataReceived) => getDataFromupdateButtonOnClick(rowDataReceived)}
                 />
             </div>
         );
@@ -149,7 +149,7 @@ function AdminDashboard() {
      * Update full status by row id
      * @param {*} rowDataReceived 
      */
-    const getDataFromRenewButtonOnClick = (rowDataReceived) => {
+    const getDataFromupdateButtonOnClick = (rowDataReceived) => {
         if (rowDataReceived) {
             let updateFullStatusPayload = {
                 id: rowDataReceived.id
