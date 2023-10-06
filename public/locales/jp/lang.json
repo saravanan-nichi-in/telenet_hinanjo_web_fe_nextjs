@@ -72,7 +72,8 @@
       "status": "状態",
       "shelter_csv_import": "避難所マスタCSVインポート",
       "evacuation_possible_people": "避難可能人数",
-      "ID": "ID"
+      "ID": "ID",
+      "edit_shelter": "避難所編集"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

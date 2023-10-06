@@ -72,7 +72,8 @@
       "status": "Status",
       "shelter_csv_import": "Shelter Master CSV Import",
       "ID": "ID",
-      "evacuation_possible_people": "Evacuation Possible People"
+      "evacuation_possible_people": "Evacuation Possible People",
+      "edit_shelter": "Edit Shelter"
     },
     "validation": {
       "staff_name_required": "Staff Name required",

@@ -10,14 +10,12 @@ import {
   DividerComponent,
   NormalTable,
 } from "@/components";
-// import { AdminPlaceService } from "@/helper/adminPlaceService";
 import { PlaceServices } from "@/services";
 
 export default function AdminPlacePage() {
   const { locale, localeJson } = useContext(LayoutContext);
   const [admins, setAdmins] = useState([]);
-  const [checked1, setChecked1] = useState(false);
-  const [importStaffOpen, setImportStaffOpen] = useState(false);
+  const [importPlaceOpen, setImportPlaceOpen] = useState(false);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -83,16 +81,34 @@ export default function AdminPlacePage() {
   };
 
   const onStaffImportClose = () => {
-    setImportStaffOpen(!importStaffOpen);
+    setImportPlaceOpen(!importPlaceOpen);
   };
 
   const onRegister = (values) => {
-    values.file && setImportStaffOpen(false);
+    values.file && setImportPlaceOpen(false);
   };
 
   function exportPlaceData(response) {
-    alert("exportedData");
-    console.log(response);
+    try {
+      const base64Data = response.result.file; // Replace with your base64 encoded file
+      if (base64Data.startsWith("data:csv;base64,")) {
+        // Remove the prefix
+        const base64String = base64Data.slice("data:csv;base64,".length);
+        console.log(base64String);
+        const binaryData = atob(base64String);
+        const blob = new Blob([binaryData], {
+          type: "application/octet-stream",
+        });
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "downloadedFile.csv"; // Set the desired filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   function fetchData(response) {
@@ -105,6 +121,7 @@ export default function AdminPlacePage() {
         phone_number: item.tel,
         active_flg: item.active_flg,
         isActive: item.active_flg,
+        status: item.active_flg == 1 ? "place-status-cell" : "",
       };
     });
 
@@ -121,30 +138,20 @@ export default function AdminPlacePage() {
    */
   const action = (obj) => {
     return (
-      <td
-        role="cell"
-        className={`w-full h-full p-cell-value ${
-          obj.isActive == 1 ? "surface-400" : ""
-        }`}
-      >
-        <div>
-          <div className="input-switch-parent">
-            <DeleteModal
-              header={translate(localeJson, "confirmation_information")}
-              content={translate(localeJson, "change_active_place")}
-              data={obj}
-              disabled={obj.active_flg == 1 || false}
-              checked={obj.active_flg == 1 || false}
-              parentClass={"custom-switch"}
-              cancelButton={true}
-              reNewButton={true}
-              reNewCalBackFunction={(rowDataReceived) =>
-                getDataFromRenewButtonOnClick(rowDataReceived)
-              }
-            />
-          </div>
-        </div>
-      </td>
+      <div className="input-switch-parent">
+        <DeleteModal
+          header={translate(localeJson, "confirmation_information")}
+          content={translate(localeJson, "change_active_place")}
+          data={obj}
+          checked={obj.active_flg == 1 || false}
+          parentClass={"custom-switch"}
+          cancelButton={true}
+          reNewButton={true}
+          reNewCalBackFunction={(rowDataReceived) =>
+            getDataFromRenewButtonOnClick(rowDataReceived)
+          }
+        />
+      </div>
     );
   };
 
@@ -162,10 +169,18 @@ export default function AdminPlacePage() {
     }
   };
 
+  const cellClassName = (data) =>
+    data == "place-status-cell" ? "p-disabled surface-400" : "";
+
+  const isCellSelectable = (event) =>
+    !(
+      event.data.field === "status" && event.data.value === "place-status-cell"
+    );
+
   return (
     <>
       <AdminManagementImportModal
-        open={importStaffOpen}
+        open={importPlaceOpen}
         close={onStaffImportClose}
         register={onRegister}
         modalHeaderText={translate(localeJson, "shelter_csv_import")}
@@ -187,7 +202,7 @@ export default function AdminPlacePage() {
                       buttonClass: "evacuation_button_height",
                       text: translate(localeJson, "import"),
                       severity: "primary",
-                      onClick: () => setImportStaffOpen(true),
+                      onClick: () => setImportPlaceOpen(true),
                     }}
                     parentClass={"mr-1 mt-1"}
                   />
@@ -222,6 +237,8 @@ export default function AdminPlacePage() {
                     value={admins}
                     columns={columns}
                     paginatorLeft={true}
+                    cellClassName={cellClassName}
+                    isDataSelectable={isCellSelectable}
                   />
                 </div>
               </div>

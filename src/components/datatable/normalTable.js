@@ -35,6 +35,9 @@ export default function NormalTable(props) {
     rowExpansionTemplate,
     expandedRows,
     onRowToggle,
+    selectedCell,
+    cellClassName,
+    isDataSelectable,
     ...restProps
   } = props;
 
@@ -66,6 +69,8 @@ export default function NormalTable(props) {
         rowExpansionTemplate={rowExpansionTemplate}
         paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate="{first} - {last} / {totalRecords}"
+        cellClassName={cellClassName}
+        isDataSelectable={isDataSelectable}
         {...restProps}
       >
         {columns.map((col, index) => (
@@ -75,7 +80,6 @@ export default function NormalTable(props) {
             header={col.header}
             sortable={col.sortable}
             alignHeader={alignHeader}
-            className={col.className}
             style={{
               minWidth: col.minWidth && col.minWidth,
               ...columnStyle,
