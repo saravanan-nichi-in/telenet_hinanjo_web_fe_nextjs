@@ -8,7 +8,7 @@ import { AdminManagementService } from '@/helper/adminManagementService';
 import { AdminManagementCreateModal, AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementEditModal, AdminManagementImportModal } from '@/components/modal';
 
 export default function AdminManagementPage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const [editAdminOpen, setEditAdminOpen] = useState(false);
@@ -18,8 +18,13 @@ export default function AdminManagementPage() {
     const [createAdminOpen, setCreateAdminOpen] = useState(false);
 
     useEffect(() => {
-        AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
+
     /**
     * Email setting modal close
    */

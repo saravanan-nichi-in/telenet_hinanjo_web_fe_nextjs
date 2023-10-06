@@ -7,7 +7,7 @@ import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components
 import { AdminSpecialCareService } from '@/helper/adminSpecialCareService';
 
 export default function AdminSpecialCarePage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
@@ -46,7 +46,11 @@ export default function AdminSpecialCarePage() {
     ];
 
     useEffect(() => {
-        AdminSpecialCareService.getAdminsSpecialCareMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminSpecialCareService.getAdminsSpecialCareMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

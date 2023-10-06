@@ -7,7 +7,7 @@ import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components
 import { AdminPlaceService } from '@/helper/adminPlaceService';
 
 export default function AdminPlacePage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
@@ -39,7 +39,11 @@ export default function AdminPlacePage() {
     ];
 
     useEffect(() => {
-        AdminPlaceService.getAdminsPlaceMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminPlaceService.getAdminsPlaceMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

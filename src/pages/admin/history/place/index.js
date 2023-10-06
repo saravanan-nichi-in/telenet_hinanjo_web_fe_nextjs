@@ -17,14 +17,18 @@ import { EmailSettings } from '@/components/modal';
  */
 
 export default function AdminHistoryPlacePage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, loader, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const router = useRouter();
     const [selectedCity, setSelectedCity] = useState(null);
 
     useEffect(() => {
-        AdminHistoryPlaceService.getAdminsHistoryPlaceMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminHistoryPlaceService.getAdminsHistoryPlaceMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     /**

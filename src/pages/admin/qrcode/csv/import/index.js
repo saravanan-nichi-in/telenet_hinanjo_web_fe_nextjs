@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -9,24 +9,30 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, InputFile, ValidationError } from '@/components';
 
 export default function AdminQrCodeCreatePage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
-    const schema = Yup.object().shape({
-        file: Yup.mixed()
-          .required('CSVファイルを選択してください.')
-          .test('is-csv', 'ファイルはCSV形式である必要があります.', (value) => {
-            if (!value) return true; // If no file is selected, the validation passes.
-            
-            const allowedExtensions = ['csv']; // Define the allowed file extensions (in this case, just 'csv').
-            const fileExtension = value.name.split('.').pop(); // Get the file extension from the file name.
-      
-            // Check if the file extension is in the list of allowed extensions.
-            return allowedExtensions.includes(fileExtension.toLowerCase());
-          }),
-      });
-
     const [successMessage, setSuccessMessage] = useState('');
     const [zipFile, setZipFile] = useState(false);
+    const schema = Yup.object().shape({
+        file: Yup.mixed()
+            .required('CSVファイルを選択してください.')
+            .test('is-csv', 'ファイルはCSV形式である必要があります.', (value) => {
+                if (!value) return true; // If no file is selected, the validation passes.
+
+                const allowedExtensions = ['csv']; // Define the allowed file extensions (in this case, just 'csv').
+                const fileExtension = value.name.split('.').pop(); // Get the file extension from the file name.
+
+                // Check if the file extension is in the list of allowed extensions.
+                return allowedExtensions.includes(fileExtension.toLowerCase());
+            }),
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoader(false);
+        };
+        fetchData();
+    }, []);
 
     const handleFormSubmit = () => {
         // Perform form submission logic here

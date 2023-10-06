@@ -8,7 +8,7 @@ import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, Normal
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
 
 export default function AdminStockPileMaster() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
@@ -51,7 +51,11 @@ export default function AdminStockPileMaster() {
     ];
 
     useEffect(() => {
-        AdminStockpileMasterService.getAdminsStockpileMasterMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminStockpileMasterService.getAdminsStockpileMasterMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

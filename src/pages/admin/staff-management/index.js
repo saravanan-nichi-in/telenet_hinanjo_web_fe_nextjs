@@ -8,7 +8,7 @@ import { StaffDetailService } from '@/helper/StaffDetailService';
 import { AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components/modal';
 
 export default function StaffManagementPage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [staff, setStaff] = useState([]);
     const router = useRouter();
     const [importStaffOpen, setImportStaffOpen] = useState(false);
@@ -16,7 +16,6 @@ export default function StaffManagementPage() {
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const [editStaffOpen, setEditStaffOpen] = useState(false);
     const [CreateStaffOpen, setCreateStaffOpen] = useState(false);
-
     const staffs = [
         { field: 'No', header: 'No.', minWidth: "3rem" },
         {
@@ -60,7 +59,11 @@ export default function StaffManagementPage() {
     ];
 
     useEffect(() => {
-        StaffDetailService.getStaffMedium().then((data) => setStaff(data));
+        const fetchData = async () => {
+            await StaffDetailService.getStaffMedium().then((data) => setStaff(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     const onStaffImportClose = () => {

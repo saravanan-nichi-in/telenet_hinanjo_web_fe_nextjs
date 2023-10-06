@@ -29,7 +29,6 @@ function MyApp({ Component, pageProps }) {
      * Check authorization & authentication
     */
     useEffect(() => {
-        console.log("HI");
         authCheck(router.asPath);
         router.events.on('routeChangeComplete', () => {
             setAuthorized(true);
