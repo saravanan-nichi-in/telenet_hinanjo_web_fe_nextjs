@@ -66,7 +66,7 @@ export default function StaffManagementEditPage() {
                                         buttonClass: "evacuation_button_height",
                                         type: 'button',
                                         onClick: () => router.push('/admin/admin-management/edit/1'),
-                                        text: translate(localeJson, 'renew'),
+                                        text: translate(localeJson, 'update'),
                                         rounded: "true",
                                         severity: "primary"
                                     }} parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }} />

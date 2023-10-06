@@ -64,7 +64,7 @@ export default function StaffManagementDetailModal(props) {
                             <Button buttonProps={{
                                 buttonClass: "w-8rem",
                                 type: "submit",
-                                text: translate(localeJson, 'renew'),
+                                text: translate(localeJson, 'update'),
                                 severity: "primary",
                                 onClick: () => setEditStaffOpen(true)
                             }} parentClass={"inline"} />

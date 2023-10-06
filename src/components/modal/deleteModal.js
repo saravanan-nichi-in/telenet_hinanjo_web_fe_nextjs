@@ -27,15 +27,15 @@ const DeleteModal = (props) => {
         severity,
         buttonClass,
         cancelButton,
-        reNewButton,
-        reNewCalBackFunction,
+        updateButton,
+        updateCalBackFunction,
         ...restProps
     } = props;
     const { localeJson } = useContext(LayoutContext);
     const [visible, setVisible] = useState(false);
     const [checkedSwitch, setCheckedSwitch] = useState(checked);
     const footer = () => {
-        if (cancelButton || reNewButton) {
+        if (cancelButton || updateButton) {
             return (
                 <div className="text-center">
                     {/* Delete button */}
@@ -48,14 +48,14 @@ const DeleteModal = (props) => {
                             onClick: () => setVisible(false),
                         }} parentClass={"inline"} />
                     )}
-                    {/* Renew button */}
-                    {reNewButton && (
+                    {/* update button */}
+                    {updateButton && (
                         <Button buttonProps={{
                             buttonClass: "w-8rem",
                             type: "submit",
-                            text: translate(localeJson, 'renew'),
+                            text: translate(localeJson, 'update'),
                             severity: "danger",
-                            onClick: () => onClickRenewButton(data),
+                            onClick: () => onClickupdateButton(data),
                         }} parentClass={"inline"} />
                     )}
                 </div>
@@ -72,8 +72,8 @@ const DeleteModal = (props) => {
      * Return id to the parent function
      * @param {*} rowData 
      */
-    const onClickRenewButton = (rowData) => {
-        reNewCalBackFunction(rowData);
+    const onClickupdateButton = (rowData) => {
+        updateCalBackFunction(rowData);
         setVisible(false);
     }
 
