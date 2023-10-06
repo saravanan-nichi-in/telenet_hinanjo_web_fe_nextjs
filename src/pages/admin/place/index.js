@@ -39,8 +39,11 @@ export default function AdminPlacePage() {
     ];
 
     useEffect(() => {
-        AdminPlaceService.getAdminsPlaceMedium().then((data) => setAdmins(data));
-        setLoader(false);
+        const fetchData = async () => {
+            await AdminPlaceService.getAdminsPlaceMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

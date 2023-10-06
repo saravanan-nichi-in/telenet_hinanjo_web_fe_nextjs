@@ -51,11 +51,11 @@ const AppMenuitem = (props) => {
         if (item.items) {
             setActiveMenu(active ? props.parentKey : key);
         } else {
-            setActiveMenu(key);
             // Set loader status on menu each click
-            if (!item.active) {
+            if (!active) {
                 setLoader(true);
             }
+            setActiveMenu(key);
         }
     };
 

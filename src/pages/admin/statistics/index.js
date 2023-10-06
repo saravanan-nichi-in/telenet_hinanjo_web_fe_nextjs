@@ -10,27 +10,29 @@ import {
 } from '@/utils/constant';
 
 export default function EvacueesStatistics() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [horizontalOptions, setHorizontalOptions] = useState(null);
     const [data, setData] = useState(evacueesShelterOptions[0].value);
     const [chartData, setChartData] = useState({});
 
-
     useEffect(() => {
-        if (data == evacueesShelterOptions[0].value) {
-            setChartData(currentEvacueesCountData);
-            setHorizontalOptions(currentEvacueesCountOptions);
-        }
-        else if (data == evacueesShelterOptions[1].value) {
-            setChartData(evacuationCenterCrowdingRateData);
-            setHorizontalOptions(evacuationCenterCrowdingRateOptions);
-        }
-        else {
-            setChartData(considerationEvacueesCountData);
-            setHorizontalOptions(considerationEvacueesCountOptions);
-        }
+        const fetchData = async () => {
+            if (data == evacueesShelterOptions[0].value) {
+                await setChartData(currentEvacueesCountData);
+                await setHorizontalOptions(currentEvacueesCountOptions);
+            }
+            else if (data == evacueesShelterOptions[1].value) {
+                await setChartData(evacuationCenterCrowdingRateData);
+                await setHorizontalOptions(evacuationCenterCrowdingRateOptions);
+            }
+            else {
+                await setChartData(considerationEvacueesCountData);
+                await setHorizontalOptions(considerationEvacueesCountOptions);
+            }
+            setLoader(false);
+        };
+        fetchData();
     }, [data]);
-
 
     return (
         <div className="grid">
