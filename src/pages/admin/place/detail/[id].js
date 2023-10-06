@@ -191,7 +191,7 @@ export default function StaffManagementEditPage() {
                       type: "button",
                       onClick: () =>
                         router.push("/admin/admin-management/edit/1"),
-                      text: translate(localeJson, "renew"),
+                      text: translate(localeJson, "update"),
                       rounded: "true",
                       severity: "primary",
                     }}
