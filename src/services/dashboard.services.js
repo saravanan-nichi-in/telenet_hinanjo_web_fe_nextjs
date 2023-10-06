@@ -12,7 +12,7 @@ export const DashboardServices = {
  * @param {*} callBackFun 
  */
 function _getList(payload, callBackFun) {
-    axios.post('/admin/dashboard', payload)
+    axios.post('/admin/dashboard/aggregation', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
