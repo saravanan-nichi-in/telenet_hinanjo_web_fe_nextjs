@@ -49,8 +49,8 @@ const evacueeFamilyDetailColumns = [
     { field: "年齢", header: "年齢", minWidth: "4rem" },
     { field: "年齢_月", header: "年齢_月", minWidth: "5rem" },
     { field: "性別", header: "性別", minWidth: "5rem" },
-    
-   
+
+
 ]
 
 const externalEvacueesListColumns = [
@@ -79,9 +79,9 @@ const evacueeFamilyDetailRowExpansionColumns = [
     { field: "更新日", header: "更新日", minWidth: "10rem" },
     { field: "住所", header: "種別", minWidth: "10rem" },
     { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
-    { field: "紐付コード", header: "紐付コード" , minWidth: "7rem" },
-    { field: "備考", header: "紐付コード", minWidth: "7rem"},
-    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem"}
+    { field: "紐付コード", header: "紐付コード", minWidth: "7rem" },
+    { field: "備考", header: "紐付コード", minWidth: "7rem" },
+    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem" }
 ]
 
 const familyDetailColumns = [
@@ -400,10 +400,10 @@ const externalEvacueesPieChartQuestionOptions = {
 };
 
 const summaryShelterOptions = [
-    { name: "--"},
-    { name: "Vacant test"},
+    { name: "--" },
+    { name: "Vacant test" },
     { name: "Starting to get crowded" },
-    { name: "Crowded"},
+    { name: "Crowded" },
     { name: "Nara" }
 ];
 
@@ -421,6 +421,240 @@ const staffDetailData = [
     },
     { field: '電話番号', header: '電話番号', minWidth: "5rem" },
 ];
+
+const evacueesShelterOptions = [
+    { name: '現在の避難者数', value: 'NY' },
+    { name: '避難所の混雑率', value: 'RM' },
+    { name: '要配慮者の避難者数', value: 'LDN' },
+];
+
+const currentEvacueesCountData = {
+    labels: ['Vacant Test', 'Starting to get Crowded', 'crowded', 'Nara', 'テスト確認', 'Manual Register'],
+    datasets: [
+        {
+            type: 'bar',
+            label: '男',
+            backgroundColor: 'rgb(31, 119, 180)',
+            data: [65, 59, 80, 81, 56, 55]
+        },
+        {
+            type: 'bar',
+            label: '女',
+            backgroundColor: 'rgb(44, 160, 44)',
+            data: [28, 48, 40, 19, 86, 27]
+        },
+        {
+            type: 'bar',
+            label: '答えくない',
+            backgroundColor: 'rgb(255, 127, 14)',
+            data: [28, 48, 40, 19]
+        }
+    ]
+};
+
+const evacuationCenterCrowdingRateData = {
+    labels: ['Vacant Test', 'Starting to get Crowded', 'crowded', 'Nara', 'テスト確認', 'Manual Register'],
+    datasets: [
+        {
+            type: 'bar',
+            backgroundColor: 'rgb(31, 119, 180)',
+            data: [65, 45, 36, 67, 0, 23]
+        }
+    ]
+};
+
+const considerationEvacueesCountData = {
+    labels: ['Vacant Test', 'Starting to get Crowded', 'crowded', 'Nara', 'テスト確認', 'Manual Register'],
+    datasets: [
+        {
+            type: 'bar',
+            label: '妊産婦',
+            backgroundColor: 'rgb(31, 119, 180)',
+            data: [15, 22, 28, 35, 0, 25]
+        },
+        {
+            type: 'bar',
+            label: '乳幼児',
+            backgroundColor: 'rgb(255, 127, 14)',
+            data: [28, 35, 80]
+        },
+        {
+            type: 'bar',
+            label: '障がい者',
+            backgroundColor: 'rgb(44, 160, 44)',
+            data: [28, 48, 40, 19]
+        },
+        {
+            type: 'bar',
+            label: '要介護者',
+            backgroundColor: 'rgb(214, 39, 40)',
+            data: [65, 59]
+        },
+        {
+            type: 'bar',
+            label: '医療機器利用者',
+            backgroundColor: 'rgb(148, 103, 189)',
+            data: [28, 48, 40]
+        },
+        {
+            type: 'bar',
+            label: 'アレルギー',
+            backgroundColor: 'rgb(140, 86, 75)',
+            data: [28, 48, 40, 19]
+        },
+        {
+            type: 'bar',
+            label: '外国籍',
+            backgroundColor: 'rgb(227, 119, 194)',
+            data: []
+        },
+        {
+            type: 'bar',
+            label: '新生児',
+            backgroundColor: 'rgb(127, 127, 127)',
+            data: []
+        },
+        {
+            type: 'bar',
+            label: 'その他',
+            backgroundColor: 'rgb(188, 189, 34)',
+            data: []
+        }
+    ]
+};
+
+const currentEvacueesCountOptions = {
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    aspectRatio: 0.8,
+    plugins: {
+        tooltip: {
+            callbacks: {
+                label: function (context) {
+                    console.log(context);
+                    const dataset = context.dataset;
+                    const index = context.dataIndex;
+                    const value = dataset.data[index];
+                    return dataset.label + " : " + value + "人";
+                },
+            }
+        },
+        legend: {
+            position: "bottom",
+            align: "center",
+            labels: {
+                usePointStyle: true,
+                pointStyle: "rect",
+                color: '#495057'
+            }
+        }
+    },
+    scales: {
+        x: {
+            min: 0,
+            max: 300,
+            stacked: true,
+            grid: {
+                display: false
+            }
+        },
+        y: {
+            stacked: true,
+            grid: {
+                display: false
+            }
+        }
+    }
+};
+
+const evacuationCenterCrowdingRateOptions = {
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    aspectRatio: 0.8,
+    plugins: {
+        tooltip: {
+            displayColors: false,
+            callbacks: {
+                title: () => null,
+                label: function (context) {
+                    const dataset = context.dataset;
+                    const index = context.dataIndex;
+                    const value = dataset.data[index];
+                    const percentage = value + '%';
+                    return " " + percentage;
+                },
+            }
+        },
+        legend: {
+            display: false
+        }
+    },
+    scales: {
+        x: {
+            min: 0,
+            max: 300,
+            stacked: true,
+            ticks: {
+                callback: function (val) {
+                    return val + "%";
+                },
+            },
+            grid: {
+                display: false
+            }
+        },
+        y: {
+            stacked: true,
+            grid: {
+                display: false
+            }
+        }
+    }
+}
+
+const considerationEvacueesCountOptions = {
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    aspectRatio: 0.8,
+    plugins: {
+        tooltip: {
+            callbacks: {
+                label: function (context) {
+                    console.log(context);
+                    const dataset = context.dataset;
+                    const index = context.dataIndex;
+                    const value = dataset.data[index];
+                    return dataset.label + " : " + value + "人";
+                },
+            }
+        },
+        legend: {
+            position: "bottom",
+            align: "center",
+            labels: {
+                usePointStyle: true,
+                pointStyle: "rect",
+                color: '#495057'
+            }
+        }
+    },
+    scales: {
+        x: {
+            min: 0,
+            max: 300,
+            stacked: true,
+            grid: {
+                display: false
+            }
+        },
+        y: {
+            stacked: true,
+            grid: {
+                display: false
+            }
+        }
+    }
+};
 
 export {
     profiles,
@@ -453,5 +687,12 @@ export {
     externalEvacueesPieChartQuestionOptions,
     summaryShelterOptions,
     loginHistory,
-    staffDetailData
+    staffDetailData,
+    evacueesShelterOptions,
+    currentEvacueesCountData,
+    evacuationCenterCrowdingRateData,
+    considerationEvacueesCountData,
+    currentEvacueesCountOptions,
+    evacuationCenterCrowdingRateOptions,
+    considerationEvacueesCountOptions
 }
