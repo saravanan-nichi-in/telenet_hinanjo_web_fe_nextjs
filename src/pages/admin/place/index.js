@@ -25,6 +25,7 @@ export default function AdminPlacePage() {
     },
     search: "",
   });
+  const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
   const handleRowClick = (rowData) => {
     router.push({
@@ -146,8 +147,9 @@ export default function AdminPlacePage() {
           checked={obj.active_flg == 1 || false}
           parentClass={"custom-switch"}
           cancelButton={true}
-          reNewButton={true}
-          reNewCalBackFunction={(rowDataReceived) =>
+          updateButton={true}
+          setCheckedValue={setCheckedValue}
+          updateCalBackFunction={(rowDataReceived) =>
             getDataFromRenewButtonOnClick(rowDataReceived)
           }
         />
@@ -162,8 +164,8 @@ export default function AdminPlacePage() {
   const getDataFromRenewButtonOnClick = (rowDataReceived) => {
     if (rowDataReceived) {
       let updateFullStatusPayload = {
-        place_id: rowDataReceived.id,
-        active_flg: 1,
+        place_id: rowDataReceived.ID,
+        active_flg: checkedValue ? 1 : 0,
       };
       updateStatus(updateFullStatusPayload, onGetPlaceListOnMounting);
     }

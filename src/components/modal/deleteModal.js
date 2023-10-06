@@ -30,6 +30,7 @@ const DeleteModal = (props) => {
     cancelButton,
     updateButton,
     updateCalBackFunction,
+    setCheckedValue,
     ...restProps
   } = props;
   const { localeJson } = useContext(LayoutContext);
@@ -110,7 +111,10 @@ const DeleteModal = (props) => {
             inputSwitchProps={{
               disabled: disabled || false,
               checked: checkedSwitch,
-              onChange: () => setVisible(true),
+              onChange: (evt) => {
+                setVisible(true);
+                setCheckedValue && setCheckedValue(evt.target.value);
+              },
             }}
           />
         </>
