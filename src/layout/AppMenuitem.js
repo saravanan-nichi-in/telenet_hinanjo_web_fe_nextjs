@@ -6,8 +6,10 @@ import { classNames } from 'primereact/utils';
 import { CSSTransition } from 'react-transition-group';
 
 import { MenuContext } from './context/menucontext';
+import { LayoutContext } from './context/layoutcontext';
 
 const AppMenuitem = (props) => {
+    const { loader, setLoader } = useContext(LayoutContext);
     const { activeMenu, setActiveMenu } = useContext(MenuContext);
     const router = useRouter();
     const item = props.item;
@@ -46,8 +48,15 @@ const AppMenuitem = (props) => {
         }
 
         // Toggle active state
-        if (item.items) setActiveMenu(active ? props.parentKey : key);
-        else setActiveMenu(key);
+        if (item.items) {
+            setActiveMenu(active ? props.parentKey : key);
+        } else {
+            // Set loader status on menu each click
+            if (!active) {
+                setLoader(true);
+            }
+            setActiveMenu(key);
+        }
     };
 
     const subMenu = item.items && item.visible !== false && (

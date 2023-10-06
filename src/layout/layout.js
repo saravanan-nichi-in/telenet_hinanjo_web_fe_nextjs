@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEventListener, useMountEffect, useUnmountEffect } from 'primereact/hooks';
 import { classNames, DomHandler } from 'primereact/utils';
 import PrimeReact from 'primereact/api';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 import AppFooter from './AppFooter';
 import AppSidebar from './AppSidebar';
@@ -10,7 +11,7 @@ import AppTopbar from './AppTopbar';
 import { LayoutContext } from './context/layoutcontext';
 
 const Layout = (props) => {
-    const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
+    const { layoutConfig, layoutState, setLayoutState, loader } = useContext(LayoutContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
     const router = useRouter();
@@ -110,12 +111,20 @@ const Layout = (props) => {
                     </div>
                 </div>
                 <div className="layout-main-container">
-                    <div className="layout-main">{props.children}</div>
+                    <div className="layout-main">
+
+                        {props.children}
+                    </div>
                     <AppFooter />
                 </div>
                 <div className="layout-mask"></div>
+                {loader && (
+                    <div className="layout-mask-loader">
+                        <ProgressSpinner className='progress-spinner' strokeWidth="8" fill="transparent" animationDuration=".5s" />
+                    </div>
+                )}
             </div>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

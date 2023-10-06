@@ -24,14 +24,15 @@ export const LayoutProvider = (props) => {
     });
     const [localeJson, setLocaleJson] = useState(jpJson);
     const [locale, setLocale] = useState(localStorage.getItem("locale"));
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
-        if (locale == 'ja') {
-            setLocale("ja");
-            setLocaleJson(jpJson);
-        } else {
+        if (locale == 'en') {
             setLocale("en");
             setLocaleJson(enJson);
+        } else {
+            setLocale("ja");
+            setLocaleJson(jpJson);
         }
     }, [])
 
@@ -86,7 +87,9 @@ export const LayoutProvider = (props) => {
         showProfileSidebar,
         locale,
         onChangeLocale,
-        localeJson
+        localeJson,
+        loader,
+        setLoader
     };
 
     return <LayoutContext.Provider value={value}>{props.children}</LayoutContext.Provider>;

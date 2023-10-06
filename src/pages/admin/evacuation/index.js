@@ -15,13 +15,17 @@ import { evacuationStatusOptions, evacuationTableColumns } from '@/utils/constan
  */
 
 export default function EvacuationPage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(null);
     const [admins, setAdmins] = useState([]);
 
     useEffect(() => {
-        AdminEvacueesListService.getAdminsEvacueesListMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminEvacueesListService.getAdminsEvacueesListMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

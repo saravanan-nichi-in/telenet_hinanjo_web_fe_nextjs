@@ -13,7 +13,7 @@ import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/cons
  */
 
 function ShoratgeSupplies() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [lockedSupplies, setLockedSupplies] = useState([]);
@@ -26,14 +26,18 @@ function ShoratgeSupplies() {
     )
 
     useEffect(() => {
-        setProducts(suppliesShortageData);
-        setLockedSupplies([
-            {
-                "避難所": "不足合計",
-                "Test1(2)": "3981574",
-                "Test2(2)": "33",
-            }
-        ]);
+        const fetchData = async () => {
+            await setProducts(suppliesShortageData);
+            await setLockedSupplies([
+                {
+                    "避難所": "不足合計",
+                    "Test1(2)": "3981574",
+                    "Test2(2)": "33",
+                }
+            ]);
+            setLoader(false);
+        };
+        fetchData();
     }, [])
 
 

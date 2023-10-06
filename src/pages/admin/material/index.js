@@ -7,7 +7,7 @@ import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components
 import { AdminMaterialService } from '@/helper/adminMaterialService';
 
 export default function AdminMaterialPage() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
@@ -46,7 +46,11 @@ export default function AdminMaterialPage() {
     ];
 
     useEffect(() => {
-        AdminMaterialService.getAdminsMaterialMedium().then((data) => setAdmins(data));
+        const fetchData = async () => {
+            await AdminMaterialService.getAdminsMaterialMedium().then((data) => setAdmins(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

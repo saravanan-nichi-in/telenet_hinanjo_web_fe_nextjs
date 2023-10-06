@@ -135,15 +135,17 @@ const AppMenu = () => {
                     }, {
                         label: translate(localeJson, 'questionnaire'),
                         icon: <FaUserPlus size={20} />,
-                        to: '/auth/register'
-                    }, {
-                        label: translate(localeJson, 'individual_questionnaire'),
-                        icon: <FaUsers size={20} />,
-                        to: '/auth/register'
-                    }, {
+                        to: '/admin/questionnaire'
+                    },
+                    // {
+                    //     label: translate(localeJson, 'individual_questionnaire'),
+                    //     icon: <FaUsers size={20} />,
+                    //     to: '/admin/questionnaire'
+                    // }
+                    {
                         label: translate(localeJson, 'setting_systems'),
                         icon: <AiFillSetting size={20} />,
-                        to: '/auth/register'
+                        to: '/admin/setting'
                     },
                     ]
                 }

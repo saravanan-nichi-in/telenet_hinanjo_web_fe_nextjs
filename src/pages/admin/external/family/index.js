@@ -13,7 +13,7 @@ import {
 
 
 export default function ExternalEvacuees() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
@@ -23,12 +23,16 @@ export default function ExternalEvacuees() {
     const [pieChartQuestionOptions, setPieChartQuestionOptions] = useState({});
 
     useEffect(() => {
-        setChartData(externalEvacueesTallyChartData);
-        setChartOptions(externalEvacueesTallyChartOptions);
-        setPieChartData(externalEvacueesPieChartData);
-        setPieChartOptions(externalEvacueesPieChartOptions);
-        setPieChartQuestionData(externalEvacueesPieChartQuestionData);
-        setPieChartQuestionOptions(externalEvacueesPieChartQuestionOptions);
+        const fetchData = async () => {
+            await setChartData(externalEvacueesTallyChartData);
+            await setChartOptions(externalEvacueesTallyChartOptions);
+            await setPieChartData(externalEvacueesPieChartData);
+            await setPieChartOptions(externalEvacueesPieChartOptions);
+            await setPieChartQuestionData(externalEvacueesPieChartQuestionData);
+            await setPieChartQuestionOptions(externalEvacueesPieChartQuestionOptions);
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     return (

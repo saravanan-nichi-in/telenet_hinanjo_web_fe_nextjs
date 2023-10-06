@@ -10,7 +10,7 @@ import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@
 import { summaryShelterOptions } from '@/utils/constant';
 
 function AdminStockpileSummary() {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const [emailModal, setEmailModal] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [stockpileSummary, setStockpileSummary] = useState([]);
@@ -58,9 +58,12 @@ function AdminStockpileSummary() {
         },
     ]
 
-
     useEffect(() => {
-        StockpileSummaryService.getStockpileSummaryWithOrdersSmall().then((data) => setStockpileSummary(data));
+        const fetchData = async () => {
+            await StockpileSummaryService.getStockpileSummaryWithOrdersSmall().then((data) => setStockpileSummary(data));
+            setLoader(false);
+        };
+        fetchData();
     }, []);
 
     /**
