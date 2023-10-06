@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { AdminManagementImportModal } from "@/components/modal";
@@ -32,18 +33,19 @@ export default function AdminPlacePage() {
       pathname: `/admin/place/detail/${rowData.ID}`,
     });
   };
-
   const columns = [
     { field: "ID", header: translate(localeJson, "ID") },
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
       minWidth: "20rem",
-      body: (rowData) => (
-        <a onClick={() => handleRowClick(rowData)}>
-          {rowData.evacuation_place}
-        </a>
-      ),
+      body: (rowData) => {
+        return (
+          <a onClick={() => handleRowClick(rowData)}>
+            {rowData.evacuation_place}
+          </a>
+        );
+      },
     },
     {
       field: "address",
@@ -59,12 +61,9 @@ export default function AdminPlacePage() {
     {
       field: "status",
       header: translate(localeJson, "status"),
-      body: (rowData) => (
-        <div
-          onClick={(event) => event.stopPropagation()}
-          className={rowData.isActive == 1 ? "surface-200" : ""}
-        ></div>
-      ),
+      body: (rowData) => {
+        return action(rowData);
+      },
     },
   ];
 
@@ -78,7 +77,7 @@ export default function AdminPlacePage() {
   /**
    * Get place list on mounting
    */
-  const onGetPlaceListOnMounting = () => {
+  const onGetPlaceListOnMounting = async () => {
     // Get places list
     getList(getPayload, fetchData);
   };
@@ -104,7 +103,7 @@ export default function AdminPlacePage() {
         address: item.address,
         evacuation_possible_people: item.total_place,
         phone_number: item.tel,
-        status: action(item),
+        active_flg: item.active_flg,
         isActive: item.active_flg,
       };
     });
@@ -122,20 +121,30 @@ export default function AdminPlacePage() {
    */
   const action = (obj) => {
     return (
-      <div className="input-switch-parent">
-        <DeleteModal
-          header={translate(localeJson, "confirmation_information")}
-          content={translate(localeJson, "change_active_place")}
-          data={obj}
-          checked={obj.active_flg == 1 || false}
-          parentClass={"custom-switch"}
-          cancelButton={true}
-          reNewButton={true}
-          reNewCalBackFunction={(rowDataReceived) =>
-            getDataFromRenewButtonOnClick(rowDataReceived)
-          }
-        />
-      </div>
+      <td
+        role="cell"
+        className={`w-full h-full p-cell-value ${
+          obj.isActive == 1 ? "surface-400" : ""
+        }`}
+      >
+        <div>
+          <div className="input-switch-parent">
+            <DeleteModal
+              header={translate(localeJson, "confirmation_information")}
+              content={translate(localeJson, "change_active_place")}
+              data={obj}
+              disabled={obj.active_flg == 1 || false}
+              checked={obj.active_flg == 1 || false}
+              parentClass={"custom-switch"}
+              cancelButton={true}
+              reNewButton={true}
+              reNewCalBackFunction={(rowDataReceived) =>
+                getDataFromRenewButtonOnClick(rowDataReceived)
+              }
+            />
+          </div>
+        </div>
+      </td>
     );
   };
 
