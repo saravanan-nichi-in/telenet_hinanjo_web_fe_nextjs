@@ -160,7 +160,10 @@
       "admin_login_screen": "Administrator login",
       "password_reset": "Password reset",
       "new_password": "New password",
+      "new_password_required": "The new password must be required.",
+      "new_password_not_matched": "The new password requirements not matched",
       "new_password_confirm": "New password (confirmation)",
+      "confirm_password_required": "The confirm password must be required.",
       "confirm_password_notMatch": "The new password (confirmation) does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
       "forgot_password_success": "A password reset email has been sent to the email address you entered."
