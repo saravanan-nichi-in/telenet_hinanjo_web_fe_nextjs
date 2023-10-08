@@ -6,7 +6,7 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable } from '@/components';
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
-import { AdminManagementDeleteModal } from '@/components/modal';
+import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 
 export default function AdminStockPileMaster() {
@@ -77,6 +77,16 @@ export default function AdminStockPileMaster() {
         fetchData();
     }, []);
 
+    const [importPlaceOpen, setImportPlaceOpen] = useState(false);
+
+    const onStaffImportClose = () => {
+        setImportPlaceOpen(!importPlaceOpen);
+      };
+    
+      const onRegisterImport = (values) => {
+        values.file && setImportPlaceOpen(false);
+      };
+
     
 
     return (
@@ -91,7 +101,13 @@ export default function AdminStockPileMaster() {
                 close={onEmailSettingsClose}
                 register={onRegister}
             />
-                    
+                    <AdminManagementImportModal
+        open={importPlaceOpen}
+        close={onStaffImportClose}
+        register={onRegister}
+        modalHeaderText={translate(localeJson, "shelter_csv_import")}
+      />
+
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
@@ -104,7 +120,8 @@ export default function AdminStockPileMaster() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'import'),
-                                    severity: "primary"
+                                    severity: "primary",
+                                    onClick: () => setImportPlaceOpen(true),
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{
                                     rounded: "true",

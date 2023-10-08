@@ -6,7 +6,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminMaterialService } from '@/helper/adminMaterialService';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
-import { AdminManagementDeleteModal } from '@/components/modal';
+import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 
 export default function AdminMaterialPage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -69,17 +69,34 @@ export default function AdminMaterialPage() {
         fetchData();
     }, []);
 
+    const [importPlaceOpen, setImportPlaceOpen] = useState(false);
+
+    const onStaffImportClose = () => {
+        setImportPlaceOpen(!importPlaceOpen);
+      };
+    
+      const onRegisterImport = (values) => {
+        values.file && setImportPlaceOpen(false);
+      };
+
     return (
         <>
         <MaterialCreateEditModal
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
-                register={onRegister}
+                register={onRegisterImport}
             />
              <AdminManagementDeleteModal
                         open={deleteStaffOpen}
                         close={onStaffDeleteClose}
                     />
+
+<AdminManagementImportModal
+        open={importPlaceOpen}
+        close={onStaffImportClose}
+        register={onRegister}
+        modalHeaderText={translate(localeJson, "shelter_csv_import")}
+      />
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
@@ -93,7 +110,8 @@ export default function AdminMaterialPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'import'),
-                                    severity: "primary"
+                                    severity: "primary",
+                                    onClick: () => setImportPlaceOpen(true),
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{
                                     type: 'submit',
@@ -113,7 +131,15 @@ export default function AdminMaterialPage() {
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
                             <div className='mt-3'>
-                                <NormalTable paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                                <NormalTable 
+                                size={"small"}
+                                stripedRows={true}
+                                rows={10}
+                                paginator={"true"}
+                                showGridlines={"true"}
+                                value={admins}
+                                columns={columns}
+                                paginatorLeft={true} />
                             </div>
                         </div>
                     </section>
