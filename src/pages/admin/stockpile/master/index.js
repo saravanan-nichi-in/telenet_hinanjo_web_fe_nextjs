@@ -7,6 +7,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable } from '@/components';
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
 import { AdminManagementDeleteModal } from '@/components/modal';
+import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 
 export default function AdminStockPileMaster() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -14,6 +15,7 @@ export default function AdminStockPileMaster() {
     const [checked1, setChecked1] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const router = useRouter();
+    const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const columns = [
         { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
         { field: '備蓄品名', header: '備蓄品名', minWidth: "30rem" },
@@ -46,8 +48,24 @@ export default function AdminStockPileMaster() {
         }
     ];
 
+    
     const onStaffDeleteClose = () => {
         setDeleteStaffOpen(!deleteStaffOpen);
+    };
+
+     /**
+     * Email setting modal close
+    */
+     const onEmailSettingsClose = () => {
+        setEmailSettingsOpen(!emailSettingsOpen);
+    };
+
+    /**
+     * Register email related information
+     * @param {*} values 
+     */
+    const onRegister = (values) => {
+        setEmailSettingsOpen(false);
     };
 
 
@@ -59,12 +77,20 @@ export default function AdminStockPileMaster() {
         fetchData();
     }, []);
 
+    
+
     return (
         <>
            <AdminManagementDeleteModal
                         open={deleteStaffOpen}
                         close={onStaffDeleteClose}
                     />
+
+<StockpileCreateEditModal
+                open={emailSettingsOpen}
+                close={onEmailSettingsClose}
+                register={onRegister}
+            />
                     
         <div className="grid">
             <div className="col-12">
@@ -91,7 +117,7 @@ export default function AdminStockPileMaster() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'signup'),
-                                    onClick: () => router.push('/admin/stockpile/master/create'),
+                                    onClick: () => setEmailSettingsOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
