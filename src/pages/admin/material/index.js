@@ -6,6 +6,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminMaterialService } from '@/helper/adminMaterialService';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
+import { AdminManagementDeleteModal } from '@/components/modal';
 
 export default function AdminMaterialPage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -19,6 +20,7 @@ export default function AdminMaterialPage() {
             <p>削除してもよろしいでしょうか？</p>
         </div>
     )
+    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columns = [
         { field: 'ID', header: 'ID' },
         { field: '物資', header: '物資', minWidth: "20rem" },
@@ -28,24 +30,21 @@ export default function AdminMaterialPage() {
             header: '削除',
             minWidth: "7rem",
             body: (rowData) => (
-                <div>
-                    <DeleteModal
-                        buttonClass="text-primary"
-                        bg="bg-white"
-                        hoverBg="hover:bg-primary hover:text-white"
-                        modalClass="w-50rem"
-                        header="確認情報"
-                        text="削除"
-                        content={content}
-                        position={"top"}
-                        checked={checked1}
-                        onChange={(e) => setChecked1(e.value)}
-                        parentClass={"mt-3"}
-                    />
-                </div>
+                 <div>
+                 <Button buttonProps={{
+                     text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                     bg: "bg-white",
+                     hoverBg: "hover:bg-primary hover:text-white",
+                     onClick: () => setDeleteStaffOpen(true)
+                 }} />
+             </div>
             ),
         }
     ];
+
+    const onStaffDeleteClose = () => {
+        setDeleteStaffOpen(!deleteStaffOpen);
+    };
 
      /**
      * Email setting modal close
@@ -77,6 +76,10 @@ export default function AdminMaterialPage() {
                 close={onEmailSettingsClose}
                 register={onRegister}
             />
+             <AdminManagementDeleteModal
+                        open={deleteStaffOpen}
+                        close={onStaffDeleteClose}
+                    />
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
