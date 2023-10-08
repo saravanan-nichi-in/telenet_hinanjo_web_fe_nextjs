@@ -41,7 +41,7 @@ const ResetPasswordPage = () => {
                 onSubmit={(values) => {
                     let preparedPayload = values;
                     preparedPayload['query'] = router.query;
-                    reset('admin', valuesUpdate, onResetSuccess);
+                    reset('admin', preparedPayload, onResetSuccess);
                 }}
             >
                 {({
