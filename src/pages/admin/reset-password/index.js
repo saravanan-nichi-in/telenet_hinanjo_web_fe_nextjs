@@ -16,11 +16,13 @@ const ResetPasswordPage = () => {
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         password: Yup.string()
-            .required(translate(localeJson, 'password_required'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
+            .required(translate(localeJson, 'new_password_required'))
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/,
+                translate(localeJson, 'new_password_not_matched')
+            ),
         confirmPassword: Yup.string()
+            .required(translate(localeJson, 'confirm_password_required'))
             .oneOf([Yup.ref("password"), null], translate(localeJson, 'confirm_password_notMatch'))
-            .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
 
@@ -37,8 +39,8 @@ const ResetPasswordPage = () => {
                 validationSchema={schema}
                 initialValues={{ password: "", confirmPassword: '' }}
                 onSubmit={(values) => {
-                    let valuesUpdate = values;
-                    valuesUpdate['query'] = router.query;
+                    let preparedPayload = values;
+                    preparedPayload['query'] = router.query;
                     reset('admin', valuesUpdate, onResetSuccess);
                 }}
             >
@@ -100,7 +102,7 @@ const ResetPasswordPage = () => {
                                                     antdRightIcon: <LockFilled />,
                                                 }}
                                                     parentClass={`w-full ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`} />
-                                                <ValidationError errorBlock={errors.confirmPassword && touched.confirmPassword && errors.password} />
+                                                <ValidationError errorBlock={errors.confirmPassword && touched.confirmPassword && errors.confirmPassword} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
                                                 <Button buttonProps={{
