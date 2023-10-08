@@ -6,11 +6,13 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable } from '@/components';
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
+import { AdminManagementDeleteModal } from '@/components/modal';
 
 export default function AdminStockPileMaster() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
+    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const router = useRouter();
     const columns = [
         { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
@@ -33,22 +35,21 @@ export default function AdminStockPileMaster() {
             minWidth: "10rem",
             body: (rowData) => (
                 <div>
-                    <DeleteModal
-                        parentMainClass={"mt-2"}
-                        style={{ minWidth: "50px" }}
-                        modalClass="w-50rem"
-                        header="確認情報"
-                        position="top"
-                        text="削除"
-                        content={"避難所の運営状態を変更しますか？"}
-                        checked={checked1}
-                        onChange={(e) => setChecked1(e.value)}
-                        parentClass={"mb-3 custom-switch"}
-                    />
-                </div>
-            ),
+                <Button buttonProps={{
+                    text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                    bg: "bg-white",
+                    hoverBg: "hover:bg-primary hover:text-white",
+                    onClick: () => setDeleteStaffOpen(true)
+                }} />
+            </div>
+           ),
         }
     ];
+
+    const onStaffDeleteClose = () => {
+        setDeleteStaffOpen(!deleteStaffOpen);
+    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,6 +60,12 @@ export default function AdminStockPileMaster() {
     }, []);
 
     return (
+        <>
+           <AdminManagementDeleteModal
+                        open={deleteStaffOpen}
+                        close={onStaffDeleteClose}
+                    />
+                    
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
@@ -131,5 +138,6 @@ export default function AdminStockPileMaster() {
                 </div>
             </div>
         </div>
+        </>
     )
 }
