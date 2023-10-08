@@ -5,12 +5,14 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
 import { AdminMaterialService } from '@/helper/adminMaterialService';
+import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
 
 export default function AdminMaterialPage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const [checked1, setChecked1] = useState(false);
     const router = useRouter();
+    const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const content = (
         <div>
             <p>一度削除したデータは、元に戻せません </p>
@@ -45,6 +47,21 @@ export default function AdminMaterialPage() {
         }
     ];
 
+     /**
+     * Email setting modal close
+    */
+     const onEmailSettingsClose = () => {
+        setEmailSettingsOpen(!emailSettingsOpen);
+    };
+
+    /**
+     * Register email related information
+     * @param {*} values 
+     */
+    const onRegister = (values) => {
+        setEmailSettingsOpen(false);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             await AdminMaterialService.getAdminsMaterialMedium().then((data) => setAdmins(data));
@@ -54,6 +71,12 @@ export default function AdminMaterialPage() {
     }, []);
 
     return (
+        <>
+        <MaterialCreateEditModal
+                open={emailSettingsOpen}
+                close={onEmailSettingsClose}
+                register={onRegister}
+            />
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
@@ -82,7 +105,7 @@ export default function AdminMaterialPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'signup'),
-                                    onClick: () => router.push('/admin/material/create'),
+                                    onClick: () => setEmailSettingsOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
@@ -94,5 +117,6 @@ export default function AdminMaterialPage() {
                 </div>
             </div>
         </div>
+        </>
     )
 }
