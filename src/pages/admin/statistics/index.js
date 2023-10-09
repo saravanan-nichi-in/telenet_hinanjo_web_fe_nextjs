@@ -47,7 +47,6 @@ export default function EvacueesStatistics() {
                             options: evacueesShelterOptions,
                             optionLabel: "name",
                             selectClass: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
-                            style: { height: "40px" },
                             onChange: (e) => setData(e.value),
                         }}
                         parentClass="w-20rem lg:w-14rem md:w-14rem sm:w-10rem pt-2 pb-2"

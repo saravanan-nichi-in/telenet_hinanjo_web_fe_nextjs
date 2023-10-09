@@ -45,7 +45,6 @@ export default function EvacuationPage() {
                                             options: evacuationStatusOptions,
                                             optionLabel: "name",
                                             inputSelectClass: "w-20rem lg:w-14rem md:w-14rem sm:w-10rem",
-                                            style: { height: "40px" },
                                             onChange: (e) => setSelectedOption(e.value),
                                             text: translate(localeJson, 'evacuation_site')
                                         }}
@@ -79,7 +78,7 @@ export default function EvacuationPage() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                <p className='pt-4 page-header2' style={{fontWeight: "bold"}}>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
+                                <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
                             </div>
                             <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
