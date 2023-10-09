@@ -8,7 +8,21 @@ import { DashboardServices } from '@/services';
 
 function AdminDashboard() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [frozenArray, setFrozenArray] = useState([]);
+    const columnsData = [
+        { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header" },
+        { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header" },
+        { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold" },
+        { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header" },
+        { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header" },
+        { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header" },
+        { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header" },
+        { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center' },
+    ]
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -18,35 +32,23 @@ function AdminDashboard() {
         },
         search: "",
     });
+    const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
-    const [columns, setColumns] = useState(
-        [
-            { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", textAlign: 'left' },
-            { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header" },
-            { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header" },
-            { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold" },
-            { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header" },
-            { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header" },
-            { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header" },
-            { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header" },
-            { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left' },
-            { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left' },
-            { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'left' },
-            { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: 'left' },
-            { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center' },
-        ]);
+    const [frozenArray, setFrozenArray] = useState([]);
+    const [tableLoading, setTableLoading] = useState(false);
 
     /* Services */
     const { getList, updateFullStatus } = DashboardServices;
 
     useEffect(() => {
+        setTableLoading(true);
         const fetchData = async () => {
             await onGetDashboardListOnMounting();
             setLoader(false);
         };
         fetchData();
-    }, [locale]);
+    }, [locale, getListPayload]);
 
     /**
      * Get dashboard list on mounting
@@ -63,7 +65,7 @@ function AdminDashboard() {
     const onGetDashboardList = (response) => {
         var preparedList = [];
         var additionalColumnsKeys = [];
-        var additionalColumnsArrayWithOldData = [...columns];
+        var additionalColumnsArrayWithOldData = [...columnsData];
         var insertIndex = 10;
         var trimPeopleLength = locale == "ja" ? 1 : 6;
         var trimHouseholdLength = locale == "ja" ? 2 : 9;
@@ -81,7 +83,7 @@ function AdminDashboard() {
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
-                    number: i + 1,
+                    number: getListPayload.filters.start + i + 1,
                     evacuation_place: locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
                     max_capacity: `${obj.total_place}${translate(localeJson, 'people')}`,
                     number_of_evacuees: `${obj.totalPerson + obj.countPerson}${translate(localeJson, 'people')}`,
@@ -124,6 +126,7 @@ function AdminDashboard() {
             setFrozenArray([frozenObj]);
             setList([...preparedList]);
             setTotalCount(response.data.total);
+            setTableLoading(false);
         }
     };
 
@@ -154,6 +157,7 @@ function AdminDashboard() {
      * @param {*} rowDataReceived 
      */
     const getDataFromupdateButtonOnClick = (rowDataReceived) => {
+        setTableLoading(true);
         if (rowDataReceived) {
             let updateFullStatusPayload = {
                 id: rowDataReceived.id
@@ -161,7 +165,27 @@ function AdminDashboard() {
             updateFullStatus(updateFullStatusPayload, onGetDashboardListOnMounting);
         }
     }
-    
+
+    /**
+     * Pagination handler
+     * @param {*} e 
+     */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
     return (
         <div className="grid">
             <div className="col-12">
@@ -172,6 +196,9 @@ function AdminDashboard() {
                     <hr />
                     <div className='mt-3 '>
                         <NormalTable
+                            lazy
+                            totalRecords={totalCount}
+                            loading={tableLoading}
                             stripedRows={true}
                             className={"custom-table-cell"}
                             showGridlines={"true"}
@@ -181,8 +208,10 @@ function AdminDashboard() {
                             filterDisplay="menu"
                             emptyMessage="No data found."
                             paginator={true}
-                            rows={5}
+                            first={getListPayload.filters.start}
+                            rows={getListPayload.filters.limit}
                             paginatorLeft={true}
+                            onPageHandler={(e) => onPaginationChange(e)}
                         />
                     </div>
                 </div>
