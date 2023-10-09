@@ -3,7 +3,7 @@ import { Chart } from 'primereact/chart';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { SelectFloatLabel } from '@/components/dropdown';
+import { InputSelectFloatLabel } from '@/components/dropdown';
 import {
     considerationEvacueesCountData, considerationEvacueesCountOptions,
     currentEvacueesCountData, currentEvacueesCountOptions, evacuationCenterCrowdingRateData, evacuationCenterCrowdingRateOptions, evacueesShelterOptions
@@ -40,17 +40,16 @@ export default function EvacueesStatistics() {
                 <div className='card'>
                     <h5 className='page_header'> {translate(localeJson, 'statistics')}</h5>
                     <hr />
-                    <SelectFloatLabel
-                        selectFloatLabelProps={{
+                    <InputSelectFloatLabel
+                        dropdownFloatLabelProps={{
                             inputId: "statisticsType",
                             value: data,
                             options: evacueesShelterOptions,
                             optionLabel: "name",
-                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                            style: { height: "40px" },
+                            selectClass: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
                             onChange: (e) => setData(e.value),
                         }}
-                        parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem pt-2 pb-2"
+                        parentClass="w-20rem lg:w-14rem md:w-14rem sm:w-10rem pt-2 pb-2"
                     />
                     <Chart type="bar" data={chartData} options={horizontalOptions} />
                 </div>

@@ -27,6 +27,8 @@ const DeleteModal = (props) => {
     hoverBg,
     severity,
     buttonClass,
+    cancelButtonClass,
+    updateButtonClass,
     cancelButton,
     updateButton,
     updateCalBackFunction,
@@ -44,7 +46,7 @@ const DeleteModal = (props) => {
           {cancelButton && (
             <Button
               buttonProps={{
-                buttonClass: "text-600 w-8rem",
+                buttonClass: cancelButtonClass ? cancelButtonClass : buttonClass,
                 bg: "bg-white",
                 hoverBg: "hover:surface-500 hover:text-white",
                 text: translate(localeJson, "cancel"),
@@ -57,7 +59,7 @@ const DeleteModal = (props) => {
           {updateButton && (
             <Button
               buttonProps={{
-                buttonClass: "w-8rem",
+                buttonClass: updateButtonClass ? updateButtonClass : buttonClass,
                 type: "submit",
                 text: translate(localeJson, "update"),
                 severity: "danger",
