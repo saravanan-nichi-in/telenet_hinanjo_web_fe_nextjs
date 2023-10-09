@@ -95,6 +95,15 @@ export default function AdminMaterialPage() {
         values.file && setImportPlaceOpen(false);
       };
 
+    const importFileApi = (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append('file', file);
+        MaterialService.importData(formData, () => {
+        });
+        onStaffImportClose();
+    }
+
     return (
         <>
         <MaterialCreateEditModal
@@ -112,6 +121,7 @@ export default function AdminMaterialPage() {
         close={onStaffImportClose}
         register={onRegister}
         modalHeaderText={translate(localeJson, "shelter_csv_import")}
+        importFile={importFileApi}
       />
         <div className="grid">
             <div className="col-12">

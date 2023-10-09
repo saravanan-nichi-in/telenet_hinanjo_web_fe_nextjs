@@ -102,7 +102,15 @@ export default function AdminStockPileMaster() {
         values.file && setImportPlaceOpen(false);
     };
 
+    const importFileApi = (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append('file', file);
+        StockpileService.importData(formData, () => {
 
+        });
+        onStaffImportClose();
+    }
 
     return (
         <>
@@ -119,6 +127,7 @@ export default function AdminStockPileMaster() {
             <AdminManagementImportModal
                 open={importPlaceOpen}
                 close={onStaffImportClose}
+                importFile={importFileApi}
                 register={onRegister}
                 modalHeaderText={translate(localeJson, "shelter_csv_import")}
             />

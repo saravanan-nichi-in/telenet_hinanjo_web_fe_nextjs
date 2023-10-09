@@ -29,8 +29,8 @@ export default function AdminManagementImportModal(props) {
             <Formik
                 validationSchema={schema}
                 initialValues={{ file: null }}
-                onSubmit={() => {
-                    router.push("#")
+                onSubmit={(values) => {
+                    props.importFile(values.file)
                 }}
             >
                 {({
