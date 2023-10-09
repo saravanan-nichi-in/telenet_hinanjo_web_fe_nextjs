@@ -38,6 +38,7 @@ export default function NormalTable(props) {
     selectedCell,
     cellClassName,
     isDataSelectable,
+    onPageHandler,
     ...restProps
   } = props;
 
@@ -71,6 +72,7 @@ export default function NormalTable(props) {
         currentPageReportTemplate="{first} - {last} / {totalRecords}"
         cellClassName={cellClassName}
         isDataSelectable={isDataSelectable}
+        onPage={(e) => _.isFunction(onPageHandler) && onPageHandler(e)}
         {...restProps}
       >
         {columns.map((col, index) => (

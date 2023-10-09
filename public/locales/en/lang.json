@@ -158,7 +158,7 @@
       "password_required": "The password must be required.",
       "password_atLeast_8_characters": "Password must be at least 8 characters.",
       "admin_login_screen": "Administrator login",
-      "password_reset": "Password reset",
+      "password_reset": "Forgot your password?",
       "new_password": "New password",
       "new_password_required": "The new password must be required.",
       "new_password_not_matched": "The new password requirements not matched",
