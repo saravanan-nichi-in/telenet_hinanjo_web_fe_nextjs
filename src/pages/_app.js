@@ -64,16 +64,16 @@ function MyApp({ Component, pageProps }) {
         if (path.startsWith('/admin')) {
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
                 console.log(path);
-                if (!adminPublicPaths.includes(path)) {
-                    console.log("1");
-                    router.push({
-                        pathname: '/admin/login',
-                        query: queryString
-                    });
-                } else {
+                if (adminPublicPaths.includes(path)) {
                     console.log("2");
                     router.push({
                         pathname: path,
+                        query: queryString
+                    });
+                } else {
+                    console.log("1");
+                    router.push({
+                        pathname: '/admin/login',
                         query: queryString
                     });
                 }
