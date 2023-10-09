@@ -97,8 +97,8 @@ function AdminDashboard() {
                     food_assistance: `${obj.foodRequiredCount}${translate(localeJson, 'people')}`,
                     switch_to_full: action(obj),
                 }
-                dataOfFirstObj.map((obj, i) => {
-                    preparedObj[obj.name_en] = `${obj.count}${translate(localeJson, 'people')}`;
+                dataOfFirstObj.map((objSub, i) => {
+                    preparedObj[objSub.name_en] = `${obj.specialCare[i].count}${translate(localeJson, 'people')}`;
                 })
                 preparedList.push(preparedObj);
             })
@@ -146,6 +146,8 @@ function AdminDashboard() {
                     parentClass={"custom-switch"}
                     cancelButton={true}
                     updateButton={true}
+                    cancelButtonClass="text-600 w-8rem font-bold"
+                    updateButtonClass="w-8rem font-bold"
                     updateCalBackFunction={(rowDataReceived) => getDataFromupdateButtonOnClick(rowDataReceived)}
                 />
             </div>
