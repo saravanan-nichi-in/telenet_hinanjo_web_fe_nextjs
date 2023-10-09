@@ -196,7 +196,7 @@ function AdminDashboard() {
                         <h5 className='page-header1'>  {translate(localeJson, 'evacuation_status_list')}</h5>
                     </div>
                     <hr />
-                    <div className='mt-3 '>
+                    <div className='mt-3'>
                         <NormalTable
                             lazy
                             totalRecords={totalCount}

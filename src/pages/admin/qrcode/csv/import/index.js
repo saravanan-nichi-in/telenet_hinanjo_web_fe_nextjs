@@ -57,84 +57,84 @@ export default function AdminQrCodeCreatePage() {
                     <div className="grid">
                         <div className="col-12">
                             <div className='card'>
-                                <section className='col-12'>
-                                    <h5 className='page_header'>{translate(localeJson, 'admin_management')}</h5>
-                                    <hr />
+                                <div className=''>
+                                    <h5 className='page-header1'>{translate(localeJson, 'qr_code_create')}</h5>
+                                </div>
+                                <hr />
+                                <div>
                                     <div>
-                                        <div>
-                                            {!successMessage ? ( // Conditionally render the form when successMessage is empty
-                                                <form onSubmit={handleSubmit}>
-                                                    <div>
-                                                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                                            <Button buttonProps={{
-                                                                type: 'submit',
-                                                                buttonClass: "evacuation_button_height",
-                                                                text: "サンプルCSVのダウンロード",
-                                                                onClick: () => router.push('/admin/admin-management/create'),
-                                                                link: "true",
-                                                                style: { whiteSpace: 'nowrap' }
-                                                            }} parentClass={"mr-1 mt-1"} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="pt-3 ">
-                                                        <InputFile inputFileProps={{
-                                                            inputFileStyle: { fontSize: "12px" },
-                                                            onChange: (event) => {
-                                                                setFieldValue("file", event.currentTarget.files[0]);
-                                                            },
-                                                            accept: '.csv',
-                                                        }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
-                                                        <div className='pt-1'>
-                                                            <ValidationError errorBlock={errors.file && touched.file && errors.file} />
-                                                        </div>
-                                                    </div>
-                                                    <div className='flex pt-3 pb-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
-                                                        <div>
-                                                            <Button buttonProps={{
-                                                                buttonClass: "evacuation_button_height",
-                                                                type: 'submit',
-                                                                text: "検索",
-                                                                rounded: "true",
-                                                                severity: "primary"
-                                                            }} parentStyle={{ paddingLeft: "10px" }} />
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            ) : null}
-                                        </div>
-                                        <div>
-                                            {successMessage && (
+                                        {!successMessage ? ( // Conditionally render the form when successMessage is empty
+                                            <form onSubmit={handleSubmit}>
                                                 <div>
-                                                    <p>{successMessage}</p>
-                                                    <ProgressBar className='mb-3' value={100} />
-                                                    {!zipFile ? ( // Conditionally render buttons when zipFile is false
-                                                        <>
-                                                            <div className="text-center">
-                                                                <Button buttonProps={{
-                                                                    buttonClass: "text-600 w-8rem",
-                                                                    bg: "bg-white",
-                                                                    hoverBg: "hover:surface-500 hover:text-white",
-                                                                    text: translate(localeJson, 'cancel'),
-                                                                    onClick: () => {
-                                                                        setSuccessMessage('');
-                                                                        setZipFile(false);
-                                                                    },
-                                                                }} parentClass={"inline"} parentStyle={{ paddingRight: "10px" }} />
-                                                                <Button buttonProps={{
-                                                                    buttonClass: "w-8rem",
-                                                                    type: "submit",
-                                                                    text: "Zip file",
-                                                                    severity: "primary",
-                                                                    onClick: () => setZipFile(true),
-                                                                }} parentClass={"inline"} />
-                                                            </div>
-                                                        </>
-                                                    ) : null}
+                                                    <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                                        <Button buttonProps={{
+                                                            type: 'submit',
+                                                            buttonClass: "evacuation_button_height",
+                                                            text: "サンプルCSVのダウンロード",
+                                                            onClick: () => router.push('/admin/admin-management/create'),
+                                                            link: "true",
+                                                            style: { whiteSpace: 'nowrap' }
+                                                        }} />
+                                                    </div>
                                                 </div>
-                                            )}
-                                        </div>
+                                                <div>
+                                                    <InputFile inputFileProps={{
+                                                        inputFileStyle: { fontSize: "12px" },
+                                                        onChange: (event) => {
+                                                            setFieldValue("file", event.currentTarget.files[0]);
+                                                        },
+                                                        accept: '.csv',
+                                                    }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
+                                                    <div className='pt-1'>
+                                                        <ValidationError errorBlock={errors.file && touched.file && errors.file} />
+                                                    </div>
+                                                </div>
+                                                <div className='flex my-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
+                                                    <div>
+                                                        <Button buttonProps={{
+                                                            buttonClass: "evacuation_button_height",
+                                                            type: 'submit',
+                                                            text: "検索",
+                                                            rounded: "true",
+                                                            severity: "primary"
+                                                        }} />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        ) : null}
                                     </div>
-                                </section>
+                                    <div>
+                                        {successMessage && (
+                                            <div>
+                                                <p>{successMessage}</p>
+                                                <ProgressBar className='mb-3' value={100} />
+                                                {!zipFile ? ( // Conditionally render buttons when zipFile is false
+                                                    <>
+                                                        <div className="text-center">
+                                                            <Button buttonProps={{
+                                                                buttonClass: "text-600 w-8rem",
+                                                                bg: "bg-white",
+                                                                hoverBg: "hover:surface-500 hover:text-white",
+                                                                text: translate(localeJson, 'cancel'),
+                                                                onClick: () => {
+                                                                    setSuccessMessage('');
+                                                                    setZipFile(false);
+                                                                },
+                                                            }} parentClass={"inline"} parentStyle={{ paddingRight: "10px" }} />
+                                                            <Button buttonProps={{
+                                                                buttonClass: "w-8rem",
+                                                                type: "submit",
+                                                                text: "Zip file",
+                                                                severity: "primary",
+                                                                onClick: () => setZipFile(true),
+                                                            }} parentClass={"inline"} />
+                                                        </div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
