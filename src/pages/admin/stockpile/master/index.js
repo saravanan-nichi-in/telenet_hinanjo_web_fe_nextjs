@@ -4,11 +4,12 @@ import { FaEyeSlash } from 'react-icons/fa';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable } from '@/components';
+import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable, SelectFloatLabel } from '@/components';
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 import { StockpileService } from '@/services/stockpilemaster.service';
+import { historyPageCities } from '@/utils/constant';
 
 export default function AdminStockPileMaster() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -38,39 +39,39 @@ export default function AdminStockPileMaster() {
             minWidth: "10rem",
             body: (rowData) => (
                 <div>
-                <Button buttonProps={{
-                    text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                    bg: "bg-white",
-                    hoverBg: "hover:bg-primary hover:text-white",
-                    onClick: () => openDeleteDialog(1)
-                }} />
-            </div>
-           ),
+                    <Button buttonProps={{
+                        text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => openDeleteDialog(1)
+                    }} />
+                </div>
+            ),
         }
     ];
 
 
     const [deleteId, setDeleteId] = useState(null);
-    
+
     const openDeleteDialog = (id) => {
         setDeleteId(id);
         setDeleteStaffOpen(true)
     }
-    
-    const onStaffDeleteClose = (action="close") => {
-        if(action=="confirm") {
+
+    const onStaffDeleteClose = (action = "close") => {
+        if (action == "confirm") {
             // alert(deleteId)
-            StockpileService.delete(deleteId, (resData)=> {
+            StockpileService.delete(deleteId, (resData) => {
                 alert(resData);
             });
         }
         setDeleteStaffOpen(!deleteStaffOpen);
     };
 
-     /**
-     * Email setting modal close
-    */
-     const onEmailSettingsClose = () => {
+    /**
+    * Email setting modal close
+   */
+    const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
     };
 
@@ -95,106 +96,109 @@ export default function AdminStockPileMaster() {
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
-      };
-    
-      const onRegisterImport = (values) => {
-        values.file && setImportPlaceOpen(false);
-      };
+    };
 
-    
+    const onRegisterImport = (values) => {
+        values.file && setImportPlaceOpen(false);
+    };
+
+
 
     return (
         <>
-           <AdminManagementDeleteModal
-                        open={deleteStaffOpen}
-                        close={onStaffDeleteClose}
-                    />
+            <AdminManagementDeleteModal
+                open={deleteStaffOpen}
+                close={onStaffDeleteClose}
+            />
 
-<StockpileCreateEditModal
+            <StockpileCreateEditModal
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
                 register={onRegister}
             />
-                    <AdminManagementImportModal
-        open={importPlaceOpen}
-        close={onStaffImportClose}
-        register={onRegister}
-        modalHeaderText={translate(localeJson, "shelter_csv_import")}
-      />
+            <AdminManagementImportModal
+                open={importPlaceOpen}
+                close={onStaffImportClose}
+                register={onRegister}
+                modalHeaderText={translate(localeJson, "shelter_csv_import")}
+            />
 
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <section className='col-12'>
-                        <h5 className='page_header'>{translate(localeJson, 'places')}</h5>
-                        <DividerComponent />
-                        <div>
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'import'),
-                                    severity: "primary",
-                                    onClick: () => setImportPlaceOpen(true),
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    severity: "primary"
-                                }} parentClass={"mr-1 mt-1"} />
-
-                                <Button buttonProps={{
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'signup'),
-                                    onClick: () => setEmailSettingsOpen(true),
-                                    severity: "success"
-                                }} parentClass={"mr-1 mt-1"} />
-                            </div>
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <section className='col-12'>
+                            <h5 className='page_header'>{translate(localeJson, 'places')}</h5>
+                            <DividerComponent />
                             <div>
-                                <form >
-                                    <div className="pt-3">
-                                        <div className='pb-1'>
-                                            <NormalLabel
-                                                text={"種別"} />
+                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                    <Button buttonProps={{
+                                        rounded: "true",
+                                        buttonClass: "evacuation_button_height",
+                                        text: translate(localeJson, 'import'),
+                                        severity: "primary",
+                                        onClick: () => setImportPlaceOpen(true),
+                                    }} parentClass={"mr-1 mt-1"} />
+                                    <Button buttonProps={{
+                                        rounded: "true",
+                                        buttonClass: "evacuation_button_height",
+                                        text: translate(localeJson, 'export'),
+                                        severity: "primary"
+                                    }} parentClass={"mr-1 mt-1"} />
+
+                                    <Button buttonProps={{
+                                        rounded: "true",
+                                        buttonClass: "evacuation_button_height",
+                                        text: translate(localeJson, 'signup'),
+                                        onClick: () => setEmailSettingsOpen(true),
+                                        severity: "success"
+                                    }} parentClass={"mr-1 mt-1"} />
+                                </div>
+                                <div>
+                                    <form >
+                                    <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div>
+                                        <SelectFloatLabel selectFloatLabelProps={{
+                                            inputId: "shelterCity",
+                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                            options: historyPageCities,
+                                            optionLabel: "name",
+                                            onChange: (e) => setSelectedCity(e.value),
+                                            text: translate(localeJson, "shelter_place_name"),
+                                            custom: "mobile-input custom-select"
+                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
                                         </div>
-                                        <InputSelect dropdownProps={{
-                                            inputSelectClass: "create_input_stock"
-                                        }}
-                                        />
-                                    </div>
-                                    <div className="pt-3">
-                                        <div className='pb-1'>
-                                            <NormalLabel
-                                                text={"備蓄品名"} />
-                                        </div>
-                                        <InputSelect dropdownProps={{
-                                            inputSelectClass: "create_input_stock"
-                                        }}
-                                        />
-                                    </div>
-                                    <div className='flex pt-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                         <div >
-                                            <Button buttonProps={{
-                                                buttonClass: "evacuation_button_height",
-                                                type: 'submit',
-                                                text: translate(localeJson, 'update'),
-                                                rounded: "true",
-                                                severity: "primary"
-                                            }} parentStyle={{ paddingLeft: "10px" }} />
+                                            <SelectFloatLabel selectFloatLabelProps={{
+                                            inputId: "shelterCity",
+                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                            options: historyPageCities,
+                                            optionLabel: "name",
+                                            onChange: (e) => setSelectedCity(e.value),
+                                            text: translate(localeJson, "shelter_place_name"),
+                                            custom: "mobile-input custom-select"
+                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
                                         </div>
+                                        <div className='pb-1'>
+                                                <Button buttonProps={{
+                                                    buttonClass: "evacuation_button_height",
+                                                    type: 'submit',
+                                                    text: translate(localeJson, 'update'),
+                                                    rounded: "true",
+                                                    severity: "primary"
+                                                }} parentStyle={{ paddingLeft: "10px" }} />
+
+                                            </div>
                                     </div>
-                                </form>
+                                    </form>
+                                </div>
+                                <div className='mt-3'>
+                                    <NormalTable responsiveLayout={"scrollable"} showGridlines={"true"} rows={10} paginator={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                                </div>
                             </div>
-                            <div className='mt-3'>
-                                <NormalTable responsiveLayout={"scrollable"} showGridlines={"true"} rows={10} paginator={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
-                            </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     )
 }
