@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { DataTable as TableData } from "primereact/datatable";
 import { Column } from "primereact/column";
+import _ from "lodash";
 
 export default function NormalTable(props) {
   const {
