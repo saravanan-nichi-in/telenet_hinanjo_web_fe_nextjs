@@ -18,12 +18,12 @@ api.interceptors.request.use((config) => {
   const locale = localStorage.getItem('locale');
 
   // Add the authentication token to the request headers
+  config.headers['x-localization'] = locale;
   if (authToken) {
     config.headers['Authorization'] = `Bearer ${authToken.token}`;
-    config.headers['x-localization'] = locale;
   }
-
   return config;
+
 }, (error) => {
   // Handle request error
   console.log(error);

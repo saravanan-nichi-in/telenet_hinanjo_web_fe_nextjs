@@ -13,7 +13,7 @@ import {
 import { PlaceServices } from "@/services";
 
 export default function AdminPlacePage() {
-  const { locale, localeJson } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const [admins, setAdmins] = useState([]);
   const [importPlaceOpen, setImportPlaceOpen] = useState(false);
   const [getPayload, setPayload] = useState({
@@ -71,7 +71,11 @@ export default function AdminPlacePage() {
   const { getList, updateStatus, exportData } = PlaceServices;
 
   useEffect(() => {
-    onGetPlaceListOnMounting();
+    const fetchData = async () => {
+      await onGetPlaceListOnMounting();
+      setLoader(false);
+    };
+    fetchData();
   }, [locale]);
 
   /**

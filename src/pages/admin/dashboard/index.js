@@ -161,7 +161,7 @@ function AdminDashboard() {
             updateFullStatus(updateFullStatusPayload, onGetDashboardListOnMounting);
         }
     }
-
+    
     return (
         <div className="grid">
             <div className="col-12">

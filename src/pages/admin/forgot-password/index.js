@@ -17,7 +17,11 @@ const ForgotPasswordPage = () => {
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
-            .email(translate(localeJson, 'email_valid')),
+            .test('trim-and-validate', translate(localeJson, 'email_valid'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
     });
 
     /* Services */
@@ -41,7 +45,9 @@ const ForgotPasswordPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "" }}
                 onSubmit={(values) => {
-                    forgot('admin', values, onForgotSuccess);
+                    let preparedPayload = values;
+                    preparedPayload['email'] = preparedPayload.email.trim();
+                    forgot('admin', preparedPayload, onForgotSuccess);
                 }}
             >
                 {({

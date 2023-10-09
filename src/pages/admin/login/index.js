@@ -20,7 +20,11 @@ const LoginPage = () => {
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
-            .email(translate(localeJson, 'email_valid')),
+            .test('trim-and-validate', translate(localeJson, 'email_valid'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
@@ -45,7 +49,9 @@ const LoginPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
-                    login('admin', values, onLoginSuccess);
+                    let preparedPayload = values;
+                    preparedPayload['email'] = preparedPayload.email.trim();
+                    login('admin', preparedPayload, onLoginSuccess);
                 }}
             >
                 {({
@@ -117,6 +123,7 @@ const LoginPage = () => {
                                             </div>
                                             <div className='w-full flex justify-content-center mt-0'>
                                                 <Button buttonProps={{
+                                                    type: 'button',
                                                     text: translate(localeJson, 'forgot_password_caption'),
                                                     link: "true",
                                                     onClick: () => router.push('/admin/forgot-password'),
