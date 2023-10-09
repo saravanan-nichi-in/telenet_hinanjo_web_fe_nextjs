@@ -58,20 +58,24 @@ function MyApp({ Component, pageProps }) {
      * @param {*} url 
     */
     function authCheck(url) {
-        const adminPublicPaths = ['/admin/login', '/admin/login/', '/admin/forgot-password', '/admin/forgot-password/', '/admin/reset-password', '/admin/reset-password/'];
+        const adminPublicPaths = [
+            '/admin/login',
+            '/admin/login/',
+            '/admin/forgot-password',
+            '/admin/forgot-password/',
+            '/admin/reset-password',
+            '/admin/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
             if (_.isNull(AuthenticationAuthorizationService.adminValue)) {
-                console.log(path);
                 if (!adminPublicPaths.includes(path)) {
-                    console.log("1");
                     router.push({
                         pathname: '/admin/login',
                         query: queryString
                     });
                 } else {
-                    console.log("2");
                     router.push({
                         pathname: path,
                         query: queryString
