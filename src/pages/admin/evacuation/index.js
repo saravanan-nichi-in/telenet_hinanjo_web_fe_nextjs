@@ -5,7 +5,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { AdminEvacueesListService } from '@/helper/adminEvacueesListService';
 import { InputFloatLabel } from '@/components/input';
-import { SelectFloatLabel } from '@/components/dropdown';
+import { InputSelectFloatLabel } from '@/components/dropdown';
 import { evacuationStatusOptions, evacuationTableColumns } from '@/utils/constant';
 
 /**
@@ -38,18 +38,18 @@ export default function EvacuationPage() {
                         <div>
                             <form>
                                 <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                    <SelectFloatLabel
-                                        selectFloatLabelProps={{
+                                    <InputSelectFloatLabel
+                                        dropdownFloatLabelProps={{
                                             inputId: "evacuationCity",
                                             value: selectedOption,
                                             options: evacuationStatusOptions,
                                             optionLabel: "name",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            inputSelectClass: "w-20rem lg:w-14rem md:w-14rem sm:w-10rem",
                                             style: { height: "40px" },
                                             onChange: (e) => setSelectedOption(e.value),
                                             text: translate(localeJson, 'evacuation_site')
                                         }}
-                                        parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
+                                        parentClass="w-20rem lg:w-14rem md:w-14rem sm:w-10rem"
                                     />
                                     <InputFloatLabel
                                         inputFloatLabelProps={{
@@ -79,7 +79,7 @@ export default function EvacuationPage() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                <p className='pt-4 page-header2'>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
+                                <p className='pt-4 page-header2' style={{fontWeight: "bold"}}>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
                             </div>
                             <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
