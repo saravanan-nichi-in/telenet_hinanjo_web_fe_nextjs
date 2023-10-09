@@ -7,6 +7,7 @@ import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components
 import { AdminMaterialService } from '@/helper/adminMaterialService';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
+import { MaterialService } from '@/services/material.service';
 
 export default function AdminMaterialPage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -35,16 +36,31 @@ export default function AdminMaterialPage() {
                      text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                      bg: "bg-white",
                      hoverBg: "hover:bg-primary hover:text-white",
-                     onClick: () => setDeleteStaffOpen(true)
+                     onClick: () => openDeleteDialog(1)
                  }} />
              </div>
             ),
         }
     ];
 
-    const onStaffDeleteClose = () => {
+
+    const [deleteId, setDeleteId] = useState(null);
+    
+    const openDeleteDialog = (id) => {
+        setDeleteId(id);
+        setDeleteStaffOpen(true)
+    }
+    
+    const onStaffDeleteClose = (action="close") => {
+        if(action=="confirm") {
+            // alert(deleteId)
+            MaterialService.delete(deleteId, (resData)=> {
+                alert(resData);
+            });
+        }
         setDeleteStaffOpen(!deleteStaffOpen);
     };
+
 
      /**
      * Email setting modal close

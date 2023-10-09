@@ -8,6 +8,7 @@ import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, Normal
 import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
+import { StockpileService } from '@/services/stockpilemaster.service';
 
 export default function AdminStockPileMaster() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -41,15 +42,28 @@ export default function AdminStockPileMaster() {
                     text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                     bg: "bg-white",
                     hoverBg: "hover:bg-primary hover:text-white",
-                    onClick: () => setDeleteStaffOpen(true)
+                    onClick: () => openDeleteDialog(1)
                 }} />
             </div>
            ),
         }
     ];
 
+
+    const [deleteId, setDeleteId] = useState(null);
     
-    const onStaffDeleteClose = () => {
+    const openDeleteDialog = (id) => {
+        setDeleteId(id);
+        setDeleteStaffOpen(true)
+    }
+    
+    const onStaffDeleteClose = (action="close") => {
+        if(action=="confirm") {
+            // alert(deleteId)
+            StockpileService.delete(deleteId, (resData)=> {
+                alert(resData);
+            });
+        }
         setDeleteStaffOpen(!deleteStaffOpen);
     };
 
