@@ -28,8 +28,9 @@ export default function AdminPlacePage() {
   const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
   const handleRowClick = (rowData) => {
-    router.push({
-      pathname: `/admin/place/detail/${rowData.ID}`,
+    router.replace({
+      pathname: `/admin/place/detail`,
+      query: { id: rowData.ID },
     });
   };
   const columns = [
