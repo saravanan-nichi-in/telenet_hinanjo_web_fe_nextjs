@@ -95,6 +95,7 @@ export default function AdminPlacePage() {
   };
 
   function exportPlaceData(response) {
+    setLoader(true)
     try {
       const base64Data = response.result.file; // Replace with your base64 encoded file
       if (base64Data.startsWith("data:csv;base64,")) {
@@ -112,12 +113,15 @@ export default function AdminPlacePage() {
         link.click();
         document.body.removeChild(link);
       }
+      setLoader(false)
     } catch (error) {
+      setLoader(false)
       console.error("Error:", error);
     }
   }
 
   function fetchData(response) {
+    setLoader(true)
     const mappedData = response.data?.model?.list.map((item) => {
       return {
         ID: item.id,
@@ -135,6 +139,7 @@ export default function AdminPlacePage() {
     mappedData.sort((a, b) => a.ID - b.ID);
 
     setAdmins(mappedData);
+    setLoader(false)
   }
 
   /**
