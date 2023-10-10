@@ -19,10 +19,19 @@ export default function AdminManagementImportModal(props) {
             {modalHeaderText}
         </div>
     );
-
     const schema = Yup.object().shape({
-        file: Yup.mixed().required('CSVファイルを选択してください.'),
-    })
+        file: Yup.mixed()
+            .required(translate(localeJson, 'file_csv_required'))
+            .test('is-csv',translate(localeJson, 'select_csv_format'), (value) => {
+                if (!value) return true; // If no file is selected, the validation passes.
+
+                const allowedExtensions = ['csv']; // Define the allowed file extensions (in this case, just 'csv').
+                const fileExtension = value.name.split('.').pop(); // Get the file extension from the file name.
+
+                // Check if the file extension is in the list of allowed extensions.
+                return allowedExtensions.includes(fileExtension.toLowerCase());
+            }),
+    });
 
     return (
         <>
@@ -65,9 +74,9 @@ export default function AdminManagementImportModal(props) {
                                     </div>
                                 }
                             >
-                                <div className={`text-center modal-content`}>
+                                <div className={`modal-content`}>
                                     <InputFile inputFileProps={{
-                                        inputFileStyle: { fontSize: "12px" },
+                                    
                                         onChange: (event) => {
                                             setFieldValue("file", event.currentTarget.files[0]);
                                         },

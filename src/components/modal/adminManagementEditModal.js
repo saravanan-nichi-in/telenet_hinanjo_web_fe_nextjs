@@ -25,7 +25,7 @@ export default function AdminManagementEditModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'admin_management_edit')}
+            {translate(localeJson, 'edit_admin_management')}
         </div>
     );
 
@@ -92,7 +92,7 @@ export default function AdminManagementEditModal(props) {
                                                 value: values.fullName,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'full_name'),
+                                                text: translate(localeJson, 'name'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
@@ -106,7 +106,7 @@ export default function AdminManagementEditModal(props) {
                                                 value: values.email,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'email'),
+                                                text: translate(localeJson, 'address_email'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.email && touched.email && errors.email} />

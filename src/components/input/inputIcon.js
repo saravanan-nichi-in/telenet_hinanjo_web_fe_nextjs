@@ -27,6 +27,7 @@ const InputIcon = (props) => {
     disabled,
     maxLength,
     minLength,
+    handleReset,
     ...restProps
   } = inputIconProps;
 
