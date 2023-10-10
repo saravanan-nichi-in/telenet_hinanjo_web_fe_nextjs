@@ -28,9 +28,9 @@
     },
     "pages": {
       "Other_shortage_supplies": "Other shortage supplies",
-      "staff_information_registration": "Staff information registration",
-      "staff_management_edit": "Staff Management Edit",
-      "admin_management_edit": "Admin Management Edit",
+      "add_staff_management": "Add Staff Management",
+      "edit_staff_management": "Edit Staff Management",
+      "edit_admin_management": "Edit Admin Management",
       "admin_information_registration": "Admin Information registration",
       "material_information_registration": "Material Information registration",
       "special_care_registration": "Registration of matters requiring consideration",
@@ -53,8 +53,8 @@
       "confirmation": "Confirmation",
       "staff_management_import": "Staff management CSV import",
       "admin_management_import": "Administrator managed CSV import",
-      "admin_registration_information": "Admin registration information",
-      "login_history": "Login History",
+      "add_admin_management": "Add Admin Management",
+      "history_login_staff_management": "Login History",
       "confirmation_information": "Confirmation Information",
       "change_active_place": "Is it okay to switch the shelter's full status?",
       "display_in_registration_screen": "Display in Registration screen",
@@ -73,7 +73,8 @@
       "shelter_csv_import": "Shelter Master CSV Import",
       "ID": "ID",
       "evacuation_possible_people": "Evacuation Possible People",
-      "edit_shelter": "Edit Shelter"
+      "edit_shelter": "Edit Shelter",
+      "detail_staff_management":"Detail Staff Management"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -84,7 +85,9 @@
       "matters_to_consider_required": "Information on persons requiring special consideration is required.",
       "things_to_consider_required": "Persons requiring special care (English) is required.",
       "notification_email_id_required": "Notification email ID is required.",
-      "format_notification": "format of the notification email ID is incorrect."
+      "format_notification": "format of the notification email ID is incorrect.",
+      "file_csv_required":"File CVS is required.",
+      "select_csv_format":"Please select a CSV format file."
     },
     "buttons": {
       "import": "import",
@@ -94,17 +97,20 @@
       "cancel": "Cancel",
       "update": "Update",
       "registration": "registration",
-      "return": "return",
       "delete": "Delete",
-      "edit": "Edit"
+      "edit": "Edit",
+      "back":"Back",
+      "submit":"Submit",
+      "create_admin":"Create Admin",
+      "create_staff":"Create Staff"
     },
     "footer": {},
     "form": {
       "evacuation_site": "Evacuation Site",
       "household_number": "Household Number",
-      "full_name": "Full Name",
-      "email": "email",
-      "telephone_number": "telephone number",
+      "name": "Name",
+      "address_email": "Address Email",
+      "tel": "Tel",
       "supplies": "Supplies",
       "unit": "Unit",
       "things_to_consider": "Matters requiring special care (English)",

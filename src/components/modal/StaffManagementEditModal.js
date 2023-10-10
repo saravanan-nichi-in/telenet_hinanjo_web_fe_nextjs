@@ -24,7 +24,7 @@ export default function StaffManagementEditModal(props) {
             .min(10, translate(localeJson, 'phone_min10_required    ')),
     });
 
-    const { open, close, register,modalHeaderText } = props && props;
+    const { open, close, register,modalHeaderText,buttonText } = props && props;
 
     const header = (
         <div className="custom-modal">
@@ -70,7 +70,7 @@ export default function StaffManagementEditModal(props) {
                                         <Button buttonProps={{
                                             buttonClass: "w-8rem",
                                             type: "submit",
-                                            text: translate(localeJson, 'update'),
+                                            text:buttonText,
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
@@ -96,7 +96,7 @@ export default function StaffManagementEditModal(props) {
                                                 value: values.fullName,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'full_name'),
+                                                text: translate(localeJson, 'name'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
@@ -110,7 +110,7 @@ export default function StaffManagementEditModal(props) {
                                                 value: values.email,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'email'),
+                                                text: translate(localeJson, 'address_email'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.email && touched.email && errors.email} />
@@ -124,7 +124,7 @@ export default function StaffManagementEditModal(props) {
                                                 spanClass: "p-error",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'telephone_number'),
+                                                text: translate(localeJson, 'tel'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`w-full ${errors.phoneNumber && touched.phoneNumber && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.phoneNumber && touched.phoneNumber && errors.phoneNumber} />

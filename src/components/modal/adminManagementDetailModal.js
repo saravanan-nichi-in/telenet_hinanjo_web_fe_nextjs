@@ -59,13 +59,13 @@ export default function AdminManagementDetailModal(props) {
                                 buttonClass: "text-600 w-8rem",
                                 bg: "bg-white",
                                 hoverBg: "hover:surface-500 hover:text-white",
-                                text: translate(localeJson, 'cancel'),
+                                text: translate(localeJson, 'back'),
                                 onClick: () => close(),
                             }} parentClass={"inline"} />
                             <Button buttonProps={{
                                 buttonClass: "w-8rem",
                                 type: "submit",
-                                text: translate(localeJson, 'update'),
+                                text: translate(localeJson, 'edit'),
                                 severity: "primary",
                                 onClick: () => setEditAdminOpen(true)
                             }} parentClass={"inline"} />

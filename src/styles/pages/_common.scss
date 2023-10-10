@@ -12,3 +12,14 @@
     font-size: $commonFontSize;
     font-weight: $commonFontWeight;
 }
+
+.household-number{
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: $commonFontSize;
+}
+.header-details-second {
+    button.p-link .layout-topbar-menu-button .layout-topbar-button{
+    display: none !important;
+}
+}

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { LayoutContext } from './context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
-import { DropdownSelect } from '@/components';
+import { DropdownSelect, LanguageDropdown } from '@/components';
 import { MdOutlineResetTv } from 'react-icons/md';
 
 const AppTopbar = forwardRef((props, ref) => {
@@ -110,7 +110,7 @@ const AppTopbar = forwardRef((props, ref) => {
                     <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
                         <i className="pi pi-ellipsis-v" />
                     </button>
-                    <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
+                    <div ref={topbarmenuRef} >
                         <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
                     </div>
                 </div>
