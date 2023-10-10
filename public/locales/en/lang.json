@@ -108,6 +108,7 @@
       "registration": "registration",
       "delete": "Delete",
       "edit": "Edit",
+      "create": "Create",
       "back":"Back",
       "submit":"Submit",
       "create_admin":"Create Admin",

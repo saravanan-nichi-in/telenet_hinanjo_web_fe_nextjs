@@ -57,6 +57,12 @@ export default function AdminMaterialPage() {
                      hoverBg: "hover:bg-primary hover:text-white",
                      onClick: () => openDeleteDialog(obj.id)
                  }} />
+            <Button buttonProps={{
+                text: translate(localeJson, 'edit'), buttonClass: "text-primary",
+                bg: "bg-white",
+                hoverBg: "hover:bg-primary hover:text-white",
+                onClick: () => openDeleteDialog(obj.id)
+            }} />
              </div>
         );
     };
@@ -260,7 +266,7 @@ export default function AdminMaterialPage() {
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'signup'),
+                                    text: translate(localeJson, 'create'),
                                     onClick: () => setEmailSettingsOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
