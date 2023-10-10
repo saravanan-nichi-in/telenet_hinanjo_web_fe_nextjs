@@ -11,7 +11,6 @@ import { NormalLabel } from "../label";
 import { InputSelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { TextAreaFloatLabel } from "../input";
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 
 export default function EmailSettings(props) {
     const router = useRouter();
@@ -29,7 +28,7 @@ export default function EmailSettings(props) {
     /**
      * Destructing
     */
-    const { open, close, register } = props && props;
+    const { open, close, register, intervalFrequency, prefectureList } = props && props;
 
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
@@ -93,7 +92,8 @@ export default function EmailSettings(props) {
                                             register({
                                                 transmissionInterval,
                                                 outputTargetArea,
-                                                email: values.email
+                                                email: values.email,
+                                                errors: errors
                                             });
                                             handleSubmit();
                                         },
@@ -121,22 +121,21 @@ export default function EmailSettings(props) {
                                             </div>
                                             <div className='mt-5 '>
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    inputId: "shelterCity",
+                                                    inputId: "mailFrequency",
                                                     inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: transmissionInterval,
-                                                    options: MailSettingsOption1,
+                                                    options: intervalFrequency,
                                                     optionLabel: "name",
                                                     onChange: (e) => setTransmissionInterval(e.value),
                                                     text: translate(localeJson, "transmission_interval"),
-
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-5'>
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    inputId: "shelterCity",
+                                                    inputId: "prefecture",
                                                     inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: outputTargetArea,
-                                                    options: MailSettingsOption2,
+                                                    options: prefectureList,
                                                     optionLabel: "name",
                                                     onChange: (e) => setOutputTargetArea(e.value),
                                                     text: translate(localeJson, "output_target_area"),

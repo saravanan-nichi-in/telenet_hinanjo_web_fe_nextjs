@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import _ from 'lodash';
 import { useRouter } from 'next/router'
 
 import { getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
@@ -8,6 +9,7 @@ import { InputSelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
 import { EmailSettings } from '@/components/modal';
 import { HistoryServices } from '@/services/history.services';
+import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 
 /**
  * Shelter Place History Status
@@ -23,10 +25,12 @@ export default function AdminHistoryPlacePage() {
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 100,
+            limit: 10,
             sort_by: "",
             order_by: "desc",
         },
@@ -34,7 +38,6 @@ export default function AdminHistoryPlacePage() {
         end_date: "",
         place_name: ""
     });
-    const router = useRouter();
     const historyTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), minWidth: "5rem", sortable: false, textAlign: 'left' },
         { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "15rem", sortable: false },
@@ -57,21 +60,19 @@ export default function AdminHistoryPlacePage() {
     const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration } = HistoryServices;
 
     useEffect(() => {
+        setTableLoading(true);
         const fetchData = async () => {
             await onGetHistoryPlaceListOnMounting();
             await onGetHistoryPlaceDropdownListOnMounting();
             setLoader(false);
         };
         fetchData();
-    }, [locale]);
+    }, [locale, getListPayload]);
 
     /**
      * Get History Place list on mounting
      */
     const onGetHistoryPlaceListOnMounting = () => {
-        // Get dashboard list
-        console.log(getListPayload);
-
         getList(getListPayload, onGetHistoryPlaceList);
     }
 
@@ -87,16 +88,16 @@ export default function AdminHistoryPlacePage() {
         let payload = {
             filters: {
                 start: 0,
-                limit: 100,
+                limit: getListPayload.filters.limit,
                 sort_by: "",
                 order_by: "desc",
             },
             start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
             end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
             place_name: selectedCity ? selectedCity.name : ""
-        };
+        }
+        getList(payload, onGetHistoryPlaceList);
         setGetListPayload(payload);
-        onGetHistoryPlaceListOnMounting();
     }
 
     /**
@@ -145,7 +146,9 @@ export default function AdminHistoryPlacePage() {
                     "place_remarks": obj.place_remarks,
                 };
                 historyPlaceListData.push(historyData);
-            })
+            });
+            setTotalCount(response.data.model.total);
+            setTableLoading(false);
             setHistoryPlaceList(historyPlaceListData);
         }
         else {
@@ -182,27 +185,49 @@ export default function AdminHistoryPlacePage() {
     const onRegister = (values) => {
         console.log(values);
         const emailList = values.email.split(",");
-        console.log(emailList);
-        let payload = {
-            email : emailList,
-            frequency: values.transmissionInterval,
-            prefecture_id: values.outputTargetArea
+        if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
+            let payload = {
+                email: emailList,
+                frequency: values.transmissionInterval,
+                prefecture_id: values.outputTargetArea
+            }
+            registerEmailConfiguration(payload, registerEmailConfig)
+            setEmailSettingsOpen(false);
         }
-        registerEmailConfiguration(payload, registerEmailConfig())
-        setEmailSettingsOpen(false);
     };
 
     const registerEmailConfig = (response) => {
         console.log(response);
     }
 
+    /**
+     * Pagination handler
+     * @param {*} e 
+     */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
     return (
         <React.Fragment>
-            {/* Place history email settings modal */}
             <EmailSettings
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
                 register={onRegister}
+                intervalFrequency={MailSettingsOption1}
+                prefectureList={MailSettingsOption2}
             />
             <div className="grid">
                 <div className="col-12">
@@ -266,15 +291,20 @@ export default function AdminHistoryPlacePage() {
                                 </form>
                             </div>
                             <NormalTable
+                                lazy
+                                totalRecords={totalCount}
+                                loading={tableLoading}
                                 size={"small"}
                                 stripedRows={true}
-                                rows={10}
                                 paginator={"true"}
                                 showGridlines={"true"}
                                 value={historyPlaceList}
                                 columns={historyTableColumns}
                                 emptyMessage={emptyTableMessage}
+                                first={getListPayload.filters.start}
+                                rows={getListPayload.filters.limit}
                                 paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)}
                             />
                         </div>
                     </div>

@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { AdminEvacueesListService } from '@/helper/adminEvacueesListService';
 import { InputFloatLabel } from '@/components/input';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { evacuationStatusOptions, evacuationTableColumns } from '@/utils/constant';
+import { EvacuationServices } from '@/services/evacuation.services';
+import { locale } from 'primereact/api';
 
 /**
  * Display Evacuees List 
@@ -15,18 +17,58 @@ import { evacuationStatusOptions, evacuationTableColumns } from '@/utils/constan
  */
 
 export default function EvacuationPage() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const {locale, localeJson, setLoader } = useContext(LayoutContext);
     const [totalSamari, setTotalSamari] = useState(57);
     const [selectedOption, setSelectedOption] = useState(null);
     const [admins, setAdmins] = useState([]);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+        },
+        place_id: "",
+        family_code: "",
+        refugee_name: ""
+    });
+
+    const downloadEvacueesListCSV = () => {
+        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
+    }
+
+    const exportEvacueesCSV = (response) => {
+        if (response.success) {
+            const downloadLink = document.createElement("a");
+            const fileName = "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+            downloadLink.href = response.result.filePath;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        }
+    }
+
+    /**
+     * Get Evacuees list on mounting
+     */
+    const onGetEvacueesListOnMounting = () => {
+        getList(getListPayload, onGetHistoryPlaceList);
+    }
+
+    const onGetHistoryPlaceList = (response) => {
+        console.log(response.data);
+    }
+
+    /* Services */
+    const { getList, exportEvacueesCSVList } = EvacuationServices;
 
     useEffect(() => {
         const fetchData = async () => {
             await AdminEvacueesListService.getAdminsEvacueesListMedium().then((data) => setAdmins(data));
+            await onGetEvacueesListOnMounting();
             setLoader(false);
         };
         fetchData();
-    }, []);
+    }, [locale, getListPayload]);
 
     return (
         <div className="grid">
@@ -86,6 +128,7 @@ export default function EvacuationPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
+                                    onClick: () => downloadEvacueesListCSV()
                                 }} parentClass={"mb-3"} />
                             </div>
                         </div>

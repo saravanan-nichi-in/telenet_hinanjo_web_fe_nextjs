@@ -4,11 +4,10 @@ import axios from '@/utils/api';
 
 
 /* Identity and Access management (IAM) */
-export const HistoryServices = {
+export const EvacuationServices = {
     getList: _getList,
     getPlaceDropdownList: _getPlaceDropdownList,
-    exportPlaceHistoryCSVList: _exportPlaceHistoryCSVList,
-    registerEmailConfiguration: _registerEmailConfiguration
+    exportEvacueesCSVList: _exportEvacueesCSVList,
 };
 
 /**
@@ -17,7 +16,7 @@ export const HistoryServices = {
  * @param {*} callBackFun 
  */
 function _getList(payload, callBackFun) {
-    axios.post('/admin/place/history/list', payload)
+    axios.post('/admin/evacuations', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -30,12 +29,12 @@ function _getList(payload, callBackFun) {
 }
 
 /**
- * Get History list
+ * Get Evacuees CSV list
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _exportPlaceHistoryCSVList(payload, callBackFun) {
-    axios.post('/admin/place/history/export', payload)
+function _exportEvacueesCSVList(payload, callBackFun) {
+    axios.get('/admin/evacuation/export', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -44,28 +43,6 @@ function _exportPlaceHistoryCSVList(payload, callBackFun) {
         .catch((error) => {
             // Handle errors here
             console.error('Error fetching data:', error);
-        });
-}
-
-/**
- * Register Email Configuration
- * @param {*} payload 
- * @param {*} callBackFun 
- */
-function _registerEmailConfiguration(payload, callBackFun) {
-    axios.post('/admin/place/history/email/configuration', payload)
-        .then((response) => {
-            if (response && response.data) {
-                callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
-        })
-        .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
         });
 }
 
