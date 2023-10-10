@@ -203,7 +203,7 @@ export default function StaffManagementEditPage() {
                       bg: "bg-white",
                       type: "button",
                       hoverBg: "hover:surface-500 hover:text-white",
-                      text: translate(localeJson, "return"),
+                      text: translate(localeJson, "back"),
                       rounded: "true",
                       severity: "primary",
                       onClick:()=> router.push('/admin/place')
