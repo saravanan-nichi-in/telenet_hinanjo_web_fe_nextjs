@@ -17,7 +17,7 @@ export default function StaffManagementPage() {
     const [editStaffOpen, setEditStaffOpen] = useState(false);
     const [CreateStaffOpen, setCreateStaffOpen] = useState(false);
     const staffs = [
-        { field: 'No', header: 'No.', minWidth: "3rem" },
+        { field: 'No', header: 'S No', minWidth: "3rem" },
         {
             field: '氏名', header: '氏名', minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>
@@ -119,7 +119,7 @@ export default function StaffManagementPage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header1'>{translate(localeJson, 'staff_management')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'staff_management')}</h5>
                         <hr />
                         <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
@@ -156,7 +156,7 @@ export default function StaffManagementPage() {
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 text: translate(localeJson, 'full_name'),
-                                                inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
+                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />
                                         </div>
