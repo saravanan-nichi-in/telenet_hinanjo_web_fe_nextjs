@@ -11,6 +11,7 @@ import {
   NormalTable,
 } from "@/components";
 import { PlaceServices } from "@/services";
+import _ from "lodash";
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -30,7 +31,7 @@ export default function AdminPlacePage() {
   const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
   const handleRowClick = (rowData) => {
-    router.replace({
+    router.push({
       pathname: `/admin/place/detail`,
       query: { id: rowData.ID },
     });
