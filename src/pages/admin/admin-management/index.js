@@ -67,7 +67,7 @@ export default function AdminManagementPage() {
     };
 
     const Listcolumn = [
-        { field: 'No.', header: 'No', minWidth: "3rem" },
+        { field: 'No.', header: 'S No', minWidth: "3rem" },
         {
             field: '氏名', header: "氏名", minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setAdminDetailsOpen(true)}>
@@ -176,7 +176,7 @@ export default function AdminManagementPage() {
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 text: translate(localeJson, 'full_name'),
-                                                inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
+                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />
 

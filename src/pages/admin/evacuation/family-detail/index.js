@@ -27,7 +27,7 @@ export default function EvacueeFamilyDetail() {
                     <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
                     <hr />
                     <div className='mb-2'>
-                        <div className='flex justify-content-end' style={{ textDecoration: "underline" }}>
+                        <div className='flex justify-content-end' style={{ textDecoration: "underline" ,fontWeight:"bold"}}>
                             {translate(localeJson, 'household_number')} 001-001
                         </div>
                     </div>
@@ -54,14 +54,14 @@ export default function EvacueeFamilyDetail() {
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
                     />
-                    <div className='mt-2 flex justify-content-center overflow-x-auto'>
+                    <div className='mt-2'>
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
-                            tableStyle={{ maxWidth: "10rem" }}
+                            // tableStyle={{ maxWidth: "10rem" }}
                             value={townAssociationData}
                             columns={townAssociationColumn}
                         />
