@@ -97,31 +97,7 @@ export default function AdminPlacePage() {
     values.file && setImportPlaceOpen(false);
   };
 
-  function exportPlaceData(response) {
-    setLoader(true)
-    try {
-      const base64Data = response.result.file; // Replace with your base64 encoded file
-      if (base64Data.startsWith("data:csv;base64,")) {
-        // Remove the prefix
-        const base64String = base64Data.slice("data:csv;base64,".length);
-        console.log(base64String);
-        const binaryData = atob(base64String);
-        const blob = new Blob([binaryData], {
-          type: "application/octet-stream",
-        });
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "downloadedFile.csv"; // Set the desired filename
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-      setLoader(false)
-    } catch (error) {
-      setLoader(false)
-      console.error("Error:", error);
-    }
-  }
+
 
   function fetchData(response) {
     setLoader(true)
@@ -253,7 +229,7 @@ export default function AdminPlacePage() {
                       buttonClass: "evacuation_button_height",
                       text: translate(localeJson, "export"),
                       severity: "primary",
-                      onClick: () => exportData(getPayload, exportPlaceData),
+                      onClick: () => exportData(getPayload),
                     }}
                     parentClass={"mr-1 mt-1"}
                   />
