@@ -6,13 +6,9 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal } from '@/components';
 import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/constant';
+import { ShortageSuppliesServices } from '@/services';
 
-/**
- * Display list of supplies shortage in the various `避難所` 
- * @returns Table view
- */
-
-function ShoratgeSupplies() {
+function ShortageSupplies() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
@@ -24,6 +20,9 @@ function ShoratgeSupplies() {
             {selectedRow}
         </div>
     )
+
+    /* Services */
+    const { getList, calExport } = ShortageSuppliesServices;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -100,7 +99,7 @@ function ShoratgeSupplies() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    onClick: () => exportCSV(false)
+                                    onClick: () => calExport()
                                 }} parentClass={"mb-3"} />
                             </div>
                             <DataTable
@@ -150,4 +149,4 @@ function ShoratgeSupplies() {
     );
 }
 
-export default ShoratgeSupplies;
+export default ShortageSupplies;
