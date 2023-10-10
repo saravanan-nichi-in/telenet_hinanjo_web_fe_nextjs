@@ -116,8 +116,6 @@ export default function AdminPlacePage() {
     });
     setTotalCount(response.data.model.total);
     // Sorting the data by ID
-    mappedData.sort((a, b) => a.ID - b.ID);
-
     setAdmins(mappedData);
     setLoader(false)
     setTableLoading(false);
