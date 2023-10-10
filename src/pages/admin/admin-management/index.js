@@ -98,8 +98,8 @@ export default function AdminManagementPage() {
                 <div>
                     <Button buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
+                        bg: "bg-red-600 text-white",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
                         onClick: () => setDeleteAdminOpen(true)
                     }} />
                 </div>
@@ -162,7 +162,7 @@ export default function AdminManagementPage() {
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'signup'),
+                                    text: translate(localeJson, 'create_admin'),
                                     onClick: () => setCreateAdminOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
@@ -175,7 +175,7 @@ export default function AdminManagementPage() {
                                         <div class="" >
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
-                                                text: translate(localeJson, 'full_name'),
+                                                text: translate(localeJson, 'name'),
                                                 inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />

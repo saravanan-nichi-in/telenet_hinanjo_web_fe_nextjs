@@ -19,6 +19,7 @@ const InputFile = (props) => {
         required,
         readOnly,
         disabled,
+        custom,
         ...restProps
     } = inputFileProps;
     const divStyle = {
@@ -31,7 +32,7 @@ const InputFile = (props) => {
         <div className={`${parentClass}`} style={divStyle}>
             <input type="file"
                 name={name}
-                className={`${inputFileClass} ${height || 'custom_input'}`}
+                className={`${inputFileClass} ${custom || 'input_file'} ${height || 'custom_input'}`}
                 accept={accept}
                 onChange={onChange}
                 onBlur={onBlur}

@@ -33,7 +33,7 @@ export default function StaffManagementDetailModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'admin_details')}
+            {translate(localeJson, 'detail_staff_management')}
         </div>
     );
 
@@ -43,6 +43,8 @@ export default function StaffManagementDetailModal(props) {
                 open={editStaffOpen}
                 close={onStaffClose}
                 register={onRegister}
+                buttonText={translate(localeJson, 'update')}
+                modalHeaderText= {translate(localeJson, 'edit_staff_management')}
             />
             <div>
                 <Dialog
@@ -58,13 +60,13 @@ export default function StaffManagementDetailModal(props) {
                                 buttonClass: "text-600 w-8rem",
                                 bg: "bg-white",
                                 hoverBg: "hover:surface-500 hover:text-white",
-                                text: translate(localeJson, 'cancel'),
+                                text: translate(localeJson, 'back'),
                                 onClick: () => close(),
                             }} parentClass={"inline"} />
                             <Button buttonProps={{
                                 buttonClass: "w-8rem",
                                 type: "submit",
-                                text: translate(localeJson, 'update'),
+                                text: translate(localeJson, 'edit'),
                                 severity: "primary",
                                 onClick: () => setEditStaffOpen(true)
                             }} parentClass={"inline"} />
@@ -77,7 +79,7 @@ export default function StaffManagementDetailModal(props) {
                                 <NormalTable tableStyle={{ maxWidth: "20rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staffDetail} columns={staffDetailData} />
                             </div>
                             <div >
-                                <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson,'login_history')}</h5>
+                                <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson,'history_login_staff_management')}</h5>
                                 <div>
                                     <NormalTable tableStyle={{ maxWidth: "30rem" }} paginator={"true"} paginatorLeft={true} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} value={admin} columns={loginHistory} />
                                 </div>
