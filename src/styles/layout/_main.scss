@@ -33,7 +33,7 @@ body {
 }
 
 :root {
-    scrollbar-color: rgb(210, 210, 210) rgb(46, 54, 69);
+    scrollbar-color: rgb(46, 54, 69) rgb(210, 210, 210);
     scrollbar-width: thin;
 }
 
@@ -43,11 +43,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgb(46, 54, 69);
+    background: rgb(210, 210, 210);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(210, 210, 210);
+    background: rgb(46, 54, 69);
 }
 
 a {

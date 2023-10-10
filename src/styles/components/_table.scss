@@ -40,4 +40,9 @@
             display: none;
         }
     }
+
+    .p-datatable.p-datatable-striped .p-datatable-frozen-tbody>tr.p-row-odd {
+        background-color: #1bb99a;
+        color: white;
+    }
 }

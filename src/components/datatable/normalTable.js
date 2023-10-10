@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { DataTable as TableData } from "primereact/datatable";
 import { Column } from "primereact/column";
+import _ from "lodash";
 
 export default function NormalTable(props) {
   const {
@@ -38,6 +39,7 @@ export default function NormalTable(props) {
     selectedCell,
     cellClassName,
     isDataSelectable,
+    onPageHandler,
     ...restProps
   } = props;
 
@@ -71,6 +73,7 @@ export default function NormalTable(props) {
         currentPageReportTemplate="{first} - {last} / {totalRecords}"
         cellClassName={cellClassName}
         isDataSelectable={isDataSelectable}
+        onPage={(e) => _.isFunction(onPageHandler) && onPageHandler(e)}
         {...restProps}
       >
         {columns.map((col, index) => (

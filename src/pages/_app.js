@@ -9,6 +9,7 @@ import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
 import { AuthenticationAuthorizationService } from '@/services';
 import _ from 'lodash';
+import { Toaster } from 'react-hot-toast';
 
 /**
  * Import global CSS for entire application
@@ -24,6 +25,11 @@ import '@/styles/pages/pages.scss';
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
+    const toastStyle = {
+        padding: '10px',
+        color: '#2b3d51',
+        borderRadius: '5px',
+    };
 
     /**
      * Check authorization & authentication
@@ -52,7 +58,14 @@ function MyApp({ Component, pageProps }) {
      * @param {*} url 
     */
     function authCheck(url) {
-        const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
+        const adminPublicPaths = [
+            '/admin/login',
+            '/admin/login/',
+            '/admin/forgot-password',
+            '/admin/forgot-password/',
+            '/admin/reset-password',
+            '/admin/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
@@ -90,6 +103,13 @@ function MyApp({ Component, pageProps }) {
             <Providers>
                 <PersistGate loading={null} persistor={persistor}>
                     <LayoutProvider>
+                        <Toaster
+                            reverseOrder={true}
+                            toastOptions={{
+                                duration: 5000,
+                                style: toastStyle
+                            }}
+                        />
                         {authorized ? (
                             Component.getLayout ? (
                                 <>
