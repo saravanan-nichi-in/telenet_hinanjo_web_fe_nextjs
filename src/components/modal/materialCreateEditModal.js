@@ -12,6 +12,7 @@ import { SelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { InputIcon, TextAreaFloatLabel } from "../input";
 import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
+import { MaterialService } from "@/services/material.service";
 
 export default function MaterialCreateEditModal(props) {
 
@@ -21,25 +22,17 @@ export default function MaterialCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const schema = Yup.object().shape({
-        supplies: Yup.string()
-            .required(translate(localeJson, 'supplies_necessary'))
+        name: Yup.string()
+            .required(translate(localeJson, 'supplies_necessary')),
+            unit: Yup.string()
+            .required(translate(localeJson, 'supplies_necessary'))    
     });
     /**
      * Destructing
     */
     const { open, close, register } = props && props;
 
-    const validateMultipleEmails = (value, localeJson) => {
-        const emails = value.split(',').map(email => email.trim());
 
-        for (const email of emails) {
-            if (!Yup.string().email().isValidSync(email)) {
-                return false;
-            }
-        }
-
-        return true; // Return true if all emails are valid
-    };
 
     const header = (
         <div className="custom-modal">
@@ -52,9 +45,13 @@ export default function MaterialCreateEditModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ supplies: "" }}
-                onSubmit={() => {
-                    router.push("/admin/material")
+                initialValues={{ name: "", unit: "" }}
+                onSubmit={(values) => {
+                    MaterialService.create(values, ()=> {
+                        close();
+                    })
+                    router.push("/admin/material");
+                    return false;
                 }}
             >
                 {({
@@ -87,11 +84,6 @@ export default function MaterialCreateEditModal(props) {
                                         text: translate(localeJson, 'registration'),
                                         severity: "primary",
                                         onClick: () => {
-                                            register({
-                                                transmissionInterval,
-                                                outputTargetArea,
-                                                email: values.email
-                                            });
                                             handleSubmit();
                                         },
                                     }} parentClass={"inline"} />
@@ -108,13 +100,13 @@ export default function MaterialCreateEditModal(props) {
                                                             text={translate(localeJson, 'supplies')} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
-                                                        name: "supplies",
-                                                        value: values.supplies,
+                                                        name: "name",
+                                                        // value: values.name,
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                    }} parentClass={`${errors.supplies && touched.supplies && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.supplies && touched.supplies && errors.supplies} />
+                                                    }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.name && touched.name && errors.name} />
                                                 </div>
                                                 <div className='pt-3'>
                                                     <div className='pb-1'>
@@ -122,9 +114,12 @@ export default function MaterialCreateEditModal(props) {
                                                             text={translate(localeJson, 'unit')} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
-                                                        name: 'email',
+                                                        name: 'unit',
                                                         inputClass: "create_input_stock",
-                                                    }} />
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                    }} parentClass={`${errors.unit && touched.unit && 'p-invalid pb-1'}`}/>
+                                                    <ValidationError errorBlock={errors.unit && touched.unit && errors.unit} />
                                                 </div>
                                             </form>
                                 </div>
