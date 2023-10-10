@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
-import { SelectFloatLabel } from '@/components/dropdown';
+import { InputSelectFloatLabel } from '@/components/dropdown';
 import { evacuationFoodSupport, evacuationSiteType, evacuationStatusOptions, externalEvacueesListColumns } from '@/utils/constant';
 import { AdminExternalEvacueesList } from '@/helper/adminExternalEvacueesListService';
 
-export default function EvacuationPage() {
+export default function ExteranalEvacuationPage() {
     const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState(null);
@@ -43,8 +43,8 @@ export default function EvacuationPage() {
                         <div>
                             <form>
                                 <div className='mt-2 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                    <SelectFloatLabel
-                                        selectFloatLabelProps={{
+                                    <InputSelectFloatLabel
+                                        dropdownFloatLabelProps={{
                                             inputId: "evacueeSiteType",
                                             value: selectedSiteType,
                                             options: evacuationSiteType,
@@ -56,8 +56,8 @@ export default function EvacuationPage() {
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
-                                    <SelectFloatLabel
-                                        selectFloatLabelProps={{
+                                    <InputSelectFloatLabel
+                                        dropdownFloatLabelProps={{
                                             inputId: "evacuationCity",
                                             value: selectedOption,
                                             options: evacuationStatusOptions,
@@ -69,8 +69,8 @@ export default function EvacuationPage() {
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
-                                    <SelectFloatLabel
-                                        selectFloatLabelProps={{
+                                    <InputSelectFloatLabel
+                                        dropdownFloatLabelProps={{
                                             inputId: "evacueeFoodSupport",
                                             value: selectedFoodSupport,
                                             options: evacuationFoodSupport,

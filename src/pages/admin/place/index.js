@@ -158,6 +158,8 @@ export default function AdminPlacePage() {
           parentClass={"custom-switch"}
           cancelButton={true}
           updateButton={true}
+          cancelButtonClass="text-600 w-8rem font-bold"
+          updateButtonClass="w-8rem font-bold"
           setCheckedValue={setCheckedValue}
           updateCalBackFunction={(rowDataReceived) =>
             getDataFromRenewButtonOnClick(rowDataReceived)

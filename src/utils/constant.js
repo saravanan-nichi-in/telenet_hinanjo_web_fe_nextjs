@@ -21,22 +21,22 @@ const evacuationStatusOptions = [
 ];
 
 const evacuationTableColumns = [
-    { field: 'ID', header: 'No', sortable: true, textAlign: 'left', minWidth: "5rem" },
-    { field: '世帯人数', header: '世帯人数', sortable: true, textAlign: 'left', minWidth: "7rem" },
-    { field: '世帯番号', header: '世帯番号', minWidth: "8rem", sortable: true, textAlign: 'left' },
-    { field: '代表者', header: '代表者', sortable: true, textAlign: 'left', minWidth: '7rem' },
-    { field: '氏名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: true, textAlign: 'left' },
-    { field: "氏名 (漢字)", header: "氏名 (漢字)", sortable: true, textAlign: 'left', minWidth: "8rem" },
-    { field: "性別", header: "性別", sortable: true, textAlign: 'left', minWidth: "5rem" },
-    { field: "生年月日", header: "生年月日", minWidth: "10rem", sortable: true, textAlign: 'left' },
-    { field: "年齢", header: "年齢", sortable: true, textAlign: 'left', minWidth: "5rem" },
-    { field: "年齢_月", header: "年齢_月", sortable: true, textAlign: 'left', minWidth: "7rem" },
-    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "10rem", sortable: true, textAlign: 'left' },
-    { field: "紐付コード", header: "紐付コード", minWidth: "8rem", sortable: true, textAlign: 'left' },
-    { field: "備考", header: "備考", sortable: true, textAlign: 'left', minWidth: "5rem" },
-    { field: "避難所", header: "避難所", sortable: true, textAlign: 'left', minWidth: "8rem" },
-    { field: "退所日時", header: "退所日時", sortable: true, textAlign: 'left', minWidth: "9rem" },
-    { field: "現在の滞在場所", header: "現在の滞在場所", sortable: "true", minWidth: "10rem", textAlign: 'left' },
+    { field: 'ID', header: 'No', sortable: false, textAlign: 'left', minWidth: "5rem" },
+    { field: '世帯人数', header: '世帯人数', sortable: false, textAlign: 'left', minWidth: "7rem" },
+    { field: '世帯番号', header: '世帯番号', minWidth: "8rem", sortable: false, textAlign: 'left' },
+    { field: '代表者', header: '代表者', sortable: false, textAlign: 'left', minWidth: '7rem' },
+    { field: '氏名 (フリガナ)', header: '氏名 (フリガナ)', minWidth: "12rem", sortable: false, textAlign: 'left' },
+    { field: "氏名 (漢字)", header: "氏名 (漢字)", sortable: false, textAlign: 'left', minWidth: "8rem" },
+    { field: "性別", header: "性別", sortable: false, textAlign: 'left', minWidth: "5rem" },
+    { field: "生年月日", header: "生年月日", minWidth: "10rem", sortable: false, textAlign: 'left' },
+    { field: "年齢", header: "年齢", sortable: false, textAlign: 'left', minWidth: "5rem" },
+    { field: "年齢_月", header: "年齢_月", sortable: false, textAlign: 'left', minWidth: "7rem" },
+    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "10rem", sortable: false, textAlign: 'left' },
+    { field: "紐付コード", header: "紐付コード", minWidth: "8rem", sortable: false, textAlign: 'left' },
+    { field: "備考", header: "備考", sortable: false, textAlign: 'left', minWidth: "5rem" },
+    { field: "避難所", header: "避難所", sortable: false, textAlign: 'left', minWidth: "8rem" },
+    { field: "退所日時", header: "退所日時", sortable: false, textAlign: 'left', minWidth: "9rem" },
+    { field: "現在の滞在場所", header: "現在の滞在場所", sortable: false, minWidth: "10rem", textAlign: 'left' },
 
 ];
 
@@ -531,7 +531,6 @@ const currentEvacueesCountOptions = {
         tooltip: {
             callbacks: {
                 label: function (context) {
-                    console.log(context);
                     const dataset = context.dataset;
                     const index = context.dataIndex;
                     const value = dataset.data[index];
@@ -620,7 +619,6 @@ const considerationEvacueesCountOptions = {
         tooltip: {
             callbacks: {
                 label: function (context) {
-                    console.log(context);
                     const dataset = context.dataset;
                     const index = context.dataIndex;
                     const value = dataset.data[index];

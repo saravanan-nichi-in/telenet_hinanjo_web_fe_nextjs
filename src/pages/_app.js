@@ -58,7 +58,14 @@ function MyApp({ Component, pageProps }) {
      * @param {*} url 
     */
     function authCheck(url) {
-        const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password'];
+        const adminPublicPaths = [
+            '/admin/login',
+            '/admin/login/',
+            '/admin/forgot-password',
+            '/admin/forgot-password/',
+            '/admin/reset-password',
+            '/admin/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
