@@ -5,18 +5,21 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, DividerComponent, GoogleMapComponent } from "@/components";
 import { AdminPlaceDetailService } from "@/helper/adminPlaceDetailService";
-
+import { PlaceServices } from "@/services";
 export default function StaffManagementEditPage() {
-  const { layoutConfig, localeJson } = useContext(LayoutContext);
+  const { locale, localeJson } = useContext(LayoutContext);
   const [admin, setAdmins] = useState([]);
   const router = useRouter();
   const { id } = router.query;
 
+  /* Services */
+  const { details } = PlaceServices;
+
   const [placeName, setPlaceName] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [addressDefault1, setAddressDefault1] = useState("");
-  const [addressDefault2, setAddressDefault2] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [address2, setAddress] = useState("");
+  const [defaultZipCode, setDefaultZipCode] = useState("");
+  const [addressDefault, setAddressDefault] = useState("");
   const [capacity, setCapacity] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coordinates, setCoordinates] = useState("");
@@ -26,28 +29,46 @@ export default function StaffManagementEditPage() {
   const [status, setStatus] = useState("");
 
   useEffect(() => {
+    const fetchData = async () => {
+      await onGetPlaceDetailsOnMounting();
+      setLoader(false);
+    };
+    fetchData();
+  }, [locale]);
+
+
+  /**
+   * Get place list on mounting
+   */
+  const onGetPlaceDetailsOnMounting = async () => {
+    // Get places list
+    details(id, fetchData);
+  };
+
+  function fetchData(response) {
+    setLoader(true)
+    const model = response.data.model;
+    setPlaceName(model.name);
+    setZipCode(model.zip_code);
+    setAddress(model.address);
+    setDefaultZipCode(model.zip_code_default);
+    setAddressDefault(model.address_default);
+    setCapacity(`${model.total_place}人`);
+    setPhoneNumber(model.tel);
+    setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
+    setUrl("https://example.com");
+    setRegisterUrl("https://example.com/register");
+    setAltitude(`${model.altitude}m`);
+    setStatus(model.active_flg === 1 ? "有効" : "無効");
+    setLoader(false)
+  }
+
+  useEffect(() => {
     AdminPlaceDetailService.getAdminsPlaceDetailMedium().then((data) =>
       setAdmins(data)
     );
   }, []);
 
-  useEffect(() => {
-    // Simulated API call
-    setTimeout(() => {
-      setPlaceName("Fetched place");
-      setAddress1("200-0022");
-      setAddress2("東京都 中野区");
-      setAddressDefault1("200-0022");
-      setAddressDefault2("東京都 中野区");
-      setCapacity("20人");
-      setPhoneNumber("0987654321");
-      setCoordinates("-3.038333 / 22.758664");
-      setUrl("https://example.com");
-      setRegisterUrl("https://example.com/register");
-      setAltitude("20m");
-      setStatus("無効");
-    }, 1000);
-  }, []);
 
   return (
     <div className="grid">
@@ -79,7 +100,7 @@ export default function StaffManagementEditPage() {
                       <div className="label">
                         {translate(localeJson, "postal_code")}
                       </div>
-                      <div className="value">{address1}</div>
+                      <div className="value">{zipCode}</div>
                     </li>
                     <li>
                       <div className="label">
@@ -91,13 +112,13 @@ export default function StaffManagementEditPage() {
                       <div className="label">
                         {translate(localeJson, "initial_postal_code")}
                       </div>
-                      <div className="value">{addressDefault1}</div>
+                      <div className="value">{defaultZipCode}</div>
                     </li>
                     <li>
                       <div className="label">
                         {translate(localeJson, "initial_address")}
                       </div>
-                      <div className="value">{addressDefault2}</div>
+                      <div className="value">{addressDefault}</div>
                     </li>
                     <li>
                       <div className="label">
@@ -162,6 +183,7 @@ export default function StaffManagementEditPage() {
                 >
                   <GoogleMapComponent
                     initialPosition={{ lat: -4.038333, lng: 21.758664 }}
+                    height={"400px"}
                   />
                 </div>
               </div>
@@ -177,7 +199,7 @@ export default function StaffManagementEditPage() {
                       bg: "bg-white",
                       type: "button",
                       hoverBg: "hover:surface-500 hover:text-white",
-                      text: translate(localeJson, "cancel"),
+                      text: translate(localeJson, "return"),
                       rounded: "true",
                       severity: "primary",
                     }}
@@ -190,7 +212,10 @@ export default function StaffManagementEditPage() {
                       buttonClass: "evacuation_button_height",
                       type: "button",
                       onClick: () =>
-                        router.push("/admin/admin-management/edit/1"),
+                        router.push({
+                          pathname: `/admin/place/edit`,
+                          query: { id: id },
+                        }),
                       text: translate(localeJson, "update"),
                       rounded: "true",
                       severity: "primary",

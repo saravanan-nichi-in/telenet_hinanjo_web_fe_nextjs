@@ -14,6 +14,7 @@ const InputSwitch = (props) => {
         checked,
         onChange,
         readOnly,
+        onBlur,
         disabled,
         ...restProps
     } = inputSwitchProps;
@@ -27,6 +28,7 @@ const InputSwitch = (props) => {
                 onChange={onChange}
                 readOnly={readOnly}
                 disabled={disabled}
+                onBlur={onBlur}
                 {...restProps}
             />
         </div>

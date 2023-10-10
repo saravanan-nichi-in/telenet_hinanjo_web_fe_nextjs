@@ -112,8 +112,13 @@ function _update(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _details(id, callBackFun) {
+  const params = {
+    params: {
+      id: id,
+    },
+  };
   axios
-    .get(`/admin/place/${id}`)
+    .get(`/admin/place/${id}`, params)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
