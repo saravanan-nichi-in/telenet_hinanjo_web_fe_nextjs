@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api'
 
 
 
 const GoogleMapComponent = ({ initialPosition, height }) => {
+    React.useEffect(() => {
+        getLocation();
+    }, []);
     const containerStyle = {
         width: '100%',
         height: height || '100vh',
@@ -52,11 +55,12 @@ const GoogleMapComponent = ({ initialPosition, height }) => {
         <>
             <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={center}
-                zoom={10}
+                center={center||currentLocation}
+                zoom={1}
                 onLoad={onLoad}
                 onUnmount={onUnmount}
             >
+                 <Marker position={center||currentLocation} />
                 { /* Child components, such as markers, info windows, etc. */}
                 <></>
             </GoogleMap>
