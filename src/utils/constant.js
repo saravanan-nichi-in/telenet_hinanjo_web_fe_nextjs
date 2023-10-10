@@ -158,25 +158,6 @@ const evacuationFoodSupport = [
     { name: 'いいえ', code: '0' },
 ];
 
-
-const historyTableColumns = [
-    { field: 'Sl No', header: '番号', minWidth: "5rem", sortable: true, textAlign: 'left' },
-    { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
-    { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
-    { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
-    { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: true },
-    { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
-    { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem", sortable: true },
-    { field: "所在地（経度1）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
-    { field: "外部公開", header: "外部公開", minWidth: "8rem", sortable: true },
-    { field: "開設状況", header: "開設状況", minWidth: "8rem", sortable: true },
-    { field: "避難者数", header: "避難者数", minWidth: "7rem", sortable: true },
-    { field: "満空状況", header: "満空状況", minWidth: "7rem", sortable: true },
-    { field: "開設日時", header: "開設日時", minWidth: "15rem", sortable: true },
-    { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem", sortable: true },
-    { field: "備考", header: "備考", minWidth: "5rem" }
-];
-
 const dashboardTableColumns = [
     { field: 'id', header: '番号', minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
     { field: '避難所', header: '避難所', minWidth: '20rem', sortable: true, headerClassName: "custom-header" },
@@ -190,23 +171,23 @@ const dashboardTableColumns = [
 ];
 
 const MailSettingsOption1 = [
-    { name: 'なし' },
-    { name: '2時間毎' },
-    { name: '3時間毎' },
-    { name: '4時間毎' },
-    { name: '6時間毎' },
-    { name: '毎日' },
-    { name: '毎日2回' },
-
+    { name: 'なし' , value: null},
+    { name: '1時間毎', value: 1 },
+    { name: '2時間毎', value: 2},
+    { name: '3時間毎', value: 3 },
+    { name: '4時間毎', value: 4 },
+    { name: '6時間毎', value: 6 },
+    { name: '毎日', value: 8 },
+    { name: '毎日2回', value: 16 },
 ];
 
 const MailSettingsOption2 = [
-    { name: '--' },
-    { name: '北海道' },
-    { name: '福島県' },
-    { name: '千葉県' },
-    { name: '東京都' },
-
+    { name: '--', value: null },
+    { name: '北海道', value: 1 },
+    { name: '福島県', value: 2 },
+    { name: '千葉県', value: 3 },
+    { name: '東京都', value: 4 },
+    { name: '大阪府', value: 5}
 ];
 
 const externalEvacueesTallyChartData = {
@@ -672,7 +653,6 @@ export {
     townAssociationData,
     suppliesShortageData,
     suppliesShortageHeaderColumn,
-    historyTableColumns,
     historyPageCities,
     dashboardTableColumns,
     MailSettingsOption1,

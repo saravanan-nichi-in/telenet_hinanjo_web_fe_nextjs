@@ -7,7 +7,7 @@
     "sidebar": {
       "vault_info": "Evacuation Information",
       "evacuation_status_list": "Evacuation Status List",
-      "history_place": "Evacuation center status history",
+      "history_place": "Place History",
       "list_of_evacuees": "List of Evacuees",
       "external_evacuees_tally": "External Evacuees Tally",
       "shortage_supplies_list": "Shortage Supplies List",
@@ -73,7 +73,21 @@
       "shelter_csv_import": "Shelter Master CSV Import",
       "ID": "ID",
       "evacuation_possible_people": "Evacuation Possible People",
-      "edit_shelter": "Edit Shelter"
+      "edit_shelter": "Edit Shelter",
+      "si_no": "SI No",
+      "report_date_time": "ReportDateTime",
+      "prefecture": "Prefecture",
+      "place_name": "PlaceName",
+      "place_name_furigana": "PlaceName (Furigana)",
+      "location_latitude": "Location(Latitude)",
+      "location_longitude": "Localtion(Longitude)",
+      "place_public_availability": "PublicPlaceAvailability",
+      "opened_status": "OpenedStatus",
+      "evacuees_count": "EvacueesCount",
+      "availability_status": "AvailabilityStatus",
+      "opened_date_time": "OpenedDateTime",
+      "closed_date_time": "ClosedDateTime",
+      "remarks": "Remarks"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -88,12 +102,12 @@
     },
     "buttons": {
       "import": "import",
-      "export": "export",
+      "export": "Export",
       "search": "search",
       "signup": "signup",
-      "cancel": "cancel",
+      "cancel": "Cancel",
       "update": "Update",
-      "registration": "registration",
+      "registration": "Save",
       "return": "return",
       "delete": "Delete",
       "edit": "Edit"
@@ -108,16 +122,16 @@
       "supplies": "Supplies",
       "unit": "Unit",
       "things_to_consider": "Matters requiring special care (English)",
-      "notification_email_id": "Notificaion email id",
-      "transmission_interval": "Transmission interval",
-      "output_target_area": "Output target area"
+      "notification_email_id": "Email",
+      "transmission_interval": "Frequency",
+      "output_target_area": "Select Prefecture"
     },
     "others": {
       "not": "Not",
-      "shelter_place": "Shelter place",
-      "setting_start_date": "Setting start date",
-      "shelter_place_name": "Sheter place name",
-      "mail_setting": "Mail setting",
+      "shelter_place": "Shelter Place",
+      "setting_start_date": "Setting Start Date",
+      "shelter_place_name": "Place Name",
+      "mail_setting": "Mail Settings",
       "total": "Total",
       "search_text": "Search",
       "history_mail_message": "*If you specify multiple email IDs, please separate them with commas.",
@@ -133,7 +147,8 @@
       "evacuation_location_aggregation": "Evacuation Location Aggregation",
       "notification_settings": "Notificaion settings",
       "people": "People",
-      "household_title": "Household"
+      "household_title": "Household",
+      "report_date_time": "Report Date and Time"
     }
   },
   "staff": {

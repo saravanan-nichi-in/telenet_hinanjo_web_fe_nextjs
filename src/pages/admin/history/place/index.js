@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
-import { AdminHistoryPlaceService } from '@/helper/adminHistoryPlaceService';
-import { SelectFloatLabel } from '@/components/dropdown';
+import { InputSelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
-import { historyPageCities, historyTableColumns } from '@/utils/constant';
 import { EmailSettings } from '@/components/modal';
+import { HistoryServices } from '@/services/history.services';
 
 /**
  * Shelter Place History Status
@@ -17,19 +16,157 @@ import { EmailSettings } from '@/components/modal';
  */
 
 export default function AdminHistoryPlacePage() {
-    const { localeJson, loader, setLoader } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
+    const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const [historyPlaceList, setHistoryPlaceList] = useState([]);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-    const router = useRouter();
+    const [historyPlaceDropdown, setHistoryPlaceDropdown] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 100,
+            sort_by: "",
+            order_by: "desc",
+        },
+        start_date: "",
+        end_date: "",
+        place_name: ""
+    });
+    const router = useRouter();
+    const historyTableColumns = [
+        { field: 'si_no', header: translate(localeJson, 'si_no'), minWidth: "5rem", sortable: false, textAlign: 'left' },
+        { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "15rem", sortable: false },
+        { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
+        { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", sortable: false },
+        { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", sortable: false },
+        { field: "place_address", header: translate(localeJson, 'address'), minWidth: "10rem", sortable: false },
+        { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
+        { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false },
+        { field: "place_public_availability", header: translate(localeJson, 'place_public_availability'), minWidth: "8rem", sortable: false },
+        { field: "place_opened_status", header: translate(localeJson, 'opened_status'), minWidth: "8rem", sortable: false },
+        { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false },
+        { field: "place_full_status", header: translate(localeJson, 'availability_status'), minWidth: "7rem", sortable: false },
+        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "15rem", sortable: false },
+        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "15rem", sortable: false },
+        { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "5rem" }
+    ];
+
+    /* Services */
+    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration } = HistoryServices;
 
     useEffect(() => {
         const fetchData = async () => {
-            await AdminHistoryPlaceService.getAdminsHistoryPlaceMedium().then((data) => setAdmins(data));
+            await onGetHistoryPlaceListOnMounting();
+            await onGetHistoryPlaceDropdownListOnMounting();
             setLoader(false);
         };
         fetchData();
-    }, []);
+    }, [locale]);
+
+    /**
+     * Get History Place list on mounting
+     */
+    const onGetHistoryPlaceListOnMounting = () => {
+        // Get dashboard list
+        console.log(getListPayload);
+
+        getList(getListPayload, onGetHistoryPlaceList);
+    }
+
+    /**
+     * Get History Place Dropdown list on mounting
+     */
+    const onGetHistoryPlaceDropdownListOnMounting = () => {
+        // Get dashboard list
+        getPlaceDropdownList({}, onGetHistoryPlaceDropdownList);
+    }
+
+    const searchListWithCriteria = () => {
+        let payload = {
+            filters: {
+                start: 0,
+                limit: 100,
+                sort_by: "",
+                order_by: "desc",
+            },
+            start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
+            end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
+            place_name: selectedCity ? selectedCity.name : ""
+        };
+        setGetListPayload(payload);
+        onGetHistoryPlaceListOnMounting();
+    }
+
+    /**
+     * Function will get data & update History Place list
+     * @param {*} data 
+    */
+    const onGetHistoryPlaceDropdownList = (response) => {
+        let historyPlaceCities = [];
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.model;
+            data.map((obj, i) => {
+                let placeDropdownList = {
+                    name: response.locale == 'ja' ? obj.name : obj.name_en,
+                    code: obj.id
+                }
+                historyPlaceCities.push(placeDropdownList)
+            })
+            setHistoryPlaceDropdown(historyPlaceCities);
+        }
+    }
+    /**
+     * Function will get data & update History Place list
+     * @param {*} data 
+    */
+    const onGetHistoryPlaceList = (response) => {
+        if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+            const data = response.data.model.list;
+            console.log(data);
+            let historyPlaceListData = [];
+            data.map((obj, i) => {
+                let historyData = {
+                    "si_no": i + 1,
+                    "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
+                    "prefecture_name": obj.prefecture_name,
+                    "place_name": obj.place_name,
+                    "place_name_en": obj.place_name_en,
+                    "place_address": obj.place_address,
+                    "place_latitude": obj.place_latitude,
+                    "place_longitude": obj.place_longitude,
+                    "place_public_availability": obj.place_public_availability,
+                    "place_opened_status": obj.place_opened_status,
+                    "place_evacuees_count": obj.place_evacuees_count,
+                    "place_full_status": obj.place_full_status,
+                    "place_opening_date_time": obj.place_opening_date_time ? getJapaneseDateTimeDisplayFormat(obj.place_opening_date_time) : "",
+                    "place_closing_date_time": obj.place_closing_date_time ? getJapaneseDateTimeDisplayFormat(obj.place_closing_date_time) : "",
+                    "place_remarks": obj.place_remarks,
+                };
+                historyPlaceListData.push(historyData);
+            })
+            setHistoryPlaceList(historyPlaceListData);
+        }
+        else {
+            setHistoryPlaceList([]);
+            setEmptyTableMessage(response.message);
+        }
+    }
+
+    const downloadPlaceHistoryCSV = () => {
+        exportPlaceHistoryCSVList(getListPayload, exportPlaceHistoryCSV);
+    }
+
+    const exportPlaceHistoryCSV = (response) => {
+        if (response.success) {
+            const downloadLink = document.createElement("a");
+            const fileName = "Place_history" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+            downloadLink.href = response.result.file;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        }
+    }
 
     /**
      * Email setting modal close
@@ -43,8 +180,21 @@ export default function AdminHistoryPlacePage() {
      * @param {*} values 
      */
     const onRegister = (values) => {
+        console.log(values);
+        const emailList = values.email.split(",");
+        console.log(emailList);
+        let payload = {
+            email : emailList,
+            frequency: values.transmissionInterval,
+            prefecture_id: values.outputTargetArea
+        }
+        registerEmailConfiguration(payload, registerEmailConfig())
         setEmailSettingsOpen(false);
     };
+
+    const registerEmailConfig = (response) => {
+        console.log(response);
+    }
 
     return (
         <React.Fragment>
@@ -71,7 +221,8 @@ export default function AdminHistoryPlacePage() {
                                         rounded: "true",
                                         buttonClass: "w-50",
                                         text: translate(localeJson, 'export'),
-                                        severity: "primary"
+                                        severity: "primary",
+                                        onClick: () => downloadPlaceHistoryCSV()
                                     }} />
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -87,14 +238,15 @@ export default function AdminHistoryPlacePage() {
                                         <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
                                             inputId: "settingStartDate",
                                             selectionMode: "range",
-                                            text: translate(localeJson, "setting_start_date"),
-                                            dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem "
+                                            text: translate(localeJson, "report_date_time"),
+                                            dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                            onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
-                                        <SelectFloatLabel selectFloatLabelProps={{
+                                        <InputSelectFloatLabel dropdownFloatLabelProps={{
                                             inputId: "shelterCity",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                            inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",
                                             value: selectedCity,
-                                            options: historyPageCities,
+                                            options: historyPlaceDropdown,
                                             optionLabel: "name",
                                             onChange: (e) => setSelectedCity(e.value),
                                             text: translate(localeJson, "shelter_place_name"),
@@ -105,7 +257,9 @@ export default function AdminHistoryPlacePage() {
                                                 buttonClass: "w-12 search-button mobile-input",
                                                 text: translate(localeJson, "search_text"),
                                                 icon: "pi pi-search",
-                                                severity: "primary"
+                                                severity: "primary",
+                                                type: "button",
+                                                onClick: () => searchListWithCriteria()
                                             }} />
                                         </div>
                                     </div>
@@ -117,8 +271,9 @@ export default function AdminHistoryPlacePage() {
                                 rows={10}
                                 paginator={"true"}
                                 showGridlines={"true"}
-                                value={admins}
+                                value={historyPlaceList}
                                 columns={historyTableColumns}
+                                emptyMessage={emptyTableMessage}
                                 paginatorLeft={true}
                             />
                         </div>
