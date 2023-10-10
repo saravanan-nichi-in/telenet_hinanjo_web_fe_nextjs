@@ -27,7 +27,6 @@ export default function AdminManagementCreatePage() {
                 validationSchema={schema}
                 initialValues={{ email: "", password: "", fullName: "" }}
                 onSubmit={(values) => {
-                    console.log(values);
                     router.push("/admin/admin-management")
                 }}
             >
