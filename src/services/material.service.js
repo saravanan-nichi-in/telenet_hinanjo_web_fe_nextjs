@@ -1,3 +1,4 @@
+import { downloadBase64File } from "@/helper";
 import axios from "@/utils/api";
 import toast from 'react-hot-toast';
 
@@ -41,16 +42,16 @@ function _importData(payload, callBackFun) {
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _exportData(payload, callBackFun) {
+function _exportData(payload) {
     axios
         .post("/admin/material/export", payload)
         .then((response) => {
-            if (response && response.data) {
-                callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
+                if (response && response.data && response.data.result.file) {
+                    downloadBase64File(response.data.result.file, "material.csv");
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
         })
         .catch((error) => {
             // Handle errors here

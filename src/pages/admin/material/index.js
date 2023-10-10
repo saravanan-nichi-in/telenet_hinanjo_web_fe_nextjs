@@ -78,7 +78,7 @@ export default function AdminMaterialPage() {
 
 
     /* Services */
-    const { getList } = MaterialService;
+    const { getList, exportData } = MaterialService;
 
     useEffect(() => {
         setTableLoading(true);
@@ -244,7 +244,16 @@ export default function AdminMaterialPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    severity: "primary"
+                                    severity: "primary",
+                                    onClick: () => {
+                                        exportData({
+                                            "filters": {
+                                                "order_by": "asc",
+                                                "sort_by": "created_at"
+                                            },
+                                            "search" : ""
+                                        })
+                                    }
                                 }} parentClass={"mr-1 mt-1"} />
 
                                 <Button buttonProps={{
