@@ -55,8 +55,9 @@ function _exportData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
+  const params = {params:payload}
   axios
-    .get("/admin/place", payload)
+    .get("/admin/place", params)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

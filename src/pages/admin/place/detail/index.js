@@ -6,8 +6,9 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, DividerComponent, GoogleMapComponent } from "@/components";
 import { AdminPlaceDetailService } from "@/helper/adminPlaceDetailService";
 import { PlaceServices } from "@/services";
+import { identity } from "lodash";
 export default function StaffManagementEditPage() {
-  const { locale, localeJson } = useContext(LayoutContext);
+  const { locale, localeJson,setLoader} = useContext(LayoutContext);
   const [admin, setAdmins] = useState([]);
   const router = useRouter();
   const { id } = router.query;
@@ -27,6 +28,8 @@ export default function StaffManagementEditPage() {
   const [registerUrl, setRegisterUrl] = useState("");
   const [altitude, setAltitude] = useState("");
   const [status, setStatus] = useState("");
+  const [longitude,setLangitude] = useState(0);
+  const [latitude,setLatitude] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +51,8 @@ export default function StaffManagementEditPage() {
   function fetchData(response) {
     setLoader(true)
     const model = response.data.model;
+    setLangitude(parseInt(model.map.longitude))
+    setLatitude(parseInt(model.map.latitude))
     setPlaceName(model.name);
     setZipCode(model.zip_code);
     setAddress(model.address);
@@ -56,8 +61,8 @@ export default function StaffManagementEditPage() {
     setCapacity(`${model.total_place}人`);
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
-    setUrl("https://example.com");
-    setRegisterUrl("https://example.com/register");
+    setUrl(`https://hinanjo.nichi.in/dashboard?hinan=${id}`);
+    setRegisterUrl(`https://hinanjo.nichi.in/temp_register_member?hinan=${id}`);
     setAltitude(`${model.altitude}m`);
     setStatus(model.active_flg === 1 ? "有効" : "無効");
     setLoader(false)
@@ -86,7 +91,7 @@ export default function StaffManagementEditPage() {
                 style={{ justifyContent: "start", flexWrap: "wrap" }}
               >
                 <div
-                  className="col-12 lg:col-7 p-0 pr-2"
+                  className="col-12 lg:col-7 pb-20px  lg:p-0 pr-2"
                   style={{ overflowX: "auto" }}
                 >
                   <ul className="custom-list">
@@ -142,14 +147,14 @@ export default function StaffManagementEditPage() {
                       <div className="label">
                         {translate(localeJson, "url")}
                       </div>
-                      <div className="value">
+                      <div className="value text-link-class cursor-pointer">
                         <a href={url} target="_blank" rel="noopener noreferrer">
                           {url}
                         </a>
                       </div>
                     </li>
                     <li>
-                      <div className="label">
+                      <div className="label text-link-class cursor-pointer">
                         {translate(localeJson, "smartphone_registration_url")}
                       </div>
                       <div className="value">
@@ -178,12 +183,11 @@ export default function StaffManagementEditPage() {
                 </div>
 
                 <div
-                  className="col-12 lg:col-5 p-0 pl-2"
-                  style={{ maxHeight: "400px" }}
+                  className="col-12 lg:col-5 lg:p-0 lg:pl-2"
                 >
                   <GoogleMapComponent
-                    initialPosition={{ lat: -4.038333, lng: 21.758664 }}
-                    height={"400px"}
+                    initialPosition={{ lat: latitude, lng: longitude }}
+                    height={"450px"}
                   />
                 </div>
               </div>
@@ -202,6 +206,7 @@ export default function StaffManagementEditPage() {
                       text: translate(localeJson, "return"),
                       rounded: "true",
                       severity: "primary",
+                      onClick:()=> router.push('/admin/place')
                     }}
                     parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }}
                   />

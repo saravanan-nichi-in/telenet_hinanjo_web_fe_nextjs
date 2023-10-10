@@ -31,7 +31,7 @@ export default function AdminManagementCreateModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'admin_registration_information')}
+            {translate(localeJson, 'add_admin_management')}
         </div>
     );
 
@@ -73,7 +73,7 @@ export default function AdminManagementCreateModal(props) {
                                         <Button buttonProps={{
                                             buttonClass: "w-8rem",
                                             type: "submit",
-                                            text: translate(localeJson, 'update'),
+                                            text: translate(localeJson, 'submit'),
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
@@ -99,7 +99,7 @@ export default function AdminManagementCreateModal(props) {
                                                 value: values.fullName,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'full_name'),
+                                                text: translate(localeJson, 'name'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
@@ -113,7 +113,7 @@ export default function AdminManagementCreateModal(props) {
                                                 value: values.email,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'email'),
+                                                text: translate(localeJson, 'address_email'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.email && touched.email && errors.email} />

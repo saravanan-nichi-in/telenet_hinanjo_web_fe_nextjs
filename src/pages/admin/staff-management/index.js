@@ -17,7 +17,7 @@ export default function StaffManagementPage() {
     const [editStaffOpen, setEditStaffOpen] = useState(false);
     const [CreateStaffOpen, setCreateStaffOpen] = useState(false);
     const staffs = [
-        { field: 'No', header: 'No.', minWidth: "3rem" },
+        { field: 'No', header: 'S No', minWidth: "3rem" },
         {
             field: '氏名', header: '氏名', minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>
@@ -49,10 +49,10 @@ export default function StaffManagementPage() {
                 <div>
                     <Button buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
+                        bg: "bg-red-600 text-white",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
                         onClick: () => setDeleteStaffOpen(true)
-                    }} />
+                    }} />   
                 </div>
             ),
         },
@@ -108,18 +108,20 @@ export default function StaffManagementPage() {
                 open={editStaffOpen}
                 close={onStaffEditClose}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, 'staff_management_edit')}
+                buttonText={translate(localeJson, 'update')}
+                modalHeaderText={translate(localeJson, 'edit_staff_management')}
             />
             <StaffManagementEditModal
                 open={CreateStaffOpen}
                 close={onStaffCreateClose}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, 'staff_information_registration')}
+                buttonText={translate(localeJson, 'submit')}
+                modalHeaderText={translate(localeJson, 'add_staff_management')}
             />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header1'>{translate(localeJson, 'staff_management')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'staff_management')}</h5>
                         <hr />
                         <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
@@ -142,7 +144,7 @@ export default function StaffManagementPage() {
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'signup'),
+                                    text: translate(localeJson, 'create_staff'),
                                     onClick: () => setCreateStaffOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
@@ -155,8 +157,8 @@ export default function StaffManagementPage() {
                                         <div class="" >
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
-                                                text: translate(localeJson, 'full_name'),
-                                                inputClass: "w-17rem lg:w-22rem md:w-20rem sm:w-14rem "
+                                                text: translate(localeJson, 'name'),
+                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />
                                         </div>

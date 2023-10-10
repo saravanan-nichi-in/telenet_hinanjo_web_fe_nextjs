@@ -82,6 +82,7 @@ export default function NormalTable(props) {
             field={col.field}
             header={col.header}
             sortable={col.sortable}
+            headerStyle={col.headerStyle}
             alignHeader={alignHeader}
             style={{
               minWidth: col.minWidth && col.minWidth,

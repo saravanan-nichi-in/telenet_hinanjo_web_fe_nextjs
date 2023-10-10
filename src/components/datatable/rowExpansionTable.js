@@ -144,6 +144,7 @@ export default function RowExpansionTable(props) {
                         sortable={col.sortable}
                         expander={col.expander}
                         className={col.className}
+                        headerStyle={col.headerStyle}
                         headerClassName={col.headerClassName}
                         style={{ minWidth: col.minWidth && col.minWidth, textAlign: col.textAlign && col.textAlign, ...columnStyle }}
                         body={col.field === props.customActionsField ? col.body : col.body} />
