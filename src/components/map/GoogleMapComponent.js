@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api'
 
-const containerStyle = {
-    width: '100%',
-    height: '100vh',
-};
 
-const GoogleMapComponent = ({ initialPosition }) => {
+
+const GoogleMapComponent = ({ initialPosition, height }) => {
+    React.useEffect(() => {
+        getLocation();
+    }, []);
+    const containerStyle = {
+        width: '100%',
+        height: height || '100vh',
+    };
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
     const [currentLocation, setCurrentLocation] = useState('');
@@ -51,11 +55,12 @@ const GoogleMapComponent = ({ initialPosition }) => {
         <>
             <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={center}
-                zoom={10}
+                center={center||currentLocation}
+                zoom={1}
                 onLoad={onLoad}
                 onUnmount={onUnmount}
             >
+                 <Marker position={center||currentLocation} />
                 { /* Child components, such as markers, info windows, etc. */}
                 <></>
             </GoogleMap>

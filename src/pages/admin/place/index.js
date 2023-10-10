@@ -11,11 +11,14 @@ import {
   NormalTable,
 } from "@/components";
 import { PlaceServices } from "@/services";
+import _ from "lodash";
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const [admins, setAdmins] = useState([]);
   const [importPlaceOpen, setImportPlaceOpen] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -29,7 +32,8 @@ export default function AdminPlacePage() {
   const router = useRouter();
   const handleRowClick = (rowData) => {
     router.push({
-      pathname: `/admin/place/detail/${rowData.ID}`,
+      pathname: `/admin/place/detail`,
+      query: { id: rowData.ID },
     });
   };
   const columns = [
@@ -40,7 +44,7 @@ export default function AdminPlacePage() {
       minWidth: "20rem",
       body: (rowData) => {
         return (
-          <a onClick={() => handleRowClick(rowData)}>
+          <a className="text-link-class cursor-pointer" onClick={() => handleRowClick(rowData)}>
             {rowData.evacuation_place}
           </a>
         );
@@ -70,12 +74,13 @@ export default function AdminPlacePage() {
   const { getList, updateStatus, exportData } = PlaceServices;
 
   useEffect(() => {
+    setTableLoading(true);
     const fetchData = async () => {
       await onGetPlaceListOnMounting();
       setLoader(false);
     };
     fetchData();
-  }, [locale]);
+  }, [locale,getPayload]);
 
   /**
    * Get place list on mounting
@@ -93,30 +98,11 @@ export default function AdminPlacePage() {
     values.file && setImportPlaceOpen(false);
   };
 
-  function exportPlaceData(response) {
-    try {
-      const base64Data = response.result.file; // Replace with your base64 encoded file
-      if (base64Data.startsWith("data:csv;base64,")) {
-        // Remove the prefix
-        const base64String = base64Data.slice("data:csv;base64,".length);
-        console.log(base64String);
-        const binaryData = atob(base64String);
-        const blob = new Blob([binaryData], {
-          type: "application/octet-stream",
-        });
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "downloadedFile.csv"; // Set the desired filename
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+
 
   function fetchData(response) {
+    setLoader(true)
+
     const mappedData = response.data?.model?.list.map((item) => {
       return {
         ID: item.id,
@@ -126,14 +112,14 @@ export default function AdminPlacePage() {
         phone_number: item.tel,
         active_flg: item.active_flg,
         isActive: item.active_flg,
-        status: item.active_flg == 1 ? "place-status-cell" : "",
+        status: item.is_active? "place-status-cell" : "",
       };
     });
-
+    setTotalCount(response.data.model.total);
     // Sorting the data by ID
-    mappedData.sort((a, b) => a.ID - b.ID);
-
     setAdmins(mappedData);
+    setLoader(false)
+    setTableLoading(false);
   }
 
   /**
@@ -169,6 +155,7 @@ export default function AdminPlacePage() {
    */
   const getDataFromRenewButtonOnClick = (rowDataReceived) => {
     if (rowDataReceived) {
+      setTableLoading(true);
       let updateFullStatusPayload = {
         place_id: rowDataReceived.ID,
         active_flg: checkedValue ? 1 : 0,
@@ -176,6 +163,27 @@ export default function AdminPlacePage() {
       updateStatus(updateFullStatusPayload, onGetPlaceListOnMounting);
     }
   };
+
+  /**
+     * Pagination handler
+     * @param {*} e 
+     */
+  const onPaginationChange = async (e) => {
+    setTableLoading(true);
+    if (!_.isEmpty(e)) {
+        const newStartValue = e.first; // Replace with your desired page value
+        const newLimitValue = e.rows; // Replace with your desired limit value
+        await setPayload(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                start: newStartValue,
+                limit: newLimitValue
+            }
+        }));
+    }
+}
+
 
   const cellClassName = (data) =>
     data == "place-status-cell" ? "p-disabled surface-400" : "";
@@ -220,7 +228,7 @@ export default function AdminPlacePage() {
                       buttonClass: "evacuation_button_height",
                       text: translate(localeJson, "export"),
                       severity: "primary",
-                      onClick: () => exportData(getPayload, exportPlaceData),
+                      onClick: () => exportData(getPayload),
                     }}
                     parentClass={"mr-1 mt-1"}
                   />
@@ -238,15 +246,20 @@ export default function AdminPlacePage() {
                 </div>
                 <div className="mt-3">
                   <NormalTable
+                    lazy
+                    totalRecords={totalCount}
+                    loading={tableLoading}
                     showGridlines={"true"}
-                    rows={10}
                     paginator={"true"}
                     columnStyle={{ textAlign: "center" }}
                     value={admins}
                     columns={columns}
-                    paginatorLeft={true}
                     cellClassName={cellClassName}
                     isDataSelectable={isCellSelectable}
+                    first={getPayload.filters.start}
+                    rows={getPayload.filters.limit}
+                    paginatorLeft={true}
+                    onPageHandler={(e) => onPaginationChange(e)}
                   />
                 </div>
               </div>

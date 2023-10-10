@@ -27,7 +27,7 @@ export default function EvacueeFamilyDetail() {
                     <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
                     <hr />
                     <div className='mb-2'>
-                        <div className='flex justify-content-end' style={{ textDecoration: "underline" }}>
+                        <div className='flex justify-content-end household-number'>
                             {translate(localeJson, 'household_number')} 001-001
                         </div>
                     </div>
@@ -54,14 +54,13 @@ export default function EvacueeFamilyDetail() {
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
                     />
-                    <div className='mt-2 flex justify-content-center overflow-x-auto'>
+                    <div className='mt-2'>
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
-                            tableStyle={{ maxWidth: "10rem" }}
                             value={townAssociationData}
                             columns={townAssociationColumn}
                         />
@@ -83,7 +82,7 @@ export default function EvacueeFamilyDetail() {
                             buttonClass: "text-600 w-8rem",
                             bg: "bg-white",
                             hoverBg: "hover:surface-500 hover:text-white",
-                            text: translate(localeJson, 'return'),
+                            text: translate(localeJson, 'back'),
                             onClick: () => router.push('/admin/evacuation/'),
                         }} parentClass={"inline"} />
                     </div>

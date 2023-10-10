@@ -8,7 +8,7 @@
   
   .custom-list li {
     display: flex;
-    height: 50px;
+    height: 75px;
   }
   
   .custom-list .label,
@@ -30,11 +30,21 @@
     width: 70%;
     display: flex;
     align-items: center;
+    word-break: break-all;
+    overflow: auto;
   }
 
   .custom-list li:not(:first-child) .label,
   .custom-list li:not(:first-child) .value {
     border-top: none; /* Remove top border for labels except the first one */
+  }
+
+  .p-inputnumber-input {
+    width: inherit;
+  }
+
+  .text-link-class {
+    color: #64b0f2;
   }
 
   
