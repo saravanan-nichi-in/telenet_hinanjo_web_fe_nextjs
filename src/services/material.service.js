@@ -67,14 +67,13 @@ function _exportData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
+    console.log(payload);
     axios
-        .get("/admin/material/list", payload)
+        .post("/admin/material/list", payload)
         .then((response) => {
+            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
             }
         })
         .catch((error) => {
@@ -143,7 +142,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/material/${id}`)
+        .delete(`/admin/material/${id}`, {"id": id})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
