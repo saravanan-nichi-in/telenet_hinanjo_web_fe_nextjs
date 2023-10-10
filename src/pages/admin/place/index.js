@@ -71,7 +71,7 @@ export default function AdminPlacePage() {
   ];
 
   /* Services */
-  const { getList, updateStatus, exportData } = PlaceServices;
+  const { getList, updateStatus, exportData,importData } = PlaceServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -95,7 +95,12 @@ export default function AdminPlacePage() {
   };
 
   const onRegister = (values) => {
-    values.file && setImportPlaceOpen(false);
+    if(values.file){ 
+      const formData = new FormData()
+      formData.append('file',values.file)
+      importData(formData)
+    setImportPlaceOpen(false);
+    }
   };
 
 
