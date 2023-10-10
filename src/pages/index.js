@@ -6,7 +6,6 @@ const MainDashboard = () => {
     return (
         <div>
             <GoogleMapComponent
-                initialPosition={{ "lat": 51.505, "lng": -0.09 }}
             />
         </div>
     )

@@ -36,6 +36,7 @@ const InputNumber = (props) => {
         readOnly={readOnly}
         disabled={disabled}
         currency={currency}
+        type='text'
         {...restProps} />
     </div>
   )
