@@ -148,20 +148,21 @@ export default function StaffManagementEditPage() {
                         {translate(localeJson, "url")}
                       </div>
                       <div className="value text-link-class cursor-pointer">
-                        <a href={url} target="_blank" rel="noopener noreferrer">
+                        <a className="text-link-class cursor-pointer" href={url} target="_blank" rel="noopener noreferrer">
                           {url}
                         </a>
                       </div>
                     </li>
                     <li>
-                      <div className="label text-link-class cursor-pointer">
+                      <div className="label">
                         {translate(localeJson, "smartphone_registration_url")}
                       </div>
-                      <div className="value">
+                      <div className="value text-link-class cursor-pointer">
                         <a
                           href={registerUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="text-link-class cursor-pointer"
                         >
                           {registerUrl}
                         </a>
