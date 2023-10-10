@@ -78,7 +78,7 @@ const evacueeFamilyDetailRowExpansionColumns = [
     { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
     { field: "紐付コード", header: "紐付コード", minWidth: "7rem" },
     { field: "備考", header: "備考", minWidth: "7rem" },
-    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem",headerStyle:{color:"red"} },
+    { field: "現在の滞在場所 *", header: "現在の滞在場所 *", minWidth: "9rem"},
     { field: "作成日", header: "作成日", minWidth: "10rem" },
     { field: "更新日", header: "更新日", minWidth: "10rem" },
     { field: "住所", header: "住所", minWidth: "10rem" },
@@ -115,7 +115,7 @@ const familyDetailData1 = [
     }
 ];
 const townAssociationColumn = [
-    { field: '町内会名 *', header: '町内会名 *', minWidth: "10rem",headerStyle:{color:"red"} },
+    { field: '町内会名 *', header: '町内会名 *', minWidth: "10rem"},
 ];
 
 const townAssociationData = [
