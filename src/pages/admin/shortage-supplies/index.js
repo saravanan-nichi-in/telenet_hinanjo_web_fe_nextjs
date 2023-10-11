@@ -20,7 +20,7 @@ function ShortageSupplies() {
     const [selectedRow, setSelectedRow] = useState(null);
 
     /* Services */
-    const { calExport, getList } = ShortageSuppliesServices;
+    const { callExport, getList } = ShortageSuppliesServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -124,7 +124,7 @@ function ShortageSupplies() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <hr />
                         <div className="col-12 custom-table">
                             <div className="flex justify-content-end ">
@@ -133,7 +133,7 @@ function ShortageSupplies() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    onClick: () => calExport()
+                                    onClick: () => callExport()
                                 }} parentClass={"mb-3"} />
                             </div>
                             <NormalTable
