@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
