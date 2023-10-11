@@ -68,7 +68,7 @@ function ShortageSupplies() {
                                     </div>
                                 )}
                             </div>
-                        ), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'
+                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'center'
                     };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
@@ -77,9 +77,7 @@ function ShortageSupplies() {
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
-                    evacuation_place: obj.note || obj.comment ?
-                        <div className="text-higlight clickable-row" onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name}</div> :
-                        locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name,
+                    evacuation_place: <div className={obj.note || obj.comment ? "text-higlight clickable-row" : "clickable-row"} onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name}</div>
                 }
                 dynamicColumns.map((objSub, i) => {
                     preparedObj[objSub.id] = `${obj.supply[objSub.id]}`;
