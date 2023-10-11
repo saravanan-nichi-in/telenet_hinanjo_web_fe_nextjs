@@ -1,14 +1,11 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate, getTotalCountFromArray } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal } from '@/components';
-import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/constant';
 import { ShortageSuppliesServices } from '@/services';
-import { NormalTable, DeleteModal } from '@/components';
+import { NormalTable } from '@/components';
 
 function ShortageSupplies() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -68,7 +65,7 @@ function ShortageSupplies() {
                                     </div>
                                 )}
                             </div>
-                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'center'
+                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left'
                     };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
