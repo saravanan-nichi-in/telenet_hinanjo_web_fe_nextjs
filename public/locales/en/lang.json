@@ -96,7 +96,10 @@
       "opened_date_time": "OpenedDateTime",
       "closed_date_time": "ClosedDateTime",
       "detail_staff_management": "Detail Staff Management",
-      "shortage_total": "Shortage Total"
+      "shortage_total": "Shortage Total",
+      "once_deleted_cannot_restore":"Once deleted, the data cannot be restored.",
+      "do_you_want_to_delete":"Do you want to delete it?",
+      "show_expiring_products": "Show expiring products"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -113,15 +116,16 @@
       "select_csv_format": "Please select a CSV format file."
     },
     "buttons": {
-      "import": "import",
+      "import": "Import",
       "export": "Export",
-      "search": "search",
-      "signup": "signup",
+      "search": "Search",
+      "signup": "Signup",
       "cancel": "Cancel",
       "update": "Update",
       "registration": "Save",
-      "return": "return",
+      "return": "Return",
       "delete": "Delete",
+      "ok":"Ok",
       "edit": "Edit",
       "create": "Create",
       "back": "Back",

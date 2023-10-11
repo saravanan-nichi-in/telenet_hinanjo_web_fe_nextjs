@@ -21,10 +21,10 @@ export default function StaffManagementEditModal(props) {
             .required(translate(localeJson, 'staff_name_required')),
         phoneNumber: Yup.string()
             .required(translate(localeJson, 'phone_no_required'))
-            .min(10, translate(localeJson, 'phone_min10_required    ')),
+            .min(10, translate(localeJson, 'phone_min10_required')),
     });
 
-    const { open, close, register,modalHeaderText,buttonText } = props && props;
+    const { open, close, register, modalHeaderText, buttonText } = props && props;
 
     const header = (
         <div className="custom-modal">
@@ -39,7 +39,7 @@ export default function StaffManagementEditModal(props) {
                 validationSchema={schema}
                 initialValues={{ email: "", phoneNumber: "", fullName: "" }}
                 onSubmit={() => {
-                    router.push("/admin/admin-management")
+                    router.push("/admin/staff-management")
                 }}
             >
                 {({
@@ -70,7 +70,7 @@ export default function StaffManagementEditModal(props) {
                                         <Button buttonProps={{
                                             buttonClass: "w-8rem",
                                             type: "submit",
-                                            text:buttonText,
+                                            text: buttonText,
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();

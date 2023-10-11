@@ -57,7 +57,7 @@
       "history_login_staff_management": "ログイン履歴",
       "confirmation_information": "確認情報",
       "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
-      "display_in_registration_screen": "避難者登録画面表示",
+      "show_expiring_products": "期限切れの近い商品のみ表示",
       "evacuation_location": "避難所",
       "evacuation_location_furigana": "避難所 (フリガナ)",
       "evacuation_location_english": "避難所 (英語)",
@@ -95,8 +95,13 @@
       "availability_status": "満空状況",
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
-      "detail_staff_management": "スタッフ詳細情報",
-      "shortage_total": "不足合計"
+      "detail_staff_management":"スタッフ詳細情報",
+      "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
+      "shortage_total": "不足合計",
+      "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
+      "show_expiring_products": "期限切れの近い商品のみ表示"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -121,6 +126,7 @@
       "update": "更新",
       "registration": "登録",
       "delete": "削除",
+      "ok":"削除",
       "edit": "編集",
       "create": "作成する",
       "back": "戻る",

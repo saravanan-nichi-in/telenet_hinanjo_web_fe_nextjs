@@ -52,7 +52,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                 validationSchema={schema}
                 initialValues={{ email: "" }}
                 onSubmit={() => {
-                    router.push("/admin/history/place")
+                    router.push("/admin/stockpile/summary")
                 }}
             >
                 {({
@@ -82,7 +82,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",
                                         type: "submit",
-                                        text: translate(localeJson, 'registration'),
+                                        text: translate(localeJson, 'update'),
                                         severity: "primary",
                                         onClick: () => {
                                             register({
