@@ -1,30 +1,51 @@
-import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
-import { classNames } from 'primereact/utils';
+import React, { forwardRef, useContext, useImperativeHandle, useRef,useState } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
-import Link from 'next/link';
 
 import { LayoutContext } from './context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
 import { DropdownSelect, LanguageDropdown } from '@/components';
 import { MdOutlineResetTv } from 'react-icons/md';
+import { ChangePasswordModal } from '@/components/modal';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
+    const [changePasswordOpen, setChangePasswordOpen] = useState(false);
     const { localeJson } = useContext(LayoutContext);
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
+
+     const onResetSuccess = (values) => {
+        if (AuthenticationAuthorizationService.adminValue) {
+            localStorage.setItem('admin', JSON.stringify(values.data));
+            dispatch(setAdminValue({
+                admin: values.data
+            }));
+            admin.next(values.data); 
+            router.push("/admin/dashboard");
+        }
+    };
 
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
         topbarmenu: topbarmenuRef.current,
         topbarmenubutton: topbarmenubuttonRef.current
     }));
+
+    const onChangePasswordClose = () => {
+        setChangePasswordOpen(!changePasswordOpen);
+    };
+
+    const onRegister = (values) => {
+       
+        setChangePasswordOpen(false);
+        console.log(values);
+    };
 
     const selectedCountryTemplate = (option, props) => {
         if (option) {
@@ -68,8 +89,8 @@ const AppTopbar = forwardRef((props, ref) => {
       
         {
             label: (
-                <div>
-                    <Link href="#">{translate(localeJson,'change_password')}</Link>
+                <div onClick={() => setChangePasswordOpen(true)}>
+                    <a >{translate(localeJson,'change_password')}</a>
                 </div>
             ),
             icon: <MdOutlineResetTv style={{fontSize:"14px"}}/>,
@@ -91,6 +112,13 @@ const AppTopbar = forwardRef((props, ref) => {
     ];
 
     return (
+        <React.Fragment>
+            <ChangePasswordModal
+             open={changePasswordOpen}
+             close={onChangePasswordClose}
+             register={onRegister}
+             onResetSuccess={onResetSuccess}
+            />
         <div className="layout-topbar">
             <div className="logo-details">
                 <div className='logo-view'>
@@ -116,6 +144,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 </div>
             </div>
         </div>
+        </React.Fragment>
     );
 });
 AppTopbar.displayName = "AppTopbar"

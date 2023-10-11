@@ -53,7 +53,7 @@ export default function EmailSettings(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "" }}
+                initialValues={{ email: "sandeepkaniyar08@gmail.com" }}
                 onSubmit={() => {
                     router.push("/admin/history/place")
                 }}
@@ -111,6 +111,7 @@ export default function EmailSettings(props) {
                                                     row: 5,
                                                     cols: 30,
                                                     name: 'email',
+                                                    value:values.email,
                                                     text: translate(localeJson, 'notification_email_id'),
                                                     spanClass: "p-error",
                                                     spanText: "*",

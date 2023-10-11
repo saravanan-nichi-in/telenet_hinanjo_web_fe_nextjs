@@ -13,3 +13,4 @@ export { default as AdminManagementImportModal } from './adminManagementImportMo
 export { default as AdminManagementCreateModal } from './adminManagementCreateModal'
 export { default as StaffManagementDetailModal } from './staffManagementDetailModal'
 export { default as StaffManagementEditModal } from './StaffManagementEditModal'
+export {default as ChangePasswordModal} from './changePasswordModal'
