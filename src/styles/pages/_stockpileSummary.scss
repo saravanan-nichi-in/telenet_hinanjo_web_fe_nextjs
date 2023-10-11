@@ -14,23 +14,10 @@
 .summary_flex {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     gap: 0.5rem;
 }
-.input-switch-summary {
-    .p-inputswitch {
-    height: 1rem;
-    }
-    .p-inputswitch-slider {
-        height: 20px;
-        width: 40px;
-    }
-
-    .p-inputswitch .p-inputswitch-slider:before {
-        width: 14px;
-        height: 16px;
-        top: 1px;
-    
-    }
+.text-link a {
+    color: #64b0f2;
 }

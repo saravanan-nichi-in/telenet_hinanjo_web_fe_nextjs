@@ -32,11 +32,11 @@ function AdminDashboard() {
         },
         search: "",
     });
+    const [tableLoading, setTableLoading] = useState(false);
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [frozenArray, setFrozenArray] = useState([]);
-    const [tableLoading, setTableLoading] = useState(false);
 
     /* Services */
     const { getList, updateFullStatus } = DashboardServices;
@@ -60,18 +60,18 @@ function AdminDashboard() {
 
     /**
      * Function will get data & update dashboard list
-     * @param {*} data 
+     * @param {*} response 
     */
     const onGetDashboardList = (response) => {
-        var preparedList = [];
         var additionalColumnsKeys = [];
         var additionalColumnsArrayWithOldData = [...columnsData];
+        var preparedList = [];
         var insertIndex = 10;
         var trimPeopleLength = locale == "ja" ? 1 : 6;
         var trimHouseholdLength = locale == "ja" ? 2 : 9;
         if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
-            const data = response.data.list;
             const dataOfFirstObj = response.data.list[0].specialCare
+            const data = response.data.list;
             // Prepare table dynamic columns
             if (dataOfFirstObj) {
                 dataOfFirstObj.map((obj, i) => {

@@ -58,6 +58,7 @@ const InputLeftRightGroup = (props) => {
             readOnly={readOnly}
             maxLength={maxLength}
             minLength={minLength}
+            required={required}
             {...restProps}
           />
         </>

@@ -1,4 +1,4 @@
-import React,{ useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,16 +8,15 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
-import { SelectFloatLabel } from "../dropdown";
+import { InputSelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { TextAreaFloatLabel } from "../input";
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 
 export default function EmailSettings(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
-    const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
-    const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
+    const [transmissionInterval, setTransmissionInterval] = useState(null);
+    const [outputTargetArea, setOutputTargetArea] = useState(null);
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
@@ -29,7 +28,7 @@ export default function EmailSettings(props) {
     /**
      * Destructing
     */
-    const { open, close, register } = props && props;
+    const { open, close, register, intervalFrequency, prefectureList } = props && props;
 
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
@@ -73,6 +72,7 @@ export default function EmailSettings(props) {
                             header={header}
                             visible={open}
                             draggable={false}
+                            blockScroll={true}
                             onHide={() => close()}
                             footer={
                                 <div className="text-center">
@@ -92,7 +92,8 @@ export default function EmailSettings(props) {
                                             register({
                                                 transmissionInterval,
                                                 outputTargetArea,
-                                                email: values.email
+                                                email: values.email,
+                                                errors: errors
                                             });
                                             handleSubmit();
                                         },
@@ -104,7 +105,7 @@ export default function EmailSettings(props) {
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                            <div className='mt-5 mb-5'>
+                                            <div className='mt-3 mb-5'>
                                                 <TextAreaFloatLabel textAreaFloatLabelProps={{
                                                     textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                                                     row: 5,
@@ -119,23 +120,22 @@ export default function EmailSettings(props) {
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className='mt-5 '>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "mailFrequency",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: transmissionInterval,
-                                                    options: MailSettingsOption1,
+                                                    options: intervalFrequency,
                                                     optionLabel: "name",
                                                     onChange: (e) => setTransmissionInterval(e.value),
                                                     text: translate(localeJson, "transmission_interval"),
-
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-5'>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "prefecture",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: outputTargetArea,
-                                                    options: MailSettingsOption2,
+                                                    options: prefectureList,
                                                     optionLabel: "name",
                                                     onChange: (e) => setOutputTargetArea(e.value),
                                                     text: translate(localeJson, "output_target_area"),
@@ -143,7 +143,7 @@ export default function EmailSettings(props) {
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
-                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} />
+                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} style = {{fontSize: "13px"}} />
                                             </div>
                                         </div>
                                     </form>

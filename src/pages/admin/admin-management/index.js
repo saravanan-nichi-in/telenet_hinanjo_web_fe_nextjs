@@ -69,16 +69,16 @@ export default function AdminManagementPage() {
     const Listcolumn = [
         { field: 'No.', header: 'S No', minWidth: "3rem" },
         {
-            field: '氏名', header: "氏名", minWidth: "15rem", body: (rowData) => (
+            field: '氏名', header:translate(localeJson, 'name'), minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setAdminDetailsOpen(true)}>
                     {rowData['氏名']}
                 </a>
             )
         },
-        { field: 'メール', header: 'メール' },
+        { field: 'メール', header: translate(localeJson, 'address_email') },
         {
             field: 'actions',
-            header: '編集',
+            header: translate(localeJson, 'edit'),
             textAlign: "center",
             body: (rowData) => (
                 <div>
@@ -92,7 +92,7 @@ export default function AdminManagementPage() {
             ),
         }, {
             field: 'actions',
-            header: '削除',
+            header: translate(localeJson, 'delete'),
             textAlign: "center",
             body: (rowData) => (
                 <div>

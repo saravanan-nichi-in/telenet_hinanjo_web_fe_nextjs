@@ -27,7 +27,8 @@
       "setting_systems": "環境設定"
     },
     "pages": {
-      "Other_shortage_supplies": "その他不足物資",
+      "Other_shortage_items": "その他不足物資",
+      "Other_shared_matters": "その他共有事項",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
       "edit_admin_management": "管理者詳細情報",
@@ -57,7 +58,7 @@
       "history_login_staff_management": "ログイン履歴",
       "confirmation_information": "確認情報",
       "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
-      "display_in_registration_screen": "避難者登録画面表示",
+      "show_expiring_products": "期限切れの近い商品のみ表示",
       "evacuation_location": "避難所",
       "evacuation_location_furigana": "避難所 (フリガナ)",
       "evacuation_location_english": "避難所 (英語)",
@@ -82,7 +83,36 @@
       "evacuation_possible_people": "避難可能人数",
       "ID": "ID",
       "edit_shelter": "避難所編集",
-      "detail_staff_management":"スタッフ詳細情報"
+      "si_no": "番号",
+      "report_date_time": "報告日時",
+      "prefecture": "地区",
+      "place_name": "避難所名",
+      "place_name_furigana": "避難所名 (フリガナ)",
+      "location_latitude": "所在地（緯度）",
+      "location_longitude": "所在地（経度）",
+      "place_public_availability": "外部公開",
+      "opened_status": "開設状況",
+      "evacuees_count": "避難者数",
+      "availability_status": "満空状況",
+      "opened_date_time": "開設日時",
+      "closed_date_time": "閉鎖日時",
+      "detail_staff_management": "スタッフ詳細情報",
+      "family_count": "",
+      "family_code": "",
+      "representative": "代表者",
+      "refugee_name": "氏名 (フリガナ)",
+      "name": "氏名 (漢字)",
+      "gender": "性別",
+      "dob": "生年月日",
+      "age": "年齢",
+      "age_month": "年齢_月",
+      "special_care_name": "要配慮者番号",
+      "connecting_code": "紐付コード",
+      "out_date": "退所日時",
+      "current_location": "現在の滞在場所",
+      "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
+      "shortage_total": "不足合計"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -95,8 +125,8 @@
       "notification_email_id_required": "通知先メールIDは必須です",
       "format_notification": "通知先メールIDの形式が正しくありません。",
       "is_required": "が必要です。",
-      "file_csv_required":"CSVファイルを選択してください。",
-      "select_csv_format":"CSV形式ファイルを選択してください。"
+      "file_csv_required": "CSVファイルを選択してください。",
+      "select_csv_format": "CSV形式ファイルを選択してください。"
     },
     "buttons": {
       "import": "インポート",
@@ -107,11 +137,13 @@
       "update": "更新",
       "registration": "登録",
       "delete": "削除",
+      "ok": "削除",
       "edit": "編集",
-      "back":"戻る",
-      "submit":"登録",
-      "create_admin":"新規登録",
-      "create_staff":"新規登録"
+      "create": "作成する",
+      "back": "戻る",
+      "submit": "登録",
+      "create_admin": "新規登録",
+      "create_staff": "新規登録"
     },
     "footer": {},
     "form": {
@@ -148,7 +180,8 @@
       "evacuation_location_aggregation": "(避難している場所ごとの集計)",
       "notification_settings": "通知設定",
       "people": "人",
-      "household_title": "世帯"
+      "household_title": "世帯",
+      "report_date_time": "報告日時"
     }
   },
   "staff": {
