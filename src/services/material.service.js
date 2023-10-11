@@ -23,9 +23,15 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                if(response?.data?.success) {
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
             }
         })
         .catch((error) => {
@@ -46,8 +52,8 @@ function _exportData(payload) {
     axios
         .post("/admin/material/export", payload)
         .then((response) => {
-                if (response && response.data && response.data.result.file) {
-                    downloadBase64File(response.data.result.file, "material.csv");
+                if (response && response.data && response.data.result.filePath) {
+                    downloadBase64File(response.data.result.filePath, "material.csv");
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
@@ -143,7 +149,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/material/${id}`, {"id": id})
+        .delete(`/admin/material/${id}`, {data: {"id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

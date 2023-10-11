@@ -23,9 +23,7 @@ export default function MaterialCreateEditModal(props) {
     const router = useRouter();
     const schema = Yup.object().shape({
         name: Yup.string()
-            .required(translate(localeJson, 'supplies_necessary')),
-            unit: Yup.string()
-            .required(translate(localeJson, 'supplies_necessary'))    
+            .required(translate(localeJson, 'supplies_necessary')), 
     });
     /**
      * Destructing
