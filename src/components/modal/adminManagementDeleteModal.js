@@ -10,7 +10,7 @@ export default function AdminManagementDeleteModal(props) {
     const { open, close } = props && props;
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'confirmation')}
+            {translate(localeJson, 'confirmation_information')}
         </div>
     );
 
@@ -34,7 +34,7 @@ export default function AdminManagementDeleteModal(props) {
                         <Button buttonProps={{
                             buttonClass: "w-8rem",
                             type: "submit",
-                            text: translate(localeJson, 'delete'),
+                            text: translate(localeJson, 'ok'),
                             severity: "danger",
                             onClick: () => close("confirm"),
                         }} parentClass={"inline"} />
@@ -43,8 +43,8 @@ export default function AdminManagementDeleteModal(props) {
             >
                 <div className={`text-center modal-content`}>
                     <div>
-                        <p> 一度削除したデータは、元に戻せません。</p>
-                        <p>  削除してもよろしいでしょうか？</p>
+                        <p>{translate(localeJson, 'once_deleted_cannot_restore')}</p>
+                        <p> {translate(localeJson, 'do_you_want_to_delete')}</p>
                     </div>
                 </div>
             </Dialog>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AiFillEye } from 'react-icons/ai';
 
-import { RowExpansionTable, Button, InputSwitch } from '@/components';
+import { RowExpansionTable, Button, InputSwitch, Linker } from '@/components';
 import { StockpileSummaryService } from '@/helper/adminStockpileSummaryService';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -15,12 +15,15 @@ function AdminStockpileSummary() {
     const [imageModal, setImageModal] = useState(false);
     const [stockpileSummary, setStockpileSummary] = useState([]);
     const [shelterSelect, setShelterSelect] = useState(summaryShelterOptions[0]);
+    const [showExpiryProducts, setShowExpiryProducts] = useState(false);
     const stockPilerMainRow = [
         {
             field: "避難所", header: "避難所", minWidth: "10rem", textAlign: "left", body: (rowData) => (
-                <a className='text-decoration' style={{ color: "grren" }} onClick={() => setEmailModal(true)}>
+                <div className='text-link'>
+                    <a className='text-decoration' style={{ color: "grren" }} onClick={() => setEmailModal(true)}>
                     {rowData['避難所']}
                 </a>
+                </div>
             )
         },
         { field: "通知先", header: "通知先" },
@@ -29,22 +32,7 @@ function AdminStockpileSummary() {
         { field: "種別", header: "種別" },
         { field: "備蓄品名", header: "備蓄品名" },
         { field: "数量", header: "数量" },
-        {
-            field: 'actions',
-            header: '画像',
-            textAlign: "center",
-            minWidth: "5rem",
-            body: (rowData) => (
-                <div>
-                    <AiFillEye style={{ fontSize: '20px' }} onClick={() => setImageModal(true)} />
-                </div>
-            ),
-        },
-    ]
-    const innerColumn1 = [
-        { field: "種別", header: "種別" },
-        { field: "備蓄品名", header: "備蓄品名" },
-        { field: "数量", header: "有効期限" },
+        { field: "有効期限", header: "有効期限" },
         {
             field: 'actions',
             header: '画像',
@@ -106,11 +94,12 @@ function AdminStockpileSummary() {
                         <hr />
                         <div >
                             <div class="mb-3" >
-                                <div class="summary_flex input-switch-summary w-13rem">
-                                    {translate(localeJson, 'display_in_registration_screen')}<InputSwitch inputSwitchProps={{
-                                        checked: false,
+                                <div class="summary_flex">
+                                    {translate(localeJson, 'show_expiring_products')}<InputSwitch inputSwitchProps={{
+                                        checked: showExpiryProducts,
+                                        onChange: (e) => setShowExpiryProducts(e.value)
                                     }}
-                                    />
+                                        parentClass={"custom-switch"} />
                                 </div>
                                 <div>
                                     <form>
@@ -151,7 +140,7 @@ function AdminStockpileSummary() {
                             </div>
                         </div>
                         <div>
-                            <RowExpansionTable rows={10} columnStyle={{ textAlign: 'left' }} paginator="true" paginatorLeft={true} customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn1={innerColumn1} innerColumn={stockPileRowExpansionColumn} outerColumn={stockPilerMainRow} rowExpansionField1="orders1" rowExpansionField="orders" />
+                            <RowExpansionTable rows={10} columnStyle={{ textAlign: 'left' }} paginator="true" paginatorLeft={true} customRowExpansionActionsField="actions" value={stockpileSummary} innerColumn={stockPileRowExpansionColumn} outerColumn={stockPilerMainRow} rowExpansionField1="orders1" rowExpansionField="orders" />
                         </div>
                     </div>
                 </div>

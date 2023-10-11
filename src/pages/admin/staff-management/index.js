@@ -19,17 +19,17 @@ export default function StaffManagementPage() {
     const staffs = [
         { field: 'No', header: 'S No', minWidth: "3rem" },
         {
-            field: '氏名', header: '氏名', minWidth: "15rem", body: (rowData) => (
+            field: '氏名', header:translate(localeJson, 'name'), minWidth: "15rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>
                     {rowData['氏名']}
                 </a>
             )
         },
-        { field: 'メール', header: 'メール' },
-        { field: '電話番号', header: '電話番号' },
+        { field: 'メール', header: translate(localeJson, 'address_email') },
+        { field: '電話番号', header:translate(localeJson, 'tel') },
         {
             field: 'actions',
-            header: '編集',
+            header: translate(localeJson, 'edit'),
             textAlign: "center",
             body: (rowData) => (
                 <div>
@@ -43,7 +43,7 @@ export default function StaffManagementPage() {
             ),
         }, {
             field: 'actions',
-            header: '削除',
+            header: translate(localeJson, 'delete'),
             textAlign: "center",
             body: (rowData) => (
                 <div>

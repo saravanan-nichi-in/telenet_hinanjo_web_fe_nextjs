@@ -5,4 +5,8 @@
         font-size: $commonFontSize;
         border-radius: $commonRadius;
     }
+    .p-disabled, .p-component:disabled {
+        opacity: 1;
+        background-color: #f8f9fa;
+    }
 }
