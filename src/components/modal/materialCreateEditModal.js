@@ -45,11 +45,19 @@ export default function MaterialCreateEditModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ name: "", unit: "" }}
+                enableReinitialize={true} 
+                initialValues={props.currentEditObj}
                 onSubmit={(values) => {
-                    MaterialService.create(values, ()=> {
-                        close();
-                    })
+                    if (props.registerModalAction=="create") {
+                        MaterialService.create(values, ()=> {
+                            close();
+                        })
+                    } else if(props.registerModalAction=="edit") {
+                        MaterialService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
+                        ()=> {
+                            close();
+                        })
+                    }
                     router.push("/admin/material");
                     return false;
                 }}
@@ -101,7 +109,7 @@ export default function MaterialCreateEditModal(props) {
                                                     </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "name",
-                                                        // value: values.name,
+                                                        value: values.name,
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
@@ -115,6 +123,7 @@ export default function MaterialCreateEditModal(props) {
                                                     </div>
                                                     <InputIcon inputIconProps={{
                                                         name: 'unit',
+                                                        value: values.unit,
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,

@@ -61,7 +61,11 @@ export default function AdminMaterialPage() {
                 text: translate(localeJson, 'edit'), buttonClass: "text-primary",
                 bg: "bg-white",
                 hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => openDeleteDialog(obj.id)
+                onClick: () => {
+                    setRegisterModalAction("edit")
+                    setCurrentEditObj(obj)
+                    setEmailSettingsOpen(true)
+                },
             }} />
              </div>
         );
@@ -209,6 +213,8 @@ export default function AdminMaterialPage() {
         }
     }
 
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [currentEditObj, setCurrentEditObj] = useState('');
 
     return (
         <>
@@ -216,6 +222,8 @@ export default function AdminMaterialPage() {
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
                 register={onRegisterImport}
+                registerModalAction={registerModalAction}
+                currentEditObj={{...currentEditObj}}
             />
              <AdminManagementDeleteModal
                         open={deleteStaffOpen}
@@ -267,7 +275,11 @@ export default function AdminMaterialPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'create'),
-                                    onClick: () => setEmailSettingsOpen(true),
+                                    onClick: () => {
+                                        setRegisterModalAction("create")
+                                        setCurrentEditObj({name:"", unit: ""})
+                                        setEmailSettingsOpen(true)
+                                    },
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
