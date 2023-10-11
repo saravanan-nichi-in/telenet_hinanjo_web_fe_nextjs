@@ -82,6 +82,19 @@
       "evacuation_possible_people": "避難可能人数",
       "ID": "ID",
       "edit_shelter": "避難所編集",
+      "si_no": "番号",
+      "report_date_time": "報告日時",
+      "prefecture": "地区",
+      "place_name": "避難所名",
+      "place_name_furigana": "避難所名 (フリガナ)",
+      "location_latitude": "所在地（緯度）",
+      "location_longitude": "所在地（経度）",
+      "place_public_availability": "外部公開",
+      "opened_status": "開設状況",
+      "evacuees_count": "避難者数",
+      "availability_status": "満空状況",
+      "opened_date_time": "開設日時",
+      "closed_date_time": "閉鎖日時",
       "detail_staff_management":"スタッフ詳細情報"
     },
     "validation": {
@@ -148,7 +161,8 @@
       "evacuation_location_aggregation": "(避難している場所ごとの集計)",
       "notification_settings": "通知設定",
       "people": "人",
-      "household_title": "世帯"
+      "household_title": "世帯",
+      "report_date_time": "報告日時"
     }
   },
   "staff": {
