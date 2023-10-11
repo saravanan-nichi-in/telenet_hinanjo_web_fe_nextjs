@@ -27,7 +27,8 @@
       "setting_systems": "環境設定"
     },
     "pages": {
-      "Other_shortage_supplies": "その他不足物資",
+      "Other_shortage_items": "その他不足物資",
+      "Other_shared_matters": "その他共有事項",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
       "edit_admin_management": "管理者詳細情報",
@@ -95,7 +96,7 @@
       "availability_status": "満空状況",
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
-      "detail_staff_management":"スタッフ詳細情報",
+      "detail_staff_management": "スタッフ詳細情報",
       "family_count": "",
       "family_code": "",
       "representative": "代表者",
@@ -109,8 +110,8 @@
       "connecting_code": "紐付コード",
       "out_date": "退所日時",
       "current_location": "現在の滞在場所",
-      "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
-      "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
+      "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
       "shortage_total": "不足合計"
     },
     "validation": {
@@ -136,7 +137,7 @@
       "update": "更新",
       "registration": "登録",
       "delete": "削除",
-      "ok":"削除",
+      "ok": "削除",
       "edit": "編集",
       "create": "作成する",
       "back": "戻る",
