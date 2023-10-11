@@ -73,6 +73,10 @@ export default function ChangePasswordModal(props) {
                     preparedPayload['query'] = router.query;
                     console.log(router.query);
                     change('admin', preparedPayload, onResetSuccess);
+                    close();
+                    values.password=""
+                    values.password_new=""
+                    values.password_confirm=""
                 }}
             >
                 {({
@@ -108,11 +112,6 @@ export default function ChangePasswordModal(props) {
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
-                                                register({
-                                                    password: values.password,
-                                                    password_new: values.password_new,
-                                                    password_confirm: values.password_confirm
-                                                });
                                             },
                                         }} parentClass={"inline"} />
                                     </div>
