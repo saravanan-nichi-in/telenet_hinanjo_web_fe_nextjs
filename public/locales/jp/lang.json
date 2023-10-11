@@ -112,7 +112,11 @@
       "current_location": "現在の滞在場所",
       "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
       "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
-      "shortage_total": "不足合計"
+      "shortage_total": "不足合計",
+      "update_isActive_status":"避難所の運営状態を変更しますか？",
+      "s_no":"S No",
+      "place_details":"避難所の詳細",
+      "place_csv_import": "避難所マスタCSVインポート"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -143,7 +147,8 @@
       "back": "戻る",
       "submit": "登録",
       "create_admin": "新規登録",
-      "create_staff": "新規登録"
+      "create_staff": "新規登録",
+      "create_place":"新規登録"
     },
     "footer": {},
     "form": {

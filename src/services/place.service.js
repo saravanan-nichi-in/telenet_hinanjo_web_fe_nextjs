@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File } from '@/helper';
+import { downloadBase64File,getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
@@ -46,7 +46,8 @@ function _exportData(payload, callBackFun) {
     .post("/admin/place/export", payload)
     .then((response) => {
       if (response && response.data && response.data.result.file) {
-          downloadBase64File(response.data.result.file, "place.csv");
+          let date =getYYYYMMDDHHSSSSDateTimeFormat(new Date())
+          downloadBase64File(response.data.result.file, `palce_${date}.csv`);
           toast.success(response?.data?.message, {
               position: "top-right",
           });

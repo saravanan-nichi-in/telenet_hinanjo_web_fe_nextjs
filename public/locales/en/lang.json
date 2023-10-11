@@ -113,7 +113,11 @@
       "shortage_total": "Shortage Total",
       "once_deleted_cannot_restore": "Once deleted, the data cannot be restored.",
       "do_you_want_to_delete": "Do you want to delete it?",
-      "show_expiring_products": "Show expiring products"
+      "show_expiring_products": "Show expiring products",
+      "update_isActive_status":"Do you want to change status of the evacuation center?",
+      "s_no":"S No",
+      "place_details":"Edit Shelter",
+      "place_csv_import": "Import Place Data"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -145,7 +149,8 @@
       "back": "Back",
       "submit": "Submit",
       "create_admin": "Create Admin",
-      "create_staff": "Create Staff"
+      "create_staff": "Create Staff",
+      "create_place":"Create Place"
     },
     "footer": {},
     "form": {

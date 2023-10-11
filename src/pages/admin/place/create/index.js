@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -20,6 +20,8 @@ import {
 export default function PlaceCreatePage() {
   const { localeJson } = useContext(LayoutContext);
   const router = useRouter();
+  const [currentLattitude, setCurrentlatitude] = useState(0)
+  const [currentLongitude, setCurrentlongitude] = useState(0)
   const schema = Yup.object().shape({
     capacity: Yup.string()
       .required(translate(localeJson, "capacity") + translate(localeJson, "is_required")),
@@ -41,6 +43,47 @@ export default function PlaceCreatePage() {
     postal_code1: Yup.number(translate(localeJson, "address") + translate(localeJson, "is_required")),
     postal_code2: Yup.number(translate(localeJson, "address") + translate(localeJson, "is_required"))
   });
+
+  useEffect(() => {
+    getLocation()
+  }, [])
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentlatitude(latitude)
+          setCurrentlongitude(longitude)
+        },
+        (error) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      console.log('Geolocation is not supported by your browser.');
+    }
+  };
+
+  // map search
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+
+  const handleSearch = () => {
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode({ address: searchQuery }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const { location } = results[0].geometry;
+        setSearchResult({
+          lat: location.lat(),
+          lng: location.lng(),
+        });
+      } else {
+        alert('Location not found');
+      }
+    });
+  };
 
   const initialValues = {
     fullName: "", evacuationLocation: "", evacuationLocationFurigana: "",
@@ -525,9 +568,20 @@ export default function PlaceCreatePage() {
                         style={{ maxHeight: "300px" }}
                       >
                         <GoogleMapComponent
-                          initialPosition={{ lat: -4.038333, lng: 21.758664 }}
-                          height={"350px"}
+                          height={"450px"}
+                          search={true}
+                          initialPosition={{ lat: currentLattitude, lng: currentLongitude }}
+                          searchResult={searchResult}
                         />
+                        <div className="mt-5">
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search for a location"
+                          />
+                          <button onClick={handleSearch}>Search</button>
+                        </div>
                       </div>
                     </div>
                     <div
