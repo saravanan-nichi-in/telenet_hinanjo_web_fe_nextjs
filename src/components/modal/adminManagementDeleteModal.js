@@ -36,7 +36,7 @@ export default function AdminManagementDeleteModal(props) {
                             type: "submit",
                             text: translate(localeJson, 'delete'),
                             severity: "danger",
-                            onClick: () => close(),
+                            onClick: () => close("confirm"),
                         }} parentClass={"inline"} />
                     </div>
                 }
