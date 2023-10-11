@@ -8,7 +8,8 @@ export const HistoryServices = {
     getList: _getList,
     getPlaceDropdownList: _getPlaceDropdownList,
     exportPlaceHistoryCSVList: _exportPlaceHistoryCSVList,
-    registerEmailConfiguration: _registerEmailConfiguration
+    registerEmailConfiguration: _registerEmailConfiguration,
+    getPrefectureList: _getPrefectureList
 };
 
 /**
@@ -76,6 +77,24 @@ function _registerEmailConfiguration(payload, callBackFun) {
  */
 function _getPlaceDropdownList(payload, callBackFun) {
     axios.get('/admin/place/history/dropdown/list', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error('Error fetching data:', error);
+        });
+}
+
+/**
+ * Get Prefecture Dropdown List
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getPrefectureList(payload, callBackFun) {
+    axios.get('/admin/place/history/prefecture', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

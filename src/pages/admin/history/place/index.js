@@ -22,6 +22,7 @@ export default function AdminHistoryPlacePage() {
     const [historyPlaceList, setHistoryPlaceList] = useState([]);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [historyPlaceDropdown, setHistoryPlaceDropdown] = useState([]);
+    const [prefectureListDropdown, setprefectureListDropdown] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
@@ -57,7 +58,7 @@ export default function AdminHistoryPlacePage() {
     ];
 
     /* Services */
-    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration } = HistoryServices;
+    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration, getPrefectureList } = HistoryServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -200,6 +201,31 @@ export default function AdminHistoryPlacePage() {
         console.log(response);
     }
 
+    const mailSettingModel = () => {
+        setEmailSettingsOpen(true);
+        getPrefectureList({}, loadPrefectureDropdownList)
+    }
+
+    const loadPrefectureDropdownList = (response) => {
+        let prefectureList = [{
+            name : "--",
+            value: null
+        }];
+        if(response.success && !_.isEmpty(response.data)){
+            const data = response.data;
+            Object.keys(data).forEach(function(key) {
+                console.log(key, data[key]);
+                let option = {
+                    name: data[key],
+                    value: key
+                };
+                prefectureList.push(option);
+            });
+
+            setprefectureListDropdown(prefectureList);
+        }
+    }
+
     /**
      * Pagination handler
      * @param {*} e 
@@ -227,7 +253,7 @@ export default function AdminHistoryPlacePage() {
                 close={onEmailSettingsClose}
                 register={onRegister}
                 intervalFrequency={MailSettingsOption1}
-                prefectureList={MailSettingsOption2}
+                prefectureList={prefectureListDropdown}
             />
             <div className="grid">
                 <div className="col-12">
@@ -254,7 +280,7 @@ export default function AdminHistoryPlacePage() {
                                         rounded: "true",
                                         buttonClass: "w-50",
                                         text: translate(localeJson, 'mail_setting'),
-                                        onClick: () => setEmailSettingsOpen(true),
+                                        onClick: () => mailSettingModel(),
                                         severity: "success"
                                     }} />
                                 </div>

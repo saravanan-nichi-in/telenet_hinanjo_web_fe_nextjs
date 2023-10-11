@@ -95,7 +95,20 @@
       "availability_status": "AvailabilityStatus",
       "opened_date_time": "OpenedDateTime",
       "closed_date_time": "ClosedDateTime",
-      "detail_staff_management":"Detail Staff Management"
+      "detail_staff_management":"Detail Staff Management",
+      "family_count": "",
+      "family_code": "",
+      "representative": "Representative",
+      "refugee_name": "RefugeeName",
+      "name": "Name",
+      "gender": "Gender",
+      "dob": "DOB",
+      "age": "Age",
+      "age_month": "AgeMonth",
+      "special_care_name": "SpecialCareName",
+      "connecting_code": "Connecting Code",
+      "out_date": "OutDate",
+      "current_location": "CurrentLocation" 
     },
     "validation": {
       "staff_name_required": "Staff Name required",

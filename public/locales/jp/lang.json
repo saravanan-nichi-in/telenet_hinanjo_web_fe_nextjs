@@ -95,7 +95,20 @@
       "availability_status": "満空状況",
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
-      "detail_staff_management":"スタッフ詳細情報"
+      "detail_staff_management":"スタッフ詳細情報",
+      "family_count": "",
+      "family_code": "",
+      "representative": "代表者",
+      "refugee_name": "氏名 (フリガナ)",
+      "name": "氏名 (漢字)",
+      "gender": "性別",
+      "dob": "生年月日",
+      "age": "年齢",
+      "age_month": "年齢_月",
+      "special_care_name": "要配慮者番号",
+      "connecting_code": "紐付コード",
+      "out_date": "退所日時",
+      "current_location": "現在の滞在場所"  
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
