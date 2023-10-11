@@ -18,6 +18,7 @@ export default function AdminStockPileMaster() {
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const router = useRouter();
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
+    const [selectedCity, setSelectedCity] = useState(false);
     const columns = [
         { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
         { field: '備蓄品名', header: '備蓄品名', minWidth: "30rem" },
@@ -164,30 +165,30 @@ export default function AdminStockPileMaster() {
                                 </div>
                                 <div>
                                     <form >
-                                    <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
-                                        <div>
-                                        <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "shelterCity",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: historyPageCities,
-                                            optionLabel: "name",
-                                            onChange: (e) => setSelectedCity(e.value),
-                                            text: translate(localeJson, "shelter_place_name"),
-                                            custom: "mobile-input custom-select"
-                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div >
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "shelterCity",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: historyPageCities,
-                                            optionLabel: "name",
-                                            onChange: (e) => setSelectedCity(e.value),
-                                            text: translate(localeJson, "shelter_place_name"),
-                                            custom: "mobile-input custom-select"
-                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div className='pb-1'>
+                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                            <div>
+                                                <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "shelterCity",
+                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    options: historyPageCities,
+                                                    optionLabel: "name",
+                                                    onChange: (e) => setSelectedCity(e.value),
+                                                    text: translate(localeJson, "shelter_place_name"),
+                                                    custom: "mobile-input custom-select"
+                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                            </div>
+                                            <div >
+                                                <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "shelterCity",
+                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    options: historyPageCities,
+                                                    optionLabel: "name",
+                                                    onChange: (e) => setSelectedCity(e.value),
+                                                    text: translate(localeJson, "shelter_place_name"),
+                                                    custom: "mobile-input custom-select"
+                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                            </div>
+                                            <div className='pb-1'>
                                                 <Button buttonProps={{
                                                     buttonClass: "evacuation_button_height",
                                                     type: 'submit',
@@ -197,7 +198,7 @@ export default function AdminStockPileMaster() {
                                                 }} parentStyle={{ paddingLeft: "10px" }} />
 
                                             </div>
-                                    </div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div className='mt-3'>
