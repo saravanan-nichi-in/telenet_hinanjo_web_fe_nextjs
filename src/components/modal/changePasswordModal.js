@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import { Formik ,useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from 'next/router'
 import { LockFilled } from '@ant-design/icons';
@@ -16,8 +16,8 @@ import { AuthenticationAuthorizationService } from "@/services";
 export default function ChangePasswordModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
-    const { open, close, register,onResetSuccess } = props && props;
-    const { change } = AuthenticationAuthorizationService;
+    const { open, close, onChangePasswordSuccess } = props && props;
+    const { changePassword } = AuthenticationAuthorizationService;
 
     // const [password, setPassword] = useState("");
     // const [password_new, setpassword_new] = useState("");
@@ -27,6 +27,9 @@ export default function ChangePasswordModal(props) {
             {translate(localeJson, 'change_password')}
         </div>
     );
+
+    const initialValues = { password: "", password_new: '', password_confirm: '' };
+
     const schema = Yup.object().shape({
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
@@ -67,16 +70,11 @@ export default function ChangePasswordModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ password: "", password_new: '', password_confirm: '' }}
-                onSubmit={(values) => {
-                    let preparedPayload = values;
-                    preparedPayload['query'] = router.query;
-                    console.log(router.query);
-                    change('admin', preparedPayload, onResetSuccess);
-                    close();
-                    values.password=""
-                    values.password_new=""
-                    values.password_confirm=""
+                initialValues={initialValues}
+                onSubmit={(values, { resetForm }) => {
+                    console.log(values);
+                    changePassword('admin', values, onChangePasswordSuccess);
+                    resetForm({ values: initialValues });
                 }}
             >
                 {({
@@ -91,7 +89,11 @@ export default function ChangePasswordModal(props) {
                         <form onSubmit={handleSubmit}>
                             <Dialog
                                 className="custom-modal"
-                                header={header}
+                                header={
+                                    <div className="custom-modal">
+                                    {translate(localeJson, 'change_password')}
+                                </div>
+                                }
                                 visible={open}
                                 draggable={false}
                                 blockScroll={true}

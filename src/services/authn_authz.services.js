@@ -14,7 +14,7 @@ export const AuthenticationAuthorizationService = {
     logout: _logout,
     forgot: _forgot,
     reset: _reset,
-    change:_change,
+    changePassword: _changePassword,
 };
 
 function _login(key, values, callBackFun) {
@@ -104,12 +104,12 @@ function _reset(key, values, callBackFun) {
     }
 }
 
-function _change(key, values, callBackFun) {
+function _changePassword(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         axios.put('/admin/change/password', values)
             .then((response) => {
-                if (response) {
-                    callBackFun();
+                if (response && response.data) {
+                    callBackFun(response.data);
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });

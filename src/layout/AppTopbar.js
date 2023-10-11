@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useImperativeHandle, useRef,useState } from 'react';
+import React, { forwardRef, useContext, useImperativeHandle, useRef, useState } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
 
@@ -20,15 +20,12 @@ const AppTopbar = forwardRef((props, ref) => {
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
 
-     const onResetSuccess = (values) => {
-        if (AuthenticationAuthorizationService.adminValue) {
-            localStorage.setItem('admin', JSON.stringify(values.data));
-            dispatch(setAdminValue({
-                admin: values.data
-            }));
-            admin.next(values.data); 
-            router.push("/admin/dashboard");
-        }
+    /**
+     * On password changed successfully
+     * @param {*} response 
+     */
+    const onChangePasswordSuccess = (response) => {
+        setChangePasswordOpen(false);
     };
 
     useImperativeHandle(ref, () => ({
@@ -36,16 +33,6 @@ const AppTopbar = forwardRef((props, ref) => {
         topbarmenu: topbarmenuRef.current,
         topbarmenubutton: topbarmenubuttonRef.current
     }));
-
-    const onChangePasswordClose = () => {
-        setChangePasswordOpen(!changePasswordOpen);
-    };
-
-    const onRegister = (values) => {
-       
-        setChangePasswordOpen(false);
-        console.log(values);
-    };
 
     const selectedCountryTemplate = (option, props) => {
         if (option) {
@@ -70,7 +57,7 @@ const AppTopbar = forwardRef((props, ref) => {
             }),
             key: '0',
         },
-        
+
         {
             type: 'divider',
         },
@@ -86,14 +73,14 @@ const AppTopbar = forwardRef((props, ref) => {
         {
             type: 'divider',
         },
-      
+
         {
             label: (
                 <div onClick={() => setChangePasswordOpen(true)}>
-                    <a >{translate(localeJson,'change_password')}</a>
+                    <a >{translate(localeJson, 'change_password')}</a>
                 </div>
             ),
-            icon: <MdOutlineResetTv style={{fontSize:"14px"}}/>,
+            icon: <MdOutlineResetTv style={{ fontSize: "14px" }} />,
             key: '2',
         },
         {
@@ -108,42 +95,41 @@ const AppTopbar = forwardRef((props, ref) => {
             icon: <LogoutOutlined />,
             key: '3',
         },
-          
+
     ];
 
     return (
         <React.Fragment>
             <ChangePasswordModal
-             open={changePasswordOpen}
-             close={onChangePasswordClose}
-             register={onRegister}
-             onResetSuccess={onResetSuccess}
+                open={changePasswordOpen}
+                close={() => setChangePasswordOpen(false)}
+                onChangePasswordSuccess={onChangePasswordSuccess}
             />
-        <div className="layout-topbar">
-            <div className="logo-details">
-                <div className='logo-view'>
-                    <DiAtom size={35} className='logo-icon' />
+            <div className="layout-topbar">
+                <div className="logo-details">
+                    <div className='logo-view'>
+                        <DiAtom size={35} className='logo-icon' />
+                    </div>
                 </div>
-            </div>
-            <div className='header-details'>
-                <div className='hamburger'>
-                    <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                        <i className="pi pi-bars" />
-                    </button>
-                </div>
-                <div className='header-details-first'>
-                    避難所管理システム
-                </div>
-                <div className='header-details-second'>
-                    <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                        <i className="pi pi-ellipsis-v" />
-                    </button>
-                    <div ref={topbarmenuRef} >
-                        <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
+                <div className='header-details'>
+                    <div className='hamburger'>
+                        <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                            <i className="pi pi-bars" />
+                        </button>
+                    </div>
+                    <div className='header-details-first'>
+                        避難所管理システム
+                    </div>
+                    <div className='header-details-second'>
+                        <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
+                            <i className="pi pi-ellipsis-v" />
+                        </button>
+                        <div ref={topbarmenuRef} >
+                            <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </React.Fragment>
     );
 });
