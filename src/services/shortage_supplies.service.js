@@ -5,26 +5,9 @@ import { downloadBase64File } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const ShortageSuppliesServices = {
-    getList: _getList,
     calExport: _calExport,
+    getList: _getList,
 };
-
-/**
- * Get dashboard list
- * @param {*} payload 
- * @param {*} callBackFun 
- */
-function _getList(payload, callBackFun) {
-    axios.post('/admin/dashboard', payload)
-        .then((response) => {
-            if (response && response.data) {
-                callBackFun(response.data);
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
-}
 
 /**
  * Export data
@@ -43,5 +26,22 @@ function _calExport() {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+        });
+}
+
+/**
+ * Get dashboard list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getList(callBackFun) {
+    axios.post('/admin/material/supply/list')
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
         });
 }

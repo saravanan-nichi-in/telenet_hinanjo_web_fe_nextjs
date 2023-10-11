@@ -108,7 +108,11 @@
       "special_care_name": "SpecialCareName",
       "connecting_code": "Connecting Code",
       "out_date": "OutDate",
-      "current_location": "CurrentLocation" 
+      "current_location": "CurrentLocation",
+      "shortage_total": "Shortage Total",
+      "once_deleted_cannot_restore":"Once deleted, the data cannot be restored.",
+      "do_you_want_to_delete":"Do you want to delete it?",
+      "show_expiring_products": "Show expiring products"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -121,24 +125,26 @@
       "notification_email_id_required": "Notification email ID is required.",
       "format_notification": "format of the notification email ID is incorrect.",
       "is_required": "is required。",
-      "file_csv_required":"File CVS is required.",
-      "select_csv_format":"Please select a CSV format file."
+      "file_csv_required": "File CVS is required.",
+      "select_csv_format": "Please select a CSV format file."
     },
     "buttons": {
-      "import": "import",
+      "import": "Import",
       "export": "Export",
-      "search": "search",
-      "signup": "signup",
+      "search": "Search",
+      "signup": "Signup",
       "cancel": "Cancel",
       "update": "Update",
       "registration": "Save",
-      "return": "return",
+      "return": "Return",
       "delete": "Delete",
+      "ok":"Ok",
       "edit": "Edit",
-      "back":"Back",
-      "submit":"Submit",
-      "create_admin":"Create Admin",
-      "create_staff":"Create Staff"
+      "create": "Create",
+      "back": "Back",
+      "submit": "Submit",
+      "create_admin": "Create Admin",
+      "create_staff": "Create Staff"
     },
     "footer": {},
     "form": {
