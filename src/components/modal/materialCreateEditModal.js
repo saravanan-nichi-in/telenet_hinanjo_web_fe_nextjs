@@ -51,14 +51,16 @@ export default function MaterialCreateEditModal(props) {
                     if (props.registerModalAction=="create") {
                         MaterialService.create(values, ()=> {
                             close();
+                            props.refreshList();
                         })
                     } else if(props.registerModalAction=="edit") {
                         MaterialService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
                         ()=> {
                             close();
+                            props.refreshList();
                         })
                     }
-                    router.push("/admin/material");
+                    
                     return false;
                 }}
             >

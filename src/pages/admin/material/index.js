@@ -224,6 +224,7 @@ export default function AdminMaterialPage() {
                 register={onRegisterImport}
                 registerModalAction={registerModalAction}
                 currentEditObj={{...currentEditObj}}
+                refreshList={onGetMaterialListOnMounting}
             />
              <AdminManagementDeleteModal
                         open={deleteStaffOpen}
