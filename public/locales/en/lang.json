@@ -113,7 +113,8 @@
       "shortage_total": "Shortage Total",
       "once_deleted_cannot_restore": "Once deleted, the data cannot be restored.",
       "do_you_want_to_delete": "Do you want to delete it?",
-      "show_expiring_products": "Show expiring products"
+      "show_expiring_products": "Show expiring products",
+      "download_sample_csv": "Download Sample CSV"
     },
     "validation": {
       "staff_name_required": "Staff Name required",

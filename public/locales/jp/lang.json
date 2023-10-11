@@ -112,7 +112,8 @@
       "current_location": "現在の滞在場所",
       "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
       "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
-      "shortage_total": "不足合計"
+      "shortage_total": "不足合計",
+      "download_sample_csv": "サンプルCSVのダウンロード"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
