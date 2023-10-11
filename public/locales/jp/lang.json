@@ -95,7 +95,8 @@
       "availability_status": "満空状況",
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
-      "detail_staff_management":"スタッフ詳細情報"
+      "detail_staff_management": "スタッフ詳細情報",
+      "shortage_total": "不足合計"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -108,8 +109,8 @@
       "notification_email_id_required": "通知先メールIDは必須です",
       "format_notification": "通知先メールIDの形式が正しくありません。",
       "is_required": "が必要です。",
-      "file_csv_required":"CSVファイルを選択してください。",
-      "select_csv_format":"CSV形式ファイルを選択してください。"
+      "file_csv_required": "CSVファイルを選択してください。",
+      "select_csv_format": "CSV形式ファイルを選択してください。"
     },
     "buttons": {
       "import": "インポート",
@@ -122,10 +123,10 @@
       "delete": "削除",
       "edit": "編集",
       "create": "作成する",
-      "back":"戻る",
-      "submit":"登録",
-      "create_admin":"新規登録",
-      "create_staff":"新規登録"
+      "back": "戻る",
+      "submit": "登録",
+      "create_admin": "新規登録",
+      "create_staff": "新規登録"
     },
     "footer": {},
     "form": {

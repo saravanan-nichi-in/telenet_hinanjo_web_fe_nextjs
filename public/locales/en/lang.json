@@ -95,7 +95,8 @@
       "availability_status": "AvailabilityStatus",
       "opened_date_time": "OpenedDateTime",
       "closed_date_time": "ClosedDateTime",
-      "detail_staff_management":"Detail Staff Management"
+      "detail_staff_management": "Detail Staff Management",
+      "shortage_total": "Shortage Total"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -108,8 +109,8 @@
       "notification_email_id_required": "Notification email ID is required.",
       "format_notification": "format of the notification email ID is incorrect.",
       "is_required": "is required。",
-      "file_csv_required":"File CVS is required.",
-      "select_csv_format":"Please select a CSV format file."
+      "file_csv_required": "File CVS is required.",
+      "select_csv_format": "Please select a CSV format file."
     },
     "buttons": {
       "import": "import",
@@ -123,10 +124,10 @@
       "delete": "Delete",
       "edit": "Edit",
       "create": "Create",
-      "back":"Back",
-      "submit":"Submit",
-      "create_admin":"Create Admin",
-      "create_staff":"Create Staff"
+      "back": "Back",
+      "submit": "Submit",
+      "create_admin": "Create Admin",
+      "create_staff": "Create Staff"
     },
     "footer": {},
     "form": {
