@@ -77,7 +77,9 @@ function ShortageSupplies() {
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
-                    evacuation_place: <div className="text-higlight clickable-row" onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}   </div>
+                    evacuation_place: obj.note || obj.comment ?
+                        <div className="text-higlight clickable-row" onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name}</div> :
+                        locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name,
                 }
                 dynamicColumns.map((objSub, i) => {
                     preparedObj[objSub.id] = `${obj.supply[objSub.id]}`;
@@ -105,6 +107,8 @@ function ShortageSupplies() {
      */
     const onClickEvacuationPlace = (rowData) => {
         console.log(rowData);
+        setSelectedRow(rowData);
+        setShowModal(true);
     }
 
     return (
@@ -112,15 +116,15 @@ function ShortageSupplies() {
             <DetailModal detailModalProps={{
                 headerContent: () => (
                     <div>
-                        {selectedRow}
+                        {locale === "en" && !_.isNull(selectedRow.place_name_en) ? selectedRow.place_name_en : selectedRow.place_name}
                     </div>
                 ),
                 visible: showModal,
                 style: { width: '600px' },
-                position: 'top',
+                position: 'center',
                 onHide: () => setShowModal(false),
-                value1: translate(localeJson, 'not'),
-                value2: translate(localeJson, 'not')
+                note: selectedRow && selectedRow.note ? selectedRow.note : translate(localeJson, 'not'),
+                comment: selectedRow && selectedRow.comment ? selectedRow.comment : translate(localeJson, 'not')
             }} />
             <div className="grid">
                 <div className="col-12">
