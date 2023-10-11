@@ -98,7 +98,10 @@
       "detail_staff_management":"スタッフ詳細情報",
       "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
       "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
-      "shortage_total": "不足合計"
+      "shortage_total": "不足合計",
+      "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
+      "show_expiring_products": "期限切れの近い商品のみ表示"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
