@@ -8,6 +8,7 @@
   ],
   "rules": {
     // "no-console": "error",
+    "no-useless-escape": "off",
     "no-multi-spaces": "error",
     "no-unused-vars": [
       "error",

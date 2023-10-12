@@ -101,9 +101,9 @@ function ShortageSupplies() {
      * @param {*} rowData 
      */
     const onClickEvacuationPlace = (rowData) => {
-        console.log(rowData);
         setSelectedRow(rowData);
         setShowModal(true);
+        document.body.classList.add('dialog-open'); // Add class to block scroll
     }
 
     return (
@@ -117,7 +117,10 @@ function ShortageSupplies() {
                 visible: showModal,
                 style: { width: '600px' },
                 position: 'center',
-                onHide: () => setShowModal(false),
+                onHide: () => {
+                    setShowModal(false);
+                    document.body.classList.remove('dialog-open'); // Remove class to enable scroll
+                },
                 note: selectedRow && selectedRow.note ? selectedRow.note : translate(localeJson, 'not'),
                 comment: selectedRow && selectedRow.comment ? selectedRow.comment : translate(localeJson, 'not')
             }} />

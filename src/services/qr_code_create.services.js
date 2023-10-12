@@ -15,8 +15,8 @@ export const QRCodeCreateServices = {
 function _calExport() {
     axios.get('/admin/qrcreate/sample/export')
         .then((response) => {
-            if (response && response.data && response.data.result.file) {
-                downloadBase64File(response.data.result.file, "qr_code_create.csv");
+            if (response && response.data && response.data.result.filePath) {
+                downloadBase64File(response.data.result.filePath, "qr_code_create.csv");
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
