@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"避難所管理システム",
       "logout": "ログアウト",
       "change_password": "パスワード変更"
     },
@@ -54,7 +55,7 @@
       "confirmation": "確認情報",
       "staff_management_import": "スタッフ管理CSVインポート",
       "admin_management_import": "管理者管理CSVインポート",
-      "add_admin_management": "管理者情報の登録",
+      "add_admin_management": "管理者情報登録",
       "history_login_staff_management": "ログイン履歴",
       "confirmation_information": "確認情報",
       "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
@@ -158,7 +159,10 @@
       "things_to_consider": "要配慮者事項（英語)",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
-      "output_target_area": "出力対象地域"
+      "output_target_area": "出力対象地域",
+      "current_password":"現在のパスワード",
+      "new_password":"新しいパスワード",
+      "new_password_confirmation":"新しいパスワード 確認用"
     },
     "others": {
       "not": "無し",

@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"Evacuation Shelter Management System",
       "logout": "Logout",
       "change_password": "Change password"
     },
@@ -160,7 +161,10 @@
       "things_to_consider": "Matters requiring special care (English)",
       "notification_email_id": "Email",
       "transmission_interval": "Frequency",
-      "output_target_area": "Select Prefecture"
+      "output_target_area": "Select Prefecture",
+      "current_password":"Current Password",
+      "new_password":"New password",
+      "new_password_confirmation":"New password confirmation"
     },
     "others": {
       "not": "None",

@@ -1,24 +1,32 @@
-import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
-import { classNames } from 'primereact/utils';
+import React, { forwardRef, useContext, useImperativeHandle, useRef, useState } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
-import Link from 'next/link';
 
 import { LayoutContext } from './context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
-import { DropdownSelect, LanguageDropdown } from '@/components';
+import { DropdownSelect } from '@/components';
 import { MdOutlineResetTv } from 'react-icons/md';
+import { ChangePasswordModal } from '@/components/modal';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
+    const [changePasswordOpen, setChangePasswordOpen] = useState(false);
     const { localeJson } = useContext(LayoutContext);
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
+
+    /**
+     * On password changed successfully
+     * @param {*} response 
+     */
+    const onChangePasswordSuccess = (response) => {
+        setChangePasswordOpen(false);
+    };
 
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
@@ -49,7 +57,7 @@ const AppTopbar = forwardRef((props, ref) => {
             }),
             key: '0',
         },
-        
+
         {
             type: 'divider',
         },
@@ -65,14 +73,14 @@ const AppTopbar = forwardRef((props, ref) => {
         {
             type: 'divider',
         },
-      
+
         {
             label: (
-                <div>
-                    <Link href="#">{translate(localeJson,'change_password')}</Link>
+                <div onClick={() => setChangePasswordOpen(true)}>
+                    <a >{translate(localeJson, 'change_password')}</a>
                 </div>
             ),
-            icon: <MdOutlineResetTv style={{fontSize:"14px"}}/>,
+            icon: <MdOutlineResetTv style={{ fontSize: "14px" }} />,
             key: '2',
         },
         {
@@ -87,35 +95,42 @@ const AppTopbar = forwardRef((props, ref) => {
             icon: <LogoutOutlined />,
             key: '3',
         },
-          
+
     ];
 
     return (
-        <div className="layout-topbar">
-            <div className="logo-details">
-                <div className='logo-view'>
-                    <DiAtom size={35} className='logo-icon' />
+        <React.Fragment>
+            <ChangePasswordModal
+                open={changePasswordOpen}
+                close={() => setChangePasswordOpen(false)}
+                onChangePasswordSuccess={onChangePasswordSuccess}
+            />
+            <div className="layout-topbar">
+                <div className="logo-details">
+                    <div className='logo-view'>
+                        <DiAtom size={35} className='logo-icon' />
+                    </div>
                 </div>
-            </div>
-            <div className='header-details'>
-                <div className='hamburger'>
-                    <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                        <i className="pi pi-bars" />
-                    </button>
-                </div>
-                <div className='header-details-first'>
-                    避難所管理システム
-                </div>
-                <div className='header-details-second'>
-                    <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                        <i className="pi pi-ellipsis-v" />
-                    </button>
-                    <div ref={topbarmenuRef} >
-                        <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
+                <div className='header-details'>
+                    <div className='hamburger'>
+                        <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                            <i className="pi pi-bars" />
+                        </button>
+                    </div>
+                    <div className='header-details-first'>
+                    {translate(localeJson, 'evacuation_shelter_management_system')}
+                    </div>
+                    <div className='header-details-second'>
+                        <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
+                            <i className="pi pi-ellipsis-v" />
+                        </button>
+                        <div ref={topbarmenuRef} >
+                            <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </React.Fragment>
     );
 });
 AppTopbar.displayName = "AppTopbar"
