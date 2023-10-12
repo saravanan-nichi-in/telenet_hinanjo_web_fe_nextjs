@@ -40,19 +40,6 @@ const evacuationTableColumns = [
 
 ];
 
-const evacueeFamilyDetailColumns = [
-    { field: "id", header: "番号", minWidth: "5rem" },
-    { field: "代表者", header: "代表者", minWidth: "10rem" },
-    { field: "氏名 (フリガナ)", header: "氏名 (フリガナ)", minWidth: "10rem" },
-    { field: "氏名 (漢字)", header: "氏名 (漢字)", minWidth: "10rem" },
-    { field: "生年月日", header: "生年月日", minWidth: "10rem" },
-    { field: "年齢", header: "年齢", minWidth: "4rem" },
-    { field: "年齢_月", header: "年齢_月", minWidth: "5rem" },
-    { field: "性別", header: "性別", minWidth: "5rem" },
-
-
-]
-
 const externalEvacueesListColumns = [
     { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
     { field: "避難場所種別", header: "避難場所種別", minWidth: "10rem", sortable: true },
@@ -72,23 +59,6 @@ const externalEvacueesDetailColumns = [
     { field: "生年月日", header: "生年月日", minWidth: "7rem", sortable: true },
     { field: "年齢", header: "年齢", minWidth: "10rem", sortable: true },
     { field: "性別", header: "性別", minWidth: "5rem", sortable: true }
-]
-
-const evacueeFamilyDetailRowExpansionColumns = [
-    { field: "住所", header: "住所", minWidth: "10rem" },
-    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
-    { field: "紐付コード", header: "紐付コード", minWidth: "7rem" },
-    { field: "備考", header: "備考", minWidth: "7rem" },
-    { field: "現在の滞在場所 *", header: "現在の滞在場所", minWidth: "9rem"},
-    { field: "作成日", header: "作成日", minWidth: "10rem" },
-    { field: "更新日", header: "更新日", minWidth: "10rem" },
-]
-
-const familyDetailColumns = [
-    { field: '避難日時', header: '避難日時', minWidth: "10rem", textAlign: 'left' },
-    { field: '住所', header: '住所', minWidth: "10rem", textAlign: 'left' },
-    { field: '電話番号(代表者)', header: '電話番号(代表者)', minWidth: "10rem", textAlign: 'left' },
-    { field: '登録言語環境', header: '登録言語環境', minWidth: "10rem", textAlign: 'left' },
 ];
 
 const familyDetailData = [
@@ -100,22 +70,12 @@ const familyDetailData = [
     }
 ];
 
-const familyDetailColumns1 = [
-    { field: '避難所', header: '避難日時', minWidth: "10rem" },
-    { field: '入所日時', header: '入所日時', minWidth: "10rem", textAlign: 'left' },
-    { field: '退所日時', header: '退所日時', minWidth: "10rem", textAlign: 'left' },
-
-];
-
 const familyDetailData1 = [
     {
         "避難所": "Vacant test",
         "入所日時": "2023/09/14 22:17",
         "退所日時": "2023/09/15 17:02"
     }
-];
-const townAssociationColumn = [
-    { field: '町内会名 *', header: '町内会名', minWidth: "10rem"},
 ];
 
 const townAssociationData = [
@@ -639,17 +599,12 @@ export {
     profiles,
     evacuationStatusOptions,
     evacuationTableColumns,
-    evacueeFamilyDetailColumns,
-    familyDetailColumns,
-    evacueeFamilyDetailRowExpansionColumns,
     externalEvacueesListColumns,
     externalEvacueesDetailColumns,
     evacuationSiteType,
     evacuationFoodSupport,
-    familyDetailColumns1,
     familyDetailData1,
     familyDetailData,
-    townAssociationColumn,
     townAssociationData,
     suppliesShortageData,
     suppliesShortageHeaderColumn,

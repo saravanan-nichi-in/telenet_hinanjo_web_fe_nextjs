@@ -7,6 +7,7 @@ import { InputFloatLabel } from '@/components/input';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { locale } from 'primereact/api';
+import Link from 'next/link';
 
 /**
  * Display Evacuees List 
@@ -49,7 +50,7 @@ export default function EvacuationPage() {
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem" },
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
-        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "8rem", sortable: false, textAlign: 'left' },
+        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem" },
@@ -58,6 +59,7 @@ export default function EvacuationPage() {
     ];
 
     const downloadEvacueesListCSV = () => {
+        console.log(getListPayload);
         exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
     }
 
@@ -94,29 +96,37 @@ export default function EvacuationPage() {
             const places = response.places;
             let evacueesList = [];
             let placesList = [];
-            data.map((obj, i) => {
-                const subData = obj;
-                subData.map((item, index) => {
-                    let evacuees = {
-                        "id": subData[0].id,
-                        "family_count": index + 1,
-                        "family_code": item.families.family_code,
-                        "representative": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                        "refugee_name": item.refugee_name,
-                        "name": item.name,
-                        "gender": getGenderValue(item.gender),
-                        "dob": getJapaneseDateDisplayFormat(item.dob),
-                        "age": item.age,
-                        "age_month": item.age_month,
-                        "special_care_name": item.special_cares ? item.special_cares[0].name : "-",
-                        "remarks": item.note,
-                        "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
-                        "connecting_code": item.connecting_code,
-                        "out_date": item.families.out_date,
-                        "current_location": "-",
-                    };
-                    evacueesList.push(evacuees);
-                })
+            let index = 0;
+            let previousItem = null;
+            data.map((item) => {
+                console.log((previousItem ? previousItem.id : ""), item.family_id)
+                if(previousItem && previousItem.id == item.family_id) {
+                    console.log(previousItem.id)
+                    index = 0;
+                }
+                let evacuees = {
+                    "id": item.family_id,
+                    "family_count": index + 1,
+                    "family_code": item.families.family_code,
+                    "representative": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    "refugee_name": <Link className="text-higlight" href={{
+                        pathname: '/admin/evacuation/family-detail',
+                        query: {family_id: item.family_id}
+                    }}>{item.refugee_name}</Link>,
+                    "name": item.name,
+                    "gender": getGenderValue(item.gender),
+                    "dob": getJapaneseDateDisplayFormat(item.dob),
+                    "age": item.age,
+                    "age_month": item.age_month,
+                    "special_care_name": item.special_cares ? item.special_cares[0].name : "-",
+                    "remarks": item.note,
+                    "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
+                    "connecting_code": item.connecting_code,
+                    "out_date": item.families.out_date,
+                    "current_location": "-",
+                };
+                previousItem = evacuees;
+                evacueesList.push(evacuees);
             });
             places.map((place) => {
                 let placeData = {
@@ -128,6 +138,7 @@ export default function EvacuationPage() {
             setEvacueesDataList(evacueesList);
             setTableLoading(false);
             setEvacuationPlaceList(placesList);
+            setTotalCount(response.data.count);
         }
         else {
             setEvacueesDataList([]);
@@ -169,9 +180,6 @@ export default function EvacuationPage() {
     }, [locale, getListPayload]);
 
     const searchListWithCriteria = () => {
-        console.log(selectedOption);
-        console.log(familyCode);
-        console.log(refugeeName);
         let payload = {
             filters: {
                 start: 0,
