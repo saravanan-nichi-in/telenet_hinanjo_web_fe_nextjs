@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"Evacuation Shelter Management System",
       "logout": "Logout",
       "change_password": "Change password"
     },
@@ -27,7 +28,8 @@
       "setting_systems": "Setting Systems"
     },
     "pages": {
-      "Other_shortage_supplies": "Other shortage supplies",
+      "Other_shortage_items": "Other shortage items",
+      "Other_shared_matters": "Other shared matters",
       "add_staff_management": "Add Staff Management",
       "edit_staff_management": "Edit Staff Management",
       "edit_admin_management": "Edit Admin Management",
@@ -95,7 +97,7 @@
       "availability_status": "AvailabilityStatus",
       "opened_date_time": "OpenedDateTime",
       "closed_date_time": "ClosedDateTime",
-      "detail_staff_management":"Detail Staff Management",
+      "detail_staff_management": "Detail Staff Management",
       "family_count": "",
       "family_code": "",
       "representative": "Representative",
@@ -110,9 +112,10 @@
       "out_date": "OutDate",
       "current_location": "CurrentLocation",
       "shortage_total": "Shortage Total",
-      "once_deleted_cannot_restore":"Once deleted, the data cannot be restored.",
-      "do_you_want_to_delete":"Do you want to delete it?",
-      "show_expiring_products": "Show expiring products"
+      "once_deleted_cannot_restore": "Once deleted, the data cannot be restored.",
+      "do_you_want_to_delete": "Do you want to delete it?",
+      "show_expiring_products": "Show expiring products",
+      "download_sample_csv": "Download Sample CSV"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -138,7 +141,7 @@
       "registration": "Save",
       "return": "Return",
       "delete": "Delete",
-      "ok":"Ok",
+      "ok": "Ok",
       "edit": "Edit",
       "create": "Create",
       "back": "Back",
@@ -158,10 +161,13 @@
       "things_to_consider": "Matters requiring special care (English)",
       "notification_email_id": "Email",
       "transmission_interval": "Frequency",
-      "output_target_area": "Select Prefecture"
+      "output_target_area": "Select Prefecture",
+      "current_password":"Current Password",
+      "new_password":"New password",
+      "new_password_confirmation":"New password confirmation"
     },
     "others": {
-      "not": "Not",
+      "not": "None",
       "shelter_place": "Shelter Place",
       "setting_start_date": "Setting Start Date",
       "shelter_place_name": "Place Name",

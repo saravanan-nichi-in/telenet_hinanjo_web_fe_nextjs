@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"避難所管理システム",
       "logout": "ログアウト",
       "change_password": "パスワード変更"
     },
@@ -27,7 +28,8 @@
       "setting_systems": "環境設定"
     },
     "pages": {
-      "Other_shortage_supplies": "その他不足物資",
+      "Other_shortage_items": "その他不足物資",
+      "Other_shared_matters": "その他共有事項",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
       "edit_admin_management": "管理者詳細情報",
@@ -53,7 +55,7 @@
       "confirmation": "確認情報",
       "staff_management_import": "スタッフ管理CSVインポート",
       "admin_management_import": "管理者管理CSVインポート",
-      "add_admin_management": "管理者情報の登録",
+      "add_admin_management": "管理者情報登録",
       "history_login_staff_management": "ログイン履歴",
       "confirmation_information": "確認情報",
       "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
@@ -109,9 +111,10 @@
       "connecting_code": "紐付コード",
       "out_date": "退所日時",
       "current_location": "現在の滞在場所",
-      "once_deleted_cannot_restore":" 一度削除したデータは、元に戻せません。",
-      "do_you_want_to_delete":" 削除してもよろしいでしょうか？",
-      "shortage_total": "不足合計"
+      "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
+      "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
+      "shortage_total": "不足合計",
+      "download_sample_csv": "サンプルCSVのダウンロード"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -136,7 +139,7 @@
       "update": "更新",
       "registration": "登録",
       "delete": "削除",
-      "ok":"削除",
+      "ok": "削除",
       "edit": "編集",
       "create": "作成する",
       "back": "戻る",
@@ -156,7 +159,10 @@
       "things_to_consider": "要配慮者事項（英語)",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
-      "output_target_area": "出力対象地域"
+      "output_target_area": "出力対象地域",
+      "current_password":"現在のパスワード",
+      "new_password":"新しいパスワード",
+      "new_password_confirmation":"新しいパスワード 確認用"
     },
     "others": {
       "not": "無し",

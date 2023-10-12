@@ -1,14 +1,11 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate, getTotalCountFromArray } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal } from '@/components';
-import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/constant';
 import { ShortageSuppliesServices } from '@/services';
-import { NormalTable, DeleteModal } from '@/components';
+import { NormalTable } from '@/components';
 
 function ShortageSupplies() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -23,7 +20,7 @@ function ShortageSupplies() {
     const [selectedRow, setSelectedRow] = useState(null);
 
     /* Services */
-    const { calExport, getList } = ShortageSuppliesServices;
+    const { callExport, getList } = ShortageSuppliesServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -68,7 +65,7 @@ function ShortageSupplies() {
                                     </div>
                                 )}
                             </div>
-                        ), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center'
+                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left'
                     };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
@@ -77,7 +74,7 @@ function ShortageSupplies() {
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
-                    evacuation_place: <div className="text-higlight clickable-row" onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}   </div>
+                    evacuation_place: <div className={obj.note || obj.comment ? "text-higlight clickable-row" : "clickable-row"} onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name}</div>
                 }
                 dynamicColumns.map((objSub, i) => {
                     preparedObj[objSub.id] = `${obj.supply[objSub.id]}`;
@@ -105,6 +102,8 @@ function ShortageSupplies() {
      */
     const onClickEvacuationPlace = (rowData) => {
         console.log(rowData);
+        setSelectedRow(rowData);
+        setShowModal(true);
     }
 
     return (
@@ -112,20 +111,20 @@ function ShortageSupplies() {
             <DetailModal detailModalProps={{
                 headerContent: () => (
                     <div>
-                        {selectedRow}
+                        {locale === "en" && !_.isNull(selectedRow.place_name_en) ? selectedRow.place_name_en : selectedRow.place_name}
                     </div>
                 ),
                 visible: showModal,
                 style: { width: '600px' },
-                position: 'top',
+                position: 'center',
                 onHide: () => setShowModal(false),
-                value1: translate(localeJson, 'not'),
-                value2: translate(localeJson, 'not')
+                note: selectedRow && selectedRow.note ? selectedRow.note : translate(localeJson, 'not'),
+                comment: selectedRow && selectedRow.comment ? selectedRow.comment : translate(localeJson, 'not')
             }} />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <hr />
                         <div className="col-12 custom-table">
                             <div className="flex justify-content-end ">
@@ -134,7 +133,7 @@ function ShortageSupplies() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    onClick: () => calExport()
+                                    onClick: () => callExport()
                                 }} parentClass={"mb-3"} />
                             </div>
                             <NormalTable

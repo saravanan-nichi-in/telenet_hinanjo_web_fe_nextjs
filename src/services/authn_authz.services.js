@@ -14,6 +14,7 @@ export const AuthenticationAuthorizationService = {
     logout: _logout,
     forgot: _forgot,
     reset: _reset,
+    changePassword: _changePassword,
 };
 
 function _login(key, values, callBackFun) {
@@ -90,6 +91,25 @@ function _reset(key, values, callBackFun) {
             .then((response) => {
                 if (response) {
                     callBackFun();
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message, {
+                    position: "top-right",
+                });
+            });
+    }
+}
+
+function _changePassword(key, values, callBackFun) {
+    if (key === 'admin' && values && callBackFun) {
+        axios.put('/admin/change/password', values)
+            .then((response) => {
+                if (response && response.data) {
+                    callBackFun(response.data);
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
