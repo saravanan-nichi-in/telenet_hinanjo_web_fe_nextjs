@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { InputFloatLabel } from '@/components/input';
@@ -16,7 +16,7 @@ import { locale } from 'primereact/api';
 
 export default function EvacuationPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [totalSamari, setTotalSamari] = useState(57);
+    const [familyCount, setFamilyCount] = useState(57);
     const [selectedOption, setSelectedOption] = useState(null);
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [evacuationPlaceList, setEvacuationPlaceList] = useState([]);
@@ -105,7 +105,7 @@ export default function EvacuationPage() {
                         "refugee_name": item.refugee_name,
                         "name": item.name,
                         "gender": getGenderValue(item.gender),
-                        "dob": item.dob,
+                        "dob": getJapaneseDateDisplayFormat(item.dob),
                         "age": item.age,
                         "age_month": item.age_month,
                         "special_care_name": item.special_cares ? item.special_cares[0].name : "-",
@@ -132,7 +132,7 @@ export default function EvacuationPage() {
         else {
             setEvacueesDataList([]);
             setEmptyTableMessage(response.message);
-            setTableLoading(true);
+            setTableLoading(false);
         }
     }
 
@@ -162,7 +162,6 @@ export default function EvacuationPage() {
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
-            // await AdminEvacueesListService.getAdminsEvacueesListMedium().then((data) => setAdmins(data));
             await onGetEvacueesListOnMounting();
             setLoader(false);
         };
@@ -216,7 +215,7 @@ export default function EvacuationPage() {
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             text: translate(localeJson, 'household_number'),
                                             value: familyCode,
-                                            onChange: (e) => setFamilyCode(e.value)
+                                            onChange: (value) => setFamilyCode(value)
                                         }}
                                     />
                                     <InputFloatLabel
@@ -226,7 +225,7 @@ export default function EvacuationPage() {
                                             text: translate(localeJson, 'name'),
                                             custom: "mobile-input custom_input",
                                             value: refugeeName,
-                                            onChange: (e) => setRefugeeName(e.value)
+                                            onChange: (value) => setRefugeeName(value)
                                         }}
                                     />
                                     <div className="">
@@ -244,7 +243,7 @@ export default function EvacuationPage() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {totalSamari}</p>
+                                <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
                             </div>
                             <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{

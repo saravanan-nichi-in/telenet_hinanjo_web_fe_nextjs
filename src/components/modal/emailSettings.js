@@ -29,8 +29,7 @@ export default function EmailSettings(props) {
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
             .test('is-email', translate(localeJson, 'format_notification'), value => {
-                // Check if it's a single valid email or a list of valid emails separated by commas
-                //return Yup.string().email().isValidSync(value) || validateMultipleEmails(value, localeJson);
+                /** Check if it's a single valid email or a list of valid emails separated by commas */ 
                 return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
