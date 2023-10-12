@@ -35,7 +35,6 @@ function _calExport() {
 function _calImport(payload, callBackFun) {
     axios.post('/admin/qrcreate/import', payload)
         .then((response) => {
-            console.log(response);
             if (response && response.data) {
                 callBackFun(response);
                 toast.success(response?.data?.message, {
