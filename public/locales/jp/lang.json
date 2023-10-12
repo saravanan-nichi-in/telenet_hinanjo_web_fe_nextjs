@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"避難所管理システム",
       "logout": "ログアウト",
       "change_password": "パスワード変更"
     },

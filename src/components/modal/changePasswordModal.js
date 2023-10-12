@@ -1,32 +1,20 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
-import { useRouter } from 'next/router'
 import { LockFilled } from '@ant-design/icons';
 
 import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
-import { InputLeftRightGroup, InputLeftRightGroupFloat } from "../input";
+import { InputLeftRightGroupFloat } from "../input";
 import { ValidationError } from "../error";
 import { AuthenticationAuthorizationService } from "@/services";
 
 export default function ChangePasswordModal(props) {
-    const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const { open, close, onChangePasswordSuccess } = props && props;
     const { changePassword } = AuthenticationAuthorizationService;
-
-    // const [password, setPassword] = useState("");
-    // const [password_new, setpassword_new] = useState("");
-    // const [newConfirmation, setpassword_confirm] = useState("");
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'change_password')}
-        </div>
-    );
 
     const initialValues = { password: "", password_new: '', password_confirm: '' };
 
@@ -44,27 +32,6 @@ export default function ChangePasswordModal(props) {
             .oneOf([Yup.ref("password_new"), null], translate(localeJson, 'confirm_password_notMatch'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
-
-    // const handleSubmit = (values) => {
-    //     if(password  && password_new && newConfirmation !=""){
-    //     // You can access the form values in the "values" parameter here.
-    //     console.log("Form Submitted with values:", values);
-    //     register({
-    //         password: password,
-    //         password_new:password_new,
-    //         newConfirmation:newConfirmation
-    //     });
-    //     setPassword("");
-    //     setpassword_new("");
-    //     setpassword_confirm("");
-    //     // Perform any other actions you need here.
-    //     // Close the modal, send an API request, etc.
-    //     close();
-    //     }else{
-    //         console.log("please submit the form:", values);
-    //     }
-    // };
-
 
     return (
         <>
@@ -91,8 +58,8 @@ export default function ChangePasswordModal(props) {
                                 className="custom-modal"
                                 header={
                                     <div className="custom-modal">
-                                    {translate(localeJson, 'change_password')}
-                                </div>
+                                        {translate(localeJson, 'change_password')}
+                                    </div>
                                 }
                                 visible={open}
                                 draggable={false}

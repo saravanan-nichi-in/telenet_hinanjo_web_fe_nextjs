@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system":"Evacuation Shelter Management System",
       "logout": "Logout",
       "change_password": "Change password"
     },

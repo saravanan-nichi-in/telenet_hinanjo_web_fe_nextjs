@@ -5,7 +5,7 @@ import { DiAtom } from "react-icons/di";
 import { LayoutContext } from './context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
-import { DropdownSelect, LanguageDropdown } from '@/components';
+import { DropdownSelect } from '@/components';
 import { MdOutlineResetTv } from 'react-icons/md';
 import { ChangePasswordModal } from '@/components/modal';
 
@@ -118,7 +118,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         </button>
                     </div>
                     <div className='header-details-first'>
-                        避難所管理システム
+                    {translate(localeJson, 'evacuation_shelter_management_system')}
                     </div>
                     <div className='header-details-second'>
                         <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
