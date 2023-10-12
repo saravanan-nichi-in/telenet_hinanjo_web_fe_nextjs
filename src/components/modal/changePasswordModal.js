@@ -39,7 +39,6 @@ export default function ChangePasswordModal(props) {
                 validationSchema={schema}
                 initialValues={initialValues}
                 onSubmit={(values, { resetForm }) => {
-                    console.log(values);
                     changePassword('admin', values, onChangePasswordSuccess);
                     resetForm({ values: initialValues });
                 }}
