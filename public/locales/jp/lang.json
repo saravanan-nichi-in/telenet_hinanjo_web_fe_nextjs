@@ -28,8 +28,8 @@
       "setting_systems": "環境設定"
     },
     "pages": {
-      "Other_shortage_items": "その他不足物資",
       "Other_shared_matters": "その他共有事項",
+      "Other_shortage_items": "その他不足物資",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
       "edit_admin_management": "管理者詳細情報",

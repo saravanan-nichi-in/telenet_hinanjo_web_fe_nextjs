@@ -41,7 +41,7 @@ const DetailModal = (props) => {
             >
                 <div className="pt-2">
                     <NormalLabel labelClass="w-full pt-0 mb-1"
-                        text={translate(localeJson, 'Other_shortage_items')}
+                        text={translate(localeJson, 'Other_shared_matters')}
                         style={{
                             marginBottom: "10px"
                         }} />
@@ -54,7 +54,7 @@ const DetailModal = (props) => {
                 </div>
                 <div className="mt-1">
                     <NormalLabel labelClass="w-full pt-0"
-                        text={translate(localeJson, 'Other_shared_matters')} />
+                        text={translate(localeJson, 'Other_shortage_items')} />
                     <TextArea textAreaProps={{
                         textAreaClass: "w-full bg-bluegray-50 pt-1",
                         rows: 5,
