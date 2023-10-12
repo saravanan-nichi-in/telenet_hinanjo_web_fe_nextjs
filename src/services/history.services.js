@@ -9,6 +9,7 @@ export const HistoryServices = {
     getPlaceDropdownList: _getPlaceDropdownList,
     exportPlaceHistoryCSVList: _exportPlaceHistoryCSVList,
     registerEmailConfiguration: _registerEmailConfiguration,
+    getEmailConfiguration: _getEmailConfiguration,
     getPrefectureList: _getPrefectureList
 };
 
@@ -40,11 +41,15 @@ function _exportPlaceHistoryCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -67,6 +72,23 @@ function _registerEmailConfiguration(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+        });
+}
+
+/**
+ * Get Email Configuration
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getEmailConfiguration(payload, callBackFun) {
+    axios.get('/admin/place/history/email/configuration', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
         });
 }
 

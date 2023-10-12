@@ -38,11 +38,15 @@ function _exportEvacueesCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
