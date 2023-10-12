@@ -46,8 +46,8 @@ function _exportData(payload) {
     axios
         .post("/admin/material/export", payload)
         .then((response) => {
-                if (response && response.data && response.data.result.file) {
-                    downloadBase64File(response.data.result.file, "material.csv");
+                if (response && response.data && response.data.result.filePath) {
+                    downloadBase64File(response.data.result.filePath, "material.csv");
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });

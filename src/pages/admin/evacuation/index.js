@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import _ from 'lodash';
 
 import { getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -6,13 +7,6 @@ import { Button, NormalTable } from '@/components';
 import { InputFloatLabel } from '@/components/input';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { EvacuationServices } from '@/services/evacuation.services';
-import { locale } from 'primereact/api';
-
-/**
- * Display Evacuees List 
- * @param `shelterPlaceName, HouseHoldNumber, Evacuee Name`
- * @returns Table view
- */
 
 export default function EvacuationPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
