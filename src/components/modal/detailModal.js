@@ -24,10 +24,15 @@ const DetailModal = (props) => {
         style,
         ...restProps
     } = detailModalProps;
+
+    /**
+     * Header content 
+     */
     const header = (
         headerContent
     );
 
+    console.log(visible);
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass} custom-modal`}
@@ -37,6 +42,7 @@ const DetailModal = (props) => {
                 visible={visible}
                 onHide={onHide}
                 style={style}
+                // blockScroll={visible}
                 {...restProps}
             >
                 <div className="pt-2">
