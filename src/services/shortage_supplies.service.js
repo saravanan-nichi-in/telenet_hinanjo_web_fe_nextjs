@@ -5,7 +5,7 @@ import { downloadBase64File } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const ShortageSuppliesServices = {
-    calExport: _calExport,
+    callExport: _calExport,
     getList: _getList,
 };
 

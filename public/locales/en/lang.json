@@ -120,7 +120,8 @@
       "update_isActive_status":"Do you want to change status of the evacuation center?",
       "s_no":"S No",
       "place_details":"Edit Shelter",
-      "place_csv_import": "Import Place Data"
+      "place_csv_import": "Import Place Data",
+      "download_sample_csv": "Download Sample CSV"
     },
     "validation": {
       "staff_name_required": "Staff Name required",

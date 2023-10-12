@@ -119,7 +119,8 @@
       "update_isActive_status":"避難所の運営状態を変更しますか？",
       "s_no":"S No",
       "place_details":"避難所の詳細",
-      "place_csv_import": "避難所マスタCSVインポート"
+      "place_csv_import": "避難所マスタCSVインポート",
+      "download_sample_csv": "サンプルCSVのダウンロード"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
