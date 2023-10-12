@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useContext, useImperativeHandle, useRef, useState,useEffect } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
 import { DiAtom } from "react-icons/di";
 
@@ -16,6 +16,13 @@ const AppTopbar = forwardRef((props, ref) => {
     const topbarmenubuttonRef = useRef(null);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
     const { localeJson } = useContext(LayoutContext);
+    const [userName, setUserName] = useState(null);
+    useEffect(() => {
+        const adminData = JSON.parse(localStorage.getItem('admin')); // Assuming 'user' is the key in local storage
+        if (adminData && adminData.user && adminData.user.name) {
+            setUserName(adminData.user.name);
+          }
+      }, []);
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
@@ -125,7 +132,7 @@ const AppTopbar = forwardRef((props, ref) => {
                             <i className="pi pi-ellipsis-v" />
                         </button>
                         <div ref={topbarmenuRef} >
-                            <DropdownSelect items={items} icon={"pi pi-cog"} spanText={"Settings"} />
+                            <DropdownSelect icon={"pi pi-chevron-down"} text={userName} items={items} spanText={"Settings"} />
                         </div>
                     </div>
                 </div>

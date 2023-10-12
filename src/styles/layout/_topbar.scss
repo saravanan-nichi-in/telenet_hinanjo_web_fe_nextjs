@@ -39,15 +39,15 @@
         align-items: center;
         position: relative;
         color: white;
-        border-radius: 50%;
-        width: 3rem;
+        // border-radius: 50%;
+        // width: 3rem;
         height: 3rem;
         cursor: pointer;
         transition: background-color $transitionDuration;
 
         &:hover {
-            color: var(--text-color);
-            background-color: var(--surface-hover);
+            // color: var(--text-color);
+            // background-color: var(--surface-hover);
         }
 
         &:focus {
