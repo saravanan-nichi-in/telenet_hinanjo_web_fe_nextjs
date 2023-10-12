@@ -115,7 +115,8 @@
       "once_deleted_cannot_restore": "Once deleted, the data cannot be restored.",
       "do_you_want_to_delete": "Do you want to delete it?",
       "show_expiring_products": "Show expiring products",
-      "download_sample_csv": "Download Sample CSV"
+      "download_sample_csv": "Download Sample CSV",
+      "create_qr_codes_successfully": "Create QrCodes successfully."
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -130,10 +131,10 @@
       "is_required": "is required。",
       "file_csv_required": "File CVS is required.",
       "select_csv_format": "Please select a CSV format file.",
-      "password_new_not_equal_to_current":"The current password and new password cannot be the same.",
-      "current_password_atLeast_8_characters":"The current password must be at least 8 characters.",
-      "current_password_max_15_characters":"The current password must not be greater than 15 characters.",
-      "new_password_max_15_characters":"The new password must not be greater than 15 characters."    
+      "password_new_not_equal_to_current": "The current password and new password cannot be the same.",
+      "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
+      "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
+      "new_password_max_15_characters": "The new password must not be greater than 15 characters."
     },
     "buttons": {
       "import": "Import",
@@ -151,7 +152,8 @@
       "back": "Back",
       "submit": "Submit",
       "create_admin": "Create Admin",
-      "create_staff": "Create Staff"
+      "create_staff": "Create Staff",
+      "download": "Download"
     },
     "footer": {},
     "form": {
@@ -215,7 +217,7 @@
       "email_valid": "The email must be a valid email address.",
       "password": "Password",
       "password_required": "The password must be required.",
-      "current_password_required":"The current password must be required.",
+      "current_password_required": "The current password must be required.",
       "password_atLeast_8_characters": "Password must be at least 8 characters.",
       "admin_login_screen": "Administrator login",
       "password_reset": "Forgot your password?",

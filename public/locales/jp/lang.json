@@ -1,7 +1,7 @@
 {
   "admin": {
     "header": {
-      "evacuation_shelter_management_system":"避難所管理システム",
+      "evacuation_shelter_management_system": "避難所管理システム",
       "logout": "ログアウト",
       "change_password": "パスワード変更"
     },
@@ -97,7 +97,7 @@
       "availability_status": "満空状況",
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
-      "detail_staff_management":"スタッフ詳細情報",
+      "detail_staff_management": "スタッフ詳細情報",
       "family_count": "世帯人数",
       "family_code": "世帯番号",
       "representative": "代表者",
@@ -114,7 +114,8 @@
       "once_deleted_cannot_restore": " 一度削除したデータは、元に戻せません。",
       "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
       "shortage_total": "不足合計",
-      "download_sample_csv": "サンプルCSVのダウンロード"
+      "download_sample_csv": "サンプルCSVのダウンロード",
+      "create_qr_codes_successfully": "QRコードが正常に生成されました。"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -129,11 +130,10 @@
       "is_required": "が必要です。",
       "file_csv_required": "CSVファイルを選択してください。",
       "select_csv_format": "CSV形式ファイルを選択してください。",
-      "password_new_not_equal_to_current":"現在のパスワ ードと新しいパスワードは同じであることはできません。",
-      "current_password_atLeast_8_characters":"現在のパスワードは 8 文字以上である必要があります。",
-      "current_password_max_15_characters":"現在のパスワードは15文字以内で入力してください。",
-      "new_password_max_15_characters":"新しいパスワードは200文字より大きくないである必要です。"    
-    
+      "password_new_not_equal_to_current": "現在のパスワ ードと新しいパスワードは同じであることはできません。",
+      "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
+      "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
+      "new_password_max_15_characters": "新しいパスワードは200文字より大きくないである必要です。"
     },
     "buttons": {
       "import": "インポート",
@@ -150,7 +150,8 @@
       "back": "戻る",
       "submit": "登録",
       "create_admin": "新規登録",
-      "create_staff": "新規登録"
+      "create_staff": "新規登録",
+      "download": "ダウンロード"
     },
     "footer": {},
     "form": {
@@ -165,9 +166,9 @@
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
       "output_target_area": "出力対象地域",
-      "current_password":"現在のパスワード",
-      "new_password":"新しいパスワード",
-      "new_password_confirmation":"新しいパスワード 確認用"
+      "current_password": "現在のパスワード",
+      "new_password": "新しいパスワード",
+      "new_password_confirmation": "新しいパスワード 確認用"
     },
     "others": {
       "not": "無し",
@@ -215,7 +216,7 @@
       "email_valid": "正しいメールアドレスをご入力ください。",
       "password": "パスワード",
       "password_required": "パスワードは必須です。",
-      "current_password_required":"現在のパスワードは必須です。",
+      "current_password_required": "現在のパスワードは必須です。",
       "password_atLeast_8_characters": "パスワードは8文字以上である必要です。 ",
       "admin_login_screen": "管理者用ログイン",
       "password_reset": "パスワードを忘れた場合",

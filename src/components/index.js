@@ -3,7 +3,7 @@ export { ValidationError } from './error';
 export { Counter } from './incrementDecrement';
 export { Linker } from './link';
 export { NormalLabel } from './label';
-export { DeleteModal, DynamicModal, DetailModal, StockPileSignupModal, StockPileEditModal, EmailSettings } from './modal';
+export { DeleteModal, DynamicModal, DetailModal, StockPileSignupModal, StockPileEditModal, EmailSettings, CommonDialog } from './modal';
 export { ImageComponent } from './image';
 export { DateCalendar, TimeCalendar, DateTimePicker, DateTimeCalendar } from './date&time';
 export { NormalCheckBox } from "./checkbox";
