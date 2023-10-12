@@ -128,7 +128,12 @@
       "format_notification": "通知先メールIDの形式が正しくありません。",
       "is_required": "が必要です。",
       "file_csv_required": "CSVファイルを選択してください。",
-      "select_csv_format": "CSV形式ファイルを選択してください。"
+      "select_csv_format": "CSV形式ファイルを選択してください。",
+      "password_new_not_equal_to_current":"現在のパスワ ードと新しいパスワードは同じであることはできません。",
+      "current_password_atLeast_8_characters":"現在のパスワードは 8 文字以上である必要があります。",
+      "current_password_max_15_characters":"現在のパスワードは15文字以内で入力してください。",
+      "new_password_max_15_characters":"新しいパスワードは200文字より大きくないである必要です。"    
+    
     },
     "buttons": {
       "import": "インポート",
@@ -210,6 +215,7 @@
       "email_valid": "正しいメールアドレスをご入力ください。",
       "password": "パスワード",
       "password_required": "パスワードは必須です。",
+      "current_password_required":"現在のパスワードは必須です。",
       "password_atLeast_8_characters": "パスワードは8文字以上である必要です。 ",
       "admin_login_screen": "管理者用ログイン",
       "password_reset": "パスワードを忘れた場合",
@@ -217,8 +223,8 @@
       "new_password_required": "新しいパスワード は必須です。",
       "new_password_not_matched": "新しいパスワード要件が一致しません。",
       "new_password_confirm": "新しいパスワード（確認)",
-      "confirm_password_required": "新しいパスワード（確認) は必須です。",
-      "confirm_password_notMatch": "新しいパスワード（確認)が新しいパスワードと一致しません。",
+      "confirm_password_required": "新しいパスワード 確認は必須です。",
+      "confirm_password_notMatch": " 新しいパスワード 確認用が新しいパスワードと一致しません。",
       "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
       "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
     },

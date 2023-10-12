@@ -84,10 +84,10 @@ const AppTopbar = forwardRef((props, ref) => {
         {
             label: (
                 <div onClick={() => setChangePasswordOpen(true)}>
-                    <a >{translate(localeJson, 'change_password')}</a>
+                    {translate(localeJson, 'change_password')}
                 </div>
             ),
-            icon: <MdOutlineResetTv style={{ fontSize: "14px" }} />,
+            icon: <MdOutlineResetTv onClick={() => setChangePasswordOpen(true)} style={{ fontSize: "14px" }} />,
             key: '2',
         },
         {

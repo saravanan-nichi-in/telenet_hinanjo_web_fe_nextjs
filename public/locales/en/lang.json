@@ -3,7 +3,7 @@
     "header": {
       "evacuation_shelter_management_system": "Evacuation Shelter Management System",
       "logout": "Logout",
-      "change_password": "Change password"
+      "change_password": "Change Password"
     },
     "sidebar": {
       "vault_info": "Evacuation Information",
@@ -129,7 +129,11 @@
       "format_notification": "format of the notification email ID is incorrect.",
       "is_required": "is required。",
       "file_csv_required": "File CVS is required.",
-      "select_csv_format": "Please select a CSV format file."
+      "select_csv_format": "Please select a CSV format file.",
+      "password_new_not_equal_to_current":"The current password and new password cannot be the same.",
+      "current_password_atLeast_8_characters":"The current password must be at least 8 characters.",
+      "current_password_max_15_characters":"The current password must not be greater than 15 characters.",
+      "new_password_max_15_characters":"The new password must not be greater than 15 characters."    
     },
     "buttons": {
       "import": "Import",
@@ -163,8 +167,8 @@
       "transmission_interval": "Frequency",
       "output_target_area": "Select Prefecture",
       "current_password": "Current Password",
-      "new_password": "New password",
-      "new_password_confirmation": "New password confirmation"
+      "new_password": "New Password",
+      "new_password_confirmation": "New Password Confirmation"
     },
     "others": {
       "not": "None",
@@ -211,12 +215,13 @@
       "email_valid": "The email must be a valid email address.",
       "password": "Password",
       "password_required": "The password must be required.",
+      "current_password_required":"The current password must be required.",
       "password_atLeast_8_characters": "Password must be at least 8 characters.",
       "admin_login_screen": "Administrator login",
       "password_reset": "Forgot your password?",
       "new_password": "New password",
       "new_password_required": "The new password must be required.",
-      "new_password_not_matched": "The new password requirements not matched",
+      "new_password_not_matched": "The new password requirements do not match.",
       "new_password_confirm": "New password (confirmation)",
       "confirm_password_required": "The confirm password must be required.",
       "confirm_password_notMatch": "The new password (confirmation) does not match the new password.",
