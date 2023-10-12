@@ -68,13 +68,10 @@ function _exportData(payload, callBackFun) {
  */
 function _getList(payload, callBackFun) {
     axios
-        .get("/admin/stockpile/list", payload)
+        .post("/admin/stockpile/list", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
             }
         })
         .catch((error) => {
@@ -118,7 +115,7 @@ function _create(payload, callBackFun) {
  */
 function _update(id, payload, callBackFun) {
     axios
-        .put(`/admin/stockpile/${id}`, payload)
+        .post(`/admin/stockpile/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();

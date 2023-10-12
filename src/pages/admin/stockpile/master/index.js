@@ -12,24 +12,21 @@ import { StockpileService } from '@/services/stockpilemaster.service';
 import { historyPageCities } from '@/utils/constant';
 
 export default function AdminStockPileMaster() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
-    const [checked1, setChecked1] = useState(false);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
-    const router = useRouter();
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-    const columns = [
-        { field: 'Sl No', header: 'Sl No', minWidth: "5rem" },
-        { field: '備蓄品名', header: '備蓄品名', minWidth: "30rem" },
-        { field: '種別', header: '種別', sortable: "true", minWidth: "10rem" },
-        { field: '保管期間 (日)', header: '保管期間 (日)', minWidth: "10rem" },
+    const columnsData = [
+        { field: 'product_id', header: 'Sl No', minWidth: "5rem" },
+        { field: 'category', header: '備蓄品名', minWidth: "10rem" },
+        { field: 'product_name', header: '種別', minWidth: "10rem" },
+        { field: 'shelf_life', header: '保管期間 (日)', minWidth: "10rem" },
         {
-            field: 'actions',
+            field: 'stockpile_image',
             header: '画像	',
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    <FaEyeSlash style={{ fontSize: '20px' }} />
+                    <FaEyeSlash style={{ fontSize: '20px' }} onClick={() => alert(rowData.stockpile_image)} />
                 </div>
             ),
         },
@@ -38,18 +35,30 @@ export default function AdminStockPileMaster() {
             header: '削除 ',
             minWidth: "10rem",
             body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
+                <>
+                <Button parentStyle={{display: "inline"}} buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => openDeleteDialog(1)
+                        onClick: () => openDeleteDialog(rowData.product_id)
                     }} />
-                </div>
+               <Button parentStyle={{display: "inline"}}  buttonProps={{
+                   text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                   bg: "bg-white",
+                   hoverBg: "hover:bg-primary hover:text-white",
+                   onClick: () => {
+                       setRegisterModalAction("edit")
+                       setCurrentEditObj(rowData)
+                       setEmailSettingsOpen(true)
+                   },
+               }} />
+                </>
             ),
         }
     ];
 
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [currentEditObj, setCurrentEditObj] = useState('');
 
     const [deleteId, setDeleteId] = useState(null);
 
@@ -83,15 +92,6 @@ export default function AdminStockPileMaster() {
         setEmailSettingsOpen(false);
     };
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await AdminStockpileMasterService.getAdminsStockpileMasterMedium().then((data) => setAdmins(data));
-            setLoader(false);
-        };
-        fetchData();
-    }, []);
-
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
@@ -112,6 +112,118 @@ export default function AdminStockPileMaster() {
         onStaffImportClose();
     }
 
+
+    //Listing start
+
+        /**
+     * Action column for dashboard list
+     * @param {*} obj 
+     * @returns 
+     */
+        const action = (obj) => {
+            return (<>
+                 <Button parentStyle={{display: "inline"}} buttonProps={{
+                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                         bg: "bg-white",
+                         hoverBg: "hover:bg-primary hover:text-white",
+                         onClick: () => openDeleteDialog(obj.product_id)
+                     }} />
+                <Button parentStyle={{display: "inline"}}  buttonProps={{
+                    text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                    bg: "bg-white",
+                    hoverBg: "hover:bg-primary hover:text-white",
+                    onClick: () => {
+                        setRegisterModalAction("edit")
+                        setCurrentEditObj(obj)
+                        setEmailSettingsOpen(true)
+                    },
+                }} />
+                 </>
+            );
+        };
+    
+        const [getListPayload, setGetListPayload] = useState({
+            filters: {
+                start: 0,
+                limit: 7,
+                order_by: "",
+                sort_by: ""
+            },
+            category : "",
+            product_name : ""
+        });
+    
+        const [columns, setColumns] = useState([]);
+        const [list, setList] = useState([]);
+        const [totalCount, setTotalCount] = useState(0);
+        const [tableLoading, setTableLoading] = useState(false);
+    
+    
+        /* Services */
+        const { getList, exportData } = StockpileService;
+    
+        useEffect(() => {
+            setTableLoading(true);
+            const fetchData = async () => {
+                await onGetMaterialListOnMounting()
+                setLoader(false);
+            };
+            fetchData();
+        }, [locale, getListPayload]);
+    
+        /**
+         * Get dashboard list on mounting
+         */
+        const onGetMaterialListOnMounting = () => {
+            // Get dashboard list
+            getList(getListPayload, (response)=> {
+                if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+                    const data = response.data.model.list;
+                    var additionalColumnsArrayWithOldData = [...columnsData];
+                    let  preparedList = [];
+                    // Update prepared list to the state
+                    // Preparing row data for specific column to display
+                    data.map((obj, i) => {
+                        let preparedObj = {
+                            product_id: obj.product_id ?? "",
+                            product_name:  obj.product_name ?? "",
+                            category: obj.category ?? "",
+                            shelf_life: obj.shelf_life ?? "",
+                            stockpile_image: obj.stockpile_image ?? "",
+                            // actions: action(obj)
+                        }
+                        preparedList.push(preparedObj);
+                    })    
+                    
+                    setList(preparedList);
+                    setColumns(additionalColumnsArrayWithOldData);
+                    setTotalCount(response.data.model.total);
+                    setTableLoading(false);
+                }
+    
+            });
+        }
+
+    /**
+     * Pagination handler
+     * @param {*} e 
+     */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
     return (
         <>
             <AdminManagementDeleteModal
@@ -123,6 +235,9 @@ export default function AdminStockPileMaster() {
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
                 register={onRegister}
+                refreshList={onGetMaterialListOnMounting} 
+                registerModalAction={registerModalAction}
+                currentEditObj={{...currentEditObj}}
             />
             <AdminManagementImportModal
                 open={importPlaceOpen}
@@ -158,7 +273,12 @@ export default function AdminStockPileMaster() {
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'signup'),
-                                        onClick: () => setEmailSettingsOpen(true),
+                                        onClick: () => {
+                                            setRegisterModalAction("create");
+                                            setCurrentEditObj({ category: "", product_name: "", shelf_life: "" });
+                                            setEmailSettingsOpen(true);
+
+                                        },
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
@@ -201,7 +321,23 @@ export default function AdminStockPileMaster() {
                                     </form>
                                 </div>
                                 <div className='mt-3'>
-                                    <NormalTable responsiveLayout={"scrollable"} showGridlines={"true"} rows={10} paginator={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                                <NormalTable
+                            lazy
+                            totalRecords={totalCount}
+                            loading={tableLoading}
+                            stripedRows={true}
+                            className={"custom-table-cell"}
+                            showGridlines={"true"}
+                            value={list}
+                            columns={columns}
+                            filterDisplay="menu"
+                            emptyMessage="No data found."
+                            paginator={true}
+                            first={getListPayload.filters.start}
+                            rows={getListPayload.filters.limit}
+                            paginatorLeft={true}
+                            onPageHandler={(e) => onPaginationChange(e)}
+                        />
                                 </div>
                             </div>
                         </section>

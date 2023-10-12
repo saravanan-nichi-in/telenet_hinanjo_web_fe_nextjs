@@ -45,27 +45,30 @@ export default function StockpileCreateEditModal(props) {
             <Formik
                 validationSchema={schema}
                 enableReinitialize={true} 
-                initialValues={{ category: "", product_name: "", shelf_life: "" }}
+                // initialValues={{ category: "", product_name: "", shelf_life: "" }}
+                initialValues={props.currentEditObj}
                 onSubmit={(values) => {
                     console.log(values.image_logo)
                     let formData = new FormData();
                     formData.append('category', values.category);
-                    formData.append('product_name', values.category);
+                    formData.append('product_name', values.product_name);
                     formData.append('shelf_life', values.shelf_life);
-                    formData.append('image_logo', values.image_logo);
-                    // if (props.registerModalAction=="create") {
+                    if(values.image_logo) {
+                        formData.append('image_logo', values.image_logo);
+                    }
+                    
+                    if (props.registerModalAction=="create") {
                         StockpileService.create(formData, ()=> {
-                            
-                            // props.refreshList();
+                            props.refreshList();
                         })
-                    // } 
-                    // else if(props.registerModalAction=="edit") {
-                    //     StockpileService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
-                    //     ()=> {
-                    //         close();
-                    //         // props.refreshList();
-                    //     })
-                    // }
+                    } 
+                    else if(props.registerModalAction=="edit") {
+                        formData.append('product_id', props.currentEditObj.product_id);
+                        StockpileService.update(props.currentEditObj.product_id, formData,
+                        ()=> {
+                            props.refreshList();
+                        })
+                    }
                     close();
                     return false;
                 }}
