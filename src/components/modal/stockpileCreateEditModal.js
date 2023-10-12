@@ -13,53 +13,59 @@ import { ValidationError } from "../error";
 import { InputIcon, TextAreaFloatLabel } from "../input";
 import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 import { InputFile } from '@/components/upload';
+import { StockpileService } from "@/services/stockpilemaster.service";
 
 export default function StockpileCreateEditModal(props) {
-
-    const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
-    const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
- 
  
     const { localeJson } = useContext(LayoutContext);
-    const router = useRouter();
+    
     const schema = Yup.object().shape({
-        type: Yup.string()
+        category: Yup.string()
             .required(translate(localeJson, 'type_required')),
-        stockpileName: Yup.string()
+        product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required')),
+            shelf_life:Yup.number()
     });
 
+    const [category,  setCategory] = useState("");
     /**
      * Destructing
     */
-    const { open, close, register } = props && props;
-
-    const validateMultipleEmails = (value, localeJson) => {
-        const emails = value.split(',').map(email => email.trim());
-
-        for (const email of emails) {
-            if (!Yup.string().email().isValidSync(email)) {
-                return false;
-            }
-        }
-
-        return true; // Return true if all emails are valid
-    };
+    const { open, close, register } = props;
 
     const header = (
         <div className="custom-modal">
             {translate(localeJson, 'edit_material_information')}
         </div>
     );
-
+    let categoryNames = ['category1', 'category2', 'category3'];
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ supplies: "" }}
-                onSubmit={() => {
-                    router.push("/admin/material")
+                initialValues={{ category: "" }}
+                onSubmit={(values) => {
+                    console.log(values.image_logo)
+                    let formData = new FormData();
+                    formData.append('category', values.category);
+                    formData.append('product_name', values.category);
+                    formData.append('shelf_life', values.shelf_life);
+                    formData.append('image_logo', values.image_logo);
+                    // if (props.registerModalAction=="create") {
+                        StockpileService.create(formData, ()=> {
+                            close();
+                            // props.refreshList();
+                        })
+                    // } 
+                    // else if(props.registerModalAction=="edit") {
+                    //     StockpileService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
+                    //     ()=> {
+                    //         close();
+                    //         // props.refreshList();
+                    //     })
+                    // }
+                    return false;
                 }}
             >
                 {({
@@ -68,6 +74,7 @@ export default function StockpileCreateEditModal(props) {
                     touched,
                     handleChange,
                     handleBlur,
+                    setFieldValue,
                     handleSubmit,
                 }) => (
                     <div>
@@ -92,11 +99,6 @@ export default function StockpileCreateEditModal(props) {
                                         text: translate(localeJson, 'registration'),
                                         severity: "primary",
                                         onClick: () => {
-                                            register({
-                                                transmissionInterval,
-                                                outputTargetArea,
-                                                email: values.email
-                                            });
                                             handleSubmit();
                                         },
                                     }} parentClass={"inline"} />
@@ -113,10 +115,11 @@ export default function StockpileCreateEditModal(props) {
                                                             text={"種別"} />
                                                     </div>
                                                     <InputSelect dropdownProps={{
-                                                        name: "type",
+                                                        name: "category",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                        value: values.type,
+                                                        values: category,
+                                                        options: categoryNames,
                                                         inputSelectClass: "create_input_stock"
                                                     }} parentClass={`${errors.type && touched.type && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.type && touched.type && errors.type} />
@@ -128,10 +131,10 @@ export default function StockpileCreateEditModal(props) {
                                                             text={"備蓄品名"} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
-                                                        name: "stockpileName",
+                                                        name: "product_name",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                        value: values.stockpileName,
+                                                        value: values.product_name,
                                                         inputClass: "create_input_stock",
                                                     }} parentClass={`${errors.stockpileName && touched.stockpileName && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.stockpileName && touched.stockpileName && errors.stockpileName} />
@@ -142,7 +145,10 @@ export default function StockpileCreateEditModal(props) {
                                                             text={"保管期間 (日)"} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
-                                                        keyfilter: "num",
+                                                        name: "shelf_life",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        value: values.shelf_life,
                                                         inputClass: "create_input_stock",
                                                     }} />
                                                 </div>
@@ -152,6 +158,10 @@ export default function StockpileCreateEditModal(props) {
                                                             text={"画像"} />
                                                     </div>
                                                     <InputFile inputFileProps={{
+                                                         name: "image_logo",
+                                                         onChange: (event) => {
+                                                            setFieldValue("image_logo", event.currentTarget.files[0]);
+                                                        },
                                                         inputFileStyle: { fontSize: "12px" }
                                                     }} parentClass={"create_input_stock"} />
                                                 </div>
