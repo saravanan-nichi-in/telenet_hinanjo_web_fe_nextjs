@@ -9,7 +9,7 @@ import { InputSelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
 import { EmailSettings } from '@/components/modal';
 import { HistoryServices } from '@/services/history.services';
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
+import { MailSettingsOption1 } from '@/utils/constant';
 
 /**
  * Shelter Place History Status
@@ -28,6 +28,11 @@ export default function AdminHistoryPlacePage() {
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
+    const [emailSettingValues, setEmailSettingValues] = useState({
+        email: "",
+        transmissionInterval: null,
+        outputTargetArea: null
+    });
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -58,13 +63,15 @@ export default function AdminHistoryPlacePage() {
     ];
 
     /* Services */
-    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration, getPrefectureList } = HistoryServices;
+    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList,
+        registerEmailConfiguration, getPrefectureList, getEmailConfiguration } = HistoryServices;
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetHistoryPlaceListOnMounting();
             await onGetHistoryPlaceDropdownListOnMounting();
+            await onGetEmailConfigurationOnMounting();
             setLoader(false);
         };
         fetchData();
@@ -83,6 +90,10 @@ export default function AdminHistoryPlacePage() {
     const onGetHistoryPlaceDropdownListOnMounting = () => {
         // Get dashboard list
         getPlaceDropdownList({}, onGetHistoryPlaceDropdownList);
+    }
+
+    const onGetEmailConfigurationOnMounting = () => {
+        getEmailConfiguration({}, getEmailConfig);
     }
 
     const searchListWithCriteria = () => {
@@ -155,6 +166,7 @@ export default function AdminHistoryPlacePage() {
         else {
             setHistoryPlaceList([]);
             setEmptyTableMessage(response.message);
+            setTableLoading(false);
         }
     }
 
@@ -166,7 +178,7 @@ export default function AdminHistoryPlacePage() {
         if (response.success) {
             const downloadLink = document.createElement("a");
             const fileName = "Place_history" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.file;
+            downloadLink.href = response.result.filePath;
             downloadLink.download = fileName;
             downloadLink.click();
         }
@@ -177,6 +189,7 @@ export default function AdminHistoryPlacePage() {
     */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        onGetHistoryPlaceListOnMounting();
     };
 
     /**
@@ -202,26 +215,37 @@ export default function AdminHistoryPlacePage() {
     }
 
     const mailSettingModel = () => {
+        getPrefectureList({}, loadPrefectureDropdownList);
+        getEmailConfiguration({}, getEmailConfig);
         setEmailSettingsOpen(true);
-        getPrefectureList({}, loadPrefectureDropdownList)
+    }
+
+    const getEmailConfig = (response) => {
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.model;
+            let emailData = {
+                email: data.email,
+                transmissionInterval: data.frequency,
+                outputTargetArea: data.prefecture_id
+            }
+            setEmailSettingValues(emailData);
+        }
     }
 
     const loadPrefectureDropdownList = (response) => {
         let prefectureList = [{
-            name : "--",
+            name: "--",
             value: null
         }];
-        if(response.success && !_.isEmpty(response.data)){
-            const data = response.data;
-            Object.keys(data).forEach(function(key) {
-                console.log(key, data[key]);
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.list;
+            data.map((obj) => {
                 let option = {
-                    name: data[key],
-                    value: key
+                    name: obj.name,
+                    value: obj.id
                 };
                 prefectureList.push(option);
-            });
-
+            })
             setprefectureListDropdown(prefectureList);
         }
     }
@@ -248,13 +272,16 @@ export default function AdminHistoryPlacePage() {
 
     return (
         <React.Fragment>
-            <EmailSettings
-                open={emailSettingsOpen}
-                close={onEmailSettingsClose}
-                register={onRegister}
-                intervalFrequency={MailSettingsOption1}
-                prefectureList={prefectureListDropdown}
-            />
+            {/* {emailSettingsOpen && */}
+                <EmailSettings
+                    open={emailSettingsOpen}
+                    close={onEmailSettingsClose}
+                    register={onRegister}
+                    intervalFrequency={MailSettingsOption1}
+                    prefectureList={prefectureListDropdown}
+                    emailSettingValues={emailSettingValues}
+                />
+            {/* } */}
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -294,7 +321,7 @@ export default function AdminHistoryPlacePage() {
                                             onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                            inputId: "shelterCity",
+                                            inputId: "shelter-city",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",
                                             value: selectedCity,
                                             options: historyPlaceDropdown,
