@@ -22,8 +22,8 @@ export default function EvacuationPage() {
     const [evacuationPlaceList, setEvacuationPlaceList] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [familyCode, setFamilyCode] = useState("");
-    const [refugeeName, setRefugeeName] = useState("");
+    const [familyCode, setFamilyCode] = useState(null);
+    const [refugeeName, setRefugeeName] = useState(null);
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [getListPayload, setGetListPayload] = useState({
         filters: {

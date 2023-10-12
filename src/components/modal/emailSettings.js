@@ -21,7 +21,9 @@ export default function EmailSettings(props) {
     const { localeJson } = useContext(LayoutContext);
     const [transmissionInterval, setTransmissionInterval] = useState(null);
     const [outputTargetArea, setOutputTargetArea] = useState(null);
-    const [emailAddress, setEmailAddres] = useState(emailSettingValues.email);
+    const [initialValues, setInitialValues] = useState({
+        email: emailSettingValues.email,
+    });
     const regexExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -53,9 +55,11 @@ export default function EmailSettings(props) {
 
     useEffect(() => {
         if (open) {
-            setTransmissionInterval(emailSettingValues.frequency);
-            setOutputTargetArea(emailSettingValues.prefectureID);
-            setEmailAddres(emailSettingValues.email);
+            setTransmissionInterval(emailSettingValues.transmissionInterval);
+            setOutputTargetArea(emailSettingValues.outputTargetArea);
+            setInitialValues({
+                email: emailSettingValues.email
+            });
         }
     }, [open]);
 
@@ -63,7 +67,8 @@ export default function EmailSettings(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: emailAddress }}
+                initialValues={initialValues}
+                enableReinitialize
                 onSubmit={() => {
                     router.push("/admin/history/place")
                 }}

@@ -30,8 +30,8 @@ export default function AdminHistoryPlacePage() {
     const [totalCount, setTotalCount] = useState(0);
     const [emailSettingValues, setEmailSettingValues] = useState({
         email: "",
-        frequency: null,
-        prefectureID: null
+        transmissionInterval: null,
+        outputTargetArea: null
     });
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -178,7 +178,7 @@ export default function AdminHistoryPlacePage() {
         if (response.success) {
             const downloadLink = document.createElement("a");
             const fileName = "Place_history" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.file;
+            downloadLink.href = response.result.filePath;
             downloadLink.download = fileName;
             downloadLink.click();
         }
@@ -225,8 +225,8 @@ export default function AdminHistoryPlacePage() {
             const data = response.data.model;
             let emailData = {
                 email: data.email,
-                frequency: data.frequency,
-                prefectureID: data.prefecture_id
+                transmissionInterval: data.frequency,
+                outputTargetArea: data.prefecture_id
             }
             setEmailSettingValues(emailData);
         }
