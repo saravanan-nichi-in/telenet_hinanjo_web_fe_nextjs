@@ -24,7 +24,7 @@ export default function StockpileCreateEditModal(props) {
             .required(translate(localeJson, 'type_required')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required')),
-            shelf_life:Yup.number()
+        shelf_life:Yup.number()
     });
 
     const [category,  setCategory] = useState("");
@@ -44,7 +44,8 @@ export default function StockpileCreateEditModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ category: "" }}
+                enableReinitialize={true} 
+                initialValues={{ category: "", product_name: "", shelf_life: "" }}
                 onSubmit={(values) => {
                     console.log(values.image_logo)
                     let formData = new FormData();
@@ -54,7 +55,7 @@ export default function StockpileCreateEditModal(props) {
                     formData.append('image_logo', values.image_logo);
                     // if (props.registerModalAction=="create") {
                         StockpileService.create(formData, ()=> {
-                            close();
+                            
                             // props.refreshList();
                         })
                     // } 
@@ -65,6 +66,7 @@ export default function StockpileCreateEditModal(props) {
                     //         // props.refreshList();
                     //     })
                     // }
+                    close();
                     return false;
                 }}
             >
@@ -118,11 +120,11 @@ export default function StockpileCreateEditModal(props) {
                                                         name: "category",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                        values: category,
+                                                        value: values.category,
                                                         options: categoryNames,
                                                         inputSelectClass: "create_input_stock"
-                                                    }} parentClass={`${errors.type && touched.type && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.type && touched.type && errors.type} />
+                                                    }} parentClass={`${errors.category && touched.category && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.category && touched.category && errors.category} />
                                                 </div>
                                                 <div className="pt-3 ">
                                                     <div className='pb-1'>
@@ -136,8 +138,8 @@ export default function StockpileCreateEditModal(props) {
                                                         onBlur: handleBlur,
                                                         value: values.product_name,
                                                         inputClass: "create_input_stock",
-                                                    }} parentClass={`${errors.stockpileName && touched.stockpileName && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.stockpileName && touched.stockpileName && errors.stockpileName} />
+                                                    }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
                                                 </div>
                                                 <div className="pt-3 ">
                                                     <div className='pb-1'>
@@ -150,7 +152,8 @@ export default function StockpileCreateEditModal(props) {
                                                         onBlur: handleBlur,
                                                         value: values.shelf_life,
                                                         inputClass: "create_input_stock",
-                                                    }} />
+                                                    }} parentClass={`${errors.shelf_life && touched.shelf_life && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.shelf_life && touched.shelf_life && errors.shelf_life} />
                                                 </div>
                                                 <div className="pt-3 ">
                                                     <div className='pb-1'>
