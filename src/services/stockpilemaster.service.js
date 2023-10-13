@@ -9,6 +9,7 @@ export const StockpileService = {
     create: _create,
     update: _update,
     delete: _delete,
+    getCategoryAndProductList: _getCategoryAndProductList
 };
 
 /**
@@ -72,6 +73,28 @@ function _getList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get stockpile category/product dropdown list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getCategoryAndProductList(callBackFun) {
+    axios
+        .get("/admin/stockpile/product/dropdown")
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data.data);
             }
         })
         .catch((error) => {

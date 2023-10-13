@@ -4,8 +4,8 @@ import { FaEyeSlash } from 'react-icons/fa';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DeleteModal, DividerComponent, InputSelect, NormalLabel, NormalTable, SelectFloatLabel } from '@/components';
-import { AdminStockpileMasterService } from '@/helper/adminStockpileMaster';
+import { Button, DividerComponent, NormalTable, SelectFloatLabel } from '@/components';
+
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 import { StockpileService } from '@/services/stockpilemaster.service';
@@ -15,6 +15,26 @@ export default function AdminStockPileMaster() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [productNames, setProductNames] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedProductName, setSelectedProductName] = useState("");
+    
+    const callDropDownApi = () => {
+        StockpileService.getCategoryAndProductList((res)=> {
+            let data = res.data;
+            let tempProducts = [""];
+            let tempCategories = new Set();
+            data.forEach((value, index) => {
+                tempProducts.push(value.product_name);
+                tempCategories.add(value.category);
+            })
+            console.log([...tempCategories], tempProducts);
+            setCategories(["", ...tempCategories]);
+            setProductNames(tempProducts);
+        });
+    }
+    
     const columnsData = [
         { field: 'product_id', header: 'Sl No', minWidth: "5rem" },
         { field: 'category', header: '備蓄品名', minWidth: "10rem" },
@@ -71,7 +91,7 @@ export default function AdminStockPileMaster() {
         if (action == "confirm") {
             // alert(deleteId)
             StockpileService.delete(deleteId, (resData) => {
-                alert(resData);
+                onGetMaterialListOnMounting()
             });
         }
         setDeleteStaffOpen(!deleteStaffOpen);
@@ -111,7 +131,6 @@ export default function AdminStockPileMaster() {
         });
         onStaffImportClose();
     }
-
 
     //Listing start
 
@@ -160,7 +179,7 @@ export default function AdminStockPileMaster() {
     
     
         /* Services */
-        const { getList, exportData } = StockpileService;
+        const { getList, exportData, getCategoryAndProductList } = StockpileService;
     
         useEffect(() => {
             setTableLoading(true);
@@ -169,6 +188,7 @@ export default function AdminStockPileMaster() {
                 setLoader(false);
             };
             fetchData();
+            callDropDownApi();
         }, [locale, getListPayload]);
     
         /**
@@ -199,9 +219,9 @@ export default function AdminStockPileMaster() {
                     setColumns(additionalColumnsArrayWithOldData);
                     setTotalCount(response.data.model.total);
                     setTableLoading(false);
-                }
-    
+                } 
             });
+            
         }
 
     /**
@@ -229,6 +249,7 @@ export default function AdminStockPileMaster() {
             <AdminManagementDeleteModal
                 open={deleteStaffOpen}
                 close={onStaffDeleteClose}
+                refreshList={onGetMaterialListOnMounting}
             />
 
             <StockpileCreateEditModal
@@ -238,6 +259,7 @@ export default function AdminStockPileMaster() {
                 refreshList={onGetMaterialListOnMounting} 
                 registerModalAction={registerModalAction}
                 currentEditObj={{...currentEditObj}}
+                categories={categories}
             />
             <AdminManagementImportModal
                 open={importPlaceOpen}
@@ -287,22 +309,22 @@ export default function AdminStockPileMaster() {
                                     <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                         <div>
                                         <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "shelterCity",
+                                            inputId: "category_search",
                                             selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: historyPageCities,
-                                            optionLabel: "name",
-                                            onChange: (e) => setSelectedCity(e.value),
+                                            options: categories,
+                                            value: selectedCategory,
+                                            onChange: (e) => setSelectedCategory(e.value),
                                             text: translate(localeJson, "shelter_place_name"),
                                             custom: "mobile-input custom-select"
                                         }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
                                         </div>
                                         <div >
                                             <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "shelterCity",
+                                            inputId: "product_name_search",
                                             selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: historyPageCities,
-                                            optionLabel: "name",
-                                            onChange: (e) => setSelectedCity(e.value),
+                                            options: productNames,
+                                            value: selectedProductName,
+                                            onChange: (e) => setSelectedProductName(e.value),
                                             text: translate(localeJson, "shelter_place_name"),
                                             custom: "mobile-input custom-select"
                                         }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
@@ -313,7 +335,12 @@ export default function AdminStockPileMaster() {
                                                     type: 'submit',
                                                     text: translate(localeJson, 'update'),
                                                     rounded: "true",
-                                                    severity: "primary"
+                                                    severity: "primary",
+                                                    onClick: (e) => {
+                                                        e.preventDefault();
+                                                        setGetListPayload({...getListPayload, 
+                                                            category: selectedCategory, product_name: selectedProductName})
+                                                    }
                                                 }} parentStyle={{ paddingLeft: "10px" }} />
 
                                             </div>

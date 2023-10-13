@@ -124,7 +124,7 @@ export default function StockpileCreateEditModal(props) {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         value: values.category,
-                                                        options: categoryNames,
+                                                        options: props.categories,
                                                         inputSelectClass: "create_input_stock"
                                                     }} parentClass={`${errors.category && touched.category && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.category && touched.category && errors.category} />
