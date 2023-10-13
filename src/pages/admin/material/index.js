@@ -14,7 +14,7 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'id', header: 'ID' },
+        { field: 'slno', header: 'ID' },
         { field: 'name', header: '物資', minWidth: "20rem" },
         { field: 'unit', header: '単位' },
         {
@@ -93,6 +93,7 @@ export default function AdminMaterialPage() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
+                        slno: i+1,
                         id: obj.id ?? "",
                         name:  obj.name ?? "",
                         unit: obj.unit ?? "",

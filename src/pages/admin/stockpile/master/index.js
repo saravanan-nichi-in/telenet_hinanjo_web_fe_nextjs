@@ -39,7 +39,7 @@ export default function AdminStockPileMaster() {
     }
     
     const columnsData = [
-        { field: 'product_id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
+        { field: 'id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem" },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), minWidth: "10rem" },
         { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "10rem" },
@@ -212,6 +212,7 @@ export default function AdminStockPileMaster() {
                     // Preparing row data for specific column to display
                     data.map((obj, i) => {
                         let preparedObj = {
+                            id: i+1,
                             product_id: obj.product_id ?? "",
                             product_name:  obj.product_name ?? "",
                             category: obj.category ?? "",
