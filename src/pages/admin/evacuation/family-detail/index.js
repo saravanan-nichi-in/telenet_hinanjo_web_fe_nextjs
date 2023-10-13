@@ -87,7 +87,6 @@ export default function EvacueeFamilyDetail() {
 
     const getSpecialCareName = (nameList) => {
         let specialCareName = null;
-        console.log(nameList);
         nameList.map((item)=>{
             specialCareName = specialCareName ? (specialCareName + ", " +item) :  item;
         });

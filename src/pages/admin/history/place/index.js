@@ -29,8 +29,8 @@ export default function AdminHistoryPlacePage() {
     const [totalCount, setTotalCount] = useState(0);
     const [emailSettingValues, setEmailSettingValues] = useState({
         email: "",
-        transmissionInterval: null,
-        outputTargetArea: null
+        transmissionInterval: 0,
+        outputTargetArea: 0
     });
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -206,10 +206,16 @@ export default function AdminHistoryPlacePage() {
         if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
             let payload = {
                 email: emailList,
-                frequency: values.transmissionInterval,
-                prefecture_id: values.outputTargetArea
+                frequency: values.transmissionInterval == 0 ? 0: values.transmissionInterval,
+                prefecture_id: values.outputTargetArea == 0 ? null : values.outputTargetArea
             }
-            registerEmailConfiguration(payload, registerEmailConfig)
+            let emailData = {
+                email: emailList,
+                transmissionInterval: values.transmissionInterval,
+                outputTargetArea: values.outputTargetArea
+            }
+            registerEmailConfiguration(payload, registerEmailConfig);
+            setEmailSettingValues(emailData);
             setEmailSettingsOpen(false);
         }
     };
@@ -229,8 +235,8 @@ export default function AdminHistoryPlacePage() {
             const data = response.data.model;
             let emailData = {
                 email: data.email,
-                transmissionInterval: data.frequency,
-                outputTargetArea: data.prefecture_id
+                transmissionInterval: data.frequency ? data.frequency : 0,
+                outputTargetArea: data.prefecture_id ? data.prefecture_id : 0
             }
             setEmailSettingValues(emailData);
         }
@@ -239,7 +245,7 @@ export default function AdminHistoryPlacePage() {
     const loadPrefectureDropdownList = (response) => {
         let prefectureList = [{
             name: "--",
-            value: null
+            value: 0
         }];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.list;

@@ -53,7 +53,6 @@ export default function EvacuationPage() {
     ];
 
     const downloadEvacueesListCSV = () => {
-        console.log(getListPayload);
         exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
     }
 
@@ -86,7 +85,6 @@ export default function EvacuationPage() {
 
     const getSpecialCareName = (nameList) => {
         let specialCareName = null;
-        console.log(nameList);
         nameList.map((item)=>{
             specialCareName = specialCareName ? (specialCareName + ", " +item.name) :  item.name;
         });
@@ -105,9 +103,7 @@ export default function EvacuationPage() {
             let index;
             let previousItem = null;
             data.map((item) => {
-                console.log()
                 if (previousItem && previousItem.id == item.family_id) {
-                    console.log(previousItem.id)
                     index = index + 1;
                 } else {
                     if (evacueesDataList.length > 0 && data.indexOf(item) === 0 ) {
