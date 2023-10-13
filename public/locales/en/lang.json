@@ -138,7 +138,7 @@
       "matters_to_consider_required": "Information on persons requiring special consideration is required.",
       "things_to_consider_required": "Persons requiring special care (English) is required.",
       "notification_email_id_required": "Notification email ID is required.",
-      "format_notification": "format of the notification email ID is incorrect.",
+      "format_notification": "Email ID format is incorrect.",
       "is_required": "is required。",
       "file_csv_required": "File CVS is required.",
       "select_csv_format": "Please select a CSV format file.",

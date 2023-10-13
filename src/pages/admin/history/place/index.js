@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
-import { useRouter } from 'next/router'
 
 import { getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -106,7 +105,7 @@ export default function AdminHistoryPlacePage() {
             },
             start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
             end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
-            place_name: selectedCity ? selectedCity.name : ""
+            place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
         }
         getList(payload, onGetHistoryPlaceList);
         setGetListPayload(payload);
@@ -117,12 +116,15 @@ export default function AdminHistoryPlacePage() {
      * @param {*} data 
     */
     const onGetHistoryPlaceDropdownList = (response) => {
-        let historyPlaceCities = [];
+        let historyPlaceCities = [{
+            name : "--",
+            code: null
+        }];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.model;
             data.map((obj, i) => {
                 let placeDropdownList = {
-                    name: response.locale == 'ja' ? obj.name : obj.name_en,
+                    name: response.locale == 'ja' ? obj.name : obj.name,
                     code: obj.id
                 }
                 historyPlaceCities.push(placeDropdownList)
@@ -139,9 +141,10 @@ export default function AdminHistoryPlacePage() {
             const data = response.data.model.list;
             console.log(data);
             let historyPlaceListData = [];
+            let index = getListPayload.filters.start + 1;
             data.map((obj, i) => {
                 let historyData = {
-                    "si_no": i + 1,
+                    "si_no":  index,
                     "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
                     "prefecture_name": obj.prefecture_name,
                     "place_name": obj.place_name,
@@ -158,6 +161,7 @@ export default function AdminHistoryPlacePage() {
                     "place_remarks": obj.place_remarks,
                 };
                 historyPlaceListData.push(historyData);
+                index = index + 1;
             });
             setTotalCount(response.data.model.total);
             setTableLoading(false);
