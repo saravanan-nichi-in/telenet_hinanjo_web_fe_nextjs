@@ -35,7 +35,8 @@
       "edit_admin_management": "Edit Admin Management",
       "admin_information_registration": "Admin Information registration",
       "material_information_registration": "Material Information registration",
-      "special_care_registration": "Registration of matters requiring consideration",
+      "special_care_create": "Special Care Create",
+      "special_care_edit":"Special Care Edit",
       "edit_material_information": "Edit material information",
       "house_hold_information_details": "Household Information Details",
       "admin_details": "Admin Details",
@@ -143,7 +144,8 @@
       "evacuation_date_time": "Evacuation Date Time",
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
-      "create_qr_codes_successfully": "Create QrCodes successfully."
+      "create_qr_codes_successfully": "Create QrCodes successfully.",
+      "special_care_import":"Special Care CSV import "
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -151,8 +153,8 @@
       "supplies_necessary": "Supplies are necessary",
       "phone_min10_required": "Enter 10 or 11 digits for The phone number",
       "phone_no_required": "phone number required",
-      "matters_to_consider_required": "Information on persons requiring special consideration is required.",
-      "things_to_consider_required": "Persons requiring special care (English) is required.",
+      "special_care_name_jp_required": "Name is required.",
+      "special_care_name_en_required": "Name (English) is required.",
       "notification_email_id_required": "Notification email ID is required.",
       "format_notification": "Email ID format is incorrect.",
       "is_required": "is required。",
@@ -185,14 +187,16 @@
       "submit": "Submit",
       "create_admin": "Create Admin",
       "create_staff": "Create Staff",
-      "create_place":"Create Place",
-      "download": "Download"
+      "download": "Download",
+      "create_special_care":"Create Special Care"
     },
     "footer": {},
     "form": {
       "evacuation_site": "Evacuation Site",
       "household_number": "Household Number",
       "name": "Name",
+      "special_care_name_jp":"Name",
+      "special_care_name_en":"Name (English)",
       "address_email": "Address Email",
       "tel": "Tel",
       "supplies": "Supplies",
