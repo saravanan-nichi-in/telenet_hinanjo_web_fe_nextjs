@@ -87,6 +87,7 @@
       "si_no": "番号",
       "report_date_time": "報告日時",
       "prefecture": "地区",
+      "location_name": "所在地（名称）",
       "place_name": "避難所名",
       "place_name_furigana": "避難所名 (フリガナ)",
       "location_latitude": "所在地（緯度）",
@@ -115,6 +116,16 @@
       "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
       "shortage_total": "不足合計",
       "download_sample_csv": "サンプルCSVのダウンロード",
+      "admission_date_time": "入所日時",
+      "discharge_date_time": "退所日時",
+      "neighbour_association_name": "町内会名",
+      "created_date": "作成日",
+      "updated_date": "更新日",
+      "representative_number": "電話番号(代表者)",
+      "registered_lang_environment": "登録言語環境",
+      "evacuation_date_time": "避難日時",
+      "test_payload": "Test Payload",
+      "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "QRコードが正常に生成されました。"
     },
     "validation": {
@@ -192,7 +203,10 @@
       "notification_settings": "通知設定",
       "people": "人",
       "household_title": "世帯",
-      "report_date_time": "報告日時"
+      "report_date_time": "報告日時",
+      "post_letter": "〒",
+      "english": "英語",
+      "japanese": "日本語"
     }
   },
   "staff": {

@@ -46,20 +46,20 @@ export default function AdminHistoryPlacePage() {
     });
     const historyTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), minWidth: "5rem", sortable: false, textAlign: 'left' },
-        { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "15rem", sortable: false },
+        { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "10rem", sortable: false },
         { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", sortable: false },
         { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", sortable: false },
-        { field: "place_address", header: translate(localeJson, 'address'), minWidth: "10rem", sortable: false },
+        { field: "place_address", header: translate(localeJson, 'location_name'), minWidth: "10rem", sortable: false },
         { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
         { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false },
         { field: "place_public_availability", header: translate(localeJson, 'place_public_availability'), minWidth: "8rem", sortable: false },
         { field: "place_opened_status", header: translate(localeJson, 'opened_status'), minWidth: "8rem", sortable: false },
         { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false },
         { field: "place_full_status", header: translate(localeJson, 'availability_status'), minWidth: "7rem", sortable: false },
-        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "15rem", sortable: false },
-        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "15rem", sortable: false },
-        { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "5rem" }
+        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "8rem", sortable: false },
+        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "8rem", sortable: false },
+        { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "10rem" }
     ];
 
     /* Services */
@@ -318,6 +318,7 @@ export default function AdminHistoryPlacePage() {
                                             selectionMode: "range",
                                             text: translate(localeJson, "report_date_time"),
                                             dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                            date: new Date(),
                                             onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{

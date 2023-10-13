@@ -8,6 +8,7 @@ export const EvacuationServices = {
     getList: _getList,
     getPlaceDropdownList: _getPlaceDropdownList,
     exportEvacueesCSVList: _exportEvacueesCSVList,
+    getFamilyEvacueesDetail: _getFamilyEvacueesDetail
 };
 
 /**
@@ -64,6 +65,24 @@ function _getPlaceDropdownList(payload, callBackFun) {
         })
         .catch((error) => {
             // Handle errors here
+            console.error('Error fetching data:', error);
+        });
+}
+
+/**
+ * Get Evacuees Family Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getFamilyEvacueesDetail(payload, callBackFun) {
+    const queryParams = new URLSearchParams(payload).toString();
+    axios.get(`/admin/evacuation/detail?${queryParams}`)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
             console.error('Error fetching data:', error);
         });
 }
