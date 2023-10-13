@@ -37,13 +37,13 @@ export default function AdminStockPileMaster() {
     }
     
     const columnsData = [
-        { field: 'product_id', header: 'Sl No', minWidth: "5rem" },
-        { field: 'category', header: '備蓄品名', minWidth: "10rem" },
-        { field: 'product_name', header: '種別', minWidth: "10rem" },
-        { field: 'shelf_life', header: '保管期間 (日)', minWidth: "10rem" },
+        { field: 'product_id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
+        { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem" },
+        { field: 'product_name', header: translate(localeJson, 'header_product_name'), minWidth: "10rem" },
+        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "10rem" },
         {
             field: 'stockpile_image',
-            header: '画像	',
+            header: translate(localeJson, 'header_stockpile_image'),
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
@@ -53,7 +53,7 @@ export default function AdminStockPileMaster() {
         },
         {
             field: 'actions',
-            header: '削除 ',
+            header: translate(localeJson, 'header_action'),
             minWidth: "10rem",
             body: (rowData) => (
                 <>
@@ -273,7 +273,7 @@ export default function AdminStockPileMaster() {
                 <div className="col-12">
                     <div className='card'>
                         <section className='col-12'>
-                            <h5 className='page_header'>{translate(localeJson, 'places')}</h5>
+                            <h5 className='page_header'>{translate(localeJson, 'stockpile_management_header')}</h5>
                             <DividerComponent />
                             <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
@@ -324,7 +324,7 @@ export default function AdminStockPileMaster() {
                                             options: categories,
                                             value: selectedCategory,
                                             onChange: (e) => setSelectedCategory(e.value),
-                                            text: translate(localeJson, "shelter_place_name"),
+                                            text: translate(localeJson, "search_category"),
                                             custom: "mobile-input custom-select"
                                         }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
                                         </div>
@@ -335,7 +335,7 @@ export default function AdminStockPileMaster() {
                                             options: productNames,
                                             value: selectedProductName,
                                             onChange: (e) => setSelectedProductName(e.value),
-                                            text: translate(localeJson, "shelter_place_name"),
+                                            text: translate(localeJson, "search_product_name"),
                                             custom: "mobile-input custom-select"
                                         }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
                                         </div>

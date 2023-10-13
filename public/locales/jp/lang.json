@@ -144,7 +144,25 @@
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "QRコードが正常に生成されました。",
-      "special_care_import":"要配慮者事項CSVインポート "
+      "special_care_import":"要配慮者事項CSVインポート ",
+      "stockpile_management_create_edit_modal_header": "備蓄品登録",
+      "stockpile_management_create_edit_field_product_name": "備蓄品名",
+      "stockpile_management_create_edit_field_category": "種別",
+      "stockpile_management_create_edit_field_shelf_life": "保管期間 (日)",
+      "stockpile_management_create_edit_field_stockpile_image": "画像",
+      "stockpile_management": {
+        "stockpile_management_header" : "備蓄品マスタ管理",
+        "search_category": "種別",
+        "search_product_name":"備蓄品名",
+        "table" : {
+          "header_slno" : "Sl No",
+          "header_product_name": "備蓄品名",
+          "header_category" : "種別",
+          "header_shelf_life" : "保管期間 (日)",
+          "header_stockpile_image" : "画像",
+          "header_action":"削除"
+        }
+      }
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -278,7 +296,8 @@
     },
     "validation": {
       "type_required": "種別は必須です。",
-      "stockpile_name_required": "備蓄品名は必須です。"
+      "stockpile_name_required": "備蓄品名は必須です。",
+      "number_field": "フィールドは有効な数字である必要があります。"
     },
     "buttons": {
       "login": "ログイン",

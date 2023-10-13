@@ -24,7 +24,9 @@ export default function StockpileCreateEditModal(props) {
             .required(translate(localeJson, 'type_required')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required')),
-        shelf_life:Yup.number()
+        shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
+        .positive(translate(localeJson, 'number_field'))
+        .integer(translate(localeJson, 'number_field'))
     });
 
     const [category,  setCategory] = useState("");
@@ -35,11 +37,10 @@ export default function StockpileCreateEditModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'edit_material_information')}
+            {translate(localeJson, 'stockpile_management_create_edit_modal_header')}
         </div>
     );
-    let categoryNames = ['category1', 'category2', 'category3'];
-
+    
     return (
         <>
             <Formik
@@ -117,7 +118,7 @@ export default function StockpileCreateEditModal(props) {
                                                     <div className='pb-1'>
                                                         <NormalLabel spanClass={"p-error"}
                                                             spanText={"*"}
-                                                            text={"種別"} />
+                                                            text={translate(localeJson, 'stockpile_management_create_edit_field_category')} />
                                                     </div>
                                                     <InputSelect dropdownProps={{
                                                         name: "category",
@@ -133,7 +134,7 @@ export default function StockpileCreateEditModal(props) {
                                                     <div className='pb-1'>
                                                         <NormalLabel spanClass={"p-error"}
                                                             spanText={"*"}
-                                                            text={"備蓄品名"} />
+                                                            text={translate(localeJson, 'stockpile_management_create_edit_field_product_name')} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "product_name",
@@ -147,7 +148,7 @@ export default function StockpileCreateEditModal(props) {
                                                 <div className="pt-3 ">
                                                     <div className='pb-1'>
                                                         <NormalLabel
-                                                            text={"保管期間 (日)"} />
+                                                            text={translate(localeJson, 'stockpile_management_create_edit_field_shelf_life')}  />
                                                     </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "shelf_life",
@@ -161,7 +162,7 @@ export default function StockpileCreateEditModal(props) {
                                                 <div className="pt-3 ">
                                                     <div className='pb-1'>
                                                         <NormalLabel
-                                                            text={"画像"} />
+                                                            text={translate(localeJson, 'stockpile_management_create_edit_field_stockpile_image')}  />
                                                     </div>
                                                     <InputFile inputFileProps={{
                                                          name: "image_logo",
