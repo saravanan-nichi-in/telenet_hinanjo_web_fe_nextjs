@@ -9,7 +9,6 @@ import { Button, NormalTable, RowExpansionTable } from '@/components';
 
 export default function EvacueeFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const param = router.query;
     const [tableLoading, setTableLoading] = useState(false);
@@ -20,6 +19,8 @@ export default function EvacueeFamilyDetail() {
     const [familyDetailData, setfamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [neighbourData, setNeighbourData] = useState(null);
+    const [townAssociationColumn, setTownAssociationColumn] = useState([]);
+    const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
 
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem" },
@@ -50,13 +51,13 @@ export default function EvacueeFamilyDetail() {
 
     ];
 
-    const townAssociationColumn = [
+    const townAssociateColumn = [
         { field: 'neighbour_association_name', header: translate(localeJson, 'neighbour_association_name') + " *", minWidth: "10rem" },
         { field: 'test_payload', header: translate(localeJson, 'test_payload') + " *", minWidth: "10rem" },
         { field: 'dropdown_related_questionnaire', header: translate(localeJson, 'dropdown_related_questionnaire') + " *", minWidth: "10rem" },
     ];
 
-    const familyDetailColumns1 = [
+    const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem" },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
@@ -76,10 +77,10 @@ export default function EvacueeFamilyDetail() {
     }
 
     const getRegisteredLanguage = (language) => {
-        if(language == "en"){
+        if (language == "en") {
             return translate(localeJson, 'english');
         }
-        else{
+        else {
             return translate(localeJson, 'japanese');
         }
     }
@@ -92,7 +93,6 @@ export default function EvacueeFamilyDetail() {
 
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
-            console.log(data);
             const historyData = response.data.history.list;
             let basicDetailList = [];
             let basicData = {
@@ -107,9 +107,23 @@ export default function EvacueeFamilyDetail() {
 
             const personList = data.person;
             const familyDataList = [];
-            personList.map((person) => {
+            let personInnerColumns = [...evacueeFamilyDetailRowExpansionColumns];
+            let individualQuestion = personList[0].individualQuestions;
+            if (individualQuestion.length > 0) {
+                individualQuestion.map((ques, index) => {
+                    let column = {
+                        field: "question_" + index,
+                        header: (locale == "ja" ? ques.title : ques.title_en) + " *",
+                        minWidth: "10rem"
+                    };
+                    personInnerColumns.push(column);
+                });
+            }
+            setEvacueePersonInnerColumns(personInnerColumns);
+
+            personList.map((person, index) => {
                 let familyData = {
-                    id: person.id,
+                    id: index + 1,
                     is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     refugee_name: person.refugee_name,
                     name: person.name,
@@ -127,10 +141,18 @@ export default function EvacueeFamilyDetail() {
                         current_location: '-',
                     },
                     ]
+                };
+
+                let question = person.individualQuestions;
+                if (question.length > 0) {
+                    question.map((ques, index) => {
+                        familyData.orders[0][`question_${index}`] = ques.answer;
+                    })
                 }
                 familyDataList.push(familyData);
             })
             setfamilyDetailData(familyDataList);
+
             let admittedHistory = [];
             historyData.map((item) => {
                 let historyItem = {
@@ -144,11 +166,26 @@ export default function EvacueeFamilyDetail() {
 
             let neighbourDataList = [];
 
+            const questionnaire = data.question;
+            let townAssociateColumnSet = [...townAssociateColumn];
+            questionnaire.map((ques, index) => {
+                let column = {
+                    field: "question_" + index,
+                    header: (locale == "ja" ? ques.title : ques.title_en) + " *",
+                    minWidth: "10rem"
+                };
+                townAssociateColumnSet.push(column);
+            });
+            setTownAssociationColumn(townAssociateColumnSet);
+
             let neighbourData = {
                 neighbour_association_name: "-",
                 test_payload: "-",
                 dropdown_related_questionnaire: "-"
             }
+            questionnaire.map((ques, index) => {
+                neighbourData[`question_${index}`] = ques.answer;
+            });
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);
         }
@@ -193,7 +230,7 @@ export default function EvacueeFamilyDetail() {
                         paginator="true"
                         customRowExpansionActionsField="actions"
                         value={familyDetailData}
-                        innerColumn={evacueeFamilyDetailRowExpansionColumns}
+                        innerColumn={evacueePersonInnerColumns}
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
                     />
@@ -217,7 +254,7 @@ export default function EvacueeFamilyDetail() {
                             showGridlines={true}
                             tableStyle={{ maxWidth: "20rem" }}
                             value={familyAdmittedData}
-                            columns={familyDetailColumns1}
+                            columns={familyAdmissionColumns}
                         />
                     </div>
                     <div className="text-center mt-2">

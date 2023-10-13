@@ -89,7 +89,10 @@ export default function EvacuationPage() {
             const data = response.data.list;
             const places = response.places;
             let evacueesList = [];
-            let placesList = [];
+            let placesList = [{
+                name: "--",
+                id: null
+            }];
             let index = 0;
             let previousItem = null;
             data.map((item) => {
@@ -124,7 +127,7 @@ export default function EvacuationPage() {
             });
             places.map((place) => {
                 let placeData = {
-                    name: response.locale == 'ja' ? place.name : place.name_en,
+                    name: response.locale == 'ja' ? place.name : place.name,
                     id: place.id
                 }
                 placesList.push(placeData);
