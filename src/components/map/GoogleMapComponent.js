@@ -1,71 +1,62 @@
-import React, { useState } from 'react';
-import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api'
+// GoogleMapComponent.jsx
+import React, { useState, useEffect } from 'react';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
-
-
-const GoogleMapComponent = ({ initialPosition, height }) => {
-    React.useEffect(() => {
-        getLocation();
-    }, []);
+const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
     const containerStyle = {
         width: '100%',
         height: height || '100vh',
     };
+    
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
-    const [currentLocation, setCurrentLocation] = useState('');
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
-    })
-    const [map, setMap] = React.useState(null)
+    });
+    
+    const mapOptions = {
+        minZoom: 0, // Set your desired min zoom level
+        maxZoom: 4
+    };
 
-    const onLoad = React.useCallback(function callback(map) {
-        getLocation();
+    useEffect(() => {
+        setCenter(initialPosition);
+    }, [initialPosition]);
+    useEffect(() => {
+        setCenter(searchResult);
+    }, [searchResult]);
+
+    useEffect(() => {
+        if (searchResult) {
+            setCenter(searchResult);
+        }
+    }, [searchResult]);
+
+    const onLoad = React.useCallback(async function callback(map) {
         const bounds = new window.google.maps.LatLngBounds(center);
         map.fitBounds(bounds);
-        setMap(map)
-    }, [])
+    }, [center]);
 
-    const onUnmount = React.useCallback(function callback(map) {
-        setMap(null)
-    }, [])
-
-    const getLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const current = {
-                        lat: latitude,
-                        lng: longitude
-                    }
-                    setCurrentLocation(current);
-                },
-                (error) => {
-                    console.log(error.message);
-                }
-            );
-        } else {
-            console.log('Geolocation is not supported by your browser.');
-        }
-    };
+    const onUnmount = React.useCallback(function callback() {
+        setCenter(null);
+    }, []);
 
     return isLoaded ? (
         <>
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center||currentLocation}
-                zoom={1}
-                onLoad={onLoad}
-                onUnmount={onUnmount}
-            >
-                 <Marker position={center||currentLocation} />
-                { /* Child components, such as markers, info windows, etc. */}
-                <></>
-            </GoogleMap>
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+            zoom={1}
+            center={center}
+            options={mapOptions} // Add this line to use the mapOptions
+        >
+               <Marker position={center} />
+        </GoogleMap>
         </>
-    ) : <></>
+    ) : <></>;
+    
 };
 
 export default GoogleMapComponent;

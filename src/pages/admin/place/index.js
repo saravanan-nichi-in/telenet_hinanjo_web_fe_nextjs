@@ -24,7 +24,7 @@ export default function AdminPlacePage() {
       start: 0,
       limit: 5,
       sort_by: "id",
-      order_by: "desc",
+      order_by: "asc",
     },
     search: "",
   });
@@ -37,7 +37,7 @@ export default function AdminPlacePage() {
     });
   };
   const columns = [
-    { field: "ID", header: translate(localeJson, "ID") },
+    { field: "ID", header: translate(localeJson, "s_no"),minWidth:"4rem" },
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
@@ -57,7 +57,7 @@ export default function AdminPlacePage() {
     },
     {
       field: "evacuation_possible_people",
-      header: translate(localeJson, "evacuation_possible_people"),
+      header: translate(localeJson, "capacity"),
       minWidth: "10rem",
     },
     { field: "phone_number", header: translate(localeJson, "phone_number") },
@@ -71,7 +71,7 @@ export default function AdminPlacePage() {
   ];
 
   /* Services */
-  const { getList, updateStatus, exportData } = PlaceServices;
+  const { getList, updateStatus, exportData,importData } = PlaceServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -94,10 +94,13 @@ export default function AdminPlacePage() {
     setImportPlaceOpen(!importPlaceOpen);
   };
 
-  const onRegister = (values) => {
-    values.file && setImportPlaceOpen(false);
+  const importFileApi = (file) => {
+      const formData = new FormData()
+      formData.append('file',file)
+      importData(formData)
+      setImportPlaceOpen(false);
   };
-
+  
 
 
   function fetchData(response) {
@@ -132,7 +135,7 @@ export default function AdminPlacePage() {
       <div className="input-switch-parent">
         <DeleteModal
           header={translate(localeJson, "confirmation_information")}
-          content={translate(localeJson, "change_active_place")}
+          content={translate(localeJson, "update_isActive_status")}
           data={obj}
           checked={obj.active_flg == 1 || false}
           parentClass={"custom-switch"}
@@ -198,8 +201,8 @@ export default function AdminPlacePage() {
       <AdminManagementImportModal
         open={importPlaceOpen}
         close={onStaffImportClose}
-        register={onRegister}
-        modalHeaderText={translate(localeJson, "shelter_csv_import")}
+        importFile={importFileApi}
+        modalHeaderText={translate(localeJson, "place_csv_import")}
       />
       <div className="grid">
         <div className="col-12">
@@ -237,7 +240,7 @@ export default function AdminPlacePage() {
                     buttonProps={{
                       rounded: "true",
                       buttonClass: "evacuation_button_height",
-                      text: translate(localeJson, "signup"),
+                      text: translate(localeJson, "create_place"),
                       onClick: () => router.push("/admin/place/create"),
                       severity: "success",
                     }}

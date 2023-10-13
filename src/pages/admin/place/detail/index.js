@@ -82,7 +82,7 @@ export default function StaffManagementEditPage() {
           <section className="col-12">
             {/* Header */}
             <h5 className="page_header">
-              {translate(localeJson, "edit_shelter")}
+              {translate(localeJson, "place_details")}
             </h5>
             <DividerComponent />
             <div>
@@ -222,7 +222,7 @@ export default function StaffManagementEditPage() {
                           pathname: `/admin/place/edit`,
                           query: { id: id },
                         }),
-                      text: translate(localeJson, "update"),
+                      text: translate(localeJson, "edit"),
                       rounded: "true",
                       severity: "primary",
                     }}

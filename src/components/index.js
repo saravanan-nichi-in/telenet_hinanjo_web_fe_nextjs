@@ -17,4 +17,4 @@ export { ProfileAvatar } from "./avatar";
 export { RadioBtn } from './radioButton';
 export { BarcodeScanner } from './qr';
 export { FileUpload, InputFile } from "./upload";
-export { TextArea, InputLeftRightGroup, InputGroup, InputIcon, InputNumber, Input, InputFloatLabel, TextAreaFloatLabel } from "./input";
+export { TextArea, InputLeftRightGroup, InputGroup, InputIcon, InputNumber, Input, InputFloatLabel, TextAreaFloatLabel,InputNumberFloatLabel } from "./input";

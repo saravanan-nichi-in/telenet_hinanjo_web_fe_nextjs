@@ -40,6 +40,7 @@ export default function AdminManagementImportModal(props) {
                 initialValues={{ file: null }}
                 onSubmit={(values) => {
                     props.importFile(values.file)
+                    values.file=null;
                 }}
             >
                 {({
@@ -56,7 +57,9 @@ export default function AdminManagementImportModal(props) {
                                 header={header}
                                 visible={open}
                                 draggable={false}
-                                onHide={() => close()}
+                                onHide={() => {
+                                    close();
+                                    values.file=null}}
                                 footer={
                                     <div className="text-center">
                                         <Button buttonProps={{
@@ -66,9 +69,6 @@ export default function AdminManagementImportModal(props) {
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
-                                                register({
-                                                    file: values.file,
-                                                });
                                             },
                                         }} parentClass={"inline"} />
                                     </div>

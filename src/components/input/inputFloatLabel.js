@@ -37,7 +37,7 @@ const InputFloatLabel = (props) => {
             <InputText className={inputClass}
                 id={id}
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={onChange}
                 placeholder={placeholder}
                 style={style}
                 keyfilter={keyfilter}
