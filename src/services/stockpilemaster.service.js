@@ -140,7 +140,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/stockpile/${id}`)
+        .delete(`/admin/stockpile/${id}`, {data: {"product_id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -150,10 +150,11 @@ function _delete(id, callBackFun) {
             }
         })
         .catch((error) => {
+            console.log(error);
             // Handle errors here
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            // console.error("Error fetching data:", error);
+            // toast.error(error?.response?.data?.message, {
+            //     position: "top-right",
+            // });
         });
 }
