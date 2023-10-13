@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/router'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, InputFile, ValidationError } from '@/components';
-import { QRCodeCreateServices } from '@/services';
+import { Button, InputFile, ValidationError, CommonDialog } from '@/components';
+import { QRCodeCreateServices, CommonServices } from '@/services';
 
 export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -23,9 +22,11 @@ export default function AdminQrCodeCreatePage() {
             }),
     });
     const [importFileData, setImportFileData] = useState("");
+    const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
 
     /* Services */
-    const { callExport, callImport } = QRCodeCreateServices;
+    const { callExport, callImport, callDelete, callZipDownload } = QRCodeCreateServices;
+    const { zipDownload } = CommonServices;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,11 +64,64 @@ export default function AdminQrCodeCreatePage() {
      * @param {*} response 
      */
     const onImportSuccess = (response) => {
-        setImportFileData("")
+        setImportFileData("");
+        setQrCodeCreateDialogVisible(true);
     }
+
+    /**
+     * Close functionality
+    */
+    const onDeleteSuccess = () => {
+        setQrCodeCreateDialogVisible(false);
+    };
+
+    /**
+     * Download functionality
+    */
+    const onZipDownloadSuccess = (response) => {
+        console.log("download", response);
+        setQrCodeCreateDialogVisible(false);
+        if (response && response.data.data.file) {
+            zipDownload(response.data.data.file);
+        }
+    };
 
     return (
         <>
+            {/* QR code create success modal */}
+            <CommonDialog
+                open={qrCodeCreateDialogVisible}
+                dialogBodyClassName="p-3"
+                header={translate(localeJson, 'qr_code_create')}
+                content={translate(localeJson, 'create_qr_codes_successfully')}
+                position={"center"}
+                footerParentClassName={"text-center"}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "text-600",
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            text: translate(localeJson, "delete"),
+                            onClick: () => callDelete(onDeleteSuccess),
+                        },
+                        parentClass: "inline"
+                    },
+                    {
+                        buttonProps: {
+                            buttonClass: "",
+                            type: "submit",
+                            text: translate(localeJson, "download"),
+                            severity: "danger",
+                            onClick: () => callZipDownload(onZipDownloadSuccess),
+                        },
+                        parentClass: "inline"
+                    }
+                ]}
+                close={() => {
+                    setQrCodeCreateDialogVisible(false);
+                }}
+            />
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
@@ -89,8 +143,8 @@ export default function AdminQrCodeCreatePage() {
                                 <hr />
                                 <div>
                                     <div>
-                                        {console.log(values)}
                                         <form onSubmit={handleSubmit}>
+
                                             <div>
                                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                                     <Button buttonProps={{

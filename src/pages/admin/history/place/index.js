@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
-import { useRouter } from 'next/router'
 
 import { getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -9,7 +8,7 @@ import { InputSelectFloatLabel } from '@/components/dropdown';
 import { DateTimeCalendarFloatLabel } from '@/components/date&time';
 import { EmailSettings } from '@/components/modal';
 import { HistoryServices } from '@/services/history.services';
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
+import { MailSettingsOption1 } from '@/utils/constant';
 
 /**
  * Shelter Place History Status
@@ -28,6 +27,11 @@ export default function AdminHistoryPlacePage() {
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
+    const [emailSettingValues, setEmailSettingValues] = useState({
+        email: "",
+        transmissionInterval: null,
+        outputTargetArea: null
+    });
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -41,30 +45,32 @@ export default function AdminHistoryPlacePage() {
     });
     const historyTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), minWidth: "5rem", sortable: false, textAlign: 'left' },
-        { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "15rem", sortable: false },
+        { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "10rem", sortable: false },
         { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", sortable: false },
         { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", sortable: false },
-        { field: "place_address", header: translate(localeJson, 'address'), minWidth: "10rem", sortable: false },
+        { field: "place_address", header: translate(localeJson, 'location_name'), minWidth: "10rem", sortable: false },
         { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
         { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false },
         { field: "place_public_availability", header: translate(localeJson, 'place_public_availability'), minWidth: "8rem", sortable: false },
         { field: "place_opened_status", header: translate(localeJson, 'opened_status'), minWidth: "8rem", sortable: false },
         { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false },
         { field: "place_full_status", header: translate(localeJson, 'availability_status'), minWidth: "7rem", sortable: false },
-        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "15rem", sortable: false },
-        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "15rem", sortable: false },
-        { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "5rem" }
+        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "8rem", sortable: false },
+        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "8rem", sortable: false },
+        { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "10rem" }
     ];
 
     /* Services */
-    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList, registerEmailConfiguration, getPrefectureList } = HistoryServices;
+    const { getList, getPlaceDropdownList, exportPlaceHistoryCSVList,
+        registerEmailConfiguration, getPrefectureList, getEmailConfiguration } = HistoryServices;
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetHistoryPlaceListOnMounting();
             await onGetHistoryPlaceDropdownListOnMounting();
+            await onGetEmailConfigurationOnMounting();
             setLoader(false);
         };
         fetchData();
@@ -85,6 +91,10 @@ export default function AdminHistoryPlacePage() {
         getPlaceDropdownList({}, onGetHistoryPlaceDropdownList);
     }
 
+    const onGetEmailConfigurationOnMounting = () => {
+        getEmailConfiguration({}, getEmailConfig);
+    }
+
     const searchListWithCriteria = () => {
         let payload = {
             filters: {
@@ -95,7 +105,7 @@ export default function AdminHistoryPlacePage() {
             },
             start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
             end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
-            place_name: selectedCity ? selectedCity.name : ""
+            place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
         }
         getList(payload, onGetHistoryPlaceList);
         setGetListPayload(payload);
@@ -106,12 +116,15 @@ export default function AdminHistoryPlacePage() {
      * @param {*} data 
     */
     const onGetHistoryPlaceDropdownList = (response) => {
-        let historyPlaceCities = [];
+        let historyPlaceCities = [{
+            name : "--",
+            code: null
+        }];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.model;
             data.map((obj, i) => {
                 let placeDropdownList = {
-                    name: response.locale == 'ja' ? obj.name : obj.name_en,
+                    name: response.locale == 'ja' ? obj.name : obj.name,
                     code: obj.id
                 }
                 historyPlaceCities.push(placeDropdownList)
@@ -128,9 +141,10 @@ export default function AdminHistoryPlacePage() {
             const data = response.data.model.list;
             console.log(data);
             let historyPlaceListData = [];
+            let index = getListPayload.filters.start + 1;
             data.map((obj, i) => {
                 let historyData = {
-                    "si_no": i + 1,
+                    "si_no":  index,
                     "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
                     "prefecture_name": obj.prefecture_name,
                     "place_name": obj.place_name,
@@ -147,6 +161,7 @@ export default function AdminHistoryPlacePage() {
                     "place_remarks": obj.place_remarks,
                 };
                 historyPlaceListData.push(historyData);
+                index = index + 1;
             });
             setTotalCount(response.data.model.total);
             setTableLoading(false);
@@ -155,6 +170,7 @@ export default function AdminHistoryPlacePage() {
         else {
             setHistoryPlaceList([]);
             setEmptyTableMessage(response.message);
+            setTableLoading(false);
         }
     }
 
@@ -166,7 +182,7 @@ export default function AdminHistoryPlacePage() {
         if (response.success) {
             const downloadLink = document.createElement("a");
             const fileName = "Place_history" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.file;
+            downloadLink.href = response.result.filePath;
             downloadLink.download = fileName;
             downloadLink.click();
         }
@@ -177,6 +193,7 @@ export default function AdminHistoryPlacePage() {
     */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        onGetHistoryPlaceListOnMounting();
     };
 
     /**
@@ -202,26 +219,37 @@ export default function AdminHistoryPlacePage() {
     }
 
     const mailSettingModel = () => {
+        getPrefectureList({}, loadPrefectureDropdownList);
+        getEmailConfiguration({}, getEmailConfig);
         setEmailSettingsOpen(true);
-        getPrefectureList({}, loadPrefectureDropdownList)
+    }
+
+    const getEmailConfig = (response) => {
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.model;
+            let emailData = {
+                email: data.email,
+                transmissionInterval: data.frequency,
+                outputTargetArea: data.prefecture_id
+            }
+            setEmailSettingValues(emailData);
+        }
     }
 
     const loadPrefectureDropdownList = (response) => {
         let prefectureList = [{
-            name : "--",
+            name: "--",
             value: null
         }];
-        if(response.success && !_.isEmpty(response.data)){
-            const data = response.data;
-            Object.keys(data).forEach(function(key) {
-                console.log(key, data[key]);
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.list;
+            data.map((obj) => {
                 let option = {
-                    name: data[key],
-                    value: key
+                    name: obj.name,
+                    value: obj.id
                 };
                 prefectureList.push(option);
-            });
-
+            })
             setprefectureListDropdown(prefectureList);
         }
     }
@@ -248,13 +276,16 @@ export default function AdminHistoryPlacePage() {
 
     return (
         <React.Fragment>
-            <EmailSettings
-                open={emailSettingsOpen}
-                close={onEmailSettingsClose}
-                register={onRegister}
-                intervalFrequency={MailSettingsOption1}
-                prefectureList={prefectureListDropdown}
-            />
+            {/* {emailSettingsOpen && */}
+                <EmailSettings
+                    open={emailSettingsOpen}
+                    close={onEmailSettingsClose}
+                    register={onRegister}
+                    intervalFrequency={MailSettingsOption1}
+                    prefectureList={prefectureListDropdown}
+                    emailSettingValues={emailSettingValues}
+                />
+            {/* } */}
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -291,10 +322,11 @@ export default function AdminHistoryPlacePage() {
                                             selectionMode: "range",
                                             text: translate(localeJson, "report_date_time"),
                                             dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                            date: new Date(),
                                             onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                            inputId: "shelterCity",
+                                            inputId: "shelter-city",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",
                                             value: selectedCity,
                                             options: historyPlaceDropdown,

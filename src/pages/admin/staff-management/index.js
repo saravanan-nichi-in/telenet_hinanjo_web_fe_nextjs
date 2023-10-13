@@ -15,7 +15,7 @@ export default function StaffManagementPage() {
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const [editStaffOpen, setEditStaffOpen] = useState(false);
-    const [CreateStaffOpen, setCreateStaffOpen] = useState(false);
+    const [createStaffOpen, setCreateStaffOpen] = useState(false);
     const staffs = [
         { field: 'No', header: 'S No', minWidth: "3rem" },
         {
@@ -80,7 +80,7 @@ export default function StaffManagementPage() {
         setEditStaffOpen(!editStaffOpen);
     };
     const onStaffCreateClose = () => {
-        setCreateStaffOpen(!CreateStaffOpen);
+        setCreateStaffOpen(!createStaffOpen);
     };
     const onRegister = (values) => {
         setImportStaffOpen(false);
@@ -112,7 +112,7 @@ export default function StaffManagementPage() {
                 modalHeaderText={translate(localeJson, 'edit_staff_management')}
             />
             <StaffManagementEditModal
-                open={CreateStaffOpen}
+                open={createStaffOpen}
                 close={onStaffCreateClose}
                 register={onRegister}
                 buttonText={translate(localeJson, 'submit')}

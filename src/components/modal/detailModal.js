@@ -24,10 +24,15 @@ const DetailModal = (props) => {
         style,
         ...restProps
     } = detailModalProps;
+
+    /**
+     * Header content 
+     */
     const header = (
         headerContent
     );
 
+    console.log(visible);
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass} custom-modal`}
@@ -37,11 +42,12 @@ const DetailModal = (props) => {
                 visible={visible}
                 onHide={onHide}
                 style={style}
+                // blockScroll={visible}
                 {...restProps}
             >
                 <div className="pt-2">
                     <NormalLabel labelClass="w-full pt-0 mb-1"
-                        text={translate(localeJson, 'Other_shortage_items')}
+                        text={translate(localeJson, 'Other_shared_matters')}
                         style={{
                             marginBottom: "10px"
                         }} />
@@ -54,7 +60,7 @@ const DetailModal = (props) => {
                 </div>
                 <div className="mt-1">
                     <NormalLabel labelClass="w-full pt-0"
-                        text={translate(localeJson, 'Other_shared_matters')} />
+                        text={translate(localeJson, 'Other_shortage_items')} />
                     <TextArea textAreaProps={{
                         textAreaClass: "w-full bg-bluegray-50 pt-1",
                         rows: 5,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -13,28 +13,32 @@ import { ValidationError } from "../error";
 import { TextAreaFloatLabel } from "../input";
 
 export default function EmailSettings(props) {
+    /**
+     * Destructing
+    */
+    const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const [transmissionInterval, setTransmissionInterval] = useState(null);
     const [outputTargetArea, setOutputTargetArea] = useState(null);
+    const [initialValues, setInitialValues] = useState({
+        email: emailSettingValues.email,
+    });
+    const regexExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
             .test('is-email', translate(localeJson, 'format_notification'), value => {
-                // Check if it's a single valid email or a list of valid emails separated by commas
-                return Yup.string().email().isValidSync(value) || validateMultipleEmails(value, localeJson);
+                /** Check if it's a single valid email or a list of valid emails separated by commas */ 
+                return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register, intervalFrequency, prefectureList } = props && props;
 
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
 
         for (const email of emails) {
-            if (!Yup.string().email().isValidSync(email)) {
+            if (!email.match(regexExp)) {
                 return false;
             }
         }
@@ -48,12 +52,22 @@ export default function EmailSettings(props) {
         </div>
     );
 
+    useEffect(() => {
+        if (open) {
+            setTransmissionInterval(emailSettingValues.transmissionInterval);
+            setOutputTargetArea(emailSettingValues.outputTargetArea);
+            setInitialValues({
+                email: emailSettingValues.email
+            });
+        }
+    }, [open]);
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "" }}
+                initialValues={initialValues}
+                enableReinitialize
                 onSubmit={() => {
                     router.push("/admin/history/place")
                 }}
@@ -111,6 +125,7 @@ export default function EmailSettings(props) {
                                                     row: 5,
                                                     cols: 30,
                                                     name: 'email',
+                                                    value: values.email,
                                                     text: translate(localeJson, 'notification_email_id'),
                                                     spanClass: "p-error",
                                                     spanText: "*",
@@ -139,11 +154,10 @@ export default function EmailSettings(props) {
                                                     optionLabel: "name",
                                                     onChange: (e) => setOutputTargetArea(e.value),
                                                     text: translate(localeJson, "output_target_area"),
-
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
-                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} style = {{fontSize: "13px"}} />
+                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} style={{ fontSize: "13px" }} />
                                             </div>
                                         </div>
                                     </form>

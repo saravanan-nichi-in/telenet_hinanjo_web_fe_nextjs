@@ -1,6 +1,7 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system": "避難所管理システム",
       "logout": "ログアウト",
       "change_password": "パスワード変更"
     },
@@ -27,8 +28,8 @@
       "setting_systems": "環境設定"
     },
     "pages": {
-      "Other_shortage_items": "その他不足物資",
       "Other_shared_matters": "その他共有事項",
+      "Other_shortage_items": "その他不足物資",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
       "edit_admin_management": "管理者詳細情報",
@@ -54,7 +55,7 @@
       "confirmation": "確認情報",
       "staff_management_import": "スタッフ管理CSVインポート",
       "admin_management_import": "管理者管理CSVインポート",
-      "add_admin_management": "管理者情報の登録",
+      "add_admin_management": "管理者情報登録",
       "history_login_staff_management": "ログイン履歴",
       "confirmation_information": "確認情報",
       "change_active_place": "避難所の満員状態を切り替えてもよろしいでしょうか？",
@@ -97,6 +98,7 @@
       "si_no": "番号",
       "report_date_time": "報告日時",
       "prefecture": "地区",
+      "location_name": "所在地（名称）",
       "place_name": "避難所名",
       "place_name_furigana": "避難所名 (フリガナ)",
       "location_latitude": "所在地（緯度）",
@@ -108,8 +110,8 @@
       "opened_date_time": "開設日時",
       "closed_date_time": "閉鎖日時",
       "detail_staff_management": "スタッフ詳細情報",
-      "family_count": "",
-      "family_code": "",
+      "family_count": "世帯人数",
+      "family_code": "世帯番号",
       "representative": "代表者",
       "refugee_name": "氏名 (フリガナ)",
       "name": "氏名 (漢字)",
@@ -128,8 +130,19 @@
       "s_no":"S No",
       "place_details":"避難所の詳細",
       "place_csv_import": "避難所マスタCSVインポート",
+      "place_search":"避難所の住所をご入力ください。",
       "download_sample_csv": "サンプルCSVのダウンロード",
-      "place_search":"避難所の住所をご入力ください。"
+      "admission_date_time": "入所日時",
+      "discharge_date_time": "退所日時",
+      "neighbour_association_name": "町内会名",
+      "created_date": "作成日",
+      "updated_date": "更新日",
+      "representative_number": "電話番号(代表者)",
+      "registered_lang_environment": "登録言語環境",
+      "evacuation_date_time": "避難日時",
+      "test_payload": "Test Payload",
+      "dropdown_related_questionnaire": "DropDown Related Questionnaire",
+      "create_qr_codes_successfully": "QRコードが正常に生成されました。"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -145,7 +158,11 @@
       "file_csv_required": "CSVファイルを選択してください。",
       "select_csv_format": "CSV形式ファイルを選択してください。",
       "max_length": "は200文字以内で入力してください。",
-      "phone":"電話番号には10または11桁の半角数字を入力してください。"
+      "phone":"電話番号には10または11桁の半角数字を入力してください。",
+      "password_new_not_equal_to_current": "現在のパスワ ードと新しいパスワードは同じであることはできません。",
+      "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
+      "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
+      "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。"
     },
     "buttons": {
       "import": "インポート",
@@ -163,7 +180,8 @@
       "submit": "登録",
       "create_admin": "新規登録",
       "create_staff": "新規登録",
-      "create_place":"新規登録"
+      "create_place":"新規登録",
+      "download": "ダウンロード"
     },
     "footer": {},
     "form": {
@@ -177,7 +195,10 @@
       "things_to_consider": "要配慮者事項（英語)",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
-      "output_target_area": "出力対象地域"
+      "output_target_area": "出力対象地域",
+      "current_password": "現在のパスワード",
+      "new_password": "新しいパスワード",
+      "new_password_confirmation": "新しいパスワード 確認用"
     },
     "others": {
       "not": "無し",
@@ -201,7 +222,10 @@
       "notification_settings": "通知設定",
       "people": "人",
       "household_title": "世帯",
-      "report_date_time": "報告日時"
+      "report_date_time": "報告日時",
+      "post_letter": "〒",
+      "english": "英語",
+      "japanese": "日本語"
     }
   },
   "staff": {
@@ -225,6 +249,7 @@
       "email_valid": "正しいメールアドレスをご入力ください。",
       "password": "パスワード",
       "password_required": "パスワードは必須です。",
+      "current_password_required": "現在のパスワードは必須です。",
       "password_atLeast_8_characters": "パスワードは8文字以上である必要です。 ",
       "admin_login_screen": "管理者用ログイン",
       "password_reset": "パスワードを忘れた場合",
@@ -232,8 +257,8 @@
       "new_password_required": "新しいパスワード は必須です。",
       "new_password_not_matched": "新しいパスワード要件が一致しません。",
       "new_password_confirm": "新しいパスワード（確認)",
-      "confirm_password_required": "新しいパスワード（確認) は必須です。",
-      "confirm_password_notMatch": "新しいパスワード（確認)が新しいパスワードと一致しません。",
+      "confirm_password_required": "新しいパスワード 確認は必須です。",
+      "confirm_password_notMatch": " 新しいパスワード 確認用が新しいパスワードと一致しません。",
       "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
       "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
     },

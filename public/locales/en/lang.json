@@ -1,8 +1,9 @@
 {
   "admin": {
     "header": {
+      "evacuation_shelter_management_system": "Evacuation Shelter Management System",
       "logout": "Logout",
-      "change_password": "Change password"
+      "change_password": "Change Password"
     },
     "sidebar": {
       "vault_info": "Evacuation Information",
@@ -27,8 +28,8 @@
       "setting_systems": "Setting Systems"
     },
     "pages": {
-      "Other_shortage_items": "Other shortage items",
       "Other_shared_matters": "Other shared matters",
+      "Other_shortage_items": "Other shortage items",
       "add_staff_management": "Add Staff Management",
       "edit_staff_management": "Edit Staff Management",
       "edit_admin_management": "Edit Admin Management",
@@ -94,33 +95,34 @@
       "ID": "ID",
       "evacuation_possible_people": "Evacuation Possible People",
       "edit_shelter": "Edit Shelter",
-      "si_no": "SI No",
-      "report_date_time": "ReportDateTime",
+      "si_no": "S No",
+      "report_date_time": "Report Date And Time",
       "prefecture": "Prefecture",
-      "place_name": "PlaceName",
-      "place_name_furigana": "PlaceName (Furigana)",
+      "location_name": "Location (name)",
+      "place_name": "Place Name",
+      "place_name_furigana": "Place Name (Furigana)",
       "location_latitude": "Location(Latitude)",
-      "location_longitude": "Localtion(Longitude)",
-      "place_public_availability": "PublicPlaceAvailability",
-      "opened_status": "OpenedStatus",
-      "evacuees_count": "EvacueesCount",
-      "availability_status": "AvailabilityStatus",
-      "opened_date_time": "OpenedDateTime",
-      "closed_date_time": "ClosedDateTime",
+      "location_longitude": "Location(Longitude)",
+      "place_public_availability": "Public Place Availability",
+      "opened_status": "Opened Status",
+      "evacuees_count": "Evacuees Count",
+      "availability_status": "Availability Status",
+      "opened_date_time": "Opened Date And Time",
+      "closed_date_time": "Closed Date And Time",
       "detail_staff_management": "Detail Staff Management",
-      "family_count": "",
-      "family_code": "",
+      "family_count": "Family Count",
+      "family_code": "Family Code",
       "representative": "Representative",
-      "refugee_name": "RefugeeName",
+      "refugee_name": "Refugee Name",
       "name": "Name",
       "gender": "Gender",
       "dob": "DOB",
       "age": "Age",
-      "age_month": "AgeMonth",
-      "special_care_name": "SpecialCareName",
+      "age_month": "Age Month",
+      "special_care_name": "Special Care Name",
       "connecting_code": "Connecting Code",
       "out_date": "OutDate",
-      "current_location": "CurrentLocation",
+      "current_location": "Current Location",
       "shortage_total": "Shortage Total",
       "once_deleted_cannot_restore": "Once deleted, the data cannot be restored.",
       "do_you_want_to_delete": "Do you want to delete it?",
@@ -129,8 +131,19 @@
       "s_no":"S No",
       "place_details":"Edit Shelter",
       "place_csv_import": "Import Place Data",
+      "place_search":"Please enter the evacuation center address.",
       "download_sample_csv": "Download Sample CSV",
-      "place_search":"Please enter the evacuation center address."
+      "admission_date_time": "Admission Date Time",
+      "discharge_date_time": "Discharge Date Time",
+      "neighbour_association_name": "Neighbour Association Name",
+      "created_date": "Created Date",
+      "updated_date": "Updated Date",
+      "representative_number": "Representative Phone Number",
+      "registered_lang_environment": "Registered Language",
+      "evacuation_date_time": "Evacuation Date Time",
+      "test_payload": "Test Payload",
+      "dropdown_related_questionnaire": "DropDown Related Questionnaire",
+      "create_qr_codes_successfully": "Create QrCodes successfully."
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -141,12 +154,16 @@
       "matters_to_consider_required": "Information on persons requiring special consideration is required.",
       "things_to_consider_required": "Persons requiring special care (English) is required.",
       "notification_email_id_required": "Notification email ID is required.",
-      "format_notification": "format of the notification email ID is incorrect.",
+      "format_notification": "Email ID format is incorrect.",
       "is_required": "is required。",
       "file_csv_required": "File CVS is required.",
       "select_csv_format": "Please select a CSV format file.",
       "max_length": "Please enter within 200 characters.",
-      "phone": "Please enter 10 or 11  digits for the phone number."
+      "phone": "Please enter 10 or 11  digits for the phone number.",
+      "password_new_not_equal_to_current": "The current password and new password cannot be the same.",
+      "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
+      "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
+      "new_password_max_15_characters": "The new password must not be greater than 15 characters."
     },
     "buttons": {
       "import": "Import",
@@ -165,7 +182,8 @@
       "submit": "Submit",
       "create_admin": "Create Admin",
       "create_staff": "Create Staff",
-      "create_place":"Create Place"
+      "create_place":"Create Place",
+      "download": "Download"
     },
     "footer": {},
     "form": {
@@ -179,7 +197,10 @@
       "things_to_consider": "Matters requiring special care (English)",
       "notification_email_id": "Email",
       "transmission_interval": "Frequency",
-      "output_target_area": "Select Prefecture"
+      "output_target_area": "Select Prefecture",
+      "current_password": "Current Password",
+      "new_password": "New Password",
+      "new_password_confirmation": "New Password Confirmation"
     },
     "others": {
       "not": "None",
@@ -203,7 +224,10 @@
       "notification_settings": "Notificaion settings",
       "people": "People",
       "household_title": "Household",
-      "report_date_time": "Report Date and Time"
+      "report_date_time": "Report Date and Time",
+      "post_letter": "〒",
+      "english": "English",
+      "japanese": "Japanese"
     }
   },
   "staff": {
@@ -226,15 +250,16 @@
       "email_valid": "The email must be a valid email address.",
       "password": "Password",
       "password_required": "The password must be required.",
+      "current_password_required": "The current password must be required.",
       "password_atLeast_8_characters": "Password must be at least 8 characters.",
       "admin_login_screen": "Administrator login",
       "password_reset": "Forgot your password?",
       "new_password": "New password",
       "new_password_required": "The new password must be required.",
-      "new_password_not_matched": "The new password requirements not matched",
+      "new_password_not_matched": "The new password requirements do not match.",
       "new_password_confirm": "New password (confirmation)",
       "confirm_password_required": "The confirm password must be required.",
-      "confirm_password_notMatch": "The new password (confirmation) does not match the new password.",
+      "confirm_password_notMatch": "The confirmed password does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
       "forgot_password_success": "A password reset email has been sent to the email address you entered."
     },

@@ -77,6 +77,19 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
     return formattedJPDateTime;
 }
 
+export const getJapaneseDateDisplayFormat = (dateTime) => {
+    
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+    };
+    const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
+
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')
+    return formattedJPDateTime;
+}
+
 export const getGeneralDateTimeDisplayFormat = (dateTime) => {
     const options = {
         year: "numeric",
