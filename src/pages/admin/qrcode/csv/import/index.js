@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFile, ValidationError, CommonDialog } from '@/components';
-import { QRCodeCreateServices } from '@/services';
+import { QRCodeCreateServices, CommonServices } from '@/services';
 
 export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -25,7 +25,8 @@ export default function AdminQrCodeCreatePage() {
     const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
 
     /* Services */
-    const { callExport, callImport } = QRCodeCreateServices;
+    const { callExport, callImport, callDelete, callZipDownload } = QRCodeCreateServices;
+    const { zipDownload } = CommonServices;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,7 +64,6 @@ export default function AdminQrCodeCreatePage() {
      * @param {*} response 
      */
     const onImportSuccess = (response) => {
-        console.log(response);
         setImportFileData("");
         setQrCodeCreateDialogVisible(true);
     }
@@ -71,16 +71,19 @@ export default function AdminQrCodeCreatePage() {
     /**
      * Close functionality
     */
-    const onClickCancelButton = () => {
-        console.log("cancel");
+    const onDeleteSuccess = () => {
         setQrCodeCreateDialogVisible(false);
     };
 
     /**
-     * Update functionality
+     * Download functionality
     */
-    const onClickDownloadButton = () => {
-        console.log("download");
+    const onZipDownloadSuccess = (response) => {
+        console.log("download", response);
+        setQrCodeCreateDialogVisible(false);
+        if (response && response.data.data.file) {
+            zipDownload(response.data.data.file);
+        }
     };
 
     return (
@@ -100,7 +103,7 @@ export default function AdminQrCodeCreatePage() {
                             bg: "bg-white",
                             hoverBg: "hover:surface-500 hover:text-white",
                             text: translate(localeJson, "delete"),
-                            onClick: () => onClickCancelButton(),
+                            onClick: () => callDelete(onDeleteSuccess),
                         },
                         parentClass: "inline"
                     },
@@ -110,7 +113,7 @@ export default function AdminQrCodeCreatePage() {
                             type: "submit",
                             text: translate(localeJson, "download"),
                             severity: "danger",
-                            onClick: () => onClickDownloadButton(),
+                            onClick: () => callZipDownload(onZipDownloadSuccess),
                         },
                         parentClass: "inline"
                     }
