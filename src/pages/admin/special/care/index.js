@@ -35,22 +35,23 @@ export default function AdminSpecialCarePage() {
     }
 
     const columns = [
-        { field: 'ID', header: 'ID'},
-        { field: '要配慮者事項', header:translate(localeJson,'special_care_name_jp'), minWidth: "10rem",body: (rowData) => (
-            <div className='text-link'>
-                <a className='text-decoration' style={{ color: "grren" }} onClick={() => setSpecialCareEditOpen(true)}>
-                {rowData['要配慮者事項']}
-            </a>
-            </div>
-        ) },
-        { field: '要配慮者事項（英語)', header:translate(localeJson,'special_care_name_en'),minWidth:"10rem"  },
+        { field: 'ID', header: 'ID' },
+        {
+            field: '要配慮者事項', header: translate(localeJson, 'special_care_name_jp'), minWidth: "10rem", body: (rowData) => (
+                <div className='text-link'>
+                    <a className='text-decoration' style={{ color: "grren" }} onClick={() => setSpecialCareEditOpen(true)}>
+                        {rowData['要配慮者事項']}
+                    </a>
+                </div>
+            )
+        },
+        { field: '要配慮者事項（英語)', header: translate(localeJson, 'special_care_name_en'), minWidth: "10rem" },
         {
             field: 'actions',
-            header: translate(localeJson,'delete'),
-            minWidth: "7rem",
-            textAlign:"center",
-            alignHeader:"center",
-            minWidth:"5rem",
+            header: translate(localeJson, 'delete'),
+            textAlign: "center",
+            alignHeader: "center",
+            minWidth: "5rem",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
@@ -113,18 +114,18 @@ export default function AdminSpecialCarePage() {
                 }}
             />
             <SpecialCareEditModal
-            open={specialCareEditOpen}
-            header={translate(localeJson, 'special_care_edit')}
-            close={() => setSpecialCareEditOpen(false)}
-            buttonText={translate(localeJson,'update')}
-            onSpecialCareEditSuccess={onSpecialCareEditSuccess}
+                open={specialCareEditOpen}
+                header={translate(localeJson, 'special_care_edit')}
+                close={() => setSpecialCareEditOpen(false)}
+                buttonText={translate(localeJson, 'update')}
+                onSpecialCareEditSuccess={onSpecialCareEditSuccess}
             />
-             <SpecialCareEditModal
-            open={specialCarCreateOpen}
-            header={translate(localeJson, 'special_care_create')}
-            close={() => setSpecialCareCreateOpen(false)}
-            buttonText={translate(localeJson,'submit')}
-            onSpecialCareEditSuccess={onSpecialCareEditSuccess}
+            <SpecialCareEditModal
+                open={specialCarCreateOpen}
+                header={translate(localeJson, 'special_care_create')}
+                close={() => setSpecialCareCreateOpen(false)}
+                buttonText={translate(localeJson, 'submit')}
+                onSpecialCareEditSuccess={onSpecialCareEditSuccess}
             />
             <AdminManagementImportModal
                 open={importSpecialCareOpen}
@@ -135,37 +136,37 @@ export default function AdminSpecialCarePage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                            <h5 className='page_header'>{translate(localeJson, 'special_care_list')}</h5>
-                            <hr/>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        onClick: () => setImportSpecialCareOpen(true),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary"
-                                    }} parentClass={"mr-1 mt-1"} />
+                        <h5 className='page_header'>{translate(localeJson, 'special_care_list')}</h5>
+                        <hr />
+                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'import'),
+                                onClick: () => setImportSpecialCareOpen(true),
+                                severity: "primary"
+                            }} parentClass={"mr-1 mt-1"} />
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'export'),
+                                severity: "primary"
+                            }} parentClass={"mr-1 mt-1"} />
 
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'create_special_care'),
-                                        onClick: () => setSpecialCareCreateOpen(true),
-                                        severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
-                                </div>
-                                <div className='mt-3'>
-                                    <NormalTable tableStyle={{minWidth:"40rem"}} paginatorLeft={true} paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
-                                </div>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'create_special_care'),
+                                onClick: () => setSpecialCareCreateOpen(true),
+                                severity: "success"
+                            }} parentClass={"mr-1 mt-1"} />
+                        </div>
+                        <div className='mt-3'>
+                            <NormalTable tableStyle={{ minWidth: "40rem" }} paginatorLeft={true} paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                        </div>
                     </div>
                 </div>
             </div>
