@@ -62,7 +62,7 @@ export const getAveragePercentage = (array, key) => {
 };
 
 export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
-    
+
     const options = {
         year: 'numeric',
         month: 'long',
@@ -78,7 +78,7 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
 }
 
 export const getJapaneseDateDisplayFormat = (dateTime) => {
-    
+
     const options = {
         year: 'numeric',
         month: 'long',
@@ -125,9 +125,10 @@ export const getYYYYMMDDHHSSSSDateTimeFormat = (dateTime) => {
     };
     let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
     formattedJPDateTime = formattedJPDateTime.replaceAll("/", "");
-    formattedJPDateTime = formattedJPDateTime.replaceAll(":","");
-    return formattedJPDateTime.replaceAll("","");
+    formattedJPDateTime = formattedJPDateTime.replaceAll(":", "");
+    return formattedJPDateTime.replaceAll("", "");
 }
+
 /**
  * Function to download a base64-encoded file
  * @param {*} base64String 
@@ -148,3 +149,17 @@ export const downloadBase64File = (base64String, fileName) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
 };
+
+/**
+ * Zip download functionality
+ * @param zipURL
+ */
+export const zipDownloadWithURL = (zipURL) => {
+    if (zipURL) {
+        // Create a temporary anchor element for the download
+        const link = document.createElement('a');
+        link.href = zipURL;
+        link.download = 'YourFile.zip'; // Specify the file name you want to give to the downloaded file
+        link.click();
+    }
+}
