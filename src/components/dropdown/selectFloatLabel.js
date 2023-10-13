@@ -23,6 +23,8 @@ export default function SelectFloatLabel(props) {
         disabled,
         onBlur,
         text,
+        spanClass,
+        spanText,
         ...restProps
     } = selectFloatLabelProps;
 
@@ -44,7 +46,7 @@ export default function SelectFloatLabel(props) {
                 disabled={disabled}
                 {...restProps}
             />
-            <label htmlFor={inputId}>{text}</label>
+            <label htmlFor={inputId}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>
         </div>
     )

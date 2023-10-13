@@ -94,15 +94,13 @@ export default function AdminPlacePage() {
     setImportPlaceOpen(!importPlaceOpen);
   };
 
-  const onRegister = (values) => {
-    if(values.file){ 
+  const importFileApi = (file) => {
       const formData = new FormData()
-      formData.append('file',values.file)
+      formData.append('file',file)
       importData(formData)
-    setImportPlaceOpen(false);
-    }
+      setImportPlaceOpen(false);
   };
-
+  
 
 
   function fetchData(response) {
@@ -203,7 +201,7 @@ export default function AdminPlacePage() {
       <AdminManagementImportModal
         open={importPlaceOpen}
         close={onStaffImportClose}
-        register={onRegister}
+        importFile={importFileApi}
         modalHeaderText={translate(localeJson, "place_csv_import")}
       />
       <div className="grid">
@@ -242,7 +240,7 @@ export default function AdminPlacePage() {
                     buttonProps={{
                       rounded: "true",
                       buttonClass: "evacuation_button_height",
-                      text: translate(localeJson, "signup"),
+                      text: translate(localeJson, "create_place"),
                       onClick: () => router.push("/admin/place/create"),
                       severity: "success",
                     }}

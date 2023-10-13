@@ -69,10 +69,18 @@
       "remarks": "Remarks",
       "address": "Address",
       "address_en": "Address (English)",
+      "prefecture_places":"Prefecture",
+      "default_postal_code":"Postal Code (Default)",
+      "default_prefecture_place":"Prefecture (Default)",
+      "default_address":"Address (default)",
+      "default_postal_code_en":"Postal Code Default (English)",
+      "default_prefecture_place_en":"Prefecture Default (English)",
+      "default_address_en":"Address Default (English)",
+      "prefecture_places_en":"Prefecture (English)",
       "initial_postal_code": "Initial Postal Code",
       "initial_address": "Initial Address",
-      "initial_address_value":"Initial Address NO",
-      "initial_address_value_en":"Initial Address No (English)",
+      "initial_address_value":"Street address (default)",
+      "initial_address_value_en":"Address default (English)",
       "capacity": "Capacity",
       "phone_number": "Phone Number",
       "latitude": "Latitude",
@@ -121,7 +129,8 @@
       "s_no":"S No",
       "place_details":"Edit Shelter",
       "place_csv_import": "Import Place Data",
-      "download_sample_csv": "Download Sample CSV"
+      "download_sample_csv": "Download Sample CSV",
+      "place_search":"Please enter the evacuation center address."
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -135,7 +144,9 @@
       "format_notification": "format of the notification email ID is incorrect.",
       "is_required": "is required。",
       "file_csv_required": "File CVS is required.",
-      "select_csv_format": "Please select a CSV format file."
+      "select_csv_format": "Please select a CSV format file.",
+      "max_length": "Please enter within 200 characters.",
+      "phone": "Please enter 10 or 11  digits for the phone number."
     },
     "buttons": {
       "import": "Import",

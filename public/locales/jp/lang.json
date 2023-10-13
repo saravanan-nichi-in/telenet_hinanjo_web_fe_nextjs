@@ -63,6 +63,14 @@
       "evacuation_location_furigana": "避難所 (フリガナ)",
       "evacuation_location_english": "避難所 (英語)",
       "postal_code": "郵便番号",
+      "default_postal_code":"初期郵便番号",
+      "default_prefecture_place":"初期都道府県",
+      "default_address":"初期住所",
+      "default_postal_code_en":"初期郵便番号 (英語)",
+      "default_prefecture_place_en":"初期都道府県 (英語)",
+      "default_address_en":"初期住所 (英語)",
+      "prefecture_places":"都道府県",
+      "prefecture_places_en":"都道府県 (英語)",
       "opening_date_time": "開設日時",
       "closing_date_time": "閉鎖日時",
       "foreign_publication": "外部公開",
@@ -120,7 +128,8 @@
       "s_no":"S No",
       "place_details":"避難所の詳細",
       "place_csv_import": "避難所マスタCSVインポート",
-      "download_sample_csv": "サンプルCSVのダウンロード"
+      "download_sample_csv": "サンプルCSVのダウンロード",
+      "place_search":"避難所の住所をご入力ください。"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -134,7 +143,9 @@
       "format_notification": "通知先メールIDの形式が正しくありません。",
       "is_required": "が必要です。",
       "file_csv_required": "CSVファイルを選択してください。",
-      "select_csv_format": "CSV形式ファイルを選択してください。"
+      "select_csv_format": "CSV形式ファイルを選択してください。",
+      "max_length": "は200文字以内で入力してください。",
+      "phone":"電話番号には10または11桁の半角数字を入力してください。"
     },
     "buttons": {
       "import": "インポート",

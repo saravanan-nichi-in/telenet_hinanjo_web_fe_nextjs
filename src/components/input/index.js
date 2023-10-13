@@ -6,3 +6,4 @@ export { default as InputNumber } from './inputNumber';
 export { default as Input } from './input';
 export { default as InputFloatLabel } from './inputFloatLabel';
 export { default as TextAreaFloatLabel } from './textAreaFloatLabel';
+export { default as InputNumberFloatLabel} from './inputNumberFloatLabel'

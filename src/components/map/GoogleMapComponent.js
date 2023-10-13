@@ -10,7 +10,6 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
     
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [center, setCenter] = useState(initialPosition);
-    const [result,setResult] = useState(searchResult)
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
@@ -26,7 +25,6 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
     }, [initialPosition]);
     useEffect(() => {
         setCenter(searchResult);
-        setResult(searchResult)
     }, [searchResult]);
 
     useEffect(() => {
@@ -45,6 +43,7 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
     }, []);
 
     return isLoaded ? (
+        <>
         <GoogleMap
             mapContainerStyle={containerStyle}
             onLoad={onLoad}
@@ -53,9 +52,11 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
             center={center}
             options={mapOptions} // Add this line to use the mapOptions
         >
-            <Marker position={result||center} />
+               <Marker position={center} />
         </GoogleMap>
+        </>
     ) : <></>;
+    
 };
 
 export default GoogleMapComponent;
