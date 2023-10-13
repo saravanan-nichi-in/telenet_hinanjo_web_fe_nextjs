@@ -73,6 +73,7 @@ export default function RowExpansionTable(props) {
                             header={column.header}
                             sortable={column.sortable}
                             className={column.className}
+                            alignHeader={column.alignHeader}
                             headerClassName={column.headerClassName}
                             style={{ minWidth: column.minWidth && column.minWidth, textAlign: column.textAlign && column.textAlign, ...rowExpansionColumnStyle }}
                             headerStyle={column.headerStyle}
@@ -82,17 +83,18 @@ export default function RowExpansionTable(props) {
                 </DataTable>
                 {inner1Column && inner1Column.length > 0 && (
                 <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
-                    {inner1Column.map((columnw, index) => (
+                    {inner1Column.map((column1, index) => (
                         <Column
                             key={index}
-                            field={columnw.field}
-                            header={columnw.header}
-                            sortable={columnw.sortable}
-                            className={columnw.className}
-                            headerClassName={columnw.headerClassName}
-                            style={{ minWidth: columnw.minWidth && columnw.minWidth, textAlign: columnw.textAlign && columnw.textAlign, ...rowExpansionColumnStyle }}
-                            headerStyle={columnw.headerStyle}
-                            body={columnw.field === props.customRowExpansionActionsField ? columnw.body : columnw.body}
+                            field={column1.field}
+                            header={column1.header}
+                            sortable={column1.sortable}
+                            className={column1.className}
+                            alignHeader={column1.alignHeader}
+                            headerClassName={column1.headerClassName}
+                            style={{ minWidth: column1.minWidth && column1.minWidth, textAlign: column1.textAlign && column1.textAlign, ...rowExpansionColumnStyle }}
+                            headerStyle={column1.headerStyle}
+                            body={column1.field === props.customRowExpansionActionsField ? column1.body : column1.body}
                         />
                     ))}
                 </DataTable>
@@ -144,6 +146,7 @@ export default function RowExpansionTable(props) {
                         sortable={col.sortable}
                         expander={col.expander}
                         className={col.className}
+                        alignHeader={col.alignHeader}
                         headerStyle={col.headerStyle}
                         headerClassName={col.headerClassName}
                         style={{ minWidth: col.minWidth && col.minWidth, textAlign: col.textAlign && col.textAlign, ...columnStyle }}

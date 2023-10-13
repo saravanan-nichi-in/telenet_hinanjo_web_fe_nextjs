@@ -88,7 +88,7 @@ export default function AdminMaterialPage() {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
                 var additionalColumnsArrayWithOldData = [...columnsData];
-                let  preparedList = [];
+                let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {

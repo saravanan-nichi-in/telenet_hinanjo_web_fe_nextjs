@@ -40,19 +40,6 @@ const evacuationTableColumns = [
 
 ];
 
-const evacueeFamilyDetailColumns = [
-    { field: "id", header: "番号", minWidth: "5rem" },
-    { field: "代表者", header: "代表者", minWidth: "10rem" },
-    { field: "氏名 (フリガナ)", header: "氏名 (フリガナ)", minWidth: "10rem" },
-    { field: "氏名 (漢字)", header: "氏名 (漢字)", minWidth: "10rem" },
-    { field: "生年月日", header: "生年月日", minWidth: "10rem" },
-    { field: "年齢", header: "年齢", minWidth: "4rem" },
-    { field: "年齢_月", header: "年齢_月", minWidth: "5rem" },
-    { field: "性別", header: "性別", minWidth: "5rem" },
-
-
-]
-
 const externalEvacueesListColumns = [
     { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
     { field: "避難場所種別", header: "避難場所種別", minWidth: "10rem", sortable: true },
@@ -72,23 +59,6 @@ const externalEvacueesDetailColumns = [
     { field: "生年月日", header: "生年月日", minWidth: "7rem", sortable: true },
     { field: "年齢", header: "年齢", minWidth: "10rem", sortable: true },
     { field: "性別", header: "性別", minWidth: "5rem", sortable: true }
-]
-
-const evacueeFamilyDetailRowExpansionColumns = [
-    { field: "住所", header: "住所", minWidth: "10rem" },
-    { field: "要配慮者番号", header: "要配慮者番号", minWidth: "8rem" },
-    { field: "紐付コード", header: "紐付コード", minWidth: "7rem" },
-    { field: "備考", header: "備考", minWidth: "7rem" },
-    { field: "現在の滞在場所 *", header: "現在の滞在場所", minWidth: "9rem"},
-    { field: "作成日", header: "作成日", minWidth: "10rem" },
-    { field: "更新日", header: "更新日", minWidth: "10rem" },
-]
-
-const familyDetailColumns = [
-    { field: '避難日時', header: '避難日時', minWidth: "10rem", textAlign: 'left' },
-    { field: '住所', header: '住所', minWidth: "10rem", textAlign: 'left' },
-    { field: '電話番号(代表者)', header: '電話番号(代表者)', minWidth: "10rem", textAlign: 'left' },
-    { field: '登録言語環境', header: '登録言語環境', minWidth: "10rem", textAlign: 'left' },
 ];
 
 const familyDetailData = [
@@ -100,22 +70,12 @@ const familyDetailData = [
     }
 ];
 
-const familyDetailColumns1 = [
-    { field: '避難所', header: '避難日時', minWidth: "10rem" },
-    { field: '入所日時', header: '入所日時', minWidth: "10rem", textAlign: 'left' },
-    { field: '退所日時', header: '退所日時', minWidth: "10rem", textAlign: 'left' },
-
-];
-
 const familyDetailData1 = [
     {
         "避難所": "Vacant test",
         "入所日時": "2023/09/14 22:17",
         "退所日時": "2023/09/15 17:02"
     }
-];
-const townAssociationColumn = [
-    { field: '町内会名 *', header: '町内会名', minWidth: "10rem"},
 ];
 
 const townAssociationData = [
@@ -158,25 +118,6 @@ const evacuationFoodSupport = [
     { name: 'いいえ', code: '0' },
 ];
 
-
-const historyTableColumns = [
-    { field: 'Sl No', header: '番号', minWidth: "5rem", sortable: true, textAlign: 'left' },
-    { field: '報告日時', header: '報告日時', minWidth: "15rem", sortable: true },
-    { field: '地区', header: '地区', minWidth: "6rem", sortable: true },
-    { field: '避難所名', header: '避難所名', minWidth: "12rem", sortable: true },
-    { field: '避難所名 (フリガナ)', header: '避難所名 (フリガナ)', minWidth: "12rem", sortable: true },
-    { field: "所在地（経度）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
-    { field: "所在地（緯度）", header: "所在地（緯度）", minWidth: "10rem", sortable: true },
-    { field: "所在地（経度1）", header: "所在地（経度）", minWidth: "10rem", sortable: true },
-    { field: "外部公開", header: "外部公開", minWidth: "8rem", sortable: true },
-    { field: "開設状況", header: "開設状況", minWidth: "8rem", sortable: true },
-    { field: "避難者数", header: "避難者数", minWidth: "7rem", sortable: true },
-    { field: "満空状況", header: "満空状況", minWidth: "7rem", sortable: true },
-    { field: "開設日時", header: "開設日時", minWidth: "15rem", sortable: true },
-    { field: "閉鎖日時", header: "閉鎖日時", minWidth: "15rem", sortable: true },
-    { field: "備考", header: "備考", minWidth: "5rem" }
-];
-
 const dashboardTableColumns = [
     { field: 'id', header: '番号', minWidth: '5rem', headerClassName: "custom-header", sortable: true, textAlign: 'left' },
     { field: '避難所', header: '避難所', minWidth: '20rem', sortable: true, headerClassName: "custom-header" },
@@ -190,23 +131,23 @@ const dashboardTableColumns = [
 ];
 
 const MailSettingsOption1 = [
-    { name: 'なし' },
-    { name: '2時間毎' },
-    { name: '3時間毎' },
-    { name: '4時間毎' },
-    { name: '6時間毎' },
-    { name: '毎日' },
-    { name: '毎日2回' },
-
+    { name: 'なし' , value: 0},
+    { name: '1時間毎', value: 1 },
+    { name: '2時間毎', value: 2},
+    { name: '3時間毎', value: 3 },
+    { name: '4時間毎', value: 4 },
+    { name: '6時間毎', value: 6 },
+    { name: '毎日', value: 8 },
+    { name: '毎日2回', value: 16 },
 ];
 
 const MailSettingsOption2 = [
-    { name: '--' },
-    { name: '北海道' },
-    { name: '福島県' },
-    { name: '千葉県' },
-    { name: '東京都' },
-
+    { name: '--', value: null },
+    { name: '北海道', value: 1 },
+    { name: '福島県', value: 2 },
+    { name: '千葉県', value: 3 },
+    { name: '東京都', value: 4 },
+    { name: '大阪府', value: 5}
 ];
 
 const externalEvacueesTallyChartData = {
@@ -658,21 +599,15 @@ export {
     profiles,
     evacuationStatusOptions,
     evacuationTableColumns,
-    evacueeFamilyDetailColumns,
-    familyDetailColumns,
-    evacueeFamilyDetailRowExpansionColumns,
     externalEvacueesListColumns,
     externalEvacueesDetailColumns,
     evacuationSiteType,
     evacuationFoodSupport,
-    familyDetailColumns1,
     familyDetailData1,
     familyDetailData,
-    townAssociationColumn,
     townAssociationData,
     suppliesShortageData,
     suppliesShortageHeaderColumn,
-    historyTableColumns,
     historyPageCities,
     dashboardTableColumns,
     MailSettingsOption1,
@@ -694,3 +629,103 @@ export {
     evacuationCenterCrowdingRateOptions,
     considerationEvacueesCountOptions
 }
+
+export const prefectures = [
+    { value: 1, name: '北海道' },
+    { value: 2, name: '青森県' },
+    { value: 3, name: '岩手県' },
+    { value: 4, name: '宮城県' },
+    { value: 5, name: '秋田県' },
+    { value: 6, name: '山形県' },
+    { value: 7, name: '福島県' },
+    { value: 8, name: '茨城県' },
+    { value: 9, name: '栃木県' },
+    { value: 10, name: '群馬県' },
+    { value: 11, name: '埼玉県' },
+    { value: 12, name: '千葉県' },
+    { value: 13, name: '東京都' },
+    { value: 14, name: '神奈川県' },
+    { value: 15, name: '新潟県' },
+    { value: 16, name: '富山県' },
+    { value: 17, name: '石川県' },
+    { value: 18, name: '福井県' },
+    { value: 19, name: '山梨県' },
+    { value: 20, name: '長野県' },
+    { value: 21, name: '岐阜県' },
+    { value: 22, name: '静岡県' },
+    { value: 23, name: '愛知県' },
+    { value: 24, name: '三重県' },
+    { value: 25, name: '滋賀県' },
+    { value: 26, name: '京都府' },
+    { value: 27, name: '大阪府' },
+    { value: 28, name: '兵庫県' },
+    { value: 29, name: '奈良県' },
+    { value: 30, name: '和歌山県' },
+    { value: 31, name: '鳥取県' },
+    { value: 32, name: '島根県' },
+    { value: 33, name: '岡山県' },
+    { value: 34, name: '広島県' },
+    { value: 35, name: '山口県' },
+    { value: 36, name: '徳島県' },
+    { value: 37, name: '香川県' },
+    { value: 38, name: '愛媛県' },
+    { value: 39, name: '高知県' },
+    { value: 40, name: '福岡県' },
+    { value: 41, name: '佐賀県' },
+    { value: 42, name: '長崎県' },
+    { value: 43, name: '熊本県' },
+    { value: 44, name: '大分県' },
+    { value: 45, name: '宮崎県' },
+    { value: 46, name: '鹿児島県' },
+    { value: 47, name: '沖縄県' },
+];
+
+export const prefectures_en = [
+    { value: 1, name: 'Hokkaido' },
+    { value: 2, name: 'Aomori' },
+    { value: 3, name: 'Iwate' },
+    { value: 4, name: 'Miyagi' },
+    { value: 5, name: 'Akita' },
+    { value: 6, name: 'Yamagata' },
+    { value: 7, name: 'Fukushima' },
+    { value: 8, name: 'Ibaraki' },
+    { value: 9, name: 'Tochigi' },
+    { value: 10, name: 'Gunma' },
+    { value: 11, name: 'Saitama' },
+    { value: 12, name: 'Chiba' },
+    { value: 13, name: 'Tokyo' },
+    { value: 14, name: 'Kanagawa' },
+    { value: 15, name: 'Niigata' },
+    { value: 16, name: 'Toyama' },
+    { value: 17, name: 'Ishikawa' },
+    { value: 18, name: 'Fukui' },
+    { value: 19, name: 'Yamanashi' },
+    { value: 20, name: 'Nagano' },
+    { value: 21, name: 'Gifu' },
+    { value: 22, name: 'Shizuoka' },
+    { value: 23, name: 'Aichi' },
+    { value: 24, name: 'Mie' },
+    { value: 25, name: 'Shiga' },
+    { value: 26, name: 'Kyoto' },
+    { value: 27, name: 'Osaka' },
+    { value: 28, name: 'Hyogo' },
+    { value: 29, name: 'Nara' },
+    { value: 30, name: 'Wakayama' },
+    { value: 31, name: 'Tottori' },
+    { value: 32, name: 'Shimane' },
+    { value: 33, name: 'Okayama' },
+    { value: 34, name: 'Hiroshima' },
+    { value: 35, name: 'Yamaguchi' },
+    { value: 36, name: 'Tokushima' },
+    { value: 37, name: 'Kagawa' },
+    { value: 38, name: 'Ehime' },
+    { value: 39, name: 'Kochi' },
+    { value: 40, name: 'Fukuoka' },
+    { value: 41, name: 'Saga' },
+    { value: 42, name: 'Nagasaki' },
+    { value: 43, name: 'Kumamoto' },
+    { value: 44, name: 'Oita' },
+    { value: 45, name: 'Miyazaki' },
+    { value: 46, name: 'Kagoshima' },
+    { value: 47, name: 'Okinawa' },
+];

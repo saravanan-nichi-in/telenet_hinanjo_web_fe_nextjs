@@ -15,6 +15,7 @@ export default function AdminStockPileMaster() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
+    
     const [categories, setCategories] = useState([]);
     const [productNames, setProductNames] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -353,7 +354,7 @@ export default function AdminStockPileMaster() {
                                                 }} parentStyle={{ paddingLeft: "10px" }} />
 
                                             </div>
-                                    </div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div className='mt-3'>

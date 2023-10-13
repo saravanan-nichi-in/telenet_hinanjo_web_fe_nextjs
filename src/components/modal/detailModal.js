@@ -14,8 +14,8 @@ const DetailModal = (props) => {
     } = props;
     const {
         headerContent,
-        value1,
-        value2,
+        note,
+        comment,
         modalClass,
         draggable,
         position,
@@ -24,10 +24,15 @@ const DetailModal = (props) => {
         style,
         ...restProps
     } = detailModalProps;
+
+    /**
+     * Header content 
+     */
     const header = (
         headerContent
     );
 
+    console.log(visible);
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass} custom-modal`}
@@ -37,11 +42,12 @@ const DetailModal = (props) => {
                 visible={visible}
                 onHide={onHide}
                 style={style}
+                // blockScroll={visible}
                 {...restProps}
             >
                 <div className="pt-2">
                     <NormalLabel labelClass="w-full pt-0 mb-1"
-                        text={translate(localeJson, 'Other_shortage_supplies')}
+                        text={translate(localeJson, 'Other_shared_matters')}
                         style={{
                             marginBottom: "10px"
                         }} />
@@ -49,17 +55,17 @@ const DetailModal = (props) => {
                         textAreaClass: "w-full bg-bluegray-50",
                         rows: 5,
                         readOnly: "true",
-                        value: value1
+                        value: note
                     }} parentStyle={{ paddingTop: "0.2rem" }} />
                 </div>
                 <div className="mt-1">
                     <NormalLabel labelClass="w-full pt-0"
-                        text={translate(localeJson, 'Other_shortage_supplies')} />
+                        text={translate(localeJson, 'Other_shortage_items')} />
                     <TextArea textAreaProps={{
                         textAreaClass: "w-full bg-bluegray-50 pt-1",
                         rows: 5,
                         readOnly: "true",
-                        value: value2
+                        value: comment
                     }} parentStyle={{ paddingTop: "0.2rem" }} />
                 </div>
             </Dialog>

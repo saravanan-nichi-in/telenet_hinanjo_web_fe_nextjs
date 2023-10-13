@@ -1,61 +1,241 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
+import { prefectures, prefectures_en } from "@/utils/constant";
 import {
   Button,
   DividerComponent,
-  InputIcon,
+  Input,
   NormalLabel,
   ValidationError,
   DateCalendar,
   TimeCalendar,
   GoogleMapComponent,
   InputSwitch,
-  InputNumber
+  InputNumber,
+  Select,
+  InputFloatLabel,
+  InputNumberFloatLabel,
+  SelectFloatLabel,
 } from "@/components";
+import {
+  DateCalendarFloatLabel,
+  TimeCalendarFloatLabel,
+} from "@/components/date&time";
+import { PlaceServices } from "@/services";
 
 export default function PlaceCreatePage() {
   const { localeJson } = useContext(LayoutContext);
   const router = useRouter();
+  const [currentLattitude, setCurrentlatitude] = useState(0);
+  const [currentLongitude, setCurrentlongitude] = useState(0);
   const schema = Yup.object().shape({
-    capacity: Yup.string()
-      .required(translate(localeJson, "capacity") + translate(localeJson, "is_required")),
-    evacuationLocation: Yup.string().required(
-      translate(localeJson, "evacuation_location") + translate(localeJson, "is_required")
+    name: Yup.string()
+      .required(
+        translate(localeJson, "evacuation_location") +
+          translate(localeJson, "is_required")
+      )
+      .max(
+        200,
+        translate(localeJson, "evacuation_location") +
+          translate(localeJson, "max_length_200")
+      ),
+    refugee_name: Yup.string().max(
+      200,
+      translate(localeJson, "evacuation_location_furigana") +
+        translate(localeJson, "max_length_200")
     ),
-    phoneNumber: Yup.string().required(
-      translate(localeJson, "phone_number") + translate(localeJson, "is_required")
+    name_en: Yup.string().max(
+      200,
+      translate(localeJson, "evacuation_location_english") +
+        translate(localeJson, "max_length_200")
     ),
-    latitude: Yup.string().required(
+    postal_code_1: Yup.string()
+      .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
+      .max(3, translate(localeJson, "postal_code_1_validation"))
+      .required(
+        translate(localeJson, "postal_code") +
+          translate(localeJson, "is_required")
+      ),
+    postal_code_2: Yup.string()
+      .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
+      .max(4, translate(localeJson, "postal_code_2_validation"))
+      .required(
+        translate(localeJson, "postal_code") +
+          translate(localeJson, "is_required")
+      ),
+    prefecture_id: Yup.string().required(
+      translate(localeJson, "prefecture_place") +
+        translate(localeJson, "is_required")
+    ),
+    address: Yup.string()
+      .required(
+        translate(localeJson, "address") + translate(localeJson, "is_required")
+      )
+      .max(
+        255,
+        translate(localeJson, "address") +
+          translate(localeJson, "max_length_255")
+      ),
+    address_en: Yup.string().max(
+      255,
+      translate(localeJson, "address_en") +
+        translate(localeJson, "max_length_255")
+    ),
+    postal_code_default_1: Yup.string()
+      .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
+      .max(3, translate(localeJson, "postal_code_1_validation"))
+      .required(
+        translate(localeJson, "default_prefecture_place") +
+          translate(localeJson, "is_required")
+      ),
+    postal_code_default_2: Yup.string()
+      .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
+      .max(4, translate(localeJson, "postal_code_2_validation"))
+      .required(
+        translate(localeJson, "default_prefecture_place") +
+          translate(localeJson, "is_required")
+      ),
+    prefecture_id_default: Yup.string().required(
+      translate(localeJson, "default_prefecture_place") +
+        translate(localeJson, "is_required")
+    ),
+    address_default: Yup.string()
+      .required(
+        translate(localeJson, "default_address") +
+          translate(localeJson, "is_required")
+      )
+      .max(
+        255,
+        translate(localeJson, "default_address") +
+          translate(localeJson, "max_length_255")
+      ),
+    address_default_en: Yup.string().max(
+      255,
+      translate(localeJson, "default_address_en") +
+        translate(localeJson, "max_length_255")
+    ),
+    tel: Yup.string()
+      .required(
+        translate(localeJson, "phone_number") +
+          translate(localeJson, "is_required")
+      )
+      .matches(/^[0-9]{10}$/, translate(localeJson, "phone")),
+    latitude: Yup.number().required(
       translate(localeJson, "latitude") + translate(localeJson, "is_required")
     ),
-    longitude: Yup.string().required(
+    longitude: Yup.number().required(
       translate(localeJson, "longitude") + translate(localeJson, "is_required")
     ),
     altitude: Yup.string().required(
       translate(localeJson, "altitude") + translate(localeJson, "is_required")
     ),
-    postal_code1: Yup.number(translate(localeJson, "address") + translate(localeJson, "is_required")),
-    postal_code2: Yup.number(translate(localeJson, "address") + translate(localeJson, "is_required"))
+    total_place: Yup.number()
+      .required(
+        translate(localeJson, "capacity") + translate(localeJson, "is_required")
+      )
+      .max(
+        999999999,
+        translate(localeJson, "capacity") +
+          translate(localeJson, "capacity_max_length")
+      ),
+    remarks: Yup.string().max(
+      255,
+      translate(localeJson, "default_address_en") +
+        translate(localeJson, "max_length_255")
+    ),
   });
 
+  /* Services */
+  const { create, getAddressByZipCode } = PlaceServices;
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentlatitude(latitude);
+          setCurrentlongitude(longitude);
+        },
+        (error) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by your browser.");
+    }
+  };
   const initialValues = {
-    fullName: "", evacuationLocation: "", evacuationLocationFurigana: "",
-    evacuationLocationEnglish: "", capacity: "", phoneNumber: "", longitude: "",
-    latitude: "", altitude: "", opening_date: "", opening_time: "", closing_date: "", closing_time: "",
-    foreignPublication: "", status: "", remarks: "", postal_code1: "", postal_code2: ""
-  }
+    name: "",
+    refugee_name: "",
+    name_en: "",
+    postal_code_1: "",
+    postal_code_2: "",
+    prefecture_id: "",
+    address: "",
+    prefecture_en_id: "",
+    address_en: "",
+    postal_code_default_1: "",
+    postal_code_default_2: "",
+    prefecture_id_default: "",
+    address_default: "",
+    prefecture_default_en_id: "",
+    address_default_en: "",
+    total_place: "",
+    tel: "",
+    longitude: "",
+    latitude: "",
+    altitude: "",
+    opening_date: "",
+    opening_time: "",
+    closing_date: "",
+    closing_time: "",
+    public_availability: "",
+    active_flg: false,
+    remarks: "",
+  };
+
+  // map search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
+
+  const handleSearch = (setFieldValue) => {
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: searchQuery }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const { location } = results[0].geometry;
+        setFieldValue("latitude", location.lat());
+        setFieldValue("longitude", location.lng());
+        setSearchResult({
+          lat: location.lat(),
+          lng: location.lng(),
+        });
+      } else {
+        alert("Location not found");
+      }
+    });
+  };
+
+  const createPlace = (response) => {
+    if (response) {
+      router.push("/admin/place");
+    }
+  };
+
   return (
     <>
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
-          console.log(values, error)
-          // router.push("/admin/place");
+          values.public_availability = values.public_availability ? "1" : "0";
+          create(values, createPlace);
         }}
       >
         {({
@@ -66,7 +246,8 @@ export default function PlaceCreatePage() {
           handleBlur,
           handleSubmit,
           handleReset,
-          resetForm
+          resetForm,
+          setFieldValue,
         }) => (
           <div className="grid">
             <div className="col-12">
@@ -81,477 +262,1069 @@ export default function PlaceCreatePage() {
                     <div className="col-12 lg:flex p-0">
                       <div className="col-12 lg:col-7 p-0">
                         <div>
+                          <div className="mb-5 mt-3">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "name", // Set id to 'evacuationLocation'
+                                name: "name",
+                                spanText: "*",
+                                spanClass: "p-error",
+                                value: values.name,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                                text: translate(
+                                  localeJson,
+                                  "evacuation_location"
+                                ),
+                                inputClass: "w-full",
+                              }}
+                              parentClass={`custom_input ${
+                                errors.name && touched.name && "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.name && touched.name && errors.name
+                              }
+                            />
+                          </div>
 
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "evacuation_location")}
-                              />
+                          <div className="mb-5">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "refugee_name",
+                                name: "refugee_name",
+                                spanText: "",
+                                spanClass: "",
+                                value: values.refugee_name,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                                text: translate(
+                                  localeJson,
+                                  "evacuation_location_furigana"
+                                ),
+                                inputClass: "w-full",
+                              }}
+                              parentClass={`custom_input ${
+                                errors.refugee_name &&
+                                touched.refugee_name &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.refugee_name &&
+                                touched.refugee_name &&
+                                errors.refugee_name
+                              }
+                            />
+                          </div>
+
+                          <div className="mb-5">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "name_en",
+                                name: "name_en",
+                                spanText: "",
+                                spanClass: "",
+                                value: values.name_en,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                                text: translate(
+                                  localeJson,
+                                  "evacuation_location_english"
+                                ),
+                                inputClass: "w-full",
+                              }}
+                              parentClass={`custom_input ${
+                                errors.name_en &&
+                                touched.name_en &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.name_en &&
+                                touched.name_en &&
+                                errors.name_en
+                              }
+                            />
+                          </div>
+
+                          <div className="mb-5">
+                            <div className="lg:flex lg:mb-5">
+                              <div className="lg:col-6 flex  p-0">
+                                <div className="flex flex-column w-full">
+                                  <InputFloatLabel
+                                    inputFloatLabelProps={{
+                                      id: "postal_code_1",
+                                      name: "postal_code_1",
+                                      spanText: "*",
+                                      spanClass: "p-error",
+                                      value: values.postal_code_1,
+                                      onChange: (evt) => {
+                                        setFieldValue(
+                                          "postal_code_1",
+                                          evt.target.value
+                                        );
+                                        let val = evt.target.value;
+                                        let val2 = values.postal_code_2;
+                                        if (
+                                          val !== undefined &&
+                                          val !== null &&
+                                          val2 !== undefined &&
+                                          val2 !== null
+                                        ) {
+                                          if (
+                                            val.length == 3 &&
+                                            val2.length == 4
+                                          ) {
+                                            let payload = `${evt.target.value}-${values.postal_code_2}`;
+                                            getAddressByZipCode(
+                                              payload,
+                                              (response) => {
+                                                if (response) {
+                                                  let address = response[0];
+                                                  const selectedPrefecture =
+                                                    prefectures.find(
+                                                      (prefecture) =>
+                                                        prefecture.value ==
+                                                        address.prefcode
+                                                    );
+                                                  setFieldValue(
+                                                    "prefecture_id",
+                                                    selectedPrefecture?.value
+                                                  );
+                                                  setFieldValue(
+                                                    "address",
+                                                    address.address2
+                                                  );
+                                                } else {
+                                                  setFieldValue(
+                                                    "prefecture_id",
+                                                    ""
+                                                  );
+                                                  setFieldValue("address", "");
+                                                }
+                                              }
+                                            );
+                                          }
+                                        }
+                                      },
+                                      onBlur: handleBlur,
+                                      text: translate(
+                                        localeJson,
+                                        "postal_code"
+                                      ),
+                                      inputClass: "w-full",
+                                    }}
+                                    parentClass={`custom-input flex w-full ${
+                                      errors.postal_code_1 &&
+                                      touched.postal_code_1 &&
+                                      "p-invalid pb-1"
+                                    }`}
+                                  />
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.postal_code_1 &&
+                                      touched.postal_code_1 &&
+                                      errors.postal_code_1
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="lg:col-1 flex align-items-center justify-content-center">
+                                -
+                              </div>
+                              <div className="lg:col-5 p-0 mb-5 lg:mb-0">
+                                <InputFloatLabel
+                                  inputFloatLabelProps={{
+                                    id: "postal_code_2",
+                                    name: "postal_code_2",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    value: values.postal_code_2,
+                                    onChange: (evt) => {
+                                      setFieldValue(
+                                        "postal_code_2",
+                                        evt.target.value
+                                      );
+                                      let val = evt.target.value;
+                                      let val2 = values.postal_code_1;
+                                      if (
+                                        val !== undefined &&
+                                        val !== null &&
+                                        val2 !== undefined &&
+                                        val2 !== null
+                                      ) {
+                                        if (
+                                          val.length == 4 &&
+                                          val2.length == 3
+                                        ) {
+                                          let payload = `${values.postal_code_1}-${evt.target.value}`;
+                                          getAddressByZipCode(
+                                            payload,
+                                            (response) => {
+                                              if (response) {
+                                                let address = response[0];
+                                                const selectedPrefecture =
+                                                  prefectures.find(
+                                                    (prefecture) =>
+                                                      prefecture.value ==
+                                                      address.prefcode
+                                                  );
+
+                                                setFieldValue(
+                                                  "prefecture_id",
+                                                  selectedPrefecture?.value
+                                                );
+                                                setFieldValue(
+                                                  "address",
+                                                  address.address2
+                                                );
+                                              } else {
+                                                setFieldValue(
+                                                  "prefecture_id",
+                                                  ""
+                                                );
+                                                setFieldValue("address", "");
+                                              }
+                                            }
+                                          );
+                                        }
+                                      }
+                                    },
+                                    onBlur: handleBlur,
+                                    inputClass: "w-full",
+                                    text: translate(localeJson, "postal_code"),
+                                  }}
+                                  parentClass={`${
+                                    errors.postal_code_2 &&
+                                    touched.postal_code_2 &&
+                                    "p-invalid pb-1"
+                                  }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.postal_code_2 &&
+                                    touched.postal_code_2 &&
+                                    errors.postal_code_2
+                                  }
+                                />
+                              </div>
                             </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "evacuationLocation",
-                                  inputClass: "w-full",
+                            <div className="lg:flex">
+                              <div className="lg:col-6 lg:pl-0 mb-5 lg:mb-0">
+                                <SelectFloatLabel
+                                  selectFloatLabelProps={{
+                                    name: "prefecture_id",
+                                    value: values.prefecture_id,
+                                    options: prefectures,
+                                    optionLabel: "name",
+                                    selectClass: "w-full",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    onChange: handleChange,
+                                    onBlur: handleBlur,
+                                    text: translate(
+                                      localeJson,
+                                      "prefecture_places"
+                                    ),
+                                  }}
+                                  parentClass={`${
+                                    errors.prefecture_id &&
+                                    touched.prefecture_id &&
+                                    "p-invalid pb-1"
+                                  }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.prefecture_id &&
+                                    touched.prefecture_id &&
+                                    errors.prefecture_id
+                                  }
+                                />
+                              </div>
+
+                              <div className="lg:col-6 lg:pr-0">
+                                <InputFloatLabel
+                                  inputFloatLabelProps={{
+                                    id: "address",
+                                    name: "address",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    value: values.address,
+                                    onChange: handleChange,
+                                    onBlur: handleBlur,
+                                    text: translate(localeJson, "address"),
+                                    inputClass: "w-full",
+                                  }}
+                                  parentClass={`custom_input ${
+                                    errors.address &&
+                                    touched.address &&
+                                    "p-invalid pb-1"
+                                  }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.address &&
+                                    touched.address &&
+                                    errors.address
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="lg:flex mb-5">
+                            <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0">
+                              <SelectFloatLabel
+                                selectFloatLabelProps={{
+                                  name: "prefecture_en_id",
+                                  value: values.prefecture_en_id,
+                                  options: prefectures_en,
+                                  optionLabel: "name",
+                                  selectClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
+                                  text: translate(
+                                    localeJson,
+                                    "prefecture_places_en"
+                                  ),
                                 }}
-                                parentClass={`${errors.evacuationLocation &&
-                                  touched.evacuationLocation &&
+                                parentClass={`${
+                                  errors.prefecture_en_id &&
+                                  touched.prefecture_en_id &&
                                   "p-invalid pb-1"
-                                  }`}
+                                }`}
                               />
                               <ValidationError
                                 errorBlock={
-                                  errors.evacuationLocation &&
-                                  touched.evacuationLocation &&
-                                  errors.evacuationLocation
+                                  errors.prefecture_en_id &&
+                                  touched.prefecture_en_id &&
+                                  errors.prefecture_en_id
+                                }
+                              />
+                            </div>
+                            <div className="lg:col-6 lg:pr-0">
+                              <InputFloatLabel
+                                inputFloatLabelProps={{
+                                  id: "address_en",
+                                  name: "address_en",
+                                  value: values.address_en,
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  text: translate(localeJson, "address_en"),
+                                  inputClass: "w-full",
+                                }}
+                                parentClass={`custom_input ${
+                                  errors.address_en &&
+                                  touched.address_en &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.address_en &&
+                                  touched.address_en &&
+                                  errors.address_en
                                 }
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                text={translate(localeJson, "evacuation_location_furigana")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "evacuationLocationFurigana",
-                                  inputClass: "w-full",
-                                  onChange: handleChange,
-                                  onBlur: handleBlur,
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                text={translate(localeJson, "evacuation_location_english")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "evacuationLocationEnglish",
-                                  inputClass: "w-full",
-                                  onChange: handleChange,
-                                  onBlur: handleBlur,
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "address")}
-                              />
-                            </div>
-                            <div className="flex">
-                              <div className="lg:col-6 lg:flex">
-                                <label className="flex align-items-center justify-content-center">〒</label>
-                                <InputNumber
-                                  inputNumberProps={{
-                                    name: "postal_code1",
-                                    inputNumberClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`custom-input flex flex-wrap ${errors.postal_code1 &&
-                                    touched.postal_code1 &&
-                                    "p-invalid pb-1"
+
+                          <div className="mb-5">
+                            <div className="lg:flex lg:mb-5">
+                              <div className="lg:col-6 flex  p-0">
+                                <div className="flex flex-column w-full">
+                                  <InputFloatLabel
+                                    inputFloatLabelProps={{
+                                      id: "postal_code_default_1",
+                                      name: "postal_code_default_1",
+                                      spanText: "*",
+                                      spanClass: "p-error",
+                                      value: values.postal_code_default_1,
+                                      onChange: (evt) => {
+                                        setFieldValue(
+                                          "postal_code_default_1",
+                                          evt.target.value
+                                        );
+                                        let val = evt.target.value;
+                                        let val2 = values.postal_code_default_2;
+                                        if (
+                                          val !== undefined &&
+                                          val !== null &&
+                                          val2 !== undefined &&
+                                          val2 !== null
+                                        ) {
+                                          if (
+                                            val.length == 3 &&
+                                            val2.length == 4
+                                          ) {
+                                            let payload = `${evt.target.value}-${values.postal_code_default_2}`;
+                                            getAddressByZipCode(
+                                              payload,
+                                              (response) => {
+                                                if (response) {
+                                                  let address = response[0];
+                                                  const selectedPrefecture =
+                                                    prefectures.find(
+                                                      (prefecture) =>
+                                                        prefecture.value ==
+                                                        address.prefcode
+                                                    );
+                                                  setFieldValue(
+                                                    "prefecture_id_default",
+                                                    selectedPrefecture?.value
+                                                  );
+                                                  setFieldValue(
+                                                    "address_default",
+                                                    address.address2
+                                                  );
+                                                } else {
+                                                  setFieldValue(
+                                                    "prefecture_id_default",
+                                                    ""
+                                                  );
+                                                  setFieldValue(
+                                                    "address_default",
+                                                    ""
+                                                  );
+                                                }
+                                              }
+                                            );
+                                          }
+                                        }
+                                      },
+                                      onBlur: handleBlur,
+                                      text: translate(
+                                        localeJson,
+                                        "default_postal_code"
+                                      ),
+                                      inputClass: "w-full",
+                                    }}
+                                    parentClass={`custom-input flex w-full ${
+                                      errors.postal_code_default_1 &&
+                                      touched.postal_code_default_1 &&
+                                      "p-invalid pb-1"
                                     }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.postal_code1 &&
-                                    touched.postal_code1 &&
-                                    errors.postal_code1
-                                  }
-                                />
+                                  />
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.postal_code_default_1 &&
+                                      touched.postal_code_default_1 &&
+                                      errors.postal_code_default_1
+                                    }
+                                  />
+                                </div>
                               </div>
-                              <div className="lg:col-1 flex align-items-center justify-content-center">-</div>
-                              <div className="lg:col-5">
-                                <InputNumber
-                                  inputNumberProps={{
-                                    name: "postal_code2",
-                                    inputNumberClass: "w-full",
-                                    onChange: handleChange,
+                              <div className="lg:col-1 flex align-items-center justify-content-center">
+                                -
+                              </div>
+                              <div className="lg:col-5 p-0 mb-5 lg:mb-0">
+                                <InputFloatLabel
+                                  inputFloatLabelProps={{
+                                    id: "postal_code_default_2",
+                                    name: "postal_code_default_2",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    value: values.postal_code_default_2,
+                                    onChange: (evt) => {
+                                      setFieldValue(
+                                        "postal_code_default_2",
+                                        evt.target.value
+                                      );
+                                      let val2 = evt.target.value;
+                                      let val = values.postal_code_default_1;
+                                      if (
+                                        val !== undefined &&
+                                        val !== null &&
+                                        val2 !== undefined &&
+                                        val2 !== null
+                                      ) {
+                                        if (
+                                          val.length == 3 &&
+                                          val2.length == 4
+                                        ) {
+                                          let payload = `${values.postal_code_default_1}-${evt.target.value}`;
+                                          getAddressByZipCode(
+                                            payload,
+                                            (response) => {
+                                              if (response) {
+                                                let address = response[0];
+                                                const selectedPrefecture =
+                                                  prefectures.find(
+                                                    (prefecture) =>
+                                                      prefecture.value ==
+                                                      address.prefcode
+                                                  );
+                                                setFieldValue(
+                                                  "prefecture_id_default",
+                                                  selectedPrefecture?.value
+                                                );
+                                                setFieldValue(
+                                                  "address_default",
+                                                  address.address2
+                                                );
+                                              } else {
+                                                setFieldValue(
+                                                  "prefecture_id_default",
+                                                  ""
+                                                );
+                                                setFieldValue(
+                                                  "address_default",
+                                                  ""
+                                                );
+                                              }
+                                            }
+                                          );
+                                        }
+                                      }
+                                    },
                                     onBlur: handleBlur,
+                                    inputClass: "w-full",
+                                    text: translate(
+                                      localeJson,
+                                      "default_postal_code"
+                                    ),
                                   }}
-                                  parentClass={`${errors.postal_code2 &&
-                                    touched.postal_code2 &&
+                                  parentClass={`${
+                                    errors.postal_code_default_2 &&
+                                    touched.postal_code_default_2 &&
                                     "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.postal_code2 &&
-                                    touched.postal_code2 &&
-                                    errors.postal_code2
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "capacity")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "capacity",
-                                  inputClass: "w-full",
-                                  onChange: handleChange,
-                                  onBlur: handleBlur,
-                                }}
-                                parentClass={`${errors.capacity &&
-                                  touched.capacity &&
-                                  "p-invalid pb-1"
                                   }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.postal_code_default_2 &&
+                                    touched.postal_code_default_2 &&
+                                    errors.postal_code_default_2
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="lg:flex">
+                              <div className="lg:col-6 lg:pl-0 mb-5 lg:mb-0">
+                                <SelectFloatLabel
+                                  selectFloatLabelProps={{
+                                    name: "prefecture_id_default",
+                                    value: values.prefecture_id_default,
+                                    options: prefectures,
+                                    optionLabel: "name",
+                                    selectClass: "w-full",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    onChange: handleChange,
+                                    onBlur: handleBlur,
+                                    text: translate(
+                                      localeJson,
+                                      "default_prefecture_place"
+                                    ),
+                                  }}
+                                  parentClass={`${
+                                    errors.prefecture_id_default &&
+                                    touched.prefecture_id_default &&
+                                    "p-invalid pb-1"
+                                  }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.prefecture_id_default &&
+                                    touched.prefecture_id_default &&
+                                    errors.prefecture_id_default
+                                  }
+                                />
+                              </div>
+
+                              <div className="lg:col-6 lg:pr-0">
+                                <InputFloatLabel
+                                  inputFloatLabelProps={{
+                                    id: "address_default",
+                                    name: "address_default",
+                                    spanText: "*",
+                                    spanClass: "p-error",
+                                    value: values.address_default,
+                                    onChange: handleChange,
+                                    onBlur: handleBlur,
+                                    text: translate(
+                                      localeJson,
+                                      "default_address"
+                                    ),
+                                    inputClass: "w-full",
+                                  }}
+                                  parentClass={`custom_input ${
+                                    errors.address_default &&
+                                    touched.address_default &&
+                                    "p-invalid pb-1"
+                                  }`}
+                                />
+                                <ValidationError
+                                  errorBlock={
+                                    errors.address_default &&
+                                    touched.address_default &&
+                                    errors.address_default
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="lg:flex mb-5">
+                            <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0">
+                              <SelectFloatLabel
+                                selectFloatLabelProps={{
+                                  name: "prefecture_default_en_id",
+                                  value: values.prefecture_default_en_id,
+                                  options: prefectures_en,
+                                  optionLabel: "name",
+                                  selectClass: "w-full",
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  text: translate(
+                                    localeJson,
+                                    "default_prefecture_place_en"
+                                  ),
+                                }}
+                                parentClass={`${
+                                  errors.prefecture_default_en_id &&
+                                  touched.prefecture_default_en_id &&
+                                  "p-invalid pb-1"
+                                }`}
                               />
                               <ValidationError
                                 errorBlock={
-                                  errors.capacity &&
-                                  touched.capacity &&
-                                  errors.capacity
+                                  errors.prefecture_default_en_id &&
+                                  touched.prefecture_default_en_id &&
+                                  errors.prefecture_default_en_id
+                                }
+                              />
+                            </div>
+                            <div className="lg:col-6 lg:pr-0">
+                              <InputFloatLabel
+                                inputFloatLabelProps={{
+                                  id: "address_default_en",
+                                  name: "address_default_en",
+                                  value: values.address_default_en,
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  text: translate(
+                                    localeJson,
+                                    "default_address_en"
+                                  ),
+                                  inputClass: "w-full",
+                                }}
+                                parentClass={`custom_input ${
+                                  errors.address_default_en &&
+                                  touched.address_default_en &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.address_default_en &&
+                                  touched.address_default_en &&
+                                  errors.address_default_en
                                 }
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "phone_number")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "phoneNumber",
-                                  inputClass: "w-full",
-                                  onChange: handleChange,
+                          <div className="mb-5">
+                            <InputNumberFloatLabel
+                              inputNumberFloatProps={{
+                                id: "total_place",
+                                name: "total_place",
+                                spanText: "*",
+                                spanClass: "p-error",
+                                value: values.total_place,
+                                onChange: (evt) => {
+                                  setFieldValue("total_place", evt.value);
+                                },
+                                onBlur: handleBlur,
+                                text: translate(localeJson, "capacity"),
+                                inputNumberClass: "w-full",
+                              }}
+                              parentClass={`custom_input ${
+                                errors.total_place &&
+                                touched.total_place &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.total_place &&
+                                touched.total_place &&
+                                errors.total_place
+                              }
+                            />
+                          </div>
+
+                          <div className="mb-5">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "tel",
+                                name: "tel",
+                                spanText: "*",
+                                spanClass: "p-error",
+                                value: values.tel,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                                text: translate(localeJson, "phone_number"),
+                                inputClass: "w-full",
+                              }}
+                              parentClass={`custom_input ${
+                                errors.tel && touched.tel && "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.tel && touched.tel && errors.tel
+                              }
+                            />
+                          </div>
+
+                          <div className="lg:flex mb-5">
+                            <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0 ">
+                              <InputNumberFloatLabel
+                                inputNumberFloatProps={{
+                                  id: "latitude",
+                                  name: "latitude",
+                                  mode: "decimal",
+                                  maxFractionDigits: "10",
+                                  spanText: "*",
+                                  spanClass: "p-error",
+                                  value: values.latitude,
+                                  onChange: (evt) => {
+                                    setFieldValue("latitude", evt.value);
+                                  },
                                   onBlur: handleBlur,
+                                  text: translate(localeJson, "latitude"),
+                                  inputNumberClass: "w-full",
                                 }}
-                                parentClass={`${errors.phoneNumber &&
-                                  touched.phoneNumber &&
+                                parentClass={` ${
+                                  errors.latitude &&
+                                  touched.latitude &&
                                   "p-invalid pb-1"
-                                  }`}
+                                }`}
                               />
                               <ValidationError
                                 errorBlock={
-                                  errors.phoneNumber &&
-                                  touched.phoneNumber &&
-                                  errors.phoneNumber
+                                  errors.latitude &&
+                                  touched.latitude &&
+                                  errors.latitude
+                                }
+                              />
+                            </div>
+                            <div className="lg:col-6 lg:pr-0">
+                              <InputNumberFloatLabel
+                                inputNumberFloatProps={{
+                                  id: "longitude",
+                                  name: "longitude",
+                                  mode: "decimal",
+                                  maxFractionDigits: "10",
+                                  spanText: "*",
+                                  spanClass: "p-error",
+                                  value: values.longitude,
+                                  onChange: (evt) => {
+                                    setFieldValue("longitude", evt.value);
+                                  },
+                                  onBlur: handleBlur,
+                                  text: translate(localeJson, "longitude"),
+                                  inputNumberClass: "w-full",
+                                }}
+                                parentClass={`${
+                                  errors.longitude &&
+                                  touched.longitude &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.longitude &&
+                                  touched.longitude &&
+                                  errors.longitude
                                 }
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "latitude_longitude")}
-                              />
-                            </div>
-                            <div className="flex">
-                              <div className="lg:col-6">
-                                <InputIcon
-                                  inputIconProps={{
-                                    name: "latitude",
-                                    inputClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.latitude &&
-                                    touched.latitude &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.latitude &&
-                                    touched.latitude &&
-                                    errors.latitude
-                                  }
-                                />
-                              </div>
-                              <div className="lg:col-6">
-                                <InputIcon
-                                  inputIconProps={{
-                                    name: "longitude",
-                                    inputClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.longitude &&
-                                    touched.longitude &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.longitude &&
-                                    touched.longitude &&
-                                    errors.longitude
-                                  }
-                                />
-                              </div>
-                            </div>
+
+                          <div className="mb-5">
+                            <InputNumberFloatLabel
+                              inputNumberFloatProps={{
+                                id: "altitude",
+                                name: "altitude",
+                                spanText: "*",
+                                spanClass: "p-error",
+                                value: values.altitude,
+                                mode: "decimal",
+                                maxFractionDigits: "10",
+                                onChange: (evt) => {
+                                  setFieldValue("altitude", evt.value);
+                                },
+                                onBlur: handleBlur,
+                                text: translate(localeJson, "altitude"),
+                                inputNumberClass: "w-full",
+                              }}
+                              parentClass={`${
+                                errors.altitude &&
+                                touched.altitude &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.altitude &&
+                                touched.altitude &&
+                                errors.altitude
+                              }
+                            />
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                spanClass={"p-error"}
-                                spanText={"*"}
-                                text={translate(localeJson, "altitude")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "altitude",
-                                  inputClass: "w-full",
+
+                          <div className="lg:flex mb-5">
+                            <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
+                              <DateCalendarFloatLabel
+                                dateFloatLabelProps={{
+                                  name: "opening_date",
+                                  dateClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
+                                  text: translate(
+                                    localeJson,
+                                    "opening_date_time"
+                                  ), // Add a label text specific to date
                                 }}
-                                parentClass={`${errors.altitude &&
-                                  touched.altitude &&
+                                parentClass={`${
+                                  errors.opening_date &&
+                                  touched.opening_date &&
                                   "p-invalid pb-1"
-                                  }`}
+                                }`}
                               />
                               <ValidationError
                                 errorBlock={
-                                  errors.altitude &&
-                                  touched.altitude &&
-                                  errors.altitude
+                                  errors.opening_date &&
+                                  touched.opening_date &&
+                                  errors.opening_date
+                                }
+                              />
+                            </div>
+                            <div className="lg:col-5 lg:pr-0">
+                              <TimeCalendarFloatLabel
+                                timeFloatLabelProps={{
+                                  name: "opening_time",
+                                  timeClass: "w-full",
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  // text: "Opening Time" // Add a label text specific to time
+                                }}
+                                parentClass={`${
+                                  errors.opening_time &&
+                                  touched.opening_time &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.opening_time &&
+                                  touched.opening_time &&
+                                  errors.opening_time
                                 }
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                text={translate(localeJson, "opening_date_time")}
+                          <div className="lg:flex mb-5">
+                            <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
+                              <DateCalendarFloatLabel
+                                dateFloatLabelProps={{
+                                  name: "closing_date",
+                                  dateClass: "w-full",
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  text: translate(
+                                    localeJson,
+                                    "closing_date_time"
+                                  ), // Add a label text specific to date
+                                }}
+                                parentClass={`${
+                                  errors.closing_date &&
+                                  touched.closing_date &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.closing_date &&
+                                  touched.closing_date &&
+                                  errors.closing_date
+                                }
                               />
                             </div>
-                            <div className="flex">
-                              <div className="lg:col-7">
-                                <DateCalendar
-                                  dateProps={{
-                                    name: "opening_date",
-                                    dateClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.opening_date &&
-                                    touched.opening_date &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.opening_date &&
-                                    touched.opening_date &&
-                                    errors.opening_date
-                                  }
-                                />
-                              </div>
-                              <div className="lg:col-5">
-                                <TimeCalendar
-                                  timeProps={{
-                                    name: "opening_time",
-                                    inputClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.opening_time &&
-                                    touched.opening_time &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.opening_time &&
-                                    touched.opening_time &&
-                                    errors.opening_time
-                                  }
-                                />
-                              </div>
+                            <div className="lg:col-5 lg:pr-0">
+                              <TimeCalendarFloatLabel
+                                timeFloatLabelProps={{
+                                  name: "closing_time",
+                                  timeClass: "w-full",
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  // text: "Opening Time" // Add a label text specific to time
+                                }}
+                                parentClass={`${
+                                  errors.closing_time &&
+                                  touched.closing_time &&
+                                  "p-invalid pb-1"
+                                }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.closing_time &&
+                                  touched.closing_time &&
+                                  errors.closing_time
+                                }
+                              />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
+                          <div className="mb-5">
+                            <div className="lg:col-12">
                               <NormalLabel
-                                text={translate(localeJson, "closing_date_time")}
+                                text={translate(
+                                  localeJson,
+                                  "foreign_publication"
+                                )}
                               />
                             </div>
-                            <div className="flex">
-                              <div className="lg:col-7">
-                                <DateCalendar
-                                  dateProps={{
-                                    name: "closing_date",
-                                    dateClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.closing_date &&
-                                    touched.closing_date &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.closing_date &&
-                                    touched.closing_date &&
-                                    errors.closing_date
-                                  }
-                                />
-                              </div>
-                              <div className="lg:col-5">
-                                <TimeCalendar
-                                  timeProps={{
-                                    name: "closing_time",
-                                    inputClass: "w-full",
-                                    onChange: handleChange,
-                                    onBlur: handleBlur,
-                                  }}
-                                  parentClass={`${errors.closing_time &&
-                                    touched.closing_time &&
-                                    "p-invalid pb-1"
-                                    }`}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.closing_time &&
-                                    touched.closing_time &&
-                                    errors.closing_time
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                text={translate(localeJson, "foreign_publication")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
+                            <div className="lg:col-12">
                               <InputSwitch
                                 inputSwitchProps={{
-                                  name: "foreignPublication",
-                                  checked: values.foreignPublication,
+                                  name: "public_availability",
+                                  checked: values.public_availability,
                                   switchClass: "",
                                   onChange: handleChange,
                                 }}
-                                parentClass={`custom-switch ${errors.foreignPublication &&
-                                  touched.foreignPublication &&
+                                parentClass={`custom-switch ${
+                                  errors.public_availability &&
+                                  touched.public_availability &&
                                   "p-invalid pb-1"
-                                  }`}
+                                }`}
                               />
                               <ValidationError
                                 errorBlock={
-                                  errors.foreignPublication &&
-                                  touched.foreignPublication &&
-                                  errors.foreignPublication
+                                  errors.public_availability &&
+                                  touched.public_availability &&
+                                  errors.public_availability
                                 }
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
+                          <div className="mb-5">
+                            <div className="pb-1 lg:col-12">
                               <NormalLabel
                                 text={translate(localeJson, "status")}
                               />
                             </div>
-                            <div className="lg:col-9">
+                            <div className="lg:col-12">
                               <InputSwitch
                                 inputSwitchProps={{
-                                  name: "status",
-                                  checked: values.status,
+                                  name: "active_flg",
+                                  checked: values.active_flg,
                                   switchClass: "",
                                   onChange: handleChange,
                                 }}
-                                parentClass={`custom-switch ${errors.status &&
-                                  touched.status &&
+                                parentClass={`custom-switch ${
+                                  errors.active_flg &&
+                                  touched.active_flg &&
                                   "p-invalid pb-1"
-                                  }`}
+                                }`}
                               />
                             </div>
                           </div>
-                          <div className="lg:flex lg:align-items-baseline  lg:col-12 p-0">
-                            <div className="pb-1 lg:col-3">
-                              <NormalLabel
-                                text={translate(localeJson, "remarks")}
-                              />
-                            </div>
-                            <div className="lg:col-9">
-                              <InputIcon
-                                inputIconProps={{
-                                  name: "remarks",
-                                  inputClass: "w-full",
-                                  onChange: handleChange,
-                                  onBlur: handleBlur,
-                                }}
-                                parentClass={`${errors.remarks &&
-                                  touched.remarks &&
-                                  "p-invalid pb-1"
-                                  }`}
-                              />
-                            </div>
+                          <div className="mb-5">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "remarks",
+                                name: "remarks",
+                                spanText: "",
+                                spanClass: "",
+                                value: values.remarks,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                                text: translate(localeJson, "remarks"),
+                                inputClass: "w-full",
+                              }}
+                              parentClass={`${
+                                errors.remarks &&
+                                touched.remarks &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.remarks &&
+                                touched.remarks &&
+                                errors.remarks
+                              }
+                            />
                           </div>
-
-
                         </div>
                       </div>
-                      <div
-                        className="col-12 lg:col-5 p-0 pl-2"
-                        style={{ maxHeight: "300px" }}
-                      >
+                      <div className="col-12 lg:col-5 p-0 lg:pl-5 mt-3">
                         <GoogleMapComponent
-                          initialPosition={{ lat: -4.038333, lng: 21.758664 }}
-                          height={"350px"}
+                          height={"450px"}
+                          search={true}
+                          initialPosition={{
+                            lat: currentLattitude,
+                            lng: currentLongitude,
+                          }}
+                          searchResult={searchResult}
                         />
+                        <div className="mt-3 flex">
+                          <div className="col-9 lg:pl-0">
+                            <InputFloatLabel
+                              inputFloatLabelProps={{
+                                id: "searchQuery",
+                                name: "searchQuery",
+                                spanText: "",
+                                spanClass: "",
+                                value: searchQuery,
+                                onChange: (e) => {
+                                  setSearchQuery(e.target.value);
+                                },
+                                onBlur: handleBlur,
+                                text: translate(localeJson, "place_search"),
+                                inputClass: "w-full",
+                              }}
+                              parentClass="custom_input"
+                            />
+                          </div>
+                          <div className="col-3 lg:pr-0">
+                            <Button
+                              buttonProps={{
+                                buttonClass: "w-12 search-button mobile-input",
+                                text: translate(localeJson, "search_text"),
+                                icon: "pi pi-search",
+                                severity: "primary",
+                                type: "button",
+                                onClick: (evt) => {
+                                  evt.preventDefault();
+                                  handleSearch(setFieldValue);
+                                },
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div
-                      className="flex pt-3 justify-content-around"
-                      style={{
-                        flexWrap: "wrap",
-                      }}
-                    >
+                    <div className="flex pt-3 justify-content-around">
                       <div>
                         <Button
                           buttonProps={{
                             buttonClass:
                               "text-600 border-500 evacuation_button_height",
                             bg: "bg-white",
-                            type: "reset",
+                            type: "button",
                             hoverBg: "hover:surface-500 hover:text-white",
                             text: translate(localeJson, "cancel"),
                             rounded: "true",
                             severity: "primary",
                             onClick: () => {
-                              resetForm()
-                              handleReset()
-                            } // Step 3: Call resetForm on click of cancel button
-
+                              router.push("/admin/place");
+                            },
                           }}
                           parentStyle={{
                             paddingTop: "10px",
@@ -581,7 +1354,7 @@ export default function PlaceCreatePage() {
             </div>
           </div>
         )}
-      </Formik >
+      </Formik>
     </>
   );
 }

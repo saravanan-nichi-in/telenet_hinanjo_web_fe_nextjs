@@ -1,96 +1,133 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import React, { useState, useEffect, useContext } from 'react';
+import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getValueByKeyRecursively as translate, getTotalCountFromArray } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DetailModal } from '@/components';
-import { suppliesShortageData, suppliesShortageHeaderColumn } from '@/utils/constant';
 import { ShortageSuppliesServices } from '@/services';
+import { NormalTable } from '@/components';
 
 function ShortageSupplies() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const columnsData = [
+        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header", textAlign: 'left' },
+    ]
+    const [tableLoading, setTableLoading] = useState(false);
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [frozenArray, setFrozenArray] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const [lockedSupplies, setLockedSupplies] = useState([]);
-    const dt = useRef(null);
-    const [products, setProducts] = useState([]);
-    const headContent = (
-        <div>
-            {selectedRow}
-        </div>
-    )
 
     /* Services */
-    const { getList, calExport } = ShortageSuppliesServices;
+    const { callExport, getList } = ShortageSuppliesServices;
 
     useEffect(() => {
+        setTableLoading(true);
         const fetchData = async () => {
-            await setProducts(suppliesShortageData);
-            await setLockedSupplies([
-                {
-                    "避難所": "不足合計",
-                    "Test1(2)": "3981574",
-                    "Test2(2)": "33",
-                }
-            ]);
+            await loadShortageSuppliesList();
             setLoader(false);
         };
         fetchData();
-    }, [])
-
+    }, [locale]);
 
     /**
-     *for export the table in csv format  
-     * @param {*} selectionOnly 
+     * Load shortage supplies list
     */
-    const exportCSV = (selectionOnly) => {
-        dt.current.exportCSV({ selectionOnly });
-    };
+    const loadShortageSuppliesList = () => {
+        // Get shortage supplies list
+        getList(onloadShortageSuppliesListDone);
+    }
 
     /**
-     * to make specific row clickable and font bold
-     * @param {*} data 
-     * @returns 
+     * Function will get data & update shortage supplies list
+     * @param {*} response 
      */
-    const rowClass = (data) => {
-        return {
-            'last-row': data.避難所 === '不足合計',
-            'font-bold': data.避難所 === '不足合計',
-            'clickable-row': data.避難所 === '不足合計' ? false : true,
-        };
-    };
+    const onloadShortageSuppliesListDone = (response) => {
+        if (response.success && !_.isEmpty(response.data)) {
+            const dynamicColumns = response.data.supplies;
+            const data = response.data.supplyInfo;
+            var additionalColumnsKeys = [];
+            var additionalColumnsArrayWithOldData = [...columnsData];
+            var preparedList = [];
+            // Prepare table dynamic columns
+            if (dynamicColumns) {
+                dynamicColumns.map((obj, i) => {
+                    let preparedColumnObjToMerge = {
+                        field: obj.id, header: () => (
+                            <div className='table_header_flexColumn'>
+                                <div>
+                                    {obj.name}
+                                </div>
+                                {obj.unit && (
+                                    <div>
+                                        {`( ${obj.unit} )`}
+                                    </div>
+                                )}
+                            </div>
+                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left'
+                    };
+                    additionalColumnsKeys.push(preparedColumnObjToMerge.field);
+                    additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
+                })
+            }
+            // Preparing row data for specific column to display
+            data.map((obj, i) => {
+                let preparedObj = {
+                    evacuation_place: <div className={obj.note || obj.comment ? "text-higlight clickable-row" : "clickable-row"} onClick={() => onClickEvacuationPlace(obj)}>{locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name}</div>
+                }
+                dynamicColumns.map((objSub, i) => {
+                    preparedObj[objSub.id] = `${obj.supply[objSub.id]}`;
+                })
+                preparedList.push(preparedObj);
+            })
+            // Update frozen data
+            var frozenObj = {
+                evacuation_place: translate(localeJson, 'shortage_total'),
+            };
+            additionalColumnsKeys.map((frozenObjSub, i) => {
+                frozenObj[frozenObjSub] = `${getTotalCountFromArray(preparedList, frozenObjSub)}`
+            })
+            // Update prepared list to the state
+            setColumns(additionalColumnsArrayWithOldData);
+            setFrozenArray([frozenObj]);
+            setList([...preparedList]);
+            setTableLoading(false);
+        }
+    }
 
     /**
-     * On row click modal appears
-     * @param {*} event 
-     * @returns 
+     * Evacuation place on click display comment & note information
+     * @param {*} rowData 
      */
-    const onRowClick = (event) => {
-        if (event.data.避難所 == "不足合計") {
-            return;
-        }
-        else {
-            setSelectedRow(event.data.避難所)
-            setShowModal(true);
-        }
-    };
+    const onClickEvacuationPlace = (rowData) => {
+        setSelectedRow(rowData);
+        setShowModal(true);
+        document.body.classList.add('dialog-open'); // Add class to block scroll
+    }
 
     return (
         <React.Fragment>
             <DetailModal detailModalProps={{
-                headerContent: headContent,
+                headerContent: () => (
+                    <div>
+                        {locale === "en" && !_.isNull(selectedRow.place_name_en) ? selectedRow.place_name_en : selectedRow.place_name}
+                    </div>
+                ),
                 visible: showModal,
                 style: { width: '600px' },
-                position: 'top',
-                onHide: () => setShowModal(false),
-                value1: translate(localeJson, 'not'),
-                value2: translate(localeJson, 'not')
+                position: 'center',
+                onHide: () => {
+                    setShowModal(false);
+                    document.body.classList.remove('dialog-open'); // Remove class to enable scroll
+                },
+                note: selectedRow && selectedRow.note ? selectedRow.note : translate(localeJson, 'not'),
+                comment: selectedRow && selectedRow.comment ? selectedRow.comment : translate(localeJson, 'not')
             }} />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'shortage_supplies_list')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'shortage_supplies_list')}</h5>
                         <hr />
                         <div className="col-12 custom-table">
                             <div className="flex justify-content-end ">
@@ -99,46 +136,23 @@ function ShortageSupplies() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    onClick: () => calExport()
+                                    onClick: () => callExport()
                                 }} parentClass={"mb-3"} />
                             </div>
-                            <DataTable
-                                ref={dt}
-                                value={products}
-                                scrollable
-                                dataKey="id"
-                                className={"custom-table custom-table-cell p-datatable-gridlines"}
-                                showGridlines
+                            <NormalTable
+                                loading={tableLoading}
+                                stripedRows={true}
+                                className={"custom-table-cell"}
+                                showGridlines={"true"}
+                                value={list}
+                                frozenValue={_.size(list) > 0 && frozenArray}
+                                columns={columns}
+                                filterDisplay="menu"
+                                emptyMessage="No data found."
+                                paginator={true}
                                 rows={5}
-                                rowClassName={rowClass}
-                                frozenValue={lockedSupplies}
-                                frozenWidth='3'
-                                emptyMessage="No customers found."
-                                size={"small"}
-                                stripedRows
-                                onRowClick={onRowClick}
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                            >
-                                {suppliesShortageHeaderColumn.map((col, index) => (
-                                    <Column key={index} field={col.field} sortable header={col.header} style={{
-                                        minWidth: col.minWidth && col.minWidth,
-                                        textAlign: col.textAlign,
-                                    }}
-                                        body={(rowData) => {
-                                            console.log(col.field);
-                                            if (col.field === translate(localeJson, 'shelter_place')) {
-                                                return (
-                                                    <span className={rowData[col.field] === 'Nara' ? 'text-higlight' : ''} onClick={() => setSelectedRow(rowData[col.field])}>
-                                                        {rowData[col.field]}
-                                                    </span>
-                                                );
-                                            } else {
-                                                return rowData[col.field];
-                                            }
-                                        }} />
-                                ))}
-                            </DataTable>
+                                paginatorLeft={true}
+                            />
                         </div>
                     </div>
                 </div>

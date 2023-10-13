@@ -39,7 +39,7 @@ api.interceptors.response.use((response) => {
   // Handle error response
   if (error.response.status === 401) {
     // Handle unauthorized access (e.g., redirect to login page)
-    // window.location.href = '/';
+    window.location.href = '/admin/login';
   }
 
   // eslint-disable-next-line no-undef

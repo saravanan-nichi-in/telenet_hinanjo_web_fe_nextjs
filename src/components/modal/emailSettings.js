@@ -1,4 +1,4 @@
-import React,{ useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,34 +8,36 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
-import { SelectFloatLabel } from "../dropdown";
+import { InputSelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
 import { TextAreaFloatLabel } from "../input";
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 
 export default function EmailSettings(props) {
+    /**
+     * Destructing
+    */
+    const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
-    const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
-    const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
+    const [transmissionInterval, setTransmissionInterval] = useState(0);
+    const [outputTargetArea, setOutputTargetArea] = useState(0);
+    const [initialValues, setInitialValues] = useState({
+        email: emailSettingValues.email,
+    });
+    const regexExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
             .test('is-email', translate(localeJson, 'format_notification'), value => {
-                // Check if it's a single valid email or a list of valid emails separated by commas
-                return Yup.string().email().isValidSync(value) || validateMultipleEmails(value, localeJson);
+                /** Check if it's a single valid email or a list of valid emails separated by commas */ 
+                return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register } = props && props;
-
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
 
         for (const email of emails) {
-            if (!Yup.string().email().isValidSync(email)) {
+            if (!email.match(regexExp)) {
                 return false;
             }
         }
@@ -49,12 +51,22 @@ export default function EmailSettings(props) {
         </div>
     );
 
+    useEffect(() => {
+        if (open) {
+            setTransmissionInterval(emailSettingValues.transmissionInterval);
+            setOutputTargetArea(emailSettingValues.outputTargetArea);
+            setInitialValues({
+                email: emailSettingValues.email
+            });
+        }
+    }, [open]);
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "" }}
+                initialValues={initialValues}
+                enableReinitialize
                 onSubmit={() => {
                     router.push("/admin/history/place")
                 }}
@@ -73,6 +85,7 @@ export default function EmailSettings(props) {
                             header={header}
                             visible={open}
                             draggable={false}
+                            blockScroll={true}
                             onHide={() => close()}
                             footer={
                                 <div className="text-center">
@@ -92,7 +105,8 @@ export default function EmailSettings(props) {
                                             register({
                                                 transmissionInterval,
                                                 outputTargetArea,
-                                                email: values.email
+                                                email: values.email,
+                                                errors: errors
                                             });
                                             handleSubmit();
                                         },
@@ -104,12 +118,13 @@ export default function EmailSettings(props) {
                                 <div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                            <div className='mt-5 mb-5'>
+                                            <div className='mt-3 mb-5'>
                                                 <TextAreaFloatLabel textAreaFloatLabelProps={{
                                                     textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                                                     row: 5,
                                                     cols: 30,
                                                     name: 'email',
+                                                    value: values.email,
                                                     text: translate(localeJson, 'notification_email_id'),
                                                     spanClass: "p-error",
                                                     spanText: "*",
@@ -119,31 +134,29 @@ export default function EmailSettings(props) {
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className='mt-5 '>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "mailFrequency",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: transmissionInterval,
-                                                    options: MailSettingsOption1,
+                                                    options: intervalFrequency,
                                                     optionLabel: "name",
                                                     onChange: (e) => setTransmissionInterval(e.value),
                                                     text: translate(localeJson, "transmission_interval"),
-
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-5'>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "shelterCity",
-                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "prefecture",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: outputTargetArea,
-                                                    options: MailSettingsOption2,
+                                                    options: prefectureList,
                                                     optionLabel: "name",
                                                     onChange: (e) => setOutputTargetArea(e.value),
                                                     text: translate(localeJson, "output_target_area"),
-
                                                 }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
                                             </div>
                                             <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
-                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} />
+                                                <NormalLabel text={translate(localeJson, 'history_mail_message')} style={{ fontSize: "13px" }} />
                                             </div>
                                         </div>
                                     </form>

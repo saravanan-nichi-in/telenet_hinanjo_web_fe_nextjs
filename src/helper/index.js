@@ -61,6 +61,74 @@ export const getAveragePercentage = (array, key) => {
     return formattedAverage;
 };
 
+export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
+
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Tokyo'
+    };
+    const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
+
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')
+    return formattedJPDateTime;
+}
+
+export const getJapaneseDateDisplayFormat = (dateTime) => {
+
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+    };
+    const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
+
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')
+    return formattedJPDateTime;
+}
+
+export const getGeneralDateTimeDisplayFormat = (dateTime) => {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    };
+    let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+    return formattedJPDateTime.replaceAll("/", "-");
+}
+
+export const getGeneralDateTimeSlashDisplayFormat = (dateTime) => {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    };
+    let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+    return formattedJPDateTime.replaceAll("-", "/");
+}
+
+export const getYYYYMMDDHHSSSSDateTimeFormat = (dateTime) => {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    };
+    let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+    formattedJPDateTime = formattedJPDateTime.replaceAll("/", "");
+    formattedJPDateTime = formattedJPDateTime.replaceAll(":", "");
+    return formattedJPDateTime.replaceAll("", "");
+}
+
 /**
  * Function to download a base64-encoded file
  * @param {*} base64String 
@@ -81,3 +149,17 @@ export const downloadBase64File = (base64String, fileName) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
 };
+
+/**
+ * Zip download functionality
+ * @param zipURL
+ */
+export const zipDownloadWithURL = (zipURL) => {
+    if (zipURL) {
+        // Create a temporary anchor element for the download
+        const link = document.createElement('a');
+        link.href = zipURL;
+        link.download = 'YourFile.zip'; // Specify the file name you want to give to the downloaded file
+        link.click();
+    }
+}

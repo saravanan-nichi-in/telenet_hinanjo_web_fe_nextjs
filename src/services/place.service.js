@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File } from '@/helper';
+import { downloadBase64File,getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
@@ -11,6 +11,7 @@ export const PlaceServices = {
   update: _update,
   details: _details,
   updateStatus: _updateStatus,
+  getAddressByZipCode:_getAddressByZipCode
 };
 
 /**
@@ -23,12 +24,16 @@ function _importData(payload, callBackFun) {
     .post("/admin/place/import", payload)
     .then((response) => {
       if (response && response.data) {
-        callBackFun(response.data);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+      });
       }
     })
     .catch((error) => {
       // Handle errors here
-      console.error("Error fetching data:", error);
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+    })
     });
 }
 
@@ -41,8 +46,9 @@ function _exportData(payload, callBackFun) {
   axios
     .post("/admin/place/export", payload)
     .then((response) => {
-      if (response && response.data && response.data.result.file) {
-          downloadBase64File(response.data.result.file, "place.csv");
+      if (response && response.data && response.data.result.filePath) {
+          let date =getYYYYMMDDHHSSSSDateTimeFormat(new Date())
+          downloadBase64File(response.data.result.filePath, `palce_${date}.csv`);
           toast.success(response?.data?.message, {
               position: "top-right",
           });
@@ -84,13 +90,27 @@ function _create(payload, callBackFun) {
   axios
     .post("/admin/place", payload)
     .then((response) => {
+      callBackFun(response.data)
       if (response && response.data) {
-        callBackFun(response.data);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+      });
       }
     })
     .catch((error) => {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      callBackFun()
+      if (error.response && error.response.status === 422) {
+        const errorMessages = Object.values(error.response.data.message);
+        errorMessages.forEach((messages) => {
+          messages.forEach((msg) => {
+            toast.error(msg, {
+              position: "top-right",
+            });
+          });
+        });
+      } else {
+        console.error(error);
+      }
     });
 }
 
@@ -154,4 +174,24 @@ function _updateStatus(payload, callBackFun) {
       // Handle errors here
       console.error("Error fetching data:", error);
     });
+}
+
+/**
+ * Get address information by zip code
+ * @param {string} zipCode - The zip code to search for.
+ * @param {Function} callBackFun - The callback function to handle the response data.
+ */
+async function _getAddressByZipCode(zipCode, callBackFun) {
+  try {
+    const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`);
+    const data = await response.json();
+    if (data.results) {
+      callBackFun(data.results);
+    }
+    else {
+      data&&callBackFun()
+    }
+  } catch (error) {
+    console.error("Error fetching address data:", error);
+  }
 }
