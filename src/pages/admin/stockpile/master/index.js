@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, DividerComponent, NormalTable, SelectFloatLabel } from '@/components';
 
-import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
+import { AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 import { StockpileService } from '@/services/stockpilemaster.service';
 import { historyPageCities } from '@/utils/constant';
@@ -14,12 +14,14 @@ import { historyPageCities } from '@/utils/constant';
 export default function AdminStockPileMaster() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
+    const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     
     const [categories, setCategories] = useState([]);
     const [productNames, setProductNames] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedProductName, setSelectedProductName] = useState("");
+    const [selectedImage, setSelectedImage] = useState('');
     
     const callDropDownApi = () => {
         StockpileService.getCategoryAndProductList((res)=> {
@@ -47,7 +49,12 @@ export default function AdminStockPileMaster() {
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    <FaEyeSlash style={{ fontSize: '20px' }} onClick={() => alert(rowData.stockpile_image)} />
+                    { (rowData.stockpile_image && rowData.stockpile_image !="")?
+                        <FaEye style={{ fontSize: '20px' }} onClick={() => {
+                            setSelectedImage(rowData.stockpile_image);
+                            setToggleImageModal(true)
+                        }} />
+                    : <FaEyeSlash style={{ fontSize: '20px' }} />}
                 </div>
             ),
         },
@@ -244,6 +251,10 @@ export default function AdminStockPileMaster() {
         }
     }
 
+    const closeImageModal = () => {
+        setToggleImageModal(false);
+    }
+
     return (
         <>
             <AdminManagementDeleteModal
@@ -251,7 +262,11 @@ export default function AdminStockPileMaster() {
                 close={onStaffDeleteClose}
                 refreshList={onGetMaterialListOnMounting}
             />
-
+            <StockpileSummaryImageModal
+                open={toggleImageModal}
+                close={closeImageModal}
+                imageUrl={selectedImage}
+            ></StockpileSummaryImageModal>
             <StockpileCreateEditModal
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
