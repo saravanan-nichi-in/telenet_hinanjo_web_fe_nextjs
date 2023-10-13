@@ -1,15 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getValueByKeyRecursively as translate, zipDownloadWithURL } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFile, ValidationError, CommonDialog } from '@/components';
-import { QRCodeCreateServices, CommonServices } from '@/services';
+import { QRCodeCreateServices } from '@/services';
 
 export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
-    const initialValues = { file: null };
+    const fileInputRef = useRef(null);
+    const [initialValues, setInitialValues] = useState({
+        file: null
+    })
     const schema = Yup.object().shape({
         file: Yup.mixed()
             .required(translate(localeJson, 'file_csv_required'))
@@ -26,7 +29,6 @@ export default function AdminQrCodeCreatePage() {
 
     /* Services */
     const { callExport, callImport, callDelete, callZipDownload } = QRCodeCreateServices;
-    const { zipDownload } = CommonServices;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,6 +55,7 @@ export default function AdminQrCodeCreatePage() {
      */
     const handleFormSubmit = async (values, { resetForm, setFieldValue }) => {
         if (importFileData) {
+            setLoader(true);
             await callImport(importFileData, onImportSuccess);
             // Reset the form after submission
             resetForm({ values: initialValues });
@@ -65,6 +68,7 @@ export default function AdminQrCodeCreatePage() {
      */
     const onImportSuccess = (response) => {
         setImportFileData("");
+        setLoader(false);
         setQrCodeCreateDialogVisible(true);
     }
 
@@ -72,17 +76,22 @@ export default function AdminQrCodeCreatePage() {
      * Close functionality
     */
     const onDeleteSuccess = () => {
-        setQrCodeCreateDialogVisible(false);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+        setLoader(false);
     };
 
     /**
      * Download functionality
     */
-    const onZipDownloadSuccess = (response) => {
-        console.log("download", response);
-        setQrCodeCreateDialogVisible(false);
+    const onZipDownloadSuccess = async (response) => {
         if (response && response.data.data.file) {
-            zipDownload(response.data.data.file);
+            await zipDownloadWithURL(response.data.data.file);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            setLoader(false);
         }
     };
 
@@ -103,7 +112,11 @@ export default function AdminQrCodeCreatePage() {
                             bg: "bg-white",
                             hoverBg: "hover:surface-500 hover:text-white",
                             text: translate(localeJson, "delete"),
-                            onClick: () => callDelete(onDeleteSuccess),
+                            onClick: () => {
+                                setQrCodeCreateDialogVisible(false);
+                                setLoader(true);
+                                callDelete(onDeleteSuccess)
+                            },
                         },
                         parentClass: "inline"
                     },
@@ -113,12 +126,20 @@ export default function AdminQrCodeCreatePage() {
                             type: "submit",
                             text: translate(localeJson, "download"),
                             severity: "danger",
-                            onClick: () => callZipDownload(onZipDownloadSuccess),
+                            onClick: () => {
+                                setQrCodeCreateDialogVisible(false);
+                                setLoader(true);
+                                callZipDownload(onZipDownloadSuccess)
+                            },
                         },
                         parentClass: "inline"
                     }
                 ]}
                 close={() => {
+                    setImportFileData("");
+                    if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                    }
                     setQrCodeCreateDialogVisible(false);
                 }}
             />
@@ -144,7 +165,6 @@ export default function AdminQrCodeCreatePage() {
                                 <div>
                                     <div>
                                         <form onSubmit={handleSubmit}>
-
                                             <div>
                                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                                     <Button buttonProps={{
@@ -166,6 +186,7 @@ export default function AdminQrCodeCreatePage() {
                                                     },
                                                     value: values.file,
                                                     accept: '.csv',
+                                                    ref: fileInputRef
                                                 }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
                                                 <div className='pt-1'>
                                                     <ValidationError errorBlock={errors.file && touched.file && errors.file} />
@@ -176,7 +197,7 @@ export default function AdminQrCodeCreatePage() {
                                                     <Button buttonProps={{
                                                         buttonClass: "evacuation_button_height",
                                                         type: 'submit',
-                                                        text: translate(localeJson, 'search_text'),
+                                                        text: translate(localeJson, 'import'),
                                                         rounded: "true",
                                                         severity: "primary",
                                                     }} />
