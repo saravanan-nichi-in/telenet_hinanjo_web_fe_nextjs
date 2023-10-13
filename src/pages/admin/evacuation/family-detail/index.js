@@ -87,8 +87,8 @@ export default function EvacueeFamilyDetail() {
 
     const getSpecialCareName = (nameList) => {
         let specialCareName = null;
-        nameList.map((item)=>{
-            specialCareName = specialCareName ? (specialCareName + ", " +item) :  item;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
         });
         return specialCareName;
     }
@@ -164,7 +164,7 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime): "-",
+                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-",
                     discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-"
                 }
                 admittedHistory.push(historyItem);
@@ -197,7 +197,7 @@ export default function EvacueeFamilyDetail() {
             setNeighbourData(neighbourDataList);
             setTableLoading(false)
         }
-        else{
+        else {
             setTableLoading(false);
             setEmptyTableMessage(response.message);
         }
