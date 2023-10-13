@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 export default function EvacuationPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [familyCount, setFamilyCount] = useState(57);
+    const [familyCount, setFamilyCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [evacuationPlaceList, setEvacuationPlaceList] = useState([]);
@@ -153,6 +153,7 @@ export default function EvacuationPage() {
                 placesList.push(placeData);
             });
             setEvacueesDataList(evacueesList);
+            setFamilyCount(response.data.total_family);
             setTableLoading(false);
             setEvacuationPlaceList(placesList);
             setTotalCount(response.data.count);
