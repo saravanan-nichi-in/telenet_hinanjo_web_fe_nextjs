@@ -6,9 +6,6 @@ const AppFooter = () => {
             <div>
                 © 2023 避難所管理システム
             </div>
-            <div className='flex flex-grow sm:justify-center align-items-center'>
-                Terms of Use | Privacy Policy
-            </div>
         </div>
     );
 };

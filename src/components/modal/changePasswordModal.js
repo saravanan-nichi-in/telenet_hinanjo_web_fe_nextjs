@@ -20,17 +20,28 @@ export default function ChangePasswordModal(props) {
 
     const schema = Yup.object().shape({
         password: Yup.string()
-            .required(translate(localeJson, 'password_required'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
+            .required(translate(localeJson, 'current_password_required'))
+            .min(8, translate(localeJson, 'current_password_atLeast_8_characters'))
+            .max(15, translate(localeJson, 'current_password_max_15_characters')),
         password_new: Yup.string()
             .required(translate(localeJson, 'new_password_required'))
-            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/,
-                translate(localeJson, 'new_password_not_matched')
-            ),
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/, translate(localeJson, 'new_password_not_matched'))
+            .max(15, translate(localeJson, 'new_password_max_15_characters'))
+            .test('not-same', translate(localeJson, 'password_new_not_equal_to_current'), function (value) {
+                // 'this' refers to the schema object
+                // Check if the 'password' and 'password_new' are not the same
+                if (value === this.parent.password) {
+                    return this.createError({
+                        path: 'password_new',
+                        message: translate(localeJson, 'password_new_not_equal_to_current')
+                    });
+                }
+                return true;
+            }),
         password_confirm: Yup.string()
             .required(translate(localeJson, 'confirm_password_required'))
             .oneOf([Yup.ref("password_new"), null], translate(localeJson, 'confirm_password_notMatch'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
+            .max(16, "password maximum 15 character"),
     });
 
     return (
@@ -38,7 +49,7 @@ export default function ChangePasswordModal(props) {
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
-                onSubmit={(values, { resetForm }) => {
+                onSubmit={(values, actions, { resetForm }) => {
                     changePassword('admin', values, onChangePasswordSuccess);
                     resetForm({ values: initialValues });
                 }}
@@ -50,6 +61,7 @@ export default function ChangePasswordModal(props) {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div>
                         <form onSubmit={handleSubmit}>
@@ -63,7 +75,10 @@ export default function ChangePasswordModal(props) {
                                 visible={open}
                                 draggable={false}
                                 blockScroll={true}
-                                onHide={() => close()}
+                                onHide={() => {
+                                    close();
+                                    resetForm({ values: initialValues });
+                                }}
                                 footer={
                                     <div className="text-center">
                                         <Button buttonProps={{
@@ -71,7 +86,10 @@ export default function ChangePasswordModal(props) {
                                             bg: "bg-white",
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
-                                            onClick: () => close(),
+                                            onClick:() => {
+                                                close();
+                                                resetForm({ values: initialValues });
+                                            },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
                                             buttonClass: "w-8rem",
@@ -86,7 +104,7 @@ export default function ChangePasswordModal(props) {
                                 }
                             >
                                 <div className={`modal-content`}>
-                                    <div className="mt-5 mb-3">
+                                    <div className="mt-5 mb-5">
                                         <div className="mb-5">
                                             <InputLeftRightGroupFloat inputLrGroupFloatProps={{
                                                 name: 'password',
