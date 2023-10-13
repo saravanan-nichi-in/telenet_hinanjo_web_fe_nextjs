@@ -38,7 +38,7 @@ const InputSelectFloatLabel = (props) => {
                     style={style}
                     options={options}
                     optionLabel={optionLabel}
-                    editable
+                    editable={false}
                     name={name}
                     onBlur={onBlur}
                     readOnly={readOnly}
