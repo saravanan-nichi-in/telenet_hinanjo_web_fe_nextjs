@@ -93,6 +93,14 @@ export default function EvacueeFamilyDetail() {
         return specialCareName;
     }
 
+    const getAnswerData = (answer) =>{
+        let answerData = null;
+        answer.map((item)=>{
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
+    }
+
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
@@ -120,7 +128,7 @@ export default function EvacueeFamilyDetail() {
                 individualQuestion.map((ques, index) => {
                     let column = {
                         field: "question_" + index,
-                        header: (locale == "ja" ? ques.title : ques.title_en) + " *",
+                        header: (locale == "ja" ? ques.title : ques.title_en) + (ques.isRequired ?  " *" : ""),
                         minWidth: "10rem"
                     };
                     personInnerColumns.push(column);
@@ -141,7 +149,7 @@ export default function EvacueeFamilyDetail() {
                     created_date: person.created_at_day,
                     updated_date: data.updated_at_day,
                     orders: [{
-                        address: person.address ? person.address : "-",
+                        address: person.address ? person.address : "",
                         special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "-",
                         connecting_code: person.connecting_code,
                         remarks: person.note,
@@ -153,7 +161,7 @@ export default function EvacueeFamilyDetail() {
                 let question = person.individualQuestions;
                 if (question.length > 0) {
                     question.map((ques, index) => {
-                        familyData.orders[0][`question_${index}`] = ques.answer;
+                        familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
                     })
                 }
                 familyDataList.push(familyData);
@@ -186,12 +194,12 @@ export default function EvacueeFamilyDetail() {
             setTownAssociationColumn(townAssociateColumnSet);
 
             let neighbourData = {
-                neighbour_association_name: "-",
-                test_payload: "-",
-                dropdown_related_questionnaire: "-"
+                neighbour_association_name: "",
+                test_payload: "",
+                dropdown_related_questionnaire: ""
             }
             questionnaire.map((ques, index) => {
-                neighbourData[`question_${index}`] = ques.answer;
+                neighbourData[`question_${index}`] = qques.answer ? getAnswerData(ques.answer.answer) : "";
             });
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);
