@@ -85,8 +85,8 @@ export default function EvacuationPage() {
 
     const getSpecialCareName = (nameList) => {
         let specialCareName = null;
-        nameList.map((item)=>{
-            specialCareName = specialCareName ? (specialCareName + ", " +item.name) :  item.name;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
         });
         return specialCareName;
     }
@@ -106,7 +106,7 @@ export default function EvacuationPage() {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
                 } else {
-                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0 ) {
+                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0) {
                         let evacueesData = evacueesDataList[evacueesDataList.length - 1];
                         if (evacueesData.id == item.family_id) {
                             index = evacueesData.family_count + 1;
@@ -115,7 +115,7 @@ export default function EvacuationPage() {
                             index = 1;
                         }
                     }
-                    else{
+                    else {
                         index = 1;
                     }
 
