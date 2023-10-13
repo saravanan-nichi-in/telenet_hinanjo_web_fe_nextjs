@@ -41,32 +41,35 @@ export default function PlaceCreatePage() {
       .max(
         200,
         translate(localeJson, "evacuation_location") +
-          translate(localeJson, "max_length")
+          translate(localeJson, "max_length_200")
       ),
     refugee_name: Yup.string().max(
       200,
       translate(localeJson, "evacuation_location_furigana") +
-        translate(localeJson, "max_length")
+        translate(localeJson, "max_length_200")
     ),
     name_en: Yup.string().max(
       200,
       translate(localeJson, "evacuation_location_english") +
-        translate(localeJson, "max_length")
+        translate(localeJson, "max_length_200")
     ),
     postal_code_1: Yup.string()
-      .matches(/^\d+$/, "Postal Code 1 must only contain numbers")
-      .max(3, "Postal Code 1 must be at most 3 characters")
+      .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
+      .max(3, translate(localeJson, "postal_code_1_validation"))
       .required(
-        translate(localeJson, "address") + translate(localeJson, "is_required")
+        translate(localeJson, "postal_code") +
+          translate(localeJson, "is_required")
       ),
     postal_code_2: Yup.string()
-      .matches(/^\d+$/, "Postal Code 1 must only contain numbers")
-      .max(4, "Postal Code 1 must be at most 3 characters")
+      .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
+      .max(4, translate(localeJson, "postal_code_2_validation"))
       .required(
-        translate(localeJson, "address") + translate(localeJson, "is_required")
+        translate(localeJson, "postal_code") +
+          translate(localeJson, "is_required")
       ),
     prefecture_id: Yup.string().required(
-      translate(localeJson, "address") + translate(localeJson, "is_required")
+      translate(localeJson, "prefecture_place") +
+        translate(localeJson, "is_required")
     ),
     address: Yup.string()
       .required(
@@ -74,42 +77,46 @@ export default function PlaceCreatePage() {
       )
       .max(
         255,
-        translate(localeJson, "evacuation_location") +
-          translate(localeJson, "max_length")
+        translate(localeJson, "address") +
+          translate(localeJson, "max_length_255")
       ),
     address_en: Yup.string().max(
       255,
-      translate(localeJson, "evacuation_location_en") +
-        translate(localeJson, "max_length")
+      translate(localeJson, "address_en") +
+        translate(localeJson, "max_length_255")
     ),
     postal_code_default_1: Yup.string()
-      .matches(/^\d+$/, "Postal Code 1 must only contain numbers")
-      .max(3, "Postal Code 1 must be at most 3 characters")
+      .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
+      .max(3, translate(localeJson, "postal_code_1_validation"))
       .required(
-        translate(localeJson, "address") + translate(localeJson, "is_required")
+        translate(localeJson, "default_prefecture_place") +
+          translate(localeJson, "is_required")
       ),
     postal_code_default_2: Yup.string()
-      .matches(/^\d+$/, "Postal Code 1 must only contain numbers")
-      .max(4, "Postal Code 1 must be at most 3 characters")
+      .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
+      .max(4, translate(localeJson, "postal_code_2_validation"))
       .required(
-        translate(localeJson, "address") + translate(localeJson, "is_required")
+        translate(localeJson, "default_prefecture_place") +
+          translate(localeJson, "is_required")
       ),
     prefecture_id_default: Yup.string().required(
-      translate(localeJson, "address") + translate(localeJson, "is_required")
+      translate(localeJson, "default_prefecture_place") +
+        translate(localeJson, "is_required")
     ),
     address_default: Yup.string()
       .required(
-        translate(localeJson, "address") + translate(localeJson, "is_required")
+        translate(localeJson, "default_address") +
+          translate(localeJson, "is_required")
       )
       .max(
         255,
-        translate(localeJson, "evacuation_location") +
-          translate(localeJson, "max_length")
+        translate(localeJson, "default_address") +
+          translate(localeJson, "max_length_255")
       ),
     address_default_en: Yup.string().max(
       255,
-      translate(localeJson, "evacuation_location_en") +
-        translate(localeJson, "max_length")
+      translate(localeJson, "default_address_en") +
+        translate(localeJson, "max_length_255")
     ),
     tel: Yup.string()
       .required(
@@ -132,8 +139,14 @@ export default function PlaceCreatePage() {
       )
       .max(
         999999999,
-        translate(localeJson, "capacity") + translate(localeJson, "max_length")
+        translate(localeJson, "capacity") +
+          translate(localeJson, "capacity_max_length")
       ),
+    remarks: Yup.string().max(
+      255,
+      translate(localeJson, "default_address_en") +
+        translate(localeJson, "max_length_255")
+    ),
   });
 
   /* Services */
@@ -189,7 +202,6 @@ export default function PlaceCreatePage() {
   };
 
   // map search
-
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState(null);
 
@@ -248,7 +260,7 @@ export default function PlaceCreatePage() {
                   <DividerComponent />
                   <form onSubmit={handleSubmit}>
                     <div className="col-12 lg:flex p-0">
-                      <div className="col-12 lg:col-6 p-0">
+                      <div className="col-12 lg:col-7 p-0">
                         <div>
                           <div className="mb-5 mt-3">
                             <InputFloatLabel
@@ -1235,12 +1247,23 @@ export default function PlaceCreatePage() {
                                 text: translate(localeJson, "remarks"),
                                 inputClass: "w-full",
                               }}
-                              parentClass="custom_input"
+                              parentClass={`${
+                                errors.remarks &&
+                                touched.remarks &&
+                                "p-invalid pb-1"
+                              }`}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.remarks &&
+                                touched.remarks &&
+                                errors.remarks
+                              }
                             />
                           </div>
                         </div>
                       </div>
-                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-3">
+                      <div className="col-12 lg:col-5 p-0 lg:pl-5 mt-3">
                         <GoogleMapComponent
                           height={"450px"}
                           search={true}
@@ -1279,7 +1302,7 @@ export default function PlaceCreatePage() {
                                 type: "button",
                                 onClick: (evt) => {
                                   evt.preventDefault();
-                                   handleSearch(setFieldValue);
+                                  handleSearch(setFieldValue);
                                 },
                               }}
                             />
@@ -1287,9 +1310,7 @@ export default function PlaceCreatePage() {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="flex pt-3 justify-content-around"
-                    >
+                    <div className="flex pt-3 justify-content-around">
                       <div>
                         <Button
                           buttonProps={{

@@ -157,12 +157,16 @@
       "is_required": "が必要です。",
       "file_csv_required": "CSVファイルを選択してください。",
       "select_csv_format": "CSV形式ファイルを選択してください。",
-      "max_length": "は200文字以内で入力してください。",
+      "max_length_200": "は200文字以内で入力してください。",
       "phone":"電話番号には10または11桁の半角数字を入力してください。",
       "password_new_not_equal_to_current": "現在のパスワ ードと新しいパスワードは同じであることはできません。",
       "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
       "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
-      "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。"
+      "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。",
+      "postal_code_1_validation":"郵便番号は3桁で指定してください。",
+      "postal_code_2_validation":"郵便番号は4桁で指定してください。",
+      "max_length_255":"は255文字以内で入力してください。",
+      "capacity_max_length":"10以下で入力してください。"
     },
     "buttons": {
       "import": "インポート",
