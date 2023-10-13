@@ -89,7 +89,6 @@ export default function AdminStockPileMaster() {
 
     const onStaffDeleteClose = (action = "close") => {
         if (action == "confirm") {
-            // alert(deleteId)
             StockpileService.delete(deleteId, (resData) => {
                 onGetMaterialListOnMounting()
             });
@@ -288,7 +287,17 @@ export default function AdminStockPileMaster() {
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'export'),
-                                        severity: "primary"
+                                        severity: "primary",
+                                        onClick: () => {
+                                            exportData({
+                                                "filters": {
+                                                    "order_by": "desc",
+                                                    "sort_by": "created_at" // default:created_at, category 
+                                                },
+                                                "category" : selectedCategory,
+                                                "product_name" : selectedProductName
+                                            })
+                                        }
                                     }} parentClass={"mr-1 mt-1"} />
 
                                     <Button buttonProps={{

@@ -1,3 +1,4 @@
+import { downloadBase64File } from "@/helper";
 import axios from "@/utils/api";
 import toast from 'react-hot-toast';
 
@@ -43,15 +44,15 @@ function _importData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _exportData(payload, callBackFun) {
-    axios
+        axios
         .post("/admin/stockpile/export", payload)
         .then((response) => {
-            if (response && response.data) {
-                callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
+                if (response && response.data && response.data.result.filePath) {
+                    downloadBase64File(response.data.result.filePath, "stockpile.csv");
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
         })
         .catch((error) => {
             // Handle errors here
