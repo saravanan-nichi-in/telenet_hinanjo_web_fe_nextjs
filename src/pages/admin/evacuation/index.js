@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { InputFloatLabel } from '@/components/input';
@@ -53,7 +53,6 @@ export default function EvacuationPage() {
     ];
 
     const downloadEvacueesListCSV = () => {
-        console.log(getListPayload);
         exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
     }
 
@@ -84,6 +83,14 @@ export default function EvacuationPage() {
         }
     }
 
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item)=>{
+            specialCareName = specialCareName ? (specialCareName + ", " +item.name) :  item.name;
+        });
+        return specialCareName;
+    }
+
     const onGetEvacueesList = (response) => {
         if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
             const data = response.data.list;
@@ -93,34 +100,47 @@ export default function EvacuationPage() {
                 name: "--",
                 id: null
             }];
-            let index = 0;
+            let index;
             let previousItem = null;
             data.map((item) => {
-                console.log((previousItem ? previousItem.id : ""), item.family_id)
-                if(previousItem && previousItem.id == item.family_id) {
-                    console.log(previousItem.id)
-                    index = 0;
+                if (previousItem && previousItem.id == item.family_id) {
+                    index = index + 1;
+                } else {
+                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0 ) {
+                        let evacueesData = evacueesDataList[evacueesDataList.length - 1];
+                        if (evacueesData.id == item.family_id) {
+                            index = evacueesData.family_count + 1;
+                        }
+                        else {
+                            index = 1;
+                        }
+                    }
+                    else{
+                        index = 1;
+                    }
+
+
                 }
                 let evacuees = {
                     "id": item.family_id,
-                    "family_count": index + 1,
+                    "family_count": index,
                     "family_code": item.families.family_code,
                     "representative": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     "refugee_name": <Link className="text-higlight" href={{
                         pathname: '/admin/evacuation/family-detail',
-                        query: {family_id: item.family_id}
+                        query: { family_id: item.family_id }
                     }}>{item.refugee_name}</Link>,
                     "name": item.name,
                     "gender": getGenderValue(item.gender),
                     "dob": getJapaneseDateDisplayFormat(item.dob),
                     "age": item.age,
                     "age_month": item.age_month,
-                    "special_care_name": item.special_cares ? item.special_cares[0].name : "-",
+                    "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares) : "-",
                     "remarks": item.note,
                     "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
-                    "out_date": item.families.out_date,
-                    "current_location": "-",
+                    "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "-",
+                    "current_location": "",
                 };
                 previousItem = evacuees;
                 evacueesList.push(evacuees);

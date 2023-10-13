@@ -102,6 +102,18 @@ export const getGeneralDateTimeDisplayFormat = (dateTime) => {
     return formattedJPDateTime.replaceAll("/", "-");
 }
 
+export const getGeneralDateTimeSlashDisplayFormat = (dateTime) => {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    };
+    let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+    return formattedJPDateTime.replaceAll("-", "/");
+}
+
 export const getYYYYMMDDHHSSSSDateTimeFormat = (dateTime) => {
     const options = {
         year: "numeric",
