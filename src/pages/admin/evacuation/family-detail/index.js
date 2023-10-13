@@ -151,64 +151,9 @@ export default function EvacueeFamilyDetail() {
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);
         }
-
-        /**
-         * 
-         * "世帯番号->family_code
-
-避難日時 -> ['join_date_modified']
-住所 ->
- {{trans('user_register.zip_code')}} {{ $data->zip_code }} {{ $data->perfecture_name . ' ' .  $data->address}}
-電話番号(代表者) -> ['tel']
-登録言語環境 -> ['language_register'] take from costant
-'en_language_english' => 'English',
-'en_language_japan' => 'Japanese',
-'ja_language_english' => '英語',
-'ja_language_japan' => '日本語',
-
-番号-> index loop
-代表者-> is_owner
-@if ($person['is_owner'] == 0)
-{{ trans('staff_refuge_index.representative') }}
-@endif
-'representative' =>'Representative' - en,
-'representative' =>'代表者' - jp,
-
-氏名 (フリガナ)->['refugee_name']
-氏名 (漢字)->['name']
-生年月日->['dob'] in format
-年齢->['age'] 
-年齢_月-> ['month']
-性別-> ['gender'] get name from key
-作成日-> ['created_at_day']
-更新日-> ['updated_at_day']
-
-
-住所 ->
-{{trans('user_register.zip_code')}} {{ substr($person['postal_code'], 0, 3) }}-{{ substr($person['postal_code'], 3) }} {{ config('app.locale') == config('constant.language_ja') ? get_prefecture_name($person['prefecture_id']) : get_prefecture_name_en($person['prefecture_id']) }} {{ $person['address'] }}
-要配慮者番号 -> ['specialCareName'] array to string
-
-紐付コード -> ['connecting_code']
-
-備考 -> ['note']
-
-現在の滞在場所 * (example) -> individualQuestions loop
-
-
-町内会名 * (example) -> ['question'] loop
-
-
- 
-避難所 -> history->placeName or placeNameEn from id
-入所日時-> history--> access_datetime
-退所日時-> history--> access_datetime
-"
-         * 
-         */
     }
 
     useEffect(() => {
-        // AdminEvacueeFamilyDetailService.getEvacueeFamilyDetailWithOrdersSmall().then((data) => setAdmins(data));
         setTableLoading(true);
         const fetchData = async () => {
             await onGetEvacueesFamilyDetailOnMounting();
