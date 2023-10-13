@@ -35,7 +35,7 @@ function _getList(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _exportEvacueesCSVList(payload, callBackFun) {
-    axios.get('/admin/evacuation/export', payload)
+    axios.post('/admin/evacuation/export', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

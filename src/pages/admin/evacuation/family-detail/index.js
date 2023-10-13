@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
@@ -85,12 +85,20 @@ export default function EvacueeFamilyDetail() {
         }
     }
 
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        console.log(nameList);
+        nameList.map((item)=>{
+            specialCareName = specialCareName ? (specialCareName + ", " +item) :  item;
+        });
+        return specialCareName;
+    }
+
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
 
     const getEvacueesFamilyDetail = (response) => {
-
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const historyData = response.data.history.list;
@@ -134,8 +142,8 @@ export default function EvacueeFamilyDetail() {
                     created_date: person.created_at_day,
                     updated_date: data.updated_at_day,
                     orders: [{
-                        address: person.address,
-                        special_care_name: person.specialCareName[0],
+                        address: person.address ? person.address : "-",
+                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "-",
                         connecting_code: person.connecting_code,
                         remarks: person.note,
                         current_location: '-',
@@ -157,8 +165,8 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime,
-                    discharge_date_time: item.access_datetime
+                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime): "-",
+                    discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-"
                 }
                 admittedHistory.push(historyItem);
             });
@@ -188,6 +196,11 @@ export default function EvacueeFamilyDetail() {
             });
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);
+            setTableLoading(false)
+        }
+        else{
+            setTableLoading(false);
+            setEmptyTableMessage(response.message);
         }
     }
 
@@ -214,6 +227,8 @@ export default function EvacueeFamilyDetail() {
                     <NormalTable
                         id="evacuee-family-detail"
                         size={"small"}
+                        tableLoading={tableLoading}
+                        emptyMessage={emptyTableMessage}
                         stripedRows={true}
                         paginator={false}
                         showGridlines={true}
@@ -227,6 +242,8 @@ export default function EvacueeFamilyDetail() {
                     <RowExpansionTable
                         rows={10}
                         paginatorLeft={true}
+                        tableLoading={tableLoading}
+                        emptyMessage={emptyTableMessage}
                         paginator="true"
                         customRowExpansionActionsField="actions"
                         value={familyDetailData}
@@ -238,6 +255,8 @@ export default function EvacueeFamilyDetail() {
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
+                            tableLoading={tableLoading}
+                            emptyMessage={emptyTableMessage}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
@@ -249,6 +268,8 @@ export default function EvacueeFamilyDetail() {
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
+                            tableLoading={tableLoading}
+                            emptyMessage={emptyTableMessage}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
