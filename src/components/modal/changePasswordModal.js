@@ -25,7 +25,7 @@ export default function ChangePasswordModal(props) {
             .max(15, translate(localeJson, 'current_password_max_15_characters')),
         password_new: Yup.string()
             .required(translate(localeJson, 'new_password_required'))
-            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/, translate(localeJson, 'new_password_not_matched'))
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/, translate(localeJson, 'new_password_not_matched'))
             .max(15, translate(localeJson, 'new_password_max_15_characters'))
             .test('not-same', translate(localeJson, 'password_new_not_equal_to_current'), function (value) {
                 // 'this' refers to the schema object
@@ -40,8 +40,7 @@ export default function ChangePasswordModal(props) {
             }),
         password_confirm: Yup.string()
             .required(translate(localeJson, 'confirm_password_required'))
-            .oneOf([Yup.ref("password_new"), null], translate(localeJson, 'confirm_password_notMatch'))
-            .max(16, "password maximum 15 character"),
+            .oneOf([Yup.ref("password_new"), null], translate(localeJson, 'confirm_password_notMatch')),
     });
 
     return (
@@ -49,9 +48,10 @@ export default function ChangePasswordModal(props) {
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
-                onSubmit={(values, actions, { resetForm }) => {
+                onSubmit={(values, actions) => {
                     changePassword('admin', values, onChangePasswordSuccess);
-                    resetForm({ values: initialValues });
+                    close();
+                    actions.resetForm({ values: initialValues });
                 }}
             >
                 {({

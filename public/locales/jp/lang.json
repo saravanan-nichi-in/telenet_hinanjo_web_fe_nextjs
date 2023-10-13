@@ -144,7 +144,7 @@
       "password_new_not_equal_to_current": "現在のパスワ ードと新しいパスワードは同じであることはできません。",
       "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
       "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
-      "new_password_max_15_characters": "新しいパスワードは200文字より大きくないである必要です。"
+      "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。"
     },
     "buttons": {
       "import": "インポート",
