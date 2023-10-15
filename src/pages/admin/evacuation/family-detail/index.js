@@ -93,9 +93,9 @@ export default function EvacueeFamilyDetail() {
         return specialCareName;
     }
 
-    const getAnswerData = (answer) =>{
+    const getAnswerData = (answer) => {
         let answerData = null;
-        answer.map((item)=>{
+        answer.map((item) => {
             answerData = answerData ? (answerData + ", " + item) : item
         });
         return answerData;
@@ -128,7 +128,7 @@ export default function EvacueeFamilyDetail() {
                 individualQuestion.map((ques, index) => {
                     let column = {
                         field: "question_" + index,
-                        header: (locale == "ja" ? ques.title : ques.title_en) + (ques.isRequired ?  " *" : ""),
+                        header: (locale == "ja" ? ques.title : ques.title_en) + (ques.isRequired ? " *" : ""),
                         minWidth: "10rem"
                     };
                     personInnerColumns.push(column);
@@ -199,7 +199,7 @@ export default function EvacueeFamilyDetail() {
                 dropdown_related_questionnaire: ""
             }
             questionnaire.map((ques, index) => {
-                neighbourData[`question_${index}`] = qques.answer ? getAnswerData(ques.answer.answer) : "";
+                neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
             });
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);

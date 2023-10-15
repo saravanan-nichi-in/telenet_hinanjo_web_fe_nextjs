@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -16,15 +17,15 @@ export default function AdminStockPileMaster() {
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-    
+
     const [categories, setCategories] = useState([]);
     const [productNames, setProductNames] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedProductName, setSelectedProductName] = useState("");
     const [selectedImage, setSelectedImage] = useState('');
-    
+
     const callDropDownApi = () => {
-        StockpileService.getCategoryAndProductList((res)=> {
+        StockpileService.getCategoryAndProductList((res) => {
             let data = res.data;
             let tempProducts = [""];
             let tempCategories = new Set();
@@ -37,7 +38,7 @@ export default function AdminStockPileMaster() {
             setProductNames(tempProducts);
         });
     }
-    
+
     const columnsData = [
         { field: 'id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem" },
@@ -49,12 +50,12 @@ export default function AdminStockPileMaster() {
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    { (rowData.stockpile_image && rowData.stockpile_image !="")?
+                    {(rowData.stockpile_image && rowData.stockpile_image != "") ?
                         <FaEye style={{ fontSize: '20px' }} onClick={() => {
                             setSelectedImage(rowData.stockpile_image);
                             setToggleImageModal(true)
                         }} />
-                    : <FaEyeSlash style={{ fontSize: '20px' }} />}
+                        : <FaEyeSlash style={{ fontSize: '20px' }} />}
                 </div>
             ),
         },
@@ -64,22 +65,22 @@ export default function AdminStockPileMaster() {
             minWidth: "10rem",
             body: (rowData) => (
                 <>
-                <Button parentStyle={{display: "inline"}} buttonProps={{
+                    <Button parentStyle={{ display: "inline" }} buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
                         onClick: () => openDeleteDialog(rowData.product_id)
                     }} />
-               <Button parentStyle={{display: "inline"}}  buttonProps={{
-                   text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
-                   bg: "bg-white",
-                   hoverBg: "hover:bg-primary hover:text-white",
-                   onClick: () => {
-                       setRegisterModalAction("edit")
-                       setCurrentEditObj(rowData)
-                       setEmailSettingsOpen(true)
-                   },
-               }} />
+                    <Button parentStyle={{ display: "inline" }} buttonProps={{
+                        text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => {
+                            setRegisterModalAction("edit")
+                            setCurrentEditObj(rowData)
+                            setEmailSettingsOpen(true)
+                        },
+                    }} />
                 </>
             ),
         }
@@ -141,96 +142,96 @@ export default function AdminStockPileMaster() {
 
     //Listing start
 
-        /**
-     * Action column for dashboard list
-     * @param {*} obj 
-     * @returns 
-     */
-        const action = (obj) => {
-            return (<>
-                 <Button parentStyle={{display: "inline"}} buttonProps={{
-                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                         bg: "bg-white",
-                         hoverBg: "hover:bg-primary hover:text-white",
-                         onClick: () => openDeleteDialog(obj.product_id)
-                     }} />
-                <Button parentStyle={{display: "inline"}}  buttonProps={{
-                    text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
-                    bg: "bg-white",
-                    hoverBg: "hover:bg-primary hover:text-white",
-                    onClick: () => {
-                        setRegisterModalAction("edit")
-                        setCurrentEditObj(obj)
-                        setEmailSettingsOpen(true)
-                    },
-                }} />
-                 </>
-            );
+    /**
+ * Action column for dashboard list
+ * @param {*} obj 
+ * @returns 
+ */
+    const action = (obj) => {
+        return (<>
+            <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                bg: "bg-white",
+                hoverBg: "hover:bg-primary hover:text-white",
+                onClick: () => openDeleteDialog(obj.product_id)
+            }} />
+            <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                bg: "bg-white",
+                hoverBg: "hover:bg-primary hover:text-white",
+                onClick: () => {
+                    setRegisterModalAction("edit")
+                    setCurrentEditObj(obj)
+                    setEmailSettingsOpen(true)
+                },
+            }} />
+        </>
+        );
+    };
+
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 7,
+            order_by: "",
+            sort_by: ""
+        },
+        category: "",
+        product_name: ""
+    });
+
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+
+
+    /* Services */
+    const { getList, exportData, getCategoryAndProductList } = StockpileService;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetMaterialListOnMounting()
+            setLoader(false);
         };
-    
-        const [getListPayload, setGetListPayload] = useState({
-            filters: {
-                start: 0,
-                limit: 7,
-                order_by: "",
-                sort_by: ""
-            },
-            category : "",
-            product_name : ""
+        fetchData();
+        callDropDownApi();
+    }, [locale, getListPayload]);
+
+    /**
+     * Get dashboard list on mounting
+     */
+    const onGetMaterialListOnMounting = () => {
+        // Get dashboard list
+        getList(getListPayload, (response) => {
+            if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+                const data = response.data.model.list;
+                var additionalColumnsArrayWithOldData = [...columnsData];
+                let preparedList = [];
+                // Update prepared list to the state
+                // Preparing row data for specific column to display
+                data.map((obj, i) => {
+                    let preparedObj = {
+                        id: i + 1,
+                        product_id: obj.product_id ?? "",
+                        product_name: obj.product_name ?? "",
+                        category: obj.category ?? "",
+                        shelf_life: obj.shelf_life ?? "",
+                        stockpile_image: obj.stockpile_image ?? "",
+                        // actions: action(obj)
+                    }
+                    preparedList.push(preparedObj);
+                })
+
+                setList(preparedList);
+                setColumns(additionalColumnsArrayWithOldData);
+                setTotalCount(response.data.model.total);
+                setTableLoading(false);
+            }
         });
-    
-        const [columns, setColumns] = useState([]);
-        const [list, setList] = useState([]);
-        const [totalCount, setTotalCount] = useState(0);
-        const [tableLoading, setTableLoading] = useState(false);
-    
-    
-        /* Services */
-        const { getList, exportData, getCategoryAndProductList } = StockpileService;
-    
-        useEffect(() => {
-            setTableLoading(true);
-            const fetchData = async () => {
-                await onGetMaterialListOnMounting()
-                setLoader(false);
-            };
-            fetchData();
-            callDropDownApi();
-        }, [locale, getListPayload]);
-    
-        /**
-         * Get dashboard list on mounting
-         */
-        const onGetMaterialListOnMounting = () => {
-            // Get dashboard list
-            getList(getListPayload, (response)=> {
-                if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-                    const data = response.data.model.list;
-                    var additionalColumnsArrayWithOldData = [...columnsData];
-                    let  preparedList = [];
-                    // Update prepared list to the state
-                    // Preparing row data for specific column to display
-                    data.map((obj, i) => {
-                        let preparedObj = {
-                            id: i+1,
-                            product_id: obj.product_id ?? "",
-                            product_name:  obj.product_name ?? "",
-                            category: obj.category ?? "",
-                            shelf_life: obj.shelf_life ?? "",
-                            stockpile_image: obj.stockpile_image ?? "",
-                            // actions: action(obj)
-                        }
-                        preparedList.push(preparedObj);
-                    })    
-                    
-                    setList(preparedList);
-                    setColumns(additionalColumnsArrayWithOldData);
-                    setTotalCount(response.data.model.total);
-                    setTableLoading(false);
-                } 
-            });
-            
-        }
+
+    }
 
     /**
      * Pagination handler
@@ -272,9 +273,9 @@ export default function AdminStockPileMaster() {
                 open={emailSettingsOpen}
                 close={onEmailSettingsClose}
                 register={onRegister}
-                refreshList={onGetMaterialListOnMounting} 
+                refreshList={onGetMaterialListOnMounting}
                 registerModalAction={registerModalAction}
-                currentEditObj={{...currentEditObj}}
+                currentEditObj={{ ...currentEditObj }}
                 categories={categories}
             />
             <AdminManagementImportModal
@@ -311,8 +312,8 @@ export default function AdminStockPileMaster() {
                                                     "order_by": "desc",
                                                     "sort_by": "created_at" // default:created_at, category 
                                                 },
-                                                "category" : selectedCategory,
-                                                "product_name" : selectedProductName
+                                                "category": selectedCategory,
+                                                "product_name": selectedProductName
                                             })
                                         }
                                     }} parentClass={"mr-1 mt-1"} />
@@ -332,30 +333,30 @@ export default function AdminStockPileMaster() {
                                 </div>
                                 <div>
                                     <form >
-                                    <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
-                                        <div>
-                                        <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "category_search",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: categories,
-                                            value: selectedCategory,
-                                            onChange: (e) => setSelectedCategory(e.value),
-                                            text: translate(localeJson, "search_category"),
-                                            custom: "mobile-input custom-select"
-                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div >
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                            inputId: "product_name_search",
-                                            selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                            options: productNames,
-                                            value: selectedProductName,
-                                            onChange: (e) => setSelectedProductName(e.value),
-                                            text: translate(localeJson, "search_product_name"),
-                                            custom: "mobile-input custom-select"
-                                        }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div className='pb-1'>
+                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                            <div>
+                                                <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "category_search",
+                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    options: categories,
+                                                    value: selectedCategory,
+                                                    onChange: (e) => setSelectedCategory(e.value),
+                                                    text: translate(localeJson, "search_category"),
+                                                    custom: "mobile-input custom-select"
+                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                            </div>
+                                            <div >
+                                                <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "product_name_search",
+                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    options: productNames,
+                                                    value: selectedProductName,
+                                                    onChange: (e) => setSelectedProductName(e.value),
+                                                    text: translate(localeJson, "search_product_name"),
+                                                    custom: "mobile-input custom-select"
+                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                            </div>
+                                            <div className='pb-1'>
                                                 <Button buttonProps={{
                                                     buttonClass: "evacuation_button_height",
                                                     type: 'submit',
@@ -364,8 +365,10 @@ export default function AdminStockPileMaster() {
                                                     severity: "primary",
                                                     onClick: (e) => {
                                                         e.preventDefault();
-                                                        setGetListPayload({...getListPayload, 
-                                                            category: selectedCategory, product_name: selectedProductName})
+                                                        setGetListPayload({
+                                                            ...getListPayload,
+                                                            category: selectedCategory, product_name: selectedProductName
+                                                        })
                                                     }
                                                 }} parentStyle={{ paddingLeft: "10px" }} />
 
@@ -374,23 +377,23 @@ export default function AdminStockPileMaster() {
                                     </form>
                                 </div>
                                 <div className='mt-3'>
-                                <NormalTable
-                            lazy
-                            totalRecords={totalCount}
-                            loading={tableLoading}
-                            stripedRows={true}
-                            className={"custom-table-cell"}
-                            showGridlines={"true"}
-                            value={list}
-                            columns={columns}
-                            filterDisplay="menu"
-                            emptyMessage="No data found."
-                            paginator={true}
-                            first={getListPayload.filters.start}
-                            rows={getListPayload.filters.limit}
-                            paginatorLeft={true}
-                            onPageHandler={(e) => onPaginationChange(e)}
-                        />
+                                    <NormalTable
+                                        lazy
+                                        totalRecords={totalCount}
+                                        loading={tableLoading}
+                                        stripedRows={true}
+                                        className={"custom-table-cell"}
+                                        showGridlines={"true"}
+                                        value={list}
+                                        columns={columns}
+                                        filterDisplay="menu"
+                                        emptyMessage="No data found."
+                                        paginator={true}
+                                        first={getListPayload.filters.start}
+                                        rows={getListPayload.filters.limit}
+                                        paginatorLeft={true}
+                                        onPageHandler={(e) => onPaginationChange(e)}
+                                    />
                                 </div>
                             </div>
                         </section>
