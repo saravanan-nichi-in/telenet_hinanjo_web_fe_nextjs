@@ -1,3 +1,4 @@
+import { downloadBase64File } from "@/helper";
 import axios from "@/utils/api";
 import toast from 'react-hot-toast';
 
@@ -9,6 +10,7 @@ export const StockpileService = {
     create: _create,
     update: _update,
     delete: _delete,
+    getCategoryAndProductList: _getCategoryAndProductList
 };
 
 /**
@@ -42,15 +44,15 @@ function _importData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _exportData(payload, callBackFun) {
-    axios
+        axios
         .post("/admin/stockpile/export", payload)
         .then((response) => {
-            if (response && response.data) {
-                callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
+                if (response && response.data && response.data.result.filePath) {
+                    downloadBase64File(response.data.result.filePath, "stockpile.csv");
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
         })
         .catch((error) => {
             // Handle errors here
@@ -68,13 +70,32 @@ function _exportData(payload, callBackFun) {
  */
 function _getList(payload, callBackFun) {
     axios
-        .get("/admin/stockpile/list", payload)
+        .post("/admin/stockpile/list", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+            }
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get stockpile category/product dropdown list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getCategoryAndProductList(callBackFun) {
+    axios
+        .get("/admin/stockpile/product/dropdown")
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data.data);
             }
         })
         .catch((error) => {
@@ -118,7 +139,7 @@ function _create(payload, callBackFun) {
  */
 function _update(id, payload, callBackFun) {
     axios
-        .put(`/admin/stockpile/${id}`, payload)
+        .post(`/admin/stockpile/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();
@@ -143,7 +164,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/stockpile/${id}`)
+        .delete(`/admin/stockpile/${id}`, {data: {"product_id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -153,10 +174,11 @@ function _delete(id, callBackFun) {
             }
         })
         .catch((error) => {
+            console.log(error);
             // Handle errors here
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            // console.error("Error fetching data:", error);
+            // toast.error(error?.response?.data?.message, {
+            //     position: "top-right",
+            // });
         });
 }

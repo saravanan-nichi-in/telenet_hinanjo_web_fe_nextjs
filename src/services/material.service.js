@@ -23,9 +23,15 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                if(response?.data?.success) {
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
             }
         })
         .catch((error) => {
@@ -143,7 +149,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/material/${id}`, {"id": id})
+        .delete(`/admin/material/${id}`, {data: {"id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

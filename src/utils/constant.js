@@ -131,7 +131,7 @@ const dashboardTableColumns = [
 ];
 
 const MailSettingsOption1 = [
-    { name: 'なし' , value: null},
+    { name: 'なし' , value: 0},
     { name: '1時間毎', value: 1 },
     { name: '2時間毎', value: 2},
     { name: '3時間毎', value: 3 },

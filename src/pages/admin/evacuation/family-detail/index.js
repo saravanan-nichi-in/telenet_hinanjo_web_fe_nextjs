@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
@@ -85,12 +85,27 @@ export default function EvacueeFamilyDetail() {
         }
     }
 
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
+        });
+        return specialCareName;
+    }
+
+    const getAnswerData = (answer) =>{
+        let answerData = null;
+        answer.map((item)=>{
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
+    }
+
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
 
     const getEvacueesFamilyDetail = (response) => {
-
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const historyData = response.data.history.list;
@@ -113,7 +128,7 @@ export default function EvacueeFamilyDetail() {
                 individualQuestion.map((ques, index) => {
                     let column = {
                         field: "question_" + index,
-                        header: (locale == "ja" ? ques.title : ques.title_en) + " *",
+                        header: (locale == "ja" ? ques.title : ques.title_en) + (ques.isRequired ?  " *" : ""),
                         minWidth: "10rem"
                     };
                     personInnerColumns.push(column);
@@ -134,8 +149,8 @@ export default function EvacueeFamilyDetail() {
                     created_date: person.created_at_day,
                     updated_date: data.updated_at_day,
                     orders: [{
-                        address: person.address,
-                        special_care_name: person.specialCareName[0],
+                        address: person.address ? person.address : "",
+                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "-",
                         connecting_code: person.connecting_code,
                         remarks: person.note,
                         current_location: '-',
@@ -146,7 +161,7 @@ export default function EvacueeFamilyDetail() {
                 let question = person.individualQuestions;
                 if (question.length > 0) {
                     question.map((ques, index) => {
-                        familyData.orders[0][`question_${index}`] = ques.answer;
+                        familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
                     })
                 }
                 familyDataList.push(familyData);
@@ -157,8 +172,8 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime,
-                    discharge_date_time: item.access_datetime
+                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-",
+                    discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-"
                 }
                 admittedHistory.push(historyItem);
             });
@@ -179,15 +194,20 @@ export default function EvacueeFamilyDetail() {
             setTownAssociationColumn(townAssociateColumnSet);
 
             let neighbourData = {
-                neighbour_association_name: "-",
-                test_payload: "-",
-                dropdown_related_questionnaire: "-"
+                neighbour_association_name: "",
+                test_payload: "",
+                dropdown_related_questionnaire: ""
             }
             questionnaire.map((ques, index) => {
-                neighbourData[`question_${index}`] = ques.answer;
+                neighbourData[`question_${index}`] = qques.answer ? getAnswerData(ques.answer.answer) : "";
             });
             neighbourDataList.push(neighbourData);
             setNeighbourData(neighbourDataList);
+            setTableLoading(false)
+        }
+        else {
+            setTableLoading(false);
+            setEmptyTableMessage(response.message);
         }
     }
 
@@ -214,6 +234,8 @@ export default function EvacueeFamilyDetail() {
                     <NormalTable
                         id="evacuee-family-detail"
                         size={"small"}
+                        tableLoading={tableLoading}
+                        emptyMessage={emptyTableMessage}
                         stripedRows={true}
                         paginator={false}
                         showGridlines={true}
@@ -227,6 +249,8 @@ export default function EvacueeFamilyDetail() {
                     <RowExpansionTable
                         rows={10}
                         paginatorLeft={true}
+                        tableLoading={tableLoading}
+                        emptyMessage={emptyTableMessage}
                         paginator="true"
                         customRowExpansionActionsField="actions"
                         value={familyDetailData}
@@ -238,6 +262,8 @@ export default function EvacueeFamilyDetail() {
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
+                            tableLoading={tableLoading}
+                            emptyMessage={emptyTableMessage}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
@@ -249,6 +275,8 @@ export default function EvacueeFamilyDetail() {
                         <NormalTable
                             id="evacuee-family-detail"
                             size={"small"}
+                            tableLoading={tableLoading}
+                            emptyMessage={emptyTableMessage}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}

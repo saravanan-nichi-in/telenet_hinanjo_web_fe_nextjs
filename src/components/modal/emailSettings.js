@@ -19,8 +19,8 @@ export default function EmailSettings(props) {
     const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
-    const [transmissionInterval, setTransmissionInterval] = useState(null);
-    const [outputTargetArea, setOutputTargetArea] = useState(null);
+    const [transmissionInterval, setTransmissionInterval] = useState(0);
+    const [outputTargetArea, setOutputTargetArea] = useState(0);
     const [initialValues, setInitialValues] = useState({
         email: emailSettingValues.email,
     });
@@ -33,7 +33,6 @@ export default function EmailSettings(props) {
                 return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
 

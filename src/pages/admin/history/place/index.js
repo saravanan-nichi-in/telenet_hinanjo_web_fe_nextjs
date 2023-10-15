@@ -29,8 +29,8 @@ export default function AdminHistoryPlacePage() {
     const [totalCount, setTotalCount] = useState(0);
     const [emailSettingValues, setEmailSettingValues] = useState({
         email: "",
-        transmissionInterval: null,
-        outputTargetArea: null
+        transmissionInterval: 0,
+        outputTargetArea: 0
     });
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -46,9 +46,9 @@ export default function AdminHistoryPlacePage() {
     const historyTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), minWidth: "5rem", sortable: false, textAlign: 'left' },
         { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "10rem", sortable: false },
-        { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", sortable: false },
         { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", sortable: false },
+        { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: "place_address", header: translate(localeJson, 'location_name'), minWidth: "10rem", sortable: false },
         { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
         { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false },
@@ -56,8 +56,8 @@ export default function AdminHistoryPlacePage() {
         { field: "place_opened_status", header: translate(localeJson, 'opened_status'), minWidth: "8rem", sortable: false },
         { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false },
         { field: "place_full_status", header: translate(localeJson, 'availability_status'), minWidth: "7rem", sortable: false },
-        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "8rem", sortable: false },
-        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "8rem", sortable: false },
+        { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "10rem", sortable: false },
+        { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "10rem", sortable: false },
         { field: "place_remarks", header: translate(localeJson, 'remarks'), minWidth: "10rem" }
     ];
 
@@ -206,10 +206,16 @@ export default function AdminHistoryPlacePage() {
         if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
             let payload = {
                 email: emailList,
-                frequency: values.transmissionInterval,
-                prefecture_id: values.outputTargetArea
+                frequency: values.transmissionInterval == 0 ? 0: values.transmissionInterval,
+                prefecture_id: values.outputTargetArea == 0 ? null : values.outputTargetArea
             }
-            registerEmailConfiguration(payload, registerEmailConfig)
+            let emailData = {
+                email: emailList,
+                transmissionInterval: values.transmissionInterval,
+                outputTargetArea: values.outputTargetArea
+            }
+            registerEmailConfiguration(payload, registerEmailConfig);
+            setEmailSettingValues(emailData);
             setEmailSettingsOpen(false);
         }
     };
@@ -229,8 +235,8 @@ export default function AdminHistoryPlacePage() {
             const data = response.data.model;
             let emailData = {
                 email: data.email,
-                transmissionInterval: data.frequency,
-                outputTargetArea: data.prefecture_id
+                transmissionInterval: data.frequency ? data.frequency : 0,
+                outputTargetArea: data.prefecture_id ? data.prefecture_id : 0
             }
             setEmailSettingValues(emailData);
         }
@@ -239,7 +245,7 @@ export default function AdminHistoryPlacePage() {
     const loadPrefectureDropdownList = (response) => {
         let prefectureList = [{
             name: "--",
-            value: null
+            value: 0
         }];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.list;

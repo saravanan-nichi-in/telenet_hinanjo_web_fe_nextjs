@@ -35,7 +35,8 @@
       "edit_admin_management": "管理者詳細情報",
       "admin_information_registration": "管理者情報の登録",
       "material_information_registration": "物資情報登録",
-      "special_care_registration": "要配慮者事項登録",
+      "special_care_create": "要配慮者事項登録",
+      "special_care_edit":"要配慮者事項編集",
       "edit_material_information": "物資情報編集",
       "house_hold_information_details": "世帯情報詳細",
       "admin_details": "管理者詳細情",
@@ -142,7 +143,26 @@
       "evacuation_date_time": "避難日時",
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
-      "create_qr_codes_successfully": "QRコードが正常に生成されました。"
+      "create_qr_codes_successfully": "QRコードが正常に生成されました。",
+      "special_care_import":"要配慮者事項CSVインポート ",
+      "stockpile_management_create_edit_modal_header": "備蓄品登録",
+      "stockpile_management_create_edit_field_product_name": "備蓄品名",
+      "stockpile_management_create_edit_field_category": "種別",
+      "stockpile_management_create_edit_field_shelf_life": "保管期間 (日)",
+      "stockpile_management_create_edit_field_stockpile_image": "画像",
+      "stockpile_management": {
+        "stockpile_management_header" : "備蓄品マスタ管理",
+        "search_category": "種別",
+        "search_product_name":"備蓄品名",
+        "table" : {
+          "header_slno" : "Sl No",
+          "header_product_name": "備蓄品名",
+          "header_category" : "種別",
+          "header_shelf_life" : "保管期間 (日)",
+          "header_stockpile_image" : "画像",
+          "header_action":"削除"
+        }
+      }
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -150,8 +170,8 @@
       "supplies_necessary": "物資は必須です。",
       "phone_min10_required": "電話番号には10または11桁の半角数字を入力してください。",
       "phone_no_required": "電話番号は必須です。",
-      "matters_to_consider_required": "要配慮者事項は必須です。",
-      "things_to_consider_required": "要配慮者事項（英語）は必須です。",
+      "special_care_name_jp_required": "要配慮者事項は必須です。",
+      "special_care_name_en_required": "要配慮者事項（英語）は必須です。",
       "notification_email_id_required": "通知先メールIDは必須です",
       "format_notification": "通知先メールIDの形式が正しくありません。",
       "is_required": "が必要です。",
@@ -185,19 +205,20 @@
       "submit": "登録",
       "create_admin": "新規登録",
       "create_staff": "新規登録",
-      "create_place":"新規登録",
-      "download": "ダウンロード"
+      "download": "ダウンロード",
+      "create_special_care":"新規登録"
     },
     "footer": {},
     "form": {
       "evacuation_site": "避難場所",
       "household_number": "世帯番号",
       "name": "氏名",
+      "special_care_name_jp":"要配慮者事項",
+      "special_care_name_en":"要配慮者事項（英語)",
       "address_email": "メール",
       "tel": "電話番号",
       "supplies": "物資",
       "unit": "単位",
-      "things_to_consider": "要配慮者事項（英語)",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
       "output_target_area": "出力対象地域",
@@ -276,7 +297,8 @@
     },
     "validation": {
       "type_required": "種別は必須です。",
-      "stockpile_name_required": "備蓄品名は必須です。"
+      "stockpile_name_required": "備蓄品名は必須です。",
+      "number_field": "フィールドは有効な数字である必要があります。"
     },
     "buttons": {
       "login": "ログイン",

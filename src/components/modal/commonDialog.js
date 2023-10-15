@@ -42,14 +42,13 @@ const CommonDialog = (props) => {
         className="custom-modal"
         header={header}
         visible={open}
+        draggable={false}
         position={position}
         onHide={() => close()}
         footer={footer()}
       >
         <div className={dialogBodyClassName}>
-          <div>
-            <p>{content}</p>
-          </div>
+          {content}
         </div>
       </Dialog>
     </div>
