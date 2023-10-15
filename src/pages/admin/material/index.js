@@ -3,8 +3,7 @@ import { useRouter } from 'next/router'
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DeleteModal, DividerComponent, NormalTable } from '@/components';
-import { AdminMaterialService } from '@/helper/adminMaterialService';
+import { Button, DividerComponent, NormalTable } from '@/components';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import { MaterialService } from '@/services/material.service';
@@ -12,35 +11,16 @@ import _ from 'lodash';
 
 export default function AdminMaterialPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
-    const [checked1, setChecked1] = useState(false);
-    const router = useRouter();
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-    const content = (
-        <div>
-            <p>一度削除したデータは、元に戻せません </p>
-            <p>削除してもよろしいでしょうか？</p>
-        </div>
-    )
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'id', header: 'ID' },
+        { field: 'slno', header: 'ID' },
         { field: 'name', header: '物資', minWidth: "20rem" },
         { field: 'unit', header: '単位' },
         {
             field: 'actions',
             header: '削除',
             minWidth: "7rem",
-            // body: (rowData) => (
-            //      <div>
-            //      <Button buttonProps={{
-            //          text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-            //          bg: "bg-white",
-            //          hoverBg: "hover:bg-primary hover:text-white",
-            //          onClick: () => openDeleteDialog(rowData.id)
-            //      }} />
-            //  </div>
-            // ),
         }
     ];
 
@@ -50,15 +30,15 @@ export default function AdminMaterialPage() {
      * @returns 
      */
     const action = (obj) => {
-        return (<div>
-             <Button buttonProps={{
+        return (<>
+             <Button parentStyle={{display: "inline"}} buttonProps={{
                      text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                      bg: "bg-white",
                      hoverBg: "hover:bg-primary hover:text-white",
                      onClick: () => openDeleteDialog(obj.id)
                  }} />
-            <Button buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary",
+            <Button parentStyle={{display: "inline"}}  buttonProps={{
+                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
                 bg: "bg-white",
                 hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => {
@@ -67,7 +47,7 @@ export default function AdminMaterialPage() {
                     setEmailSettingsOpen(true)
                 },
             }} />
-             </div>
+             </>
         );
     };
 
@@ -113,6 +93,7 @@ export default function AdminMaterialPage() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
+                        slno: i+1,
                         id: obj.id ?? "",
                         name:  obj.name ?? "",
                         unit: obj.unit ?? "",
@@ -121,7 +102,6 @@ export default function AdminMaterialPage() {
                     preparedList.push(preparedObj);
                 })    
                 
-                // setColumns(additionalColumnsArrayWithOldData);
                 setList(preparedList);
                 setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
@@ -135,16 +115,14 @@ export default function AdminMaterialPage() {
     const [deleteId, setDeleteId] = useState(null);
     
     const openDeleteDialog = (id) => {
-        alert(id);
         setDeleteId(id);
         setDeleteStaffOpen(true)
     }
     
     const onStaffDeleteClose = (action="close") => {
         if(action=="confirm") {
-            // alert(deleteId)
             MaterialService.delete(deleteId, (resData)=> {
-                alert(resData);
+                onGetMaterialListOnMounting()
             });
         }
         setDeleteStaffOpen(!deleteStaffOpen);
@@ -165,14 +143,6 @@ export default function AdminMaterialPage() {
     const onRegister = (values) => {
         setEmailSettingsOpen(false);
     };
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         await AdminMaterialService.getAdminsMaterialMedium().then((data) => setAdmins(data));
-    //         setLoader(false);
-    //     };
-    //     fetchData();
-    // }, []);
 
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
@@ -302,17 +272,6 @@ export default function AdminMaterialPage() {
                             paginatorLeft={true}
                             onPageHandler={(e) => onPaginationChange(e)}
                         />
-                                {/* <NormalTable 
-                                size={"small"}
-                                stripedRows={true}
-                                rows={10}
-                                paginator={"true"}
-                                showGridlines={"true"}
-                                value={list}
-                                columns={columns}
-                                paginatorLeft={true}
-                                totalRecords={totalCount}
-                                loading={tableLoading} /> */}
                             </div>
                         </div>
                     </section>

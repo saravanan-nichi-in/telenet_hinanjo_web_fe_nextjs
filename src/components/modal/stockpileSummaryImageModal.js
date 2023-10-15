@@ -12,7 +12,7 @@ export default function StockpileSummaryImageModal(props) {
     /**
      * Destructing
     */
-    const { open, close } = props && props;
+    const { open, close } = props;
 
     return (
                     <div>
@@ -27,8 +27,9 @@ export default function StockpileSummaryImageModal(props) {
                                 imageProps={{
                                     width: "300",
                                     height: "200",
-                                    src: "/layout/images/perspective.jpg"
+                                    src: props.imageUrl
                                 }}
+        
                             />
                             </div>
                         </Dialog>

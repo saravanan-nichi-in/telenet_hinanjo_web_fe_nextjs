@@ -145,7 +145,25 @@
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "Create QrCodes successfully.",
-      "special_care_import":"Special Care CSV import "
+      "special_care_import":"Special Care CSV import ",
+      "stockpile_management_create_edit_modal_header": "Stockpile Registration",
+      "stockpile_management_create_edit_field_product_name": "Stockpile Product Name",
+      "stockpile_management_create_edit_field_category": "Category",
+      "stockpile_management_create_edit_field_shelf_life": "Shelf Life (Days)",
+      "stockpile_management_create_edit_field_stockpile_image": "Image",
+      "stockpile_management": {
+        "stockpile_management_header": "Stockpile Master Management",
+        "search_category": "Category",
+        "search_product_name": "Stockpile Product Name",
+        "table": {
+            "header_slno": "Sl No",
+            "header_product_name": "Stockpile Product Name",
+            "header_category": "Category",
+            "header_shelf_life": "Shelf Life (Days)",
+            "header_stockpile_image": "Image",
+            "header_action": "Delete"
+        }
+    }
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -279,7 +297,8 @@
     },
     "validation": {
       "type_required": "Type is required.",
-      "stockpile_name_required": "stockpile name is required."
+      "stockpile_name_required": "stockpile name is required.",
+      "number_field": "Field should be a valid number."
     },
     "buttons": {
       "login": "Login",
