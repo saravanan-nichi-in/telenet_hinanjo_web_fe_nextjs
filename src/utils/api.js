@@ -36,10 +36,18 @@ api.interceptors.response.use((response) => {
   // Handle successful response
   return response;
 }, (error) => {
+  const adminPath = window.location.pathname.startsWith('/admin');
+  const staffPath = window.location.pathname.startsWith('/staff');
   // Handle error response
   if (error.response.status === 401) {
     // Handle unauthorized access (e.g., redirect to login page)
-    window.location.href = '/admin/login';
+    if (adminPath) {
+      localStorage.removeItem('admin');
+      window.location.href = '/admin/login';
+    } else {
+      localStorage.removeItem('staff');
+      window.location.href = '/staff/login';
+    }
   }
 
   // eslint-disable-next-line no-undef
