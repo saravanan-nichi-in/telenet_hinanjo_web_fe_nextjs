@@ -61,6 +61,11 @@ export const getAveragePercentage = (array, key) => {
     return formattedAverage;
 };
 
+/**
+ * Get japanese date & time with custom format
+ * @param {*} dateTime 
+ * @returns 
+ */
 export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
 
     const options = {
@@ -77,6 +82,11 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
     return formattedJPDateTime;
 }
 
+/**
+ * Get japanese display format
+ * @param {*} dateTime 
+ * @returns 
+ */
 export const getJapaneseDateDisplayFormat = (dateTime) => {
 
     const options = {
@@ -90,6 +100,11 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
     return formattedJPDateTime;
 }
 
+/**
+ * Get general date & time display format
+ * @param {*} dateTime 
+ * @returns 
+ */
 export const getGeneralDateTimeDisplayFormat = (dateTime) => {
     const options = {
         year: "numeric",
@@ -102,6 +117,11 @@ export const getGeneralDateTimeDisplayFormat = (dateTime) => {
     return formattedJPDateTime.replaceAll("/", "-");
 }
 
+/**
+ * Get general display date & time slash display format
+ * @param {*} dateTime 
+ * @returns 
+ */
 export const getGeneralDateTimeSlashDisplayFormat = (dateTime) => {
     const options = {
         year: "numeric",
@@ -114,6 +134,11 @@ export const getGeneralDateTimeSlashDisplayFormat = (dateTime) => {
     return formattedJPDateTime.replaceAll("-", "/");
 }
 
+/**
+ * Get current date format
+ * @param {*} dateTime 
+ * @returns 
+ */
 export const getYYYYMMDDHHSSSSDateTimeFormat = (dateTime) => {
     const options = {
         year: "numeric",
@@ -157,9 +182,11 @@ export const downloadBase64File = (base64String, fileName) => {
 export const zipDownloadWithURL = (zipURL) => {
     if (zipURL) {
         // Create a temporary anchor element for the download
+        let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date())
         const link = document.createElement('a');
         link.href = zipURL;
-        link.download = 'YourFile.zip'; // Specify the file name you want to give to the downloaded file
+        const fileName = `Sample_${date}.zip`;
+        link.setAttribute('download', fileName); // Specify the file name you want to give to the downloaded file
         link.click();
     }
 }
