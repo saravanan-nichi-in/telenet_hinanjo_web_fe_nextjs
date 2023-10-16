@@ -46,7 +46,7 @@ const AppTopbar = forwardRef((props, ref) => {
             return (
                 <div className="flex align-items-center" onClick={() => onChangeLocale(option.name === "JP" ? "jp" : "en")}>
                     <img alt={option.name} src={option.image} className={`mr-1`} style={{ width: '14px' }} />
-                    <div>{option.name}</div>
+                    <div className='pl-1'>{option.name}</div>
                 </div>
             );
         }
