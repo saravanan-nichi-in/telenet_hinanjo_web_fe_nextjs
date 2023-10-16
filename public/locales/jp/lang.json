@@ -144,7 +144,7 @@
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "QRコードが正常に生成されました。",
-      "special_care_import":"要配慮者事項CSVインポート ",
+      "import_special_care_data_csv":"要配慮者事項CSVインポート ",
       "stockpile_management_create_edit_modal_header": "備蓄品登録",
       "stockpile_management_create_edit_field_product_name": "備蓄品名",
       "stockpile_management_create_edit_field_category": "種別",

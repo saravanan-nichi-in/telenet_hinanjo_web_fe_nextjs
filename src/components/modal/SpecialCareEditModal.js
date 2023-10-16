@@ -80,7 +80,7 @@ export default function SpecialCareEditModal(props) {
                                 }
                             >
                                 <div className={`modal-content`}>
-                                    <div className="mt-5 mb-3">
+                                    <div className="mt-5 mb-5">
                                         <div className="mb-5">
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 name: "name_jp",
