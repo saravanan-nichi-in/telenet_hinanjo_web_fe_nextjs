@@ -68,6 +68,7 @@ export default function MaterialCreateEditModal(props) {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div>
                         <Dialog
@@ -75,7 +76,10 @@ export default function MaterialCreateEditModal(props) {
                             header={header}
                             visible={open}
                             draggable={false}
-                            onHide={() => close()}
+                            onHide={() => {
+                                resetForm();
+                                close();
+                            }}
                             footer={
                                 <div className="text-center">
                                     <Button buttonProps={{
@@ -83,7 +87,9 @@ export default function MaterialCreateEditModal(props) {
                                         bg: "bg-white",
                                         hoverBg: "hover:surface-500 hover:text-white",
                                         text: translate(localeJson, 'cancel'),
-                                        onClick: () => close(),
+                                        onClick: () => {
+                                            resetForm();
+                                            close()},
                                     }} parentClass={"inline"} />
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",
