@@ -1465,6 +1465,19 @@ export default function PlaceUpdatePage() {
                           }}
                         />
                       </div>
+               
+                      <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                        <Button
+                          buttonProps={{
+                            buttonClass: "evacuation_button_height",
+                            type: "submit",
+                            text: translate(localeJson, "edit"),
+                            rounded: "true",
+                            severity: "primary",
+                          }}
+                        />
+                      </div>
+
                       <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
                         <Button
                           buttonProps={{
@@ -1479,17 +1492,6 @@ export default function PlaceUpdatePage() {
                             setPlaceEditDialogVisible(true);
                             //   router.push("/admin/place");
                             },
-                          }}
-                        />
-                      </div>
-                      <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
-                        <Button
-                          buttonProps={{
-                            buttonClass: "evacuation_button_height",
-                            type: "submit",
-                            text: translate(localeJson, "edit"),
-                            rounded: "true",
-                            severity: "primary",
                           }}
                         />
                       </div>
