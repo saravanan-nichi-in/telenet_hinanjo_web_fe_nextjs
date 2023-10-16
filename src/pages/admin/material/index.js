@@ -221,7 +221,7 @@ export default function AdminMaterialPage() {
                 open={importPlaceOpen}
                 close={onStaffImportClose}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, "shelter_csv_import")}
+                modalHeaderText={translate(localeJson, "material_csv_import")}
                 importFile={importFileApi}
             />
             <div className="grid">
@@ -264,7 +264,7 @@ export default function AdminMaterialPage() {
                                         type: 'submit',
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'create'),
+                                        text: translate(localeJson, 'signup'),
                                         onClick: () => {
                                             setRegisterModalAction("create")
                                             setCurrentEditObj({ name: "", unit: "" })
@@ -274,7 +274,7 @@ export default function AdminMaterialPage() {
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
-                                <div className='mt-3'>
+                                <div className='mt-5'>
                                     <NormalTable
                                         lazy
                                         totalRecords={totalCount}

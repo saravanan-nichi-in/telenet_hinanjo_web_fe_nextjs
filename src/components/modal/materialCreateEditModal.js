@@ -1,4 +1,4 @@
-import React,{ useContext, useState } from "react"
+import React,{ useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,22 +8,21 @@ import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
-import { SelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
-import { InputIcon, TextAreaFloatLabel } from "../input";
-import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
+import { InputIcon } from "../input";
 import { MaterialService } from "@/services/material.service";
 
 export default function MaterialCreateEditModal(props) {
-
-    const [transmissionInterval, setTransmissionInterval] = useState(MailSettingsOption1[4]);
-    const [outputTargetArea, setOutputTargetArea] = useState(MailSettingsOption2[0]);
  
     const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const schema = Yup.object().shape({
         name: Yup.string()
-            .required(translate(localeJson, 'supplies_necessary')), 
+            .required(translate(localeJson, 'supplies_necessary'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+        unit: Yup.string()
+            .max(100, translate(localeJson, 'material_page_create_update_unit_max'))
+            .nullable()
     });
     /**
      * Destructing
@@ -44,7 +43,7 @@ export default function MaterialCreateEditModal(props) {
             <Formik
                 validationSchema={schema}
                 enableReinitialize={true} 
-                initialValues={props.currentEditObj}
+                initialValues={...props.currentEditObj}
                 onSubmit={(values) => {
                     if (props.registerModalAction=="create") {
                         MaterialService.create(values, ()=> {
@@ -105,7 +104,7 @@ export default function MaterialCreateEditModal(props) {
                                                     <div className='pb-1'>
                                                         <NormalLabel spanClass={"p-error"}
                                                             spanText={"*"}
-                                                            text={translate(localeJson, 'supplies')} />
+                                                            text={translate(localeJson, 'material_name')} />
                                                     </div>
                                                     <InputIcon inputIconProps={{
                                                         name: "name",

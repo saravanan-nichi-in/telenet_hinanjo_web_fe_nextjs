@@ -93,6 +93,7 @@
       "altitude": "海抜",
       "status": "状態",
       "shelter_csv_import": "避難所マスタCSVインポート",
+      "material_csv_import": "避難所マスタCSVインポート",
       "evacuation_possible_people": "避難可能人数",
       "ID": "ID",
       "edit_shelter": "避難所編集",
@@ -187,7 +188,9 @@
       "postal_code_2_validation":"郵便番号は4桁で指定してください。",
       "max_length_255":"は255文字以内で入力してください。",
       "capacity_max_length":"999999999以下で入力してください。",
-      "closing_date":"閉鎖日時は開設日時のより大きいである必要です。"
+      "closing_date":"閉鎖日時は開設日時のより大きいである必要です。",
+      "material_page_create_update_name_max": "物資は100文字以下で指定してください。",
+      "material_page_create_update_unit_max": "単位は100文字以下で指定してください。"
     },
     "buttons": {
       "import": "インポート",
@@ -219,6 +222,7 @@
       "address_email": "メール",
       "tel": "電話番号",
       "supplies": "物資",
+      "material_name": "物資",
       "unit": "単位",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",

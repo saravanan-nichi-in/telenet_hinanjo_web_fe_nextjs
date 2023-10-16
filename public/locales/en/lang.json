@@ -34,7 +34,7 @@
       "edit_staff_management": "Edit Staff Management",
       "edit_admin_management": "Edit Admin Management",
       "admin_information_registration": "Admin Information registration",
-      "material_information_registration": "Material Information registration",
+      "material_information_registration": "Material Create",
       "special_care_create": "Special Care Create",
       "special_care_edit":"Special Care Edit",
       "edit_material_information": "Edit material information",
@@ -93,6 +93,7 @@
       "altitude": "Altitude",
       "status": "Status",
       "shelter_csv_import": "Shelter Master CSV Import",
+      "material_csv_import": "Import Material Data CSV",
       "ID": "ID",
       "evacuation_possible_people": "Evacuation Possible People",
       "edit_shelter": "Edit Shelter",
@@ -187,7 +188,9 @@
       "postal_code_1_validation":"Please specify the postal code using 3 digits.",
       "postal_code_2_validation":"Please specify the postal code using 4 digits.",
       "capacity_max_length":"must not be greater than 999999999.",
-      "closing_date":"The closing date and time must be greater than the opening date and time."
+      "closing_date":"The closing date and time must be greater than the opening date and time.",
+      "material_page_create_update_name_max": "Name 100 characters or less.",
+      "material_page_create_update_unit_max": "Unit 100 characters or less."
     },
     "buttons": {
       "import": "Import",
@@ -220,6 +223,7 @@
       "address_email": "Address Email",
       "tel": "Tel",
       "supplies": "Supplies",
+      "material_name":"Name",
       "unit": "Unit",
       "things_to_consider": "Matters requiring special care (English)",
       "notification_email_id": "Email",
