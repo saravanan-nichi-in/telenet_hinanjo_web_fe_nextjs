@@ -248,11 +248,11 @@ function _deletePlace(id, callBackFun) {
           }
       })
       .catch((error) => {
-          console.log(error);
-          // Handle errors here
-          // console.error("Error fetching data:", error);
-          // toast.error(error?.response?.data?.message, {
-          //     position: "top-right",
-          // });
+        if(!isArray(error.response.data.message))
+        {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+        });
+      }
       });
 }

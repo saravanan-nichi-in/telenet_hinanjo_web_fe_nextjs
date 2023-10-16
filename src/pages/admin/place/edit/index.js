@@ -1490,7 +1490,6 @@ export default function PlaceUpdatePage() {
                             severity: "primary",
                             onClick: () => {
                             setPlaceEditDialogVisible(true);
-                            //   router.push("/admin/place");
                             },
                           }}
                         />
