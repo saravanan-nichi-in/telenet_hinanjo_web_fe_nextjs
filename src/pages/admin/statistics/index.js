@@ -5,15 +5,16 @@ import _ from 'lodash';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { InputSelectFloatLabel } from '@/components/dropdown';
-import {
-    considerationEvacueesCountData, considerationEvacueesCountOptions,
-    currentEvacueesCountData, currentEvacueesCountOptions, evacuationCenterCrowdingRateData, evacuationCenterCrowdingRateOptions, evacueesShelterOptions
-} from '@/utils/constant';
 import { StatisticsServices } from '@/services';
 
 export default function EvacueesStatistics() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [horizontalOptions, setHorizontalOptions] = useState(null);
+    const [options, setOptions] = useState(null);
+    const [evacueesShelterOptions, setEvacueesShelterOptions] = useState([
+        { name: '現在の避難者数', value: 'NY' },
+        { name: '避難所の混雑率', value: 'RM' },
+        { name: '要配慮者の避難者数', value: 'LDN' },
+    ]);
     const [data, setData] = useState(evacueesShelterOptions[0].value);
     const [chartData, setChartData] = useState({});
 
@@ -42,8 +43,8 @@ export default function EvacueesStatistics() {
     const GetStatisticsListSuccess = async (response) => {
         if (response.success && !_.isEmpty(response.data)) {
             var list_place = response.data.model.list_place;
-            var specialCares = response.data.specialCares;
             var labels = [];
+            // Dataset configuration
             var datasets_first = [{
                 type: 'bar',
                 label: '男',
@@ -68,7 +69,167 @@ export default function EvacueesStatistics() {
                 backgroundColor: 'rgb(31, 119, 180)',
                 data: []
             }];
-            var datasets_third = []
+            var datasets_third = [];
+            // Chart options
+            const chart_first_options = {
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                aspectRatio: 0.2,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const dataset = context.dataset;
+                                const index = context.dataIndex;
+                                const value = dataset.data[index];
+                                return dataset.label + " : " + value + "人";
+                            },
+                        }
+                    },
+                    legend: {
+                        position: "bottom",
+                        align: "center",
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: "rect",
+                            color: '#495057'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 300,
+                        stacked: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            autoSkip: false, // Enable label auto-skipping
+                            maxTicksLimit: 5,  // Limit the number of displayed labels to 5
+                            callback: function (value, index) {
+                                if (labels[index].length > 15) {
+                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                }
+                                return labels[index];
+                            },
+                        }
+                    }
+                }
+            };
+            const chart_second_options = {
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                aspectRatio: 0.2,
+                plugins: {
+                    tooltip: {
+                        displayColors: false,
+                        callbacks: {
+                            title: () => null,
+                            label: function (context) {
+                                const dataset = context.dataset;
+                                const index = context.dataIndex;
+                                const value = dataset.data[index];
+                                const percentage = value + '%';
+                                return " " + percentage;
+                            },
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 500,
+                        stacked: true,
+                        ticks: {
+                            callback: function (val) {
+                                return val + "%";
+                            },
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        // type: 'logarithmic', // Use a logarithmic scale
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            autoSkip: false, // Enable label auto-skipping
+                            maxTicksLimit: 5,  // Limit the number of displayed labels to 5
+                            callback: function (value, index) {
+                                if (labels[index].length > 15) {
+                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                }
+                                return labels[index];
+                            },
+                        }
+                    }
+                }
+            }
+            const chart_third_options = {
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                aspectRatio: 0.2,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const dataset = context.dataset;
+                                const index = context.dataIndex;
+                                const value = dataset.data[index];
+                                return dataset.label + " : " + value + "人";
+                            },
+                        }
+                    },
+                    legend: {
+                        position: "bottom",
+                        align: "center",
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: "rect",
+                            color: '#495057'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 300,
+                        stacked: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            autoSkip: false, // Enable label auto-skipping
+                            maxTicksLimit: 5,  // Limit the number of displayed labels to 5
+                            callback: function (value, index) {
+                                if (labels[index].length > 15) {
+                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                }
+                                return labels[index];
+                            },
+                        }
+                    }
+                }
+            };
             // Preparing labels
             list_place.map((obj, i) => {
                 let preparedObj = locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name;
@@ -87,8 +248,17 @@ export default function EvacueesStatistics() {
             var evacuation_center_crowding_rate_array = list_place.map((obj, i) => {
                 return 100 - (((obj.total_place - obj.totalPerson) / obj.total_place) * 100);
             })
-            // var number_of_evacuees_requiring_consideration = 
-            console.log(labels);
+            list_place.forEach(item => {
+                const specialCare = item.specialCare;
+                for (const key in specialCare) {
+                    const existingEntry = datasets_third.find(entry => entry.key === key);
+                    if (existingEntry) {
+                        existingEntry.data.push(specialCare[key]);
+                    } else {
+                        datasets_third.push({ key, label: key, type: 'bar', data: [specialCare[key]] });
+                    }
+                }
+            });
             if (data == evacueesShelterOptions[0].value) {
                 datasets_first.map((obj, i) => {
                     switch (obj.label) {
@@ -110,7 +280,7 @@ export default function EvacueesStatistics() {
                     datasets: datasets_first,
                 }
                 await setChartData(chartData);
-                await setHorizontalOptions(currentEvacueesCountOptions);
+                await setOptions(chart_first_options);
             }
             else if (data == evacueesShelterOptions[1].value) {
                 datasets_second.map((obj, i) => {
@@ -121,15 +291,15 @@ export default function EvacueesStatistics() {
                     datasets: datasets_second,
                 }
                 await setChartData(chartData);
-                await setHorizontalOptions(evacuationCenterCrowdingRateOptions);
+                await setOptions(chart_second_options);
             }
             else {
                 let chartData = {
                     labels: labels,
-                    datasets: datasets_second,
+                    datasets: datasets_third,
                 }
-                await setChartData(considerationEvacueesCountData);
-                await setHorizontalOptions(considerationEvacueesCountOptions);
+                await setChartData(chartData);
+                await setOptions(chart_third_options);
             }
             setLoader(false);
         }
@@ -161,7 +331,7 @@ export default function EvacueesStatistics() {
                         }}
                         parentClass="w-20rem lg:w-14rem md:w-14rem sm:w-10rem pt-2 pb-2"
                     />
-                    <Chart type="bar" data={chartData} options={horizontalOptions} />
+                    <Chart type="bar" data={chartData} options={options} />
                 </div>
             </div>
         </div>
