@@ -117,7 +117,7 @@ export default function AdminHistoryPlacePage() {
     */
     const onGetHistoryPlaceDropdownList = (response) => {
         let historyPlaceCities = [{
-            name : "--",
+            name: "--",
             code: null
         }];
         if (response.success && !_.isEmpty(response.data)) {
@@ -144,7 +144,7 @@ export default function AdminHistoryPlacePage() {
             let index = getListPayload.filters.start + 1;
             data.map((obj, i) => {
                 let historyData = {
-                    "si_no":  index,
+                    "si_no": index,
                     "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
                     "prefecture_name": obj.prefecture_name,
                     "place_name": obj.place_name,
@@ -206,7 +206,7 @@ export default function AdminHistoryPlacePage() {
         if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
             let payload = {
                 email: emailList,
-                frequency: values.transmissionInterval == 0 ? 0: values.transmissionInterval,
+                frequency: values.transmissionInterval == 0 ? 0 : values.transmissionInterval,
                 prefecture_id: values.outputTargetArea == 0 ? null : values.outputTargetArea
             }
             let emailData = {
@@ -283,14 +283,14 @@ export default function AdminHistoryPlacePage() {
     return (
         <React.Fragment>
             {/* {emailSettingsOpen && */}
-                <EmailSettings
-                    open={emailSettingsOpen}
-                    close={onEmailSettingsClose}
-                    register={onRegister}
-                    intervalFrequency={MailSettingsOption1}
-                    prefectureList={prefectureListDropdown}
-                    emailSettingValues={emailSettingValues}
-                />
+            <EmailSettings
+                open={emailSettingsOpen}
+                close={onEmailSettingsClose}
+                register={onRegister}
+                intervalFrequency={MailSettingsOption1}
+                prefectureList={prefectureListDropdown}
+                emailSettingValues={emailSettingValues}
+            />
             {/* } */}
             <div className="grid">
                 <div className="col-12">
@@ -323,12 +323,14 @@ export default function AdminHistoryPlacePage() {
                                 </div>
                                 <form>
                                     <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
-                                        <DateTimeCalendarFloatLabel dateTimeFloatLabelProps={{
+                                        <DateTimeCalendarFloatLabel
+                                            date={[new Date(), new Date()]}
+                                            dateTimeFloatLabelProps={{
                                             inputId: "settingStartDate",
                                             selectionMode: "range",
                                             text: translate(localeJson, "report_date_time"),
                                             dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
-                                            date: new Date(),
+
                                             onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
