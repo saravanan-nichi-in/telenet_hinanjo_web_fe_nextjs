@@ -26,7 +26,6 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
 
     useEffect(() => {
         setCenter(initialPosition);
-        console.log(initialPosition)
     }, [initialPosition]);
     useEffect(() => {
         setCenter(searchResult);
