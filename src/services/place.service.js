@@ -1,7 +1,7 @@
 import axios from "@/utils/api";
 import { downloadBase64File,getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 import toast from 'react-hot-toast';
-import { isArray } from "lodash";
+import { isArray, isObject } from "lodash";
 
 /* Identity and Access management (IAM) */
 export const PlaceServices = {
@@ -101,18 +101,22 @@ function _create(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun()
-      if (error.response && error.response.status === 422) {
+      if (error.response && error.response.status == 422) {
 
-        if(isArray(error.response.data.message))
+        if(isObject(error.response.data.message))
         {
         const errorMessages = Object.values(error.response.data.message);
         errorMessages.forEach((messages) => {
-          messages.forEach((msg) => {
-            toast.error(msg, {
-              position: "top-right",
-            });
+          toast.error(messages, {
+            position: "top-right",
           });
+          // messages.forEach((msg) => {
+          //   toast.error(msg, {
+          //     position: "top-right",
+          //   });
+          // });
         });
+        
       }
       else {
         toast.error(error.response.data.message, {
@@ -146,7 +150,7 @@ function _update(payload, callBackFun) {
       callBackFun()
       if (error.response && error.response.status === 422) {
 
-        if(isArray(error.response.data.message))
+        if(isObject(error.response.data.message))
         {
         const errorMessages = Object.values(error.response.data.message);
         errorMessages.forEach((messages) => {
