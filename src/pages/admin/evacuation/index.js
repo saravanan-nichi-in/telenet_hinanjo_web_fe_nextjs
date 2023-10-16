@@ -33,13 +33,14 @@ export default function EvacuationPage() {
     });
 
     const evacuationTableColumns = [
-        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "7rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "8rem", sortable: false, textAlign: 'left' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '7rem' },
         { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "12rem", sortable: false, textAlign: 'left' },
         { field: "name", header: translate(localeJson, 'name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem" },
@@ -102,7 +103,8 @@ export default function EvacuationPage() {
             }];
             let index;
             let previousItem = null;
-            data.map((item) => {
+            let siNo = getListPayload.filters.start + 1;
+            data.map((item, i) => {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
                 } else {
@@ -122,6 +124,7 @@ export default function EvacuationPage() {
 
                 }
                 let evacuees = {
+                    "si_no": siNo,
                     "id": item.family_id,
                     "family_count": index,
                     "family_code": item.families.family_code,
@@ -144,6 +147,7 @@ export default function EvacuationPage() {
                 };
                 previousItem = evacuees;
                 evacueesList.push(evacuees);
+                siNo = siNo + 1;
             });
             places.map((place) => {
                 let placeData = {
@@ -162,6 +166,8 @@ export default function EvacuationPage() {
             setEvacueesDataList([]);
             setEmptyTableMessage(response.message);
             setTableLoading(false);
+            setTotalCount(0);
+            setFamilyCount(0);
         }
     }
 
@@ -241,7 +247,7 @@ export default function EvacuationPage() {
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             text: translate(localeJson, 'household_number'),
                                             value: familyCode,
-                                            onChange: (value) => setFamilyCode(value)
+                                            onChange: (e) => setFamilyCode(e.target.value)
                                         }}
                                     />
                                     <InputFloatLabel
@@ -251,7 +257,7 @@ export default function EvacuationPage() {
                                             text: translate(localeJson, 'name'),
                                             custom: "mobile-input custom_input",
                                             value: refugeeName,
-                                            onChange: (value) => setRefugeeName(value)
+                                            onChange: (e) => setRefugeeName(e.target.value)
                                         }}
                                     />
                                     <div className="">
@@ -284,6 +290,7 @@ export default function EvacuationPage() {
                     </div>
                     <NormalTable
                         lazy
+                        id={"evacuation-list"}
                         totalRecords={totalCount}
                         loading={tableLoading}
                         size={"small"}
@@ -297,7 +304,6 @@ export default function EvacuationPage() {
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}
                         onPageHandler={(e) => onPaginationChange(e)}
-
                     />
                 </div>
             </div>

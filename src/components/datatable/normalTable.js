@@ -89,6 +89,7 @@ export default function NormalTable(props) {
               ...columnStyle,
               textAlign: col.textAlign && col.textAlign,
               fontWeight: col.fontWeight && col.fontWeight,
+              display: col.display
             }}
             body={col.field === customActionsField ? col.body : col.body}
           />

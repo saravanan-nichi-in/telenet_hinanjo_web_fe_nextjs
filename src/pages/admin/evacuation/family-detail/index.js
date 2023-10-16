@@ -30,7 +30,7 @@ export default function EvacueeFamilyDetail() {
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
         { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
-        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
         { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
         { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },
     ];

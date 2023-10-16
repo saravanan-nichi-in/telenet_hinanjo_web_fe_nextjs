@@ -23,6 +23,10 @@
     width: 150px;
 }
 
+#evacuation-list .p-dropdown-label.p-inputtext {
+    padding: 0.75rem 0.75rem;
+}
+
 @media (max-width: 575px){
     .gap-2.mobile-input {
         gap: 2rem !important;
