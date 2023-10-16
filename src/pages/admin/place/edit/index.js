@@ -178,7 +178,6 @@ export default function PlaceUpdatePage() {
   useEffect(() => {
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
-      setLoader(false);
     };
     fetchData();
   }, [locale]);
@@ -222,7 +221,11 @@ export default function PlaceUpdatePage() {
   };
 
   function fetchData(response) {
+  
+    setLoader(true)
     const model = response.data.model;
+    let openingDate = model.opening_date_time?new Date(model.opening_date_time):"";
+    let closingDate = model.closing_date_time?new Date(model.closing_date_time):""
     initialValues.name = model.name || "";
     initialValues.refugee_name = model.refugee_name || "";
     initialValues.name_en = model.name_en || "";
@@ -252,21 +255,15 @@ export default function PlaceUpdatePage() {
     initialValues.longitude = model?.map?.longitude || "";
     initialValues.latitude = model?.map?.latitude || "";
     initialValues.altitude = model.altitude || "";
-    initialValues.opening_date = model.opening_date_time || "";
-    initialValues.opening_time = model.opening_date_time
-      ? model.opening_date_time.split("T")[1].slice(0, -1)
-      : "";
-    initialValues.closing_date = model.closing_date_time || "";
-    initialValues.closing_time = model.closing_date_time
-      ? model.closing_date_time.split("T")[1].slice(0, -1)
-      : "";
+    initialValues.opening_date = openingDate;
+    initialValues.closing_date = closingDate;
     initialValues.public_availability = model.public_availability ===1;
     initialValues.active_flg = model.active_flg === 1;
     initialValues.remarks = model.remarks || "";
+    setLoader(false);
     setApiResponse(model);
     setCurrentlatitude(parseFloat(model?.map?.latitude));
     setCurrentlongitude(parseFloat(model?.map?.longitude));
-    setLoader(false);
   }
 
   // map search
@@ -343,7 +340,9 @@ export default function PlaceUpdatePage() {
                             text: translate(localeJson, "ok"),
                             severity: "danger",
                             onClick: ()=> {
+                                setLoader(true)
                                 deletePlace(id,deleteSelectedPlace)
+                                setLoader(false)
                             }
                             
                         },
@@ -1206,9 +1205,11 @@ export default function PlaceUpdatePage() {
                           <div className="lg:flex mb-5">
                             <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
                               <DateCalendarFloatLabel
+                               date={values.opening_date}
                                 dateFloatLabelProps={{
                                   name: "opening_date",
                                   dateClass: "w-full",
+                                  date:initialValues.opening_date,
                                   onChange: (evt) => {
                                     setFieldValue(
                                       "opening_date",
@@ -1237,12 +1238,12 @@ export default function PlaceUpdatePage() {
                             </div>
                             <div className="lg:col-5 lg:pr-0">
                               <TimeCalendarFloatLabel
+                               date={values.opening_date}
                                 timeFloatLabelProps={{
                                   name: "opening_time",
                                   timeClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-                                  // text: "Opening Time" // Add a label text specific to time
                                 }}
                                 parentClass={`${
                                   errors.opening_time &&
@@ -1262,6 +1263,7 @@ export default function PlaceUpdatePage() {
                           <div className="lg:flex mb-5">
                             <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
                               <DateCalendarFloatLabel
+                                date = {values.closing_date}
                                 dateFloatLabelProps={{
                                   name: "closing_date",
                                   dateClass: "w-full",
@@ -1272,13 +1274,11 @@ export default function PlaceUpdatePage() {
                                     );
                                   },
                                   onBlur: handleBlur,
-                                  // minDate:values.opening_date,
                                   text: translate(
                                     localeJson,
                                     "closing_date_time"
                                   ), // Add a label text specific to date
                                 }}
-                                date={values.closing_date}
                                 parentClass={`${
                                   errors.closing_date &&
                                   touched.closing_date &&
@@ -1295,12 +1295,12 @@ export default function PlaceUpdatePage() {
                             </div>
                             <div className="lg:col-5 lg:pr-0">
                               <TimeCalendarFloatLabel
+                               date={values.closing_date}
                                 timeFloatLabelProps={{
                                   name: "closing_time",
                                   timeClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-                                  // text: "Opening Time" // Add a label text specific to time
                                 }}
                                 parentClass={`${
                                   errors.closing_time &&

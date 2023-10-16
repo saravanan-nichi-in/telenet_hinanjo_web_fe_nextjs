@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
@@ -27,6 +27,10 @@ const DateCalendarFloatLabel = (props) => {
         ...restProps
     } = dateFloatLabelProps;
     const [date, setDate] = useState(props.date);
+
+    useEffect(()=> {
+     setDate(props.date)
+    },[props.date])
 
     addLocale('en', {
         firstDayOfWeek: 0,

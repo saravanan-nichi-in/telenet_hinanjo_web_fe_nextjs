@@ -28,7 +28,7 @@ import {
 import { PlaceServices } from "@/services";
 
 export default function PlaceCreatePage() {
-  const { localeJson } = useContext(LayoutContext);
+  const { localeJson , setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
@@ -253,7 +253,9 @@ export default function PlaceCreatePage() {
         onSubmit={(values, error) => {
           values.public_availability = values.public_availability ? "1" : "0";
           values.active_flg = values.active_flg ? "1" : "0"
+          setLoader(true)
           create(values, createPlace);
+          setLoader(false)
         }}
       >
         {({
