@@ -162,7 +162,12 @@
           "header_stockpile_image" : "画像",
           "header_action":"削除"
         }
-      }
+      },
+      "Place_Delete_Content_1":"一度削除したデータは、元に戻せません。",
+      "Place_Delete_Content_2": "削除してもよろしいでしょうか？",
+      "register_place":"避難所の新規登録",
+      "edit_place":"避難所の編集",
+      "details_place":"避難所の詳細"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

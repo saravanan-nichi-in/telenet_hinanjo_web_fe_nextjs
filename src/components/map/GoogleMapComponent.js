@@ -9,7 +9,7 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
     };
     
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-    const [center, setCenter] = useState(initialPosition);
+    const [center, setCenter] = useState();
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
@@ -20,8 +20,13 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
         maxZoom: 4
     };
 
+    useEffect(()=> {
+        setCenter(initialPosition)
+    },[]);
+
     useEffect(() => {
         setCenter(initialPosition);
+        console.log(initialPosition)
     }, [initialPosition]);
     useEffect(() => {
         setCenter(searchResult);
@@ -52,7 +57,10 @@ const GoogleMapComponent = ({ initialPosition, height, searchResult }) => {
             center={center}
             options={mapOptions} // Add this line to use the mapOptions
         >
+            { center && (
                <Marker position={center} />
+            )
+            }
         </GoogleMap>
         </>
     ) : <></>;

@@ -163,7 +163,12 @@
             "header_stockpile_image": "Image",
             "header_action": "Delete"
         }
-    }
+    },
+    "Place_Delete_Content_1": "Once deleted, the data cannot be recovered.",
+    "Place_Delete_Content_2": "Are you sure you want to delete it?",
+    "register_place":"Place Create",
+    "edit_place":"Place Edit",
+    "details_place":"Place Detail"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
