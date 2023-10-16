@@ -14,7 +14,7 @@ import { historyPageCities } from '@/utils/constant';
 
 export default function AdminStockPileMaster() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
 
@@ -66,13 +66,7 @@ export default function AdminStockPileMaster() {
             body: (rowData) => (
                 <>
                     <Button parentStyle={{ display: "inline" }} buttonProps={{
-                        text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => openDeleteDialog(rowData.product_id)
-                    }} />
-                    <Button parentStyle={{ display: "inline" }} buttonProps={{
-                        text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                        text: translate(localeJson, 'edit'), buttonClass: "text-primary",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
                         onClick: () => {
@@ -80,6 +74,14 @@ export default function AdminStockPileMaster() {
                             setCurrentEditObj(rowData)
                             setEmailSettingsOpen(true)
                         },
+                    }} />
+                    <Button parentStyle={{ display: "inline" }} buttonProps={{
+                        text: translate(localeJson, 'delete'), 
+                        buttonClass: "text-primary ml-2",
+                        bg: "bg-red-600 text-white",
+                        severity: "danger",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
+                        onClick: () => openDeleteDialog(rowData.product_id)
                     }} />
                 </>
             ),
@@ -93,16 +95,26 @@ export default function AdminStockPileMaster() {
 
     const openDeleteDialog = (id) => {
         setDeleteId(id);
-        setDeleteStaffOpen(true)
+        setDeleteOpen(true);
+        hideOverFlow();
     }
 
-    const onStaffDeleteClose = (action = "close") => {
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
+
+    const onDeleteClose = (action = "close") => {
         if (action == "confirm") {
             StockpileService.delete(deleteId, (resData) => {
                 onGetMaterialListOnMounting()
             });
         }
-        setDeleteStaffOpen(!deleteStaffOpen);
+        setDeleteOpen(false);
+        showOverFlow();
     };
 
     /**
@@ -141,34 +153,6 @@ export default function AdminStockPileMaster() {
     }
 
     //Listing start
-
-    /**
- * Action column for dashboard list
- * @param {*} obj 
- * @returns 
- */
-    const action = (obj) => {
-        return (<>
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => openDeleteDialog(obj.product_id)
-            }} />
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => {
-                    setRegisterModalAction("edit")
-                    setCurrentEditObj(obj)
-                    setEmailSettingsOpen(true)
-                },
-            }} />
-        </>
-        );
-    };
-
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -260,8 +244,8 @@ export default function AdminStockPileMaster() {
     return (
         <>
             <AdminManagementDeleteModal
-                open={deleteStaffOpen}
-                close={onStaffDeleteClose}
+                open={deleteOpen}
+                close={onDeleteClose}
                 refreshList={onGetMaterialListOnMounting}
             />
             <StockpileSummaryImageModal
@@ -290,7 +274,7 @@ export default function AdminStockPileMaster() {
                 <div className="col-12">
                     <div className='card'>
                         <section className='col-12'>
-                            <h5 className='page_header'>{translate(localeJson, 'stockpile_management_header')}</h5>
+                            <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
                             <DividerComponent />
                             <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>

@@ -31,21 +31,24 @@ export default function AdminMaterialPage() {
      */
     const action = (obj) => {
         return (<>
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => openDeleteDialog(obj.id)
-            }} />
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+        <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'edit'), buttonClass: "text-primary ",
                 bg: "bg-white",
                 hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => {
                     setRegisterModalAction("edit")
                     setCurrentEditObj(obj)
                     setEmailSettingsOpen(true)
+                    hideOverFlow();
                 },
+            }} />
+            <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'delete'), 
+                buttonClass: "text-primary ml-2",
+                bg: "bg-red-600 text-white",
+                severity: "danger",
+                hoverBg: "hover:bg-red-500 hover:text-white",
+                onClick: () => openDeleteDialog(obj.id)
             }} />
         </>
         );
@@ -116,7 +119,8 @@ export default function AdminMaterialPage() {
 
     const openDeleteDialog = (id) => {
         setDeleteId(id);
-        setDeleteStaffOpen(true)
+        setDeleteStaffOpen(true);
+        hideOverFlow();
     }
 
     const onStaffDeleteClose = (action = "close") => {
@@ -126,14 +130,23 @@ export default function AdminMaterialPage() {
             });
         }
         setDeleteStaffOpen(!deleteStaffOpen);
+        showOverFlow();
     };
 
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
 
     /**
     * Email setting modal close
    */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        showOverFlow();
     };
 
     /**
@@ -142,16 +155,19 @@ export default function AdminMaterialPage() {
      */
     const onRegister = (values) => {
         setEmailSettingsOpen(false);
+        hideOverFlow();
     };
 
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
+        showOverFlow();
     };
 
     const onRegisterImport = (values) => {
         values.file && setImportPlaceOpen(false);
+        hideOverFlow();
     };
 
     const importFileApi = (file) => {
@@ -212,7 +228,7 @@ export default function AdminMaterialPage() {
                 <div className="col-12">
                     <div className='card'>
                         <section className='col-12'>
-                            <h5 className='page_header'>{translate(localeJson, 'material')}</h5>
+                            <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
                             <DividerComponent />
                             <div className="col-12">
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
@@ -222,7 +238,10 @@ export default function AdminMaterialPage() {
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'import'),
                                         severity: "primary",
-                                        onClick: () => setImportPlaceOpen(true),
+                                        onClick: () => {
+                                            setImportPlaceOpen(true);
+                                            hideOverFlow();
+                                        },
                                     }} parentClass={"mr-1 mt-1"} />
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -249,7 +268,8 @@ export default function AdminMaterialPage() {
                                         onClick: () => {
                                             setRegisterModalAction("create")
                                             setCurrentEditObj({ name: "", unit: "" })
-                                            setEmailSettingsOpen(true)
+                                            setEmailSettingsOpen(true);
+                                            hideOverFlow();
                                         },
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
