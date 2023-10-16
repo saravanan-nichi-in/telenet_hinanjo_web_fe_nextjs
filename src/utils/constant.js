@@ -532,7 +532,7 @@ const evacuationCenterCrowdingRateOptions = {
     scales: {
         x: {
             min: 0,
-            max: 300,
+            max: 500,
             stacked: true,
             ticks: {
                 callback: function (val) {
