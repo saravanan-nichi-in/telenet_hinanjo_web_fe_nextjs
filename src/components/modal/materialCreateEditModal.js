@@ -9,7 +9,7 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
 import { ValidationError } from "../error";
-import { InputIcon } from "../input";
+import { InputFloatLabel, InputIcon } from "../input";
 import { MaterialService } from "@/services/material.service";
 
 export default function MaterialCreateEditModal(props) {
@@ -106,32 +106,28 @@ export default function MaterialCreateEditModal(props) {
                             <div className={`modal-content`}>
                                 <div>
                                 <form onSubmit={handleSubmit}>
-                                                <div className="pt-3">
-                                                    <div className='pb-1'>
-                                                        <NormalLabel spanClass={"p-error"}
-                                                            spanText={"*"}
-                                                            text={translate(localeJson, 'material_name')} />
-                                                    </div>
-                                                    <InputIcon inputIconProps={{
+                                                <div className="mt-5">
+                                                    <InputFloatLabel inputFloatLabelProps={{
                                                         name: "name",
+                                                        spanText: "*",
                                                         value: values.name,
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
+                                                        text : translate(localeJson, 'material_name'),
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                                     }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.name && touched.name && errors.name} />
                                                 </div>
-                                                <div className='pt-3'>
-                                                    <div className='pb-1'>
-                                                        <NormalLabel
-                                                            text={translate(localeJson, 'unit')} />
-                                                    </div>
-                                                    <InputIcon inputIconProps={{
+                                                <div className='mt-5 mb-5'>
+                                                    <InputFloatLabel inputFloatLabelProps={{
                                                         name: 'unit',
                                                         value: values.unit,
                                                         inputClass: "create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
+                                                        text: translate(localeJson, 'unit'),
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                                     }} parentClass={`${errors.unit && touched.unit && 'p-invalid pb-1'}`}/>
                                                     <ValidationError errorBlock={errors.unit && touched.unit && errors.unit} />
                                                 </div>
