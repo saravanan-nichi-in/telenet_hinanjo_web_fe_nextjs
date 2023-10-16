@@ -68,7 +68,7 @@ export default function PlaceCreatePage() {
           translate(localeJson, "is_required")
       ),
     prefecture_id: Yup.string().required(
-      translate(localeJson, "prefecture_place") +
+      translate(localeJson, "prefecture_places") +
         translate(localeJson, "is_required")
     ),
     address: Yup.string()
@@ -147,6 +147,24 @@ export default function PlaceCreatePage() {
       translate(localeJson, "default_address_en") +
         translate(localeJson, "max_length_255")
     ),
+    opening_date: Yup.date().nullable(),
+    closing_date: Yup.date()
+      .when('opening_date', (opening_date, schema) => {
+        if (opening_date && opening_date != "" && opening_date != undefined) {
+          console.log(opening_date)
+          return schema
+            .default(() => new Date())
+            .min(opening_date,translate(localeJson,"closing_date"),)
+            .test({
+              name: 'greaterThan',
+              message: translate(localeJson,"closing_date"),
+              test: function(closing_date) {
+                const opening_date = this.resolve(Yup.ref('opening_date'));
+                return opening_date < closing_date;
+              },
+            });
+        }
+      }).nullable(),
   });
 
   /* Services */
@@ -192,11 +210,11 @@ export default function PlaceCreatePage() {
     longitude: "",
     latitude: "",
     altitude: "",
-    opening_date: "",
-    opening_time: "",
+    opening_date:"",
+    opening_time:"",
     closing_date: "",
     closing_time: "",
-    public_availability: "",
+    public_availability: false,
     active_flg: false,
     remarks: "",
   };
@@ -235,6 +253,7 @@ export default function PlaceCreatePage() {
         initialValues={initialValues}
         onSubmit={(values, error) => {
           values.public_availability = values.public_availability ? "1" : "0";
+          values.active_flg = values.active_flg ? "1" : "0"
           create(values, createPlace);
         }}
       >
@@ -260,7 +279,7 @@ export default function PlaceCreatePage() {
                   <DividerComponent />
                   <form onSubmit={handleSubmit}>
                     <div className="col-12 lg:flex p-0">
-                      <div className="col-12 lg:col-7 p-0">
+                      <div className="col-12 lg:col-6 p-0">
                         <div>
                           <div className="mb-5 mt-3">
                             <InputFloatLabel
@@ -1084,7 +1103,9 @@ export default function PlaceCreatePage() {
                                 dateFloatLabelProps={{
                                   name: "opening_date",
                                   dateClass: "w-full",
-                                  onChange: handleChange,
+                                  onChange: (evt)=> {
+                                    setFieldValue("opening_date",evt.target.value)
+                                  },
                                   onBlur: handleBlur,
                                   text: translate(
                                     localeJson,
@@ -1135,13 +1156,18 @@ export default function PlaceCreatePage() {
                                 dateFloatLabelProps={{
                                   name: "closing_date",
                                   dateClass: "w-full",
-                                  onChange: handleChange,
+                                  onChange: (evt)=> {
+                                    console.log(evt.target.value)
+                                    setFieldValue("closing_date",evt.target.value)
+                                  },
                                   onBlur: handleBlur,
+                                  // minDate:values.opening_date,
                                   text: translate(
                                     localeJson,
                                     "closing_date_time"
                                   ), // Add a label text specific to date
                                 }}
+                                date={values.closing_date}
                                 parentClass={`${
                                   errors.closing_date &&
                                   touched.closing_date &&
@@ -1263,7 +1289,7 @@ export default function PlaceCreatePage() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-12 lg:col-5 p-0 lg:pl-5 mt-3">
+                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-3">
                         <GoogleMapComponent
                           height={"450px"}
                           search={true}

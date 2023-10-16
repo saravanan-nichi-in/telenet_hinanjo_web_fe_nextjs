@@ -206,7 +206,8 @@
       "create_admin": "新規登録",
       "create_staff": "新規登録",
       "download": "ダウンロード",
-      "create_special_care":"新規登録"
+      "create_special_care":"新規登録",
+      "create_place":"新規登録"
     },
     "footer": {},
     "form": {

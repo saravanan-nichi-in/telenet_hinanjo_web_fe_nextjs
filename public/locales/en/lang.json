@@ -207,7 +207,8 @@
       "create_admin": "Create Admin",
       "create_staff": "Create Staff",
       "download": "Download",
-      "create_special_care":"Create Special Care"
+      "create_special_care":"Create Special Care",
+      "create_place":"Create Place"
     },
     "footer": {},
     "form": {

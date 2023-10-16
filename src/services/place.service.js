@@ -120,16 +120,28 @@ function _create(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _update(payload, callBackFun) {
+  let place_id=payload.place_id
   axios
-    .put("/admin/place/{place}", payload)
+    .put(`/admin/place/${place_id}`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun();
       }
     })
     .catch((error) => {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      callBackFun()
+      if (error.response && error.response.status === 422) {
+        const errorMessages = Object.values(error.response.data.message);
+        errorMessages.forEach((messages) => {
+          messages.forEach((msg) => {
+            toast.error(msg, {
+              position: "top-right",
+            });
+          });
+        });
+      } else {
+        console.error(error);
+      }
     });
 }
 
