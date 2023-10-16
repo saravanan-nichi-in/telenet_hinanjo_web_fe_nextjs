@@ -161,7 +161,8 @@
             "header_category": "Category",
             "header_shelf_life": "Shelf Life (Days)",
             "header_stockpile_image": "Image",
-            "header_action": "Delete"
+            "header_action": "Delete",
+            "sno":"S No"
         }
     },
     "Place_Delete_Content_1": "Once deleted, the data cannot be recovered.",
