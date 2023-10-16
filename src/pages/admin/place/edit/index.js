@@ -159,7 +159,6 @@ export default function PlaceUpdatePage() {
     closing_date: Yup.date()
       .when('opening_date', (opening_date, schema) => {
         if (opening_date && opening_date != "" && opening_date != undefined) {
-          console.log(opening_date)
           return schema
             .default(() => new Date())
             .min(opening_date,translate(localeJson,"closing_date"),)
@@ -287,7 +286,6 @@ export default function PlaceUpdatePage() {
 
     setApiResponse(model);
     setLoader(false);
-    console.log(model);
   }
 
   // map search
@@ -323,7 +321,6 @@ export default function PlaceUpdatePage() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
-            console.log(values)
           values.public_availability = values.public_availability ? "1" : "0";
           update(values, updatePlace);
         }}
@@ -1231,7 +1228,6 @@ export default function PlaceUpdatePage() {
                                   name: "closing_date",
                                   dateClass: "w-full",
                                   onChange: (evt) => {
-                                    console.log(evt.target.value);
                                     setFieldValue(
                                       "closing_date",
                                       evt.target.value
