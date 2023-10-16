@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getValueByKeyRecursively as translate,getGeneralDateTimeDisplayFormat } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
 import {
@@ -28,7 +28,7 @@ import {
 import { PlaceServices } from "@/services";
 
 export default function PlaceCreatePage() {
-  const { localeJson } = useContext(LayoutContext);
+  const { localeJson , setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
@@ -209,6 +209,8 @@ export default function PlaceCreatePage() {
     longitude: "",
     latitude: "",
     altitude: "",
+    opening_date_time:"",
+    closing_date_time:"",
     opening_date:"",
     opening_time:"",
     closing_date: "",
@@ -251,9 +253,42 @@ export default function PlaceCreatePage() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
-          values.public_availability = values.public_availability ? "1" : "0";
-          values.active_flg = values.active_flg ? "1" : "0"
+          const openingDate = new Date(values.opening_date);
+          const closingDate = new Date(values.closing_date);
+
+          const sourceDate = new Date(values.opening_time);
+          if (!isNaN(sourceDate)) {
+            const minutes = sourceDate.getMinutes();
+            const hours = sourceDate.getHours();
+            const openingDateMinute = openingDate.getMinutes();
+            const openingDateHours = openingDate.getHours();
+            if (openingDateMinute == minutes && openingDateHours == hours) {
+              openingDate.setMinutes(minutes);
+              openingDate.setHours(hours);
+            }
+          }
+          const sourceDate2 = new Date(values.closing_time);
+          if (!isNaN(sourceDate2)) {
+            alert(sourceDate2.getMinutes())
+            const ClosingMinutes = sourceDate2.getMinutes();
+            const ClosingHours = sourceDate2.getHours();
+            const closingDateMinute = openingDate.getMinutes();
+            const closingDateHours = openingDate.getHours();
+            if (
+              closingDateMinute != ClosingMinutes &&
+              closingDateHours != ClosingHours
+            ) {
+              closingDate.setMinutes(ClosingMinutes);
+              closingDate.setHours(ClosingHours);
+            }
+          }
+        values.public_availability = values.public_availability ? "1" : "0";
+        values.active_flg = values.active_flg ? "1" : "0";
+        values.opening_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(openingDate):""
+        values.closing_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(closingDate):""
+          setLoader(true)
           create(values, createPlace);
+          setLoader(false)
         }}
       >
         {({
