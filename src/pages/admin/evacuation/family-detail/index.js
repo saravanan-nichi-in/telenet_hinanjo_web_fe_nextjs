@@ -47,8 +47,6 @@ export default function EvacueeFamilyDetail() {
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
-        { field: "current_location", header: translate(localeJson, 'current_location'), minWidth: "9rem" },
-
     ];
 
     const townAssociateColumn = [
@@ -153,7 +151,6 @@ export default function EvacueeFamilyDetail() {
                         special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
                         connecting_code: person.connecting_code,
                         remarks: person.note,
-                        current_location: '',
                     },
                     ]
                 };
