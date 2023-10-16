@@ -40,6 +40,11 @@ export default function StaffManagementEditPage() {
   }, [locale]);
 
 
+  useEffect(()=>{
+    setLangitude(longitude)
+    setLatitude(latitude)
+  },[longitude,latitude])
+
   /**
    * Get place list on mounting
    */
@@ -51,8 +56,8 @@ export default function StaffManagementEditPage() {
   function fetchData(response) {
     setLoader(true)
     const model = response.data.model;
-    setLangitude(parseInt(model.map.longitude))
-    setLatitude(parseInt(model.map.latitude))
+    setLangitude(parseFloat(model.map.longitude))
+    setLatitude(parseFloat(model.map.latitude))
     setPlaceName(model.name);
     setZipCode(model.zip_code);
     setAddress(model.address);
@@ -82,7 +87,7 @@ export default function StaffManagementEditPage() {
           <section className="col-12">
             {/* Header */}
             <h5 className="page_header">
-              {translate(localeJson, "place_details")}
+              {translate(localeJson, "details_place")}
             </h5>
             <DividerComponent />
             <div>

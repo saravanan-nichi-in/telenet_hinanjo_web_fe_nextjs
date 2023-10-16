@@ -20,6 +20,7 @@ import {
   InputFloatLabel,
   InputNumberFloatLabel,
   SelectFloatLabel,
+  CommonDialog
 } from "@/components";
 import {
   DateCalendarFloatLabel,
@@ -32,11 +33,11 @@ export default function PlaceUpdatePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const [apiResponse, setApiResponse] = useState({});
-  //   const [initialValues,setInitialValues] = useState({})
   const { id } = router.query;
+  const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
 
   /* Services */
-  const { update, getAddressByZipCode, details } = PlaceServices;
+  const { deletePlace, update, getAddressByZipCode, details } = PlaceServices;
 
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
@@ -175,25 +176,6 @@ export default function PlaceUpdatePage() {
   });
 
   useEffect(() => {
-    getLocation();
-  }, []);
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentlatitude(latitude);
-          setCurrentlongitude(longitude);
-        },
-        (error) => {
-          console.log(error.message);
-        }
-      );
-    } else {
-      console.log("Geolocation is not supported by your browser.");
-    }
-  };
-  useEffect(() => {
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
       setLoader(false);
@@ -240,9 +222,7 @@ export default function PlaceUpdatePage() {
   };
 
   function fetchData(response) {
-    setLoader(true);
     const model = response.data.model;
-
     initialValues.name = model.name || "";
     initialValues.refugee_name = model.refugee_name || "";
     initialValues.name_en = model.name_en || "";
@@ -283,8 +263,9 @@ export default function PlaceUpdatePage() {
     initialValues.public_availability = model.public_availability ===1;
     initialValues.active_flg = model.active_flg === 1;
     initialValues.remarks = model.remarks || "";
-
     setApiResponse(model);
+    setCurrentlatitude(parseFloat(model?.map?.latitude));
+    setCurrentlongitude(parseFloat(model?.map?.longitude));
     setLoader(false);
   }
 
@@ -315,13 +296,71 @@ export default function PlaceUpdatePage() {
     }
   };
 
+  const deleteContent = (
+    <div className="text-center">
+      <div className="mb-3">
+        {translate(localeJson, "Place_Delete_Content_1")}
+      </div>
+      <div>
+        {translate(localeJson, "Place_Delete_Content_2")}
+      </div>
+    </div>
+  );
+
+
+  const deleteSelectedPlace = (res) => {
+   if(res) {
+    router.push('/admin/place')
+   }
+  }
   return (
+
     <>
+          <CommonDialog
+                open={placeEditDialogVisible}
+                dialogBodyClassName="p-3"
+                header={translate(localeJson, 'confirmation')}
+                content={deleteContent}
+                position={"center"}
+                footerParentClassName={"text-center"}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "text-600 w-8rem",
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            text: translate(localeJson, "cancel"),
+                            onClick: () => {
+                                setPlaceEditDialogVisible(false);
+                            },
+                        },
+                        parentClass: "inline"
+                    },
+                    {
+                        buttonProps: {
+                            buttonClass: "w-8rem",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            text: translate(localeJson, "ok"),
+                            severity: "danger",
+                            onClick: ()=> {
+                                deletePlace(id,deleteSelectedPlace)
+                            }
+                            
+                        },
+                        parentClass: "inline"
+                    },
+
+                ]}
+                close={() => {
+                    setPlaceEditDialogVisible(false);
+                }}
+            />
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
           values.public_availability = values.public_availability ? "1" : "0";
+          values.active_flg = values.active_flg ? "1" : "0";
           update(values, updatePlace);
         }}
       >
@@ -339,17 +378,16 @@ export default function PlaceUpdatePage() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <section className="col-12">
                   {/* Header */}
-                  <h5 className="page_header">
-                    {translate(localeJson, "admin_information_registration")}
+                  <h5 className="page-header1">
+                    {translate(localeJson, "edit_place")}
                   </h5>
-                  <DividerComponent />
+                  <hr />
                   <form onSubmit={handleSubmit}>
                     <div className="col-12 lg:flex p-0">
                       <div className="col-12 lg:col-6 p-0">
                         <div>
-                          <div className="mb-5 mt-3">
+                          <div className="mb-5 mt-5">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "name", // Set id to 'evacuationLocation'
@@ -808,7 +846,7 @@ export default function PlaceUpdatePage() {
                               <div className="lg:col-1 flex align-items-center justify-content-center">
                                 -
                               </div>
-                              <div className="lg:col-5 p-0 mb-5 lg:mb-0">
+                              <div className="lg:col-5 p-0 mb-5 lg:mb-0 mt-3 lg:mt-0">
                                 <InputFloatLabel
                                   inputFloatLabelProps={{
                                     id: "postal_code_default_2",
@@ -1362,7 +1400,7 @@ export default function PlaceUpdatePage() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-3">
+                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-5">
                         <GoogleMapComponent
                           height={"450px"}
                           search={true}
@@ -1372,8 +1410,8 @@ export default function PlaceUpdatePage() {
                           }}
                           searchResult={searchResult}
                         />
-                        <div className="mt-3 flex">
-                          <div className="col-9 lg:pl-0">
+                        <div className="mt-5  lg:flex">
+                          <div className="lg:col-9 lg:pl-0 mb-5 lg:mb-0">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "searchQuery",
@@ -1391,10 +1429,10 @@ export default function PlaceUpdatePage() {
                               parentClass="custom_input"
                             />
                           </div>
-                          <div className="col-3 lg:pr-0">
+                          <div className="lg:col-3 lg:pr-0">
                             <Button
                               buttonProps={{
-                                buttonClass: "w-12 search-button mobile-input",
+                                buttonClass: "evacuation_button_height lg:search-button  lg:w-full mobile-input",
                                 text: translate(localeJson, "search_text"),
                                 icon: "pi pi-search",
                                 severity: "primary",
@@ -1409,8 +1447,8 @@ export default function PlaceUpdatePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex pt-3 justify-content-around">
-                      <div>
+                    <div className="lg:flex pt-3 justify-content-start">
+                      <div className="flex justify-content-start mb-3 lg:mb-0">
                         <Button
                           buttonProps={{
                             buttonClass:
@@ -1425,30 +1463,39 @@ export default function PlaceUpdatePage() {
                               router.push("/admin/place");
                             },
                           }}
-                          parentStyle={{
-                            paddingTop: "10px",
-                            paddingLeft: "10px",
-                          }}
                         />
                       </div>
-                      <div>
+               
+                      <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
                         <Button
                           buttonProps={{
                             buttonClass: "evacuation_button_height",
                             type: "submit",
-                            text: translate(localeJson, "registration"),
+                            text: translate(localeJson, "edit"),
                             rounded: "true",
                             severity: "primary",
                           }}
-                          parentStyle={{
-                            paddingTop: "10px",
-                            paddingLeft: "10px",
+                        />
+                      </div>
+
+                      <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                        <Button
+                          buttonProps={{
+                            buttonClass: "text-600 evacuation_button_height",
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            type:"button",
+                            text: translate(localeJson, "delete"),
+                            rounded: "true",
+                            severity: "primary",
+                            onClick: () => {
+                            setPlaceEditDialogVisible(true);
+                            },
                           }}
                         />
                       </div>
                     </div>
                   </form>
-                </section>
               </div>
             </div>
           </div>

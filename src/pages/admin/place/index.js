@@ -207,9 +207,8 @@ export default function AdminPlacePage() {
       <div className="grid">
         <div className="col-12">
           <div className="card">
-            <section className="col-12">
-              <h5 className="page_header">{translate(localeJson, "places")}</h5>
-              <DividerComponent />
+              <h5 className="page-header1">{translate(localeJson, "places")}</h5>
+              <hr />
               <div>
                 <div
                   className="flex"
@@ -266,7 +265,6 @@ export default function AdminPlacePage() {
                   />
                 </div>
               </div>
-            </section>
           </div>
         </div>
       </div>
