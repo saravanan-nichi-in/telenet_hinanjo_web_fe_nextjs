@@ -35,7 +35,7 @@ export default function AdminSpecialCarePage() {
     }
 
     const columns = [
-        { field: 'ID', header: 'S No',maxWidth:"5rem" },
+        { field: 'ID', header:translate(localeJson,'sno'),maxWidth:"5rem" },
         {
             field: '要配慮者事項', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", body: (rowData) => (
                 <div className='text-link'>
