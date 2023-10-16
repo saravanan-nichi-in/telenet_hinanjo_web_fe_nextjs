@@ -378,12 +378,11 @@ export default function PlaceUpdatePage() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <section className="col-12">
                   {/* Header */}
-                  <h5 className="page_header">
+                  <h5 className="page-header1">
                     {translate(localeJson, "edit_place")}
                   </h5>
-                  <DividerComponent />
+                  <hr />
                   <form onSubmit={handleSubmit}>
                     <div className="col-12 lg:flex p-0">
                       <div className="col-12 lg:col-6 p-0">
@@ -1496,7 +1495,6 @@ export default function PlaceUpdatePage() {
                       </div>
                     </div>
                   </form>
-                </section>
               </div>
             </div>
           </div>
