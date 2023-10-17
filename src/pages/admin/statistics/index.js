@@ -259,13 +259,13 @@ export default function EvacueesStatistics() {
             if (data == evacueesShelterOptions[0].value) {
                 datasets_first.map((obj, i) => {
                     switch (obj.label) {
-                        case '男':
+                        case translate(localeJson, 'male'):
                             obj['data'] = count_male_array;
                             break;
-                        case '女':
+                        case translate(localeJson, 'female'):
                             obj['data'] = count_female_array;
                             break;
-                        case '答えくない':
+                        case translate(localeJson, 'others_text'):
                             obj['data'] = count_others_array;
                             break;
                         default:
