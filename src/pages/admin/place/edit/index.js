@@ -680,8 +680,9 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
                           </div>
-                          <div className="lg:flex">
-                            <div className="lg:col-6 lg:pl-0 mb-5 lg:mb-0">
+                        </div>
+                        <div className="lg:flex mb-5">
+                            <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-5 lg:mb-0">
                               <SelectFloatLabel
                                 selectFloatLabelProps={{
                                   name: "prefecture_id",
@@ -713,7 +714,7 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
 
-                            <div className="lg:col-6 lg:pr-0">
+                            <div className="lg:col-6 pt-0 pb-0 lg:pr-0">
                               <InputFloatLabel
                                 inputFloatLabelProps={{
                                   id: "address",
@@ -741,10 +742,9 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
                           </div>
-                        </div>
 
                         <div className="lg:flex mb-5">
-                          <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0">
+                          <div className="lg:col-6 mb-5 pt-0 pb-0 lg:mb-0 lg:pl-0">
                             <SelectFloatLabel
                               selectFloatLabelProps={{
                                 name: "prefecture_en_id",
@@ -967,8 +967,9 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
                           </div>
-                          <div className="lg:flex">
-                            <div className="lg:col-6 lg:pl-0 mb-5 lg:mb-0">
+                        </div>
+                        <div className="lg:flex mb-5">
+                            <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-5 lg:mb-0">
                               <SelectFloatLabel
                                 selectFloatLabelProps={{
                                   name: "prefecture_id_default",
@@ -1000,7 +1001,7 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
 
-                            <div className="lg:col-6 lg:pr-0">
+                            <div className="lg:col-6 pt-0 pb-0 lg:pr-0">
                               <InputFloatLabel
                                 inputFloatLabelProps={{
                                   id: "address_default",
@@ -1031,9 +1032,8 @@ export default function PlaceUpdatePage() {
                               />
                             </div>
                           </div>
-                        </div>
                         <div className="lg:flex mb-5">
-                          <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0">
+                          <div className="lg:col-6 pt-0 pb-0 mb-5 lg:mb-0 lg:pl-0">
                             <SelectFloatLabel
                               selectFloatLabelProps={{
                                 name: "prefecture_default_en_id",
@@ -1062,7 +1062,7 @@ export default function PlaceUpdatePage() {
                               }
                             />
                           </div>
-                          <div className="lg:col-6 lg:pr-0">
+                          <div className="lg:col-6 pt-0 pb-0 lg:pr-0">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "address_default_en",
@@ -1144,7 +1144,7 @@ export default function PlaceUpdatePage() {
                         </div>
 
                         <div className="lg:flex mb-5">
-                          <div className="lg:col-6 mb-5 lg:mb-0 lg:pl-0 ">
+                          <div className="lg:col-6 pt-0 pb-0 mb-5 lg:mb-0 lg:pl-0 ">
                             <InputNumberFloatLabel
                               inputNumberFloatProps={{
                                 id: "latitude",
@@ -1175,7 +1175,7 @@ export default function PlaceUpdatePage() {
                               }
                             />
                           </div>
-                          <div className="lg:col-6 lg:pr-0">
+                          <div className="lg:col-6 pt-0 pb-0 lg:pr-0">
                             <InputNumberFloatLabel
                               inputNumberFloatProps={{
                                 id: "longitude",
@@ -1241,7 +1241,7 @@ export default function PlaceUpdatePage() {
                         </div>
 
                         <div className="lg:flex mb-5">
-                          <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
+                          <div className="lg:col-7 pt-0 pb-0 mb-5 lg:mb-0 lg:pl-0">
                             <DateCalendarFloatLabel
                               date={values.opening_date}
                               dateFloatLabelProps={{
@@ -1275,7 +1275,7 @@ export default function PlaceUpdatePage() {
                               }
                             />
                           </div>
-                          <div className="lg:col-5 lg:pr-0">
+                          <div className="lg:col-5 pt-0 pb-0 lg:pr-0">
                             <TimeCalendarFloatLabel
                               date={values.opening_date}
                               timeFloatLabelProps={{
@@ -1302,7 +1302,7 @@ export default function PlaceUpdatePage() {
                           </div>
                         </div>
                         <div className="lg:flex mb-5">
-                          <div className="lg:col-7 mb-5 lg:mb-0 lg:pl-0">
+                          <div className="lg:col-7 pt-0 pb-0 mb-5 lg:mb-0 lg:pl-0">
                             <DateCalendarFloatLabel
                               date={values.closing_date}
                               dateFloatLabelProps={{
@@ -1335,7 +1335,7 @@ export default function PlaceUpdatePage() {
                               }
                             />
                           </div>
-                          <div className="lg:col-5 lg:pr-0">
+                          <div className="lg:col-5 pt-0 pb-0 lg:pr-0">
                             <TimeCalendarFloatLabel
                               date={values.closing_date}
                               timeFloatLabelProps={{

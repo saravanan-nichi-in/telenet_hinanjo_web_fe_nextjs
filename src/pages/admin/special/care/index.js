@@ -21,6 +21,7 @@ export default function AdminSpecialCarePage() {
     const [totalCount, setTotalCount] = useState(0);
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
+    const [id,setId] = useState(0)
     const [getPayload, setPayload] = useState({
         filters: {
           start: 0,
@@ -30,13 +31,15 @@ export default function AdminSpecialCarePage() {
         },
         search: "",
       });
-
     const onClickCancelButton = () => {
         console.log("cancel");
         setSpecialCareCreateDialogVisible(false);
     };
-    const onClickOkButton = () => {
+    const onClickOkButton = (res) => {
+        if(res)
+        {
         setSpecialCareCreateDialogVisible(false);
+      }
     };
     const onSpecialCareEditSuccess = (response) => {
         setSpecialCareEditOpen(false);
@@ -68,16 +71,23 @@ export default function AdminSpecialCarePage() {
             textAlign: "center",
             alignHeader: "center",
             minWidth: "5rem",
-            body: (rowData) => (
+            body: (rowData) =>
+            {
+                return (
                 <div>
                     <Button buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-red-600 text-white",
                         hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => setSpecialCareCreateDialogVisible(true)
+                        onClick: () => 
+                        {
+                        setId(rowData.id)
+                        setSpecialCareCreateDialogVisible(true)
+                        }
                     }} />
                 </div>
-            ),
+            )
+            }
         }
     ];
 
@@ -187,7 +197,11 @@ export default function AdminSpecialCarePage() {
                             type: "submit",
                             text: translate(localeJson, 'ok'),
                             severity: "danger",
-                            onClick: () => onClickOkButton(),
+                            onClick: () =>{
+                                setLoader(true)
+                                deleteSpecialCare(id,onClickOkButton)
+                                setLoader(false)
+                            },
                         },
                         parentClass: "inline"
                     }
@@ -208,6 +222,7 @@ export default function AdminSpecialCarePage() {
                 header={translate(localeJson, 'special_care_create')}
                 close={() => setSpecialCareCreateOpen(false)}
                 buttonText={translate(localeJson, 'submit')}
+                submit
                 onSpecialCareEditSuccess={onSpecialCareEditSuccess}
             />
             <AdminManagementImportModal

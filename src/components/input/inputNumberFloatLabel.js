@@ -24,6 +24,7 @@ const InputNumberFloatLabel = (props) => {
         spanText,
         minFractionDigits,
         maxFractionDigits,
+        useGrouping,
         ...restProps
     } = inputNumberFloatProps;
 
@@ -44,6 +45,7 @@ const InputNumberFloatLabel = (props) => {
                 currency={currency} 
                 minFractionDigits={minFractionDigits}
                 maxFractionDigits={maxFractionDigits}
+                useGrouping={false}// disable comma separate for Number
                 {...restProps} />
             <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>
