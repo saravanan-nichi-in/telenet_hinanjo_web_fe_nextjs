@@ -135,7 +135,7 @@ export default function EmailSettings(props) {
                                             </div>
                                             <div className='mt-5 '>
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    inputId: "mailFrequency",
+                                                    id: "mailFrequency",
                                                     inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: transmissionInterval,
                                                     options: intervalFrequency,
@@ -146,7 +146,7 @@ export default function EmailSettings(props) {
                                             </div>
                                             <div className='mt-5'>
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    inputId: "prefecture",
+                                                    id: "prefecture",
                                                     inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     value: outputTargetArea,
                                                     options: prefectureList,

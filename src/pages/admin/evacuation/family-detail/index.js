@@ -244,6 +244,7 @@ export default function EvacueeFamilyDetail() {
                         <h5 className='page-header2'>{translate(localeJson, 'household_list')}</h5>
                     </div>
                     <RowExpansionTable
+                        id={"evacuation-detail-list"}
                         rows={10}
                         paginatorLeft={true}
                         tableLoading={tableLoading}
