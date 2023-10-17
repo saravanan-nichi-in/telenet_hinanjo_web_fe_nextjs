@@ -45,7 +45,6 @@ function AdminDashboard() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetDashboardListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
@@ -126,8 +125,9 @@ function AdminDashboard() {
             setFrozenArray([frozenObj]);
             setList([...preparedList]);
             setTotalCount(response.data.total);
-            setTableLoading(false);
         }
+        setTableLoading(false);
+        setLoader(false);
     };
 
     /**

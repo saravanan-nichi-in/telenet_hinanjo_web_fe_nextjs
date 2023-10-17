@@ -199,7 +199,7 @@ export default function StaffManagementEditPage() {
               </div>
               <div
                 className="flex pt-3 pb-3"
-                style={{ justifyContent: "center", flexWrap: "wrap" }}
+                style={{ justifyContent: "start", flexWrap: "wrap" }}
               >
                 <div>
                   <Button

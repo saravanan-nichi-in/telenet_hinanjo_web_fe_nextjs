@@ -26,7 +26,6 @@ function ShortageSupplies() {
         setTableLoading(true);
         const fetchData = async () => {
             await loadShortageSuppliesList();
-            setLoader(false);
         };
         fetchData();
     }, [locale]);
@@ -92,8 +91,9 @@ function ShortageSupplies() {
             setColumns(additionalColumnsArrayWithOldData);
             setFrozenArray([frozenObj]);
             setList([...preparedList]);
-            setTableLoading(false);
         }
+        setTableLoading(false);
+        setLoader(false);
     }
 
     /**

@@ -74,7 +74,7 @@ export default function EvacueesStatistics() {
             const chart_first_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
@@ -126,7 +126,7 @@ export default function EvacueesStatistics() {
             const chart_second_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         displayColors: false,
@@ -181,7 +181,7 @@ export default function EvacueesStatistics() {
             const chart_third_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
