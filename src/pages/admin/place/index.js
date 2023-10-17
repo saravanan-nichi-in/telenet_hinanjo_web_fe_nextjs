@@ -9,6 +9,7 @@ import {
   DeleteModal,
   DividerComponent,
   NormalTable,
+  CommonDialog
 } from "@/components";
 import { PlaceServices } from "@/services";
 import _ from "lodash";
@@ -19,6 +20,7 @@ export default function AdminPlacePage() {
   const [importPlaceOpen, setImportPlaceOpen] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
+  const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -30,6 +32,7 @@ export default function AdminPlacePage() {
   });
   const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
+  let id;
   const handleRowClick = (rowData) => {
     router.push({
       pathname: `/admin/place/detail`,
@@ -68,10 +71,29 @@ export default function AdminPlacePage() {
         return action(rowData);
       },
     },
+    {
+      field: 'actions',
+      header: translate(localeJson, 'delete'),
+      textAlign: "center",
+      alignHeader: "center",
+      minWidth: "5rem",
+      body: (rowData) =>{ id=rowData.ID;
+         return(
+          <div>
+              <Button buttonProps={{
+                  text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                  bg: "bg-red-600 text-white",
+                  hoverBg: "hover:bg-red-500 hover:text-white",
+                  disabled:rowData.isActive,
+                  onClick: () => setPlaceEditDialogVisible(true)
+              }} />
+          </div>
+      )},
+  }
   ];
 
   /* Services */
-  const { getList, updateStatus, exportData,importData } = PlaceServices;
+  const { getList, updateStatus, exportData,importData,deletePlace } = PlaceServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -114,7 +136,7 @@ export default function AdminPlacePage() {
         evacuation_possible_people: item.total_place,
         phone_number: item.tel,
         active_flg: item.active_flg,
-        isActive: item.active_flg,
+        isActive: item.is_active,
         status: item.is_active? "place-status-cell" : "",
       };
     });
@@ -196,8 +218,64 @@ export default function AdminPlacePage() {
       event.data.field === "status" && event.data.value === "place-status-cell"
     );
 
+    const deleteContent = (
+      <div className="text-center">
+        <div className="mb-3">
+          {translate(localeJson, "Place_Delete_Content_1")}
+        </div>
+        <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
+      </div>
+    );
+
+    const isDeleted =((res)=> {
+      if(res)
+      {
+        setPlaceEditDialogVisible(false);
+        onGetPlaceListOnMounting()
+      }
+
+    })
+
   return (
     <>
+       <CommonDialog
+        open={placeEditDialogVisible}
+        dialogBodyClassName="p-3"
+        header={translate(localeJson, "confirmation")}
+        content={deleteContent}
+        position={"center"}
+        footerParentClassName={"text-center"}
+        footerButtonsArray={[
+          {
+            buttonProps: {
+              buttonClass: "text-600 w-8rem",
+              bg: "bg-white",
+              hoverBg: "hover:surface-500 hover:text-white",
+              text: translate(localeJson, "cancel"),
+              onClick: () => {
+                setPlaceEditDialogVisible(false);
+              },
+            },
+            parentClass: "inline",
+          },
+          {
+            buttonProps: {
+              buttonClass: "w-8rem",
+              text: translate(localeJson, "ok"),
+              severity: "danger",
+              onClick: () => {
+                setLoader(true);
+                deletePlace(id,isDeleted);
+                setLoader(false);
+              },
+            },
+            parentClass: "inline",
+          },
+        ]}
+        close={() => {
+          setPlaceEditDialogVisible(false);
+        }}
+      />
       <AdminManagementImportModal
         open={importPlaceOpen}
         close={onStaffImportClose}

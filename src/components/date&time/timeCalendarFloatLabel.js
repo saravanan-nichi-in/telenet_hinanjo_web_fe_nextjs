@@ -66,7 +66,7 @@ const TimeCalendarFloatLabel = (props) => {
                     }}
                     timeOnly
                     readOnlyInput={readOnlyInput}
-                    showSeconds
+                    showSeconds={false}
                     disabled={disabled}
                     placeholder={placeholder}
                     hourFormat="24"
