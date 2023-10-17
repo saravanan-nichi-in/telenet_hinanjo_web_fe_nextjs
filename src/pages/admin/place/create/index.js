@@ -455,7 +455,7 @@ export default function PlaceCreatePage() {
                                                   );
                                                   setFieldValue(
                                                     "address",
-                                                    address.address2
+                                                    address.address2+(address.address3||"")
                                                   );
                                                 } else {
                                                   setFieldValue(
@@ -538,7 +538,7 @@ export default function PlaceCreatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -737,7 +737,7 @@ export default function PlaceCreatePage() {
                                                   );
                                                   setFieldValue(
                                                     "address_default",
-                                                    address.address2
+                                                    address.address2+(address.address3||"")
                                                   );
                                                 } else {
                                                   setFieldValue(
@@ -822,7 +822,7 @@ export default function PlaceCreatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address_default",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
