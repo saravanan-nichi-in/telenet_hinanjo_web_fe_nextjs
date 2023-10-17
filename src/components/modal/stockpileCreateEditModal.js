@@ -88,6 +88,7 @@ export default function StockpileCreateEditModal(props) {
                             })
                     }
                     close();
+                    resetForm();
                     return false;
                 }}
             >
@@ -99,6 +100,7 @@ export default function StockpileCreateEditModal(props) {
                     handleBlur,
                     setFieldValue,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div>
                         <Dialog
@@ -106,7 +108,10 @@ export default function StockpileCreateEditModal(props) {
                             header={header}
                             visible={open}
                             draggable={false}
-                            onHide={() => close()}
+                            onHide={() => {
+                                close()
+                                resetForm()
+                            }}
                             footer={
                                 <div className="text-center">
                                     <Button buttonProps={{
@@ -114,7 +119,10 @@ export default function StockpileCreateEditModal(props) {
                                         bg: "bg-white",
                                         hoverBg: "hover:surface-500 hover:text-white",
                                         text: translate(localeJson, 'cancel'),
-                                        onClick: () => close(),
+                                        onClick: () => {
+                                            close()
+                                            resetForm()
+                                        },
                                     }} parentClass={"inline"} />
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",
