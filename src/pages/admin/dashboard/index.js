@@ -208,7 +208,7 @@ function AdminDashboard() {
                             frozenValue={_.size(list) > 0 && frozenArray}
                             columns={columns}
                             filterDisplay="menu"
-                            emptyMessage="No data found."
+                            emptyMessage={translate(localeJson, "data_not_found")}
                             paginator={true}
                             first={getListPayload.filters.start}
                             rows={getListPayload.filters.limit}
