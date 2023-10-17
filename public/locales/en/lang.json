@@ -119,7 +119,7 @@
       "gender": "Gender",
       "dob": "DOB",
       "age": "Age",
-      "age_month": "Age Month",
+      "age_month": "Age (Month)",
       "special_care_name": "Special Care Name",
       "connecting_code": "Connecting Code",
       "out_date": "OutDate",

@@ -90,6 +90,26 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
     return formattedJPDateTime;
 }
 
+export const getDefaultTodayDateTimeFormat = (hours, minutes) => {
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    let constructDate = new Date();
+    constructDate.setHours(hours);
+    constructDate.setMinutes(minutes);
+
+    const formattedJPDateTime = new Date(constructDate.getFullYear(),
+        (constructDate.getMonth()).toString().padStart(2, '0'),
+        (constructDate.getDate()).toString().padStart(2, '0'),
+        (constructDate.getHours()).toString().padStart(2, '0'),
+        (constructDate.getMinutes()).toString().padStart(2, '0'));
+    return formattedJPDateTime;
+}
+
 export const getGeneralDateTimeDisplayFormat = (dateTime) => {
     const options = {
         year: "numeric",
