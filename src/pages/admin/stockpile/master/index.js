@@ -155,7 +155,7 @@ export default function AdminStockPileMaster() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 7,
+            limit: 5,
             order_by: "",
             sort_by: ""
         },
