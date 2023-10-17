@@ -6,6 +6,7 @@ import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, get
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
+import { prefectures } from '@/utils/constant';
 
 export default function EvacueeFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -93,6 +94,14 @@ export default function EvacueeFamilyDetail() {
         return answerData;
     }
 
+    const getPrefectureName = (id) => {
+        if (id) {
+            let p_name = prefectures.find((item) => item.value === id);
+            return p_name.name;
+        }
+        return "";
+    }
+
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
@@ -104,7 +113,7 @@ export default function EvacueeFamilyDetail() {
             let basicDetailList = [];
             let basicData = {
                 evacuation_date_time: data.join_date_modified,
-                address: translate(localeJson, 'post_letter') + data.zip_code + data.perfecture_name + data.address,
+                address: translate(localeJson, 'post_letter') + data.zip_code + getPrefectureName(data.prefecture_id) + data.address,
                 representative_number: data.tel,
                 registered_lang_environment: getRegisteredLanguage(data.language_register)
             };

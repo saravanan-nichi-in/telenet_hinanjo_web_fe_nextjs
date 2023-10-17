@@ -80,14 +80,25 @@ export default function AdminHistoryPlacePage() {
      * Get History Place list on mounting
      */
     const onGetHistoryPlaceListOnMounting = () => {
-        getList(getListPayload, onGetHistoryPlaceList);
+        let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit) + 1;
+        let payload = {
+            filters: {
+                start: pageStart,
+                limit: getListPayload.filters.limit,
+                sort_by: "",
+                order_by: "desc",
+            },
+            start_date: getListPayload.start_date,
+            end_date: getListPayload.end_date,
+            place_name: getListPayload.place_name
+        }
+        getList(payload, onGetHistoryPlaceList);
     }
 
     /**
      * Get History Place Dropdown list on mounting
      */
     const onGetHistoryPlaceDropdownListOnMounting = () => {
-        // Get dashboard list
         getPlaceDropdownList({}, onGetHistoryPlaceDropdownList);
     }
 
@@ -96,9 +107,10 @@ export default function AdminHistoryPlacePage() {
     }
 
     const searchListWithCriteria = () => {
+        let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit) + 1;
         let payload = {
             filters: {
-                start: 0,
+                start: pageStart,
                 limit: getListPayload.filters.limit,
                 sort_by: "",
                 order_by: "desc",
@@ -106,9 +118,8 @@ export default function AdminHistoryPlacePage() {
             start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
             end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
             place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
-        }
+        };
         getList(payload, onGetHistoryPlaceList);
-        setGetListPayload(payload);
     }
 
     /**
@@ -169,12 +180,25 @@ export default function AdminHistoryPlacePage() {
         else {
             setHistoryPlaceList([]);
             setEmptyTableMessage(response.message);
+            setTotalCount(0);
             setTableLoading(false);
         }
     }
 
     const downloadPlaceHistoryCSV = () => {
-        exportPlaceHistoryCSVList(getListPayload, exportPlaceHistoryCSV);
+        let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit) + 1;
+        let payload = {
+            filters: {
+                start: pageStart,
+                limit: getListPayload.filters.limit,
+                sort_by: "",
+                order_by: "desc",
+            },
+            start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
+            end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
+            place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
+        };
+        exportPlaceHistoryCSVList(payload, exportPlaceHistoryCSV);
     }
 
     const exportPlaceHistoryCSV = (response) => {
@@ -279,7 +303,10 @@ export default function AdminHistoryPlacePage() {
                     ...prevState.filters,
                     start: newStartValue,
                     limit: newLimitValue
-                }
+                },
+                start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
+                end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
+                place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
             }));
         }
     }
@@ -330,13 +357,13 @@ export default function AdminHistoryPlacePage() {
                                         <DateTimeCalendarFloatLabel
                                             date={getDefaultTodayDateTime}
                                             dateTimeFloatLabelProps={{
-                                            inputId: "settingStartDate",
-                                            selectionMode: "range",
-                                            text: translate(localeJson, "report_date_time"),
-                                            dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                                inputId: "settingStartDate",
+                                                selectionMode: "range",
+                                                text: translate(localeJson, "report_date_time"),
+                                                dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
 
-                                            onChange: (e) => setSelectedDate(e.value)
-                                        }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
+                                                onChange: (e) => setSelectedDate(e.value)
+                                            }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
                                             id: "shelterCity",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",
