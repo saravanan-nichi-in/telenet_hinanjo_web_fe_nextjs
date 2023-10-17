@@ -160,7 +160,7 @@ export default function PlaceUpdatePage() {
         translate(localeJson, "max_length_255")
     ),
     opening_date: Yup.date().nullable(),
-    closing_date: Yup.date()
+    closing_date: Yup.date().nullable()
       .when("opening_date", (opening_date, schema) => {
         if (opening_date && opening_date != "" && opening_date != undefined) {
           return schema
@@ -176,7 +176,6 @@ export default function PlaceUpdatePage() {
             });
         }
       })
-      .nullable(),
   });
 
   useEffect(() => {
@@ -361,8 +360,8 @@ export default function PlaceUpdatePage() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
+          if(values.opening_date ) {
           const openingDate = new Date(values.opening_date);
-          const closingDate = new Date(values.closing_date);
 
           const sourceDate = new Date(values.opening_time);
           if (!isNaN(sourceDate)) {
@@ -375,12 +374,18 @@ export default function PlaceUpdatePage() {
               openingDate.setHours(hours);
             }
           }
+          values.opening_date_time = values.opening_date
+          ? getGeneralDateTimeDisplayFormat(openingDate)
+          : "";
+        }
+        if(values.closing_date) {
+          const closingDate = new Date(values.closing_date);
           const sourceDate2 = new Date(values.closing_time);
           if (!isNaN(sourceDate2)) {
             const ClosingMinutes = sourceDate2.getMinutes();
             const ClosingHours = sourceDate2.getHours();
-            const closingDateMinute = openingDate.getMinutes();
-            const closingDateHours = openingDate.getHours();
+            const closingDateMinute = closingDate.getMinutes();
+            const closingDateHours = closingDate.getHours();
             if (
               closingDateMinute != ClosingMinutes &&
               closingDateHours != ClosingHours
@@ -389,14 +394,13 @@ export default function PlaceUpdatePage() {
               closingDate.setHours(ClosingHours);
             }
           }
+
+        values.closing_date_time = values.opening_date
+          ? getGeneralDateTimeDisplayFormat(closingDate)
+          : "";
+        }
           values.public_availability = values.public_availability ? "1" : "0";
           values.active_flg = values.active_flg ? "1" : "0";
-          values.opening_date_time = values.opening_date
-            ? getGeneralDateTimeDisplayFormat(openingDate)
-            : "";
-          values.closing_date_time = values.opening_date
-            ? getGeneralDateTimeDisplayFormat(closingDate)
-            : "";
           update(values, updatePlace);
         }}
       >
@@ -1270,6 +1274,7 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
+                                disabled: !values.opening_date
                               }}
                               parentClass={`${
                                 errors.opening_time &&
@@ -1294,9 +1299,10 @@ export default function PlaceUpdatePage() {
                                 name: "closing_date",
                                 dateClass: "w-full",
                                 onChange: (evt) => {
+                                  console.log(evt.target.value)
                                   setFieldValue(
                                     "closing_date",
-                                    evt.target.value
+                                    evt.target.value?evt.target.value:""
                                   );
                                 },
                                 onBlur: handleBlur,
@@ -1327,6 +1333,7 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
+                                disabled: !values.closing_date
                               }}
                               parentClass={`${
                                 errors.closing_time &&
@@ -1475,25 +1482,9 @@ export default function PlaceUpdatePage() {
                     </div>
                   </div>
                   <div className="lg:flex pt-3 justify-content-start">
-                    <div className="flex justify-content-start mb-3 lg:mb-0">
-                      <Button
-                        buttonProps={{
-                          buttonClass:
-                            "text-600 border-500 evacuation_button_height",
-                          bg: "bg-white",
-                          type: "button",
-                          hoverBg: "hover:surface-500 hover:text-white",
-                          text: translate(localeJson, "cancel"),
-                          rounded: "true",
-                          severity: "primary",
-                          onClick: () => {
-                            router.push("/admin/place");
-                          },
-                        }}
-                      />
-                    </div>
+                 
 
-                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                    <div className="flex justify-content-start  mb-3 lg:mb-0">
                       <Button
                         buttonProps={{
                           buttonClass: "evacuation_button_height",
@@ -1517,6 +1508,23 @@ export default function PlaceUpdatePage() {
                           severity: "primary",
                           onClick: () => {
                             setPlaceEditDialogVisible(true);
+                          },
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                      <Button
+                        buttonProps={{
+                          buttonClass:
+                            "text-600 border-500 evacuation_button_height",
+                          bg: "bg-white",
+                          type: "button",
+                          hoverBg: "hover:surface-500 hover:text-white",
+                          text: translate(localeJson, "cancel"),
+                          rounded: "true",
+                          severity: "primary",
+                          onClick: () => {
+                            router.push("/admin/place");
                           },
                         }}
                       />
