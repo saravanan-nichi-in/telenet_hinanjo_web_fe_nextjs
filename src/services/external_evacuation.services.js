@@ -8,6 +8,7 @@ export const ExternalEvacuationServices = {
     exportExternalEvacueesCSVList: _exportExternalEvacueesCSVList,
     getPlaceDropdownList: _getPlaceDropdownList,
     getList: _getList,
+    getExternalEvacueesDetail: _getExternalEvacueesDetail
 };
 
 /**
@@ -45,8 +46,9 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -63,7 +65,27 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get External Evacuees Detail
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getExternalEvacueesDetail(payload, callBackFun) {
+    axios.post('/admin/external/family/detail', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
