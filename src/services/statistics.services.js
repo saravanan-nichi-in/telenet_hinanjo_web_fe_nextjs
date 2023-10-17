@@ -8,12 +8,11 @@ export const StatisticsServices = {
 };
 
 /**
- * Get dashboard list
- * @param {*} payload 
+ * Get statistics list
  * @param {*} callBackFun 
  */
-function _getList(payload, callBackFun) {
-    axios.post('/admin/statistics', payload)
+function _getList(callBackFun) {
+    axios.get('/admin/statistics')
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

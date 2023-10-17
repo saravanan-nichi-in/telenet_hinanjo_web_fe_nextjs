@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { downloadBase64File } from '@/helper';
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const QRCodeCreateServices = {
@@ -18,7 +18,8 @@ function _callExport() {
     axios.get('/admin/qrcreate/sample/export')
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
-                downloadBase64File(response.data.result.filePath, "qr_code_create.csv");
+                let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
+                downloadBase64File(response.data.result.filePath, `Sample_${date}.csv`);
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });

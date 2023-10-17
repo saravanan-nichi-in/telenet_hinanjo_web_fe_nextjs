@@ -117,7 +117,7 @@ export default function EvacuationPage() {
                     };
                     evacuationColumns.push(column);
                 });
-            };
+            }
             data.map((item, i) => {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
@@ -134,7 +134,7 @@ export default function EvacuationPage() {
                     else {
                         index = 1;
                     }
-                };
+                }
                 let evacuees = {
                     "si_no": siNo,
                     "id": item.family_id,

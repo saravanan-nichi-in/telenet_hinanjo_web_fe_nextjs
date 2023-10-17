@@ -35,9 +35,9 @@ export default function AdminSpecialCarePage() {
     }
 
     const columns = [
-        { field: 'ID', header: 'ID' },
+        { field: 'ID', header:translate(localeJson,'sno'),maxWidth:"5rem" },
         {
-            field: '要配慮者事項', header: translate(localeJson, 'special_care_name_jp'), minWidth: "10rem", body: (rowData) => (
+            field: '要配慮者事項', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", body: (rowData) => (
                 <div className='text-link'>
                     <a className='text-decoration' style={{ color: "grren" }} onClick={() => setSpecialCareEditOpen(true)}>
                         {rowData['要配慮者事項']}
@@ -45,7 +45,7 @@ export default function AdminSpecialCarePage() {
                 </div>
             )
         },
-        { field: '要配慮者事項（英語)', header: translate(localeJson, 'special_care_name_en'), minWidth: "10rem" },
+        { field: '要配慮者事項（英語)', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'delete'),
@@ -131,12 +131,12 @@ export default function AdminSpecialCarePage() {
                 open={importSpecialCareOpen}
                 close={onSpecialCareImportClose}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, 'special_care_import')}
+                modalHeaderText={translate(localeJson, 'import_special_care_data_csv')}
             />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'special_care_list')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'special_care_list')}</h5>
                         <hr />
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                             <Button buttonProps={{
@@ -165,7 +165,17 @@ export default function AdminSpecialCarePage() {
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                         <div className='mt-3'>
-                            <NormalTable tableStyle={{ minWidth: "40rem" }} paginatorLeft={true} paginator={"true"} showGridlines={"true"} rows={10} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={admins} columns={columns} />
+                            <NormalTable 
+                            tableStyle={{ minWidth: "40rem" }} 
+                            paginatorLeft={true} 
+                            paginator={"true"} 
+                            showGridlines={"true"} 
+                            stripedRows={true}
+                            rows={10} 
+                            columnStyle={{ textAlign: 'center' }} 
+                            customActionsField="actions" 
+                            value={admins} 
+                            columns={columns} />
                         </div>
                     </div>
                 </div>

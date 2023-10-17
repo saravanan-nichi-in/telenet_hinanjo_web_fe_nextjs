@@ -144,7 +144,7 @@
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "QRコードが正常に生成されました。",
-      "special_care_import":"要配慮者事項CSVインポート ",
+      "import_special_care_data_csv":"要配慮者事項CSVインポート ",
       "stockpile_management_create_edit_modal_header": "備蓄品登録",
       "stockpile_management_create_edit_field_product_name": "備蓄品名",
       "stockpile_management_create_edit_field_category": "種別",
@@ -160,9 +160,15 @@
           "header_category" : "種別",
           "header_shelf_life" : "保管期間 (日)",
           "header_stockpile_image" : "画像",
-          "header_action":"削除"
+          "header_action":"削除",
+          "sno":"番号"
         }
-      }
+      },
+      "Place_Delete_Content_1":"一度削除したデータは、元に戻せません。",
+      "Place_Delete_Content_2": "削除してもよろしいでしょうか？",
+      "register_place":"避難所の新規登録",
+      "edit_place":"避難所の編集",
+      "details_place":"避難所の詳細"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -186,7 +192,8 @@
       "postal_code_1_validation":"郵便番号は3桁で指定してください。",
       "postal_code_2_validation":"郵便番号は4桁で指定してください。",
       "max_length_255":"は255文字以内で入力してください。",
-      "capacity_max_length":"10以下で入力してください。"
+      "capacity_max_length":"999999999以下で入力してください。",
+      "closing_date":"閉鎖日時は開設日時のより大きいである必要です。"
     },
     "buttons": {
       "import": "インポート",
@@ -205,7 +212,8 @@
       "create_admin": "新規登録",
       "create_staff": "新規登録",
       "download": "ダウンロード",
-      "create_special_care":"新規登録"
+      "create_special_care":"新規登録",
+      "create_place":"新規登録"
     },
     "footer": {},
     "form": {
