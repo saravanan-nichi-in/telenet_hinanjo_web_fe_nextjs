@@ -1299,7 +1299,6 @@ export default function PlaceUpdatePage() {
                                 name: "closing_date",
                                 dateClass: "w-full",
                                 onChange: (evt) => {
-                                  console.log(evt.target.value)
                                   setFieldValue(
                                     "closing_date",
                                     evt.target.value?evt.target.value:""
