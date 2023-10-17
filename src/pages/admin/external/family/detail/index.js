@@ -38,10 +38,10 @@ export default function EvacuationPage() {
                     <div className='mt-3 flex justify-content-center'>
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                             <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'return'),
+                                buttonClass: "text-600 w-8rem",
+                                bg: "bg-white",
+                                hoverBg: "hover:surface-500 hover:text-white",
+                                text: translate(localeJson, 'back'),
                                 onClick: () => router.push('/admin/external/family/list'),
                             }} parentClass={"mb-3"} />
                         </div>

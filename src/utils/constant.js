@@ -40,19 +40,6 @@ const evacuationTableColumns = [
 
 ];
 
-const externalEvacueesListColumns = [
-    { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
-    { field: "避難場所種別", header: "避難場所種別", minWidth: "10rem", sortable: true },
-    { field: "場所", header: "場所", minWidth: "7rem", sortable: true },
-    { field: "食料等の支援", header: "食料等の支援", minWidth: "10rem", sortable: true },
-    { field: "人数", header: "人数", minWidth: "5rem", sortable: true },
-    { field: "避難所", header: "避難所", minWidth: "10rem", sortable: true },
-    { field: "メールアドレス", header: "メールアドレス", minWidth: "10rem", sortable: true },
-    { field: "郵便番号", header: "郵便番号", minWidth: "8rem", sortable: true },
-    { field: "県", header: "県", minWidth: "5rem", sortable: true },
-    { field: "住所", header: "住所", minWidth: "12rem", sortable: true }
-]
-
 const externalEvacueesDetailColumns = [
     { field: "Sl No", header: "Sl No", minWidth: "7rem", sortable: true },
     { field: "氏名 (フリガナ)", header: "氏名 (フリガナ)", minWidth: "10rem", sortable: true },
@@ -105,17 +92,6 @@ const historyPageCities = [
     { name: 'London', code: 'LDN' },
     { name: 'Istanbul', code: 'IST' },
     { name: 'Paris', code: 'PRS' }
-];
-
-const evacuationSiteType = [
-    { name: '市内', code: 'CITY_IN' },
-    { name: '市外', code: 'CITY_OUT' },
-    { name: '県外', code: 'PREF_OUT' }
-];
-
-const evacuationFoodSupport = [
-    { name: 'はい', code: '1' },
-    { name: 'いいえ', code: '0' },
 ];
 
 const dashboardTableColumns = [
@@ -629,10 +605,7 @@ export {
     profiles,
     evacuationStatusOptions,
     evacuationTableColumns,
-    externalEvacueesListColumns,
     externalEvacueesDetailColumns,
-    evacuationSiteType,
-    evacuationFoodSupport,
     familyDetailData1,
     familyDetailData,
     townAssociationData,
