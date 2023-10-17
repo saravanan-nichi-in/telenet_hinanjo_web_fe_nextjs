@@ -32,7 +32,6 @@ const DetailModal = (props) => {
         headerContent
     );
 
-    console.log(visible);
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass} custom-modal`}
