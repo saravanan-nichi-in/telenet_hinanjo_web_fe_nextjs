@@ -5,3 +5,4 @@ export * from "./shortage_supplies.service";
 export * from "./qr_code_create.services";
 export * from "./common.services";
 export * from "./statistics.services";
+export * from "./special_care.service";

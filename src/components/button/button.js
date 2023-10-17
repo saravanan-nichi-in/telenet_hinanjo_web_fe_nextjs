@@ -21,6 +21,7 @@ export default function Button(props) {
     link,
     dataPrToolTip,
     onClick,
+    disabled,
     bg,
     rounded,
     ...restProps
@@ -38,6 +39,7 @@ export default function Button(props) {
         icon={icon}
         type={type}
         link={link}
+        disabled={disabled}
         data-pr-tooltip={dataPrToolTip}
         onClick={onClick}
         {...restProps}

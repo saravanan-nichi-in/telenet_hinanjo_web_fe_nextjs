@@ -34,14 +34,16 @@ function _calExport() {
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getList(callBackFun) {
-    axios.post('/admin/material/supply/list')
+function _getList(payload, callBackFun) {
+    axios.post('/admin/material/supply/list', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }

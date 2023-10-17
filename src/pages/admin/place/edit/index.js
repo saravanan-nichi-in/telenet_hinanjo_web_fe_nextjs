@@ -37,7 +37,8 @@ export default function PlaceUpdatePage() {
   const router = useRouter();
   const [apiResponse, setApiResponse] = useState({});
   const { id } = router.query;
-  const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
+  //Delete (CR)
+  // const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
 
   /* Services */
   const { deletePlace, update, getAddressByZipCode, details } = PlaceServices;
@@ -68,6 +69,7 @@ export default function PlaceUpdatePage() {
     postal_code_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -75,6 +77,7 @@ export default function PlaceUpdatePage() {
     postal_code_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -100,6 +103,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -107,6 +111,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -309,15 +314,18 @@ export default function PlaceUpdatePage() {
       <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
     </div>
   );
-
-  const deleteSelectedPlace = (res) => {
-    if (res) {
-      router.push("/admin/place");
-    }
-  };
+  
+  // Delete (CR)
+  // const deleteSelectedPlace = (res) => {
+  //   if (res) {
+  //     router.push("/admin/place");
+  //   }
+  // };
   return (
     <>
-      <CommonDialog
+      {/*
+       Delete Dialog(CR)
+       <CommonDialog
         open={placeEditDialogVisible}
         dialogBodyClassName="p-3"
         header={translate(localeJson, "confirmation")}
@@ -355,7 +363,7 @@ export default function PlaceUpdatePage() {
         close={() => {
           setPlaceEditDialogVisible(false);
         }}
-      />
+      /> */}
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
@@ -562,7 +570,7 @@ export default function PlaceUpdatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -639,7 +647,7 @@ export default function PlaceUpdatePage() {
                                               );
                                               setFieldValue(
                                                 "address",
-                                                address.address2
+                                                address.address2+(address.address3||"")
                                               );
                                             } else {
                                               setFieldValue(
@@ -838,7 +846,7 @@ export default function PlaceUpdatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address_default",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -920,7 +928,7 @@ export default function PlaceUpdatePage() {
                                               );
                                               setFieldValue(
                                                 "address_default",
-                                                address.address2
+                                                address.address2+(address.address3||"")
                                               );
                                             } else {
                                               setFieldValue(
@@ -1240,6 +1248,7 @@ export default function PlaceUpdatePage() {
                                 name: "opening_date",
                                 dateClass: "w-full",
                                 date: initialValues.opening_date,
+                                placeholder:"yyyy-mm-dd",
                                 onChange: (evt) => {
                                   setFieldValue(
                                     "opening_date",
@@ -1274,7 +1283,8 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
-                                disabled: !values.opening_date
+                                disabled: !values.opening_date,
+                                placeholder:"hh-mm",
                               }}
                               parentClass={`${
                                 errors.opening_time &&
@@ -1304,6 +1314,7 @@ export default function PlaceUpdatePage() {
                                     evt.target.value?evt.target.value:""
                                   );
                                 },
+                                placeholder:"yyyy-mm-dd",
                                 onBlur: handleBlur,
                                 text: translate(
                                   localeJson,
@@ -1332,7 +1343,8 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
-                                disabled: !values.closing_date
+                                disabled: !values.closing_date,
+                                placeholder:"hh-mm",
                               }}
                               parentClass={`${
                                 errors.closing_time &&
@@ -1488,14 +1500,17 @@ export default function PlaceUpdatePage() {
                         buttonProps={{
                           buttonClass: "evacuation_button_height",
                           type: "submit",
-                          text: translate(localeJson, "edit"),
+                          text: translate(localeJson, "update"),
                           rounded: "true",
                           severity: "primary",
                         }}
                       />
                     </div>
 
-                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                    
+                    {/*
+                      Delete - (CR)
+                     <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
                       <Button
                         buttonProps={{
                           buttonClass: "text-600 evacuation_button_height",
@@ -1510,7 +1525,7 @@ export default function PlaceUpdatePage() {
                           },
                         }}
                       />
-                    </div>
+                    </div> */}
                     <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
                       <Button
                         buttonProps={{

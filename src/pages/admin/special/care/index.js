@@ -6,15 +6,30 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable } from '@/components';
 import { AdminSpecialCareService } from '@/helper/adminSpecialCareService';
 import { AdminManagementImportModal, SpecialCareEditModal } from '@/components/modal';
+import { SpecialCareServices } from "@/services";
+import _ from "lodash";
 
 export default function AdminSpecialCarePage() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader,locale } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const [specialCareCreateDialogVisible, setSpecialCareCreateDialogVisible] = useState(false);
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
     const [specialCarCreateOpen, setSpecialCareCreateOpen] = useState(false);
     const [importSpecialCareOpen, setImportSpecialCareOpen] = useState(false);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [getPayload, setPayload] = useState({
+        filters: {
+          start: 0,
+          limit: 5,
+          sort_by: "updated_at",
+          order_by: "asc",
+        },
+        search: "",
+      });
 
     const onClickCancelButton = () => {
         console.log("cancel");
@@ -34,18 +49,19 @@ export default function AdminSpecialCarePage() {
         setImportSpecialCareOpen(false);
     }
 
-    const columns = [
-        { field: 'ID', header:translate(localeJson,'sno'),maxWidth:"5rem" },
+    const columnsData = [
+        { field: 'index', header:translate(localeJson,'s_no'),maxWidth:"5rem" },
         {
-            field: '要配慮者事項', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", body: (rowData) => (
+            field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
+            body: (rowData) => (
                 <div className='text-link'>
                     <a className='text-decoration' style={{ color: "grren" }} onClick={() => setSpecialCareEditOpen(true)}>
-                        {rowData['要配慮者事項']}
+                        {rowData.name}
                     </a>
                 </div>
             )
         },
-        { field: '要配慮者事項（英語)', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
+        { field: 'name_en', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'delete'),
@@ -65,13 +81,80 @@ export default function AdminSpecialCarePage() {
         }
     ];
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await AdminSpecialCareService.getAdminsSpecialCareMedium().then((data) => setAdmins(data));
-            setLoader(false);
-        };
-        fetchData();
-    }, []);
+      /* Services */
+  const { getList,importData,exportData,deleteSpecialCare,create,update } = SpecialCareServices;
+
+  useEffect(() => {
+    setTableLoading(true);
+    const fetchData = async () => {
+      await onGetPlaceListOnMounting();
+      setLoader(false);
+    };
+    fetchData();
+  }, [locale,getPayload]);
+
+  /**
+   * Get place list on mounting
+   */
+  const onGetPlaceListOnMounting = async () => {
+    // Get places list
+    getList(getPayload, fetchData);
+  };
+
+  function fetchData(response) {
+    setLoader(true)
+
+    if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+        const data = response.data.model.list;
+        var additionalColumnsArrayWithOldData = [...columnsData];
+        let preparedList = [];
+        // Update prepared list to the state
+        // Preparing row data for specific column to display
+        data.map((obj, i) => {
+            let preparedObj = {
+                index: getPayload.filters.start+i + 1,
+                id: obj.id || "",
+                name: obj.name || "",
+                name_en: obj.name_en || "",
+            }
+            preparedList.push(preparedObj);
+        })
+
+        setList(preparedList);
+        setColumns(additionalColumnsArrayWithOldData);
+        setTotalCount(response.data.model.total);
+        setTableLoading(false);
+        setLoader(false)
+    }
+  }
+
+   /**
+     * Pagination handler
+     * @param {*} e 
+     */
+   const onPaginationChange = async (e) => {
+    setTableLoading(true);
+    if (!_.isEmpty(e)) {
+        const newStartValue = e.first; // Replace with your desired page value
+        const newLimitValue = e.rows; // Replace with your desired limit value
+        await setPayload(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                start: newStartValue,
+                limit: newLimitValue
+            }
+        }));
+    }
+}
+
+
+  const importFileApi = (file) => {
+      const formData = new FormData()
+      formData.append('file',file)
+      importData(formData)
+      setImportSpecialCareOpen(false);
+  };
 
     return (
         <>
@@ -130,6 +213,7 @@ export default function AdminSpecialCarePage() {
             <AdminManagementImportModal
                 open={importSpecialCareOpen}
                 close={onSpecialCareImportClose}
+                importFile={importFileApi}
                 register={onRegister}
                 modalHeaderText={translate(localeJson, 'import_special_care_data_csv')}
             />
@@ -152,7 +236,8 @@ export default function AdminSpecialCarePage() {
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'export'),
-                                severity: "primary"
+                                severity: "primary",
+                                onClick: () => exportData(getPayload),
                             }} parentClass={"mr-1 mt-1"} />
 
                             <Button buttonProps={{
@@ -166,16 +251,20 @@ export default function AdminSpecialCarePage() {
                         </div>
                         <div className='mt-3'>
                             <NormalTable 
-                            tableStyle={{ minWidth: "40rem" }} 
-                            paginatorLeft={true} 
-                            paginator={"true"} 
-                            showGridlines={"true"} 
-                            stripedRows={true}
-                            rows={10} 
-                            columnStyle={{ textAlign: 'center' }} 
-                            customActionsField="actions" 
-                            value={admins} 
-                            columns={columns} />
+                            lazy
+                            totalRecords={totalCount}
+                            loading={tableLoading}
+                            showGridlines={"true"}
+                            paginator={"true"}
+                            columnStyle={{ textAlign: "center" }}
+                            className={"custom-table-cell"}
+                            value={list}
+                            columns={columns}
+                            emptyMessage= {translate(localeJson,"data_not_found")}
+                            first={getPayload.filters.start}
+                            rows={getPayload.filters.limit}
+                            paginatorLeft={true}
+                            onPageHandler={(e) => onPaginationChange(e)} />
                         </div>
                     </div>
                 </div>
