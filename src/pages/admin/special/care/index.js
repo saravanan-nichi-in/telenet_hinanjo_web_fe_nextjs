@@ -260,7 +260,7 @@ export default function AdminSpecialCarePage() {
                             className={"custom-table-cell"}
                             value={list}
                             columns={columns}
-                            emptyMessage= {translate("data_not_found",locale)}
+                            emptyMessage= {translate(localeJson,"data_not_found")}
                             first={getPayload.filters.start}
                             rows={getPayload.filters.limit}
                             paginatorLeft={true}
