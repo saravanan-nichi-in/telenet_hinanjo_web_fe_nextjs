@@ -49,12 +49,6 @@ export default function EvacueeFamilyDetail() {
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
     ];
 
-    const townAssociateColumn = [
-        { field: 'neighbour_association_name', header: translate(localeJson, 'neighbour_association_name'), minWidth: "10rem" },
-        { field: 'test_payload', header: translate(localeJson, 'test_payload'), minWidth: "10rem" },
-        { field: 'dropdown_related_questionnaire', header: translate(localeJson, 'dropdown_related_questionnaire'), minWidth: "10rem" },
-    ];
-
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem" },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
@@ -179,7 +173,7 @@ export default function EvacueeFamilyDetail() {
             let neighbourDataList = [];
 
             const questionnaire = data.question;
-            let townAssociateColumnSet = [...townAssociateColumn];
+            let townAssociateColumnSet = [];
             questionnaire.map((ques, index) => {
                 let column = {
                     field: "question_" + index,
@@ -190,11 +184,7 @@ export default function EvacueeFamilyDetail() {
             });
             setTownAssociationColumn(townAssociateColumnSet);
 
-            let neighbourData = {
-                neighbour_association_name: "",
-                test_payload: "",
-                dropdown_related_questionnaire: ""
-            }
+            let neighbourData = {};
             questionnaire.map((ques, index) => {
                 neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
             });
@@ -256,19 +246,21 @@ export default function EvacueeFamilyDetail() {
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
                     />
-                    <div className='mt-2'>
-                        <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            tableLoading={tableLoading}
-                            emptyMessage={emptyTableMessage}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            value={neighbourData}
-                            columns={townAssociationColumn}
-                        />
-                    </div>
+                    {townAssociationColumn.length > 0 &&
+                        <div className='mt-2'>
+                            <NormalTable
+                                id="evacuee-family-detail"
+                                size={"small"}
+                                tableLoading={tableLoading}
+                                emptyMessage={emptyTableMessage}
+                                stripedRows={true}
+                                paginator={false}
+                                showGridlines={true}
+                                value={neighbourData}
+                                columns={townAssociationColumn}
+                            />
+                        </div>
+                    }
                     <div className='mt-2 flex justify-content-center overflow-x-auto'>
                         <NormalTable
                             id="evacuee-family-detail"
