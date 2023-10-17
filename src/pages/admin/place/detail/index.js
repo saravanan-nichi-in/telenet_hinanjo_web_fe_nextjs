@@ -84,12 +84,11 @@ export default function StaffManagementEditPage() {
     <div className="grid">
       <div className="col-12">
         <div className="card">
-          <section className="col-12">
             {/* Header */}
-            <h5 className="page_header">
+            <h5 className="page-header1">
               {translate(localeJson, "details_place")}
             </h5>
-            <DividerComponent />
+            <hr />
             <div>
               <div
                 className="col-12 lg:flex p-0"
@@ -120,13 +119,13 @@ export default function StaffManagementEditPage() {
                     </li>
                     <li>
                       <div className="label">
-                        {translate(localeJson, "initial_postal_code")}
+                        {translate(localeJson, "default_postal_code")}
                       </div>
                       <div className="value">{defaultZipCode}</div>
                     </li>
                     <li>
                       <div className="label">
-                        {translate(localeJson, "initial_address")}
+                        {translate(localeJson, "default_address")}
                       </div>
                       <div className="value">{addressDefault}</div>
                     </li>
@@ -193,7 +192,7 @@ export default function StaffManagementEditPage() {
                 >
                   <GoogleMapComponent
                     initialPosition={{ lat: latitude, lng: longitude }}
-                    height={"450px"}
+                    height={"455px"}
                   />
                 </div>
               </div>
@@ -214,7 +213,7 @@ export default function StaffManagementEditPage() {
                       severity: "primary",
                       onClick:()=> router.push('/admin/place')
                     }}
-                    parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }}
+                    parentStyle={{ paddingTop: "10px" }}
                   />
                 </div>
                 <div>
@@ -236,7 +235,7 @@ export default function StaffManagementEditPage() {
                 </div>
               </div>
             </div>
-          </section>
+        
         </div>
       </div>
     </div>

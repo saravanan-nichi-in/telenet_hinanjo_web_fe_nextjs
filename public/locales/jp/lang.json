@@ -128,7 +128,7 @@
       "do_you_want_to_delete": " 削除してもよろしいでしょうか？",
       "shortage_total": "不足合計",
       "update_isActive_status":"避難所の運営状態を変更しますか？",
-      "s_no":"S No",
+      "s_no":"番号",
       "place_details":"避難所の詳細",
       "place_csv_import": "避難所マスタCSVインポート",
       "place_search":"避難所の住所をご入力ください。",
