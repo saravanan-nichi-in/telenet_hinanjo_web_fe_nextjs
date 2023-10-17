@@ -14,13 +14,13 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'slno', header: 'ID' },
-        { field: 'name', header: '物資', minWidth: "20rem" },
-        { field: 'unit', header: '単位' },
+        { field: 'slno', header: 'ID', minWidth: "15rem" },
+        { field: 'name', header: '物資', minWidth: "15rem", maxWidth: "10rem" },
+        { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "10rem" },
         {
             field: 'actions',
             header: '削除',
-            minWidth: "7rem",
+            minWidth: "15rem",
         }
     ];
 
