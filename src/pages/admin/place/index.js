@@ -40,7 +40,7 @@ export default function AdminPlacePage() {
     });
   };
   const columns = [
-    { field: "ID", header: translate(localeJson, "s_no"),minWidth:"4rem" },
+    { field: "index", header: translate(localeJson, "s_no"),minWidth:"4rem" },
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
@@ -128,8 +128,9 @@ export default function AdminPlacePage() {
   function fetchData(response) {
     setLoader(true)
 
-    const mappedData = response.data?.model?.list.map((item) => {
+    const mappedData = response.data?.model?.list.map((item,index) => {
       return {
+        index:index+1,
         ID: item.id,
         evacuation_place: item.name,
         address: item.address,
