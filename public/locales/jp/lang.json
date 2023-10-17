@@ -179,7 +179,13 @@
       "current_number_of_evacuees": "現在の避難者数",
       "evacuation_center_occupancy_rate": "避難所の混雑率",
       "special_care_percentage": "要配慮者の避難者数",
-      "others_text": "答えくない"
+      "others_text": "答えくない",
+      "japanese_notation":"日本語表記",
+      "english_notation":"英語表記",
+      "map_center_coordinates":"MAPの中心座標",
+      "public_information_display_list":"公開情報一覧表示",
+      "stockPile_management":"備蓄品管理",
+      "evacuation_history_download":"避難所状況履歴取得"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -205,7 +211,20 @@
       "max_length_255":"は255文字以内で入力してください。",
       "capacity_max_length":"999999999以下で入力してください。",
       "closing_date":"閉鎖日時は開設日時のより大きいである必要です。",
-      "data_not_found":"データーが見つかりません。"
+      "data_not_found":"データーが見つかりません。",
+      "map_scale_required":"全体MAP縮尺率は必須です。",
+      "footer_required":"フッター表示は必須です。",
+      "type_name_jp_required":"通称は必須です。",
+      "system_name_jp_required":"システム名は必須です。",
+      "disclosure_info_jp_required":"情報公開の説明は必須です。",
+      "type_name_en_required":"通称は必須です。",
+      "system_name_en_required":"システム名は必須です。",
+      "disclosure_info_en_required":"情報公開の説明は必須です。",
+      "latitude_required":"緯度は必須です。",
+      "longitude_required":"経度は必須です。",
+      "default_shell_life_days_required":"デフォルト保持期間(日)は必須です。",
+      "logo_img_correct_format":"ロゴ画像のフォーマットが正しいものをご使用ください。",
+      "logo_img_not_greater_than_3mb":"画像サイズは3MB以内のものをご使用ください。"
     },
     "buttons": {
       "import": "インポート",
@@ -243,7 +262,20 @@
       "output_target_area": "出力対象地域",
       "current_password": "現在のパスワード",
       "new_password": "新しいパスワード",
-      "new_password_confirmation": "新しいパスワード 確認用"
+      "new_password_confirmation": "新しいパスワード 確認用",
+      "overall_map_size_setting":"全体MAP縮尺率",
+      "footer_display":"フッター表示",
+      "type_name":"通称",
+      "system_name":"システム名",
+      "disclosure_information":"情報公開の説明",
+      "lat":"緯度",
+      "lng":"経度",
+      "display_by_default":"デフォルトで表示",
+      "display_items_setting":"表示項目設定",
+      "logo_image":"ロゴ画像",
+      "name_phonetic":"氏名 (フリガナ)",
+      "name_kanji":"氏名 (漢字)",
+      "default_shelf_life_days":"デフォルト保持期間 (日)"
     },
     "others": {
       "not": "無し",

@@ -25,6 +25,7 @@ const InputNumberFloatLabel = (props) => {
         minFractionDigits,
         maxFractionDigits,
         useGrouping,
+        onBlur,
         ...restProps
     } = inputNumberFloatProps;
 
@@ -46,6 +47,7 @@ const InputNumberFloatLabel = (props) => {
                 minFractionDigits={minFractionDigits}
                 maxFractionDigits={maxFractionDigits}
                 useGrouping={false}// disable comma separate for Number
+                onBlur={onBlur}
                 {...restProps} />
             <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>

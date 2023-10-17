@@ -72,7 +72,7 @@ export default function AdminSpecialCarePage() {
             alignHeader: "center",
             minWidth: "5rem",
             body: (rowData) =>
-            {
+            { 
                 return (
                 <div>
                     <Button buttonProps={{
