@@ -8,7 +8,7 @@ const DND = (props) => {
     } = props;
 
     return (
-        <div className="col-12 dargDrop_view">
+        <div className="dargDrop_view">
             <div className="dargDrop_view-inner">
                 <ReactDragListView {...dragProps}>
                     {React.Children.map(children, (child, index) => (

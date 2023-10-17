@@ -1,6 +1,7 @@
 import axios from "@/utils/api";
 import { downloadBase64File,getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 import toast from 'react-hot-toast';
+import { isArray, isObject } from "lodash";
 
 /* Identity and Access management (IAM) */
 export const PlaceServices = {
@@ -10,6 +11,7 @@ export const PlaceServices = {
   create: _create,
   update: _update,
   details: _details,
+  deletePlace: _deletePlace,
   updateStatus: _updateStatus,
   getAddressByZipCode:_getAddressByZipCode
 };
@@ -48,7 +50,7 @@ function _exportData(payload, callBackFun) {
     .then((response) => {
       if (response && response.data && response.data.result.filePath) {
           let date =getYYYYMMDDHHSSSSDateTimeFormat(new Date())
-          downloadBase64File(response.data.result.filePath, `palce_${date}.csv`);
+          downloadBase64File(response.data.result.filePath, `Place_${date}.csv`);
           toast.success(response?.data?.message, {
               position: "top-right",
           });
@@ -99,15 +101,28 @@ function _create(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun()
-      if (error.response && error.response.status === 422) {
+      if (error.response && error.response.status == 422) {
+
+        if(isObject(error.response.data.message))
+        {
         const errorMessages = Object.values(error.response.data.message);
         errorMessages.forEach((messages) => {
-          messages.forEach((msg) => {
-            toast.error(msg, {
-              position: "top-right",
-            });
+          toast.error(messages, {
+            position: "top-right",
           });
+          // messages.forEach((msg) => {
+          //   toast.error(msg, {
+          //     position: "top-right",
+          //   });
+          // });
         });
+        
+      }
+      else {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+        });
+      }
       } else {
         console.error(error);
       }
@@ -125,12 +140,18 @@ function _update(payload, callBackFun) {
     .put(`/admin/place/${place_id}`, payload)
     .then((response) => {
       if (response && response.data) {
-        callBackFun();
+        callBackFun(response.data);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+      });
       }
     })
     .catch((error) => {
       callBackFun()
       if (error.response && error.response.status === 422) {
+
+        if(isObject(error.response.data.message))
+        {
         const errorMessages = Object.values(error.response.data.message);
         errorMessages.forEach((messages) => {
           messages.forEach((msg) => {
@@ -139,6 +160,12 @@ function _update(payload, callBackFun) {
             });
           });
         });
+      }
+      else {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+        });
+      }
       } else {
         console.error(error);
       }
@@ -206,4 +233,30 @@ async function _getAddressByZipCode(zipCode, callBackFun) {
   } catch (error) {
     console.error("Error fetching address data:", error);
   }
+}
+
+/**
+ * delete place by id
+ * @param {*} id
+ * @param {*} callBackFun
+ */
+function _deletePlace(id, callBackFun) {
+  axios
+      .delete(`/admin/place/${id}`, {data: {"id": id}})
+      .then((response) => {
+          if (response && response.data) {
+              callBackFun(response.data);
+              toast.success(response?.data?.message, {
+                  position: "top-right",
+              });
+          }
+      })
+      .catch((error) => {
+        if(!isArray(error.response.data.message))
+        {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+        });
+      }
+      });
 }

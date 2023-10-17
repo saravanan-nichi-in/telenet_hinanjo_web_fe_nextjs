@@ -8,12 +8,11 @@
   
   .custom-list li {
     display: flex;
-    height: 75px;
   }
   
   .custom-list .label,
   .custom-list .value {
-    border: 1px solid #ccc;
+    border: 1px solid #DEE2E6;
     padding: 5px;
     box-sizing: border-box; /* Include padding in width calculation */
   }

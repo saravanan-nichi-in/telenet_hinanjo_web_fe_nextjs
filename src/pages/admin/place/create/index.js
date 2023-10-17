@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getValueByKeyRecursively as translate,getGeneralDateTimeDisplayFormat } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
 import {
@@ -28,7 +28,7 @@ import {
 import { PlaceServices } from "@/services";
 
 export default function PlaceCreatePage() {
-  const { localeJson } = useContext(LayoutContext);
+  const { localeJson , setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
@@ -209,6 +209,8 @@ export default function PlaceCreatePage() {
     longitude: "",
     latitude: "",
     altitude: "",
+    opening_date_time:"",
+    closing_date_time:"",
     opening_date:"",
     opening_time:"",
     closing_date: "",
@@ -251,9 +253,42 @@ export default function PlaceCreatePage() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
-          values.public_availability = values.public_availability ? "1" : "0";
-          values.active_flg = values.active_flg ? "1" : "0"
+          const openingDate = new Date(values.opening_date);
+          const closingDate = new Date(values.closing_date);
+
+          const sourceDate = new Date(values.opening_time);
+          if (!isNaN(sourceDate)) {
+            const minutes = sourceDate.getMinutes();
+            const hours = sourceDate.getHours();
+            const openingDateMinute = openingDate.getMinutes();
+            const openingDateHours = openingDate.getHours();
+            if (openingDateMinute == minutes && openingDateHours == hours) {
+              openingDate.setMinutes(minutes);
+              openingDate.setHours(hours);
+            }
+          }
+          const sourceDate2 = new Date(values.closing_time);
+          if (!isNaN(sourceDate2)) {
+            alert(sourceDate2.getMinutes())
+            const ClosingMinutes = sourceDate2.getMinutes();
+            const ClosingHours = sourceDate2.getHours();
+            const closingDateMinute = openingDate.getMinutes();
+            const closingDateHours = openingDate.getHours();
+            if (
+              closingDateMinute != ClosingMinutes &&
+              closingDateHours != ClosingHours
+            ) {
+              closingDate.setMinutes(ClosingMinutes);
+              closingDate.setHours(ClosingHours);
+            }
+          }
+        values.public_availability = values.public_availability ? "1" : "0";
+        values.active_flg = values.active_flg ? "1" : "0";
+        values.opening_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(openingDate):""
+        values.closing_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(closingDate):""
+          setLoader(true)
           create(values, createPlace);
+          setLoader(false)
         }}
       >
         {({
@@ -270,17 +305,16 @@ export default function PlaceCreatePage() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <section className="col-12">
                   {/* Header */}
-                  <h5 className="page_header">
-                    {translate(localeJson, "admin_information_registration")}
+                  <h5 className="page-header1">
+                    {translate(localeJson, "register_place")}
                   </h5>
-                  <DividerComponent />
+                <hr />
                   <form onSubmit={handleSubmit}>
                     <div className="col-12 lg:flex p-0">
                       <div className="col-12 lg:col-6 p-0">
                         <div>
-                          <div className="mb-5 mt-3">
+                          <div className="mb-5 mt-5">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "name", // Set id to 'evacuationLocation'
@@ -739,7 +773,7 @@ export default function PlaceCreatePage() {
                               <div className="lg:col-1 flex align-items-center justify-content-center">
                                 -
                               </div>
-                              <div className="lg:col-5 p-0 mb-5 lg:mb-0">
+                              <div className="lg:col-5 p-0 mb-5 lg:mb-0 mt-3 lg:mt-0">
                                 <InputFloatLabel
                                   inputFloatLabelProps={{
                                     id: "postal_code_default_2",
@@ -1287,7 +1321,7 @@ export default function PlaceCreatePage() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-3">
+                      <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-5">
                         <GoogleMapComponent
                           height={"450px"}
                           search={true}
@@ -1297,8 +1331,8 @@ export default function PlaceCreatePage() {
                           }}
                           searchResult={searchResult}
                         />
-                        <div className="mt-3 flex">
-                          <div className="col-9 lg:pl-0">
+                        <div className="mt-5 lg:flex">
+                          <div className="lg:col-9 lg:pl-0 mb-5 lg:mb-0">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "searchQuery",
@@ -1316,10 +1350,10 @@ export default function PlaceCreatePage() {
                               parentClass="custom_input"
                             />
                           </div>
-                          <div className="col-3 lg:pr-0">
+                          <div className="lg:col-3 lg:pr-0">
                             <Button
                               buttonProps={{
-                                buttonClass: "w-12 search-button mobile-input",
+                                buttonClass: "evacuation_button_height lg:search-button  lg:w-full mobile-input",
                                 text: translate(localeJson, "search_text"),
                                 icon: "pi pi-search",
                                 severity: "primary",
@@ -1334,12 +1368,12 @@ export default function PlaceCreatePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex pt-3 justify-content-around">
-                      <div>
+                    <div className="lg:flex pt-3 justify-content-start">
+                      <div className="flex justify-content-start mb-3 lg:mb-0">
                         <Button
                           buttonProps={{
                             buttonClass:
-                              "text-600 border-500 evacuation_button_height",
+                              "text-600 border-500 evacuation_button_height p-0",
                             bg: "bg-white",
                             type: "button",
                             hoverBg: "hover:surface-500 hover:text-white",
@@ -1350,13 +1384,9 @@ export default function PlaceCreatePage() {
                               router.push("/admin/place");
                             },
                           }}
-                          parentStyle={{
-                            paddingTop: "10px",
-                            paddingLeft: "10px",
-                          }}
                         />
                       </div>
-                      <div>
+                      <div className="flex justify-content-start lg:pl-5">
                         <Button
                           buttonProps={{
                             buttonClass: "evacuation_button_height",
@@ -1365,15 +1395,11 @@ export default function PlaceCreatePage() {
                             rounded: "true",
                             severity: "primary",
                           }}
-                          parentStyle={{
-                            paddingTop: "10px",
-                            paddingLeft: "10px",
-                          }}
                         />
                       </div>
                     </div>
                   </form>
-                </section>
+
               </div>
             </div>
           </div>

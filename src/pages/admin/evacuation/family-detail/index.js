@@ -30,7 +30,7 @@ export default function EvacueeFamilyDetail() {
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
         { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
-        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
         { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
         { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },
     ];
@@ -47,14 +47,12 @@ export default function EvacueeFamilyDetail() {
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
-        { field: "current_location", header: translate(localeJson, 'current_location') + " *", minWidth: "9rem" },
-
     ];
 
     const townAssociateColumn = [
-        { field: 'neighbour_association_name', header: translate(localeJson, 'neighbour_association_name') + " *", minWidth: "10rem" },
-        { field: 'test_payload', header: translate(localeJson, 'test_payload') + " *", minWidth: "10rem" },
-        { field: 'dropdown_related_questionnaire', header: translate(localeJson, 'dropdown_related_questionnaire') + " *", minWidth: "10rem" },
+        { field: 'neighbour_association_name', header: translate(localeJson, 'neighbour_association_name'), minWidth: "10rem" },
+        { field: 'test_payload', header: translate(localeJson, 'test_payload'), minWidth: "10rem" },
+        { field: 'dropdown_related_questionnaire', header: translate(localeJson, 'dropdown_related_questionnaire'), minWidth: "10rem" },
     ];
 
     const familyAdmissionColumns = [
@@ -128,7 +126,7 @@ export default function EvacueeFamilyDetail() {
                 individualQuestion.map((ques, index) => {
                     let column = {
                         field: "question_" + index,
-                        header: (locale == "ja" ? ques.title : ques.title_en) + (ques.isRequired ? " *" : ""),
+                        header: (locale == "ja" ? ques.title : ques.title_en),
                         minWidth: "10rem"
                     };
                     personInnerColumns.push(column);
@@ -150,10 +148,9 @@ export default function EvacueeFamilyDetail() {
                     updated_date: data.updated_at_day,
                     orders: [{
                         address: person.address ? person.address : "",
-                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "-",
+                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
                         connecting_code: person.connecting_code,
                         remarks: person.note,
-                        current_location: '-',
                     },
                     ]
                 };
@@ -172,8 +169,8 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-",
-                    discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "-"
+                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "",
+                    discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : ""
                 }
                 admittedHistory.push(historyItem);
             });
@@ -186,7 +183,7 @@ export default function EvacueeFamilyDetail() {
             questionnaire.map((ques, index) => {
                 let column = {
                     field: "question_" + index,
-                    header: (locale == "ja" ? ques.title : ques.title_en) + " *",
+                    header: (locale == "ja" ? ques.title : ques.title_en),
                     minWidth: "10rem"
                 };
                 townAssociateColumnSet.push(column);

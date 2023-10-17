@@ -20,6 +20,7 @@ export default function EvacuationPage() {
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [emptyTableMessage, setEmptyTableMessage] = useState(null);
+    const [evacuationTableFields, setEvacuationTableFields] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -33,13 +34,14 @@ export default function EvacuationPage() {
     });
 
     const evacuationTableColumns = [
-        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "7rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "8rem", sortable: false, textAlign: 'left' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '7rem' },
         { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "12rem", sortable: false, textAlign: 'left' },
         { field: "name", header: translate(localeJson, 'name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem" },
@@ -47,9 +49,7 @@ export default function EvacuationPage() {
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem" },
-        { field: "current_location", header: translate(localeJson, 'current_location'), sortable: false, minWidth: "10rem", textAlign: 'left' },
-
+        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem" }
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -94,6 +94,7 @@ export default function EvacuationPage() {
     const onGetEvacueesList = (response) => {
         if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
             const data = response.data.list;
+            const questionnaire = response.data.questionnaire;
             const places = response.places;
             let evacueesList = [];
             let placesList = [{
@@ -102,7 +103,19 @@ export default function EvacuationPage() {
             }];
             let index;
             let previousItem = null;
-            data.map((item) => {
+            let siNo = getListPayload.filters.start + 1;
+            let evacuationColumns = [...evacuationTableColumns];
+            if (questionnaire.length > 0) {
+                questionnaire.map((ques, num) => {
+                    let column = {
+                        field: "question_" + num,
+                        header: (locale == "ja" ? ques.title : ques.title_en),
+                        minWidth: "10rem"
+                    };
+                    evacuationColumns.push(column);
+                });
+            }
+            data.map((item, i) => {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
                 } else {
@@ -118,10 +131,9 @@ export default function EvacuationPage() {
                     else {
                         index = 1;
                     }
-
-
                 }
                 let evacuees = {
+                    "si_no": siNo,
                     "id": item.family_id,
                     "family_count": index,
                     "family_code": item.families.family_code,
@@ -140,10 +152,16 @@ export default function EvacuationPage() {
                     "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
                     "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "-",
-                    "current_location": "",
                 };
+
+                if (questionnaire.length > 0) {
+                    questionnaire.map((ques, num) => {
+                        evacuees[`question_${num}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+                    })
+                }
                 previousItem = evacuees;
                 evacueesList.push(evacuees);
+                siNo = siNo + 1;
             });
             places.map((place) => {
                 let placeData = {
@@ -152,6 +170,7 @@ export default function EvacuationPage() {
                 }
                 placesList.push(placeData);
             });
+            setEvacuationTableFields(evacuationColumns);
             setEvacueesDataList(evacueesList);
             setFamilyCount(response.data.total_family);
             setTableLoading(false);
@@ -162,7 +181,17 @@ export default function EvacuationPage() {
             setEvacueesDataList([]);
             setEmptyTableMessage(response.message);
             setTableLoading(false);
+            setTotalCount(0);
+            setFamilyCount(0);
         }
+    }
+
+    const getAnswerData = (answer) => {
+        let answerData = null;
+        answer.map((item) => {
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
     }
 
     /* Services */
@@ -241,7 +270,7 @@ export default function EvacuationPage() {
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             text: translate(localeJson, 'household_number'),
                                             value: familyCode,
-                                            onChange: (value) => setFamilyCode(value)
+                                            onChange: (e) => setFamilyCode(e.target.value)
                                         }}
                                     />
                                     <InputFloatLabel
@@ -251,7 +280,7 @@ export default function EvacuationPage() {
                                             text: translate(localeJson, 'name'),
                                             custom: "mobile-input custom_input",
                                             value: refugeeName,
-                                            onChange: (value) => setRefugeeName(value)
+                                            onChange: (e) => setRefugeeName(e.target.value)
                                         }}
                                     />
                                     <div className="">
@@ -284,6 +313,7 @@ export default function EvacuationPage() {
                     </div>
                     <NormalTable
                         lazy
+                        id={"evacuation-list"}
                         totalRecords={totalCount}
                         loading={tableLoading}
                         size={"small"}
@@ -291,13 +321,12 @@ export default function EvacuationPage() {
                         paginator={"true"}
                         showGridlines={"true"}
                         value={evacueesDataList}
-                        columns={evacuationTableColumns}
+                        columns={evacuationTableFields}
                         emptyMessage={emptyTableMessage}
                         first={getListPayload.filters.start}
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}
                         onPageHandler={(e) => onPaginationChange(e)}
-
                     />
                 </div>
             </div>
