@@ -69,6 +69,7 @@ export default function PlaceUpdatePage() {
     postal_code_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -76,6 +77,7 @@ export default function PlaceUpdatePage() {
     postal_code_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -101,6 +103,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -108,6 +111,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
