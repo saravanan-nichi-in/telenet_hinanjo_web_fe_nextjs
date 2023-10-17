@@ -11,7 +11,6 @@ import { AiOutlineDrag } from 'react-icons/ai';
 
 export default function Setting() {
     const { setLoader } = useContext(LayoutContext);
-    const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
         footerDisplay: Yup.string()
@@ -35,7 +34,7 @@ export default function Setting() {
         longitude: Yup.number()
             .required(translate(localeJson, 'longitude_required')),
         file: Yup.mixed()
-            .test('is-image', translate(localeJson,'logo_img_correct_format'), (value) => {
+            .test('is-image', translate(localeJson, 'logo_img_correct_format'), (value) => {
                 if (!value) return true; // If no file is selected, the validation passes.
                 const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                 const fileExtension = value.split('.').pop().toLowerCase();
@@ -45,7 +44,7 @@ export default function Setting() {
                         return true; // Pass validation
                     } else {
                         // Custom error message for image size exceeded
-                        return new Yup.ValidationError(translate(localeJson,'logo_img_not_greater_than_3mb'), null);
+                        return new Yup.ValidationError(translate(localeJson, 'logo_img_not_greater_than_3mb'), null);
                     }
                 }
                 return false; // Return false for invalid input.
@@ -117,7 +116,6 @@ export default function Setting() {
                 validationSchema={schema}
                 initialValues={initialValues}
                 onSubmit={(values, actions) => {
-                    changePassword('admin', values, onChangePasswordSuccess);
                     close();
                     actions.resetForm({ values: initialValues });
                 }}
@@ -151,7 +149,6 @@ export default function Setting() {
                                                         value: values.mapScale,
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                        // onChange: (e => setMapScale(e.value)),
                                                         text: translate(localeJson, 'overall_map_size_setting'),
                                                     }} parentClass="w-full" />
                                             </div>
@@ -163,7 +160,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "footerDisplay",
-                                                        // onChange: (e => setFooterDisplay(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`w-full ${errors.footerDisplay && touched.footerDisplay && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.footerDisplay && touched.footerDisplay && errors.footerDisplay} />
@@ -184,7 +180,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "typeName",
-                                                        // onChange: (e => setTypeName(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`w-full ${errors.typeName && touched.typeName && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.typeName && touched.typeName && errors.typeName} />
@@ -197,7 +192,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "systemName",
-                                                        // onChange: (e => setSystemName(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`w-full ${errors.systemName && touched.systemName && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.systemName && touched.systemName && errors.systemName} />
@@ -210,7 +204,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "disclosureInfo",
-                                                        // onChange: (e => setDisclosureInfo(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`${errors.disclosureInfo && touched.disclosureInfo && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.disclosureInfo && touched.disclosureInfo && errors.disclosureInfo} />
@@ -231,7 +224,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "typeName_En",
-                                                        // onChange: (e => setTypeName_En(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`w-full ${errors.typeName_En && touched.typeName_En && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.typeName_En && touched.typeName_En && errors.typeName_En} />
@@ -244,7 +236,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "systemName_En",
-                                                        // onChange: (e => setSystemName_En(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`w-full ${errors.systemName_En && touched.systemName_En && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.systemName_En && touched.systemName_En && errors.systemName_En} />
@@ -257,7 +248,6 @@ export default function Setting() {
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "disclosureInfo_En",
-                                                        // onChange: (e => setDisclosureInfo_En(e.value)),
                                                         inputClass: "w-full",
                                                     }} parentClass={`${errors.disclosureInfo_En && touched.disclosureInfo_En && 'p-invalid pb-1'}`} />
                                                 <ValidationError errorBlock={errors.disclosureInfo_En && touched.disclosureInfo_En && errors.disclosureInfo_En} />
@@ -278,7 +268,6 @@ export default function Setting() {
                                                         onValueChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "latitude",
-                                                        // onChange: (e => setLatitude(e.value)),
                                                         maxFractionDigits: "10",
                                                         text: translate(localeJson, 'lat'),
                                                         inputNumberClass: "w-full",
@@ -293,7 +282,6 @@ export default function Setting() {
                                                         onValueChange: handleChange,
                                                         onBlur: handleBlur,
                                                         name: "longitude",
-                                                        // onChange: (e => setLongitude(e.value)),
                                                         maxFractionDigits: "10",
                                                         text: translate(localeJson, 'lng'),
                                                         inputNumberClass: "w-full",
@@ -320,7 +308,6 @@ export default function Setting() {
                                                             name: "displayDefault",
                                                             checked: values.displayDefault,
                                                             onChange: handleChange,
-                                                            // onChange: (e => setDisplayDefault(e.value)),
                                                             switchClass: "",
                                                         }}
                                                         parentClass={'custom-switch'}
@@ -354,7 +341,6 @@ export default function Setting() {
                                                         mode: "decimal",
                                                         value: values.defaultShelfLife,
                                                         name: "defaultShelfLife",
-                                                        // onChange: (e => setDefaultShelfLife(e.value)),
                                                         maxFractionDigits: "1",
                                                         onValueChange: handleChange,
                                                         onBlur: handleBlur,
@@ -398,7 +384,6 @@ export default function Setting() {
                                                         name: "public_availability",
                                                         checked: values.loadStatus,
                                                         onChange: handleChange,
-                                                        // onChange: (e => setLoadStatus(e.value)),
                                                         switchClass: "",
                                                     }}
                                                     parentClass={'custom-switch'}
