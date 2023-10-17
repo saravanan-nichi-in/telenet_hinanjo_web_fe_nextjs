@@ -345,7 +345,7 @@ export default function AdminPlacePage() {
                     value={list}
                     columns={columns}
                     cellClassName={cellClassName}
-                    emptyMessage= {translate("data_not_found",locale)}
+                    emptyMessage= {translate(localeJson,"data_not_found")}
                     isDataSelectable={isCellSelectable}
                     first={getPayload.filters.start}
                     rows={getPayload.filters.limit}
