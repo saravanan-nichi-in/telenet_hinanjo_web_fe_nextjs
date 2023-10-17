@@ -12,7 +12,10 @@ import Link from 'next/link';
 export default function EvacuationPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [familyCount, setFamilyCount] = useState(0);
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState({
+        name: "--",
+        id: 0
+    });
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [evacuationPlaceList, setEvacuationPlaceList] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
@@ -36,20 +39,20 @@ export default function EvacuationPage() {
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "5rem" },
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "7rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "8rem", sortable: false, textAlign: 'left' },
-        { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '7rem' },
+        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "6rem" },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: 'left' },
+        { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
         { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "12rem", sortable: false, textAlign: 'left' },
         { field: "name", header: translate(localeJson, 'name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem", sortable: false, textAlign: 'left' },
-        { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem" },
-        { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem" },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
-        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "10rem", sortable: false, textAlign: 'left' },
-        { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "5rem" },
-        { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem" }
+        { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
+        { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem", display: 'none' },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left', display: 'none' },
+        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: false, textAlign: 'left', display: 'none' },
+        { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "8rem", display: 'none' },
+        { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "12rem", display: 'none' },
+        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem", display: 'none' }
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -92,6 +95,7 @@ export default function EvacuationPage() {
     }
 
     const onGetEvacueesList = (response) => {
+        let evacuationColumns = [...evacuationTableColumns];
         if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
             const data = response.data.list;
             const questionnaire = response.data.questionnaire;
@@ -99,12 +103,11 @@ export default function EvacuationPage() {
             let evacueesList = [];
             let placesList = [{
                 name: "--",
-                id: null
+                id: 0
             }];
             let index;
             let previousItem = null;
             let siNo = getListPayload.filters.start + 1;
-            let evacuationColumns = [...evacuationTableColumns];
             if (questionnaire.length > 0) {
                 questionnaire.map((ques, num) => {
                     let column = {
@@ -137,7 +140,7 @@ export default function EvacuationPage() {
                     "id": item.family_id,
                     "family_count": index,
                     "family_code": item.families.family_code,
-                    "representative": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     "refugee_name": <Link className="text-higlight" href={{
                         pathname: '/admin/evacuation/family-detail',
                         query: { family_id: item.family_id }
@@ -151,7 +154,7 @@ export default function EvacuationPage() {
                     "remarks": item.note,
                     "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
-                    "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "-",
+                    "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "",
                 };
 
                 if (questionnaire.length > 0) {
@@ -179,6 +182,7 @@ export default function EvacuationPage() {
         }
         else {
             setEvacueesDataList([]);
+            setEvacuationTableFields(evacuationColumns);
             setEmptyTableMessage(response.message);
             setTableLoading(false);
             setTotalCount(0);
@@ -233,13 +237,34 @@ export default function EvacuationPage() {
                 limit: getListPayload.filters.limit,
                 sort_by: "",
                 order_by: "desc",
-                place_id: selectedOption ? selectedOption.id : "",
+                place_id: selectedOption && selectedOption.id != 0 ? selectedOption.id : "",
                 family_code: familyCode,
                 refugee_name: refugeeName
             }
         }
         getList(payload, onGetEvacueesList);
         setGetListPayload(payload);
+    }
+
+    const handleFamilyCode = (e) => {
+        if ((e.target.value).length == 4) {
+            const newValue = e.target.value;
+            if (newValue.indexOf("-") !== -1) {
+                setFamilyCode(e.target.value);
+            }
+            else{
+                const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
+                setFamilyCode(formattedValue);
+            }
+        }
+        else if ((e.target.value).length == 3) {
+            const newValue = e.target.value;
+            const formattedValue = newValue.substring(0, 3);
+            setFamilyCode(formattedValue);
+        }
+        else {
+            setFamilyCode(e.target.value)
+        }
     }
 
     return (
@@ -254,7 +279,7 @@ export default function EvacuationPage() {
                                 <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
                                     <InputSelectFloatLabel
                                         dropdownFloatLabelProps={{
-                                            inputId: "evacuationCity",
+                                            id: "evacuationCity",
                                             value: selectedOption,
                                             options: evacuationPlaceList,
                                             optionLabel: "name",
@@ -270,7 +295,7 @@ export default function EvacuationPage() {
                                             inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             text: translate(localeJson, 'household_number'),
                                             value: familyCode,
-                                            onChange: (e) => setFamilyCode(e.target.value)
+                                            onChange: (e) => handleFamilyCode(e)
                                         }}
                                     />
                                     <InputFloatLabel

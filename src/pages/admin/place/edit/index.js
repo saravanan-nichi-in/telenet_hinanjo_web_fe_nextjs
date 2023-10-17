@@ -37,7 +37,8 @@ export default function PlaceUpdatePage() {
   const router = useRouter();
   const [apiResponse, setApiResponse] = useState({});
   const { id } = router.query;
-  const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
+  //Delete (CR)
+  // const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
 
   /* Services */
   const { deletePlace, update, getAddressByZipCode, details } = PlaceServices;
@@ -68,6 +69,7 @@ export default function PlaceUpdatePage() {
     postal_code_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -75,6 +77,7 @@ export default function PlaceUpdatePage() {
     postal_code_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -100,6 +103,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -107,6 +111,7 @@ export default function PlaceUpdatePage() {
     postal_code_default_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -160,7 +165,7 @@ export default function PlaceUpdatePage() {
         translate(localeJson, "max_length_255")
     ),
     opening_date: Yup.date().nullable(),
-    closing_date: Yup.date()
+    closing_date: Yup.date().nullable()
       .when("opening_date", (opening_date, schema) => {
         if (opening_date && opening_date != "" && opening_date != undefined) {
           return schema
@@ -176,7 +181,6 @@ export default function PlaceUpdatePage() {
             });
         }
       })
-      .nullable(),
   });
 
   useEffect(() => {
@@ -310,15 +314,18 @@ export default function PlaceUpdatePage() {
       <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
     </div>
   );
-
-  const deleteSelectedPlace = (res) => {
-    if (res) {
-      router.push("/admin/place");
-    }
-  };
+  
+  // Delete (CR)
+  // const deleteSelectedPlace = (res) => {
+  //   if (res) {
+  //     router.push("/admin/place");
+  //   }
+  // };
   return (
     <>
-      <CommonDialog
+      {/*
+       Delete Dialog(CR)
+       <CommonDialog
         open={placeEditDialogVisible}
         dialogBodyClassName="p-3"
         header={translate(localeJson, "confirmation")}
@@ -356,13 +363,13 @@ export default function PlaceUpdatePage() {
         close={() => {
           setPlaceEditDialogVisible(false);
         }}
-      />
+      /> */}
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
+          if(values.opening_date ) {
           const openingDate = new Date(values.opening_date);
-          const closingDate = new Date(values.closing_date);
 
           const sourceDate = new Date(values.opening_time);
           if (!isNaN(sourceDate)) {
@@ -375,12 +382,18 @@ export default function PlaceUpdatePage() {
               openingDate.setHours(hours);
             }
           }
+          values.opening_date_time = values.opening_date
+          ? getGeneralDateTimeDisplayFormat(openingDate)
+          : "";
+        }
+        if(values.closing_date) {
+          const closingDate = new Date(values.closing_date);
           const sourceDate2 = new Date(values.closing_time);
           if (!isNaN(sourceDate2)) {
             const ClosingMinutes = sourceDate2.getMinutes();
             const ClosingHours = sourceDate2.getHours();
-            const closingDateMinute = openingDate.getMinutes();
-            const closingDateHours = openingDate.getHours();
+            const closingDateMinute = closingDate.getMinutes();
+            const closingDateHours = closingDate.getHours();
             if (
               closingDateMinute != ClosingMinutes &&
               closingDateHours != ClosingHours
@@ -389,14 +402,13 @@ export default function PlaceUpdatePage() {
               closingDate.setHours(ClosingHours);
             }
           }
+
+        values.closing_date_time = values.opening_date
+          ? getGeneralDateTimeDisplayFormat(closingDate)
+          : "";
+        }
           values.public_availability = values.public_availability ? "1" : "0";
           values.active_flg = values.active_flg ? "1" : "0";
-          values.opening_date_time = values.opening_date
-            ? getGeneralDateTimeDisplayFormat(openingDate)
-            : "";
-          values.closing_date_time = values.opening_date
-            ? getGeneralDateTimeDisplayFormat(closingDate)
-            : "";
           update(values, updatePlace);
         }}
       >
@@ -558,7 +570,7 @@ export default function PlaceUpdatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -635,7 +647,7 @@ export default function PlaceUpdatePage() {
                                               );
                                               setFieldValue(
                                                 "address",
-                                                address.address2
+                                                address.address2+(address.address3||"")
                                               );
                                             } else {
                                               setFieldValue(
@@ -834,7 +846,7 @@ export default function PlaceUpdatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address_default",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -916,7 +928,7 @@ export default function PlaceUpdatePage() {
                                               );
                                               setFieldValue(
                                                 "address_default",
-                                                address.address2
+                                                address.address2+(address.address3||"")
                                               );
                                             } else {
                                               setFieldValue(
@@ -1236,6 +1248,7 @@ export default function PlaceUpdatePage() {
                                 name: "opening_date",
                                 dateClass: "w-full",
                                 date: initialValues.opening_date,
+                                placeholder:"yyyy-mm-dd",
                                 onChange: (evt) => {
                                   setFieldValue(
                                     "opening_date",
@@ -1270,6 +1283,8 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
+                                disabled: !values.opening_date,
+                                placeholder:"hh-mm",
                               }}
                               parentClass={`${
                                 errors.opening_time &&
@@ -1296,9 +1311,10 @@ export default function PlaceUpdatePage() {
                                 onChange: (evt) => {
                                   setFieldValue(
                                     "closing_date",
-                                    evt.target.value
+                                    evt.target.value?evt.target.value:""
                                   );
                                 },
+                                placeholder:"yyyy-mm-dd",
                                 onBlur: handleBlur,
                                 text: translate(
                                   localeJson,
@@ -1327,6 +1343,8 @@ export default function PlaceUpdatePage() {
                                 timeClass: "w-full",
                                 onChange: handleChange,
                                 onBlur: handleBlur,
+                                disabled: !values.closing_date,
+                                placeholder:"hh-mm",
                               }}
                               parentClass={`${
                                 errors.closing_time &&
@@ -1475,7 +1493,40 @@ export default function PlaceUpdatePage() {
                     </div>
                   </div>
                   <div className="lg:flex pt-3 justify-content-start">
-                    <div className="flex justify-content-start mb-3 lg:mb-0">
+                 
+
+                    <div className="flex justify-content-start  mb-3 lg:mb-0">
+                      <Button
+                        buttonProps={{
+                          buttonClass: "evacuation_button_height",
+                          type: "submit",
+                          text: translate(localeJson, "update"),
+                          rounded: "true",
+                          severity: "primary",
+                        }}
+                      />
+                    </div>
+
+                    
+                    {/*
+                      Delete - (CR)
+                     <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                      <Button
+                        buttonProps={{
+                          buttonClass: "text-600 evacuation_button_height",
+                          bg: "bg-white",
+                          hoverBg: "hover:surface-500 hover:text-white",
+                          type: "button",
+                          text: translate(localeJson, "delete"),
+                          rounded: "true",
+                          severity: "primary",
+                          onClick: () => {
+                            setPlaceEditDialogVisible(true);
+                          },
+                        }}
+                      />
+                    </div> */}
+                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
                       <Button
                         buttonProps={{
                           buttonClass:
@@ -1488,35 +1539,6 @@ export default function PlaceUpdatePage() {
                           severity: "primary",
                           onClick: () => {
                             router.push("/admin/place");
-                          },
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
-                      <Button
-                        buttonProps={{
-                          buttonClass: "evacuation_button_height",
-                          type: "submit",
-                          text: translate(localeJson, "edit"),
-                          rounded: "true",
-                          severity: "primary",
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
-                      <Button
-                        buttonProps={{
-                          buttonClass: "text-600 evacuation_button_height",
-                          bg: "bg-white",
-                          hoverBg: "hover:surface-500 hover:text-white",
-                          type: "button",
-                          text: translate(localeJson, "delete"),
-                          rounded: "true",
-                          severity: "primary",
-                          onClick: () => {
-                            setPlaceEditDialogVisible(true);
                           },
                         }}
                       />

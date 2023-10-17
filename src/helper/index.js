@@ -101,6 +101,24 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
 }
 
 /**
+ * Get Default Today DateTime display format
+ * @param {*} hours, minutes 
+ * @returns today DateTime
+ */
+export const getDefaultTodayDateTimeFormat = (hours, minutes) => {
+    let constructDate = new Date();
+    constructDate.setHours(hours);
+    constructDate.setMinutes(minutes);
+
+    const formattedJPDateTime = new Date(constructDate.getFullYear(),
+        (constructDate.getMonth()).toString().padStart(2, '0'),
+        (constructDate.getDate()).toString().padStart(2, '0'),
+        (constructDate.getHours()).toString().padStart(2, '0'),
+        (constructDate.getMinutes()).toString().padStart(2, '0'));
+    return formattedJPDateTime;
+}
+
+/**
  * Get general date & time display format
  * @param {*} dateTime 
  * @returns 

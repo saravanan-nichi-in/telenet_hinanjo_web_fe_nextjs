@@ -6,6 +6,7 @@ import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, get
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
+import { prefectures } from '@/utils/constant';
 
 export default function EvacueeFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -47,12 +48,6 @@ export default function EvacueeFamilyDetail() {
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
-    ];
-
-    const townAssociateColumn = [
-        { field: 'neighbour_association_name', header: translate(localeJson, 'neighbour_association_name'), minWidth: "10rem" },
-        { field: 'test_payload', header: translate(localeJson, 'test_payload'), minWidth: "10rem" },
-        { field: 'dropdown_related_questionnaire', header: translate(localeJson, 'dropdown_related_questionnaire'), minWidth: "10rem" },
     ];
 
     const familyAdmissionColumns = [
@@ -99,6 +94,14 @@ export default function EvacueeFamilyDetail() {
         return answerData;
     }
 
+    const getPrefectureName = (id) => {
+        if (id) {
+            let p_name = prefectures.find((item) => item.value === id);
+            return p_name.name;
+        }
+        return "";
+    }
+
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
@@ -110,7 +113,7 @@ export default function EvacueeFamilyDetail() {
             let basicDetailList = [];
             let basicData = {
                 evacuation_date_time: data.join_date_modified,
-                address: translate(localeJson, 'post_letter') + data.zip_code + data.perfecture_name + data.address,
+                address: translate(localeJson, 'post_letter') + data.zip_code + getPrefectureName(data.prefecture_id) + data.address,
                 representative_number: data.tel,
                 registered_lang_environment: getRegisteredLanguage(data.language_register)
             };
@@ -179,7 +182,7 @@ export default function EvacueeFamilyDetail() {
             let neighbourDataList = [];
 
             const questionnaire = data.question;
-            let townAssociateColumnSet = [...townAssociateColumn];
+            let townAssociateColumnSet = [];
             questionnaire.map((ques, index) => {
                 let column = {
                     field: "question_" + index,
@@ -190,11 +193,7 @@ export default function EvacueeFamilyDetail() {
             });
             setTownAssociationColumn(townAssociateColumnSet);
 
-            let neighbourData = {
-                neighbour_association_name: "",
-                test_payload: "",
-                dropdown_related_questionnaire: ""
-            }
+            let neighbourData = {};
             questionnaire.map((ques, index) => {
                 neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
             });
@@ -244,6 +243,7 @@ export default function EvacueeFamilyDetail() {
                         <h5 className='page-header2'>{translate(localeJson, 'household_list')}</h5>
                     </div>
                     <RowExpansionTable
+                        id={"evacuation-detail-list"}
                         rows={10}
                         paginatorLeft={true}
                         tableLoading={tableLoading}
@@ -255,19 +255,21 @@ export default function EvacueeFamilyDetail() {
                         outerColumn={evacueeFamilyDetailColumns}
                         rowExpansionField="orders"
                     />
-                    <div className='mt-2'>
-                        <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            tableLoading={tableLoading}
-                            emptyMessage={emptyTableMessage}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            value={neighbourData}
-                            columns={townAssociationColumn}
-                        />
-                    </div>
+                    {townAssociationColumn.length > 0 &&
+                        <div className='mt-2'>
+                            <NormalTable
+                                id="evacuee-family-detail"
+                                size={"small"}
+                                tableLoading={tableLoading}
+                                emptyMessage={emptyTableMessage}
+                                stripedRows={true}
+                                paginator={false}
+                                showGridlines={true}
+                                value={neighbourData}
+                                columns={townAssociationColumn}
+                            />
+                        </div>
+                    }
                     <div className='mt-2 flex justify-content-center overflow-x-auto'>
                         <NormalTable
                             id="evacuee-family-detail"

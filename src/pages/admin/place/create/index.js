@@ -56,6 +56,7 @@ export default function PlaceCreatePage() {
     postal_code_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -63,6 +64,7 @@ export default function PlaceCreatePage() {
     postal_code_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "postal_code") +
           translate(localeJson, "is_required")
@@ -88,6 +90,7 @@ export default function PlaceCreatePage() {
     postal_code_default_1: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_1_validation"))
       .max(3, translate(localeJson, "postal_code_1_validation"))
+      .min(3, translate(localeJson, "postal_code_1_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -95,6 +98,7 @@ export default function PlaceCreatePage() {
     postal_code_default_2: Yup.string()
       .matches(/^\d+$/, translate(localeJson, "postal_code_2_validation"))
       .max(4, translate(localeJson, "postal_code_2_validation"))
+      .min(4, translate(localeJson, "postal_code_2_validation"))
       .required(
         translate(localeJson, "default_prefecture_place") +
           translate(localeJson, "is_required")
@@ -148,7 +152,7 @@ export default function PlaceCreatePage() {
         translate(localeJson, "max_length_255")
     ),
     opening_date: Yup.date().nullable(),
-    closing_date: Yup.date()
+    closing_date: Yup.date().nullable()
       .when('opening_date', (opening_date, schema) => {
         if (opening_date && opening_date != "" && opening_date != undefined) {
           return schema
@@ -163,7 +167,7 @@ export default function PlaceCreatePage() {
               },
             });
         }
-      }).nullable(),
+      })
   });
 
   /* Services */
@@ -253,9 +257,8 @@ export default function PlaceCreatePage() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
+          if(values.opening_date) {
           const openingDate = new Date(values.opening_date);
-          const closingDate = new Date(values.closing_date);
-
           const sourceDate = new Date(values.opening_time);
           if (!isNaN(sourceDate)) {
             const minutes = sourceDate.getMinutes();
@@ -267,13 +270,16 @@ export default function PlaceCreatePage() {
               openingDate.setHours(hours);
             }
           }
+          values.opening_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(openingDate):""  
+        }
+        if(values.closing_date) {
+          const closingDate = new Date(values.closing_date);
           const sourceDate2 = new Date(values.closing_time);
           if (!isNaN(sourceDate2)) {
-            alert(sourceDate2.getMinutes())
             const ClosingMinutes = sourceDate2.getMinutes();
             const ClosingHours = sourceDate2.getHours();
-            const closingDateMinute = openingDate.getMinutes();
-            const closingDateHours = openingDate.getHours();
+            const closingDateMinute = closingDate.getMinutes();
+            const closingDateHours = closingDate.getHours();
             if (
               closingDateMinute != ClosingMinutes &&
               closingDateHours != ClosingHours
@@ -282,10 +288,10 @@ export default function PlaceCreatePage() {
               closingDate.setHours(ClosingHours);
             }
           }
+          values.closing_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(closingDate):""
+        }
         values.public_availability = values.public_availability ? "1" : "0";
         values.active_flg = values.active_flg ? "1" : "0";
-        values.opening_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(openingDate):""
-        values.closing_date_time= values.opening_date?getGeneralDateTimeDisplayFormat(closingDate):""
           setLoader(true)
           create(values, createPlace);
           setLoader(false)
@@ -449,7 +455,7 @@ export default function PlaceCreatePage() {
                                                   );
                                                   setFieldValue(
                                                     "address",
-                                                    address.address2
+                                                    address.address2+(address.address3||"")
                                                   );
                                                 } else {
                                                   setFieldValue(
@@ -532,7 +538,7 @@ export default function PlaceCreatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -731,7 +737,7 @@ export default function PlaceCreatePage() {
                                                   );
                                                   setFieldValue(
                                                     "address_default",
-                                                    address.address2
+                                                    address.address2+(address.address3||"")
                                                   );
                                                 } else {
                                                   setFieldValue(
@@ -816,7 +822,7 @@ export default function PlaceCreatePage() {
                                                 );
                                                 setFieldValue(
                                                   "address_default",
-                                                  address.address2
+                                                  address.address2+(address.address3||"")
                                                 );
                                               } else {
                                                 setFieldValue(
@@ -1140,6 +1146,7 @@ export default function PlaceCreatePage() {
                                     setFieldValue("opening_date",evt.target.value)
                                   },
                                   onBlur: handleBlur,
+                                  placeholder:"yyyy-mm-dd",
                                   text: translate(
                                     localeJson,
                                     "opening_date_time"
@@ -1161,12 +1168,14 @@ export default function PlaceCreatePage() {
                             </div>
                             <div className="lg:col-5 lg:pr-0">
                               <TimeCalendarFloatLabel
+                              date={values.opening_date}
                                 timeFloatLabelProps={{
                                   name: "opening_time",
                                   timeClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-                                  // text: "Opening Time" // Add a label text specific to time
+                                  disabled: !values.opening_date,
+                                  placeholder:"hh-mm",
                                 }}
                                 parentClass={`${
                                   errors.opening_time &&
@@ -1190,10 +1199,10 @@ export default function PlaceCreatePage() {
                                   name: "closing_date",
                                   dateClass: "w-full",
                                   onChange: (evt)=> {
-                                    setFieldValue("closing_date",evt.target.value)
+                                    setFieldValue("closing_date",evt.target.value||"")
                                   },
                                   onBlur: handleBlur,
-                                  // minDate:values.opening_date,
+                                  placeholder:"yyyy-mm-dd",
                                   text: translate(
                                     localeJson,
                                     "closing_date_time"
@@ -1216,12 +1225,14 @@ export default function PlaceCreatePage() {
                             </div>
                             <div className="lg:col-5 lg:pr-0">
                               <TimeCalendarFloatLabel
+                              date={values.closing_date}
                                 timeFloatLabelProps={{
                                   name: "closing_time",
                                   timeClass: "w-full",
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-                                  // text: "Opening Time" // Add a label text specific to time
+                                  disabled: !values.closing_date,
+                                  placeholder:"hh-mm",
                                 }}
                                 parentClass={`${
                                   errors.closing_time &&

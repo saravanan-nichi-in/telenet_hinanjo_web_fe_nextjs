@@ -10,24 +10,19 @@
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
     text-overflow: ellipsis;
-    width: 20rem;
+    width: auto;
     white-space: nowrap;
     overflow: hidden;
 }
 
-
-.text-alignment{
+.text-alignment {
     .p-inputtext {
-   padding-top: 12px; 
+        padding-top: 12px;
     }
 }
 
-.p-dropdown-label.p-inputtext {
-    padding: 0.5rem 0.75rem;
-}
-
-.input-align{
-    .p-inputtext{
+.input-align {
+    .p-inputtext {
         padding-top: 12px;
     }
 }

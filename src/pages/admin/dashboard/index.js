@@ -45,7 +45,6 @@ function AdminDashboard() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetDashboardListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
@@ -126,8 +125,9 @@ function AdminDashboard() {
             setFrozenArray([frozenObj]);
             setList([...preparedList]);
             setTotalCount(response.data.total);
-            setTableLoading(false);
         }
+        setTableLoading(false);
+        setLoader(false);
     };
 
     /**
@@ -208,7 +208,7 @@ function AdminDashboard() {
                             frozenValue={_.size(list) > 0 && frozenArray}
                             columns={columns}
                             filterDisplay="menu"
-                            emptyMessage="No data found."
+                            emptyMessage={translate(localeJson, "data_not_found")}
                             paginator={true}
                             first={getListPayload.filters.start}
                             rows={getListPayload.filters.limit}

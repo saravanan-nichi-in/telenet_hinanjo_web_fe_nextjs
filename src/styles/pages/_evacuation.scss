@@ -23,14 +23,12 @@
     width: 150px;
 }
 
-#evacuation-list .p-dropdown-label.p-inputtext {
-    padding: 0.75rem 0.75rem;
-}
 
-@media (max-width: 575px){
+@media (max-width: 575px) {
     .gap-2.mobile-input {
         gap: 2rem !important;
     }
+
     .search-button.mobile-input {
         margin-top: -1rem !important;
     }
@@ -40,6 +38,7 @@
     .mobile-input.p-float-label {
         margin-left: 106px !important;
     }
+
     .mobile-input.custom-select {
         margin-left: 106px !important;
     }

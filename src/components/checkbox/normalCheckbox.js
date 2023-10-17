@@ -7,6 +7,7 @@ const NormalCheckBox = (props) => {
     const {
         parentClass,
         parentStyle,
+        custom,
         checkBoxProps = {}
     } = props;
     const {
@@ -23,8 +24,8 @@ const NormalCheckBox = (props) => {
     } = checkBoxProps;
 
     return (
-        <div className={`${parentClass}`} style={parentStyle}>
-            <Checkbox className={`${checkboxClass}`}
+        <div className={`${parentClass} ${custom || 'custom-checkbox'}`} style={parentStyle}>
+            <Checkbox className={`${checkboxClass} `}
                 inputId={id}
                 name={name}
                 value={value}

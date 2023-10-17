@@ -4,26 +4,19 @@ import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
 /* Identity and Access management (IAM) */
-export const PlaceServices = {
-  importData: _importData,
-  exportData: _exportData,
-  getList: _getList,
-  create: _create,
-  update: _update,
-  details: _details,
-  deletePlace: _deletePlace,
-  updateStatus: _updateStatus,
-  getAddressByZipCode: _getAddressByZipCode,
+export const SpecialCareServices = {
+  importData: _importSpecialCareData,
+  exportData: _exportSpecialCareData,
+  getList: _getSpecialCareList,
+  create: _createSpecialCare,
+  update: _updateSpecialCare,
+  details: _specialCareDetails,
+  deleteSpecialCare: _deleteSpecialCare
 };
 
-/**
- * Import place data
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _importData(payload, callBackFun) {
+function _importSpecialCareData(payload, callBackFun) {
   axios
-    .post("/admin/place/import", payload)
+    .post("/admin/specialcare/import", payload)
     .then((response) => {
       if (response && response.data) {
         toast.success(response?.data?.message, {
@@ -32,25 +25,19 @@ function _importData(payload, callBackFun) {
       }
     })
     .catch((error) => {
-      // Handle errors here
       toast.error(error?.response?.data?.message, {
         position: "top-right",
       });
     });
 }
 
-/**
- * Export place data
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _exportData(payload, callBackFun) {
+function _exportSpecialCareData(payload, callBackFun) {
   axios
-    .post("/admin/place/export", payload)
+    .post("/admin/specialcare/export", payload)
     .then((response) => {
       if (response && response.data && response.data.result.filePath) {
         let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
-        downloadBase64File(response.data.result.filePath, `Place_${date}.csv`);
+        downloadBase64File(response.data.result.filePath, `SpecialCare_${date}.csv`);
         toast.success(response?.data?.message, {
           position: "top-right",
         });
@@ -63,34 +50,22 @@ function _exportData(payload, callBackFun) {
     });
 }
 
-/**
- * Get place list
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _getList(payload, callBackFun) {
-  const params = { params: payload };
+function _getSpecialCareList(payload, callBackFun) {
   axios
-    .get("/admin/place", params)
+    .post("/admin/specialcare/list", payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
       }
     })
     .catch((error) => {
-      // Handle errors here
       console.error("Error fetching data:", error);
     });
 }
 
-/**
- * Create a new place
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _create(payload, callBackFun) {
+function _createSpecialCare(payload, callBackFun) {
   axios
-    .post("/admin/place", payload)
+    .post("/admin/specialcare", payload)
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {
@@ -104,14 +79,12 @@ function _create(payload, callBackFun) {
       if (error.response && error.response.status == 422) {
         if (isObject(error.response.data.message)) {
           let errorMessages = Object.values(error.response.data.message);
-          let errorString = errorMessages.join('.')
+          let errorString = errorMessages.join('.');
           let errorArray = errorString.split(".");
           errorArray = errorArray.filter(message => message.trim() !== "");
-          // Join the error messages with line breaks
-          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
           let formattedErrorMessage = errorArray
             .map((message, index) => {
-                return `${message.trim()}`;
+              return `${message.trim()}`;
             })
             .join("\n");
           toast.error(formattedErrorMessage, {
@@ -128,15 +101,10 @@ function _create(payload, callBackFun) {
     });
 }
 
-/**
- * Update place by id
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _update(payload, callBackFun) {
-  let place_id = payload.place_id;
+function _updateSpecialCare(payload, callBackFun) {
+  let specialcare_id = payload.specialcare_id;
   axios
-    .put(`/admin/place/${place_id}`, payload)
+    .put(`/admin/specialcare/${specialcare_id}`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
@@ -150,14 +118,12 @@ function _update(payload, callBackFun) {
       if (error.response && error.response.status == 422) {
         if (isObject(error.response.data.message)) {
           let errorMessages = Object.values(error.response.data.message);
-          let errorString = errorMessages.join('.')
+          let errorString = errorMessages.join('.');
           let errorArray = errorString.split(".");
           errorArray = errorArray.filter(message => message.trim() !== "");
-          // Join the error messages with line breaks
-          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
           let formattedErrorMessage = errorArray
             .map((message, index) => {
-                return `${message.trim()}`;
+              return `${message.trim()}`;
             })
             .join("\n");
           toast.error(formattedErrorMessage, {
@@ -174,78 +140,29 @@ function _update(payload, callBackFun) {
     });
 }
 
-/**
- * Get place details by id
- * @param {*} id
- * @param {*} callBackFun
- */
-function _details(id, callBackFun) {
+function _specialCareDetails(id, callBackFun) {
   const params = {
     params: {
       id: id,
     },
   };
   axios
-    .get(`/admin/place/${id}`, params)
+    .get(`/admin/specialcare/${id}`, params)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
       }
     })
     .catch((error) => {
-      // Handle errors here
       console.error("Error fetching data:", error);
     });
 }
 
-/**
- * Update place status by id
- * @param {*} payload
- * @param {*} callBackFun
- */
-function _updateStatus(payload, callBackFun) {
-  axios
-    .put(`/admin/place/status/update/${payload.place_id}`, payload)
-    .then((response) => {
-      if (response && response.data) {
-        callBackFun();
-      }
-    })
-    .catch((error) => {
-      // Handle errors here
-      console.error("Error fetching data:", error);
-    });
-}
 
-/**
- * Get address information by zip code
- * @param {string} zipCode - The zip code to search for.
- * @param {Function} callBackFun - The callback function to handle the response data.
- */
-async function _getAddressByZipCode(zipCode, callBackFun) {
-  try {
-    const response = await fetch(
-      `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`
-    );
-    const data = await response.json();
-    if (data.results) {
-      callBackFun(data.results);
-    } else {
-      data && callBackFun();
-    }
-  } catch (error) {
-    console.error("Error fetching address data:", error);
-  }
-}
 
-/**
- * delete place by id
- * @param {*} id
- * @param {*} callBackFun
- */
-function _deletePlace(id, callBackFun) {
+function _deleteSpecialCare(id, callBackFun) {
   axios
-    .delete(`/admin/place/${id}`, { data: { id: id } })
+    .delete(`/admin/specialcare/${id}`, { data: { id: id } })
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

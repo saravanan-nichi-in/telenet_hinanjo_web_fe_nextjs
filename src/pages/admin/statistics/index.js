@@ -11,9 +11,9 @@ export default function EvacueesStatistics() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [options, setOptions] = useState(null);
     const [evacueesShelterOptions, setEvacueesShelterOptions] = useState([
-        { name: '現在の避難者数', value: 'NY' },
-        { name: '避難所の混雑率', value: 'RM' },
-        { name: '要配慮者の避難者数', value: 'LDN' },
+        { name: translate(localeJson, 'current_number_of_evacuees'), value: 'NY' },
+        { name: translate(localeJson, 'evacuation_center_occupancy_rate'), value: 'RM' },
+        { name: translate(localeJson, 'special_care_percentage'), value: 'LDN' },
     ]);
     const [data, setData] = useState(evacueesShelterOptions[0].value);
     const [chartData, setChartData] = useState({});
@@ -47,19 +47,19 @@ export default function EvacueesStatistics() {
             // Dataset configuration
             var datasets_first = [{
                 type: 'bar',
-                label: '男',
+                label: translate(localeJson, 'male'),
                 backgroundColor: 'rgb(31, 119, 180)',
                 data: []
             },
             {
                 type: 'bar',
-                label: '女',
+                label: translate(localeJson, 'female'),
                 backgroundColor: 'rgb(44, 160, 44)',
                 data: []
             },
             {
                 type: 'bar',
-                label: '答えくない',
+                label: translate(localeJson, 'others_text'),
                 backgroundColor: 'rgb(255, 127, 14)',
                 data: []
             }];
@@ -74,7 +74,7 @@ export default function EvacueesStatistics() {
             const chart_first_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
@@ -99,7 +99,6 @@ export default function EvacueesStatistics() {
                 scales: {
                     x: {
                         min: 0,
-                        max: 300,
                         stacked: true,
                         grid: {
                             display: false
@@ -126,7 +125,7 @@ export default function EvacueesStatistics() {
             const chart_second_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         displayColors: false,
@@ -148,7 +147,6 @@ export default function EvacueesStatistics() {
                 scales: {
                     x: {
                         min: 0,
-                        max: 500,
                         stacked: true,
                         ticks: {
                             callback: function (val) {
@@ -181,7 +179,7 @@ export default function EvacueesStatistics() {
             const chart_third_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.2,
+                aspectRatio: 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
@@ -206,7 +204,6 @@ export default function EvacueesStatistics() {
                 scales: {
                     x: {
                         min: 0,
-                        max: 300,
                         stacked: true,
                         grid: {
                             display: false
@@ -262,13 +259,13 @@ export default function EvacueesStatistics() {
             if (data == evacueesShelterOptions[0].value) {
                 datasets_first.map((obj, i) => {
                     switch (obj.label) {
-                        case '男':
+                        case translate(localeJson, 'male'):
                             obj['data'] = count_male_array;
                             break;
-                        case '女':
+                        case translate(localeJson, 'female'):
                             obj['data'] = count_female_array;
                             break;
-                        case '答えくない':
+                        case translate(localeJson, 'others_text'):
                             obj['data'] = count_others_array;
                             break;
                         default:
@@ -279,6 +276,7 @@ export default function EvacueesStatistics() {
                     labels: labels,
                     datasets: datasets_first,
                 }
+                console.log(chartData);
                 await setChartData(chartData);
                 await setOptions(chart_first_options);
             }
@@ -318,7 +316,7 @@ export default function EvacueesStatistics() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <h5 className='page_header'> {translate(localeJson, 'statistics')}</h5>
+                    <h5 className='page-header1'> {translate(localeJson, 'statistics')}</h5>
                     <hr />
                     <InputSelectFloatLabel
                         dropdownFloatLabelProps={{

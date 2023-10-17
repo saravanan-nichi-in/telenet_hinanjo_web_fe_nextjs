@@ -12,9 +12,19 @@ function ShortageSupplies() {
     const columnsData = [
         { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header", textAlign: 'left' },
     ]
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 5,
+            sort_by: "",
+            order_by: "desc",
+        },
+        search: "",
+    });
     const [tableLoading, setTableLoading] = useState(false);
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
     const [frozenArray, setFrozenArray] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
@@ -26,17 +36,16 @@ function ShortageSupplies() {
         setTableLoading(true);
         const fetchData = async () => {
             await loadShortageSuppliesList();
-            setLoader(false);
         };
         fetchData();
-    }, [locale]);
+    }, [locale, getListPayload]);
 
     /**
      * Load shortage supplies list
     */
     const loadShortageSuppliesList = () => {
         // Get shortage supplies list
-        getList(onloadShortageSuppliesListDone);
+        getList(getListPayload, onloadShortageSuppliesListDone);
     }
 
     /**
@@ -92,8 +101,10 @@ function ShortageSupplies() {
             setColumns(additionalColumnsArrayWithOldData);
             setFrozenArray([frozenObj]);
             setList([...preparedList]);
-            setTableLoading(false);
+            setTotalCount(response.data.total);
         }
+        setTableLoading(false);
+        setLoader(false);
     }
 
     /**
@@ -104,6 +115,26 @@ function ShortageSupplies() {
         setSelectedRow(rowData);
         setShowModal(true);
         document.body.classList.add('dialog-open'); // Add class to block scroll
+    }
+
+    /**
+     * Pagination handler
+     * @param {*} e 
+     */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
     }
 
     return (
@@ -140,6 +171,8 @@ function ShortageSupplies() {
                                 }} parentClass={"mb-3"} />
                             </div>
                             <NormalTable
+                                lazy
+                                totalRecords={totalCount}
                                 loading={tableLoading}
                                 stripedRows={true}
                                 className={"custom-table-cell"}
@@ -148,10 +181,12 @@ function ShortageSupplies() {
                                 frozenValue={_.size(list) > 0 && frozenArray}
                                 columns={columns}
                                 filterDisplay="menu"
-                                emptyMessage="No data found."
+                                emptyMessage={translate(localeJson, "data_not_found")}
                                 paginator={true}
-                                rows={5}
+                                first={getListPayload.filters.start}
+                                rows={getListPayload.filters.limit}
                                 paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)}
                             />
                         </div>
                     </div>
