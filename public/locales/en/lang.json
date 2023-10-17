@@ -201,11 +201,12 @@
       "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
       "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
       "new_password_max_15_characters": "The new password must not be greater than 15 characters.",
-      "postal_code_1_validation": "Please specify the postal code using 3 digits.",
-      "postal_code_2_validation": "Please specify the postal code using 4 digits.",
-      "capacity_max_length": " must not be greater than 999999999.",
-      "closing_date": "The closing date and time must be greater than the opening date and time.",
-      "max_length_250": " must be 250 characters or less."
+      "postal_code_1_validation":"Please specify the postal code using 3 digits.",
+      "postal_code_2_validation":"Please specify the postal code using 4 digits.",
+      "capacity_max_length":" must not be greater than 999999999.",
+      "closing_date":"The closing date and time must be greater than the opening date and time.",
+      "max_length_250": " must be 250 characters or less.",
+      "data_not_found":"Data not found."
     },
     "buttons": {
       "import": "Import",

@@ -200,11 +200,12 @@
       "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
       "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
       "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。",
-      "postal_code_1_validation": "郵便番号は3桁で指定してください。",
-      "postal_code_2_validation": "郵便番号は4桁で指定してください。",
-      "max_length_255": "は255文字以内で入力してください。",
-      "capacity_max_length": "999999999以下で入力してください。",
-      "closing_date": "閉鎖日時は開設日時のより大きいである必要です。"
+      "postal_code_1_validation":"郵便番号は3桁で指定してください。",
+      "postal_code_2_validation":"郵便番号は4桁で指定してください。",
+      "max_length_255":"は255文字以内で入力してください。",
+      "capacity_max_length":"999999999以下で入力してください。",
+      "closing_date":"閉鎖日時は開設日時のより大きいである必要です。",
+      "data_not_found":"データーが見つかりません。"
     },
     "buttons": {
       "import": "インポート",
