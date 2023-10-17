@@ -21,6 +21,8 @@ export default function AdminPlacePage() {
   const [tableLoading, setTableLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
+  const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -39,7 +41,7 @@ export default function AdminPlacePage() {
       query: { id: rowData.ID },
     });
   };
-  const columns = [
+  const columnsData = [
     { field: "index", header: translate(localeJson, "s_no"),minWidth:"4rem" },
     {
       field: "evacuation_place",
@@ -126,26 +128,32 @@ export default function AdminPlacePage() {
 
 
   function fetchData(response) {
-    setLoader(true)
-
-    const mappedData = response.data?.model?.list.map((item,index) => {
-      return {
-        index:index+1,
-        ID: item.id,
-        evacuation_place: item.name,
-        address: item.address,
-        evacuation_possible_people: item.total_place,
-        phone_number: item.tel,
-        active_flg: item.active_flg,
-        isActive: item.is_active,
-        status: item.is_active? "place-status-cell" : "",
+  
+    if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+      setLoader(true)
+      const data = response.data.model.list;
+      var additionalColumnsArrayWithOldData = [...columnsData];
+      let preparedList = [];
+      data.map((obj, i) => {
+        let preparedObj = {
+        index:getPayload.filters.start+i+1,
+        ID: obj.id,
+        evacuation_place: obj.name,
+        address: obj.address,
+        evacuation_possible_people: obj.total_place,
+        phone_number: obj.tel,
+        active_flg: obj.active_flg,
+        isActive: obj.is_active,
+        status: obj.is_active? "place-status-cell" : "",
       };
+      preparedList.push(preparedObj);
     });
+    setList(preparedList);
+    setColumns(additionalColumnsArrayWithOldData);
     setTotalCount(response.data.model.total);
-    // Sorting the data by ID
-    setAdmins(mappedData);
-    setLoader(false)
     setTableLoading(false);
+    setLoader(false)
+  }
   }
 
   /**
@@ -333,7 +341,8 @@ export default function AdminPlacePage() {
                     showGridlines={"true"}
                     paginator={"true"}
                     columnStyle={{ textAlign: "center" }}
-                    value={admins}
+                    className={"custom-table-cell"}
+                    value={list}
                     columns={columns}
                     cellClassName={cellClassName}
                     isDataSelectable={isCellSelectable}
