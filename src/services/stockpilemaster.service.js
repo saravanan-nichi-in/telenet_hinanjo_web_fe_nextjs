@@ -24,9 +24,15 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                if(response?.data?.success) {
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
             }
         })
         .catch((error) => {

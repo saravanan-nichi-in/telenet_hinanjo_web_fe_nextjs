@@ -94,6 +94,7 @@
       "status": "Status",
       "shelter_csv_import": "Shelter Master CSV Import",
       "material_csv_import": "Import Material Data CSV",
+      "stockpile_csv_import": "Import Stockpile Master Data CSV",
       "ID": "ID",
       "evacuation_possible_people": "Evacuation Possible People",
       "edit_shelter": "Edit Shelter",
@@ -148,19 +149,21 @@
       "create_qr_codes_successfully": "Create QrCodes successfully.",
       "import_special_care_data_csv":"Import Special Care Data CSV",
       "stockpile_management_create_edit_modal_header": "Stockpile Registration",
-      "stockpile_management_create_edit_field_product_name": "Stockpile Product Name",
-      "stockpile_management_create_edit_field_category": "Category",
-      "stockpile_management_create_edit_field_shelf_life": "Shelf Life (Days)",
+      "stockpile_management_create_edit_field_product_name": "Product Name",
+      "stockpile_management_create_edit_field_category": "Product Type",
+      "stockpile_management_create_edit_field_shelf_life": "Product Shelf Life (Days)",
       "stockpile_management_create_edit_field_stockpile_image": "Image",
+      "stockpile_management_create_button": "Add Stockpile",
       "stockpile_management": {
         "stockpile_management_header": "Stockpile Master Management",
-        "search_category": "Category",
-        "search_product_name": "Stockpile Product Name",
+        "search_category": "Product Type",
+        "search_product_name": "Product Name",
+        "stockpile_search_button" : "Search",
         "table": {
-            "header_slno": "Sl No",
-            "header_product_name": "Stockpile Product Name",
-            "header_category": "Category",
-            "header_shelf_life": "Shelf Life (Days)",
+            "header_slno": "S No",
+            "header_product_name": "Product Name",
+            "header_category": "Product Type",
+            "header_shelf_life": "Product Shelf Life (Days)",
             "header_stockpile_image": "Image",
             "header_action": "Delete",
             "sno":"S No"
@@ -193,13 +196,13 @@
       "new_password_max_15_characters": "The new password must not be greater than 15 characters.",
       "postal_code_1_validation":"Please specify the postal code using 3 digits.",
       "postal_code_2_validation":"Please specify the postal code using 4 digits.",
-      "capacity_max_length":"must not be greater than 999999999.",
-      "closing_date":"The closing date and time must be greater than the opening date and time.",
       "capacity_max_length":" must not be greater than 999999999.",
       "closing_date":"The closing date and time must be greater than the opening date and time.",
       "max_length_250": " Please enter within 250 characters.",
       "material_page_create_update_name_max": "Name 100 characters or less.",
-      "material_page_create_update_unit_max": "Unit 100 characters or less."
+      "material_page_create_update_unit_max": "Unit 100 characters or less.",
+      "stockpile_page_create_update_category_max":"Product Type 100 characters or less.",
+      "stockpile_page_create_update_product_name_max":"Product Name 100 characters or less."
     },
     "buttons": {
       "import": "Import",
@@ -311,9 +314,11 @@
       "image": "Image"
     },
     "validation": {
-      "type_required": "Type is required.",
-      "stockpile_name_required": "stockpile name is required.",
-      "number_field": "Field should be a valid number."
+      "type_required": "Product Type is required.",
+      "stockpile_name_required": "Product Name is required.",
+      "number_field": "Field should be a valid number.",
+      "valid_image_file": "Image format should be valid.",
+      "image_size_validation": "Image size must not exceed 5 MB."
     },
     "buttons": {
       "login": "Login",

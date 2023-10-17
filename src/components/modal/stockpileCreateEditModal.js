@@ -21,12 +21,29 @@ export default function StockpileCreateEditModal(props) {
 
     const schema = Yup.object().shape({
         category: Yup.string()
-            .required(translate(localeJson, 'type_required')),
+            .required(translate(localeJson, 'type_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
         product_name: Yup.string()
-            .required(translate(localeJson, 'stockpile_name_required')),
+            .required(translate(localeJson, 'stockpile_name_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
         shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
             .positive(translate(localeJson, 'number_field'))
             .integer(translate(localeJson, 'number_field'))
+            .max(999),
+        image_logo: Yup.mixed()
+            .notRequired() // Allow it to be nullable
+            .test('fileSize', translate(localeJson, 'image_size_validation'), (value) => {
+                if (value) {
+                return value && value.size <= 5 * 1024 * 1024; // 5 MB in bytes
+                }
+                return true; // Null values are allowed
+            })
+            .test('fileType', translate(localeJson, 'valid_image_file'), (value) => {
+                if (value) {
+                return value && value.type.startsWith('image/'); // Check if the file type starts with "image/"
+                }
+                return true; // Null values are allowed
+            }),    
     });
 
     const [category, setCategory] = useState("");
@@ -154,12 +171,15 @@ export default function StockpileCreateEditModal(props) {
                                                 name: "shelf_life",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
+                                                type: "number",
+                                                min: 100,
+                                                max:999,
                                                 value: values.shelf_life,
                                                 inputClass: "create_input_stock",
                                             }} parentClass={`${errors.shelf_life && touched.shelf_life && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.shelf_life && touched.shelf_life && errors.shelf_life} />
                                         </div>
-                                        <div className="pt-3 ">
+                                        <div className="py-3 ">
                                             <div className='pb-1'>
                                                 <NormalLabel
                                                     text={translate(localeJson, 'stockpile_management_create_edit_field_stockpile_image')} />
@@ -171,6 +191,7 @@ export default function StockpileCreateEditModal(props) {
                                                 },
                                                 inputFileStyle: { fontSize: "12px" }
                                             }} parentClass={"create_input_stock"} />
+                                            <ValidationError errorBlock={errors.image_logo && touched.image_logo && errors.image_logo} />
                                         </div>
                                     </form>
                                 </div>
