@@ -168,7 +168,14 @@
       "Place_Delete_Content_2": "削除してもよろしいでしょうか？",
       "register_place":"避難所の新規登録",
       "edit_place":"避難所の編集",
-      "details_place":"避難所の詳細"
+      "details_place":"避難所の詳細",
+      "city_in": "市内",
+      "city_out": "市外",
+      "pref_out": "県外",
+      "yes": "はい",
+      "no": "いいえ",
+      "place": "場所",
+      "prefecture_symbol": "県"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -258,7 +265,8 @@
       "report_date_time": "報告日時",
       "post_letter": "〒",
       "english": "英語",
-      "japanese": "日本語"
+      "japanese": "日本語",
+      "people_count" : "人数"
     }
   },
   "staff": {
