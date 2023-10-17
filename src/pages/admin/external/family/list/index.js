@@ -64,7 +64,7 @@ export default function ExteranalEvacuationPage() {
         { field: "people_count", header: translate(localeJson, 'people_count'), minWidth: "5rem", sortable: false },
         { field: "shelter_place", header: translate(localeJson, 'shelter_place'), minWidth: "10rem", sortable: false },
         { field: "mail_address", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
-        { field: "post_code", header: translate(localeJson, 'post_code'), minWidth: "8rem", sortable: false },
+        { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false },
         { field: "prefecture", header: translate(localeJson, 'prefecture_symbol'), minWidth: "5rem", sortable: false },
         { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem", sortable: false }
     ];
@@ -112,6 +112,12 @@ export default function ExteranalEvacuationPage() {
         }
     }
 
+    const getFormattedPostCode = (code) => {
+        let newValue = code.toString();
+        const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
+        return formattedValue;
+    }
+
     const getExternalEvacueesList = (response) => {
         if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
             const data = response.data.model.list;
@@ -129,7 +135,7 @@ export default function ExteranalEvacuationPage() {
                     }}>{item.external_person_count}</Link>,
                     shelter_place: item.hinan_id,
                     mail_address: item.email,
-                    post_code: item.zipcode,
+                    post_code: item.post_code ? getFormattedPostCode(item.zipcode) : "",
                     prefecture: item.prefecture_name,
                     address: item.address
                 };
