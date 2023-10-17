@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getDefaultTodayDateTimeFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { InputSelectFloatLabel } from '@/components/dropdown';
@@ -39,8 +39,8 @@ export default function AdminHistoryPlacePage() {
             sort_by: "",
             order_by: "desc",
         },
-        start_date: "",
-        end_date: "",
+        start_date: getGeneralDateTimeDisplayFormat(getDefaultTodayDateTimeFormat("00", "00")),
+        end_date: getGeneralDateTimeDisplayFormat(getDefaultTodayDateTimeFormat("23", "59")),
         place_name: ""
     });
     const historyTableColumns = [
@@ -139,7 +139,6 @@ export default function AdminHistoryPlacePage() {
     const onGetHistoryPlaceList = (response) => {
         if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
             const data = response.data.model.list;
-            console.log(data);
             let historyPlaceListData = [];
             let index = getListPayload.filters.start + 1;
             data.map((obj, i) => {
@@ -201,7 +200,6 @@ export default function AdminHistoryPlacePage() {
      * @param {*} values 
      */
     const onRegister = (values) => {
-        console.log(values);
         const emailList = values.email.split(",");
         if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
             let payload = {
@@ -260,6 +258,12 @@ export default function AdminHistoryPlacePage() {
         }
     }
 
+    const getDefaultTodayDateTime = () => {
+        let startDateTime = getDefaultTodayDateTimeFormat("00", "00");
+        let endDateTime = getDefaultTodayDateTimeFormat("23", "59");
+        setSelectedDate([startDateTime, endDateTime]);
+        return [startDateTime, endDateTime];
+    }
     /**
      * Pagination handler
      * @param {*} e 
@@ -324,7 +328,7 @@ export default function AdminHistoryPlacePage() {
                                 <form>
                                     <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                         <DateTimeCalendarFloatLabel
-                                            date={[new Date(), new Date()]}
+                                            date={getDefaultTodayDateTime}
                                             dateTimeFloatLabelProps={{
                                             inputId: "settingStartDate",
                                             selectionMode: "range",
@@ -334,7 +338,7 @@ export default function AdminHistoryPlacePage() {
                                             onChange: (e) => setSelectedDate(e.value)
                                         }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                            inputId: "shelter-city",
+                                            id: "shelterCity",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",
                                             value: selectedCity,
                                             options: historyPlaceDropdown,
@@ -358,6 +362,7 @@ export default function AdminHistoryPlacePage() {
                             </div>
                             <NormalTable
                                 lazy
+                                id={"history-list"}
                                 totalRecords={totalCount}
                                 loading={tableLoading}
                                 size={"small"}
