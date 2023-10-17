@@ -180,7 +180,13 @@
       "current_number_of_evacuees": "Current Number of Evacuees",
       "evacuation_center_occupancy_rate": "Evacuation Center Occupancy Rate",
       "special_care_percentage": "Special Care Percentage",
-      "others_text": "Others"
+      "others_text": "Others",
+      "japanese_notation":"Japanese Notation",
+      "english_notation":"English Notation",
+      "map_center_coordinates":"MAP center coordinates",
+      "public_information_display_list":"Public information display list",
+      "stockPile_management":"Stockpile Management",
+      "evacuation_history_download":"Evacuation history download"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -206,7 +212,20 @@
       "capacity_max_length":" must not be greater than 999999999.",
       "closing_date":"The closing date and time must be greater than the opening date and time.",
       "max_length_250": " must be 250 characters or less.",
-      "data_not_found":"Data not found."
+      "data_not_found":"Data not found.",
+      "map_scale_required":"Map scale is required.",
+      "footer_required":"Footer is required.",
+      "type_name_jp_required":"Type name (Japanese) is required.",
+      "system_name_jp_required":"System name  (Japanese) is required.",
+      "disclosure_info_jp_required":"Disclosure information (Japanese) is required.",
+      "type_name_en_required":"Type name (English) is required.",
+      "system_name_en_required":"System name (English) is required.",
+      "disclosure_info_en_required":"Disclosure information (English) is required.",
+      "latitude_required":"Latitude is required.",
+      "longitude_required":"Longitude is required.",
+      "default_shell_life_days_required":"Default shelf life(Days) is required.",
+      "logo_img_correct_format":"The logo image must be correct format.",
+      "logo_img_not_greater_than_3mb":"The logo image must not be greater than 3 megabytes."
     },
     "buttons": {
       "import": "Import",
@@ -246,7 +265,20 @@
       "output_target_area": "Select Prefecture",
       "current_password": "Current Password",
       "new_password": "New Password",
-      "new_password_confirmation": "New Password Confirmation"
+      "new_password_confirmation": "New Password Confirmation",
+      "overall_map_size_setting":"Overall MAP Size Setting",
+      "footer_display":"Footer Display",
+      "type_name":"Type Name",
+      "system_name":"System Name",
+      "disclosure_information":"Disclosure information",
+      "lat":"Lat",
+      "lng":"Lng",
+      "display_by_default":"Display by default",
+      "display_items_setting":"Display items setting",
+      "logo_image":"Logo image",
+      "name_phonetic":"Name (phonetic)",
+      "name_kanji":"Name (kanji)",
+      "default_shelf_life_days":"Default shelf life (Days)"
     },
     "others": {
       "not": "None",

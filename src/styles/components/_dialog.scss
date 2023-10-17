@@ -30,3 +30,15 @@
 .dialog-open {
     overflow: hidden;
 }
+
+.modal-import{
+    .p-dialog-content{
+        display: flex;
+    }
+}
+
+@media screen and (min-width: 576px){
+    .importModal_width{
+        width:40rem ;
+    }
+}
