@@ -1,6 +1,6 @@
 import axios from "@/utils/api";
-import { downloadBase64File,getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
-import toast from 'react-hot-toast';
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from "@/helper";
+import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
 /* Identity and Access management (IAM) */
@@ -13,7 +13,7 @@ export const PlaceServices = {
   details: _details,
   deletePlace: _deletePlace,
   updateStatus: _updateStatus,
-  getAddressByZipCode:_getAddressByZipCode
+  getAddressByZipCode: _getAddressByZipCode,
 };
 
 /**
@@ -28,14 +28,14 @@ function _importData(payload, callBackFun) {
       if (response && response.data) {
         toast.success(response?.data?.message, {
           position: "top-right",
-      });
+        });
       }
     })
     .catch((error) => {
       // Handle errors here
       toast.error(error?.response?.data?.message, {
         position: "top-right",
-    })
+      });
     });
 }
 
@@ -49,18 +49,18 @@ function _exportData(payload, callBackFun) {
     .post("/admin/place/export", payload)
     .then((response) => {
       if (response && response.data && response.data.result.filePath) {
-          let date =getYYYYMMDDHHSSSSDateTimeFormat(new Date())
-          downloadBase64File(response.data.result.filePath, `Place_${date}.csv`);
-          toast.success(response?.data?.message, {
-              position: "top-right",
-          });
-      }
-  })
-  .catch((error) => {
-      toast.error(error?.response?.data?.message, {
+        let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
+        downloadBase64File(response.data.result.filePath, `Place_${date}.csv`);
+        toast.success(response?.data?.message, {
           position: "top-right",
+        });
+      }
+    })
+    .catch((error) => {
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
       });
-  });
+    });
 }
 
 /**
@@ -69,7 +69,7 @@ function _exportData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
-  const params = {params:payload}
+  const params = { params: payload };
   axios
     .get("/admin/place", params)
     .then((response) => {
@@ -92,37 +92,36 @@ function _create(payload, callBackFun) {
   axios
     .post("/admin/place", payload)
     .then((response) => {
-      callBackFun(response.data)
+      callBackFun(response.data);
       if (response && response.data) {
         toast.success(response?.data?.message, {
           position: "top-right",
-      });
+        });
       }
     })
     .catch((error) => {
-      callBackFun()
+      callBackFun();
       if (error.response && error.response.status == 422) {
-
-        if(isObject(error.response.data.message))
-        {
-        const errorMessages = Object.values(error.response.data.message);
-        errorMessages.forEach((messages) => {
-          toast.error(messages, {
+        if (isObject(error.response.data.message)) {
+          let errorMessages = Object.values(error.response.data.message);
+          let errorString = errorMessages.join('.')
+          let errorArray = errorString.split(".");
+          errorArray = errorArray.filter(message => message.trim() !== "");
+          // Join the error messages with line breaks
+          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+          let formattedErrorMessage = errorArray
+            .map((message, index) => {
+                return `${message.trim()}`;
+            })
+            .join("\n");
+          toast.error(formattedErrorMessage, {
             position: "top-right",
           });
-          // messages.forEach((msg) => {
-          //   toast.error(msg, {
-          //     position: "top-right",
-          //   });
-          // });
-        });
-        
-      }
-      else {
-        toast.error(error.response.data.message, {
-          position: "top-right",
-        });
-      }
+        } else {
+          toast.error(error.response.data.message, {
+            position: "top-right",
+          });
+        }
       } else {
         console.error(error);
       }
@@ -135,7 +134,7 @@ function _create(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _update(payload, callBackFun) {
-  let place_id=payload.place_id
+  let place_id = payload.place_id;
   axios
     .put(`/admin/place/${place_id}`, payload)
     .then((response) => {
@@ -143,29 +142,32 @@ function _update(payload, callBackFun) {
         callBackFun(response.data);
         toast.success(response?.data?.message, {
           position: "top-right",
-      });
+        });
       }
     })
     .catch((error) => {
-      callBackFun()
-      if (error.response && error.response.status === 422) {
-
-        if(isObject(error.response.data.message))
-        {
-        const errorMessages = Object.values(error.response.data.message);
-        errorMessages.forEach((messages) => {
-          messages.forEach((msg) => {
-            toast.error(msg, {
-              position: "top-right",
-            });
+      callBackFun();
+      if (error.response && error.response.status == 422) {
+        if (isObject(error.response.data.message)) {
+          let errorMessages = Object.values(error.response.data.message);
+          let errorString = errorMessages.join('.')
+          let errorArray = errorString.split(".");
+          errorArray = errorArray.filter(message => message.trim() !== "");
+          // Join the error messages with line breaks
+          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+          let formattedErrorMessage = errorArray
+            .map((message, index) => {
+                return `${message.trim()}`;
+            })
+            .join("\n");
+          toast.error(formattedErrorMessage, {
+            position: "top-right",
           });
-        });
-      }
-      else {
-        toast.error(error.response.data.message, {
-          position: "top-right",
-        });
-      }
+        } else {
+          toast.error(error.response.data.message, {
+            position: "top-right",
+          });
+        }
       } else {
         console.error(error);
       }
@@ -222,13 +224,14 @@ function _updateStatus(payload, callBackFun) {
  */
 async function _getAddressByZipCode(zipCode, callBackFun) {
   try {
-    const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`);
+    const response = await fetch(
+      `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`
+    );
     const data = await response.json();
     if (data.results) {
       callBackFun(data.results);
-    }
-    else {
-      data&&callBackFun()
+    } else {
+      data && callBackFun();
     }
   } catch (error) {
     console.error("Error fetching address data:", error);
@@ -242,21 +245,20 @@ async function _getAddressByZipCode(zipCode, callBackFun) {
  */
 function _deletePlace(id, callBackFun) {
   axios
-      .delete(`/admin/place/${id}`, {data: {"id": id}})
-      .then((response) => {
-          if (response && response.data) {
-              callBackFun(response.data);
-              toast.success(response?.data?.message, {
-                  position: "top-right",
-              });
-          }
-      })
-      .catch((error) => {
-        if(!isArray(error.response.data.message))
-        {
+    .delete(`/admin/place/${id}`, { data: { id: id } })
+    .then((response) => {
+      if (response && response.data) {
+        callBackFun(response.data);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+        });
+      }
+    })
+    .catch((error) => {
+      if (!isArray(error.response.data.message)) {
         toast.error(error.response.data.message, {
           position: "top-right",
         });
       }
-      });
+    });
 }

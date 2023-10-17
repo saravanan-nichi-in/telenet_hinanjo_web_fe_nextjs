@@ -269,7 +269,6 @@ export default function PlaceCreatePage() {
           }
           const sourceDate2 = new Date(values.closing_time);
           if (!isNaN(sourceDate2)) {
-            alert(sourceDate2.getMinutes())
             const ClosingMinutes = sourceDate2.getMinutes();
             const ClosingHours = sourceDate2.getHours();
             const closingDateMinute = openingDate.getMinutes();
