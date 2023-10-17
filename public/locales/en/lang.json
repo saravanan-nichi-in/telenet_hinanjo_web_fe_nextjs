@@ -194,7 +194,8 @@
       "postal_code_2_validation":"Please specify the postal code using 4 digits.",
       "capacity_max_length":" must not be greater than 999999999.",
       "closing_date":"The closing date and time must be greater than the opening date and time.",
-      "max_length_250": " must be 250 characters or less."
+      "max_length_250": " must be 250 characters or less.",
+      "data_not_found":"Data not found."
     },
     "buttons": {
       "import": "Import",

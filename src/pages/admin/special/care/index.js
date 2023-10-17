@@ -148,6 +148,14 @@ export default function AdminSpecialCarePage() {
     }
 }
 
+
+  const importFileApi = (file) => {
+      const formData = new FormData()
+      formData.append('file',file)
+      importData(formData)
+      setImportSpecialCareOpen(false);
+  };
+
     return (
         <>
             <CommonDialog
@@ -205,6 +213,7 @@ export default function AdminSpecialCarePage() {
             <AdminManagementImportModal
                 open={importSpecialCareOpen}
                 close={onSpecialCareImportClose}
+                importFile={importFileApi}
                 register={onRegister}
                 modalHeaderText={translate(localeJson, 'import_special_care_data_csv')}
             />
@@ -227,7 +236,8 @@ export default function AdminSpecialCarePage() {
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'export'),
-                                severity: "primary"
+                                severity: "primary",
+                                onClick: () => exportData(getPayload),
                             }} parentClass={"mr-1 mt-1"} />
 
                             <Button buttonProps={{
@@ -250,6 +260,7 @@ export default function AdminSpecialCarePage() {
                             className={"custom-table-cell"}
                             value={list}
                             columns={columns}
+                            emptyMessage= {translate("data_not_found",locale)}
                             first={getPayload.filters.start}
                             rows={getPayload.filters.limit}
                             paginatorLeft={true}
