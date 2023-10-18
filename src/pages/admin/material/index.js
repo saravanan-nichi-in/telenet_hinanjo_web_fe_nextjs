@@ -15,16 +15,18 @@ export default function AdminMaterialPage() {
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
         { field: 'slno', header: 'ID', minWidth: "5rem" },
-        { field: 'name', header: '物資', minWidth: "5rem", maxWidth: "10rem" },
-        { field: 'unit', header: '単位', minWidth: "5rem", maxWidth: "10rem" },
+        { field: 'name', header: '物資', minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "15rem" },
         {
             field: 'actions',
-            header: translate(localeJson, 'edit'),
+            header: translate(localeJson, 'common_action'),
             textAlign: "center",
             minWidth: "2rem",
             body: (rowData) => (
                 <>
-                <Button buttonProps={{
+                <Button 
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
                         text: translate(localeJson, 'edit'), 
                         buttonClass: "text-primary ",
                         bg: "bg-white",
@@ -36,58 +38,19 @@ export default function AdminMaterialPage() {
                             hideOverFlow();
                         },
                     }} />
+                <Button parentStyle={{ display: "inline" }}
+                    buttonProps={{
+                    text: translate(localeJson, 'delete'), 
+                    buttonClass: "text-primary ml-2",
+                    bg: "bg-red-600 text-white",
+                    severity: "danger",
+                    hoverBg: "hover:bg-red-500 hover:text-white",
+                    onClick: () => openDeleteDialog(rowData.id)
+                }} />
                 </>
-            ),
-        },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'delete'),
-            textAlign: "center",
-            minWidth: "2rem",
-            body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
-                        text: translate(localeJson, 'delete'), 
-                        buttonClass: "text-primary",
-                        bg: "bg-red-600 text-white",
-                        severity: "danger",
-                        hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => openDeleteDialog(rowData.id)
-                    }} />
-                </div>
             ),
         }
     ];
-
-    /**
-     * Action column for dashboard list
-     * @param {*} obj 
-     * @returns 
-     */
-    const action = (obj) => {
-        return (<>
-        <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary ",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => {
-                    setRegisterModalAction("edit")
-                    setCurrentEditObj(obj)
-                    setEmailSettingsOpen(true)
-                    hideOverFlow();
-                },
-            }} />
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'delete'), 
-                buttonClass: "text-primary ml-2",
-                bg: "bg-red-600 text-white",
-                severity: "danger",
-                hoverBg: "hover:bg-red-500 hover:text-white",
-                onClick: () => openDeleteDialog(obj.id)
-            }} />
-        </>
-        );
-    };
 
     const [getListPayload, setGetListPayload] = useState({
         filters: {

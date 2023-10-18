@@ -60,12 +60,14 @@ export default function AdminStockPileMaster() {
         },
         {
             field: 'actions',
-            header: translate(localeJson, 'edit'),
+            header: translate(localeJson, 'common_action'),
             textAlign: "center",
             minWidth: "5rem",
             body: (rowData) => (
                 <>
-                <Button buttonProps={{
+                <Button 
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
                         text: translate(localeJson, 'edit'), 
                         buttonClass: "text-primary ",
                         bg: "bg-white",
@@ -77,24 +79,17 @@ export default function AdminStockPileMaster() {
                             hideOverFlow()
                         },
                     }} />
+                <Button 
+                    parentStyle={{ display: "inline" }}
+                    buttonProps={{
+                    text: translate(localeJson, 'delete'), 
+                    buttonClass: "text-primary ml-2",
+                    bg: "bg-red-600 text-white",
+                    severity: "danger",
+                    hoverBg: "hover:bg-red-500 hover:text-white",
+                    onClick: () => openDeleteDialog(rowData.product_id)
+                }} />
                 </>
-            ),
-        },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'delete'),
-            textAlign: "center",
-            body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
-                        text: translate(localeJson, 'delete'), 
-                        buttonClass: "text-primary",
-                        bg: "bg-red-600 text-white",
-                        severity: "danger",
-                        hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => openDeleteDialog(rowData.product_id)
-                    }} />
-                </div>
             ),
         }
     ];

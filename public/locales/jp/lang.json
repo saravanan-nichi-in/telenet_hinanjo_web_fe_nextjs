@@ -189,7 +189,8 @@
       "map_center_coordinates":"MAPの中心座標",
       "public_information_display_list":"公開情報一覧表示",
       "stockPile_management":"備蓄品管理",
-      "evacuation_history_download":"避難所状況履歴取得"
+      "evacuation_history_download":"避難所状況履歴取得",
+      "common_action":"アクション"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

@@ -190,7 +190,8 @@
       "map_center_coordinates":"MAP center coordinates",
       "public_information_display_list":"Public information display list",
       "stockPile_management":"Stockpile Management",
-      "evacuation_history_download":"Evacuation history download"
+      "evacuation_history_download":"Evacuation history download",
+      "common_action":"Action"
     },
     "validation": {
       "staff_name_required": "Staff Name required",

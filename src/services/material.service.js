@@ -124,7 +124,7 @@ function _create(payload, callBackFun) {
  */
 function _update(id, payload, callBackFun) {
     axios
-        .put(`/admin/material/${id}`, payload)
+        .put(`/admin/material/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();
@@ -149,7 +149,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/material/${id}`, {data: {"id": id}})
+        .delete(`/admin/material/delete`, {data: {"id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
