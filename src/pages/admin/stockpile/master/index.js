@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import _ from 'lodash';
 
@@ -10,11 +9,10 @@ import { Button, DividerComponent, NormalTable, SelectFloatLabel } from '@/compo
 import { AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 import { StockpileService } from '@/services/stockpilemaster.service';
-import { historyPageCities } from '@/utils/constant';
 
 export default function AdminStockPileMaster() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
 
@@ -27,33 +25,34 @@ export default function AdminStockPileMaster() {
     const callDropDownApi = () => {
         StockpileService.getCategoryAndProductList((res) => {
             let data = res.data;
-            let tempProducts = [""];
+            let tempProducts = ["--"];
             let tempCategories = new Set();
             data.forEach((value, index) => {
                 tempProducts.push(value.product_name);
                 tempCategories.add(value.category);
             })
             console.log([...tempCategories], tempProducts);
-            setCategories(["", ...tempCategories]);
+            setCategories(["--", ...tempCategories]);
             setProductNames(tempProducts);
         });
     }
 
     const columnsData = [
         { field: 'id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
-        { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem" },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), minWidth: "10rem" },
+        { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem", sortable: true },
         { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "10rem" },
         {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
             minWidth: "5rem",
             body: (rowData) => (
-                <div>
+                <div style={{textAlign: "center"}}>
                     {(rowData.stockpile_image && rowData.stockpile_image != "") ?
-                        <FaEye style={{ fontSize: '20px' }} onClick={() => {
+                        <FaEye style={{ fontSize: '20px', textAlign: "center" }} onClick={() => {
                             setSelectedImage(rowData.stockpile_image);
-                            setToggleImageModal(true)
+                            setToggleImageModal(true);
+                            hideOverFlow();
                         }} />
                         : <FaEyeSlash style={{ fontSize: '20px' }} />}
                 </div>
@@ -61,27 +60,40 @@ export default function AdminStockPileMaster() {
         },
         {
             field: 'actions',
-            header: translate(localeJson, 'header_action'),
-            minWidth: "10rem",
+            header: translate(localeJson, 'edit'),
+            textAlign: "center",
             body: (rowData) => (
                 <>
-                    <Button parentStyle={{ display: "inline" }} buttonProps={{
-                        text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => openDeleteDialog(rowData.product_id)
-                    }} />
-                    <Button parentStyle={{ display: "inline" }} buttonProps={{
-                        text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+                <Button buttonProps={{
+                        text: translate(localeJson, 'edit'), 
+                        buttonClass: "text-primary ",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
                         onClick: () => {
                             setRegisterModalAction("edit")
                             setCurrentEditObj(rowData)
                             setEmailSettingsOpen(true)
+                            hideOverFlow()
                         },
                     }} />
                 </>
+            ),
+        },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'delete'),
+            textAlign: "center",
+            body: (rowData) => (
+                <div>
+                    <Button buttonProps={{
+                        text: translate(localeJson, 'delete'), 
+                        buttonClass: "text-primary",
+                        bg: "bg-red-600 text-white",
+                        severity: "danger",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
+                        onClick: () => openDeleteDialog(rowData.product_id)
+                    }} />
+                </div>
             ),
         }
     ];
@@ -93,16 +105,26 @@ export default function AdminStockPileMaster() {
 
     const openDeleteDialog = (id) => {
         setDeleteId(id);
-        setDeleteStaffOpen(true)
+        setDeleteOpen(true);
+        hideOverFlow();
     }
 
-    const onStaffDeleteClose = (action = "close") => {
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
+
+    const onDeleteClose = (action = "close") => {
         if (action == "confirm") {
             StockpileService.delete(deleteId, (resData) => {
                 onGetMaterialListOnMounting()
             });
         }
-        setDeleteStaffOpen(!deleteStaffOpen);
+        setDeleteOpen(false);
+        showOverFlow();
     };
 
     /**
@@ -110,6 +132,7 @@ export default function AdminStockPileMaster() {
    */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        showOverFlow();
     };
 
     /**
@@ -124,6 +147,7 @@ export default function AdminStockPileMaster() {
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
+        hideOverFlow();
     };
 
     const onRegisterImport = (values) => {
@@ -138,41 +162,14 @@ export default function AdminStockPileMaster() {
 
         });
         onStaffImportClose();
+        showOverFlow();
     }
 
     //Listing start
-
-    /**
- * Action column for dashboard list
- * @param {*} obj 
- * @returns 
- */
-    const action = (obj) => {
-        return (<>
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => openDeleteDialog(obj.product_id)
-            }} />
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => {
-                    setRegisterModalAction("edit")
-                    setCurrentEditObj(obj)
-                    setEmailSettingsOpen(true)
-                },
-            }} />
-        </>
-        );
-    };
-
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 7,
+            limit: 5,
             order_by: "",
             sort_by: ""
         },
@@ -213,7 +210,7 @@ export default function AdminStockPileMaster() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
-                        id: i + 1,
+                        id: i + getListPayload.filters.start + 1,
                         product_id: obj.product_id ?? "",
                         product_name: obj.product_name ?? "",
                         category: obj.category ?? "",
@@ -228,6 +225,9 @@ export default function AdminStockPileMaster() {
                 setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
+            } else {
+                setTableLoading(false);
+                setList([]);
             }
         });
 
@@ -255,13 +255,14 @@ export default function AdminStockPileMaster() {
 
     const closeImageModal = () => {
         setToggleImageModal(false);
+        showOverFlow();
     }
 
     return (
         <>
             <AdminManagementDeleteModal
-                open={deleteStaffOpen}
-                close={onStaffDeleteClose}
+                open={deleteOpen}
+                close={onDeleteClose}
                 refreshList={onGetMaterialListOnMounting}
             />
             <StockpileSummaryImageModal
@@ -283,15 +284,14 @@ export default function AdminStockPileMaster() {
                 close={onStaffImportClose}
                 importFile={importFileApi}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, "shelter_csv_import")}
+                modalHeaderText={translate(localeJson, "stockpile_csv_import")}
             />
 
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
-                            <h5 className='page_header'>{translate(localeJson, 'stockpile_management_header')}</h5>
-                            <DividerComponent />
+                            <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
+                            <hr />
                             <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
@@ -321,26 +321,32 @@ export default function AdminStockPileMaster() {
                                     <Button buttonProps={{
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'signup'),
+                                        text: translate(localeJson, 'stockpile_management_create_button'),
                                         onClick: () => {
                                             setRegisterModalAction("create");
                                             setCurrentEditObj({ category: "", product_name: "", shelf_life: "" });
                                             setEmailSettingsOpen(true);
-
+                                            hideOverFlow();
                                         },
                                         severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
+                                    }} parentClass={"mt-1"} />
                                 </div>
                                 <div>
                                     <form >
-                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div className='mt-3 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                             <div>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "category_search",
                                                     selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
                                                     options: categories,
                                                     value: selectedCategory,
-                                                    onChange: (e) => setSelectedCategory(e.value),
+                                                    onChange: (e) => {
+                                                        if(e.value=="--") {
+                                                            setSelectedCategory("")
+                                                        } else {
+                                                            setSelectedCategory(e.value)
+                                                        }
+                                                    },
                                                     text: translate(localeJson, "search_category"),
                                                     custom: "mobile-input custom-select"
                                                 }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
@@ -351,7 +357,13 @@ export default function AdminStockPileMaster() {
                                                     selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
                                                     options: productNames,
                                                     value: selectedProductName,
-                                                    onChange: (e) => setSelectedProductName(e.value),
+                                                    onChange: (e) => {
+                                                        if(e.value=="--") {
+                                                            setSelectedProductName("")
+                                                        } else {
+                                                            setSelectedProductName(e.value)
+                                                        }
+                                                    },
                                                     text: translate(localeJson, "search_product_name"),
                                                     custom: "mobile-input custom-select"
                                                 }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
@@ -360,7 +372,7 @@ export default function AdminStockPileMaster() {
                                                 <Button buttonProps={{
                                                     buttonClass: "evacuation_button_height",
                                                     type: 'submit',
-                                                    text: translate(localeJson, 'update'),
+                                                    text: translate(localeJson, 'stockpile_search_button'),
                                                     rounded: "true",
                                                     severity: "primary",
                                                     onClick: (e) => {
@@ -387,7 +399,7 @@ export default function AdminStockPileMaster() {
                                         value={list}
                                         columns={columns}
                                         filterDisplay="menu"
-                                        emptyMessage="No data found."
+                                        emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}
                                         first={getListPayload.filters.start}
                                         rows={getListPayload.filters.limit}
@@ -396,7 +408,6 @@ export default function AdminStockPileMaster() {
                                     />
                                 </div>
                             </div>
-                        </section>
                     </div>
                 </div>
             </div>

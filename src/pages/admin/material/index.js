@@ -14,13 +14,46 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'slno', header: 'ID' },
-        { field: 'name', header: '物資', minWidth: "20rem" },
-        { field: 'unit', header: '単位' },
+        { field: 'slno', header: 'ID', minWidth: "15rem" },
+        { field: 'name', header: '物資', minWidth: "15rem", maxWidth: "10rem" },
+        { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "10rem" },
         {
             field: 'actions',
-            header: '削除',
-            minWidth: "7rem",
+            header: translate(localeJson, 'edit'),
+            textAlign: "center",
+            body: (rowData) => (
+                <>
+                <Button buttonProps={{
+                        text: translate(localeJson, 'edit'), 
+                        buttonClass: "text-primary ",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => {
+                            setRegisterModalAction("edit")
+                            setCurrentEditObj(rowData)
+                            setEmailSettingsOpen(true)
+                            hideOverFlow();
+                        },
+                    }} />
+                </>
+            ),
+        },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'delete'),
+            textAlign: "center",
+            body: (rowData) => (
+                <div>
+                    <Button buttonProps={{
+                        text: translate(localeJson, 'delete'), 
+                        buttonClass: "text-primary",
+                        bg: "bg-red-600 text-white",
+                        severity: "danger",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
+                        onClick: () => openDeleteDialog(rowData.id)
+                    }} />
+                </div>
+            ),
         }
     ];
 
@@ -31,21 +64,24 @@ export default function AdminMaterialPage() {
      */
     const action = (obj) => {
         return (<>
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                bg: "bg-white",
-                hoverBg: "hover:bg-primary hover:text-white",
-                onClick: () => openDeleteDialog(obj.id)
-            }} />
-            <Button parentStyle={{ display: "inline" }} buttonProps={{
-                text: translate(localeJson, 'edit'), buttonClass: "text-primary ml-2",
+        <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'edit'), buttonClass: "text-primary ",
                 bg: "bg-white",
                 hoverBg: "hover:bg-primary hover:text-white",
                 onClick: () => {
                     setRegisterModalAction("edit")
                     setCurrentEditObj(obj)
                     setEmailSettingsOpen(true)
+                    hideOverFlow();
                 },
+            }} />
+            <Button parentStyle={{ display: "inline" }} buttonProps={{
+                text: translate(localeJson, 'delete'), 
+                buttonClass: "text-primary ml-2",
+                bg: "bg-red-600 text-white",
+                severity: "danger",
+                hoverBg: "hover:bg-red-500 hover:text-white",
+                onClick: () => openDeleteDialog(obj.id)
             }} />
         </>
         );
@@ -93,11 +129,10 @@ export default function AdminMaterialPage() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
-                        slno: i + 1,
+                        slno: i + getListPayload.filters.start + 1,
                         id: obj.id ?? "",
                         name: obj.name ?? "",
                         unit: obj.unit ?? "",
-                        actions: action(obj)
                     }
                     preparedList.push(preparedObj);
                 })
@@ -106,6 +141,9 @@ export default function AdminMaterialPage() {
                 setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
+            } else {
+                setTableLoading(false);
+                setList([]);
             }
 
         });
@@ -116,7 +154,8 @@ export default function AdminMaterialPage() {
 
     const openDeleteDialog = (id) => {
         setDeleteId(id);
-        setDeleteStaffOpen(true)
+        setDeleteStaffOpen(true);
+        hideOverFlow();
     }
 
     const onStaffDeleteClose = (action = "close") => {
@@ -126,14 +165,23 @@ export default function AdminMaterialPage() {
             });
         }
         setDeleteStaffOpen(!deleteStaffOpen);
+        showOverFlow();
     };
 
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
 
     /**
     * Email setting modal close
    */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        showOverFlow();
     };
 
     /**
@@ -142,16 +190,19 @@ export default function AdminMaterialPage() {
      */
     const onRegister = (values) => {
         setEmailSettingsOpen(false);
+        hideOverFlow();
     };
 
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
+        showOverFlow();
     };
 
     const onRegisterImport = (values) => {
         values.file && setImportPlaceOpen(false);
+        hideOverFlow();
     };
 
     const importFileApi = (file) => {
@@ -205,16 +256,15 @@ export default function AdminMaterialPage() {
                 open={importPlaceOpen}
                 close={onStaffImportClose}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, "shelter_csv_import")}
+                modalHeaderText={translate(localeJson, "material_csv_import")}
                 importFile={importFileApi}
             />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
-                            <h5 className='page_header'>{translate(localeJson, 'material')}</h5>
-                            <DividerComponent />
-                            <div className="col-12">
+                            <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
+                            <hr />
+                            <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -222,7 +272,10 @@ export default function AdminMaterialPage() {
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'import'),
                                         severity: "primary",
-                                        onClick: () => setImportPlaceOpen(true),
+                                        onClick: () => {
+                                            setImportPlaceOpen(true);
+                                            hideOverFlow();
+                                        },
                                     }} parentClass={"mr-1 mt-1"} />
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -245,14 +298,15 @@ export default function AdminMaterialPage() {
                                         type: 'submit',
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'create'),
+                                        text: translate(localeJson, 'signup'),
                                         onClick: () => {
                                             setRegisterModalAction("create")
                                             setCurrentEditObj({ name: "", unit: "" })
-                                            setEmailSettingsOpen(true)
+                                            setEmailSettingsOpen(true);
+                                            hideOverFlow();
                                         },
                                         severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
+                                    }} parentClass={"mt-1"} />
                                 </div>
                                 <div className='mt-3'>
                                     <NormalTable
@@ -265,7 +319,7 @@ export default function AdminMaterialPage() {
                                         value={list}
                                         columns={columns}
                                         filterDisplay="menu"
-                                        emptyMessage="No data found."
+                                        emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}
                                         first={getListPayload.filters.start}
                                         rows={getListPayload.filters.limit}
@@ -274,7 +328,6 @@ export default function AdminMaterialPage() {
                                     />
                                 </div>
                             </div>
-                        </section>
                     </div>
                 </div>
             </div>

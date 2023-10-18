@@ -93,6 +93,8 @@
       "altitude": "海抜",
       "status": "状態",
       "shelter_csv_import": "避難所マスタCSVインポート",
+      "material_csv_import": "避難所マスタCSVインポート",
+      "stockpile_csv_import": "避難所マスタCSVインポート",
       "evacuation_possible_people": "避難可能人数",
       "ID": "ID",
       "edit_shelter": "避難所編集",
@@ -150,12 +152,14 @@
       "stockpile_management_create_edit_field_category": "種別",
       "stockpile_management_create_edit_field_shelf_life": "保管期間 (日)",
       "stockpile_management_create_edit_field_stockpile_image": "画像",
+      "stockpile_management_create_button": "新規登録",
       "stockpile_management": {
         "stockpile_management_header": "備蓄品マスタ管理",
         "search_category": "種別",
-        "search_product_name": "備蓄品名",
-        "table": {
-          "header_slno": "Sl No",
+        "search_product_name":"備蓄品名",
+        "stockpile_search_button" : "検索",
+        "table" : {
+          "header_slno" : "番号",
           "header_product_name": "備蓄品名",
           "header_category": "種別",
           "header_shelf_life": "保管期間 (日)",
@@ -211,6 +215,10 @@
       "max_length_255":"は255文字以内で入力してください。",
       "capacity_max_length":"999999999以下で入力してください。",
       "closing_date":"閉鎖日時は開設日時のより大きいである必要です。",
+      "material_page_create_update_name_max": "物資は100文字以下で指定してください。",
+      "material_page_create_update_unit_max": "単位は100文字以下で指定してください。",
+      "stockpile_page_create_update_category_max":"種別は100文字以内で入力してください。",
+      "stockpile_page_create_update_product_name_max":" 備蓄品名は100文字以内で入力してください。",
       "data_not_found":"データーが見つかりません。",
       "map_scale_required":"全体MAP縮尺率は必須です。",
       "footer_required":"フッター表示は必須です。",
@@ -256,6 +264,7 @@
       "address_email": "メール",
       "tel": "電話番号",
       "supplies": "物資",
+      "material_name": "物資",
       "unit": "単位",
       "notification_email_id": "通知先メールID",
       "transmission_interval": "送信間隔",
@@ -350,7 +359,9 @@
     "validation": {
       "type_required": "種別は必須です。",
       "stockpile_name_required": "備蓄品名は必須です。",
-      "number_field": "フィールドは有効な数字である必要があります。"
+      "number_field": "フィールドは有効な数字である必要があります。",
+      "valid_image_file": "画像のフォーマットが正しいものをご使用ください。",
+      "image_size_validation": "画像サイズは5MB以内のものをご使用ください。"
     },
     "buttons": {
       "login": "ログイン",
