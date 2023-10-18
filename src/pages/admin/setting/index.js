@@ -33,7 +33,7 @@ export default function Setting() {
             .required(translate(localeJson, 'default_shell_life_days_required')),
         longitude: Yup.number()
             .required(translate(localeJson, 'longitude_required')),
-        file: Yup.mixed()
+        file: Yup.mixed().nullable()
             .test('is-image', translate(localeJson, 'logo_img_correct_format'), (value) => {
                 if (!value) return true; // If no file is selected, the validation passes.
                 const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
@@ -127,6 +127,7 @@ export default function Setting() {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    setFieldValue,
                 }) => (
                     <div className="grid">
                         <div className="col-12">
@@ -135,10 +136,10 @@ export default function Setting() {
                                 <hr />
                                 <form onSubmit={handleSubmit}>
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
 
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <SelectFloatLabel
                                                     selectFloatLabelProps={{
@@ -168,10 +169,10 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                             {translate(localeJson, 'japanese_notation')}
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <InputFloatLabel
                                                     inputFloatLabelProps={{
@@ -212,10 +213,10 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                             {translate(localeJson, 'english_notation')}
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <InputFloatLabel
                                                     inputFloatLabelProps={{
@@ -256,16 +257,21 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                             {translate(localeJson, 'map_center_coordinates')}
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <InputNumberFloatLabel
                                                     inputNumberFloatProps={{
                                                         mode: "decimal",
                                                         value: values.latitude,
-                                                        onValueChange: handleChange,
+                                                        onChange: (evt) => {
+                                                            setFieldValue("latitude", evt.value);
+                                                        },
+                                                        onValueChange: (evt) => {
+                                                            setFieldValue("latitude", evt.value);
+                                                        },
                                                         onBlur: handleBlur,
                                                         name: "latitude",
                                                         maxFractionDigits: "10",
@@ -279,9 +285,15 @@ export default function Setting() {
                                                     inputNumberFloatProps={{
                                                         mode: "decimal",
                                                         value: values.longitude,
-                                                        onValueChange: handleChange,
+                                                        onChange: (evt) => {
+                                                            setFieldValue("longitude", evt.value);
+                                                        },
+                                                        onValueChange: (evt) => {
+                                                            setFieldValue("longitude", evt.value);
+                                                        },
                                                         onBlur: handleBlur,
                                                         name: "longitude",
+
                                                         maxFractionDigits: "10",
                                                         text: translate(localeJson, 'lng'),
                                                         inputNumberClass: "w-full",
@@ -292,12 +304,12 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                             {translate(localeJson, 'public_information_display_list')}
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
-                                            <div>
-                                                <div>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
+                                            <div className='flex'>
+                                                <div className='pr-2'>
                                                     <NormalLabel
                                                         text={translate(localeJson, 'display_by_default')}
                                                     />
@@ -315,7 +327,7 @@ export default function Setting() {
                                                 </div>
                                             </div>
                                             <div className='pt-5'>
-                                                <div>
+                                                <div className='pb-2'>
                                                     <NormalLabel
                                                         text={translate(localeJson, 'display_items_setting')}
                                                     />
@@ -331,10 +343,10 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6  align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4  align-self-center'>
                                             {translate(localeJson, 'stockPile_management')}
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6 justify-content-end'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8 justify-content-end'>
                                             <div>
                                                 <InputNumberFloatLabel
                                                     inputNumberFloatProps={{
@@ -342,7 +354,12 @@ export default function Setting() {
                                                         value: values.defaultShelfLife,
                                                         name: "defaultShelfLife",
                                                         maxFractionDigits: "1",
-                                                        onValueChange: handleChange,
+                                                        onChange: (evt) => {
+                                                            setFieldValue("defaultShelfLife", evt.value);
+                                                        },
+                                                        onValueChange: (evt) => {
+                                                            setFieldValue("defaultShelfLife", evt.value);
+                                                        },
                                                         onBlur: handleBlur,
                                                         text: translate(localeJson, 'default_shelf_life_days'),
                                                         inputNumberClass: "w-full",
@@ -353,9 +370,9 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                         </div>
-                                        <div className='flex-row col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <NormalLabel
                                                     text={translate(localeJson, 'logo_image')}
@@ -374,14 +391,14 @@ export default function Setting() {
                                     </div>
                                     <hr />
                                     <div className='flex p-5 pl-0 pr-0'>
-                                        <div className='col-4 lg:col-6 md:col-6 align-self-center'>
+                                        <div className='col-4 lg:col-4 md:col-4 align-self-center'>
                                             {translate(localeJson, 'evacuation_history_download')}
                                         </div>
-                                        <div className='flex-row flex-end col-8 lg:col-6 md:col-6'>
+                                        <div className='flex-row flex-end col-8 lg:col-8 md:col-8'>
                                             <div>
                                                 <InputSwitch
                                                     inputSwitchProps={{
-                                                        name: "public_availability",
+                                                        name: "loadStatus",
                                                         checked: values.loadStatus,
                                                         onChange: handleChange,
                                                         switchClass: "",

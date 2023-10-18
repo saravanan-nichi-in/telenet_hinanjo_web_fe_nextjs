@@ -5,6 +5,7 @@ const InputSwitch = (props) => {
     const {
         parentClass,
         parentStyle,
+        custom,
         inputSwitchProps = {}
     } = props;
     const {
@@ -20,7 +21,7 @@ const InputSwitch = (props) => {
     } = inputSwitchProps;
 
     return (
-        <div className={`${parentClass}`} style={parentStyle}>
+        <div className={`${parentClass} ${custom || 'custom-switch'} `} style={parentStyle}>
             <InputSwitcher className={` ${switchClass}`}
                 checked={checked}
                 id={id}

@@ -101,7 +101,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                             {[0, 1, 2].map((arr, i) => (
                                 <div key={i} className="p-2">
                                     <div className=" align-items-center content-align">
-                                        選択肢{i}<span style={{
+                                        選択肢{i + 1}<span style={{
                                             color: "red"
                                         }}>*</span>
                                     </div>
@@ -114,7 +114,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                                             <Input inputProps={{
                                                 placeholder: "項目（英語）",
                                                 inputClass: "col-12 p-inputtext-sm",
-                                                value: `選択肢${i}（英語）`
+                                                value: `選択肢${i + 1}（英語）`
                                             }} />
                                         </div>
                                     </div>
@@ -140,6 +140,8 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                         </AccordionTab>
                     </Accordion>
                 </div>
+
+
                 <div className='hidden sm:block'>
                     {/* Questionnaires header */}
                     <div className="flex " style={{
@@ -163,9 +165,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                                 <div className='col-6 flex  gap-2 align-items-center justify-content-end '>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
-                                    }}
-
-                                    />
+                                    }} />
                                     避難者登録画面表示
                                 </div>
                             </div>
@@ -193,7 +193,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                                         数値形式
                                     </div>
                                 </div>
-                                <div className='col-6 flex gap-2 align-items-center justify-content-end'>
+                                <div className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
                                     }} />
@@ -246,7 +246,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
                             borderLeft: "1px solid #000",
                         }}>
                             <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                                選択肢{i}<span style={{
+                                選択肢{i + 1}<span style={{
                                     color: "red"
                                 }}>*</span>
                             </div>
@@ -261,7 +261,7 @@ const QuestionnairesView = ({ questionnaires, handleOnDrag }) => {
 
                                     <Input inputProps={{
                                         value: "",
-                                        placeholder: `選択肢${i}（英語）`,
+                                        placeholder: `選択肢${i + 1}（英語）`,
                                         inputClass: "w-full"
                                     }} parentClass="col p-inputtext-lg md:w-full " />
                                 </div>
