@@ -24,7 +24,6 @@ export default function AdminHistoryPlacePage() {
     const [prefectureListDropdown, setprefectureListDropdown] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
-    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [emailSettingValues, setEmailSettingValues] = useState({
@@ -179,7 +178,6 @@ export default function AdminHistoryPlacePage() {
         }
         else {
             setHistoryPlaceList([]);
-            setEmptyTableMessage(response.message);
             setTotalCount(0);
             setTableLoading(false);
         }
@@ -398,7 +396,7 @@ export default function AdminHistoryPlacePage() {
                                 showGridlines={"true"}
                                 value={historyPlaceList}
                                 columns={historyTableColumns}
-                                emptyMessage={emptyTableMessage}
+                                emptyMessage={translate(localeJson, "data_not_found")}
                                 first={getListPayload.filters.start}
                                 rows={getListPayload.filters.limit}
                                 paginatorLeft={true}

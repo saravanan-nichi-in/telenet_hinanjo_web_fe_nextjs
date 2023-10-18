@@ -65,7 +65,7 @@ function _getSpecialCareList(payload, callBackFun) {
 
 function _createSpecialCare(payload, callBackFun) {
   axios
-    .post("/admin/specialcare", payload)
+    .post("/admin/specialcare/store", payload)
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {

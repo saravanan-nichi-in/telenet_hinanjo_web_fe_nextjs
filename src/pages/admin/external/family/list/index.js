@@ -28,7 +28,6 @@ export default function ExteranalEvacuationPage() {
     const [externalPersonCount, setExternalPersonCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [evacuationStatusOptions, setEvacuationStatusOptions] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -149,7 +148,6 @@ export default function ExteranalEvacuationPage() {
 
         else {
             setExternalEvacueesList([]);
-            setEmptyTableMessage(response.message);
             setTableLoading(false);
             setTotalCount(0);
         }
@@ -290,7 +288,7 @@ export default function ExteranalEvacuationPage() {
                         showGridlines={"true"}
                         value={externalEvacueesList}
                         columns={externalEvacueesListColumns}
-                        emptyMessage={emptyTableMessage}
+                        emptyMessage={translate(localeJson, "data_not_found")}
                         first={getListPayload.filters.start}
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}

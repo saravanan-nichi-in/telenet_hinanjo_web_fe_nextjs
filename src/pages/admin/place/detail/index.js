@@ -197,7 +197,7 @@ export default function StaffManagementEditPage() {
                 </div>
               </div>
               <div
-                className="flex pt-3 pb-3"
+                className="flex pt-3 pb-3 gap-2"
                 style={{ justifyContent: "start", flexWrap: "wrap" }}
               >
                 <div>
@@ -216,7 +216,7 @@ export default function StaffManagementEditPage() {
                     parentStyle={{ paddingTop: "10px" }}
                   />
                 </div>
-                <div>
+                <div className="">
                   <Button
                     buttonProps={{
                       buttonClass: "evacuation_button_height",
@@ -230,7 +230,7 @@ export default function StaffManagementEditPage() {
                       rounded: "true",
                       severity: "primary",
                     }}
-                    parentStyle={{ paddingTop: "10px", paddingLeft: "10px" }}
+                    parentStyle={{ paddingTop: "10px" }}
                   />
                 </div>
               </div>
