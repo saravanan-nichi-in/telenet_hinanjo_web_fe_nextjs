@@ -54,7 +54,7 @@ export default function AdminSpecialCarePage() {
     }
 
     const columnsData = [
-        { field: 'index', header:translate(localeJson,'s_no'),className:"max-w-3rem xl:max-w-2rem" },
+        { field: 'index', header:translate(localeJson,'s_no'),className:"sno_class" },
         {
             field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
         },
@@ -64,7 +64,7 @@ export default function AdminSpecialCarePage() {
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
             alignHeader: "center",
-            maxWidth: "8rem",
+           className:"action_class",
             body: (rowData) =>
             { 
                 return (
