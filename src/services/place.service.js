@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from "@/helper";
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from "@/helper";
 import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
@@ -25,17 +25,12 @@ function _importData(payload, callBackFun) {
   axios
     .post("/admin/place/import", payload)
     .then((response) => {
-      if (response && response.data) {
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
-      }
+      // Handling import success && errors
+      importErrorToastDisplay(response);
     })
     .catch((error) => {
-      // Handle errors here
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-      });
+      // Handling import errors
+      importErrorToastDisplay(error.response);
     });
 }
 
@@ -110,7 +105,7 @@ function _create(payload, callBackFun) {
           // Join the error messages with line breaks and add a comma at the end of each line, except the last one
           let formattedErrorMessage = errorArray
             .map((message, index) => {
-                return `${message.trim()}`;
+              return `${message.trim()}`;
             })
             .join("\n");
           toast.error(formattedErrorMessage, {
@@ -155,7 +150,7 @@ function _update(payload, callBackFun) {
           // Join the error messages with line breaks and add a comma at the end of each line, except the last one
           let formattedErrorMessage = errorArray
             .map((message, index) => {
-                return `${message.trim()}`;
+              return `${message.trim()}`;
             })
             .join("\n");
           toast.error(formattedErrorMessage, {

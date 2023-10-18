@@ -22,8 +22,8 @@ export default function AdminPlacePage() {
   const [totalCount, setTotalCount] = useState(0);
   const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
   const [columns, setColumns] = useState([]);
-  const [id,setId] = useState(0)
-    const [list, setList] = useState([]);
+  const [id, setId] = useState(0)
+  const [list, setList] = useState([]);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -42,7 +42,7 @@ export default function AdminPlacePage() {
     });
   };
   const columnsData = [
-    { field: "index", header: translate(localeJson, "s_no"),className:"sno_class"},
+    { field: "index", header: translate(localeJson, "s_no"), className: "sno_class" },
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
@@ -79,27 +79,28 @@ export default function AdminPlacePage() {
       textAlign: "center",
       alignHeader: "center",
       minWidth: "6rem",
-      body: (rowData) =>{ 
-         return(
+      body: (rowData) => {
+        return (
           <div className="flex flex-wrap">
-              <Button buttonProps={{
-                  text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                  bg: "bg-red-600 text-white",
-                  hoverBg: "hover:bg-red-500 hover:text-white",
-                  disabled:rowData.isActive,
-                  onClick: () =>{ 
-                    setId(rowData?.ID)
-                    console.log(id,"id")
-                    setPlaceEditDialogVisible(true)
-                  }
-              }} />
+            <Button buttonProps={{
+              text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+              bg: "bg-red-600 text-white",
+              hoverBg: "hover:bg-red-500 hover:text-white",
+              disabled: rowData.isActive,
+              onClick: () => {
+                setId(rowData?.ID)
+                console.log(id, "id")
+                setPlaceEditDialogVisible(true)
+              }
+            }} />
           </div>
-      )},
-  }
+        )
+      },
+    }
   ];
 
   /* Services */
-  const { getList, updateStatus, exportData,importData,deletePlace } = PlaceServices;
+  const { getList, updateStatus, exportData, importData, deletePlace } = PlaceServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -108,7 +109,7 @@ export default function AdminPlacePage() {
       setLoader(false);
     };
     fetchData();
-  }, [locale,getPayload]);
+  }, [locale, getPayload]);
 
   /**
    * Get place list on mounting
@@ -123,16 +124,13 @@ export default function AdminPlacePage() {
   };
 
   const importFileApi = (file) => {
-      const formData = new FormData()
-      formData.append('file',file)
-      importData(formData)
-      setImportPlaceOpen(false);
+    const formData = new FormData()
+    formData.append('file', file)
+    importData(formData)
+    setImportPlaceOpen(false);
   };
-  
-
 
   function fetchData(response) {
-  
     if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
       setLoader(true)
       const data = response.data.model.list;
@@ -140,24 +138,24 @@ export default function AdminPlacePage() {
       let preparedList = [];
       data.map((obj, i) => {
         let preparedObj = {
-        index:getPayload.filters.start+i+1,
-        ID: obj.id,
-        evacuation_place: obj.name,
-        address: obj.address,
-        evacuation_possible_people: obj.total_place,
-        phone_number: obj.tel,
-        active_flg: obj.active_flg,
-        isActive: obj.is_active,
-        status: obj.is_active? "place-status-cell" : "",
-      };
-      preparedList.push(preparedObj);
-    });
-    setList(preparedList);
-    setColumns(additionalColumnsArrayWithOldData);
-    setTotalCount(response.data.model.total);
-    setTableLoading(false);
-    setLoader(false)
-  }
+          index: getPayload.filters.start + i + 1,
+          ID: obj.id,
+          evacuation_place: obj.name,
+          address: obj.address,
+          evacuation_possible_people: obj.total_place,
+          phone_number: obj.tel,
+          active_flg: obj.active_flg,
+          isActive: obj.is_active,
+          status: obj.is_active ? "place-status-cell" : "",
+        };
+        preparedList.push(preparedObj);
+      });
+      setList(preparedList);
+      setColumns(additionalColumnsArrayWithOldData);
+      setTotalCount(response.data.model.total);
+      setTableLoading(false);
+      setLoader(false)
+    }
   }
 
   /**
@@ -209,19 +207,18 @@ export default function AdminPlacePage() {
   const onPaginationChange = async (e) => {
     setTableLoading(true);
     if (!_.isEmpty(e)) {
-        const newStartValue = e.first; // Replace with your desired page value
-        const newLimitValue = e.rows; // Replace with your desired limit value
-        await setPayload(prevState => ({
-            ...prevState,
-            filters: {
-                ...prevState.filters,
-                start: newStartValue,
-                limit: newLimitValue
-            }
-        }));
+      const newStartValue = e.first; // Replace with your desired page value
+      const newLimitValue = e.rows; // Replace with your desired limit value
+      await setPayload(prevState => ({
+        ...prevState,
+        filters: {
+          ...prevState.filters,
+          start: newStartValue,
+          limit: newLimitValue
+        }
+      }));
     }
-}
-
+  }
 
   const cellClassName = (data) =>
     data == "place-status-cell" ? "p-disabled surface-400" : "";
@@ -231,27 +228,25 @@ export default function AdminPlacePage() {
       event.data.field === "status" && event.data.value === "place-status-cell"
     );
 
-    const deleteContent = (
-      <div className="text-center">
-        <div className="mb-3">
-          {translate(localeJson, "Place_Delete_Content_1")}
-        </div>
-        <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
+  const deleteContent = (
+    <div className="text-center">
+      <div className="mb-3">
+        {translate(localeJson, "Place_Delete_Content_1")}
       </div>
-    );
+      <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
+    </div>
+  );
 
-    const isDeleted =((res)=> {
-      if(res)
-      {
-        setPlaceEditDialogVisible(false);
-        onGetPlaceListOnMounting()
-      }
-
-    })
+  const isDeleted = ((res) => {
+    if (res) {
+      setPlaceEditDialogVisible(false);
+      onGetPlaceListOnMounting()
+    }
+  })
 
   return (
     <>
-       <CommonDialog
+      <CommonDialog
         open={placeEditDialogVisible}
         dialogBodyClassName="p-3"
         header={translate(localeJson, "confirmation")}
@@ -278,7 +273,7 @@ export default function AdminPlacePage() {
               severity: "danger",
               onClick: () => {
                 setLoader(true);
-                deletePlace(id,isDeleted);
+                deletePlace(id, isDeleted);
                 setLoader(false);
               },
             },
@@ -298,66 +293,66 @@ export default function AdminPlacePage() {
       <div className="grid">
         <div className="col-12">
           <div className="card">
-              <h5 className="page-header1">{translate(localeJson, "places")}</h5>
-              <hr />
-              <div>
-                <div
-                  className="flex"
-                  style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
-                >
-                  <Button
-                    buttonProps={{
-                      rounded: "true",
-                      buttonClass: "evacuation_button_height",
-                      text: translate(localeJson, "import"),
-                      severity: "primary",
-                      onClick: () => setImportPlaceOpen(true),
-                    }}
-                    parentClass={"mr-1 mt-1"}
-                  />
-                  <Button
-                    buttonProps={{
-                      rounded: "true",
-                      buttonClass: "evacuation_button_height",
-                      text: translate(localeJson, "export"),
-                      severity: "primary",
-                      onClick: () => exportData(getPayload),
-                    }}
-                    parentClass={"mr-1 mt-1"}
-                  />
+            <h5 className="page-header1">{translate(localeJson, "places")}</h5>
+            <hr />
+            <div>
+              <div
+                className="flex"
+                style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
+              >
+                <Button
+                  buttonProps={{
+                    rounded: "true",
+                    buttonClass: "evacuation_button_height",
+                    text: translate(localeJson, "import"),
+                    severity: "primary",
+                    onClick: () => setImportPlaceOpen(true),
+                  }}
+                  parentClass={"mr-1 mt-1"}
+                />
+                <Button
+                  buttonProps={{
+                    rounded: "true",
+                    buttonClass: "evacuation_button_height",
+                    text: translate(localeJson, "export"),
+                    severity: "primary",
+                    onClick: () => exportData(getPayload),
+                  }}
+                  parentClass={"mr-1 mt-1"}
+                />
 
-                  <Button
-                    buttonProps={{
-                      rounded: "true",
-                      buttonClass: "evacuation_button_height",
-                      text: translate(localeJson, "create_place"),
-                      onClick: () => router.push("/admin/place/create"),
-                      severity: "success",
-                    }}
-                    parentClass={"mr-1 mt-1"}
-                  />
-                </div>
-                <div className="mt-3">
-                  <NormalTable
-                    lazy
-                    totalRecords={totalCount}
-                    loading={tableLoading}
-                    showGridlines={"true"}
-                    paginator={"true"}
-                    columnStyle={{ textAlign: "center" }}
-                    className={"custom-table-cell"}
-                    value={list}
-                    columns={columns}
-                    cellClassName={cellClassName}
-                    emptyMessage= {translate(localeJson,"data_not_found")}
-                    isDataSelectable={isCellSelectable}
-                    first={getPayload.filters.start}
-                    rows={getPayload.filters.limit}
-                    paginatorLeft={true}
-                    onPageHandler={(e) => onPaginationChange(e)}
-                  />
-                </div>
+                <Button
+                  buttonProps={{
+                    rounded: "true",
+                    buttonClass: "evacuation_button_height",
+                    text: translate(localeJson, "create_place"),
+                    onClick: () => router.push("/admin/place/create"),
+                    severity: "success",
+                  }}
+                  parentClass={"mr-1 mt-1"}
+                />
               </div>
+              <div className="mt-3">
+                <NormalTable
+                  lazy
+                  totalRecords={totalCount}
+                  loading={tableLoading}
+                  showGridlines={"true"}
+                  paginator={"true"}
+                  columnStyle={{ textAlign: "center" }}
+                  className={"custom-table-cell"}
+                  value={list}
+                  columns={columns}
+                  cellClassName={cellClassName}
+                  emptyMessage={translate(localeJson, "data_not_found")}
+                  isDataSelectable={isCellSelectable}
+                  first={getPayload.filters.start}
+                  rows={getPayload.filters.limit}
+                  paginatorLeft={true}
+                  onPageHandler={(e) => onPaginationChange(e)}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

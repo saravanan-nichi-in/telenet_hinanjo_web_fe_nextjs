@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import toast from "react-hot-toast";
 
 /**
  * 
@@ -219,5 +220,40 @@ export const zipDownloadWithURL = (zipURL) => {
         const fileName = `Sample_${date}.zip`;
         link.setAttribute('download', fileName); // Specify the file name you want to give to the downloaded file
         link.click();
+    }
+}
+
+/**
+ * Import fail error status displaying in toast
+ * @param {*} response 
+ */
+export const importErrorToastDisplay = (response) => {
+    console.log(response);
+    if (response && response.data) {
+        if (!response.data.success && response.data.code == "422") {
+            toast.error(() => (
+                <div>
+                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                        {response?.data?.message}
+                    </a>
+                </div>
+            ), {
+                position: "top-right",
+            });
+        } else if (response.data.success && response.data.code == "206") {
+            toast.success(() => (
+                <div>
+                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                        {response?.data?.message}
+                    </a>
+                </div>
+            ), {
+                position: "top-right",
+            });
+        } else {
+            toast.error(response?.data?.message, {
+                position: "top-right",
+            });
+        }
     }
 }
