@@ -22,7 +22,6 @@ export default function EvacuationPage() {
     const [totalCount, setTotalCount] = useState(0);
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
-    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -183,7 +182,6 @@ export default function EvacuationPage() {
         else {
             setEvacueesDataList([]);
             setEvacuationTableFields(evacuationColumns);
-            setEmptyTableMessage(response.message);
             setTableLoading(false);
             setTotalCount(0);
             setFamilyCount(0);
@@ -347,7 +345,7 @@ export default function EvacuationPage() {
                         showGridlines={"true"}
                         value={evacueesDataList}
                         columns={evacuationTableFields}
-                        emptyMessage={emptyTableMessage}
+                        emptyMessage={translate(localeJson, "data_not_found")}
                         first={getListPayload.filters.start}
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}

@@ -282,7 +282,7 @@
     },
     "others": {
       "not": "None",
-      "shelter_place": "Place (name)",
+      "shelter_place": "Place Name",
       "setting_start_date": "Setting Start Date",
       "shelter_place_name": "Place Name",
       "mail_setting": "Mail Settings",

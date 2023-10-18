@@ -113,7 +113,7 @@ export default function EvacueeFamilyDetail() {
             let basicDetailList = [];
             let basicData = {
                 evacuation_date_time: data.join_date_modified,
-                address: translate(localeJson, 'post_letter') + data.zip_code + getPrefectureName(data.prefecture_id) + data.address,
+                address: translate(localeJson, 'post_letter') + data.zip_code + " " + getPrefectureName(data.prefecture_id) + " " + data.address,
                 representative_number: data.tel,
                 registered_lang_environment: getRegisteredLanguage(data.language_register)
             };
@@ -231,7 +231,7 @@ export default function EvacueeFamilyDetail() {
                         id="evacuee-family-detail"
                         size={"small"}
                         tableLoading={tableLoading}
-                        emptyMessage={emptyTableMessage}
+                        emptyMessage={translate(localeJson, "data_not_found")}
                         stripedRows={true}
                         paginator={false}
                         showGridlines={true}
@@ -247,7 +247,7 @@ export default function EvacueeFamilyDetail() {
                         rows={10}
                         paginatorLeft={true}
                         tableLoading={tableLoading}
-                        emptyMessage={emptyTableMessage}
+                        emptyMessage={translate(localeJson, "data_not_found")}
                         paginator="true"
                         customRowExpansionActionsField="actions"
                         value={familyDetailData}
@@ -261,7 +261,7 @@ export default function EvacueeFamilyDetail() {
                                 id="evacuee-family-detail"
                                 size={"small"}
                                 tableLoading={tableLoading}
-                                emptyMessage={emptyTableMessage}
+                                emptyMessage={translate(localeJson, "data_not_found")}
                                 stripedRows={true}
                                 paginator={false}
                                 showGridlines={true}
@@ -275,7 +275,7 @@ export default function EvacueeFamilyDetail() {
                             id="evacuee-family-detail"
                             size={"small"}
                             tableLoading={tableLoading}
-                            emptyMessage={emptyTableMessage}
+                            emptyMessage={translate(localeJson, "data_not_found")}
                             stripedRows={true}
                             paginator={false}
                             showGridlines={true}
