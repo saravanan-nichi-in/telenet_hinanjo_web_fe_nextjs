@@ -7,6 +7,7 @@ export default function RadioBtn(props) {
     const {
         parentClass,
         parentStyle,
+        custom,
         radioBtnProps = {}
     } = props;
     const {
@@ -23,7 +24,7 @@ export default function RadioBtn(props) {
     } = radioBtnProps;
 
     return (
-        <div className={`${parentClass}`} style={parentStyle} >
+        <div className={`${parentClass} ${custom || 'custom-radioBtn'}`} style={parentStyle} >
             <RadioButton className={`${radioClass}`}
                 inputId={inputId}
                 name={name}
