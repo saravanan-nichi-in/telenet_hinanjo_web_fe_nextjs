@@ -51,7 +51,8 @@ export default function AdminStockPileMaster() {
                     {(rowData.stockpile_image && rowData.stockpile_image != "") ?
                         <FaEye style={{ fontSize: '20px', textAlign: "center" }} onClick={() => {
                             setSelectedImage(rowData.stockpile_image);
-                            setToggleImageModal(true)
+                            setToggleImageModal(true);
+                            hideOverFlow();
                         }} />
                         : <FaEyeSlash style={{ fontSize: '20px' }} />}
                 </div>
@@ -72,6 +73,7 @@ export default function AdminStockPileMaster() {
                             setRegisterModalAction("edit")
                             setCurrentEditObj(rowData)
                             setEmailSettingsOpen(true)
+                            hideOverFlow()
                         },
                     }} />
                     <Button parentStyle={{ display: "inline" }} buttonProps={{
@@ -121,6 +123,7 @@ export default function AdminStockPileMaster() {
    */
     const onEmailSettingsClose = () => {
         setEmailSettingsOpen(!emailSettingsOpen);
+        showOverFlow();
     };
 
     /**
@@ -135,6 +138,7 @@ export default function AdminStockPileMaster() {
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
+        hideOverFlow();
     };
 
     const onRegisterImport = (values) => {
@@ -149,6 +153,7 @@ export default function AdminStockPileMaster() {
 
         });
         onStaffImportClose();
+        showOverFlow();
     }
 
     //Listing start
@@ -238,6 +243,7 @@ export default function AdminStockPileMaster() {
 
     const closeImageModal = () => {
         setToggleImageModal(false);
+        showOverFlow();
     }
 
     return (
@@ -272,9 +278,8 @@ export default function AdminStockPileMaster() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
                             <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
-                            <DividerComponent />
+                            <hr />
                             <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
@@ -309,14 +314,14 @@ export default function AdminStockPileMaster() {
                                             setRegisterModalAction("create");
                                             setCurrentEditObj({ category: "", product_name: "", shelf_life: "" });
                                             setEmailSettingsOpen(true);
-
+                                            hideOverFlow();
                                         },
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
                                 <div>
                                     <form >
-                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div className='mt-3 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                             <div>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "category_search",
@@ -391,7 +396,6 @@ export default function AdminStockPileMaster() {
                                     />
                                 </div>
                             </div>
-                        </section>
                     </div>
                 </div>
             </div>

@@ -227,10 +227,9 @@ export default function AdminMaterialPage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <section className='col-12'>
                             <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
-                            <DividerComponent />
-                            <div className="col-12">
+                            <hr />
+                            <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -274,7 +273,7 @@ export default function AdminMaterialPage() {
                                         severity: "success"
                                     }} parentClass={"mr-1 mt-1"} />
                                 </div>
-                                <div className='mt-5'>
+                                <div className='mt-3'>
                                     <NormalTable
                                         lazy
                                         totalRecords={totalCount}
@@ -294,7 +293,6 @@ export default function AdminMaterialPage() {
                                     />
                                 </div>
                             </div>
-                        </section>
                     </div>
                 </div>
             </div>
