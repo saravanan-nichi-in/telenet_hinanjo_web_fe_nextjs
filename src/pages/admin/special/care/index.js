@@ -32,7 +32,6 @@ export default function AdminSpecialCarePage() {
         search: "",
       });
     const onClickCancelButton = () => {
-        console.log("cancel");
         setSpecialCareCreateDialogVisible(false);
     };
     const onClickOkButton = (res) => {
@@ -166,6 +165,17 @@ export default function AdminSpecialCarePage() {
       setImportSpecialCareOpen(false);
   };
 
+  const submitForm=(res)=> {
+    create(res,isCreated)
+
+  }
+  const isCreated = (res) => {
+    if(res)
+    {
+        onSpecialCareEditSuccess()
+    }
+  }
+
     return (
         <>
             <CommonDialog
@@ -222,7 +232,7 @@ export default function AdminSpecialCarePage() {
                 header={translate(localeJson, 'special_care_create')}
                 close={() => setSpecialCareCreateOpen(false)}
                 buttonText={translate(localeJson, 'submit')}
-                submit
+                submitForm={submitForm}
                 onSpecialCareEditSuccess={onSpecialCareEditSuccess}
             />
             <AdminManagementImportModal
