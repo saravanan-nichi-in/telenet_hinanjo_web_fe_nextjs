@@ -161,7 +161,7 @@ function _specialCareDetails(id, callBackFun) {
 
 function _deleteSpecialCare(id, callBackFun) {
   axios
-    .delete(`/admin/specialcare/${id}`, { data: { id: id } })
+    .delete(`/admin/specialcare/delete`, { data: { id: id } })
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
