@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -20,15 +20,18 @@ export default function SpecialCareEditModal(props) {
             .required(translate(localeJson, 'special_care_name_en_required')),
     });
     const { open, close, onSpecialCareEditSuccess, header, buttonText } = props && props;
-    const initialValues = { name: "", name_en: "" }
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={initialValues}
+                initialValues={props.currentEditObj}
+                enableReinitialize
                 onSubmit={(values, actions) => {
+                    if(props.registerModalAction=="create"||props.registerModalAction=="edit")
+                    {
                    props.submitForm(values);
+                    }
 
                 }}
             >
@@ -49,10 +52,9 @@ export default function SpecialCareEditModal(props) {
                                 visible={open}
                                 draggable={false}
                                 blockScroll={true}
-
                                 onHide={() => {
                                     close();
-                                    resetForm({ values: initialValues });
+                                    resetForm()
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -61,9 +63,10 @@ export default function SpecialCareEditModal(props) {
                                             bg: "bg-white",
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
+                                            type:"reset",
                                             onClick: () => {
                                                 close();
-                                                resetForm({ values: initialValues });
+                                                resetForm()
                                             },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{

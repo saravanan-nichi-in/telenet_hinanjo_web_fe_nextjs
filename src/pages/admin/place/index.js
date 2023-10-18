@@ -78,10 +78,10 @@ export default function AdminPlacePage() {
       header: translate(localeJson, 'delete'),
       textAlign: "center",
       alignHeader: "center",
-      minWidth: "5rem",
+      minWidth: "6rem",
       body: (rowData) =>{ 
          return(
-          <div>
+          <div className="flex flex-wrap">
               <Button buttonProps={{
                   text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                   bg: "bg-red-600 text-white",
