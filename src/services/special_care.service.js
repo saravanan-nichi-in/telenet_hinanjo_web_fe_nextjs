@@ -65,7 +65,7 @@ function _getSpecialCareList(payload, callBackFun) {
 
 function _createSpecialCare(payload, callBackFun) {
   axios
-    .post("/admin/specialcare", payload)
+    .post("/admin/specialcare/store", payload)
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {
@@ -102,9 +102,8 @@ function _createSpecialCare(payload, callBackFun) {
 }
 
 function _updateSpecialCare(payload, callBackFun) {
-  let specialcare_id = payload.specialcare_id;
   axios
-    .put(`/admin/specialcare/${specialcare_id}`, payload)
+    .put(`/admin/specialcare/update`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

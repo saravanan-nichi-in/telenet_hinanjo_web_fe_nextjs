@@ -22,6 +22,7 @@ export default function AdminPlacePage() {
   const [totalCount, setTotalCount] = useState(0);
   const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
   const [columns, setColumns] = useState([]);
+  const [id,setId] = useState(0)
     const [list, setList] = useState([]);
   const [getPayload, setPayload] = useState({
     filters: {
@@ -34,7 +35,6 @@ export default function AdminPlacePage() {
   });
   const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
-  let id;
   const handleRowClick = (rowData) => {
     router.push({
       pathname: `/admin/place/detail`,
@@ -78,16 +78,20 @@ export default function AdminPlacePage() {
       header: translate(localeJson, 'delete'),
       textAlign: "center",
       alignHeader: "center",
-      minWidth: "5rem",
-      body: (rowData) =>{ id=rowData.ID;
+      minWidth: "6rem",
+      body: (rowData) =>{ 
          return(
-          <div>
+          <div className="flex flex-wrap">
               <Button buttonProps={{
                   text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                   bg: "bg-red-600 text-white",
                   hoverBg: "hover:bg-red-500 hover:text-white",
                   disabled:rowData.isActive,
-                  onClick: () => setPlaceEditDialogVisible(true)
+                  onClick: () =>{ 
+                    setId(rowData?.ID)
+                    console.log(id,"id")
+                    setPlaceEditDialogVisible(true)
+                  }
               }} />
           </div>
       )},

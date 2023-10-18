@@ -194,6 +194,19 @@ export const downloadBase64File = (base64String, fileName) => {
 };
 
 /**
+ * Timestamp filename
+ * @param {*} fileName 
+ */
+export const timestampFile = (fileName) => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const random = Math.floor(10000000 + Math.random() * 90000000);
+    return `${fileName}${year}${month}${day}${random}.csv`;
+};
+
+/**
  * Zip download functionality
  * @param zipURL
  */

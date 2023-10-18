@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -14,22 +14,24 @@ export default function SpecialCareEditModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
-        name_jp: Yup.string()
+        name: Yup.string()
             .required(translate(localeJson, 'special_care_name_jp_required')),
         name_en: Yup.string()
             .required(translate(localeJson, 'special_care_name_en_required')),
     });
     const { open, close, onSpecialCareEditSuccess, header, buttonText } = props && props;
-    const initialValues = { name_jp: "", name_en: "" }
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={initialValues}
+                initialValues={props.currentEditObj}
+                enableReinitialize
                 onSubmit={(values, actions) => {
-                    close();
-                    actions.resetForm({ values: initialValues });
+                    if(props.registerModalAction=="create"||props.registerModalAction=="edit")
+                    {
+                   props.submitForm(values);
+                    }
 
                 }}
             >
@@ -50,10 +52,9 @@ export default function SpecialCareEditModal(props) {
                                 visible={open}
                                 draggable={false}
                                 blockScroll={true}
-
                                 onHide={() => {
                                     close();
-                                    resetForm({ values: initialValues });
+                                    resetForm()
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -62,9 +63,10 @@ export default function SpecialCareEditModal(props) {
                                             bg: "bg-white",
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
+                                            type:"reset",
                                             onClick: () => {
                                                 close();
-                                                resetForm({ values: initialValues });
+                                                resetForm()
                                             },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
@@ -83,16 +85,16 @@ export default function SpecialCareEditModal(props) {
                                     <div className="mt-5 mb-5">
                                         <div className="mb-5">
                                             <InputFloatLabel inputFloatLabelProps={{
-                                                name: "name_jp",
+                                                name: "name",
                                                 spanText: "*",
                                                 spanClass: "p-error",
-                                                value: values.name_jp,
+                                                value: values.name,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'special_care_name_jp'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} parentClass={`${errors.name_jp && touched.name_jp && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.name_jp && touched.name_jp && errors.name_jp} />
+                                            }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
+                                            <ValidationError errorBlock={errors.name && touched.name && errors.name} />
                                         </div>
                                         <div className="mt-5 ">
                                             < InputFloatLabel inputFloatLabelProps={{
