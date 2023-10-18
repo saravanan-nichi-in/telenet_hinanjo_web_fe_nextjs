@@ -225,6 +225,9 @@ export default function AdminStockPileMaster() {
                 setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
+            } else {
+                setTableLoading(false);
+                setList([]);
             }
         });
 
@@ -396,7 +399,7 @@ export default function AdminStockPileMaster() {
                                         value={list}
                                         columns={columns}
                                         filterDisplay="menu"
-                                        emptyMessage="No data found."
+                                        emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}
                                         first={getListPayload.filters.start}
                                         rows={getListPayload.filters.limit}
