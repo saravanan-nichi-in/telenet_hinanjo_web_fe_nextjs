@@ -42,7 +42,7 @@ export default function AdminPlacePage() {
     });
   };
   const columnsData = [
-    { field: "index", header: translate(localeJson, "s_no"),minWidth:"50px",maxWidth:"50px",width:"50px"},
+    { field: "index", header: translate(localeJson, "s_no"),className:"sno_class"},
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
