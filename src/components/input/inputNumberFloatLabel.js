@@ -24,6 +24,7 @@ const InputNumberFloatLabel = (props) => {
         spanText,
         minFractionDigits,
         maxFractionDigits,
+        onBlur,
         ...restProps
     } = inputNumberFloatProps;
 
@@ -44,6 +45,7 @@ const InputNumberFloatLabel = (props) => {
                 currency={currency} 
                 minFractionDigits={minFractionDigits}
                 maxFractionDigits={maxFractionDigits}
+                onBlur={onBlur}
                 {...restProps} />
             <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>

@@ -40,12 +40,12 @@ export default function EvacuationPage() {
 
     const bindExternalEvacueesDetail = (response) => {
         if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
-            const data  = response.data.model.list;
+            const data = response.data.model.list;
             console.log(data)
             let externalEvacueesDetailList = [];
             data.map((item, index) => {
                 let evacueeDetail = {
-                    si_no : index + 1,
+                    si_no: index + 1,
                     id: item.id,
                     refugee_name: item.name_furigana,
                     dob: getJapaneseDateDisplayFormat(item.dob),
