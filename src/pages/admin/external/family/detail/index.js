@@ -13,7 +13,6 @@ export default function EvacuationPage() {
     const param = router.query;
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [externalEvacueesList, setExternalEvacueesList] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -63,7 +62,6 @@ export default function EvacuationPage() {
             setTotalCount(0);
             setTableLoading(false);
             setExternalEvacueesList([]);
-            setEmptyTableMessage(response.message);
         }
 
     }
@@ -114,7 +112,7 @@ export default function EvacuationPage() {
                         loading={tableLoading}
                         value={externalEvacueesList}
                         columns={externalEvacueesDetailColumns}
-                        emptyMessage={emptyTableMessage}
+                        emptyMessage={translate(localeJson, "data_not_found")}
                         first={getListPayload.filters.start}
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}
