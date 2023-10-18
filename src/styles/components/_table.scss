@@ -46,3 +46,16 @@
         color: white;
     }
 }
+
+.sno_class {
+    min-width: $sNoWidth;
+    max-width: $sNoWidth;
+    width: $sNoWidth;
+}
+
+.action_class {
+    min-width: $actionEditDeleteWidth;
+    max-width: $actionEditDeleteWidth;
+    width: $actionEditDeleteWidth;
+}
+
