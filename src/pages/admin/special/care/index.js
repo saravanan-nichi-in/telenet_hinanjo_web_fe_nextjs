@@ -54,7 +54,7 @@ export default function AdminSpecialCarePage() {
     }
 
     const columnsData = [
-        { field: 'index', header:translate(localeJson,'s_no'),className:"max-w-3rem xl:max-w-2rem" },
+        { field: 'index', header:translate(localeJson,'s_no'),minWidth:"50px",maxWidth:"50px",width:"50px" },
         {
             field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
         },

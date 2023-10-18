@@ -88,6 +88,7 @@ export default function NormalTable(props) {
             style={{
               minWidth: col.minWidth && col.minWidth,
               maxWidth: col.maxWidth && col.maxWidth,
+              width: col.width && col.width,
               ...columnStyle,
               textAlign: col.textAlign && col.textAlign,
               fontWeight: col.fontWeight && col.fontWeight,
