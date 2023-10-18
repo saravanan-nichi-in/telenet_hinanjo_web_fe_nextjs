@@ -54,19 +54,22 @@ export default function AdminSpecialCarePage() {
     }
 
     const columnsData = [
-        { field: 'index', header:translate(localeJson,'s_no'),maxWidth:"5rem" },
+        { field: 'index', header:translate(localeJson,'s_no'),className:"max-w-3rem xl:max-w-2rem" },
         {
             field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
         },
         { field: 'name_en', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
         {
             field: 'actions',
-            header: translate(localeJson, 'edit'),
+            header: translate(localeJson, 'common_action'),
             textAlign: "center",
-            minWidth: "2rem",
-            body: (rowData) => (
-                <>
-                <Button buttonProps={{
+            alignHeader: "center",
+            maxWidth: "8rem",
+            body: (rowData) =>
+            { 
+                return (
+                <div className='flex flex-wrap justify-content-center gap-2'>
+                        <Button buttonProps={{
                         text: translate(localeJson, 'edit'), 
                         buttonClass: "text-primary ",
                         bg: "bg-white",
@@ -81,20 +84,7 @@ export default function AdminSpecialCarePage() {
                             setSpecialCareEditOpen(true)
                         },
                     }} />
-                </>
-            ),
-        },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'delete'),
-            textAlign: "center",
-            alignHeader: "center",
-            minWidth: "5rem",
-            body: (rowData) =>
-            { 
-                return (
-                <div className='flex flex-wrap justify-content-center'>
-                    <Button buttonProps={{
+                     <Button buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-red-600 text-white",
                         hoverBg: "hover:bg-red-500 hover:text-white",
