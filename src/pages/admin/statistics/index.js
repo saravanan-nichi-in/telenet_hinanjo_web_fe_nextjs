@@ -282,7 +282,6 @@ export default function EvacueesStatistics() {
                     labels: labels,
                     datasets: datasets_first,
                 }
-                console.log(chartData);
                 await setChartData(chartData);
                 await setOptions(chart_first_options);
             }
