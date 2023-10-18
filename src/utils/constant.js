@@ -635,6 +635,7 @@ export {
 }
 
 export const prefectures = [
+    { value: "", name: '--' },
     { value: 1, name: '北海道' },
     { value: 2, name: '青森県' },
     { value: 3, name: '岩手県' },
@@ -685,6 +686,7 @@ export const prefectures = [
 ];
 
 export const prefectures_en = [
+    { value: "", name: '--' },
     { value: 1, name: 'Hokkaido' },
     { value: 2, name: 'Aomori' },
     { value: 3, name: 'Iwate' },

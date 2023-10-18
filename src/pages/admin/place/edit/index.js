@@ -204,15 +204,15 @@ export default function PlaceUpdatePage() {
     name_en: "",
     postal_code_1: "",
     postal_code_2: "",
-    prefecture_id: "",
+    prefecture_id: null,
     address: "",
-    prefecture_en_id: "",
+    prefecture_en_id: null,
     address_en: "",
     postal_code_default_1: "",
     postal_code_default_2: "",
-    prefecture_id_default: "",
+    prefecture_id_default: null,
     address_default: "",
-    prefecture_default_en_id: "",
+    prefecture_default_en_id: null,
     address_default_en: "",
     total_place: "",
     tel: "",
@@ -248,9 +248,9 @@ export default function PlaceUpdatePage() {
     initialValues.postal_code_2 = model.zip_code
       ? model.zip_code.split("-")[1]
       : "";
-    initialValues.prefecture_id = model.prefecture_id || "";
+    initialValues.prefecture_id = model.prefecture_id || null;
     initialValues.address = model.address || "";
-    initialValues.prefecture_en_id = model.prefecture_en_id || "";
+    initialValues.prefecture_en_id = model.prefecture_en_id || null;
     initialValues.address_en = model.address_en || "";
     initialValues.postal_code_default_1 = model.zip_code_default
       ? model.zip_code_default.split("-")[0]
@@ -258,10 +258,10 @@ export default function PlaceUpdatePage() {
     initialValues.postal_code_default_2 = model.zip_code_default
       ? model.zip_code_default.split("-")[1]
       : "";
-    initialValues.prefecture_id_default = model.prefecture_id_default || "";
+    initialValues.prefecture_id_default = model.prefecture_id_default ||null;
     initialValues.address_default = model.address_default || "";
     initialValues.prefecture_default_en_id =
-      model.prefecture_default_en_id || "";
+      model.prefecture_default_en_id || null;
     initialValues.address_default_en = model.address_default_en || "";
     initialValues.total_place = model.total_place || "";
     initialValues.tel = model.tel || "";

@@ -22,6 +22,8 @@ export default function AdminSpecialCarePage() {
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [id,setId] = useState(0)
+    const [currentEditObj, setCurrentEditObj] = useState({});
+    const [registerModalAction, setRegisterModalAction] = useState('create');
     const [getPayload, setPayload] = useState({
         filters: {
           start: 0,
@@ -55,15 +57,33 @@ export default function AdminSpecialCarePage() {
         { field: 'index', header:translate(localeJson,'s_no'),maxWidth:"5rem" },
         {
             field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
-            body: (rowData) => (
-                <div className='text-link'>
-                    <a className='text-decoration' style={{ color: "grren" }} onClick={() => setSpecialCareEditOpen(true)}>
-                        {rowData.name}
-                    </a>
-                </div>
-            )
         },
         { field: 'name_en', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'edit'),
+            textAlign: "center",
+            minWidth: "2rem",
+            body: (rowData) => (
+                <>
+                <Button buttonProps={{
+                        text: translate(localeJson, 'edit'), 
+                        buttonClass: "text-primary ",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => {
+                            setRegisterModalAction("edit")
+                            setCurrentEditObj({
+                                id:rowData.id,
+                                name:rowData.name,
+                                name_en:rowData.name_en
+                            })
+                            setSpecialCareEditOpen(true)
+                        },
+                    }} />
+                </>
+            ),
+        },
         {
             field: 'actions',
             header: translate(localeJson, 'delete'),
@@ -73,7 +93,7 @@ export default function AdminSpecialCarePage() {
             body: (rowData) =>
             { 
                 return (
-                <div>
+                <div className='flex flex-wrap justify-content-center'>
                     <Button buttonProps={{
                         text: translate(localeJson, 'delete'), buttonClass: "text-primary",
                         bg: "bg-red-600 text-white",
@@ -166,12 +186,26 @@ export default function AdminSpecialCarePage() {
   };
 
   const submitForm=(res)=> {
+    if(res.id)
+    {
+    update(res,isUpdated)
+    }
+    else {
     create(res,isCreated)
+    }
 
   }
   const isCreated = (res) => {
     if(res)
     {
+        onSpecialCareEditSuccess()
+    }
+  }
+  const isUpdated = (res) => {
+    if(res)
+    {
+        setCurrentEditObj({})
+        setId(0)
         onSpecialCareEditSuccess()
     }
   }
@@ -224,16 +258,11 @@ export default function AdminSpecialCarePage() {
                 open={specialCareEditOpen}
                 header={translate(localeJson, 'special_care_edit')}
                 close={() => setSpecialCareEditOpen(false)}
-                buttonText={translate(localeJson, 'update')}
-                onSpecialCareEditSuccess={onSpecialCareEditSuccess}
-            />
-            <SpecialCareEditModal
-                open={specialCarCreateOpen}
-                header={translate(localeJson, 'special_care_create')}
-                close={() => setSpecialCareCreateOpen(false)}
-                buttonText={translate(localeJson, 'submit')}
+                buttonText={translate(localeJson,registerModalAction=="create"?'submit': 'update')}
                 submitForm={submitForm}
                 onSpecialCareEditSuccess={onSpecialCareEditSuccess}
+                currentEditObj={currentEditObj}
+                registerModalAction={registerModalAction}
             />
             <AdminManagementImportModal
                 open={importSpecialCareOpen}
@@ -270,7 +299,11 @@ export default function AdminSpecialCarePage() {
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'create_special_care'),
-                                onClick: () => setSpecialCareCreateOpen(true),
+                                onClick: () =>{ 
+                                    setRegisterModalAction("create")
+                                    setCurrentEditObj({ name: "", name_en: "" })
+                                    setSpecialCareEditOpen(true)
+                                },
                                 severity: "success"
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
