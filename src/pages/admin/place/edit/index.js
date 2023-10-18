@@ -773,7 +773,7 @@ export default function PlaceUpdatePage() {
                               }
                             />
                           </div>
-                          <div className="lg:col-6 lg:pr-0">
+                          <div className="lg:col-6 pt-0 pb-0 lg:pr-0">
                             <InputFloatLabel
                               inputFloatLabelProps={{
                                 id: "address_en",
@@ -1102,6 +1102,9 @@ export default function PlaceUpdatePage() {
                               onChange: (evt) => {
                                 setFieldValue("total_place", evt.value);
                               },
+                              onValueChange: (evt) => {
+                                evt.value &&setFieldValue("total_place", evt.value);
+                              },
                               onBlur: handleBlur,
                               text: translate(localeJson, "capacity"),
                               inputNumberClass: "w-full",
@@ -1157,6 +1160,9 @@ export default function PlaceUpdatePage() {
                                 onChange: (evt) => {
                                   setFieldValue("latitude", evt.value);
                                 },
+                                onValueChange: (evt) => {
+                                  evt.value &&setFieldValue("latitude", evt.value);
+                                },
                                 onBlur: handleBlur,
                                 text: translate(localeJson, "latitude"),
                                 inputNumberClass: "w-full",
@@ -1187,6 +1193,9 @@ export default function PlaceUpdatePage() {
                                 value: values.longitude,
                                 onChange: (evt) => {
                                   setFieldValue("longitude", evt.value);
+                                },
+                                onValueChange: (evt) => {
+                                  evt.value &&setFieldValue("longitude", evt.value);
                                 },
                                 onBlur: handleBlur,
                                 text: translate(localeJson, "longitude"),
@@ -1220,6 +1229,9 @@ export default function PlaceUpdatePage() {
                               maxFractionDigits: "10",
                               onChange: (evt) => {
                                 setFieldValue("altitude", evt.value);
+                              },
+                              onValueChange: (evt) => {
+                                evt.value &&setFieldValue("altitude", evt.value);
                               },
                               onBlur: handleBlur,
                               text: translate(localeJson, "altitude"),
@@ -1455,7 +1467,7 @@ export default function PlaceUpdatePage() {
                         searchResult={searchResult}
                       />
                       <div className="mt-5  lg:flex">
-                        <div className="lg:col-9 lg:pl-0 mb-5 lg:mb-0">
+                        <div className="lg:col-9 lg:pl-0 mb-3 lg:mb-0">
                           <InputFloatLabel
                             inputFloatLabelProps={{
                               id: "searchQuery",
@@ -1492,10 +1504,8 @@ export default function PlaceUpdatePage() {
                       </div>
                     </div>
                   </div>
-                  <div className="lg:flex pt-3 justify-content-start">
-                 
-
-                    <div className="flex justify-content-start  mb-3 lg:mb-0">
+                  <div className="flex pt-3 justify-content-start flex-wrap gap-3">
+                    <div className="">
                       <Button
                         buttonProps={{
                           buttonClass: "evacuation_button_height",
@@ -1526,7 +1536,7 @@ export default function PlaceUpdatePage() {
                         }}
                       />
                     </div> */}
-                    <div className="flex justify-content-start lg:pl-5  mb-3 lg:mb-0">
+                    <div className="">
                       <Button
                         buttonProps={{
                           buttonClass:
