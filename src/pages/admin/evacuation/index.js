@@ -339,6 +339,7 @@ export default function EvacuationPage() {
                     <NormalTable
                         lazy
                         id={"evacuation-list"}
+                        className="evacuation-list"
                         totalRecords={totalCount}
                         loading={tableLoading}
                         size={"small"}
