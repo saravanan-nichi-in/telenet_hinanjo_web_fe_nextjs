@@ -46,7 +46,7 @@ function _callImport(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
@@ -67,7 +67,7 @@ function _callDelete(callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
@@ -88,7 +88,7 @@ function _callZipDownload(callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });

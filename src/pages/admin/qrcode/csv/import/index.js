@@ -67,15 +67,21 @@ export default function AdminQrCodeCreatePage() {
      * @param {*} response 
      */
     const onImportSuccess = (response) => {
+        if (response) {
+            setQrCodeCreateDialogVisible(true);
+        }
         setImportFileData("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
         setLoader(false);
-        setQrCodeCreateDialogVisible(true);
     }
 
     /**
      * Close functionality
+     * @param {*} response 
     */
-    const onDeleteSuccess = () => {
+    const onDeleteSuccess = (response) => {
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -88,11 +94,11 @@ export default function AdminQrCodeCreatePage() {
     const onZipDownloadSuccess = async (response) => {
         if (response && response.data.data.file) {
             await zipDownloadWithURL(response.data.data.file);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
-            setLoader(false);
         }
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+        setLoader(false);
     };
 
     return (
