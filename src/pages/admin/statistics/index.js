@@ -74,10 +74,16 @@ export default function EvacueesStatistics() {
             const chart_first_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.8,
+                aspectRatio: list_place.length > 10 ? 0.2 : 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
+                            title: function (tooltipItems, data) {
+                                if (tooltipItems[0].label.length > 50) {
+                                    return tooltipItems[0].label.substring(0, 50) + '...'; // Truncate labels longer than 10 characters
+                                }
+                                return tooltipItems[0].label;
+                            },
                             label: function (context) {
                                 const dataset = context.dataset;
                                 const index = context.dataIndex;
@@ -113,8 +119,8 @@ export default function EvacueesStatistics() {
                             autoSkip: false, // Enable label auto-skipping
                             maxTicksLimit: 5, // Limit the number of displayed labels to 5
                             callback: function (value, index) {
-                                if (labels[index].length > 15) {
-                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                if (labels[index].length > 10) {
+                                    return labels[index].substring(0, 10) + '...'; // Truncate labels longer than 10 characters
                                 }
                                 return labels[index];
                             },
@@ -125,7 +131,7 @@ export default function EvacueesStatistics() {
             const chart_second_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.8,
+                aspectRatio: list_place.length > 10 ? 0.2 : 0.8,
                 plugins: {
                     tooltip: {
                         displayColors: false,
@@ -167,8 +173,8 @@ export default function EvacueesStatistics() {
                             autoSkip: false, // Enable label auto-skipping
                             maxTicksLimit: 5, // Limit the number of displayed labels to 5
                             callback: function (value, index) {
-                                if (labels[index].length > 15) {
-                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                if (labels[index].length > 10) {
+                                    return labels[index].substring(0, 10) + '...'; // Truncate labels longer than 10 characters
                                 }
                                 return labels[index];
                             },
@@ -179,7 +185,7 @@ export default function EvacueesStatistics() {
             const chart_third_options = {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                aspectRatio: 0.8,
+                aspectRatio: list_place.length > 10 ? 0.2 : 0.8,
                 plugins: {
                     tooltip: {
                         callbacks: {
@@ -218,8 +224,8 @@ export default function EvacueesStatistics() {
                             autoSkip: false, // Enable label auto-skipping
                             maxTicksLimit: 5, // Limit the number of displayed labels to 5
                             callback: function (value, index) {
-                                if (labels[index].length > 15) {
-                                    return labels[index].substring(0, 15) + '...'; // Truncate labels longer than 10 characters
+                                if (labels[index].length > 10) {
+                                    return labels[index].substring(0, 10) + '...'; // Truncate labels longer than 10 characters
                                 }
                                 return labels[index];
                             },
