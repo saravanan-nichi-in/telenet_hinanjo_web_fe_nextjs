@@ -40,6 +40,7 @@ export default function AdminSpecialCarePage() {
         if(res)
         {
         setSpecialCareCreateDialogVisible(false);
+        onGetSpecialCareListOnMounting()
       }
     };
     const onSpecialCareEditSuccess = (response) => {
@@ -106,7 +107,7 @@ export default function AdminSpecialCarePage() {
   useEffect(() => {
     setTableLoading(true);
     const fetchData = async () => {
-      await onGetPlaceListOnMounting();
+      await onGetSpecialCareListOnMounting();
       setLoader(false);
     };
     fetchData();
@@ -115,7 +116,7 @@ export default function AdminSpecialCarePage() {
   /**
    * Get place list on mounting
    */
-  const onGetPlaceListOnMounting = async () => {
+  const onGetSpecialCareListOnMounting = async () => {
     // Get places list
     getList(getPayload, fetchData);
   };
@@ -173,12 +174,14 @@ export default function AdminSpecialCarePage() {
       formData.append('file',file)
       importData(formData)
       setImportSpecialCareOpen(false);
+      onGetSpecialCareListOnMounting();
   };
 
   const submitForm=(res)=> {
     if(res.id)
     {
     update(res,isUpdated)
+    
     }
     else {
     create(res,isCreated)
@@ -189,6 +192,7 @@ export default function AdminSpecialCarePage() {
     if(res)
     {
         onSpecialCareEditSuccess()
+        onGetSpecialCareListOnMounting();
     }
   }
   const isUpdated = (res) => {
@@ -197,6 +201,7 @@ export default function AdminSpecialCarePage() {
         setCurrentEditObj({})
         setId(0)
         onSpecialCareEditSuccess()
+        onGetSpecialCareListOnMounting();
     }
   }
 
