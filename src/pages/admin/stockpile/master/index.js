@@ -334,7 +334,7 @@ export default function AdminStockPileMaster() {
                                 </div>
                                 <div>
                                     <form >
-                                        <div className='mt-3 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                             <div>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "category_search",
