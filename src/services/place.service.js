@@ -69,9 +69,8 @@ function _exportData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
-  const params = { params: payload };
   axios
-    .get("/admin/place", params)
+    .post("/admin/place/list", payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
@@ -134,9 +133,8 @@ function _create(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _update(payload, callBackFun) {
-  let place_id = payload.place_id;
   axios
-    .put(`/admin/place/${place_id}`, payload)
+    .put(`/admin/place/update`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
@@ -186,7 +184,7 @@ function _details(id, callBackFun) {
     },
   };
   axios
-    .get(`/admin/place/${id}`, params)
+    .get(`/admin/place/detail`, params)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
@@ -245,7 +243,7 @@ async function _getAddressByZipCode(zipCode, callBackFun) {
  */
 function _deletePlace(id, callBackFun) {
   axios
-    .delete(`/admin/place/${id}`, { data: { id: id } })
+    .delete(`/admin/place/delete`, { data: { id: id } })
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
