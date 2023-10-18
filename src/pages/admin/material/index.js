@@ -14,13 +14,14 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'slno', header: 'ID', minWidth: "15rem" },
-        { field: 'name', header: '物資', minWidth: "15rem", maxWidth: "10rem" },
-        { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "10rem" },
+        { field: 'slno', header: 'ID', minWidth: "5rem" },
+        { field: 'name', header: '物資', minWidth: "5rem", maxWidth: "10rem" },
+        { field: 'unit', header: '単位', minWidth: "5rem", maxWidth: "10rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'edit'),
             textAlign: "center",
+            minWidth: "2rem",
             body: (rowData) => (
                 <>
                 <Button buttonProps={{
@@ -42,6 +43,7 @@ export default function AdminMaterialPage() {
             field: 'actions',
             header: translate(localeJson, 'delete'),
             textAlign: "center",
+            minWidth: "2rem",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{

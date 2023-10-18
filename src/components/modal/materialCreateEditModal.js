@@ -43,8 +43,8 @@ export default function MaterialCreateEditModal(props) {
             <Formik
                 validationSchema={schema}
                 enableReinitialize={true} 
-                initialValues={...props.currentEditObj}
-                onSubmit={(values) => {
+                initialValues={props.currentEditObj}
+                onSubmit={(values, {resetForm}) => {
                     if (props.registerModalAction=="create") {
                         MaterialService.create(values, ()=> {
                             close();
@@ -57,7 +57,7 @@ export default function MaterialCreateEditModal(props) {
                             props.refreshList();
                         })
                     }
-                    
+                    resetForm();
                     return false;
                 }}
             >
@@ -111,11 +111,10 @@ export default function MaterialCreateEditModal(props) {
                                                         name: "name",
                                                         spanText: "*",
                                                         value: values.name,
-                                                        inputClass: "create_input_stock",
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         text : translate(localeJson, 'material_name'),
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                                     }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
                                                     <ValidationError errorBlock={errors.name && touched.name && errors.name} />
                                                 </div>
@@ -123,11 +122,10 @@ export default function MaterialCreateEditModal(props) {
                                                     <InputFloatLabel inputFloatLabelProps={{
                                                         name: 'unit',
                                                         value: values.unit,
-                                                        inputClass: "create_input_stock",
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
                                                         text: translate(localeJson, 'unit'),
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                                     }} parentClass={`${errors.unit && touched.unit && 'p-invalid pb-1'}`}/>
                                                     <ValidationError errorBlock={errors.unit && touched.unit && errors.unit} />
                                                 </div>

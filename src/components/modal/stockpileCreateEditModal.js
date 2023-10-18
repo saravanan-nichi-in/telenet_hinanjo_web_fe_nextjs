@@ -65,7 +65,7 @@ export default function StockpileCreateEditModal(props) {
                 enableReinitialize={true}
                 // initialValues={{ category: "", product_name: "", shelf_life: "" }}
                 initialValues={props.currentEditObj}
-                onSubmit={(values) => {
+                onSubmit={(values, {resetForm}) => {
                     console.log(values.image_logo)
                     let formData = new FormData();
                     formData.append('category', values.category);

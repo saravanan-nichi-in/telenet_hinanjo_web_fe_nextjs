@@ -39,9 +39,9 @@ export default function AdminStockPileMaster() {
 
     const columnsData = [
         { field: 'id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
-        { field: 'product_name', header: translate(localeJson, 'header_product_name'), minWidth: "10rem" },
-        { field: 'category', header: translate(localeJson, 'header_category'), minWidth: "10rem", sortable: true },
-        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "10rem" },
+        { field: 'product_name', header: translate(localeJson, 'header_product_name'), maxWidth: "10rem", minWidth: "5rem" },
+        { field: 'category', header: translate(localeJson, 'header_category'), maxWidth: "10rem", minWidth: "5rem", sortable: true },
+        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem" },
         {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
@@ -62,6 +62,7 @@ export default function AdminStockPileMaster() {
             field: 'actions',
             header: translate(localeJson, 'edit'),
             textAlign: "center",
+            minWidth: "5rem",
             body: (rowData) => (
                 <>
                 <Button buttonProps={{
@@ -333,7 +334,7 @@ export default function AdminStockPileMaster() {
                                 </div>
                                 <div>
                                     <form >
-                                        <div className='mt-3 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
                                             <div>
                                                 <SelectFloatLabel selectFloatLabelProps={{
                                                     inputId: "category_search",

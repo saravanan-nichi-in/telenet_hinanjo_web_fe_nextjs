@@ -86,10 +86,12 @@ export default function NormalTable(props) {
             alignHeader={alignHeader}
             style={{
               minWidth: col.minWidth && col.minWidth,
+              maxWidth: col.maxWidth && col.maxWidth,
               ...columnStyle,
               textAlign: col.textAlign && col.textAlign,
               fontWeight: col.fontWeight && col.fontWeight,
-              display: col.display
+              display: col.display,
+              wordWrap: "break-word"
             }}
             body={col.field === customActionsField ? col.body : col.body}
           />
