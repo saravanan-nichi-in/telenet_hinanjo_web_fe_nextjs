@@ -19,8 +19,41 @@ export default function AdminMaterialPage() {
         { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "10rem" },
         {
             field: 'actions',
-            header: '削除',
-            minWidth: "15rem",
+            header: translate(localeJson, 'edit'),
+            textAlign: "center",
+            body: (rowData) => (
+                <>
+                <Button buttonProps={{
+                        text: translate(localeJson, 'edit'), 
+                        buttonClass: "text-primary ",
+                        bg: "bg-white",
+                        hoverBg: "hover:bg-primary hover:text-white",
+                        onClick: () => {
+                            setRegisterModalAction("edit")
+                            setCurrentEditObj(rowData)
+                            setEmailSettingsOpen(true)
+                            hideOverFlow();
+                        },
+                    }} />
+                </>
+            ),
+        },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'delete'),
+            textAlign: "center",
+            body: (rowData) => (
+                <div>
+                    <Button buttonProps={{
+                        text: translate(localeJson, 'delete'), 
+                        buttonClass: "text-primary",
+                        bg: "bg-red-600 text-white",
+                        severity: "danger",
+                        hoverBg: "hover:bg-red-500 hover:text-white",
+                        onClick: () => openDeleteDialog(rowData.id)
+                    }} />
+                </div>
+            ),
         }
     ];
 
@@ -100,7 +133,6 @@ export default function AdminMaterialPage() {
                         id: obj.id ?? "",
                         name: obj.name ?? "",
                         unit: obj.unit ?? "",
-                        actions: action(obj)
                     }
                     preparedList.push(preparedObj);
                 })
@@ -271,7 +303,7 @@ export default function AdminMaterialPage() {
                                             hideOverFlow();
                                         },
                                         severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
+                                    }} parentClass={"mt-1"} />
                                 </div>
                                 <div className='mt-3'>
                                     <NormalTable

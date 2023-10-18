@@ -60,11 +60,11 @@ export default function AdminStockPileMaster() {
         },
         {
             field: 'actions',
-            header: translate(localeJson, 'header_action'),
-            minWidth: "10rem",
+            header: translate(localeJson, 'edit'),
+            textAlign: "center",
             body: (rowData) => (
                 <>
-                <Button parentStyle={{ display: "inline" }} buttonProps={{
+                <Button buttonProps={{
                         text: translate(localeJson, 'edit'), 
                         buttonClass: "text-primary ",
                         bg: "bg-white",
@@ -76,15 +76,24 @@ export default function AdminStockPileMaster() {
                             hideOverFlow()
                         },
                     }} />
-                    <Button parentStyle={{ display: "inline" }} buttonProps={{
+                </>
+            ),
+        },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'delete'),
+            textAlign: "center",
+            body: (rowData) => (
+                <div>
+                    <Button buttonProps={{
                         text: translate(localeJson, 'delete'), 
-                        buttonClass: "text-primary ml-2",
+                        buttonClass: "text-primary",
                         bg: "bg-red-600 text-white",
                         severity: "danger",
                         hoverBg: "hover:bg-red-500 hover:text-white",
                         onClick: () => openDeleteDialog(rowData.product_id)
                     }} />
-                </>
+                </div>
             ),
         }
     ];
@@ -317,7 +326,7 @@ export default function AdminStockPileMaster() {
                                             hideOverFlow();
                                         },
                                         severity: "success"
-                                    }} parentClass={"mr-1 mt-1"} />
+                                    }} parentClass={"mt-1"} />
                                 </div>
                                 <div>
                                     <form >
