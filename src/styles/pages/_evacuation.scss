@@ -6,6 +6,14 @@
     width: 150px;
 }
 
+.evacuation-list.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
+    border-width: 0 1px 1px 1px;
+}
+
+.evacuation-list.p-datatable.p-datatable-gridlines .p-datatable-thead>tr>th{
+    border-width: 1px 1px 1px 1px;
+}
+
 @media(max-width:450px) {
     .evacuation_dropdown {
         width: 170px;

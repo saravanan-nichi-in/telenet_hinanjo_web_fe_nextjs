@@ -36,15 +36,15 @@ export default function EvacuationPage() {
     });
 
     const evacuationTableColumns = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "5rem" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem" },
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "6rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: 'left' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
-        { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "12rem", sortable: false, textAlign: 'left' },
+        { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "name", header: translate(localeJson, 'name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem", sortable: false, textAlign: 'left' },
+        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem", display: 'none' },
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left', display: 'none' },
@@ -110,13 +110,15 @@ export default function EvacuationPage() {
             if (questionnaire.length > 0) {
                 questionnaire.map((ques, num) => {
                     let column = {
-                        field: "question_" + num,
+                        field: "question_" + ques.id,
                         header: (locale == "ja" ? ques.title : ques.title_en),
-                        minWidth: "10rem"
+                        minWidth: "10rem",
+                        display: "none"
                     };
                     evacuationColumns.push(column);
                 });
             }
+            setEvacuationTableFields(evacuationColumns);
             data.map((item, i) => {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
@@ -156,9 +158,9 @@ export default function EvacuationPage() {
                     "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "",
                 };
 
-                if (questionnaire.length > 0) {
-                    questionnaire.map((ques, num) => {
-                        evacuees[`question_${num}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+                if (item.add_question.length > 0) {
+                    item.add_question.map((ques) => {
+                        evacuees[`question_${ques.question_id}`] = (locale == 'ja' ? (ques.answer.length > 0 ? getAnswerData(ques.answer) : ""): (ques.answer_en.length > 0 ? getAnswerData(ques.answer_en) : ""));
                     })
                 }
                 previousItem = evacuees;
@@ -337,6 +339,7 @@ export default function EvacuationPage() {
                     <NormalTable
                         lazy
                         id={"evacuation-list"}
+                        className="evacuation-list"
                         totalRecords={totalCount}
                         loading={tableLoading}
                         size={"small"}

@@ -187,8 +187,8 @@
       "others_text": "Others",
       "japanese_notation":"Japanese Notation",
       "english_notation":"English Notation",
-      "map_center_coordinates":"MAP center coordinates",
-      "public_information_display_list":"Public information display list",
+      "map_center_coordinates":"MAP Center Coordinates",
+      "public_information_display_list":"Public Information Display List",
       "stockPile_management":"Stockpile Management",
       "evacuation_history_download":"Evacuation history download",
       "common_action":"Action"
@@ -234,7 +234,7 @@
       "longitude_required":"Longitude is required.",
       "default_shell_life_days_required":"Default shelf life(Days) is required.",
       "logo_img_correct_format":"The logo image must be correct format.",
-      "logo_img_not_greater_than_3mb":"The logo image must not be greater than 3 megabytes."
+      "logo_img_not_greater_than_3mb":"The logo image must not be greater than 3 MB."
     },
     "buttons": {
       "import": "Import",
@@ -280,15 +280,15 @@
       "footer_display":"Footer Display",
       "type_name":"Type Name",
       "system_name":"System Name",
-      "disclosure_information":"Disclosure information",
+      "disclosure_information":"Disclosure Information",
       "lat":"Lat",
       "lng":"Lng",
-      "display_by_default":"Display by default",
-      "display_items_setting":"Display items setting",
-      "logo_image":"Logo image",
+      "display_by_default":"Display by Default",
+      "display_items_setting":"Display Items Setting",
+      "logo_image":"Logo Image",
       "name_phonetic":"Name (phonetic)",
       "name_kanji":"Name (kanji)",
-      "default_shelf_life_days":"Default shelf life (Days)"
+      "default_shelf_life_days":"Default Shelf Life (Days)"
     },
     "others": {
       "not": "None",
