@@ -129,7 +129,7 @@ export default function AdminMaterialPage() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
-                        slno: i + 1,
+                        slno: i + getListPayload.filters.start + 1,
                         id: obj.id ?? "",
                         name: obj.name ?? "",
                         unit: obj.unit ?? "",

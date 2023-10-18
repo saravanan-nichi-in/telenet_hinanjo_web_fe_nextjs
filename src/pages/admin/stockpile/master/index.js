@@ -210,7 +210,7 @@ export default function AdminStockPileMaster() {
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
-                        id: i + 1,
+                        id: i + getListPayload.filters.start + 1,
                         product_id: obj.product_id ?? "",
                         product_name: obj.product_name ?? "",
                         category: obj.category ?? "",
