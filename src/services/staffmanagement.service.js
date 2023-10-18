@@ -149,7 +149,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/material/delete`, {data: {"id": id}})
+        .delete(`/admin/staff_management/delete`, {data: {"id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

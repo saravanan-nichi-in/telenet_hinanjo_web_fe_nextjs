@@ -13,13 +13,42 @@ export default function StaffManagementPage() {
     const [staff, setStaff] = useState([]);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
-    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [editStaffOpen, setEditStaffOpen] = useState(false);
     const [createStaffOpen, setCreateStaffOpen] = useState(false);
     const [searchName, setSearchName] = useState("");
 
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
+
+    //delete related mehotds start
+    const [deleteId, setDeleteId] = useState(null);
+
+    const openDeleteDialog = (id) => {
+        setDeleteId(id);
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (action = "close") => {
+        if (action == "confirm") {
+            StaffManagementService.delete(deleteId, (resData) => {
+                getStaffList()
+            });
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
+    //delete related mehotds end
+
     const columnsData = [
-        { field: 'id', header: 'S No', minWidth: "3rem" },
+        { field: 'slno', header: 'S No', minWidth: "3rem" },
         {
             field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>
@@ -50,8 +79,9 @@ export default function StaffManagementPage() {
                         text: translate(localeJson, 'delete'), 
                         buttonClass: "text-primary ml-2",
                         bg: "bg-red-600 text-white",
+                        severity: "danger",
                         hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => setDeleteStaffOpen(true)
+                        onClick: () => openDeleteDialog(rowData.id)
                     }} />  
                 </div>
             ),
@@ -66,7 +96,7 @@ export default function StaffManagementPage() {
 
     };
     const onStaffDeleteClose = () => {
-        setDeleteStaffOpen(!deleteStaffOpen);
+        openDeleteDialog(!deleteOpen);
     };
     const onStaffEditClose = () => {
         setEditStaffOpen(!editStaffOpen);
@@ -99,7 +129,7 @@ export default function StaffManagementPage() {
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
     
-    const onGetMaterialListOnMounting = () => {
+    const getStaffList = () => {
         // Get dashboard list
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
@@ -108,10 +138,10 @@ export default function StaffManagementPage() {
                 let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
-                console.log(data);
                 data.map((obj, i) => {
                     let preparedObj = {
-                        id: i + getListPayload.filters.start + 1,
+                        slno: i + getListPayload.filters.start + 1,
+                        id: obj.id,
                         name: obj.name ?? "",
                         email: obj.email ?? "",
                         image: obj.image ?? "",
@@ -160,7 +190,7 @@ export default function StaffManagementPage() {
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
-            await onGetMaterialListOnMounting()
+            await getStaffList()
             setLoader(false);
         };
         fetchData();
@@ -181,8 +211,9 @@ export default function StaffManagementPage() {
                 close={onStaffDetailClose}
             />
             <AdminManagementDeleteModal
-                open={deleteStaffOpen}
-                close={onStaffDeleteClose}
+                open={deleteOpen}
+                close={onDeleteClose}
+                refreshList={getStaffList}
             />
             <StaffManagementEditModal
                 open={editStaffOpen}
