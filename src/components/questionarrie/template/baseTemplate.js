@@ -7,9 +7,12 @@ import { NormalCheckBox } from '@/components/checkbox';
 import { InputSwitch } from '@/components/switch';
 import { Input } from '@/components/input';
 import { RadioBtn } from '@/components/radioButton';
+// import { props } from 'cypress/types/bluebird';
 // import useItems from 'antd/es/menu/hooks/useItems';
+const BaseTemplate = (props) => {
 
-const BaseTemplate = ({ questionnaires, handleOnDrag }) => {
+    const{item}=props;
+    console.log(item,"questionarrie");
     const itemTemplate = (item) => {
         return (
             <div>
@@ -300,23 +303,14 @@ const BaseTemplate = ({ questionnaires, handleOnDrag }) => {
     };
 
     return (
-        questionnaires && (
+        // questionnaires && (
             <div className="grid custom_orderlist">
-                <div className="col-12 mb-4">
-                    <div className='xl:flex xl:justify-content-center"'>
-                        <OrderList
-                            value={questionnaires}
-                            onChange={(e) => handleOnDrag(e)}
-                            itemTemplate={itemTemplate}
-                            draggable="true"
-                            // className='col questionnaires_orderList'
-                        >
-                        </OrderList>
+                <div className="col-12 mb-4 ">
+                            {itemTemplate(item)}
                     </div>
-                </div>
-            </div>
-        ));
-    // );
+                 </div>
+        // ));
+    )
 };
 
 export default BaseTemplate;

@@ -46,13 +46,13 @@ export default function MasterQuestionnaire() {
         fetchData();
     }, []);
 
-    const handleOnDrag = (event) => {
-        setQuestionnaires(event.value);
-    }
+    // const handleOnDrag = (event) => {
+    //     setQuestionnaires(event.value);
+    // }
     const map = (
         <ol>
-            {questionnaires.map((index) => (
-                <li key={index}>
+            {questionnaires.map((item,index) => (
+                <li>
                     {/* <NormalCheckBox checkBoxProps={{
                         checked: true,
                     }} /> */}
@@ -61,17 +61,18 @@ export default function MasterQuestionnaire() {
 
                     </div> */}
                     <div className='ml-1 mr-1'>
-                    <BaseTemplate
-                            questionnaires={questionnaires}
-                            handleOnDrag={handleOnDrag}
+                    <BaseTemplate  item={item}
+                            // questionnaires={questionnaires}
+                            // handleOnDrag={handleOnDrag}
+                        
                         />
                     </div>
-                    <a className='ml-2'>
+                    <a className='mr-10'>
                         <AiOutlineDrag />
                     </a>
                 </li>
 
-            ))}
+             ))} 
         </ol>
     )
 
@@ -82,10 +83,12 @@ export default function MasterQuestionnaire() {
                     <div className='card'>
                         <h5 className='page-header1'>{translate(localeJson, 'questionnaire')}</h5>
                         <hr />
+                        <div className='w-full'>
                         <DND dragProps={dragProps}
                                                     >
                                                         {map}
                                                     </DND>
+                                                    </div>
                     </div>
                 </div>
             </div>
