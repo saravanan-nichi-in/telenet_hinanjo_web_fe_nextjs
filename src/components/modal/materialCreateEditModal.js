@@ -36,7 +36,12 @@ export default function MaterialCreateEditModal(props) {
             {translate(localeJson, 'material_information_registration')}
         </div>
     );
-
+    
+    const resetAndCloseForm = (callback) => {
+        close();
+        callback();
+        props.refreshList();
+    }
 
     return (
         <>
@@ -47,17 +52,14 @@ export default function MaterialCreateEditModal(props) {
                 onSubmit={(values, {resetForm}) => {
                     if (props.registerModalAction=="create") {
                         MaterialService.create(values, ()=> {
-                            close();
-                            props.refreshList();
+                            resetAndCloseForm(resetForm)
                         })
                     } else if(props.registerModalAction=="edit") {
                         MaterialService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
                         ()=> {
-                            close();
-                            props.refreshList();
+                            resetAndCloseForm(resetForm)
                         })
                     }
-                    resetForm();
                     return false;
                 }}
             >

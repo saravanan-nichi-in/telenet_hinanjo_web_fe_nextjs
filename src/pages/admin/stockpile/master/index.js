@@ -166,8 +166,8 @@ export default function AdminStockPileMaster() {
         filters: {
             start: 0,
             limit: 5,
-            order_by: "",
-            sort_by: ""
+            order_by: "desc",
+            sort_by: "updated_at"
         },
         category: "",
         product_name: ""
