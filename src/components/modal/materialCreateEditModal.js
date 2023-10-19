@@ -112,6 +112,7 @@ export default function MaterialCreateEditModal(props) {
                                                     <InputFloatLabel inputFloatLabelProps={{
                                                         name: "name",
                                                         spanText: "*",
+                                                        spanClass: "p-error",
                                                         value: values.name,
                                                         inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                         onChange: handleChange,
