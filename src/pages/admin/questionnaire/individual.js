@@ -60,7 +60,7 @@ export default function individualQuestionnaire() {
                     {item.title}
 
                     </div> */}
-                    <div className='ml-1 mr-1' style={{width:"90%"}}>
+                    <div className='ml-1 mr-1' style={{width:"95%"}}>
                         <BaseTemplate item={item}
                         // questionnaires={questionnaires}
                         // handleOnDrag={handleOnDrag}

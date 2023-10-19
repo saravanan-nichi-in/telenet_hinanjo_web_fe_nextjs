@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { OrderList } from 'primereact/orderlist';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
 import { Button } from '@/components/button';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { getValueByKeyRecursively as translate } from "@/helper";
 import { NormalCheckBox } from '@/components/checkbox';
 import { InputSwitch } from '@/components/switch';
 import { Input } from '@/components/input';
@@ -11,14 +13,15 @@ import { RadioBtn } from '@/components/radioButton';
 // import useItems from 'antd/es/menu/hooks/useItems';
 const BaseTemplate = (props) => {
 
-    const{item}=props;
-    console.log(item,"questionarrie");
+    const { item } = props;
+    console.log(item, "questionarrie");
+    const { localeJson } = useContext(LayoutContext);
     const itemTemplate = (item) => {
         return (
             <div>
                 <div className='mobile_questionaries mobile_accordion '>
                     <Accordion>
-                        <AccordionTab header={`項目${item.title}`}>
+                        <AccordionTab header={`${translate(localeJson, 'item')} ${item.title}`}>
                             {/* Questionnaires header */}
                             <div style={{
                                 backgroundColor: "#afe1f9"
@@ -30,14 +33,14 @@ const BaseTemplate = (props) => {
                                         <div className='align-items-center pb-2'>
                                             <NormalCheckBox checkBoxProps={{
                                                 checked: true,
-                                                value: "必須"
+                                                value: translate(localeJson, 'required')
                                             }} />
                                         </div>
                                         <div className='flex align-items-center pt-2 pb-2 switch-align' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                             <InputSwitch inputSwitchProps={{
                                                 checked: true
                                             }} />
-                                            避難者登録画面表示
+                                            {translate(localeJson, 'display_in_registration_screen')}
                                         </div>
                                     </div>
                                     <div className='align-items-center pt-2 pb-2'>
@@ -47,28 +50,28 @@ const BaseTemplate = (props) => {
                                                     checked: true
                                                 }}
                                                 />
-                                                選択形式
+                                                {translate(localeJson, 'selection')}
                                             </div>
                                             <div className='pb-2 flex align-items-center '>
                                                 <RadioBtn radioBtnProps={{
                                                     checked: true
                                                 }}
                                                 />
-                                                記述形式
+                                                {translate(localeJson, 'description')}
                                             </div>
                                             <div className='pb-2 flex align-items-center'>
                                                 <RadioBtn radioBtnProps={{
                                                     checked: true
                                                 }}
                                                 />
-                                                数値形式
+                                                {translate(localeJson, 'numeric')}
                                             </div>
                                         </div>
                                         <div className='pt-2 flex align-items-center justify-content-start' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                             <InputSwitch inputSwitchProps={{
                                                 checked: true
                                             }} />
-                                            避難者登録画面表示
+                                            {translate(localeJson, 'voice_input')}
                                         </div>
                                     </div>
                                 </div>
@@ -76,28 +79,29 @@ const BaseTemplate = (props) => {
                             {/* Questionnaires */}
                             <div className="p-2">
                                 <div className="align-items-center justify-content-center content-align">
-                                    項目タイトル
+                                    {translate(localeJson, 'item_title')}
                                 </div>
                                 <div >
                                     <div className='col-12 align-items-center'>
                                         <Input inputProps={{
                                             inputClass: "col-12 p-inputtext-sm",
-                                            value:item.questiontitle,
+                                            value: item.questiontitle,
                                         }} />
                                     </div>
                                     <div className='col-12 align-items-center'>
                                         <Input inputProps={{
-                                            inputClass: "col-12 p-inputtext-sm",
+                                            inputClass: "col-12",
                                             placeholder: "項目（英語）",
-                                            value:item.questiontitle_en,
+                                            value: item.questiontitle_en,
                                         }} />
                                     </div>
                                 </div>
                                 <div className='align-items-center justify-content-center content-align' >
                                     <Button buttonProps={{
-                                        text: "－ 項目削除",
+                                        text: `－ ${translate(localeJson, 'del_item')}`,
                                         severity: "danger",
-                                        rounded: "true"
+                                        rounded: "true",
+                                        buttonClass: "evacuation_button_height",
                                     }} />
                                 </div>
                             </div>
@@ -105,7 +109,7 @@ const BaseTemplate = (props) => {
                             {Array.isArray(item.option) && item.option.map((option, i) => (
                                 <div key={i} className="p-2">
                                     <div className=" align-items-center content-align">
-                                        選択肢{i + 1}<span style={{
+                                        {translate(localeJson, 'choice')}{i + 1}<span style={{
                                             color: "red"
                                         }}>*</span>
                                     </div>
@@ -128,16 +132,18 @@ const BaseTemplate = (props) => {
                                     <div className='align-items-center content-align'>
                                         {i < 2 ? (
                                             <Button buttonProps={{
-                                                text: " － 項目削除",
+                                                text: `－ ${translate(localeJson, 'del_choice')}`,
                                                 severity: "danger",
+                                                buttonClass: "evacuation_button_height",
                                                 rounded: "true"
                                             }}
                                             />
                                         ) : (
                                             <Button buttonProps={{
-                                                text: "＋ 選択肢追加",
+                                                text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                 severity: "success",
-                                                rounded: "true"
+                                                rounded: "true",
+                                                buttonClass: "evacuation_button_height"
                                             }}
                                             />
                                         )}
@@ -156,7 +162,7 @@ const BaseTemplate = (props) => {
                         border: "1px solid #000",
                     }}>
                         <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                            項目{item.title}
+                            {translate(localeJson, 'item')} {item.title}
                         </div>
                         <div className="col" style={{
                             borderLeft: "1px solid #000"
@@ -167,13 +173,13 @@ const BaseTemplate = (props) => {
                                         checked: true,
 
                                     }} />
-                                    必須
+                                    {translate(localeJson, 'required')}
                                 </div>
                                 <div className='col-6 flex  gap-2 align-items-center justify-content-end '>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
                                     }} />
-                                    避難者登録画面表示
+                                    {translate(localeJson, 'display_in_registration_screen')}
                                 </div>
                             </div>
                             <div className='flex align-items-center justify-content-between'>
@@ -183,28 +189,28 @@ const BaseTemplate = (props) => {
                                             checked: true
                                         }}
                                         />
-                                        選択形式
+                                        {translate(localeJson, 'selection')}
                                     </div>
                                     <div className='flex  pb-2 gap-2 align-items-center justify-content-start'>
                                         <RadioBtn radioBtnProps={{
                                             checked: true
                                         }}
                                         />
-                                        記述形式
+                                        {translate(localeJson, 'description')}
                                     </div>
                                     <div className='flex pb-2 gap-2 align-items-center justify-content-start'>
                                         <RadioBtn radioBtnProps={{
                                             checked: true
                                         }}
                                         />
-                                        数値形式
+                                        {translate(localeJson, 'numeric')}
                                     </div>
                                 </div>
                                 <div className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
                                     }} />
-                                    避難者登録画面表示
+                                    {translate(localeJson, 'voice_input')}
                                 </div>
                             </div>
                         </div>
@@ -216,21 +222,21 @@ const BaseTemplate = (props) => {
                         borderLeft: "1px solid #000",
                     }}>
                         <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                            項目タイトル
+                            {translate(localeJson, 'item_title')}
                         </div>
                         <div className="col-7" style={{
                             borderLeft: "1px solid #000",
                         }}>
                             <div className='col-12'>
                                 <Input inputProps={{
-                                    inputClass: "col-12 p-inputtext-lg",
+                                    inputClass: "col-12",
                                     value: item.questiontitle
                                 }} />
                             </div>
                             <div className='col-12 align-items-center'>
                                 <Input inputProps={{
                                     inputClass: "col-12 p-inputtext-lg",
-                                    value:item.questiontitle_en,
+                                    value: item.questiontitle_en,
                                     placeholder: '項目（英語）'
                                 }} />
                             </div>
@@ -239,8 +245,9 @@ const BaseTemplate = (props) => {
                             borderLeft: "1px solid #000",
                         }}>
                             <Button buttonProps={{
-                                text: "－ 項目削除",
+                                text: `－ ${translate(localeJson, 'del_item')}`,
                                 severity: "danger",
+                                buttonClass: "evacuation_button_height",
                                 rounded: "true"
                             }} />
                         </div>
@@ -253,7 +260,7 @@ const BaseTemplate = (props) => {
                             borderLeft: "1px solid #000",
                         }}>
                             <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                                選択肢{i + 1}<span style={{
+                                {translate(localeJson, 'choice')} {i + 1}<span style={{
                                     color: "red"
                                 }}>*</span>
                             </div>
@@ -262,14 +269,14 @@ const BaseTemplate = (props) => {
                             }}>
                                 <div className='col-12 xl:flex gap-3 p-0 align-items-center ' style={{ justifyContent: "start", flexWrap: "wrap" }}>
                                     <Input inputProps={{
-                                        value:option,
+                                        value: option,
                                         inputClass: "w-full"
                                     }} parentClass="col p-inputtext-lg md:w-full" />
-                                                        {Array.isArray(item.option_en) && item.option_en.map((option_en, i) => (
+                                    {Array.isArray(item.option_en) && item.option_en.map((option_en, i) => (
                                         <div key={i}>
                                             <Input inputProps={{
                                                 value: option_en,
-                                                placeholder: `選択肢${i + 1}（英語）`,
+                                                placeholder: `${translate(localeJson, 'choice')}${i + 1}（英語）`,
                                                 inputClass: "w-full"
                                             }} parentClass="col p-inputtext-lg md:w-full " />
                                         </div>))}
@@ -280,16 +287,18 @@ const BaseTemplate = (props) => {
                             }}>
                                 {i < 2 ? (
                                     <Button buttonProps={{
-                                        text: " － 項目削除",
+                                        text: `－ ${translate(localeJson, 'del_choice')}`,
                                         severity: "danger",
+                                        buttonClass: "evacuation_button_height",
                                         rounded: "true",
 
                                     }}
                                     />
                                 ) : (
                                     <Button buttonProps={{
-                                        text: "＋ 選択肢追加",
+                                        text: `＋  ${translate(localeJson, 'add_choice')}`,
                                         severity: "success",
+                                        buttonClass: "evacuation_button_height",
                                         rounded: "true",
                                     }}
                                     />
@@ -304,11 +313,11 @@ const BaseTemplate = (props) => {
 
     return (
         // questionnaires && (
-            <div className="grid custom_orderlist">
-                <div className="col-12 mb-4 ">
-                            {itemTemplate(item)}
-                    </div>
-                 </div>
+        <div className="grid custom_orderlist">
+            <div className="col-12 mb-4 ">
+                {itemTemplate(item)}
+            </div>
+        </div>
         // ));
     )
 };

@@ -60,14 +60,14 @@ export default function MasterQuestionnaire() {
                     {item.title}
 
                     </div> */}
-                    <div className='ml-1 mr-1'>
-                    <BaseTemplate  item={item}
+                    <div className='ml-1 mr-1'style={{width:"95%"}}>
+                    <BaseTemplate  item={item} 
                             // questionnaires={questionnaires}
                             // handleOnDrag={handleOnDrag}
                         
                         />
                     </div>
-                    <a className='mr-10'>
+                    <a className='ml-2'>
                         <AiOutlineDrag />
                     </a>
                 </li>

@@ -190,7 +190,18 @@
       "public_information_display_list":"公開情報一覧表示",
       "stockPile_management":"備蓄品管理",
       "evacuation_history_download":"避難所状況履歴取得",
-      "common_action":"アクション"
+      "common_action":"アクション",
+      "item":"項目",
+      "required":"必須",
+      "selection":"選択形式",
+      "description":"記述形式",
+      "numeric":"数値形式",
+      "voice_input":"音声入力有り",
+      "item_title":"項目タイトル",
+      "choice":"選択肢",
+      "del_item":"Del Item",
+      "del_choice":"選択肢削",
+      "add_choice":"選択肢追"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

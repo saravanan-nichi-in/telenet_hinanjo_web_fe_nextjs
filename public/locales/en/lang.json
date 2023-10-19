@@ -190,8 +190,19 @@
       "map_center_coordinates":"MAP Center Coordinates",
       "public_information_display_list":"Public Information Display List",
       "stockPile_management":"Stockpile Management",
-      "evacuation_history_download":"Evacuation history download",
-      "common_action":"Action"
+      "evacuation_history_download":"Evacuation History Download",
+      "common_action":"Action",
+      "item":"Item",
+      "required":"Required",
+      "selection":"Selection",
+      "description":"Description",
+      "numeric":"Numeric",
+      "voice_input":"Voice Input",
+      "item_title":"Item Title",
+      "choice":"Choice",
+      "del_item":"Del Item",
+      "del_choice":"Del Choice",
+      "add_choice":"Add Choice"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
