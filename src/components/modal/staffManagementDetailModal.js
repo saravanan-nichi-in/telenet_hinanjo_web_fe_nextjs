@@ -23,10 +23,13 @@ export default function StaffManagementDetailModal(props) {
         setEditStaffOpen(false);
     };  
 
+    const staffDetailData = [{ field: 'name', header: translate(localeJson, 'name')},
+    { field: 'tel', header: translate(localeJson, 'tel')}];
+
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class"},
-        { field: 'name', header: translate(localeJson, 'staff_management_detail_login_history_name'), minWidth: "5rem" },
-        { field: 'login_datetime', header:translate(localeJson, 'staff_management_detail_login_history_login_datetime') }];
+        { field: 'name', header: translate(localeJson, 'staff_management_detail_login_history_name'), maxWidth: "2rem" },
+        { field: 'login_datetime', header:translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" }];
 
     // Main Table listing starts
     const { show } = StaffManagementService;
@@ -47,24 +50,32 @@ export default function StaffManagementDetailModal(props) {
     const getStaffList = () => {
         // Get dashboard list
         show(getListPayload, (response) => {
-            if (response.success && !_.isEmpty(response.data) && response.data.login_history.total > 0) {
-                const data = response.data.login_history.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
-                let preparedList = [];
-                // Update prepared list to the state
-                // Preparing row data for specific column to display
-                data.map((obj, i) => {
-                    let preparedObj = {
-                        slno: i + getListPayload.filters.start + 1,
-                        name: obj.name ?? "",
-                        login_datetime: obj.login_datetime ?? "",
-                    }
-                    preparedList.push(preparedObj);
-                })
-                setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
-                setTotalCount(response.data.login_history.total);
-                setTableLoading(false);
+            if (response.success && !_.isEmpty(response.data)) {
+                if(response.data.login_history.total > 0) {
+                    const data = response.data.login_history.list;
+                    var additionalColumnsArrayWithOldData = [...columnsData];
+                    let preparedList = [];
+                    // Update prepared list to the state
+                    // Preparing row data for specific column to display
+                    data.map((obj, i) => {
+                        let preparedObj = {
+                            slno: i + getListPayload.filters.start + 1,
+                            name: obj.name ?? "",
+                            login_datetime: obj.login_datetime ?? "",
+                        }
+                        preparedList.push(preparedObj);
+                    })
+                    setList(preparedList);
+                    setColumns(additionalColumnsArrayWithOldData);
+                    setTotalCount(response.data.login_history.total);
+                    setTableLoading(false);
+                } else {
+                    setTableLoading(false);
+                    setList([]);
+                }
+                if(response.data.model) {
+                    setStaffDetail([{name: response.data.model.name, tel: response.data.model.tel}]);
+                }
             } else {
                 setTableLoading(false);
                 setList([]);
@@ -147,7 +158,7 @@ export default function StaffManagementDetailModal(props) {
                     <div className={`modal-content`}>
                     <div>
                             <div className="flex justify-content-center overflow-x-auto">
-                                {/* <NormalTable tableStyle={{ maxWidth: "20rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staffDetail} columns={staffDetailData} /> */}
+                                <NormalTable tableStyle={{ maxWidth: "20rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staffDetail} columns={staffDetailData} />
                             </div>
                             <div >
                                 <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson,'history_login_staff_management')}</h5>
