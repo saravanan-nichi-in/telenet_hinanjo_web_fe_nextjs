@@ -38,7 +38,7 @@ export default function AdminStockPileMaster() {
     }
 
     const columnsData = [
-        { field: 'id', header: translate(localeJson, 'header_slno'), minWidth: "5rem" },
+        { field: 'id', header: translate(localeJson, 'header_slno'), className: "sno_class" },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), maxWidth: "10rem", minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), maxWidth: "10rem", minWidth: "5rem", sortable: true },
         { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem" },

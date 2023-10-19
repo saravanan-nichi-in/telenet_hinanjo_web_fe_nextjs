@@ -48,7 +48,7 @@ export default function StaffManagementPage() {
     //delete related mehotds end
 
     const columnsData = [
-        { field: 'slno', header: 'S No', minWidth: "3rem" },
+        { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class"},
         {
             field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", body: (rowData) => (
                 <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>

@@ -169,6 +169,9 @@
             "sno":"S No"
         }
       },
+      "material_management_table_header_slno": "S No",
+      "material_management_table_header_name": "Name",
+      "material_management_table_header_unit": "Unit",
       "Place_Delete_Content_1": "Once deleted, the data cannot be recovered.",
       "Place_Delete_Content_2": "Are you sure you want to delete it?",
       "register_place": "Place Create",
