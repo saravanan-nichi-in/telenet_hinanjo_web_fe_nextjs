@@ -8,7 +8,8 @@ export const ExternalEvacuationServices = {
     exportExternalEvacueesCSVList: _exportExternalEvacueesCSVList,
     getPlaceDropdownList: _getPlaceDropdownList,
     getList: _getList,
-    getExternalEvacueesDetail: _getExternalEvacueesDetail
+    getExternalEvacueesDetail: _getExternalEvacueesDetail,
+    getChartScreenData: _getChartScreenData
 };
 
 /**
@@ -78,6 +79,25 @@ function _getList(payload, callBackFun) {
  */
 function _getExternalEvacueesDetail(payload, callBackFun) {
     axios.post('/admin/external/family/detail', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get Chart Screen Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getChartScreenData(payload, callBackFun) {
+    axios.get('/admin/external/family', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
