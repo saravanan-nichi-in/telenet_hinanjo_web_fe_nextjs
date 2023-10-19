@@ -32,7 +32,12 @@ export default function StaffManagementEditModal(props) {
             {modalHeaderText}
         </div>
     );
-
+    
+    const resetAndCloseForm = (callback) => {
+                close();
+                callback();
+                props.refreshList();
+    }
 
     return (
         <>
@@ -43,16 +48,14 @@ export default function StaffManagementEditModal(props) {
                 onSubmit={(values, {resetForm}) => {
                     if (props.registerModalAction=="create") {
                         StaffManagementService.create(values, ()=> {
-                            props.refreshList();
+                            resetAndCloseForm(resetForm);
                         })
                     } else if(props.registerModalAction=="edit") {
                         StaffManagementService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
                         ()=> {
-                            props.refreshList();
+                            resetAndCloseForm(resetForm);
                         })
                     }
-                    close();
-                    resetForm();
                     return false;
                 }}
             >
