@@ -101,7 +101,7 @@ const BaseTemplate = (props) => {
                                         text: `－ ${translate(localeJson, 'del_item')}`,
                                         severity: "danger",
                                         rounded: "true",
-                                        buttonClass: "evacuation_button_height",
+                                        // buttonClass: "evacuation_button_height",
                                     }} />
                                 </div>
                             </div>
@@ -134,7 +134,7 @@ const BaseTemplate = (props) => {
                                             <Button buttonProps={{
                                                 text: `－ ${translate(localeJson, 'del_choice')}`,
                                                 severity: "danger",
-                                                buttonClass: "evacuation_button_height",
+                                                // buttonClass: "evacuation_button_height",
                                                 rounded: "true"
                                             }}
                                             />
@@ -143,7 +143,7 @@ const BaseTemplate = (props) => {
                                                 text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                 severity: "success",
                                                 rounded: "true",
-                                                buttonClass: "evacuation_button_height"
+                                                // buttonClass: "evacuation_button_height"
                                             }}
                                             />
                                         )}
@@ -247,7 +247,7 @@ const BaseTemplate = (props) => {
                             <Button buttonProps={{
                                 text: `－ ${translate(localeJson, 'del_item')}`,
                                 severity: "danger",
-                                buttonClass: "evacuation_button_height",
+                                // buttonClass: "evacuation_button_height",
                                 rounded: "true"
                             }} />
                         </div>
@@ -289,7 +289,7 @@ const BaseTemplate = (props) => {
                                     <Button buttonProps={{
                                         text: `－ ${translate(localeJson, 'del_choice')}`,
                                         severity: "danger",
-                                        buttonClass: "evacuation_button_height",
+                                        // buttonClass: "evacuation_button_height",
                                         rounded: "true",
 
                                     }}
@@ -298,7 +298,7 @@ const BaseTemplate = (props) => {
                                     <Button buttonProps={{
                                         text: `＋  ${translate(localeJson, 'add_choice')}`,
                                         severity: "success",
-                                        buttonClass: "evacuation_button_height",
+                                        // buttonClass: "evacuation_button_height",
                                         rounded: "true",
                                     }}
                                     />
