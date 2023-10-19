@@ -259,13 +259,13 @@ const BaseTemplate = ({ questionnaires, handleOnDrag }) => {
                             }}>
                                 <div className='col-12 xl:flex gap-3 p-0 align-items-center ' style={{ justifyContent: "start", flexWrap: "wrap" }}>
                                     <Input inputProps={{
-                                        value: "",
+                                        value:option,
                                         inputClass: "w-full"
                                     }} parentClass="col p-inputtext-lg md:w-full" />
-                                    {item.option_en.map((arr, i) => (
+                                                        {Array.isArray(item.option_en) && item.option_en.map((option_en, i) => (
                                         <div key={i}>
                                             <Input inputProps={{
-                                                value: "",
+                                                value: option_en,
                                                 placeholder: `選択肢${i + 1}（英語）`,
                                                 inputClass: "w-full"
                                             }} parentClass="col p-inputtext-lg md:w-full " />
