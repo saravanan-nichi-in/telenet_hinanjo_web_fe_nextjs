@@ -101,7 +101,7 @@ export default function Setting() {
                     <div className='ml-1 mr-1'>
                         {item.title}
                     </div>
-                    <a href="#" className='ml-2'>
+                    <a className='ml-2'>
                         <AiOutlineDrag />
                     </a>
                 </li>
