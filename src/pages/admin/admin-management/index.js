@@ -64,7 +64,7 @@ export default function AdminManagementPage() {
     /**
      * Function will get data & update admin list
      * @param {*} response 
-    */
+     */
     const onGetAdminListSuccess = (response) => {
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
@@ -91,32 +91,29 @@ export default function AdminManagementPage() {
     }
 
     /**
-    * Email setting modal close
-   */
+     * Email setting modal close
+    */
     const onAdminClose = () => {
         setEditAdminOpen(!editAdminOpen);
     };
+
     /**
-        * Detail setting modal close
-       */
+     * Detail setting modal close
+     */
     const onAdminDetailClose = () => {
         setAdminDetailsOpen(!adminDetailsOpen);
     };
+
     /**
-        * Delete setting modal close
-       */
+     * Delete setting modal close
+     */
     const onAdminDeleteClose = () => {
         setDeleteAdminOpen(!deleteAdminOpen);
     };
+
     /**
-    * Import setting modal close
-   */
-    const onAdminImportClose = () => {
-        setImportAdminOpen(!importAdminOpen);
-    };
-    /**
-    * Delete setting modal close
-   */
+     * Delete setting modal close
+     */
     const onAdminCreateClose = () => {
         setCreateAdminOpen(!createAdminOpen);
     };
@@ -127,7 +124,6 @@ export default function AdminManagementPage() {
      */
     const onRegister = (values) => {
         setEditAdminOpen(false);
-        setImportAdminOpen(false);
         setCreateAdminOpen(false);
     };
 
