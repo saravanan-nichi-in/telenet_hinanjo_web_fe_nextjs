@@ -99,7 +99,7 @@ function _getList(payload, callBackFun) {
  */
 function _create(payload, callBackFun) {
     axios
-        .post("/admin/material", payload)
+        .post("/admin/staff_management/store", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -124,7 +124,7 @@ function _create(payload, callBackFun) {
  */
 function _update(id, payload, callBackFun) {
     axios
-        .put(`/admin/material/update`, payload)
+        .post(`/admin/staff_management/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();

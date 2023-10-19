@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFloatLabel, NormalTable } from '@/components';
-import { StaffDetailService } from '@/helper/StaffDetailService';
 import { AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components/modal';
 import { StaffManagementService } from '@/services/staffmanagement.service';
 
 export default function StaffManagementPage() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
+    let blankStaffObj = { email: "", tel: "", name: "" };
     const [staff, setStaff] = useState([]);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
@@ -17,6 +15,8 @@ export default function StaffManagementPage() {
     const [editStaffOpen, setEditStaffOpen] = useState(false);
     const [createStaffOpen, setCreateStaffOpen] = useState(false);
     const [searchName, setSearchName] = useState("");
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [currentEditObj, setCurrentEditObj] = useState(blankStaffObj);
 
     const hideOverFlow = () => {
         document.body.style.overflow = 'hidden';
@@ -71,7 +71,12 @@ export default function StaffManagementPage() {
                         buttonClass: "text-primary",
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => setEditStaffOpen(true)
+                        onClick: () => {
+                            setRegisterModalAction("edit")
+                            setCurrentEditObj(rowData)
+                            setEditStaffOpen(true)
+                            hideOverFlow();
+                        }
                     }} />
                     <Button 
                         parentStyle={{ display: "inline" }}
@@ -99,11 +104,10 @@ export default function StaffManagementPage() {
         openDeleteDialog(!deleteOpen);
     };
     const onStaffEditClose = () => {
-        setEditStaffOpen(!editStaffOpen);
+        setEditStaffOpen(false);
+        showOverFlow();
     };
-    const onStaffCreateClose = () => {
-        setCreateStaffOpen(!createStaffOpen);
-    };
+
     const onRegister = (values) => {
         setImportStaffOpen(false);
         setEditStaffOpen(false);
@@ -154,7 +158,6 @@ export default function StaffManagementPage() {
                     }
                     preparedList.push(preparedObj);
                 })
-                console.log(preparedList);
                 setList(preparedList);
                 setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
@@ -197,6 +200,10 @@ export default function StaffManagementPage() {
     }, [locale, getListPayload]);
 
     // Main table listing ends
+
+    //Create and edit dialog starts
+
+    //create edit dialog ends
     
     return (
         <React.Fragment>
@@ -219,16 +226,16 @@ export default function StaffManagementPage() {
                 open={editStaffOpen}
                 close={onStaffEditClose}
                 register={onRegister}
-                buttonText={translate(localeJson, 'update')}
-                modalHeaderText={translate(localeJson, 'edit_staff_management')}
+                currentEditObj={{ ...currentEditObj }}
+                refreshList={getStaffList}
+                registerModalAction={registerModalAction}
             />
-            <StaffManagementEditModal
+            {/* <StaffManagementEditModal
                 open={createStaffOpen}
                 close={onStaffCreateClose}
                 register={onRegister}
-                buttonText={translate(localeJson, 'submit')}
-                modalHeaderText={translate(localeJson, 'add_staff_management')}
-            />
+                
+            /> */}
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -256,7 +263,12 @@ export default function StaffManagementPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'create_staff'),
-                                    onClick: () => setCreateStaffOpen(true),
+                                    onClick: () => {
+                                        setRegisterModalAction("create")
+                                        setCurrentEditObj(blankStaffObj);
+                                        setEditStaffOpen(true);
+                                        hideOverFlow();
+                                    },
                                     severity: "success"
                                 }} parentClass={"mt-1"} />
                             </div>
