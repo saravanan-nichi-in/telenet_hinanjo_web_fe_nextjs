@@ -189,6 +189,12 @@ export default function EvacueesStatistics() {
                 plugins: {
                     tooltip: {
                         callbacks: {
+                            title: function (tooltipItems, data) {
+                                if (tooltipItems[0].label.length > 50) {
+                                    return tooltipItems[0].label.substring(0, 50) + '...'; // Truncate labels longer than 10 characters
+                                }
+                                return tooltipItems[0].label;
+                            },
                             label: function (context) {
                                 const dataset = context.dataset;
                                 const index = context.dataIndex;
