@@ -201,14 +201,14 @@ export default function ExternalEvacuees() {
                 }
             ];
             personCountByCategory.map((item, index) => {
-                let foundObject = personCountCategory.filter(obj => obj.hasOwnProperty(item[0]));
+                let foundObject = personCountCategory.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
                 if (foundObject) {
                     personCountCategory[index][`${item[0]}`] = item[1];
                 }
             });
 
             personCountByFoodRequire.map((item, index) => {
-                let foundObject = personCountFoodSupport.filter(obj => obj.hasOwnProperty(item[0]));
+                let foundObject = personCountFoodSupport.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
                 if (foundObject) {
                     personCountFoodSupport[index][`${item[0]}`] = item[1];
                 }
