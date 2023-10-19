@@ -228,7 +228,6 @@ export const zipDownloadWithURL = (zipURL) => {
  * @param {*} response 
  */
 export const importErrorToastDisplay = (response) => {
-    console.log(response);
     if (response && response.data) {
         if (!response.data.success && response.data.code == "422") {
             toast.error(() => (
@@ -240,16 +239,22 @@ export const importErrorToastDisplay = (response) => {
             ), {
                 position: "top-right",
             });
-        } else if (response.data.success && response.data.code == "206") {
-            toast.success(() => (
-                <div>
-                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                        {response?.data?.message}
-                    </a>
-                </div>
-            ), {
-                position: "top-right",
-            });
+        } else if (response.data.success) {
+            if (response.data.code == "206") {
+                toast.success(() => (
+                    <div>
+                        <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                            {response?.data?.message}
+                        </a>
+                    </div>
+                ), {
+                    position: "top-right",
+                });
+            } else {
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
         } else {
             toast.error(response?.data?.message, {
                 position: "top-right",

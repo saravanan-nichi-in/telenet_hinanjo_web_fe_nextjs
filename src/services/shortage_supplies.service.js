@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { downloadBase64File } from '@/helper';
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const ShortageSuppliesServices = {
@@ -15,8 +15,11 @@ export const ShortageSuppliesServices = {
 function _calExport() {
     axios.get('/admin/material/supply/export')
         .then((response) => {
-            if (response && response.data && response.data.result.filePath) {
-                downloadBase64File(response.data.result.filePath, "shortage_supplies.csv");
+            if (response && response.data) {
+                if (response.data?.result?.filePath) {
+                    let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
+                    downloadBase64File(response.data.result.filePath, `Shortage_supplies_${date}.csv`);
+                }
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
