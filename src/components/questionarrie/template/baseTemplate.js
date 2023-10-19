@@ -119,12 +119,12 @@ const BaseTemplate = (props) => {
                                                 inputClass: "col-12 p-inputtext-sm mb-3",
                                                 value: option
                                             }} />
-                                            {item.option_en.map((arr, i) => (
-                                                <div key={i}>
+                                            {item.option_en.map((arr, j) => (
+                                                <div key={j}>
                                                     <Input inputProps={{
-                                                        placeholder: "項目（英語）",
+                                                        placeholder: `項目 ${j + 1}（英語）`,
                                                         inputClass: "col-12 p-inputtext-sm",
-                                                        value: arr
+                                                        value: i==j ?arr:""
                                                     }} />
                                                 </div>))}
                                         </div>
@@ -206,7 +206,7 @@ const BaseTemplate = (props) => {
                                         {translate(localeJson, 'numeric')}
                                     </div>
                                 </div>
-                                <div style={{paddingRight:"54px"}} className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
+                                <div style={{ paddingRight: "54px" }} className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
                                     }} />
@@ -272,14 +272,15 @@ const BaseTemplate = (props) => {
                                         value: option,
                                         inputClass: "w-full"
                                     }} parentClass="col p-inputtext-lg md:w-full" />
-                                    {Array.isArray(item.option_en) && item.option_en.map((option_en, i) => (
-                                        <div key={i}>
-                                            <Input inputProps={{
-                                                value: option_en,
-                                                placeholder: `${translate(localeJson, 'choice')}${i + 1}（英語）`,
-                                                inputClass: "w-full"
-                                            }} parentClass="col p-inputtext-lg md:w-full " />
-                                        </div>))}
+                                    {Array.isArray(item.option_en) && item.option_en.map((option_en, j) => (
+                                    
+                                    <div key={j}>
+                                        <Input inputProps={{
+                                            value: i == j ? option_en:"",
+                                            placeholder: `${translate(localeJson, 'choice')}${j + 1}（英語）`,
+                                            inputClass: "w-full"
+                                        }} parentClass="col p-inputtext-lg md:w-full " />
+                                    </div>))}
                                 </div>
                             </div>
                             <div className='col-3 flex align-items-center justify-content-center' style={{
