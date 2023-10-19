@@ -95,6 +95,7 @@ export default function StaffManagementPage() {
 
     const onStaffImportClose = () => {
         setImportStaffOpen(!importStaffOpen);
+        showOverFlow();
     };
     const onStaffDetailClose = () => {
         setStaffDetailsOpen(!staffDetailsOpen);
@@ -201,17 +202,26 @@ export default function StaffManagementPage() {
 
     // Main table listing ends
 
-    //Create and edit dialog starts
+    // Import api
+    const importFileApi = (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append('file', file);
+        StaffManagementService.importData(formData, () => {
 
-    //create edit dialog ends
+        });
+        onStaffImportClose();
+        showOverFlow();
+    }
     
     return (
         <React.Fragment>
             <AdminManagementImportModal
                 open={importStaffOpen}
                 close={onStaffImportClose}
+                importFile={importFileApi}
                 register={onRegister}
-                modalHeaderText={translate(localeJson, 'staff_management_import')}
+                modalHeaderText={translate(localeJson, "staff_management_import")}
             />
             <StaffManagementDetailModal
                 open={staffDetailsOpen}
@@ -246,7 +256,10 @@ export default function StaffManagementPage() {
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    onClick: () => setImportStaffOpen(true),
+                                    onClick: () => {
+                                        setImportStaffOpen(true);
+                                        hideOverFlow();
+                                    },
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'import'),
                                     severity: "primary"

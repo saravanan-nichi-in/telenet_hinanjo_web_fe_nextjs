@@ -20,7 +20,7 @@ export const StaffManagementService = {
  */
 function _importData(payload, callBackFun) {
     axios
-        .post("/admin/material/import", payload)
+        .post("/admin/staff_management/import", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
