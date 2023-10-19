@@ -51,10 +51,10 @@ function _importData(payload, callBackFun) {
  */
 function _exportData(payload) {
     axios
-        .post("/admin/material/export", payload)
+        .post("/admin/staff_management/export", payload)
         .then((response) => {
                 if (response && response.data && response.data.result.filePath) {
-                    downloadBase64File(response.data.result.filePath, timestampFile("Material"));
+                    downloadBase64File(response.data.result.filePath, timestampFile("StaffManagement"));
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });

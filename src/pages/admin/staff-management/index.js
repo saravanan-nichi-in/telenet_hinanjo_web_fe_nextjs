@@ -117,7 +117,7 @@ export default function StaffManagementPage() {
 
 
     // Main Table listing starts
-    const { getList } = StaffManagementService;
+    const { getList, exportData } = StaffManagementService;
 
     const [getListPayload, setGetListPayload] = useState( {
         "filters": {
@@ -269,7 +269,10 @@ export default function StaffManagementPage() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
-                                    severity: "primary"
+                                    severity: "primary",
+                                    onClick: () => {
+                                        exportData(getListPayload)
+                                    }
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{
                                     type: 'submit',
