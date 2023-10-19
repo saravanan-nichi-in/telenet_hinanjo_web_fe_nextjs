@@ -8,7 +8,7 @@ import { StaffManagementService } from '@/services/staffmanagement.service';
 export default function StaffManagementPage() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
     let blankStaffObj = { email: "", tel: "", name: "" };
-    const [staff, setStaff] = useState([]);
+    const [staff, setStaff] = useState(null);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -50,10 +50,14 @@ export default function StaffManagementPage() {
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class"},
         {
-            field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", body: (rowData) => (
-                <a className='text-decoration' onClick={() => setStaffDetailsOpen(true)}>
+            field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", 
+            body: (rowData) => (
+                <p className='text-decoration' onClick={() => {
+                    setStaff(rowData.id);
+                    setStaffDetailsOpen(true);
+                }}>
                     {rowData['name']}
-                </a>
+                </p>
             )
         },
         { field: 'email', header: translate(localeJson, 'address_email'), minWidth: "5rem" },
@@ -98,7 +102,8 @@ export default function StaffManagementPage() {
         showOverFlow();
     };
     const onStaffDetailClose = () => {
-        setStaffDetailsOpen(!staffDetailsOpen);
+        setStaff(null);
+        setStaffDetailsOpen(false);
 
     };
     const onStaffDeleteClose = () => {
@@ -223,10 +228,11 @@ export default function StaffManagementPage() {
                 register={onRegister}
                 modalHeaderText={translate(localeJson, "staff_management_import")}
             />
-            <StaffManagementDetailModal
+            {staff && <StaffManagementDetailModal
                 open={staffDetailsOpen}
                 close={onStaffDetailClose}
-            />
+                staff={staff}
+            />}
             <AdminManagementDeleteModal
                 open={deleteOpen}
                 close={onDeleteClose}

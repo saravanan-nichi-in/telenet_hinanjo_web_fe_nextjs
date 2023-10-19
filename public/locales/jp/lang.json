@@ -168,6 +168,9 @@
           "sno": "番号"
         }
       },
+      "staff_management_detail_login_history_slno": "番号",
+      "staff_management_detail_login_history_name": "避難所",
+      "staff_management_detail_login_history_login_datetime": "ログイン日時",
       "material_management_table_header_slno": "番号",
       "material_management_table_header_name": "物資",
       "material_management_table_header_unit": "単位",

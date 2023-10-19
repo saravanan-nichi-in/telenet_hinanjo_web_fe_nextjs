@@ -169,6 +169,9 @@
             "sno":"S No"
         }
       },
+      "staff_management_detail_login_history_slno": "S No",
+      "staff_management_detail_login_history_name": "Name",
+      "staff_management_detail_login_history_login_datetime": "Login DateTime",
       "material_management_table_header_slno": "S No",
       "material_management_table_header_name": "Name",
       "material_management_table_header_unit": "Unit",

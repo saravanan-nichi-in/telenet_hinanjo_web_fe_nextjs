@@ -11,6 +11,7 @@ export const StaffManagementService = {
     create: _create,
     update: _update,
     delete: _delete,
+    show: _show
 };
 
 /**
@@ -78,6 +79,30 @@ function _getList(payload, callBackFun) {
     console.log(payload);
     axios
         .post("/admin/staff_management/list", payload)
+        .then((response) => {
+            // console.log(response);
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _show(payload, callBackFun) {
+    console.log(payload);
+    axios
+        .post("/admin/staff_management/detail", payload)
         .then((response) => {
             // console.log(response);
             if (response && response.data) {
