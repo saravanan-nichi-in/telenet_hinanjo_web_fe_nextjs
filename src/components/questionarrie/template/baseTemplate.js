@@ -206,7 +206,7 @@ const BaseTemplate = (props) => {
                                         {translate(localeJson, 'numeric')}
                                     </div>
                                 </div>
-                                <div className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
+                                <div style={{paddingRight:"54px"}} className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
                                     <InputSwitch inputSwitchProps={{
                                         checked: true
                                     }} />

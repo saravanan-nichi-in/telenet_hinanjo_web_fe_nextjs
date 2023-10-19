@@ -199,9 +199,10 @@
       "voice_input":"音声入力有り",
       "item_title":"項目タイトル",
       "choice":"選択肢",
-      "del_item":"Del Item",
+      "del_item":"項目削除",
       "del_choice":"選択肢削",
-      "add_choice":"選択肢追"
+      "add_choice":"選択肢追",
+      "display_in_registration_screen": "避難者登録画面表示"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
