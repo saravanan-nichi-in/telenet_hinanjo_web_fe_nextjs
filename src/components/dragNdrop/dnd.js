@@ -7,11 +7,6 @@ const DND = (props) => {
         children,
     } = props;
 
-     // Function to handle drag end event
-    //  const handleDragEnd = (fromIndex, toIndex) => {
-    //     setDragChild(fromIndex,toIndex); // Pass the index of the dragged child
-    // };
-
     return (
         <div className="dargDrop_view">
             <div className="dargDrop_view-inner">
