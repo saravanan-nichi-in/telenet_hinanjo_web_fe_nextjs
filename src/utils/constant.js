@@ -126,14 +126,6 @@ const MailSettingsOption2 = [
     { name: '大阪府', value: 5 }
 ];
 
-const summaryShelterOptions = [
-    { name: "--" },
-    { name: "Vacant test" },
-    { name: "Starting to get crowded" },
-    { name: "Crowded" },
-    { name: "Nara" }
-];
-
 const loginHistory = [
     { field: 'No', header: 'No.', minWidth: "3rem" },
     { field: '避難所', header: '避難所', minWidth: "5rem" },
@@ -427,7 +419,6 @@ export {
     dashboardTableColumns,
     MailSettingsOption1,
     MailSettingsOption2,
-    summaryShelterOptions,
     loginHistory,
     staffDetailData,
     evacueesShelterOptions,

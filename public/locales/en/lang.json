@@ -356,7 +356,9 @@
       "stockpile_item_name": "Stockpile item name",
       "storage_period": "Storage period",
       "days": "days",
-      "image": "Image"
+      "image": "Image",
+      "quantity": "quantity",
+      "expiration_date":"Expiration Date"
     },
     "validation": {
       "type_required": "Product Type is required.",
