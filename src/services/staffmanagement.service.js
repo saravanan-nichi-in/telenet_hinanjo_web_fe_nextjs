@@ -4,24 +4,24 @@ import { isObject } from "lodash";
 import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
-export const StockpileService = {
+export const StaffManagementService = {
     importData: _importData,
     exportData: _exportData,
     getList: _getList,
     create: _create,
     update: _update,
     delete: _delete,
-    getCategoryAndProductList: _getCategoryAndProductList
+    show: _show
 };
 
 /**
- * Import stockpile master data
+ * Import place data
  * @param {*} payload
  * @param {*} callBackFun
  */
 function _importData(payload, callBackFun) {
     axios
-        .post("/admin/stockpile/import", payload)
+        .post("/admin/staff_management/import", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -46,17 +46,16 @@ function _importData(payload, callBackFun) {
 }
 
 /**
- * Export stockpile master data
+ * Export place data
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _exportData(payload, callBackFun) {
-        axios
-        .post("/admin/stockpile/export", payload)
+function _exportData(payload) {
+    axios
+        .post("/admin/staff_management/export", payload)
         .then((response) => {
                 if (response && response.data && response.data.result.filePath) {
-                    
-                    downloadBase64File(response.data.result.filePath, timestampFile("MasterStockpile"));
+                    downloadBase64File(response.data.result.filePath, timestampFile("StaffManagement"));
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
@@ -72,14 +71,16 @@ function _exportData(payload, callBackFun) {
 }
 
 /**
- * Get stockpile master list
+ * Get place list
  * @param {*} payload
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
+    console.log(payload);
     axios
-        .post("/admin/stockpile/list", payload)
+        .post("/admin/staff_management/list", payload)
         .then((response) => {
+            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }
@@ -94,16 +95,18 @@ function _getList(payload, callBackFun) {
 }
 
 /**
- * Get stockpile category/product dropdown list
+ * Get place list
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _getCategoryAndProductList(callBackFun) {
+function _show(payload, callBackFun) {
+    console.log(payload);
     axios
-        .get("/admin/stockpile/product/dropdown")
+        .post("/admin/staff_management/detail", payload)
         .then((response) => {
+            // console.log(response);
             if (response && response.data) {
-                callBackFun(response.data.data);
+                callBackFun(response.data);
             }
         })
         .catch((error) => {
@@ -116,13 +119,13 @@ function _getCategoryAndProductList(callBackFun) {
 }
 
 /**
- * Create a new stockpile master
+ * Create a new place
  * @param {*} payload
  * @param {*} callBackFun
  */
 function _create(payload, callBackFun) {
     axios
-        .post("/admin/stockpile", payload)
+        .post("/admin/staff_management/store", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -160,13 +163,13 @@ function _create(payload, callBackFun) {
 }
 
 /**
- * Update stockpile master by id
+ * Update place by id
  * @param {*} payload
  * @param {*} callBackFun
  */
 function _update(id, payload, callBackFun) {
     axios
-        .post(`/admin/stockpile/update`, payload)
+        .post(`/admin/staff_management/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();
@@ -204,13 +207,13 @@ function _update(id, payload, callBackFun) {
 }
 
 /**
- * Get stockpile master details by id
+ * Get place details by id
  * @param {*} id
  * @param {*} callBackFun
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/stockpile/delete`, {data: {"product_id": id}})
+        .delete(`/admin/staff_management/delete`, {data: {"id": id}})
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -220,11 +223,10 @@ function _delete(id, callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
             // Handle errors here
-            // console.error("Error fetching data:", error);
-            // toast.error(error?.response?.data?.message, {
-            //     position: "top-right",
-            // });
+            console.error("Error fetching data:", error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }

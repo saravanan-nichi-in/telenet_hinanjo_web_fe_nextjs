@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -12,26 +12,28 @@ import { ValidationError } from "../error";
 import { InputFloatLabel, TextAreaFloatLabel } from "../input";
 
 export default function StockPileSummaryMailSettingsModal(props) {
+
+    const { open, close, register, emailSettingValues } = props && props;
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
+    const [initialValues, setInitialValues] = useState({
+        email: emailSettingValues.email,
+        place_name: emailSettingValues.place_name
+    });
+    const regexExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
             .test('is-email', translate(localeJson, 'format_notification'), value => {
-                // Check if it's a single valid email or a list of valid emails separated by commas
-                return Yup.string().email().isValidSync(value) || validateMultipleEmails(value, localeJson);
+                /** Check if it's a single valid email or a list of valid emails separated by commas */ 
+                return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register } = props && props;
-
     const validateMultipleEmails = (value, localeJson) => {
         const emails = value.split(',').map(email => email.trim());
 
         for (const email of emails) {
-            if (!Yup.string().email().isValidSync(email)) {
+            if (!email.match(regexExp)) {
                 return false;
             }
         }
@@ -45,12 +47,22 @@ export default function StockPileSummaryMailSettingsModal(props) {
         </div>
     );
 
+    useEffect(() => {
+        if (open) {
+            console.log(emailSettingValues);
+            setInitialValues({
+                email: emailSettingValues.email,
+                place_name: emailSettingValues.place_name
+            });
+        }
+    }, [open]);
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "" }}
+                initialValues={initialValues}
+                enableReinitialize
                 onSubmit={() => {
                     router.push("/admin/stockpile/summary")
                 }}
@@ -86,7 +98,8 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                         severity: "primary",
                                         onClick: () => {
                                             register({
-                                                email: values.email
+                                                email: values.email,
+                                                errors: errors
                                             });
                                             handleSubmit();
                                         },
@@ -103,7 +116,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                                     inputFloatLabelProps={{
                                                         id: 'householdNumber',
                                                         readOnly: "true",
-                                                        value: "日比谷公園避難所",
+                                                        value: values.place_name,
                                                         spanClass: "p-error",
                                                         spanText: "*",
                                                         disabled: "true",
@@ -121,6 +134,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                                     text: translate(localeJson, 'notification_email_id'),
                                                     spanClass: "p-error",
                                                     spanText: "*",
+                                                    value: values.email,
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                 }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />

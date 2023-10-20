@@ -117,7 +117,6 @@
       "family_code": "世帯番号",
       "representative": "代表者",
       "refugee_name": "氏名 (フリガナ)",
-      "name": "氏名 (漢字)",
       "gender": "性別",
       "dob": "生年月日",
       "age": "年齢",
@@ -168,6 +167,12 @@
           "sno": "番号"
         }
       },
+      "staff_management_detail_login_history_slno": "番号",
+      "staff_management_detail_login_history_name": "避難所",
+      "staff_management_detail_login_history_login_datetime": "ログイン日時",
+      "material_management_table_header_slno": "番号",
+      "material_management_table_header_name": "物資",
+      "material_management_table_header_unit": "単位",
       "Place_Delete_Content_1": "一度削除したデータは、元に戻せません。",
       "Place_Delete_Content_2": "削除してもよろしいでしょうか？",
       "register_place": "避難所の新規登録",
@@ -325,7 +330,8 @@
       "post_letter": "〒",
       "english": "英語",
       "japanese": "日本語",
-      "people_count": "人数"
+      "people_count": "人数",
+      "notification_email": "通知先"
     }
   },
   "staff": {
@@ -367,7 +373,9 @@
       "stockpile_item_name": "備蓄品名",
       "storage_period": "保管期間",
       "days": "(日)",
-      "image": "画像"
+      "image": "画像",
+      "quantity": "数量",
+      "expiration_date":"有効期限"
     },
     "validation": {
       "type_required": "種別は必須です。",

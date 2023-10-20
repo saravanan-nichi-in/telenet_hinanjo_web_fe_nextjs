@@ -9,6 +9,7 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { InputFloatLabel } from "../input";
+import { StaffManagementService } from "@/services/staffmanagement.service";
 
 export default function StaffManagementEditModal(props) {
     const router = useRouter();
@@ -17,9 +18,9 @@ export default function StaffManagementEditModal(props) {
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
             .email(translate(localeJson, 'email_valid')),
-        fullName: Yup.string()
+        name: Yup.string()
             .required(translate(localeJson, 'staff_name_required')),
-        phoneNumber: Yup.string()
+        tel: Yup.string()
             .required(translate(localeJson, 'phone_no_required'))
             .min(10, translate(localeJson, 'phone_min10_required')),
     });
@@ -31,15 +32,31 @@ export default function StaffManagementEditModal(props) {
             {modalHeaderText}
         </div>
     );
-
+    
+    const resetAndCloseForm = (callback) => {
+                close();
+                callback();
+                props.refreshList();
+    }
 
     return (
         <>
             <Formik
+                initialValues={props.currentEditObj}
                 validationSchema={schema}
-                initialValues={{ email: "", phoneNumber: "", fullName: "" }}
-                onSubmit={() => {
-                    router.push("/admin/staff-management")
+                enableReinitialize={true} 
+                onSubmit={(values, {resetForm}) => {
+                    if (props.registerModalAction=="create") {
+                        StaffManagementService.create(values, ()=> {
+                            resetAndCloseForm(resetForm);
+                        })
+                    } else if(props.registerModalAction=="edit") {
+                        StaffManagementService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
+                        ()=> {
+                            resetAndCloseForm(resetForm);
+                        })
+                    }
+                    return false;
                 }}
             >
                 {({
@@ -49,15 +66,19 @@ export default function StaffManagementEditModal(props) {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div>
                         <form onSubmit={handleSubmit}>
                             <Dialog
                                 className="custom-modal"
-                                header={header}
+                                header={props.registerModalAction=='create'? translate(localeJson, 'add_staff_management') : translate(localeJson, 'edit_staff_management')}
                                 visible={open}
                                 draggable={false}
-                                onHide={() => close()}
+                                onHide={() => {
+                                    resetForm();
+                                    close();
+                                }}
                                 footer={
                                     <div className="text-center">
                                         <Button buttonProps={{
@@ -65,21 +86,18 @@ export default function StaffManagementEditModal(props) {
                                             bg: "bg-white",
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
-                                            onClick: () => close(),
+                                            onClick: () => {
+                                                resetForm();
+                                                close()
+                                            },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
                                             buttonClass: "w-8rem",
                                             type: "submit",
-                                            text: buttonText,
+                                            text: props.registerModalAction=='create'? translate(localeJson, 'submit') : translate(localeJson, 'update'),
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
-                                                register({
-                                                    fullName: values.fullName,
-                                                    email: values.email,
-                                                    password: values.phoneNumber
-                                                });
-
                                             },
                                         }} parentClass={"inline"} />
                                     </div>
@@ -90,16 +108,16 @@ export default function StaffManagementEditModal(props) {
                                         <div className="mb-5">
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
-                                                name: "fullName",
+                                                name: "name",
                                                 spanText: "*",
                                                 spanClass: "p-error",
-                                                value: values.fullName,
+                                                value: values && values.name,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'name'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} parentClass={`${errors.fullName && touched.fullName && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.fullName && touched.fullName && errors.fullName} />
+                                            }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
+                                            <ValidationError errorBlock={errors.name && touched.name && errors.name} />
                                         </div>
                                         <div className="mt-5 ">
                                             < InputFloatLabel inputFloatLabelProps={{
@@ -107,7 +125,7 @@ export default function StaffManagementEditModal(props) {
                                                 spanText: "*",
                                                 name: 'email',
                                                 spanClass: "p-error",
-                                                value: values.email,
+                                                value: values && values.email,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'address_email'),
@@ -119,15 +137,15 @@ export default function StaffManagementEditModal(props) {
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 spanText: "*",
-                                                name: 'phoneNumber',
-                                                value: values.phoneNumber,
+                                                name: 'tel',
+                                                value: values && values.tel,
                                                 spanClass: "p-error",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'tel'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} parentClass={`w-full ${errors.phoneNumber && touched.phoneNumber && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.phoneNumber && touched.phoneNumber && errors.phoneNumber} />
+                                            }} parentClass={`w-full ${errors.tel && touched.tel && 'p-invalid pb-1'}`} />
+                                            <ValidationError errorBlock={errors.tel && touched.tel && errors.tel} />
                                         </div>
                                     </div>
                                 </div>

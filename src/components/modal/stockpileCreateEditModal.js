@@ -58,6 +58,12 @@ export default function StockpileCreateEditModal(props) {
         </div>
     );
 
+    const resetAndCloseForm = (callback) => {
+        close();
+        callback();
+        props.refreshList();
+    }
+
     return (
         <>
             <Formik
@@ -66,7 +72,6 @@ export default function StockpileCreateEditModal(props) {
                 // initialValues={{ category: "", product_name: "", shelf_life: "" }}
                 initialValues={props.currentEditObj}
                 onSubmit={(values, {resetForm}) => {
-                    console.log(values.image_logo)
                     let formData = new FormData();
                     formData.append('category', values.category);
                     formData.append('product_name', values.product_name);
@@ -77,18 +82,16 @@ export default function StockpileCreateEditModal(props) {
 
                     if (props.registerModalAction == "create") {
                         StockpileService.create(formData, () => {
-                            props.refreshList();
+                            resetAndCloseForm(resetForm);
                         })
                     }
                     else if (props.registerModalAction == "edit") {
                         formData.append('product_id', props.currentEditObj.product_id);
                         StockpileService.update(props.currentEditObj.product_id, formData,
                             () => {
-                                props.refreshList();
+                                resetAndCloseForm(resetForm);
                             })
                     }
-                    close();
-                    resetForm();
                     return false;
                 }}
             >

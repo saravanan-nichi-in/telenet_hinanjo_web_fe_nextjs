@@ -14,9 +14,9 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'slno', header: 'ID', minWidth: "5rem" },
-        { field: 'name', header: '物資', minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'unit', header: '単位', minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class" },
+        { field: 'name', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'unit', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
