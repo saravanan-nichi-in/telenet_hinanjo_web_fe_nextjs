@@ -8,6 +8,7 @@ import {
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
+import { useAppSelector } from "@/redux/hooks";
 import {
   Button,
   DividerComponent,
@@ -36,7 +37,8 @@ export default function PlaceUpdatePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const [apiResponse, setApiResponse] = useState({});
-  const { id } = router.query;
+  const Place = useAppSelector((state) => state.placeReducer.place);
+  const id = Place?.id
   //Delete (CR)
   // const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
 

@@ -4,8 +4,13 @@ import ReactDragListView from 'react-drag-listview';
 const DND = (props) => {
     const {
         dragProps,
-        children
+        children,
     } = props;
+
+     // Function to handle drag end event
+    //  const handleDragEnd = (fromIndex, toIndex) => {
+    //     setDragChild(fromIndex,toIndex); // Pass the index of the dragged child
+    // };
 
     return (
         <div className="dargDrop_view">
