@@ -142,8 +142,8 @@ export default function AdminStockPileMaster() {
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
-        setImportPlaceOpen(!importPlaceOpen);
-        hideOverFlow();
+        setImportPlaceOpen(false);
+        showOverFlow();
     };
 
     const onRegisterImport = (values) => {
@@ -293,7 +293,7 @@ export default function AdminStockPileMaster() {
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'import'),
                                         severity: "primary",
-                                        onClick: () => setImportPlaceOpen(true),
+                                        onClick: () => {setImportPlaceOpen(true); hideOverFlow();},
                                     }} parentClass={"mr-1 mt-1"} />
                                     <Button buttonProps={{
                                         rounded: "true",
