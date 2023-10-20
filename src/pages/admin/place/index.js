@@ -13,6 +13,8 @@ import {
 } from "@/components";
 import { PlaceServices } from "@/services";
 import _ from "lodash";
+import { setPlace } from "@/redux/place";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -35,11 +37,14 @@ export default function AdminPlacePage() {
   });
   const [checkedValue, setCheckedValue] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const handleRowClick = (rowData) => {
+    let id = { id: rowData.ID };
+    dispatch(setPlace(id));
     router.push({
       pathname: `/admin/place/detail`,
       query: { id: rowData.ID },
-    });
+    },'/admin/place/detail');
   };
   const columnsData = [
     { field: "index", header: translate(localeJson, "s_no"), className: "sno_class" },

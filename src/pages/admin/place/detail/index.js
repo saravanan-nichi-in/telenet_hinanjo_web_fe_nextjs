@@ -7,11 +7,13 @@ import { Button, DividerComponent, GoogleMapComponent } from "@/components";
 import { AdminPlaceDetailService } from "@/helper/adminPlaceDetailService";
 import { PlaceServices } from "@/services";
 import { identity } from "lodash";
+import { useAppSelector } from "@/redux/hooks";
 export default function StaffManagementEditPage() {
   const { locale, localeJson,setLoader} = useContext(LayoutContext);
   const [admin, setAdmins] = useState([]);
   const router = useRouter();
-  const { id } = router.query;
+  const Place = useAppSelector((state) => state.placeReducer.place);
+  const id = Place?.id
 
   /* Services */
   const { details } = PlaceServices;
@@ -223,8 +225,7 @@ export default function StaffManagementEditPage() {
                       type: "button",
                       onClick: () =>
                         router.push({
-                          pathname: `/admin/place/edit`,
-                          query: { id: id },
+                          pathname: `/admin/place/edit`
                         }),
                       text: translate(localeJson, "edit"),
                       rounded: "true",

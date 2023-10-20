@@ -4,7 +4,7 @@ import ReactDragListView from 'react-drag-listview';
 const DND = (props) => {
     const {
         dragProps,
-        children
+        children,
     } = props;
 
     return (
