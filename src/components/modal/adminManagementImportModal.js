@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useRouter } from "next/router";
 
 import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -12,8 +11,7 @@ import { InputFile } from "../upload";
 
 export default function AdminManagementImportModal(props) {
     const { localeJson } = useContext(LayoutContext);
-    const { open, close, register, modalHeaderText, style} = props && props;
-    const router = useRouter();
+    const { open, close, importFile, modalHeaderText, style } = props && props;
     const header = (
         <div className="custom-modal">
             {modalHeaderText}
@@ -39,7 +37,7 @@ export default function AdminManagementImportModal(props) {
                 validationSchema={schema}
                 initialValues={{ file: null }}
                 onSubmit={(values) => {
-                    props.importFile(values.file)
+                    importFile(values.file)
                     values.file = null;
                 }}
             >
@@ -92,7 +90,7 @@ export default function AdminManagementImportModal(props) {
                         </form>
                     </div>
                 )}
-            </Formik >
+            </Formik>
         </>
     );
 }

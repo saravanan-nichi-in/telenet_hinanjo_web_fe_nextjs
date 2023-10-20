@@ -27,10 +27,12 @@ export const LayoutProvider = (props) => {
     const [loader, setLoader] = useState(false);
 
     useEffect(() => {
-        if (locale == 'en') {
+        if (locale && locale == 'en') {
+            localStorage.setItem('locale', 'en');
             setLocale("en");
             setLocaleJson(enJson);
         } else {
+            localStorage.setItem('locale', 'ja');
             setLocale("ja");
             setLocaleJson(jpJson);
         }

@@ -4,35 +4,13 @@ import axios from '@/utils/api';
 import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
-export const QRCodeCreateServices = {
-    callExport: _callExport,
+export const AdminManagementServices = {
     callImport: _callImport,
+    callExport: _callExport,
+    callCreate: _callCreate,
+    callGetList: _callGetList,
     callDelete: _callDelete,
-    callZipDownload: _callZipDownload,
 };
-
-/**
- * Export data
- */
-function _callExport() {
-    axios.get('/admin/qrcreate/sample/export')
-        .then((response) => {
-            if (response && response.data) {
-                if (response.data?.result?.filePath) {
-                    let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
-                    downloadBase64File(response.data.result.filePath, `Sample_${date}.csv`);
-                }
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
-        })
-        .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
-        });
-}
 
 /**
  * Import data
@@ -40,7 +18,7 @@ function _callExport() {
  * @param {*} callBackFun 
  */
 function _callImport(payload, callBackFun) {
-    axios.post('/admin/qrcreate/import', payload)
+    axios.post('/admin/management/import', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
@@ -56,21 +34,23 @@ function _callImport(payload, callBackFun) {
 }
 
 /**
- * Delete data
- * @param {*} callBackFun 
+ * Export data
+ * @param {*} payload 
  */
-function _callDelete(callBackFun) {
-    axios.get('/admin/qrcreate/zip/delete')
+function _callExport(payload) {
+    axios.post('/admin/management/export', payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun(response);
+                if (response.data?.result?.filePath) {
+                    let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
+                    downloadBase64File(response.data.result.filePath, `Admin_management_${date}.csv`);
+                }
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
             }
         })
         .catch((error) => {
-            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
@@ -78,11 +58,49 @@ function _callDelete(callBackFun) {
 }
 
 /**
- * Zip download
+ * Get list
+ * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _callZipDownload(callBackFun) {
-    axios.get('/admin/qrcreate/zip/download')
+function _callGetList(payload, callBackFun) {
+    axios.post('/admin/management/list', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Create data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _callCreate(payload, callBackFun) {
+    axios.post('/admin/material/supply/list', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Delete data
+ * @param {*} callBackFun 
+ */
+function _callDelete(callBackFun) {
+    axios.get('/admin/qrcreate/zip/delete')
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
