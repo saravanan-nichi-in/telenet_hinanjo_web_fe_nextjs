@@ -11,10 +11,10 @@ export default function IndividualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [questionnaires, setQuestionnaires] = useState([{
         "title": "ROW1",
-        "questiontitle": "selc",
-        "questiontitle_en": "",
-        "option": ["selection", "rejection"],
-        "option_en": [" "]
+        "questiontitle": "現在の滞在場所",
+        "questiontitle_en": "current place of stay",
+        "option": ["避難所"],
+        "option_en": [" refuge"]
     }, {
         "title": "ROW2",
         "questiontitle": "selcti",
@@ -103,7 +103,7 @@ export default function IndividualQuestionnaire() {
                                 },
                                 hoverBg: "hover:surface-500 hover:text-white",
                                 buttonClass: "text-600 evacuation_button_height",
-                                text: translate(localeJson, 'import'),
+                                text: translate(localeJson, 'back'),
                             }} parentClass={"mr-1 mt-1"} />
                             <Button buttonProps={{
                                 type: 'submit',

@@ -11,16 +11,16 @@ export default function MasterQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [questionnaires, setQuestionnaires] = useState([{
         "title": "ROW1",
-        "questiontitle": "selc",
-        "questiontitle_en": "",
-        "option": ["selection", "rejection"],
+        "questiontitle": "町内会名",
+        "questiontitle_en":"Neighborhood association name",
+        "option": [],
         "option_en": [" "]
     }, {
         "title": "ROW2",
-        "questiontitle": "selcti",
-        "questiontitle_en": "san",
-        "option": ["selection", "rejection", " "],
-        "option_en": [" a"]
+        "questiontitle": "test payload",
+        "questiontitle_en": "test payload",
+        "option": ["testopt", "test stop","test"],
+        "option_en": ["testOPT"]
     }]);
 
     const [newItem, setNewItem] = useState({
@@ -100,7 +100,7 @@ export default function MasterQuestionnaire() {
                                     router.push("/admin/questionnaire")
                                 },
                                 buttonClass: "text-600 evacuation_button_height",
-                                text: translate(localeJson, 'import'),
+                                text: translate(localeJson, 'back'),
                             }} parentClass={"mr-1 mt-1"} />
                             <Button buttonProps={{
                                 type: 'submit',

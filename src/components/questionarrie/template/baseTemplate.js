@@ -229,7 +229,7 @@ const BaseTemplate = (props) => {
                                     </div>
                                     <div className='col-12 align-items-center'>
                                         <Input inputProps={{
-                                            inputClass: "col-12 p-inputtext-lg",
+                                            inputClass: "col-12 ",
                                             value: item.questiontitle_en,
                                         }} />
                                     </div>
