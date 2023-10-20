@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import _ from 'lodash';
 
-import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
@@ -27,7 +27,7 @@ export default function EvacueeFamilyDetail() {
         { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem" },
         { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
         { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
-        { field: "name", header: translate(localeJson, 'name'), minWidth: "10rem" },
+        { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
         { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
         { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
@@ -172,8 +172,8 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : "",
-                    discharge_date_time: item.access_datetime ? getGeneralDateTimeSlashDisplayFormat(item.access_datetime) : ""
+                    admission_date_time: item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "",
+                    discharge_date_time: item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : ""
                 }
                 admittedHistory.push(historyItem);
             });
