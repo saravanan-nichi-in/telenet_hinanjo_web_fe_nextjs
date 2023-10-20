@@ -195,7 +195,25 @@
       "public_information_display_list":"公開情報一覧表示",
       "stockPile_management":"備蓄品管理",
       "evacuation_history_download":"避難所状況履歴取得",
-      "common_action":"アクション"
+      "common_action":"アクション",
+      "item":"項目",
+      "required":"必須",
+      "selection":"選択形式",
+      "description":"記述形式",
+      "numeric":"数値形式",
+      "voice_input":"音声入力有り",
+      "item_title":"項目タイトル",
+      "choice":"選択肢",
+      "del_item":"項目削除",
+      "del_choice":"選択肢削",
+      "add_choice":"選択肢追",
+      "display_in_registration_screen": "避難者登録画面表示",
+      "add_item":"項目追加",
+      "individual_questionaries":"個人ごとの個別項目",
+      "master_questionaries":"全体の個別項目",
+      "questionnaire_name":"項目",
+      "questionnaire_description":"詳細",
+      "action":"アクション"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -258,7 +276,8 @@
       "create_staff": "新規登録",
       "download": "ダウンロード",
       "create_special_care": "新規登録",
-      "create_place": "新規登録"
+      "create_place": "新規登録",
+      "details":"明細"
     },
     "footer": {},
     "form": {
