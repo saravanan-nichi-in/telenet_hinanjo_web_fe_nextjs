@@ -146,7 +146,6 @@ export default function StaffManagementPage() {
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
                 let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
@@ -167,7 +166,6 @@ export default function StaffManagementPage() {
                     preparedList.push(preparedObj);
                 })
                 setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
             } else {
@@ -333,7 +331,7 @@ export default function StaffManagementPage() {
                                         className={"custom-table-cell"}
                                         showGridlines={"true"}
                                         value={list}
-                                        columns={columns}
+                                        columns={columnsData}
                                         filterDisplay="menu"
                                         emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}
