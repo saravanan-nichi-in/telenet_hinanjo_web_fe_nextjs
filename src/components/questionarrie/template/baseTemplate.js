@@ -101,6 +101,7 @@ const BaseTemplate = (props) => {
                                                 text: `－ ${translate(localeJson, 'del_item')}`,
                                                 severity: "danger",
                                                 rounded: "true",
+                                                type:"button"
                                             }} />
                                         </div>
                                     </div>
@@ -132,6 +133,7 @@ const BaseTemplate = (props) => {
                                                     <Button buttonProps={{
                                                         text: `－ ${translate(localeJson, 'del_choice')}`,
                                                         severity: "danger",
+                                                        type:"button",
                                                         rounded: "true"
                                                     }}
                                                     />
@@ -139,6 +141,7 @@ const BaseTemplate = (props) => {
                                                     <Button buttonProps={{
                                                         text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                         severity: "success",
+                                                        type:"button",
                                                         rounded: "true",
                                                     }}
                                                     />
@@ -244,7 +247,8 @@ const BaseTemplate = (props) => {
                                     <Button buttonProps={{
                                         text: `－ ${translate(localeJson, 'del_item')}`,
                                         severity: "danger",
-                                        rounded: "true"
+                                        rounded: "true",
+                                        type:"button",
                                     }} />
                                 </div>
                             </div>
@@ -290,6 +294,7 @@ const BaseTemplate = (props) => {
                                                 text: `－ ${translate(localeJson, 'del_choice')}`,
                                                 severity: "danger",
                                                 rounded: "true",
+                                                type:"button"
                                             }}
                                             />
                                         ) : (
@@ -297,6 +302,7 @@ const BaseTemplate = (props) => {
                                                 text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                 severity: "success",
                                                 rounded: "true",
+                                                type:"button"
                                             }}
                                             />
                                         )}
