@@ -6,4 +6,5 @@ export * from "./qr_code_create.services";
 export * from "./common.services";
 export * from "./statistics.services";
 export * from "./special_care.service";
+export * from "./system_setting.services";
 export * from "./admin_management.services";
