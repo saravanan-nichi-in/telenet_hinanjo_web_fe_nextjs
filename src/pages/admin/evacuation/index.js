@@ -42,7 +42,7 @@ export default function EvacuationPage() {
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: 'left' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
         { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
-        { field: "name", header: translate(localeJson, 'name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
+        { field: "name", header: translate(localeJson, 'name_kanji'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
@@ -40,6 +40,7 @@ export default function RowExpansionTable(props) {
         rowExpansionClassName,
         rowExpansionOnRowClick,
         onRowClick,
+        expandAllTrigger,
         expandAllButtonProps,
         ...restProps
     } = props;
@@ -75,30 +76,34 @@ export default function RowExpansionTable(props) {
                             className={column.className}
                             alignHeader={column.alignHeader}
                             headerClassName={column.headerClassName}
-                            style={{ minWidth: column.minWidth && column.minWidth, textAlign: column.textAlign && column.textAlign, ...rowExpansionColumnStyle }}
+                            style={{
+                                minWidth: column.minWidth && column.minWidth,
+                                display: column.display,
+                                textAlign: column.textAlign && column.textAlign, ...rowExpansionColumnStyle
+                            }}
                             headerStyle={column.headerStyle}
                             body={column.field === props.customRowExpansionActionsField ? column.body : column.body}
                         />
                     ))}
                 </DataTable>
                 {inner1Column && inner1Column.length > 0 && (
-                <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
-                    {inner1Column.map((column1, index) => (
-                        <Column
-                            key={index}
-                            field={column1.field}
-                            header={column1.header}
-                            sortable={column1.sortable}
-                            className={column1.className}
-                            alignHeader={column1.alignHeader}
-                            headerClassName={column1.headerClassName}
-                            style={{ minWidth: column1.minWidth && column1.minWidth, textAlign: column1.textAlign && column1.textAlign, ...rowExpansionColumnStyle }}
-                            headerStyle={column1.headerStyle}
-                            body={column1.field === props.customRowExpansionActionsField ? column1.body : column1.body}
-                        />
-                    ))}
-                </DataTable>
-            )}
+                    <DataTable className={`${rowExpansionClassName}`} id={id} showGridlines={rowExpanisonGridlines || 'true'} onRowClick={rowExpansionOnRowClick} value={data[rowExpansionField]} size={rowExpansionSize} style={rowExpansionStyle} tableStyle={rowExpansionTableStyle || { minWidth: '20rem' }}>
+                        {inner1Column.map((column1, index) => (
+                            <Column
+                                key={index}
+                                field={column1.field}
+                                header={column1.header}
+                                sortable={column1.sortable}
+                                className={column1.className}
+                                alignHeader={column1.alignHeader}
+                                headerClassName={column1.headerClassName}
+                                style={{ minWidth: column1.minWidth && column1.minWidth, textAlign: column1.textAlign && column1.textAlign, ...rowExpansionColumnStyle }}
+                                headerStyle={column1.headerStyle}
+                                body={column1.field === props.customRowExpansionActionsField ? column1.body : column1.body}
+                            />
+                        ))}
+                    </DataTable>
+                )}
             </div>
         );
     };
@@ -109,6 +114,15 @@ export default function RowExpansionTable(props) {
             <Button buttonProps={{ icon: "pi pi-minus", text: " Collapse All", onClick: collapseAll }} />
         </div>
     );
+
+    useEffect(()=>{
+        if(expandAllTrigger){
+            expandAll();
+        }
+        else{
+            collapseAll();
+        }
+    }, [expandAllTrigger])
 
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`}>
@@ -149,7 +163,11 @@ export default function RowExpansionTable(props) {
                         alignHeader={col.alignHeader}
                         headerStyle={col.headerStyle}
                         headerClassName={col.headerClassName}
-                        style={{ minWidth: col.minWidth && col.minWidth, textAlign: col.textAlign && col.textAlign, ...columnStyle }}
+                        style={{
+                            minWidth: col.minWidth && col.minWidth,
+                            display: col.display,
+                            textAlign: col.textAlign && col.textAlign, ...columnStyle
+                        }}
                         body={col.field === props.customActionsField ? col.body : col.body} />
                 ))}
                 <Column expander={allowExpansion} style={{ width: '5rem', textAlign: "center" }} />
