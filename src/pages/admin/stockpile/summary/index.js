@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AiFillEye } from 'react-icons/ai';
+import _ from 'lodash';
 
 import { RowExpansionTable, Button, InputSwitch } from '@/components';
-import { getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getGeneralDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
@@ -267,9 +268,7 @@ function AdminStockpileSummary() {
                     start: newStartValue,
                     limit: newLimitValue
                 },
-                start_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[0]) : "",
-                end_date: selectedDate ? getGeneralDateTimeDisplayFormat(selectedDate[1]) : "",
-                place_name: selectedCity && selectedCity.code ? selectedCity.name : ""
+                search: selectedPlaceName.id != 0 ? selectedPlaceName.name : ""
             }));
         }
     }
