@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { OrderList } from 'primereact/orderlist';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
 import { Button } from '@/components/button';
@@ -9,12 +8,9 @@ import { NormalCheckBox } from '@/components/checkbox';
 import { InputSwitch } from '@/components/switch';
 import { Input } from '@/components/input';
 import { RadioBtn } from '@/components/radioButton';
-import { ValidationError } from '@/components/error';
-// import { props } from 'cypress/types/bluebird';
-// import useItems from 'antd/es/menu/hooks/useItems';
+
 const BaseTemplate = (props) => {
     const { item } = props;
-    console.log(item, "questionarrie");
     const { localeJson } = useContext(LayoutContext);
     const itemTemplate = (item) => {
         return (
@@ -103,7 +99,6 @@ const BaseTemplate = (props) => {
                                                 text: `－ ${translate(localeJson, 'del_item')}`,
                                                 severity: "danger",
                                                 rounded: "true",
-                                                // buttonClass: "evacuation_button_height",
                                             }} />
                                         </div>
                                     </div>
@@ -135,7 +130,6 @@ const BaseTemplate = (props) => {
                                                     <Button buttonProps={{
                                                         text: `－ ${translate(localeJson, 'del_choice')}`,
                                                         severity: "danger",
-                                                        // buttonClass: "evacuation_button_height",
                                                         rounded: "true"
                                                     }}
                                                     />
@@ -144,7 +138,6 @@ const BaseTemplate = (props) => {
                                                         text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                         severity: "success",
                                                         rounded: "true",
-                                                        // buttonClass: "evacuation_button_height"
                                                     }}
                                                     />
                                                 )}
@@ -247,7 +240,6 @@ const BaseTemplate = (props) => {
                                     <Button buttonProps={{
                                         text: `－ ${translate(localeJson, 'del_item')}`,
                                         severity: "danger",
-                                        // buttonClass: "evacuation_button_height",
                                         rounded: "true"
                                     }} />
                                 </div>
@@ -290,17 +282,13 @@ const BaseTemplate = (props) => {
                                             <Button buttonProps={{
                                                 text: `－ ${translate(localeJson, 'del_choice')}`,
                                                 severity: "danger",
-                                                onClick: () => handleDeleteChoice(i),
-                                                // buttonClass: "evacuation_button_height",
                                                 rounded: "true",
-
                                             }}
                                             />
                                         ) : (
                                             <Button buttonProps={{
                                                 text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                 severity: "success",
-                                                // buttonClass: "evacuation_button_height",
                                                 rounded: "true",
                                             }}
                                             />
@@ -316,15 +304,13 @@ const BaseTemplate = (props) => {
     };
 
     return (
-        // questionnaires && (
-            <>
-        <div className="grid custom_orderlist">
-            <div className="col-12 ">
-                {itemTemplate(item)}
+        <>
+            <div className="grid custom_orderlist">
+                <div className="col-12 ">
+                    {itemTemplate(item)}
+                </div>
             </div>
-        </div>
         </>
-        // ));
     )
 };
 

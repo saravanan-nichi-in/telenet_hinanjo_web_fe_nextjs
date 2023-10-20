@@ -24,7 +24,7 @@ export default function MasterQuestionnaire() {
     }]);
 
     const [newItem, setNewItem] = useState({
-        "title": "", // Provide initial values
+        "title": "",
         "questiontitle": "",
         "questiontitle_en": "",
         "option": [""],
@@ -39,7 +39,6 @@ export default function MasterQuestionnaire() {
             const item = prepareData.splice(fromIndex, 1)[0];
             prepareData.splice(toIndex, 0, item);
             setQuestionnaires(prepareData);
-
         },
         nodeSelector: 'li',
         handleSelector: 'a'
@@ -49,7 +48,6 @@ export default function MasterQuestionnaire() {
         const fetchData = async () => {
             setLoader(false);
         };
-
         fetchData();
     }, []);
 
@@ -64,7 +62,6 @@ export default function MasterQuestionnaire() {
                         <AiOutlineDrag />
                     </a>
                 </li>
-
             ))}
         </ol>
     )
@@ -89,8 +86,7 @@ export default function MasterQuestionnaire() {
                         <h5 className='page-header1'>{translate(localeJson, 'master_questionaries')}</h5>
                         <hr />
                         <div className='w-full'>
-                            <DND dragProps={dragProps}
-                            >
+                            <DND dragProps={dragProps}>
                                 {map}
                             </DND>
                         </div>
@@ -100,7 +96,7 @@ export default function MasterQuestionnaire() {
                                 rounded: "true",
                                 bg: "bg-white",
                                 hoverBg: "hover:surface-500 hover:text-white",
-                                onClick:() => {
+                                onClick: () => {
                                     router.push("/admin/questionnaire")
                                 },
                                 buttonClass: "text-600 evacuation_button_height",
@@ -120,7 +116,7 @@ export default function MasterQuestionnaire() {
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'add_item'),
                                 severity: "success",
-                                onClick:handleAddNewItem
+                                onClick: handleAddNewItem
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                     </div>

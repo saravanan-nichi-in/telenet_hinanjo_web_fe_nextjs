@@ -7,7 +7,7 @@ import { BaseTemplate } from '@/components/questionarrie';
 import { AiOutlineDrag } from 'react-icons/ai';
 import { Button, DND } from '@/components';
 
-export default function individualQuestionnaire() {
+export default function IndividualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const [questionnaires, setQuestionnaires] = useState([{
         "title": "ROW1",
@@ -26,7 +26,7 @@ export default function individualQuestionnaire() {
     const router = useRouter();
 
     const [newItem, setNewItem] = useState({
-        "title": "", // Provide initial values
+        "title": "",
         "questiontitle": "",
         "questiontitle_en": "",
         "option": [" "],
@@ -39,7 +39,6 @@ export default function individualQuestionnaire() {
             const item = prepareData.splice(fromIndex, 1)[0];
             prepareData.splice(toIndex, 0, item);
             setQuestionnaires(prepareData);
-
         },
         nodeSelector: 'li',
         handleSelector: 'a'
@@ -49,7 +48,6 @@ export default function individualQuestionnaire() {
         const fetchData = async () => {
             setLoader(false);
         };
-
         fetchData();
     }, []);
 
@@ -78,8 +76,8 @@ export default function individualQuestionnaire() {
             "title": "",
             "questiontitle": "",
             "questiontitle_en": "",
-            "option": [],
-            "option_en": []
+            "option": [""],
+            "option_en": [""]
         });
 
     };
@@ -91,8 +89,7 @@ export default function individualQuestionnaire() {
                         <h5 className='page-header1'>{translate(localeJson, 'individual_questionaries')}</h5>
                         <hr />
                         <div className='w-full'>
-                            <DND dragProps={dragProps}
-                            >
+                            <DND dragProps={dragProps}>
                                 {map}
                             </DND>
                         </div>
