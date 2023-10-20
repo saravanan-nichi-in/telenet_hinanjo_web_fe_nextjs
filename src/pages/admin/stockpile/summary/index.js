@@ -136,7 +136,6 @@ function AdminStockpileSummary() {
             place_name: rowData.shelter_place.props.children,
             place_id: rowData.place_id
         };
-        console.log(emailData);
         setEmailSettingValues(emailData);
         setEmailModal(true);
     };
@@ -170,15 +169,11 @@ function AdminStockpileSummary() {
                 place_name: values.place_name,
                 place_id: emailSettingValues.place_id
             }
-            getStockPileEmailUpdate(payload, registerEmailConfig);
+            getStockPileEmailUpdate(payload);
             setEmailSettingValues(emailData);
             setEmailModal(false);
         }
     };
-
-    const registerEmailConfig = (response) => {
-        console.log(response);
-    }
 
     const searchListWithCriteria = () => {
         let payload = {
@@ -194,7 +189,6 @@ function AdminStockpileSummary() {
     }
 
     const onGetStockPileSummaryList = (response) => {
-        console.log(response);
         if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
             const data = response.data.model.list;
             let stockPileList = [];
@@ -213,7 +207,6 @@ function AdminStockpileSummary() {
                 };
                 stockPileList.push(summaryList);
             });
-            console.log(stockPileList);
             setStockpileSummaryList(stockPileList);
             setTotalCount(response.data.model.total);
             setTableLoading(false);

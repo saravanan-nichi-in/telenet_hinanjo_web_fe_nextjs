@@ -25,8 +25,9 @@ function _getSummaryList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -65,8 +66,9 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -84,7 +86,9 @@ function _getStockPileEmailData(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -93,14 +97,18 @@ function _getStockPileEmailData(payload, callBackFun) {
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getStockPileEmailUpdate(payload, callBackFun) {
+function _getStockPileEmailUpdate(payload) {
     axios.post('admin/stockpile/summary/mail', payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
             }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
