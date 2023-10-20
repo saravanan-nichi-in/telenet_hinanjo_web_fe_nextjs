@@ -207,7 +207,13 @@
       "del_item":"項目削除",
       "del_choice":"選択肢削",
       "add_choice":"選択肢追",
-      "display_in_registration_screen": "避難者登録画面表示"
+      "display_in_registration_screen": "避難者登録画面表示",
+      "add_item":"項目追加",
+      "individual_questionaries":"個人ごとの個別項目",
+      "master_questionaries":"全体の個別項目",
+      "questionnaire_name":"項目",
+      "questionnaire_description":"詳細",
+      "action":"アクション"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -270,7 +276,8 @@
       "create_staff": "新規登録",
       "download": "ダウンロード",
       "create_special_care": "新規登録",
-      "create_place": "新規登録"
+      "create_place": "新規登録",
+      "details":"明細"
     },
     "footer": {},
     "form": {

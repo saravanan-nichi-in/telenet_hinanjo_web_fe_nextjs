@@ -4,9 +4,8 @@ import { useRouter } from 'next/router';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { BaseTemplate } from '@/components/questionarrie';
-// import BaseTemplate from '@/components/questionarrie/template/baseTemplate';
 import { AiOutlineDrag } from 'react-icons/ai';
-import { DND, NormalCheckBox } from '@/components';
+import { Button, DND } from '@/components';
 
 export default function individualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -25,6 +24,14 @@ export default function individualQuestionnaire() {
     }]);
 
     const router = useRouter();
+
+    const [newItem, setNewItem] = useState({
+        "title": "", // Provide initial values
+        "questiontitle": "",
+        "questiontitle_en": "",
+        "option": [" "],
+        "option_en": [" "]
+    });
 
     const dragProps = {
         onDragEnd(fromIndex, toIndex) {
@@ -46,25 +53,12 @@ export default function individualQuestionnaire() {
         fetchData();
     }, []);
 
-    // const handleOnDrag = (event) => {
-    //     setQuestionnaires(event.value);
-    // }
     const map = (
         <ol>
             {questionnaires.map((item, index) => (
-                <li>
-                    {/* <NormalCheckBox checkBoxProps={{
-                        checked: true,
-                    }} /> */}
-                    {/* <div>
-                    {item.title}
-
-                    </div> */}
-                    <div className='ml-1 mr-1' style={{width:"95%"}}>
+                <li key={index}>
+                    <div className='ml-1 mr-1' style={{ width: "95%" }}>
                         <BaseTemplate item={item}
-                        // questionnaires={questionnaires}
-                        // handleOnDrag={handleOnDrag}
-
                         />
                     </div>
                     <a className='mr-10'>
@@ -76,18 +70,60 @@ export default function individualQuestionnaire() {
         </ol>
     )
 
+    const handleAddNewItem = () => {
+        // Add the new item to the questionnaires state
+        setQuestionnaires([...questionnaires, newItem]);
+        // Clear the newItem state for the next addition
+        setNewItem({
+            "title": "",
+            "questiontitle": "",
+            "questiontitle_en": "",
+            "option": [],
+            "option_en": []
+        });
+
+    };
     return (
         <>
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'questionnaire')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'individual_questionaries')}</h5>
                         <hr />
                         <div className='w-full'>
                             <DND dragProps={dragProps}
                             >
                                 {map}
                             </DND>
+                        </div>
+                        <div className='flex pt-3 pb-3' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                bg: "bg-white",
+                                onClick: () => {
+                                    router.push("/admin/questionnaire")
+                                },
+                                hoverBg: "hover:surface-500 hover:text-white",
+                                buttonClass: "text-600 evacuation_button_height",
+                                text: translate(localeJson, 'import'),
+                            }} parentClass={"mr-1 mt-1"} />
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'submit'),
+                                severity: "primary",
+                            }} parentClass={"mr-1 mt-1"} />
+
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                buttonClass: "evacuation_button_height",
+                                text: translate(localeJson, 'add_item'),
+                                severity: "success",
+                                onClick: handleAddNewItem
+                            }} parentClass={"mr-1 mt-1"} />
                         </div>
                     </div>
                 </div>

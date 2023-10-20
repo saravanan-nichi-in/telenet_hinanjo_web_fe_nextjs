@@ -208,7 +208,13 @@
       "choice":"Choice",
       "del_item":"Del Item",
       "del_choice":"Del Choice",
-      "add_choice":"Add Choice"
+      "add_choice":"Add Choice",
+      "add_item":"Add Item",
+      "individual_questionaries":"Individual Questionaries",
+      "master_questionaries":"Master Questionaries",
+      "questionnaire_name":"Name",
+      "questionnaire_description":"Description",
+      "action":"Action"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -272,7 +278,8 @@
       "create_staff": "Create Staff",
       "download": "Download",
       "create_special_care": "Create Special Care",
-      "create_place": "Create Place"
+      "create_place": "Create Place",
+      "details":"Details"
     },
     "footer": {},
     "form": {
