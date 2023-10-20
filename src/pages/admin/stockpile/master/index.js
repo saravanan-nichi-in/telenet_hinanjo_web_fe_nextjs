@@ -142,8 +142,8 @@ export default function AdminStockPileMaster() {
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
-        setImportPlaceOpen(!importPlaceOpen);
-        hideOverFlow();
+        setImportPlaceOpen(false);
+        showOverFlow();
     };
 
     const onRegisterImport = (values) => {
@@ -166,7 +166,7 @@ export default function AdminStockPileMaster() {
         filters: {
             start: 0,
             limit: 5,
-            order_by: "asc",
+            order_by: "desc",
             sort_by: "created_at"
         },
         category: "",
@@ -200,7 +200,6 @@ export default function AdminStockPileMaster() {
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
                 let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
@@ -218,7 +217,6 @@ export default function AdminStockPileMaster() {
                 })
 
                 setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
             } else {
@@ -295,7 +293,7 @@ export default function AdminStockPileMaster() {
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'import'),
                                         severity: "primary",
-                                        onClick: () => setImportPlaceOpen(true),
+                                        onClick: () => {setImportPlaceOpen(true); hideOverFlow();},
                                     }} parentClass={"mr-1 mt-1"} />
                                     <Button buttonProps={{
                                         rounded: "true",
@@ -393,7 +391,7 @@ export default function AdminStockPileMaster() {
                                         className={"custom-table-cell"}
                                         showGridlines={"true"}
                                         value={list}
-                                        columns={columns}
+                                        columns={columnsData}
                                         filterDisplay="menu"
                                         emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}

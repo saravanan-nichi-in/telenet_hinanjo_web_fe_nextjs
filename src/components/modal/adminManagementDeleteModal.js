@@ -7,18 +7,18 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 
 export default function AdminManagementDeleteModal(props) {
     const { localeJson } = useContext(LayoutContext);
+    // Destructuring
     const { open, close } = props && props;
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'confirmation_information')}
-        </div>
-    );
 
     return (
         <div>
             <Dialog
                 className="custom-modal"
-                header={header}
+                header={
+                    <div className="custom-modal">
+                        {translate(localeJson, 'confirmation_information')}
+                    </div>
+                }
                 visible={open}
                 draggable={false}
                 onHide={() => close()}

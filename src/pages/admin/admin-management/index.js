@@ -15,11 +15,7 @@ export default function AdminManagementPage() {
         { field: 'email', header: translate(localeJson, 'address_email'), headerClassName: "custom-header", textAlign: "left" },
         { field: 'actions', header: translate(localeJson, 'common_action'), headerClassName: "custom-header", className: "action_class", textAlign: "center" },
     ];
-    const [editAdminOpen, setEditAdminOpen] = useState(false);
-    const [adminDetailsOpen, setAdminDetailsOpen] = useState(false);
-    const [deleteAdminOpen, setDeleteAdminOpen] = useState(false);
     const [importOpen, setImportOpen] = useState(false);
-    const [createAdminOpen, setCreateAdminOpen] = useState(false);
     const [exportPayload, setExportPayload] = useState({
         filters: {
             order_by: "desc",
@@ -27,6 +23,16 @@ export default function AdminManagementPage() {
         },
         name: ""
     });
+    const [createOpen, setCreateOpen] = useState(false);
+    const [createPayload, setCreatePayload] = useState({
+        name: "",
+        name_kana: "",
+        email: "",
+        birthday: "",
+        gender: "",
+        password: ""
+    });
+    const [searchName, setSearchName] = useState("");
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -40,15 +46,25 @@ export default function AdminManagementPage() {
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
+    const [editOpen, setEditOpen] = useState(false);
+    const [editPayload, setEditPayload] = useState({
+        id: "",
+        name: "",
+        name_kana: "",
+        email: "",
+        birthday: "",
+        gender: "",
+        password: ""
+    });
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deletePayload, setDeletePayload] = useState(0);
 
     /* Services */
-    const { callImport, callExport, callCreate, callGetList, callDelete } = AdminManagementServices;
+    const { callImport, callExport, callCreate, callGetList, callUpdate, callDelete } = AdminManagementServices;
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
-            // await AdminManagementService.getAdminsMedium().then((data) => setAdmins(data));
-            // setLoader(false);
             await onGetAdminList();
         };
         fetchData();
@@ -72,7 +88,6 @@ export default function AdminManagementPage() {
             const data = response.data.model.list;
             // Preparing row data for specific column to display
             data.map((obj, i) => {
-                console.log(obj.name);
                 let preparedObj = {
                     number: getListPayload.filters.start + i + 1,
                     name: obj.name,
@@ -91,51 +106,13 @@ export default function AdminManagementPage() {
     }
 
     /**
-     * Email setting modal close
-    */
-    const onAdminClose = () => {
-        setEditAdminOpen(!editAdminOpen);
-    };
-
-    /**
-     * Detail setting modal close
-     */
-    const onAdminDetailClose = () => {
-        setAdminDetailsOpen(!adminDetailsOpen);
-    };
-
-    /**
-     * Delete setting modal close
-     */
-    const onAdminDeleteClose = () => {
-        setDeleteAdminOpen(!deleteAdminOpen);
-    };
-
-    /**
-     * Delete setting modal close
-     */
-    const onAdminCreateClose = () => {
-        setCreateAdminOpen(!createAdminOpen);
-    };
-
-    /**
-     * Register email related information
-     * @param {*} values 
-     */
-    const onRegister = (values) => {
-        setEditAdminOpen(false);
-        setCreateAdminOpen(false);
-    };
-
-    /**
      * Import file
      * @param {*} file 
      */
     const onImportFile = async (file) => {
         setImportOpen(false);
-        setLoader(true);
-        console.log(file);
         if (file) {
+            setLoader(true);
             const payload = new FormData();
             payload.append('file', file);
             await callImport(payload, onImportSuccess);
@@ -164,12 +141,29 @@ export default function AdminManagementPage() {
                     buttonClass: "text-primary ",
                     bg: "bg-white",
                     hoverBg: "hover:bg-primary hover:text-white",
+                    onClick: async () => {
+                        if (!_.isEmpty(obj)) {
+                            await setEditPayload(prevState => ({
+                                ...prevState,
+                                id: obj.id,
+                                name: obj.name,
+                                email: obj.email,
+                            }));
+                        }
+                        setEditOpen(true);
+                    }
                 }} />
                 <Button buttonProps={{
                     text: translate(localeJson, 'delete'),
                     buttonClass: "text-primary",
                     bg: "bg-red-600 text-white",
                     hoverBg: "hover:bg-red-500 hover:text-white",
+                    onClick: () => {
+                        if (!_.isEmpty(obj)) {
+                            setDeletePayload(obj.id);
+                        }
+                        setDeleteOpen(true);
+                    }
                 }} />
             </div>
         );
@@ -195,6 +189,73 @@ export default function AdminManagementPage() {
         }
     }
 
+    /**
+     * Create admin callback function
+     * @param {*} data 
+     */
+    const onCreate = async (data) => {
+        setCreateOpen(false);
+        if (data) {
+            setLoader(true);
+            let payload = createPayload;
+            const { fullName, email, password } = data;
+            payload['name'] = fullName;
+            payload['email'] = email;
+            payload['password'] = password;
+            await callCreate(payload, onCreateSuccess);
+            setCreatePayload(payload);
+        }
+    }
+
+    /**
+     * Create success callback function
+     * @param {*} response 
+     */
+    const onCreateSuccess = (response) => {
+        onGetAdminList();
+    }
+
+    /**
+     * Create callback function
+     * @param {*} data 
+     */
+    const onEdit = async (data) => {
+        setEditOpen(false);
+        if (data) {
+            setLoader(true);
+            let payload = editPayload;
+            const { fullName, email } = data;
+            payload['name'] = fullName;
+            payload['email'] = email;
+            await callUpdate(payload, onEditSuccess);
+            setEditPayload(payload);
+        }
+    }
+
+    /**
+     * Edit success callback function
+     * @param {*} response 
+     */
+    const onEditSuccess = (response) => {
+        onGetAdminList();
+    }
+
+    const onDelete = async (string) => {
+        if (string === "confirm") {
+            setLoader(true);
+            callDelete(deletePayload, onDeleteSuccess)
+        }
+        setDeleteOpen(false);
+    }
+
+    /**
+    * Delete success callback function
+    * @param {*} response 
+    */
+    const onDeleteSuccess = (response) => {
+        onGetAdminList();
+    }
+
     return (
         <React.Fragment>
             {/* Import */}
@@ -206,23 +267,27 @@ export default function AdminManagementPage() {
                 }}
                 importFile={onImportFile}
             />
-            <AdminManagementEditModal
-                open={editAdminOpen}
-                close={onAdminClose}
-                register={onRegister}
-            />
-            <AdminManagementDetailModal
-                open={adminDetailsOpen}
-                close={onAdminDetailClose}
-            />
-            <AdminManagementDeleteModal
-                open={deleteAdminOpen}
-                close={onAdminDeleteClose}
-            />
+            {/* Create */}
             <AdminManagementCreateModal
-                open={createAdminOpen}
-                close={onAdminCreateClose}
-                register={onRegister}
+                open={createOpen}
+                close={() => {
+                    setCreateOpen(false);
+                }}
+                callBackFunction={onCreate}
+            />
+            {/* Edit */}
+            <AdminManagementEditModal
+                open={editOpen}
+                close={() => {
+                    setEditOpen(false);
+                }}
+                values={editPayload}
+                callBackFunction={onEdit}
+            />
+            {/* Delete */}
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDelete}
             />
             <div className="grid">
                 <div className="col-12">
@@ -245,15 +310,22 @@ export default function AdminManagementPage() {
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
                                     severity: "primary",
-                                    onClick: () => callExport(exportPayload)
+                                    onClick: () => {
+                                        if (searchName) {
+                                            let payload = exportPayload;
+                                            payload['name'] = searchName;
+                                            callExport(payload);
+                                        } else {
+                                            callExport(exportPayload);
+                                        }
+                                    }
                                 }} parentClass={"mr-1 mt-1"} />
-
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'create_admin'),
-                                    onClick: () => setCreateAdminOpen(true),
+                                    onClick: () => setCreateOpen(true),
                                     severity: "success"
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
@@ -266,17 +338,28 @@ export default function AdminManagementPage() {
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 text: translate(localeJson, 'name'),
-                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
+                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem",
+                                                value: searchName,
+                                                onChange: (e) => {
+                                                    setSearchName(e.target.value);
+                                                }
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />
 
                                         </div>
                                         <div>
                                             <Button buttonProps={{
+                                                type: "button",
                                                 buttonClass: "w-12 search-button",
                                                 text: translate(localeJson, "search_text"),
                                                 icon: "pi pi-search",
-                                                severity: "primary"
+                                                severity: "primary",
+                                                onClick: async () => {
+                                                    await setGetListPayload(prevState => ({
+                                                        ...prevState,
+                                                        search: searchName
+                                                    }));
+                                                }
                                             }} />
                                         </div>
                                     </div>

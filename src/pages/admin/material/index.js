@@ -88,7 +88,7 @@ export default function AdminMaterialPage() {
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
+                // var additionalColumnsArrayWithOldData = [...columnsData];
                 let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
@@ -103,7 +103,7 @@ export default function AdminMaterialPage() {
                 })
 
                 setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
+                // setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
             } else {
@@ -282,7 +282,7 @@ export default function AdminMaterialPage() {
                                         className={"custom-table-cell"}
                                         showGridlines={"true"}
                                         value={list}
-                                        columns={columns}
+                                        columns={columnsData}
                                         filterDisplay="menu"
                                         emptyMessage={translate(localeJson, "data_not_found")}
                                         paginator={true}
