@@ -78,7 +78,9 @@ const BaseTemplate = (props) => {
                                     {/* Questionnaires */}
                                     <div className="p-2">
                                         <div className="align-items-center justify-content-center content-align">
-                                            {translate(localeJson, 'item_title')}
+                                            {translate(localeJson, 'item_title')}<span style={{
+                                                color: "red"
+                                            }}>*</span>
                                         </div>
                                         <div >
                                             <div className='col-12 align-items-center'>
@@ -107,7 +109,7 @@ const BaseTemplate = (props) => {
                                         <div key={i} className="p-2">
                                             <div className=" align-items-center content-align">
                                                 {translate(localeJson, 'choice')}{i + 1}<span style={{
-                                                    color: "red"
+                                                    color: i < 1 ? "red" : "white"
                                                 }}>*</span>
                                             </div>
                                             <div>
@@ -216,7 +218,9 @@ const BaseTemplate = (props) => {
                                 borderLeft: "1px solid #000",
                             }}>
                                 <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                                    {translate(localeJson, 'item_title')}
+                                    {translate(localeJson, 'item_title')}<span style={{
+                                        color: "red"
+                                    }}>*</span>
                                 </div>
                                 <div className="col-7" style={{
                                     borderLeft: "1px solid #000",
@@ -251,10 +255,13 @@ const BaseTemplate = (props) => {
                                     borderBottom: "1px solid #000",
                                     borderLeft: "1px solid #000",
                                 }}>
+
                                     <div className="col-fixed col-2 flex align-items-center justify-content-center">
+
                                         {translate(localeJson, 'choice')} {i + 1}<span style={{
-                                            color: "red"
-                                        }}>*</span>
+                                            color: i < 1 ? "red" : "white"
+                                        }} >*</span>
+
                                     </div>
                                     <div className="col-7" style={{
                                         borderLeft: "1px solid #000",
