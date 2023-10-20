@@ -82,11 +82,6 @@ export default function AdminManagementCreateModal(props) {
                                         severity: "primary",
                                         onClick: () => {
                                             handleSubmit();
-                                            // register({
-                                            //     fullName: values.fullName,
-                                            //     email: values.email,
-                                            //     password: values.password
-                                            // });
                                         },
                                     }} parentClass={"inline"} />
                                 </div>
