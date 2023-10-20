@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { isArray, isObject } from "lodash";
 
 import axios from '@/utils/api';
 import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from '@/helper';
@@ -9,6 +10,7 @@ export const AdminManagementServices = {
     callExport: _callExport,
     callCreate: _callCreate,
     callGetList: _callGetList,
+    callUpdate: _callUpdate,
     callDelete: _callDelete,
 };
 
@@ -22,9 +24,9 @@ function _callImport(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                // Handling import success && errors
-                importErrorToastDisplay(response);
             }
+            // Handling import success && errors
+            importErrorToastDisplay(response);
         })
         .catch((error) => {
             callBackFun(false);
@@ -70,6 +72,7 @@ function _callGetList(payload, callBackFun) {
             }
         })
         .catch((error) => {
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
@@ -82,37 +85,119 @@ function _callGetList(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _callCreate(payload, callBackFun) {
-    axios.post('/admin/material/supply/list', payload)
+    axios.post('/admin/management/store', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
-        })
-        .catch((error) => {
-            toast.error(error?.response?.data?.message, {
+            toast.success(response?.data?.message, {
                 position: "top-right",
             });
+        })
+        .catch((error) => {
+            if (error.response.status == 422) {
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    callBackFun(false);
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
+            } else {
+                callBackFun(false);
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                });
+            }
+        });
+}
+
+/**
+ * Update data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _callUpdate(payload, callBackFun) {
+    axios.post('/admin/management/update', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+            toast.success(response?.data?.message, {
+                position: "top-right",
+            });
+        })
+        .catch((error) => {
+            if (error.response.status == 422) {
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    callBackFun(false);
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
+            } else {
+                callBackFun(false);
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                });
+            }
         });
 }
 
 /**
  * Delete data
+ * @param id
  * @param {*} callBackFun 
  */
-function _callDelete(callBackFun) {
-    axios.get('/admin/qrcreate/zip/delete')
+function _callDelete(id, callBackFun) {
+    axios.delete('/admin/management/delete', { data: { "id": id } })
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                toast.success(response?.data?.message, {
+            }
+            toast.success(response?.data?.message, {
+                position: "top-right",
+            });
+        })
+        .catch((error) => {
+            if (error.response.status == 422) {
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    callBackFun(false);
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
+            } else {
+                callBackFun(false);
+                toast.error(error.response.data.message, {
                     position: "top-right",
                 });
             }
-        })
-        .catch((error) => {
-            callBackFun(false);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
         });
 }
