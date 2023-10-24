@@ -3,7 +3,7 @@ import { AiFillEye } from 'react-icons/ai';
 import _ from 'lodash';
 
 import { RowExpansionTable, Button, InputSwitch } from '@/components';
-import { getGeneralDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
@@ -17,6 +17,7 @@ function AdminStockpileSummary() {
     const [imageModal, setImageModal] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
     const [stockpileSummaryList, setStockpileSummaryList] = useState([]);
+    const [filteredStockpileSummaryList, setFilteredStockpileSummaryList] = useState([]);
     const [placeListOptions, setPlaceListOptions] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
@@ -29,7 +30,7 @@ function AdminStockpileSummary() {
         place_name: "",
         place_id: ""
     });
-    const [showExpiryProducts, setShowExpiryProducts] = useState(false);
+    const [showExpiringProducts, setShowExpiringProducts] = useState(false);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -57,6 +58,7 @@ function AdminStockpileSummary() {
         { field: "type", header: translate(localeJson, 'type') },
         { field: "stock_pile_name", header: translate(localeJson, 'stockpile_item_name') },
         { field: "quantity", header: translate(localeJson, 'quantity') },
+        { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
         { field: "stock_pile_image", header: "", display: 'none' },
         {
@@ -85,7 +87,7 @@ function AdminStockpileSummary() {
             setLoader(false);
         };
         fetchData();
-    }, [locale, getListPayload, showExpiryProducts]);
+    }, [locale, getListPayload]);
 
     const onGetStockPileSummaryListOnMounting = () => {
         getSummaryList(getListPayload, onGetStockPileSummaryList)
@@ -118,7 +120,7 @@ function AdminStockpileSummary() {
 
     const bindEmailDataConfig = (rowData) => {
         let payload = {
-            place_id : rowData.place_id
+            place_id: rowData.place_id
         }
         getStockPileEmailData(payload, (response) => {
             if (response.success && !_.isEmpty(response.data)) {
@@ -192,8 +194,10 @@ function AdminStockpileSummary() {
         if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
             const data = response.data.model.list;
             let stockPileList = [];
-            data.map((item, index) => {
+            let index = 1;
+            data.map((item) => {
                 let summaryList = {
+                    id: index,
                     place_id: item.place_id,
                     shelter_place: <Link href="">{item.name}</Link>,
                     notification_email: item.email,
@@ -201,13 +205,33 @@ function AdminStockpileSummary() {
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
-                        expiration_date: item.expiry_date,
+                        expiry_date: item.expiry_date,
+                        expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
                         stock_pile_image: item.stockpile_image
                     }],
                 };
-                stockPileList.push(summaryList);
+                let isAvailable = stockPileList.some(obj => obj.place_id == item.place_id);
+                if (!isAvailable) {
+                    index = index + 1
+                    stockPileList.push(summaryList);
+                }
+                else {
+                    const index = stockPileList.findIndex(obj => obj['place_id'] === item.place_id);
+                    if (index !== -1) {
+                        let newOrder = {
+                            type: item.category,
+                            stock_pile_name: item.product_name,
+                            quantity: item.after_count,
+                            expiry_date: item.expiry_date,
+                            expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
+                            stock_pile_image: item.stockpile_image
+                        }
+                        stockPileList[index].orders.push(newOrder);
+                    }
+                }
             });
             setStockpileSummaryList(stockPileList);
+            setFilteredStockpileSummaryList(stockPileList);
             setTotalCount(response.data.model.total);
             setTableLoading(false);
         }
@@ -215,6 +239,7 @@ function AdminStockpileSummary() {
             setTotalCount(0);
             setTableLoading(false);
             setStockpileSummaryList([]);
+            setFilteredStockpileSummaryList([]);
         }
     }
 
@@ -231,8 +256,29 @@ function AdminStockpileSummary() {
         exportStockPileSummaryCSVList(payload, exportStockPileSummary);
     }
 
-    const updatedTableExpansion = (e) => {
-        setShowExpiryProducts(e.value);
+    const showOnlyExpiringProducts = () => {
+        setShowExpiringProducts(!showExpiringProducts); 
+        if (!showExpiringProducts) {
+            let dataManipulate = stockpileSummaryList.map(item => ({ ...item }));
+            dataManipulate.map((item, index) => {
+                let data = item.orders;
+                let filteredDates = data.filter(obj => new Date(obj.expiry_date) > new Date());
+                if (filteredDates.length > 0) {
+                    let minDateAfterToday = filteredDates.reduce((min, current) =>
+                        current.expiry_date < min.expiry_date ? current : min
+                    );
+                    let filteredProducts = data.filter(obj => obj.expiry_date == minDateAfterToday.expiry_date);
+                    dataManipulate[index].orders = filteredProducts;
+                }
+                else {
+                    dataManipulate[index].orders = [];
+                }
+            });
+            setFilteredStockpileSummaryList(dataManipulate);
+        }
+        else {
+            setFilteredStockpileSummaryList([...stockpileSummaryList]);
+        }
     }
 
     const exportStockPileSummary = (response) => {
@@ -294,8 +340,8 @@ function AdminStockpileSummary() {
                             <div class="mb-3" >
                                 <div class="summary_flex">
                                     {translate(localeJson, 'show_expiring_products')}<InputSwitch inputSwitchProps={{
-                                        checked: showExpiryProducts,
-                                        onChange: (e) => updatedTableExpansion(e)
+                                        checked: showExpiringProducts,
+                                        onChange: () => showOnlyExpiringProducts()
                                     }}
                                         parentClass={"custom-switch"} />
                                 </div>
@@ -347,10 +393,9 @@ function AdminStockpileSummary() {
                                 totalRecords={totalCount}
                                 loading={tableLoading}
                                 customRowExpansionActionsField="actions"
-                                value={stockpileSummaryList}
+                                value={filteredStockpileSummaryList}
                                 innerColumn={stockPileRowExpansionColumn}
                                 outerColumn={stockPilerMainRow}
-                                expandAllTrigger={showExpiryProducts}
                                 rowExpansionField1="orders1"
                                 rowExpansionField="orders"
                                 emptyMessage={translate(localeJson, "data_not_found")}
