@@ -79,7 +79,7 @@ function _getPlaceDropdownList(payload, callBackFun) {
  */
 function _getStockPileEmailData(payload, callBackFun) {
     const queryParams = new URLSearchParams(payload).toString();
-    axios.get(`admin/stockpile/summary/mail?${queryParams}`)
+    axios.get(`admin/stockpile/summary/mail/detail?${queryParams}`)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

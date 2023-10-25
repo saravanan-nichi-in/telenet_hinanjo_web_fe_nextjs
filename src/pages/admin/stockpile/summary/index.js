@@ -127,19 +127,23 @@ function AdminStockpileSummary() {
                 const data = response.data.model;
                 let emailData = {
                     email: data.email,
-                    place_name: rowData.shelter_place,
+                    place_name: rowData.shelter_place.props.children,
                     place_id: rowData.place_id
                 }
                 setEmailSettingValues(emailData);
+                setEmailModal(true);
+            }
+            else {
+                let emailData = {
+                    email: "",
+                    place_name: rowData.shelter_place.props.children,
+                    place_id: rowData.place_id
+                };
+                setEmailSettingValues(emailData);
+                setEmailModal(true);
             }
         });
-        let emailData = {
-            email: "",
-            place_name: rowData.shelter_place.props.children,
-            place_id: rowData.place_id
-        };
-        setEmailSettingValues(emailData);
-        setEmailModal(true);
+        
     };
 
 
@@ -174,6 +178,7 @@ function AdminStockpileSummary() {
             getStockPileEmailUpdate(payload);
             setEmailSettingValues(emailData);
             setEmailModal(false);
+            getSummaryList(getListPayload, onGetStockPileSummaryList);
         }
     };
 
@@ -257,7 +262,7 @@ function AdminStockpileSummary() {
     }
 
     const showOnlyExpiringProducts = () => {
-        setShowExpiringProducts(!showExpiringProducts); 
+        setShowExpiringProducts(!showExpiringProducts);
         if (!showExpiringProducts) {
             let dataManipulate = stockpileSummaryList.map(item => ({ ...item }));
             dataManipulate.map((item, index) => {
