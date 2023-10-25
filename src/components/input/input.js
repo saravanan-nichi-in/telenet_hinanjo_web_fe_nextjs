@@ -28,8 +28,8 @@ const Input = (props) => {
     } = inputProps;
 
     return (
-        <div className={`${parentClass || ''}  `} style={parentStyle}>
-            <InputText className={`${inputClass} ${custom || 'custom_input'}`}
+        <div className={`${parentClass || ''} ${custom || 'custom_input'} `} style={parentStyle}>
+            <InputText className={`${inputClass} `}
                 placeholder={placeholder}
                 id={id}
                 style={style}

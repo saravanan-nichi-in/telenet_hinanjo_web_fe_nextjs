@@ -223,8 +223,8 @@ function _delete(id, callBackFun) {
             console.log(error);
             // Handle errors here
             // console.error("Error fetching data:", error);
-            // toast.error(error?.response?.data?.message, {
-            //     position: "top-right",
-            // });
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
