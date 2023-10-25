@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import _ from 'lodash';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import { MdDashboard, MdManageAccounts, MdSettings } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";
@@ -19,8 +18,8 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 const AppMenu = () => {
     const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
-    const [model, setModel] = useState([]);
-
+    const url = window.location.pathname;
+    // Admin side bar information
     const adminModel = [
         {
             label: translate(localeJson, 'vault_info'),
@@ -137,11 +136,6 @@ const AppMenu = () => {
                         icon: <FaUserPlus size={20} />,
                         to: '/admin/questionnaire'
                     },
-                    // {
-                    //     label: translate(localeJson, 'individual_questionnaire'),
-                    //     icon: <FaUsers size={20} />,
-                    //     to: '/admin/questionnaire'
-                    // }
                     {
                         label: translate(localeJson, 'setting_systems'),
                         icon: <AiFillSetting size={20} />,
@@ -152,82 +146,112 @@ const AppMenu = () => {
             ]
         },
     ];
-
+    // Staff side bar information
     const staffModel = [
         {
-            label: translate(localeJson, 'dashboard'), icon: <MdDashboard size={20} />,
+            label: translate(localeJson, 'staff_dashboard'),
+            icon: <MdDashboard size={20} />,
             items: [
                 {
-                    label: translate(localeJson, 'dashboard'),
+                    label: translate(localeJson, 'staff_dashboard'),
                     icon: <MdDashboard size={20} />,
-                    to: '/staff/dashboard'
+                    to: '/staff/dashboard',
+                    active: router.pathname.startsWith('/staff/dashboard')
                 },
             ]
         },
         {
-            label: translate(localeJson, 'evacuee_information'), icon: <MdDashboard size={20} />,
+            label: translate(localeJson, 'evacuee_information'),
+            icon: <MdDashboard size={20} />,
             items: [
                 {
-                    label: translate(localeJson, 'list_of_evacuees'),
-                    icon: <HiDocumentText size={20} />,
-                    to: '/staff/family'
-                },
-                {
-                    label: translate(localeJson, 'temporary_registrants'),
-                    icon: <HiDocumentText size={20} />,
-                    to: '/staff/temp/family'
+                    label: translate(localeJson, 'evacuee_information'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'list_of_evacuees'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/family?hinan=1',
+                            active: router.pathname.startsWith('/staff/family')
+                        },
+                        {
+                            label: translate(localeJson, 'temporary_registrants'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/temporary/family?hinan=1',
+                            active: router.pathname.startsWith('/staff/temporary/family')
+                        },
+                        {
+                            label: translate(localeJson, 'external_evacuees_list'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/external/family-list?hinan=1',
+                            active: router.pathname.startsWith('/staff/external/family-list')
+                        },
+                    ]
                 },
             ]
         },
         {
-            label: translate(localeJson, 'stockpile_management'), icon: <MdDashboard size={20} />,
+            label: translate(localeJson, 'staff_stockpile_management'),
+            icon: <MdDashboard size={20} />,
             items: [
                 {
-                    label: translate(localeJson, 'stockpile_list'),
-                    icon: <HiDocumentText size={20} />,
-                    to: '/staff/stockpile/dashboard',
-                },
-                {
-                    label: translate(localeJson, 'stockpile_history'),
-                    icon: <HiDocumentText size={20} />,
-                    to: '/staff/stockpile/history'
+                    label: translate(localeJson, 'staff_stockpile_management'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'stockpile_list'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/stockpile/dashboard?hinan=1',
+                            active: router.pathname.startsWith('/staff/stockpile/dashboard')
+                        },
+                        {
+                            label: translate(localeJson, 'stockpile_history'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/stockpile/history?hinan=1',
+                            active: router.pathname.startsWith('/staff/stockpile/history')
+                        }
+                    ]
                 },
             ]
         },
         {
-            label: translate(localeJson, 'setting'), icon: <MdDashboard size={20} />,
+            label: translate(localeJson, 'setting'),
+            icon: <MdDashboard size={20} />,
             items: [
                 {
-                    label: translate(localeJson, 'necessary_supplies_registration'),
-                    icon: <ImUser size={20} />,
-                    to: '/staff/supplies'
-                },
-                {
-                    label: translate(localeJson, 'manual_registration_of_evacuees'),
-                    icon: <RiUserSharedFill size={20} />,
-                    to: '/staff/register-checkin'
+                    label: translate(localeJson, 'setting'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'necessary_supplies_registration'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/supplies?hinan=1',
+                            active: router.pathname.startsWith('/staff/supplies')
+                        },
+                        {
+                            label: translate(localeJson, 'manual_registration_of_evacuees'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/register/check-in?hinan=1',
+                            active: router.pathname.startsWith('/staff/register/check-in')
+                        },
+                    ]
                 },
             ]
         },
     ];
 
-    useEffect(() => {
-        /* Services */
-        const publicPaths = ['/admin/login', '/staff/login', '/admin/forgot-password', '/staff/forgot-password', '/admin/reset-password', '/staff/reset-password'];
-        const path = router.asPath.split('?')[0];
-        if (path.startsWith('/admin') && !publicPaths.includes(path)) {
-            setModel(adminModel);
-        } else if (path.startsWith('/staff') && !publicPaths.includes(path)) {
-            setModel(staffModel);
-        }
-    }, [localeJson])
-
     return (
         <MenuProvider>
             <ul className="layout-menu">
-                {!_.isEmpty(model) && model.map((item, i) => {
-                    return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
-                })}
+                {url.startsWith('/admin') ? (
+                    adminModel.map((item, i) => {
+                        return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
+                    })
+                ) : (
+                    staffModel.map((item, i) => {
+                        return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
+                    })
+                )}
             </ul>
         </MenuProvider>
     );

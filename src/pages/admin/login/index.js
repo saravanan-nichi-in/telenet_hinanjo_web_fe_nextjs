@@ -11,11 +11,14 @@ import { setAdminValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, NormalLabel, Button, ValidationError, InputLeftRightGroup } from '@/components';
+import { setLayout } from "@/redux/layout";
+import { systemSettingServices } from "@/services";
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const { getList } = systemSettingServices;
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -39,9 +42,19 @@ const LoginPage = () => {
             dispatch(setAdminValue({
                 admin: values.data
             }));
+            getList(fetchSettingData)
             router.push("/admin/dashboard");
         }
     };
+
+    const fetchSettingData =(res)=> {
+        if(res)
+        {
+            const data = res.data.model;
+            dispatch(setLayout(data))
+        }
+        
+    }
 
     return (
         <>

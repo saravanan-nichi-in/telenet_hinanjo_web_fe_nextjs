@@ -167,7 +167,7 @@ export default function AdminStockPileMaster() {
             start: 0,
             limit: 5,
             order_by: "desc",
-            sort_by: "created_at"
+            sort_by: "category"
         },
         category: "",
         product_name: ""
@@ -399,6 +399,16 @@ export default function AdminStockPileMaster() {
                                         rows={getListPayload.filters.limit}
                                         paginatorLeft={true}
                                         onPageHandler={(e) => onPaginationChange(e)}
+                                        onSort= {(data) => {
+                                            setGetListPayload({
+                                                ...getListPayload,
+                                                filters: {
+                                                  ...getListPayload.filters,
+                                                  order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                                }
+                                              }
+                                              )
+                                        }}
                                     />
                                 </div>
                             </div>

@@ -20,12 +20,15 @@ import {InputFile} from '@/components/upload'
 import { mapScaleRateOptions } from "@/utils/constant";
 import { AiOutlineDrag } from "react-icons/ai";
 import { systemSettingServices } from "@/services";
+import { setLayout } from "@/redux/layout";
+import { useAppDispatch } from '@/redux/hooks';
 
 export default function Setting() {
   const { setLoader } = useContext(LayoutContext);
   const { localeJson, locale } = useContext(LayoutContext);
   const [response, setResponse] = useState({});
   const { getList, update } = systemSettingServices;
+  const dispatch = useAppDispatch();
 
   const public_display_order_data= [
     {
@@ -162,6 +165,7 @@ export default function Setting() {
     if (res) {
       setLoader(true);
       const data = res.data.model;
+      dispatch(setLayout(data))
       initialValues.map_scale = data?.map_scale + "" || "";
       initialValues.footer = data?.footer || "";
       initialValues.type_name_ja = data?.type_name_ja || "";
