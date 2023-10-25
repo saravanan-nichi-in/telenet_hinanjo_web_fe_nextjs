@@ -7,7 +7,6 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
-import { locale } from 'primereact/api';
 
 
 export default function ExternalEvacuees() {
