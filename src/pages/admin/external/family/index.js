@@ -7,6 +7,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
+import { locale } from 'primereact/api';
 
 
 export default function ExternalEvacuees() {
@@ -168,6 +169,49 @@ export default function ExternalEvacuees() {
         maintainAspectRatio: false
     };
 
+    const personCountCategory_jp = [
+        {
+            "市内": 0,
+        },
+        {
+            "市外": 0
+        },
+        {
+            "県外": 0
+        },
+    ];
+
+    const personCountFoodSupport_jp = [
+        {
+            "いいえ": 0,
+        },
+        {
+            "はい": 0
+        }
+    ];
+
+
+    const personCountCategory_en = [
+        {
+            "Within City": 0,
+        },
+        {
+            "City Outskirts": 0
+        },
+        {
+            "Outside Prefecture": 0
+        },
+    ];
+
+    const personCountFoodSupport_en = [
+        {
+            "No": 0,
+        },
+        {
+            "Yes": 0
+        }
+    ];
+
     const onGetExternalEvacueesChartScreenData = () => {
         getChartScreenData({}, getChartScreenViewData);
     }
@@ -198,27 +242,9 @@ export default function ExternalEvacuees() {
             };
             setChartData(personCountDataset);
             setChartOptions(externalEvacueesTallyChartOptions);
+            let personCountCategory = response.locale == 'jp' ? personCountCategory_jp : personCountCategory_en;
+            let personCountFoodSupport = response.locale == 'jp' ? personCountFoodSupport_jp : personCountFoodSupport_en;
 
-            let personCountCategory = [
-                {
-                    "市内": 0,
-                },
-                {
-                    "市外": 0
-                },
-                {
-                    "県外": 0
-                },
-            ];
-
-            let personCountFoodSupport = [
-                {
-                    "いいえ": 0,
-                },
-                {
-                    "はい": 0
-                }
-            ];
             personCountByCategory.map((item, index) => {
                 let foundObject = personCountCategory.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
                 if (foundObject) {
