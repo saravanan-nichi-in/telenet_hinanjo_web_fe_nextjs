@@ -6,7 +6,7 @@ export default function Staff() {
 
     useEffect(() => {
         router.push({
-            pathname: '/staff/login',
+            pathname: '/staff/dashboard',
             query: { hinan: 1 }
         });
     }, []);
