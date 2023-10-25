@@ -20,12 +20,49 @@ import {InputFile} from '@/components/upload'
 import { mapScaleRateOptions } from "@/utils/constant";
 import { AiOutlineDrag } from "react-icons/ai";
 import { systemSettingServices } from "@/services";
+import { setLayout } from "@/redux/layout";
+import { useAppDispatch } from '@/redux/hooks';
 
 export default function Setting() {
   const { setLoader } = useContext(LayoutContext);
   const { localeJson, locale } = useContext(LayoutContext);
   const [response, setResponse] = useState({});
   const { getList, update } = systemSettingServices;
+  const dispatch = useAppDispatch();
+
+  const public_display_order_data= [
+    {
+        "is_visible": "0",
+        "column_id": "0",
+        "column_name": "refugee_name",
+        "display_order": 1
+    },
+    {
+        "is_visible": "0",
+        "column_id": "1",
+        "column_name": "name",
+        "display_order": 2
+    },
+    {
+        "is_visible": "0",
+        "column_id": "2",
+        "column_name": "age",
+        "display_order": 3
+    },
+    {
+        "is_visible": "0",
+        "column_id": "3",
+        "column_name": "gender",
+        "display_order": 4
+    },
+    {
+        "is_visible": "0",
+        "column_id": "4",
+        "column_name": "address",
+        "display_order": 5
+    }
+]
+
   const schema = Yup.object().shape({
     footer: Yup.string().required(translate(localeJson, "footer_required")),
     type_name_ja: Yup.string().required(
@@ -128,7 +165,7 @@ export default function Setting() {
     if (res) {
       setLoader(true);
       const data = res.data.model;
-     console.log(data?.initial_load_status == "1" ? true : false || "")
+      dispatch(setLayout(data))
       initialValues.map_scale = data?.map_scale + "" || "";
       initialValues.footer = data?.footer || "";
       initialValues.type_name_ja = data?.type_name_ja || "";
@@ -143,8 +180,9 @@ export default function Setting() {
         data?.initial_load_status == "1" ? true : false || "";
       initialValues.default_shelf_life = data?.default_shelf_life || "",
         initialValues.scheduler_option = data?.initial_load_status == "1" ? true : false || "";
-
-      const PublicData = data?.public_display_order.map((item) => {
+      setLoader(false);
+      let public_data= data?.public_display_order||public_display_order_data
+      const PublicData = public_data.map((item) => {
         let namePublic;
         if (item.column_name == "name") {
           namePublic = "name_kanji";
@@ -163,7 +201,6 @@ export default function Setting() {
       });
       setData(PublicData);
       setResponse(data);
-      setLoader(false);
     }
   }
 
@@ -175,7 +212,7 @@ export default function Setting() {
   };
   const map = (
     <ol>
-      {data.map((item, index) => (
+      {data?.map((item, index) => (
         <li key={index}>
           <NormalCheckBox
             checkBoxProps={{

@@ -66,6 +66,14 @@ function MyApp({ Component, pageProps }) {
             '/admin/reset-password',
             '/admin/reset-password/'
         ];
+        const staffPublicPaths = [
+            '/staff/login',
+            '/staff/login/',
+            '/staff/forgot-password',
+            '/staff/forgot-password/',
+            '/staff/reset-password',
+            '/staff/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
@@ -85,6 +93,33 @@ function MyApp({ Component, pageProps }) {
                 if (adminPublicPaths.includes(path)) {
                     router.push({
                         pathname: '/admin/dashboard',
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            }
+        } else if (path.startsWith('/staff')) {
+            if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
+                if (!staffPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/staff/login',
+                        query: {
+                            "hinan": 1
+                        }
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            } else {
+                if (staffPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/staff/dashboard',
                     });
                 } else {
                     router.push({

@@ -122,9 +122,8 @@ export default function AdminSpecialCarePage() {
   };
 
   function fetchData(response) {
-    setLoader(true)
-
     if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+        setLoader(true)
         const data = response.data.model.list;
         var additionalColumnsArrayWithOldData = [...columnsData];
         let preparedList = [];
@@ -146,6 +145,7 @@ export default function AdminSpecialCarePage() {
         setTableLoading(false);
         setLoader(false)
     }
+    setTableLoading(false);
   }
 
    /**

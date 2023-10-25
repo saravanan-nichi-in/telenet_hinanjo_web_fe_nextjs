@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
-function StaffDashboard() {
+function StockpileDashboard() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
 
     useEffect(() => {
@@ -14,10 +14,10 @@ function StaffDashboard() {
 
     return (
         <div>
-            Dashboard
+            Stockpile Dashboard
         </div>
     )
 }
 
-export default StaffDashboard;
+export default StockpileDashboard;
 

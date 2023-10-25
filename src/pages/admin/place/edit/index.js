@@ -39,6 +39,7 @@ export default function PlaceUpdatePage() {
   const [apiResponse, setApiResponse] = useState({});
   const Place = useAppSelector((state) => state.placeReducer.place);
   const id = Place?.id
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   //Delete (CR)
   // const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
 
@@ -1461,12 +1462,12 @@ export default function PlaceUpdatePage() {
                     <div className="col-12 lg:col-6 p-0 lg:pl-5 mt-5">
                       <GoogleMapComponent
                         height={"450px"}
-                        search={true}
                         initialPosition={{
                           lat: currentLattitude,
                           lng: currentLongitude,
                         }}
                         searchResult={searchResult}
+                        mapScale={settings_data?.map_scale}
                       />
                       <div className="mt-5  lg:flex">
                         <div className="lg:col-9 lg:pl-0 mb-3 lg:mb-0">
