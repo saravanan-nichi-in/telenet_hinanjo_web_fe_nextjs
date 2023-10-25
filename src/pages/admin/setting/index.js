@@ -128,7 +128,6 @@ export default function Setting() {
     if (res) {
       setLoader(true);
       const data = res.data.model;
-     console.log(data?.initial_load_status == "1" ? true : false || "")
       initialValues.map_scale = data?.map_scale + "" || "";
       initialValues.footer = data?.footer || "";
       initialValues.type_name_ja = data?.type_name_ja || "";
@@ -143,8 +142,8 @@ export default function Setting() {
         data?.initial_load_status == "1" ? true : false || "";
       initialValues.default_shelf_life = data?.default_shelf_life || "",
         initialValues.scheduler_option = data?.initial_load_status == "1" ? true : false || "";
-
-      const PublicData = data?.public_display_order.map((item) => {
+      setLoader(false);
+      const PublicData = data?.public_display_order?.map((item) => {
         let namePublic;
         if (item.column_name == "name") {
           namePublic = "name_kanji";
@@ -163,7 +162,6 @@ export default function Setting() {
       });
       setData(PublicData);
       setResponse(data);
-      setLoader(false);
     }
   }
 
@@ -175,7 +173,7 @@ export default function Setting() {
   };
   const map = (
     <ol>
-      {data.map((item, index) => (
+      {data?.map((item, index) => (
         <li key={index}>
           <NormalCheckBox
             checkBoxProps={{

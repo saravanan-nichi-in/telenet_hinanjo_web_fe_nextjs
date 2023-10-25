@@ -161,6 +161,7 @@ export default function AdminPlacePage() {
       setTableLoading(false);
       setLoader(false)
     }
+    setTableLoading(false);
   }
 
   /**
