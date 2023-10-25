@@ -26,6 +26,40 @@ export default function Setting() {
   const { localeJson, locale } = useContext(LayoutContext);
   const [response, setResponse] = useState({});
   const { getList, update } = systemSettingServices;
+
+  const public_display_order_data= [
+    {
+        "is_visible": "0",
+        "column_id": "0",
+        "column_name": "refugee_name",
+        "display_order": 1
+    },
+    {
+        "is_visible": "0",
+        "column_id": "1",
+        "column_name": "name",
+        "display_order": 2
+    },
+    {
+        "is_visible": "0",
+        "column_id": "2",
+        "column_name": "age",
+        "display_order": 3
+    },
+    {
+        "is_visible": "0",
+        "column_id": "3",
+        "column_name": "gender",
+        "display_order": 4
+    },
+    {
+        "is_visible": "0",
+        "column_id": "4",
+        "column_name": "address",
+        "display_order": 5
+    }
+]
+
   const schema = Yup.object().shape({
     footer: Yup.string().required(translate(localeJson, "footer_required")),
     type_name_ja: Yup.string().required(
@@ -143,7 +177,8 @@ export default function Setting() {
       initialValues.default_shelf_life = data?.default_shelf_life || "",
         initialValues.scheduler_option = data?.initial_load_status == "1" ? true : false || "";
       setLoader(false);
-      const PublicData = data?.public_display_order?.map((item) => {
+      let public_data= data?.public_display_order||public_display_order_data
+      const PublicData = public_data.map((item) => {
         let namePublic;
         if (item.column_name == "name") {
           namePublic = "name_kanji";
