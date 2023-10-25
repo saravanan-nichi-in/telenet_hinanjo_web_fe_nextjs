@@ -160,84 +160,84 @@ const AppMenu = () => {
                 },
             ]
         },
-        // {
-        //     label: translate(localeJson, 'evacuee_information'),
-        //     icon: <MdDashboard size={20} />,
-        //     items: [
-        //         {
-        //             label: translate(localeJson, 'evacuee_information'),
-        //             icon: <MdDashboard size={20} />,
-        //             items: [
-        //                 {
-        //                     label: translate(localeJson, 'list_of_evacuees'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/family?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/family')
-        //                 },
-        //                 {
-        //                     label: translate(localeJson, 'temporary_registrants'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/temporary/family?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/temporary/family')
-        //                 },
-        //                 {
-        //                     label: translate(localeJson, 'external_evacuees_list'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/external/family-list?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/external/family-list')
-        //                 },
-        //             ]
-        //         },
-        //     ]
-        // },
-        // {
-        //     label: translate(localeJson, 'staff_stockpile_management'),
-        //     icon: <MdDashboard size={20} />,
-        //     items: [
-        //         {
-        //             label: translate(localeJson, 'staff_stockpile_management'),
-        //             icon: <MdDashboard size={20} />,
-        //             items: [
-        //                 {
-        //                     label: translate(localeJson, 'stockpile_list'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/stockpile/dashboard?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/stockpile/dashboard')
-        //                 },
-        //                 {
-        //                     label: translate(localeJson, 'stockpile_history'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/stockpile/history?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/stockpile/history')
-        //                 }
-        //             ]
-        //         },
-        //     ]
-        // },
-        // {
-        //     label: translate(localeJson, 'setting'),
-        //     icon: <MdDashboard size={20} />,
-        //     items: [
-        //         {
-        //             label: translate(localeJson, 'setting'),
-        //             icon: <MdDashboard size={20} />,
-        //             items: [
-        //                 {
-        //                     label: translate(localeJson, 'necessary_supplies_registration'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/supplies?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/supplies')
-        //                 },
-        //                 {
-        //                     label: translate(localeJson, 'manual_registration_of_evacuees'),
-        //                     icon: <ImUsers size={20} />,
-        //                     to: '/staff/register/check-in?hinan=1',
-        //                     active: router.pathname.startsWith('/staff/register/check-in')
-        //                 },
-        //             ]
-        //         },
-        //     ]
-        // },
+        {
+            label: translate(localeJson, 'evacuee_information'),
+            icon: <MdDashboard size={20} />,
+            items: [
+                {
+                    label: translate(localeJson, 'evacuee_information'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'list_of_evacuees'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/family?hinan=1',
+                            active: router.pathname.startsWith('/staff/family')
+                        },
+                        {
+                            label: translate(localeJson, 'temporary_registrants'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/temporary/family?hinan=1',
+                            active: router.pathname.startsWith('/staff/temporary/family')
+                        },
+                        {
+                            label: translate(localeJson, 'external_evacuees_list'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/external/family-list?hinan=1',
+                            active: router.pathname.startsWith('/staff/external/family-list')
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            label: translate(localeJson, 'staff_stockpile_management'),
+            icon: <MdDashboard size={20} />,
+            items: [
+                {
+                    label: translate(localeJson, 'staff_stockpile_management'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'stockpile_list'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/stockpile/dashboard?hinan=1',
+                            active: router.pathname.startsWith('/staff/stockpile/dashboard')
+                        },
+                        {
+                            label: translate(localeJson, 'stockpile_history'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/stockpile/history?hinan=1',
+                            active: router.pathname.startsWith('/staff/stockpile/history')
+                        }
+                    ]
+                },
+            ]
+        },
+        {
+            label: translate(localeJson, 'setting'),
+            icon: <MdDashboard size={20} />,
+            items: [
+                {
+                    label: translate(localeJson, 'setting'),
+                    icon: <MdDashboard size={20} />,
+                    items: [
+                        {
+                            label: translate(localeJson, 'necessary_supplies_registration'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/supplies?hinan=1',
+                            active: router.pathname.startsWith('/staff/supplies')
+                        },
+                        {
+                            label: translate(localeJson, 'manual_registration_of_evacuees'),
+                            icon: <ImUsers size={20} />,
+                            to: '/staff/register/check-in?hinan=1',
+                            active: router.pathname.startsWith('/staff/register/check-in')
+                        },
+                    ]
+                },
+            ]
+        },
     ];
 
     return (
