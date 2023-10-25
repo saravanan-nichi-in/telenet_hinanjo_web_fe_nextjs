@@ -146,6 +146,7 @@ export default function AdminSpecialCarePage() {
         setTableLoading(false);
         setLoader(false)
     }
+    setTableLoading(false);
   }
 
    /**
