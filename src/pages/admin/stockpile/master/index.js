@@ -399,6 +399,16 @@ export default function AdminStockPileMaster() {
                                         rows={getListPayload.filters.limit}
                                         paginatorLeft={true}
                                         onPageHandler={(e) => onPaginationChange(e)}
+                                        onSort= {(data) => {
+                                            setGetListPayload({
+                                                ...getListPayload,
+                                                filters: {
+                                                  ...getListPayload.filters,
+                                                  order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                                }
+                                              }
+                                              )
+                                        }}
                                     />
                                 </div>
                             </div>
