@@ -24,7 +24,7 @@ export default function EvacueeFamilyDetail() {
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
 
     const evacueeFamilyDetailColumns = [
-        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem" },
+        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem",className: "sno_class" },
         { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
         { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
         { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },

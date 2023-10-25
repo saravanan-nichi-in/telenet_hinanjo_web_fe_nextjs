@@ -36,7 +36,7 @@ export default function EvacuationPage() {
     });
 
     const evacuationTableColumns = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left',className: "sno_class"},
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "6rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: 'left' },
