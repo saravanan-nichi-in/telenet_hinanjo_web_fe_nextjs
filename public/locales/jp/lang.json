@@ -213,7 +213,44 @@
       "master_questionaries": "全体の個別項目",
       "questionnaire_name": "項目",
       "questionnaire_description": "詳細",
-      "action": "アクション"
+      "action": "アクション",
+      "dateFormat":"yy年mm月dd日",
+      "today":"今日",
+      "clear":"クリア",
+      "calendar":{
+        "dayNames":{
+          "sunday":"日曜日",
+          "monday":"月曜日",
+          "tuesday":"火曜日",
+          "wednesday":"水曜日",
+          "thursday":"木曜日",
+          "friday":"金曜日",
+          "saturday":"土曜日"
+        },
+        "dayNamesShort":{
+          "su":"日",
+          "mo":"月",
+          "tu":"火",
+          "we":"水",
+          "th":"木",
+          "fr":"金",
+          "sa":"土"
+        },
+        "monthNamesShort":{
+          "jan":"1月",
+          "feb":"2月",
+          "mar":"3月",
+          "apr":"4月",
+          "may":"5月",
+          "jun":"6月",
+          "jul":"7月",
+          "aug":"8月",
+          "sep":"9月",
+          "oct":"10月",
+          "nov":"11月",
+          "dec":"12月"
+        }
+      }
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
