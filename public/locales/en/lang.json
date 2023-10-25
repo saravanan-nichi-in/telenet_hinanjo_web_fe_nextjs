@@ -214,7 +214,44 @@
       "master_questionaries": "Master Questionaries",
       "questionnaire_name": "Name",
       "questionnaire_description": "Description",
-      "action": "Action"
+      "action": "Action",
+      "dateFormat":"yy/mm/dd ",
+      "today":"Today",
+      "clear":"Clear",
+      "calendar":{
+        "dayNames":{
+          "sunday":"Sunday",
+          "monday":"Monday",
+          "tuesday":"Tuesday",
+          "wednesday":"Wednesday",
+          "thursday":"Thursday",
+          "friday":"Friday",
+          "saturday":"Saturday"
+        },
+        "dayNamesShort":{
+          "su":"Su",
+          "mo":"Mo",
+          "tu":"Tu",
+          "we":"We",
+          "th":"Th",
+          "fr":"Fr",
+          "sa":"Sa"
+        },
+        "monthNamesShort":{
+          "jan":"Jan",
+          "feb":"Feb",
+          "mar":"Mar",
+          "apr":"Apr",
+          "may":"May",
+          "jun":"Jun",
+          "jul":"Jul",
+          "aug":"Aug",
+          "sep":"Sep",
+          "oct":"Oct",
+          "nov":"Nov",
+          "dec":"Dec"
+        }
+      }
     },
     "validation": {
       "staff_name_required": "Staff Name required",
