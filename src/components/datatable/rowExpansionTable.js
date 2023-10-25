@@ -40,7 +40,6 @@ export default function RowExpansionTable(props) {
         rowExpansionClassName,
         rowExpansionOnRowClick,
         onRowClick,
-        expandAllTrigger,
         expandAllButtonProps,
         ...restProps
     } = props;
@@ -114,15 +113,6 @@ export default function RowExpansionTable(props) {
             <Button buttonProps={{ icon: "pi pi-minus", text: " Collapse All", onClick: collapseAll }} />
         </div>
     );
-
-    useEffect(()=>{
-        if(expandAllTrigger){
-            expandAll();
-        }
-        else{
-            collapseAll();
-        }
-    }, [expandAllTrigger])
 
     return (
         <div className={`${parentClass} ${custom || 'custom-table'}`}>
