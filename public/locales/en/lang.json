@@ -34,7 +34,7 @@
       "edit_staff_management": "Edit Staff Management",
       "edit_admin_management": "Edit Admin Management",
       "admin_information_registration": "Admin Information registration",
-      "material_information_registration": "Material Create",
+      "material_information_registration": "Add Material",
       "special_care_create": "Special Care Create",
       "special_care_edit": "Special Care Edit",
       "edit_material_information": "Edit material information",
@@ -427,7 +427,8 @@
       "stockpile_name_required": "Product Name is required.",
       "number_field": "Field should be a valid number.",
       "valid_image_file": "Image format should be valid.",
-      "image_size_validation": "Image size must not exceed 5 MB."
+      "image_size_validation": "Image size must not exceed 5 MB.",
+      "stockpile_shelf_life_max": "Shelf life should not exceed 999."
     },
     "buttons": {
       "login": "Login",

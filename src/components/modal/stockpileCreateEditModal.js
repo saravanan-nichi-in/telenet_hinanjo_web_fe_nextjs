@@ -10,7 +10,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
 import { InputSelect, SelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
-import { InputIcon, TextAreaFloatLabel } from "../input";
+import { InputFloatLabel, InputIcon, TextAreaFloatLabel } from "../input";
 import { MailSettingsOption1, MailSettingsOption2 } from '@/utils/constant';
 import { InputFile } from '@/components/upload';
 import { StockpileService } from "@/services/stockpilemaster.service";
@@ -29,7 +29,7 @@ export default function StockpileCreateEditModal(props) {
         shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
             .positive(translate(localeJson, 'number_field'))
             .integer(translate(localeJson, 'number_field'))
-            .max(999),
+            .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         image_logo: Yup.mixed()
             .notRequired() // Allow it to be nullable
             .test('fileSize', translate(localeJson, 'image_size_validation'), (value) => {
@@ -142,53 +142,51 @@ export default function StockpileCreateEditModal(props) {
                             <div className={`modal-content`}>
                                 <div>
                                     <form onSubmit={handleSubmit}>
-                                        <div className="pt-3">
-                                            <div className='pb-1'>
-                                                <NormalLabel spanClass={"p-error"}
-                                                    spanText={"*"}
-                                                    text={translate(localeJson, 'stockpile_management_create_edit_field_category')} />
-                                            </div>
-                                            <InputSelect dropdownProps={{
-                                                name: "category",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                value: values.category,
-                                                options: props.categories,
-                                                inputSelectClass: "create_input_stock"
-                                            }} parentClass={`${errors.category && touched.category && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.category && touched.category && errors.category} />
+                                        <div className="mt-5">
+                                                <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "category",
+                                                    spanText: "*",
+                                                    spanClass: "p-error",
+                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                    options: props.categories,
+                                                    value: values.category,
+                                                    onChange: (e) => {
+                                                        if(e.value=="--") {
+                                                            values.category=''
+                                                        } else {
+                                                            values.category=e.value
+                                                        }
+                                                    },
+                                                    onBlur: handleBlur,
+                                                    text: translate(localeJson, "stockpile_management_create_edit_field_category"),
+                                                    
+                                                }}/>
+                                                <ValidationError errorBlock={errors.category && touched.category && errors.category} />
                                         </div>
-                                        <div className="pt-3 ">
-                                            <div className='pb-1'>
-                                                <NormalLabel spanClass={"p-error"}
-                                                    spanText={"*"}
-                                                    text={translate(localeJson, 'stockpile_management_create_edit_field_product_name')} />
-                                            </div>
-                                            <InputIcon inputIconProps={{
-                                                name: "product_name",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                value: values.product_name,
-                                                inputClass: "create_input_stock",
-                                            }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
+                                        <div className="mt-5">
+                                                    <InputFloatLabel inputFloatLabelProps={{
+                                                        name: "product_name",
+                                                        spanText: "*",
+                                                        spanClass: "p-error",
+                                                        value: values.product_name,
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        text : translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
+                                                    }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
                                         </div>
-                                        <div className="pt-3 ">
-                                            <div className='pb-1'>
-                                                <NormalLabel
-                                                    text={translate(localeJson, 'stockpile_management_create_edit_field_shelf_life')} />
-                                            </div>
-                                            <InputIcon inputIconProps={{
-                                                name: "shelf_life",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                type: "number",
-                                                min: 100,
-                                                max:999,
-                                                value: values.shelf_life,
-                                                inputClass: "create_input_stock",
-                                            }} parentClass={`${errors.shelf_life && touched.shelf_life && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.shelf_life && touched.shelf_life && errors.shelf_life} />
+                                        <div className="mt-5">
+                                                    <InputFloatLabel inputFloatLabelProps={{
+                                                        name: "shelf_life",
+                                                        spanClass: "p-error",
+                                                        value: values.shelf_life,
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        text : translate(localeJson, 'stockpile_management_create_edit_field_shelf_life'),
+                                                    }} parentClass={`${errors.shelf_life && touched.shelf_life && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.shelf_life && touched.shelf_life && errors.shelf_life} />
                                         </div>
                                         <div className="py-3 ">
                                             <div className='pb-1'>
@@ -200,8 +198,9 @@ export default function StockpileCreateEditModal(props) {
                                                 onChange: (event) => {
                                                     setFieldValue("image_logo", event.currentTarget.files[0]);
                                                 },
+                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 inputFileStyle: { fontSize: "12px" }
-                                            }} parentClass={"create_input_stock"} />
+                                            }} parentClass={"create_input_stock w-full lg:w-25rem md:w-23rem sm:w-21rem"} />
                                             <ValidationError errorBlock={errors.image_logo && touched.image_logo && errors.image_logo} />
                                         </div>
                                     </form>
