@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { getValueByKeyRecursively as translate,getGeneralDateTimeDisplayFormat } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
+import { useAppSelector } from "@/redux/hooks";
 import {
   Button,
   DividerComponent,
@@ -32,6 +33,7 @@ export default function PlaceCreatePage() {
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(
@@ -1354,6 +1356,7 @@ export default function PlaceCreatePage() {
                             lng: currentLongitude,
                           }}
                           searchResult={searchResult}
+                          mapScale={settings_data?.map_scale}
                         />
                         <div className="mt-5 lg:flex">
                           <div className="lg:col-9 lg:pl-0 mb-3 lg:mb-0">
