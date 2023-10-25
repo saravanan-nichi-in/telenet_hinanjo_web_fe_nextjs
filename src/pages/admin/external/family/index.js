@@ -24,6 +24,25 @@ export default function ExternalEvacuees() {
     /* Services */
     const { getChartScreenData } = ExternalEvacuationServices;
 
+    const chartBackgroundColor = [
+        {
+            backgroundColor: 'rgba(31, 119, 180, 1)',
+            borderColor: 'rgb(31, 119, 180)',
+        },
+        {
+            backgroundColor: 'rgba(255, 127, 14, 1)',
+            borderColor: 'rgb(255, 127, 14)',
+        },
+        {
+            backgroundColor: 'rgba(44, 160, 44, 1)',
+            borderColor: 'rgb(44, 160, 44)',
+        },
+        {
+            backgroundColor: 'rgba(214, 39, 40, 0.2)',
+            borderColor: 'rgb(214, 39, 40)',
+        }
+    ];
+
     const externalEvacueesTallyChartOptions = {
         scales: {
             x: {
@@ -162,12 +181,12 @@ export default function ExternalEvacuees() {
             let personCountByCategory = response.aggregations.personsCountByCategory;
             setFoodSupportCount(response.aggregations.externalPersonCountOptedFood);
             let personCountCenter = [];
-            personCountByCenter.map((item) => {
+            personCountByCenter.map((item, index) => {
                 let personDataSet = {
                     label: item[0],
                     data: [{ x: 1, y: item[1] }],
-                    backgroundColor: 'rgba(31, 119, 180, 1)',
-                    borderColor: 'rgb(31, 119, 180)',
+                    backgroundColor: chartBackgroundColor[(index % chartBackgroundColor.length)].backgroundColor,
+                    borderColor: chartBackgroundColor[(index % chartBackgroundColor.length)].borderColor,
                     borderWidth: 1,
                     barPercentage: 0.8,
                     categoryPercentage: 1,
@@ -228,8 +247,6 @@ export default function ExternalEvacuees() {
                     foodData.push(obj[key])
                 }
             });
-
-            console.log(foodData);
 
             let placeCategoryDataSet = {
                 labels: [translate(localeJson, 'city_in'), translate(localeJson, 'city_out'), translate(localeJson, 'pref_out')],
