@@ -9,7 +9,7 @@ import { DashboardServices } from '@/services';
 function AdminDashboard() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const columnsData = [
-        { field: 'number', header: translate(localeJson, 'number'), minWidth: '5rem', headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'number', header: translate(localeJson, 'number'),headerClassName: "custom-header",className: "sno_class",  textAlign: 'left' },
         { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', headerClassName: "custom-header" },
         { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header" },
         { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold" },

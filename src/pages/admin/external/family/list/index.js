@@ -55,8 +55,8 @@ export default function ExteranalEvacuationPage() {
     ];
 
     const externalEvacueesListColumns = [
-        { field: "si_no", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false },
-        { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none' },
+        { field: "si_no", header: translate(localeJson, 'si_no'),className: "sno_class",sortable: false },
+        { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none' ,className: "sno_class"},
         { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
         { field: "place", header: translate(localeJson, 'place'), minWidth: "7rem", sortable: false },
         { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
