@@ -241,8 +241,8 @@ export default function ExternalEvacuees() {
             };
             setChartData(personCountDataset);
             setChartOptions(externalEvacueesTallyChartOptions);
-            let personCountCategory = response.locale == 'jp' ? personCountCategory_jp : personCountCategory_en;
-            let personCountFoodSupport = response.locale == 'jp' ? personCountFoodSupport_jp : personCountFoodSupport_en;
+            let personCountCategory = response.locale == 'ja' ? personCountCategory_jp : personCountCategory_en;
+            let personCountFoodSupport = response.locale == 'ja' ? personCountFoodSupport_jp : personCountFoodSupport_en;
 
             personCountByCategory.map((item, index) => {
                 let foundObject = personCountCategory.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
