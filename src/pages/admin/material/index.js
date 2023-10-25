@@ -263,7 +263,7 @@ export default function AdminMaterialPage() {
                                         type: 'submit',
                                         rounded: "true",
                                         buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'signup'),
+                                        text: translate(localeJson, 'material_information_registration'),
                                         onClick: () => {
                                             setRegisterModalAction("create")
                                             setCurrentEditObj({ name: "", unit: "" })
