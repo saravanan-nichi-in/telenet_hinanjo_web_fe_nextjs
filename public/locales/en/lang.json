@@ -389,7 +389,8 @@
       "stockpile_name_required": "Product Name is required.",
       "number_field": "Field should be a valid number.",
       "valid_image_file": "Image format should be valid.",
-      "image_size_validation": "Image size must not exceed 5 MB."
+      "image_size_validation": "Image size must not exceed 5 MB.",
+      "stockpile_shelf_life_max": "Shelf life should not exceed 999."
     },
     "buttons": {
       "login": "Login",

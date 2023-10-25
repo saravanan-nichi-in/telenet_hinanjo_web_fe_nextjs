@@ -389,7 +389,8 @@
       "stockpile_name_required": "備蓄品名は必須です。",
       "number_field": "フィールドは有効な数字である必要があります。",
       "valid_image_file": "画像のフォーマットが正しいものをご使用ください。",
-      "image_size_validation": "画像サイズは5MB以内のものをご使用ください。"
+      "image_size_validation": "画像サイズは5MB以内のものをご使用ください。",
+      "stockpile_shelf_life_max": "賞味期限は 999 を超えてはなりません。"
     },
     "buttons": {
       "login": "ログイン",
