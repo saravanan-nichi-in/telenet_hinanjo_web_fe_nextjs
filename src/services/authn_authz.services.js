@@ -56,7 +56,7 @@ function _logout() {
         window.location.href = "/admin/login";
     } else {
         localStorage.removeItem('staff');
-        admin.next(null);
+        staff.next(null);
         window.location.href = "/staff/login?hinan=1";
     }
 }

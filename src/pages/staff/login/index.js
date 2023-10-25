@@ -17,18 +17,21 @@ const LoginPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
-
-    /* Services */
-    const { login } = AuthenticationAuthorizationService;
-
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
-            .email(translate(localeJson, 'email_valid')),
+            .test('trim-and-validate', translate(localeJson, 'email_valid'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters')),
     });
+
+    /* Services */
+    const { login } = AuthenticationAuthorizationService;
 
     const onLoginSuccess = (values) => {
         if (AuthenticationAuthorizationService.staffValue) {
@@ -46,9 +49,9 @@ const LoginPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
-                    const updatedValues = values;
-                    updatedValues.place_id = router.query ? router.query.hinan : "";
-                    login('staff', updatedValues, onLoginSuccess);
+                    let preparedPayload = values;
+                    preparedPayload['place_id'] = router.query ? router.query.hinan : "";
+                    login('staff', preparedPayload, onLoginSuccess);
                 }}
             >
                 {({
@@ -88,7 +91,6 @@ const LoginPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <MailFilled />,
-                                                    placeholder: translate(localeJson, 'mail_address'),
                                                     value: values.email
                                                 }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
@@ -107,7 +109,6 @@ const LoginPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <LockFilled />,
-                                                    placeholder: translate(localeJson, 'password'),
                                                 }}
                                                     parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
@@ -121,10 +122,10 @@ const LoginPage = () => {
                                                     severity: "primary"
                                                 }} />
                                             </div>
-                                            <div className='flex justify-content-center' onClick={() => router.push('/staff/forgot-password')}>
+                                            <div className='w-full flex justify-content-center mt-0'>
                                                 <Button buttonProps={{
+                                                    type: 'button',
                                                     text: translate(localeJson, 'forgot_password_caption'),
-                                                    buttonClass: "custom_radiusBtn",
                                                     link: "true",
                                                     onClick: () => router.push('/staff/forgot-password'),
                                                     severity: "primary"
