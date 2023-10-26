@@ -251,7 +251,14 @@
           "dec":"12月"
         }
       },
-      "evacuation_center_management_system_list":"避難所管理システム避難所管理システム一覧"
+      "evacuation_center_management_system_list":"避難所管理システム避難所管理システム一覧",
+      "place_name_list":"避難所",
+      "address_public_evacuees":"住所",
+      "place_capacity":"収容人数",
+      "percent":"避難者数",
+      "status_public_evacuees":"状態",
+      "active":"有効",
+      "inactive":"無効"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

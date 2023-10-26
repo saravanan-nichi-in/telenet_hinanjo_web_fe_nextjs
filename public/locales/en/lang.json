@@ -252,7 +252,15 @@
           "dec":"Dec"
         }
       },
-      "evacuation_center_management_system_list":"Evacuation center management system List"
+      "evacuation_center_management_system_list":"Evacuation center management system List",
+      "place_name_list":"Place Name",
+      "address_public_evacuees":"Address",
+      "place_capacity":"Place Capacity",
+      "percent":"Percent",
+      "status_public_evacuees":"Status",
+      "active":"Active",
+      "inactive":"Inactive"
+
     },
     "validation": {
       "staff_name_required": "Staff Name required",
