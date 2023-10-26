@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import jpJson from '../../../public/locales/jp/lang.json'
 import enJson from '../../../public/locales/en/lang.json'
@@ -6,10 +7,11 @@ import enJson from '../../../public/locales/en/lang.json'
 export const LayoutContext = React.createContext();
 
 export const LayoutProvider = (props) => {
+    const router = useRouter();
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
-        menuMode: 'static',
+        menuMode: window.location.pathname.startsWith('/user') ? 'overlay' : 'static',
         colorScheme: 'light',
         theme: 'lara-light-indigo',
         scale: 14
@@ -25,6 +27,22 @@ export const LayoutProvider = (props) => {
     const [localeJson, setLocaleJson] = useState(jpJson);
     const [locale, setLocale] = useState(localStorage.getItem("locale"));
     const [loader, setLoader] = useState(false);
+
+    useEffect(() => {
+        router.events.on('routeChangeComplete', () => {
+            updateLayoutConfigState();
+        });
+    }, []);
+
+    /**
+     * Layout config state update
+     */
+    const updateLayoutConfigState = () => {
+        setLayoutConfig(prevState => ({
+            ...prevState,
+            menuMode: window.location.pathname.startsWith('/user') ? 'overlay' : 'static',
+        }));
+    }
 
     useEffect(() => {
         if (locale && locale == 'en') {
@@ -91,7 +109,7 @@ export const LayoutProvider = (props) => {
         onChangeLocale,
         localeJson,
         loader,
-        setLoader
+        setLoader,
     };
 
     return <LayoutContext.Provider value={value}>{props.children}</LayoutContext.Provider>;

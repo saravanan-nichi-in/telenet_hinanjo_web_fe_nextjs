@@ -192,29 +192,30 @@ function AdminDashboard() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <div className=''>
-                        <h5 className='page-header1'>  {translate(localeJson, 'evacuation_status_list')}</h5>
-                    </div>
+                    <h5 className='page-header1'>  {translate(localeJson, 'evacuation_status_list')}</h5>
                     <hr />
-                    <div className='mt-3'>
-                        <NormalTable
-                            lazy
-                            totalRecords={totalCount}
-                            loading={tableLoading}
-                            stripedRows={true}
-                            className={"custom-table-cell"}
-                            showGridlines={"true"}
-                            value={list}
-                            frozenValue={_.size(list) > 0 && frozenArray}
-                            columns={columns}
-                            filterDisplay="menu"
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            paginator={true}
-                            first={getListPayload.filters.start}
-                            rows={getListPayload.filters.limit}
-                            paginatorLeft={true}
-                            onPageHandler={(e) => onPaginationChange(e)}
-                        />
+                    <div>
+
+                        <div className='mt-3'>
+                            <NormalTable
+                                lazy
+                                totalRecords={totalCount}
+                                loading={tableLoading}
+                                stripedRows={true}
+                                className={"custom-table-cell"}
+                                showGridlines={"true"}
+                                value={list}
+                                frozenValue={_.size(list) > 0 && frozenArray}
+                                columns={columns}
+                                filterDisplay="menu"
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                paginator={true}
+                                first={getListPayload.filters.start}
+                                rows={getListPayload.filters.limit}
+                                paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

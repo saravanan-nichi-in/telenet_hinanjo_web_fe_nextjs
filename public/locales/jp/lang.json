@@ -250,7 +250,18 @@
           "nov":"11月",
           "dec":"12月"
         }
-      }
+      },
+      "evacuation_center_management_system_list":"避難所管理システム避難所管理システム一覧",
+      "place_name_list":"避難所",
+      "address_public_evacuees":"住所",
+      "place_capacity":"収容人数",
+      "percent":"避難者数",
+      "status_public_evacuees":"状態",
+      "active":"有効",
+      "inactive":"無効",
+      "new_to_admission_procedures":"入所手続き",
+      "Evacuee_Search_random_order":"避難者検索（順不同）",
+      "name_public_evacuee":"氏名"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -314,7 +325,11 @@
       "download": "ダウンロード",
       "create_special_care": "新規登録",
       "create_place": "新規登録",
-      "details": "明細"
+      "details": "明細",
+      "admission":"入所",
+      "exit":"退所",
+      "go_to_staff_screen":"スタッフ画面へ",
+      "exit_procedure":"退所手続きへ戻る"
     },
     "footer": {},
     "form": {
@@ -375,7 +390,8 @@
       "english": "英語",
       "japanese": "日本語",
       "people_count": "人数",
-      "notification_email": "通知先"
+      "notification_email": "通知先",
+      "user_dashboard_note":"※ 退所する時は、必ず「退所」の手続きをしてください。"
     }
   },
   "staff": {

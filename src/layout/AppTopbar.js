@@ -10,7 +10,7 @@ import { MdOutlineResetTv } from 'react-icons/md';
 import { ChangePasswordModal } from '@/components/modal';
 
 const AppTopbar = forwardRef((props, ref) => {
-    const { layoutState, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const { layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
@@ -77,7 +77,6 @@ const AppTopbar = forwardRef((props, ref) => {
             icon: <LogoutOutlined />,
             key: '3',
         },
-
     ];
     // Staff menu information
     const StaffItems = [
@@ -114,7 +113,30 @@ const AppTopbar = forwardRef((props, ref) => {
             icon: <LogoutOutlined />,
             key: '3',
         },
-
+    ];
+    // User menu information
+    const UserItems = [
+        {
+            label: selectedCountryTemplate({
+                name: 'JP',
+                code: 'JP',
+                placeholder: '',
+                image: "/layout/images/jp.png"
+            }),
+            key: '0',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: selectedCountryTemplate({
+                name: 'EN',
+                code: 'US',
+                placeholder: '',
+                image: "/layout/images/us.png"
+            }),
+            key: '1',
+        },
     ];
 
     useEffect(() => {
@@ -149,17 +171,23 @@ const AppTopbar = forwardRef((props, ref) => {
                 onChangePasswordSuccess={onChangePasswordSuccess}
             />
             <div className="layout-topbar">
-                <div className="logo-details">
-                    <div className='logo-view'>
-                        <DiAtom size={35} className='logo-icon' />
+                {layoutConfig.menuMode === 'static' && (
+                    <div className="logo-details">
+                        <div className='logo-view'>
+                            <DiAtom size={35} className='logo-icon' />
+                        </div>
                     </div>
-                </div>
-                <div className='header-details'>
-                    <div className='hamburger'>
-                        <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                            <i className="pi pi-bars" />
-                        </button>
-                    </div>
+                )}
+                <div className='header-details' style={{
+                    width: layoutConfig.menuMode === 'overlay' && "100%"
+                }}>
+                    {layoutConfig.menuMode === 'static' && (
+                        <div className='hamburger'>
+                            <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                                <i className="pi pi-bars" />
+                            </button>
+                        </div>
+                    )}
                     <div className='header-details-first'>
                         {translate(localeJson, 'evacuation_shelter_management_system')}
                     </div>
@@ -170,8 +198,8 @@ const AppTopbar = forwardRef((props, ref) => {
                         <div ref={topbarmenuRef} >
                             <DropdownSelect
                                 icon={"pi pi-chevron-down"}
-                                text={userName}
-                                items={url.startsWith('/admin') ? AdminItems : StaffItems}
+                                text={layoutConfig.menuMode === 'overlay' ? "" : userName}
+                                items={layoutConfig.menuMode === 'overlay' ? UserItems : url.startsWith('/admin') ? AdminItems : StaffItems}
                                 spanText={"Settings"}
                             />
                         </div>

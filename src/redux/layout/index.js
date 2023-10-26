@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    layout: {},
+  layout: {},
+  user: {
+    place: {},
+    other: ""
+  },
 };
 
 export const layout = createSlice({
@@ -12,8 +16,11 @@ export const layout = createSlice({
     setLayout: (state, action) => {
       state.layout = action.payload;
     },
+    setUserDetails: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { setLayout, reset } = layout.actions;
+export const { reset, setLayout, setUserDetails } = layout.actions;
 export default layout.reducer;

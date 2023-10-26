@@ -17,7 +17,6 @@ export default function DropdownSelect(props) {
         <div className={`${parentClass}  ${custom || 'custom-select'}`} style={parentStyle}>
             <Dropdown
                 title={"title"}
-
                 menu={{
                     items,
                 }}
@@ -25,7 +24,6 @@ export default function DropdownSelect(props) {
             >
                 <button type="button" className="p-link layout-topbar-button ml-3">
                     <div className='header-details-first'>
-
                         {text}
                     </div>
                     <i className={`${icon} ml-1`}>{antdIcon}</i>

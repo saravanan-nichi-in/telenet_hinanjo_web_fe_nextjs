@@ -251,7 +251,18 @@
           "nov":"Nov",
           "dec":"Dec"
         }
-      }
+      },
+      "evacuation_center_management_system_list":"Evacuation center management system List",
+      "place_name_list":"Place Name",
+      "address_public_evacuees":"Address",
+      "place_capacity":"Place Capacity",
+      "percent":"Percent",
+      "status_public_evacuees":"Status",
+      "active":"Active",
+      "inactive":"Inactive",
+      "new_to_admission_procedures":"For those who are new to admission procedures",
+      "Evacuee_Search_random_order":"Evacuee Search (random order)",
+      "name_public_evacuee":"Name"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -316,7 +327,11 @@
       "download": "Download",
       "create_special_care": "Create Special Care",
       "create_place": "Create Place",
-      "details": "Details"
+      "details": "Details",
+      "admission":"Admission",
+      "exit":"Exit",
+      "go_to_staff_screen":"Go to staff screen",
+      "exit_procedure":"Exit procedure"
     },
     "footer": {},
     "form": {
@@ -376,7 +391,8 @@
       "report_date_time": "Report Date and Time",
       "post_letter": "〒",
       "english": "English",
-      "japanese": "Japanese"
+      "japanese": "Japanese",
+      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'."
     }
   },
   "staff": {
