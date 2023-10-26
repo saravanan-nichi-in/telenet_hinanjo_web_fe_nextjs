@@ -8,10 +8,14 @@ $desktop: 1200px;
 
 /* Heights */
 $commonHeight: 40px;
+$userDashBoardHeight:350px;
+$userDashboardHeightSm:280px;
 
 /* width */
 $sNoWidth: 50px;
 $actionEditDeleteWidth: 200px;
+$userDashBoardWidth:500px;
+$fullWidth:100%;
 
 /* Transition duration */
 $transitionDuration: .2s;
@@ -28,6 +32,7 @@ $pageHeaderFontSize2: 20px;
 $footerFontSize: 16px;
 $topHeaderFontSize:21px;
 $fileUploadFontSize:12px;
+$userDashBoardFontSize:25px;
 
 /* Fonts weights */
 $commonFontWeight: 500;

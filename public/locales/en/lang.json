@@ -325,7 +325,11 @@
       "download": "Download",
       "create_special_care": "Create Special Care",
       "create_place": "Create Place",
-      "details": "Details"
+      "details": "Details",
+      "admission":"Admission",
+      "exit":"Exit",
+      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'.",
+      "go_to_staff_screen":"Go to staff screen"
     },
     "footer": {},
     "form": {

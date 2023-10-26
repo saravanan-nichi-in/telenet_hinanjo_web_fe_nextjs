@@ -258,7 +258,9 @@
       "percent":"避難者数",
       "status_public_evacuees":"状態",
       "active":"有効",
-      "inactive":"無効"
+      "inactive":"無効",
+      "user_dashboard_note":"※ 退所する時は、必ず「退所」の手続きをしてください。",
+      "go_to_staff_screen":"スタッフ画面へ"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -322,7 +324,9 @@
       "download": "ダウンロード",
       "create_special_care": "新規登録",
       "create_place": "新規登録",
-      "details": "明細"
+      "details": "明細",
+      "admission":"入所",
+      "exit":"退所"
     },
     "footer": {},
     "form": {

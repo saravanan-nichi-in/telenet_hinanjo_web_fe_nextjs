@@ -11,7 +11,14 @@ export default function PublicEvacuees() {
     const [customers, setCustomers] = useState([]);
     const columns = [
         { field: 'id', header:translate(localeJson,'s_no'),className: "sno_class"},
-        { field: 'name', header:translate(localeJson,'place_name_list'), minWidth: "15rem" },
+        { field: 'name', header:translate(localeJson,'place_name_list'), minWidth: "15rem" ,  body: (rowData) => (
+            <div className="text-link">
+                <a href={`/user/dashboard`}>
+                {rowData['name']}
+                </a>
+            </div>
+        ),
+    },
         { field: 'address_place', header:translate(localeJson,'address_public_evacuees') },
         { field: 'total_capacity', header:translate(localeJson,'place_capacity') },
         { field: 'percent', header:translate(localeJson,'percent') },
@@ -19,7 +26,7 @@ export default function PublicEvacuees() {
             field: 'full_status',
             header: translate(localeJson,'status_public_evacuees'),
             body: (rowData) => (
-                <div>
+                <div className="text-link">
                     <Button buttonProps={{
                         text:rowData.full_status === 1 ? translate(localeJson,'active') : translate(localeJson,'inactive'), buttonClass: "text-white w-9",
                         bg: rowData.full_status === 1 ? "bg-red-500" : "bg-grey-500",
