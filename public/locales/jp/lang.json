@@ -250,7 +250,8 @@
           "nov":"11月",
           "dec":"12月"
         }
-      }
+      },
+      "evacuation_center_management_system_list":"避難所管理システム避難所管理システム一覧"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",

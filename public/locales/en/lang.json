@@ -251,7 +251,8 @@
           "nov":"Nov",
           "dec":"Dec"
         }
-      }
+      },
+      "evacuation_center_management_system_list":"Evacuation center management system List"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
