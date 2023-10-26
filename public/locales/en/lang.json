@@ -259,8 +259,10 @@
       "percent":"Percent",
       "status_public_evacuees":"Status",
       "active":"Active",
-      "inactive":"Inactive"
-
+      "inactive":"Inactive",
+      "new_to_admission_procedures":"For those who are new to admission procedures",
+      "Evacuee_Search_random_order":"Evacuee Search (random order)",
+      "name_public_evacuee":"Name"
     },
     "validation": {
       "staff_name_required": "Staff Name required",
@@ -328,8 +330,8 @@
       "details": "Details",
       "admission":"Admission",
       "exit":"Exit",
-      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'.",
-      "go_to_staff_screen":"Go to staff screen"
+      "go_to_staff_screen":"Go to staff screen",
+      "exit_procedure":"Exit procedure"
     },
     "footer": {},
     "form": {
@@ -389,7 +391,8 @@
       "report_date_time": "Report Date and Time",
       "post_letter": "〒",
       "english": "English",
-      "japanese": "Japanese"
+      "japanese": "Japanese",
+      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'."
     }
   },
   "staff": {
