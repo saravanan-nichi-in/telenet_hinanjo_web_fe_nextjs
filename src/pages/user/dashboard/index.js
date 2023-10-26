@@ -1,26 +1,24 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import _ from 'lodash';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button } from "@/components";
-import Link from "next/link";
 
 export default function PublicDashboard() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoader(false);
-        };
-        fetchData();
-    }, []);
+    const { locale, localeJson } = useContext(LayoutContext);
+    const router = useRouter();
+    // Getting storage data with help of reducers
+    const layoutReducer = useSelector((state) => state.layoutReducer);
 
     return (
         <div>
             <div className="grid">
                 <div className="col-12">
                     <div className="card">
-                        <h5 className="page-header1">日比谷公園避難所</h5>
+                        <h5 className="page-header1">{locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}</h5>
                         <hr />
                         <div>
                             <div className="mt-3">
@@ -31,7 +29,8 @@ export default function PublicDashboard() {
                                         custom: "userDashboard",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'admission'),
-                                        severity: "primary"
+                                        severity: "primary",
+                                        disabled: true,
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard "} />
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -40,16 +39,19 @@ export default function PublicDashboard() {
                                         buttonClass: "text-600",
                                         text: translate(localeJson, 'exit'),
                                         bg: "bg-white",
-                                        hoverBg: "hover:bg-primary hover:text-white"
+                                        hoverBg: "hover:bg-primary hover:text-white",
+                                        disabled: true,
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard"} />
                                 </div>
                                 <p className="p-error mt-3 flex justify-content-center" >
                                     {translate(localeJson, 'user_dashboard_note')}
                                 </p>
-                                <div className="text-link">
-                                    <Link href="/staff/dashboard" className="mt-3 flex justify-content-end" >
-                                        {translate(localeJson, 'go_to_staff_screen')}
-                                    </Link>
+                                <div className="mt-3 flex justify-content-end text-higlight clickable-row" onClick={() => {
+                                    router.push({
+                                        pathname: '/staff/dashboard',
+                                    });
+                                }}>
+                                    {translate(localeJson, 'go_to_staff_screen')}
                                 </div>
                             </div>
                         </div>

@@ -10,12 +10,12 @@ export default function PublicEvacuee() {
     const [tableLoading, setTableLoading] = useState(false);
     const [customers, setCustomers] = useState([]);
     const columns = [
-        { field: 'place_name', header:translate(localeJson,'place_name_list')},
-        { field: 'name_phonetic', header:translate(localeJson,'name_phonetic'),minWidth: "15rem" },
-        { field: 'name_kanji', header:translate(localeJson,'name_kanji') },
-        { field: 'age', header:translate(localeJson,'age') },
-        { field: 'gender', header:translate(localeJson,'gender') },
-        { field: 'Address', header:translate(localeJson,'address') },       
+        { field: 'place_name', header: translate(localeJson, 'place_name_list') },
+        { field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), minWidth: "15rem" },
+        { field: 'name_kanji', header: translate(localeJson, 'name_kanji') },
+        { field: 'age', header: translate(localeJson, 'age') },
+        { field: 'gender', header: translate(localeJson, 'gender') },
+        { field: 'Address', header: translate(localeJson, 'address') },
     ];
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function PublicEvacuee() {
                         <h5 className="page-header1">{translate(localeJson, "Evacuee_Search_random_order")}</h5>
                         <hr />
                         <div>
-                        <form>
+                            <form>
                                 <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
                                     <InputFloatLabel
                                         inputFloatLabelProps={{
@@ -51,14 +51,14 @@ export default function PublicEvacuee() {
                                             icon: "pi pi-search",
                                             severity: "primary",
                                             type: "button",
-                                            onClick: () => searchListWithCriteria()
+                                            // onClick: () => searchListWithCriteria()
                                         }} />
                                     </div>
                                 </div>
                             </form>
                             <div className="mt-3">
                                 <NormalTable
-                                    customActionsField="actions" 
+                                    customActionsField="actions"
                                     value={customers} columns={columns}
                                     // loading={tableLoading}
                                     showGridlines={"true"}
