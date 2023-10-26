@@ -9,7 +9,7 @@ export const LayoutProvider = (props) => {
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
-        menuMode: 'static',
+        menuMode: window.location.pathname.startsWith('/user') ? 'overlay' : 'static',
         colorScheme: 'light',
         theme: 'lara-light-indigo',
         scale: 14
