@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button, NormalTable } from "@/components";
-import { PublicEvacueesServices } from '@/services';
+import { UserPlaceListServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserDetails } from '@/redux/layout';
 
@@ -39,7 +39,7 @@ export default function PublicEvacuees() {
     const [totalCount, setTotalCount] = useState(0);
 
     /* Services */
-    const { getList } = PublicEvacueesServices;
+    const { getList } = UserPlaceListServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -53,7 +53,17 @@ export default function PublicEvacuees() {
      * Get public evacuees list
      */
     const getPublicEvacueesList = () => {
-        getList(getListPayload, onGetPublicEvacueesList);
+        let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit) + 1;
+        let payload = {
+            filters: {
+                start: pageStart,
+                limit: getListPayload.filters.limit,
+                sort_by: "",
+                order_by: "desc",
+            },
+            search: "",
+        }
+        getList(payload, onGetPublicEvacueesList);
     }
 
     /**
@@ -64,15 +74,14 @@ export default function PublicEvacuees() {
         var additionalColumnsKeys = [];
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
-        // if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
-        if (response.success && !_.isEmpty(response.data)) {
-            const data = response.data.model;
+        if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+            console.log(response);
+            const data = response.data.model.list;
             // Preparing row data for specific column to display
             if (data.length > 0) {
                 data.map((obj, i) => {
                     let preparedObj = {
-                        // number: getListPayload.filters.start + i + 1,
-                        number: i + 1,
+                        number: getListPayload.filters.start + i + 1,
                         name: <div className={obj.active_flg === 1 ? "text-higlight clickable-row" : ""} onClick={() => onClickPlaceName(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}</div>,
                         address_place: obj.address_place,
                         total_capacity: getTotalCapacity(obj),
@@ -85,7 +94,7 @@ export default function PublicEvacuees() {
             // Update prepared list to the state
             setColumns(additionalColumnsArrayWithOldData);
             setList(preparedList);
-            setTotalCount(response.data.count);
+            setTotalCount(response.data.model.total);
         }
         setTableLoading(false);
     }
@@ -153,7 +162,8 @@ export default function PublicEvacuees() {
                     ...prevState.filters,
                     start: newStartValue,
                     limit: newLimitValue
-                }
+                },
+                search: ""
             }));
         }
     }
