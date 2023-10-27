@@ -9,4 +9,9 @@
         opacity: 1;
         background-color: #f8f9fa;
     }
+    .p-inputgroup-addon {
+        height: $commonHeight;
+        font-weight: $commonFontWeight;
+        font-size: $commonFontSize;
+    }
 }

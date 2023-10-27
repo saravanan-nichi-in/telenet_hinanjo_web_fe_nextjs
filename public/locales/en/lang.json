@@ -411,7 +411,8 @@
       "confirm_password_required": "The confirm password must be required.",
       "confirm_password_notMatch": "The confirmed password does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
-      "forgot_password_success": "A password reset email has been sent to the email address you entered."
+      "forgot_password_success": "A password reset email has been sent to the email address you entered.",
+      "staff_page_dashboard":"STAFF DASHBOARD (TOP)"
     },
     "form": {
       "type": "type",
