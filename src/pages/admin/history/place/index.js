@@ -388,6 +388,7 @@ export default function AdminHistoryPlacePage() {
                             <NormalTable
                                 lazy
                                 id={"history-list"}
+                                className="history-list"
                                 totalRecords={totalCount}
                                 loading={tableLoading}
                                 size={"small"}
