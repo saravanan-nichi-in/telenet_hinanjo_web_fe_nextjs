@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { classNames } from 'primereact/utils';
 import { MailFilled, LockFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { AuthenticationAuthorizationService } from '@/services';
@@ -16,6 +17,8 @@ const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
+    // Getting storage data with help of reducers
+    const layoutReducer = useSelector((state) => state.layoutReducer);
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -50,7 +53,7 @@ const LoginPage = () => {
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
                     let preparedPayload = values;
-                    preparedPayload['place_id'] = router.query ? router.query.hinan : "";
+                    preparedPayload['place_id'] = layoutReducer?.user?.place?.id;
                     login('staff', preparedPayload, onLoginSuccess);
                 }}
             >

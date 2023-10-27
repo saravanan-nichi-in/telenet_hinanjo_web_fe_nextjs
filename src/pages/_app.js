@@ -104,12 +104,7 @@ function MyApp({ Component, pageProps }) {
         } else if (path.startsWith('/staff')) {
             if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
                 if (!staffPublicPaths.includes(path)) {
-                    router.push({
-                        pathname: '/staff/login',
-                        query: {
-                            "hinan": 1
-                        }
-                    });
+                    router.push('/user/list');
                 } else {
                     router.push({
                         pathname: path,
