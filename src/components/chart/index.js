@@ -1,39 +1,32 @@
 import React from 'react';
 import { Chart } from 'primereact/chart';
 
-const DonutChartDemo = ({ labels, data, title,style }) => {
+const Doughnut = ({ labels, data, title, style,bgClr,hvrClr }) => {
+    
     const chartData = {
         labels,
         datasets: [
             {
-                data,
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF5733",
-                    "#33FF57",
-                    "#5A33FF",
-                    "#FF336D",
-                    "#FFC233",
-                    "#33FFB1"
-                ],
-                hoverBackgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF5733",
-                    "#33FF57",
-                    "#5A33FF",
-                    "#FF336D",
-                    "#FFC233",
-                    "#33FFB1"
-                ]
+                data: data, // Set a minimum value of 0.1 for data points
+                backgroundColor: bgClr, // Generate colors based on data length
+                hoverBackgroundColor: hvrClr
             }]
     };
 
     const options = {
         plugins: {
+            tooltip: {
+                callbacks: {
+                    title: () => null,
+                    label: function(context) {
+                        let val = context.raw || '';
+                        if (context.raw == 1) {
+                            val = '0'; // Display "0" on hover if value is 0
+                        }
+                        return context.label+" "+val;
+                    }
+                }
+            },
             legend: {
                 position: "bottom",
                 align: "center",
@@ -42,15 +35,21 @@ const DonutChartDemo = ({ labels, data, title,style }) => {
                     pointStyle: "rect",
                     color: '#495057',
                 }
-            }
+            },
+
+        },
+        maintainAspectRatio: false, // This prevents the chart from maintaining a constant aspect ratio
+        responsive: true,
+        aspectRatio: 1,
+        animation: {
+            animateRotate: false // Disable rotation animation
         }
+        
     };
 
     return (
-  
-            <Chart type="doughnut" data={chartData} options={options} style={style} />
-
+        <Chart type="doughnut" data={chartData} options={options} />
     );
 }
 
-export default DonutChartDemo;
+export default Doughnut;

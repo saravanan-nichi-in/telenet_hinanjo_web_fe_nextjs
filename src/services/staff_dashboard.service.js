@@ -5,12 +5,9 @@ export const StaffDashBoardServices = {
 };
 
 function _getStaffDashboardList(payload, callBackFun) {
-    const no = 1
-    const payload2 = {
-        place_id:parseInt(no, 10)
-    }
+
   axios
-    .get(`/staff/dashboard`,{params:payload2})
+    .get(`/staff/dashboard`,{params:payload})
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
