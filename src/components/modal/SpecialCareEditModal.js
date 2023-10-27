@@ -30,9 +30,8 @@ export default function SpecialCareEditModal(props) {
                 initialValues={props.currentEditObj}
                 enableReinitialize
                 onSubmit={(values, actions) => {
-                    if(props.registerModalAction=="create"||props.registerModalAction=="edit")
-                    {
-                   props.submitForm(values);
+                    if (props.registerModalAction == "create" || props.registerModalAction == "edit") {
+                        props.submitForm(values);
                     }
 
                 }}
@@ -65,7 +64,7 @@ export default function SpecialCareEditModal(props) {
                                             bg: "bg-white",
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
-                                            type:"reset",
+                                            type: "reset",
                                             onClick: () => {
                                                 close();
                                                 resetForm()
