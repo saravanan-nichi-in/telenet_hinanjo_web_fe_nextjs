@@ -468,7 +468,9 @@
       "send": "送信",
       "save": "保存",
       "addition": "追加",
-      "add_stockpile":"新規登録"
+      "add_stockpile":"新規登録",
+      "back_to_top":"TOPに戻る",
+      "inventory":"棚卸"
     },
     "footer": {}
   },
