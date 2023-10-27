@@ -110,7 +110,7 @@ function StockpileDashboard() {
                                 paginatorLeft={true}
                             />
                         </div>
-                        <div className="text-center">
+                        <div className="text-center mt-3">
                             <Button buttonProps={{
                                 buttonClass: "w-8rem",
                                 severity: "primary",
