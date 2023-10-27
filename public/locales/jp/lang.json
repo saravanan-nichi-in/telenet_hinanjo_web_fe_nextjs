@@ -439,9 +439,9 @@
       "confirm_password_required": "新しいパスワード 確認は必須です。",
       "confirm_password_notMatch": " 新しいパスワード 確認用が新しいパスワードと一致しません。",
       "forgot_password_failure": "エラーが発生しました。もう一度やり直してください。",
-      "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"
-    },
-    "form": {
+      "forgot_password_success": "入力されたメールアドレスにパスワード再設定メールを送信しました。"    
+    }, 
+      "form": {
       "type": "種別",
       "stockpile_item_name": "備蓄品名",
       "storage_period": "保管期間",
@@ -463,7 +463,8 @@
       "forgot_password_caption": "パスワードがわからない場合",
       "send": "送信",
       "save": "保存",
-      "addition": "追加"
+      "addition": "追加",
+      "add_stockpile":"新規登録"
     },
     "footer": {}
   },
