@@ -464,7 +464,9 @@
       "send": "Send",
       "save": "Save",
       "addition": "addition",
-      "add_stockpile":"Add Stockpile"
+      "add_stockpile":"Add Stockpile",
+      "back_to_top":"Back To Top",
+      "inventory":"Inventory"
     },
     "footer": {}
   },

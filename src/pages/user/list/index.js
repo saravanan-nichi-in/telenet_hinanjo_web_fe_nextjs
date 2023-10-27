@@ -18,7 +18,7 @@ export default function PublicEvacuees() {
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const columnsData = [
         { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
-        { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "15rem",maxWidth:"15rem", textAlign: 'left' },
+        { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "15rem",maxWidth:"15rem",textAlign: 'left' },
         { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", textAlign: 'left' },
         { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", textAlign: 'left' },
         { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", textAlign: 'left' },
