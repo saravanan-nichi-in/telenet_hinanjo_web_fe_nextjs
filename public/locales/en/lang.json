@@ -262,14 +262,18 @@
       "inactive":"Inactive",
       "new_to_admission_procedures":"For those who are new to admission procedures",
       "Evacuee_Search_random_order":"Evacuee Search (random order)",
-      "name_public_evacuee":"Name"
+      "name_public_evacuee":"Name",
+      "working_date":"Working Date",
+      "quantity_before":"Quantity (Before)",
+      "quantity_after":"Quantity (After)",
+      "expiry_date":"Expiry Date"
     },
     "validation": {
-      "staff_name_required": "Staff Name required",
+      "staff_name_required": "Staff name is required",
       "admin_name_required": "Admin name is required.",
       "supplies_necessary": "Supplies are necessary",
       "phone_min10_required": "Enter 10 or 11 digits for The phone number",
-      "phone_no_required": "Phone number required",
+      "phone_no_required": "Telephone number is required.",
       "special_care_name_jp_required": "Name is required.",
       "special_care_name_en_required": "Name (English) is required.",
       "notification_email_id_required": "Notification email ID is required.",
@@ -308,7 +312,8 @@
       "logo_img_not_greater_than_3mb": "The logo image must not be greater than 3 MB.",
       "admin_name_max_200_characters":"The admin name should be 200 characters or less.",
       "special_care_name_max_required":"Name 255 characters or less.",
-      "special_care_name_en_max_required":"Name (English) 255 characters or less."
+      "special_care_name_en_max_required":"Name (English) 255 characters or less.",
+      "staff_name_max_required":"The staff name should be 200 characters or less."
     },
     "buttons": {
       "import": "Import",
@@ -367,7 +372,11 @@
       "logo_image": "Logo Image",
       "name_phonetic": "Name (phonetic)",
       "name_kanji": "Name (kanji)",
-      "default_shelf_life_days": "Default Shelf Life (Days)"
+      "default_shelf_life_days": "Default Shelf Life (Days)",
+      "inventory_date":"Inventory Date",
+      "product_type":"Product Type",
+      "product_name":"Product Name",
+      "confirmer":"Confirmer"
     },
     "others": {
       "not": "None",

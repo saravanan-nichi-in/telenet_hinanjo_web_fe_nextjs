@@ -54,7 +54,7 @@ export default function StaffManagementPage() {
         {
             field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", 
             body: (rowData) => (
-                <p className='text-decoration' onClick={() => {
+                <p className='text-link-class clickable-row' onClick={() => {
                     setStaff(rowData.id);
                     setStaffDetailsOpen(true);
                 }}>
@@ -132,7 +132,7 @@ export default function StaffManagementPage() {
             "start": 0,
             "limit": 5,
             "order_by": "desc",
-            "sort_by": "updated_at"
+            "sort_by": ""
         },
         "name" : ""
     });
