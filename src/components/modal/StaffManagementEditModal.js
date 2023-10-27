@@ -19,7 +19,8 @@ export default function StaffManagementEditModal(props) {
             .required(translate(localeJson, 'email_required'))
             .email(translate(localeJson, 'email_valid')),
         name: Yup.string()
-            .required(translate(localeJson, 'staff_name_required')),
+            .required(translate(localeJson, 'staff_name_required'))
+            .max(200,translate(localeJson,'staff_name_max_required')),
         tel: Yup.string()
             .required(translate(localeJson, 'phone_no_required'))
             .min(10, translate(localeJson, 'phone_min10_required')),
