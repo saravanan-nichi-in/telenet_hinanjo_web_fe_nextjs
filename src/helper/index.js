@@ -262,3 +262,19 @@ export const importErrorToastDisplay = (response) => {
         }
     }
 }
+
+export const generateColors = (length) => {
+    const colors = [];
+    for (let i = 0; i < length; i++) {
+        let hue = (i * 360) / length; // Calculate hue based on index
+
+        // Adjust hue to avoid red and blue ranges
+        if (hue >= 0 && hue < 60) {
+            hue = 30 + (i * 300) / length;
+        } else if (hue >= 240 && hue <= 300) {
+            hue = 210 - (i * 300) / length;
+        }
+        colors.push(`hsl(${hue}, 80%, 50%)`); // Generate color using HSL color model
+    }
+    return colors;
+}

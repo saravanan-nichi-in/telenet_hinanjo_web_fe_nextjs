@@ -7,21 +7,26 @@ export default function Counter(props) {
         name,
         readOnly,
         disabled,
-        parentClass
+        parentClass,
+        inputClass
     } = props;
     const [value, setValue] = useState(props.value);
 
     const handleIncrement = () => {
-        setValue(value + 1);
+        const newValue = parseInt(value) + 1;
+        setValue(newValue);
+        props.onValueChange(newValue);
     };
 
     const handleDecrement = () => {
-        setValue(value - 1);
+        const newValue = parseInt(value) - 1;
+        setValue(newValue);
+        props.onValueChange(newValue);
     };
 
     return (
         <InputGroup inputGroupProps={{
-            inputClass: "text-center",
+            inputClass: inputClass,
             id: props.id,
             value: value,
             name: name,

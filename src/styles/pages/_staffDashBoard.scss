@@ -1,0 +1,43 @@
+.staff-list {
+    list-style: none;
+    padding: 0;
+    border-radius: 5px;
+    width: 100%;
+    margin: 0 auto;
+    max-height: 320px;
+    overflow: auto;
+  }
+  
+  .staff-list li {
+    display: flex;
+  }
+  
+  .staff-list .label,
+  .staff-list .value {
+    border: 1px solid #DEE2E6;
+    padding: 5px;
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  .staff-list .label {
+    width: 60%;
+    color: #343a40;
+    font-weight: bold;
+    border-right: none; /* Remove right border for label */
+    display: flex;
+    align-items: center;
+    background-color: #F8F9FA;
+  }
+  
+  .staff-list .value {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    word-break: break-all;
+    overflow: auto;
+  }
+
+  .staff-list li:not(:first-child) .label,
+  .staff-list li:not(:first-child) .value {
+    border-top: none; /* Remove top border for labels except the first one */
+  }

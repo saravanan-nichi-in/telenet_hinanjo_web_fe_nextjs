@@ -8,6 +8,7 @@ import { AuthenticationAuthorizationService } from '@/services';
 import { DropdownSelect } from '@/components';
 import { MdOutlineResetTv } from 'react-icons/md';
 import { ChangePasswordModal } from '@/components/modal';
+import { useAppSelector } from "@/redux/hooks";
 
 const AppTopbar = forwardRef((props, ref) => {
     const { layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
@@ -15,9 +16,10 @@ const AppTopbar = forwardRef((props, ref) => {
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson,locale } = useContext(LayoutContext);
     const url = window.location.pathname;
     const [userName, setUserName] = useState(null);
+    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const selectedCountryTemplate = (option, props) => {
         if (option) {
             return (
@@ -177,6 +179,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 {layoutConfig.menuMode === 'static' && (
                     <div className="logo-details">
                         <div className='logo-view'>
+                             {/* <img src={settings_data.image_logo_path} width={"280px"} height={"45px"} /> */}
                             <DiAtom size={35} className='logo-icon' />
                         </div>
                     </div>
@@ -192,7 +195,9 @@ const AppTopbar = forwardRef((props, ref) => {
                         </div>
                     )}
                     <div className='header-details-first'>
-                        {translate(localeJson, 'evacuation_shelter_management_system')}
+                        {
+                            locale == "ja"?settings_data?.system_name_ja:settings_data?.system_name_en     
+                        }
                     </div>
                     <div className='header-details-second'>
                         <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>

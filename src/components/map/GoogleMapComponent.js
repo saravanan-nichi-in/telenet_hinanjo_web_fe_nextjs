@@ -8,6 +8,7 @@ import {
 } from "@react-google-maps/api";
 
 
+
 const GoogleMapComponent = ({
   initialPosition,
   height,
@@ -36,6 +37,10 @@ const GoogleMapComponent = ({
     minZoom: 0, // Set your desired min zoom level
     maxZoom: 25,
     zoom: mapScale||4,
+  };
+
+  const customIcon = {
+    url: '/layout/images/map/map_active.png', // Replace with the URL of your custom marker image
   };
 
   useEffect(() => {
@@ -76,7 +81,7 @@ const GoogleMapComponent = ({
         options={mapOptions}
       >
         {center && (
-          <Marker position={center} onClick={() => onMarkerClick(center)} />
+          <Marker position={center} onClick={() => onMarkerClick(center)} icon={popoverContent?customIcon:null} />
         )}
         {selectedMarker && popoverContent && (
             <>
