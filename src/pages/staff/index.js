@@ -5,10 +5,7 @@ export default function Staff() {
     const router = useRouter();
 
     useEffect(() => {
-        router.push({
-            pathname: '/staff/dashboard',
-            query: { hinan: 1 }
-        });
+        router.push("/staff/dashboard");
     }, []);
 
     return (

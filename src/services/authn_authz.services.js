@@ -82,6 +82,21 @@ function _forgot(key, values, callBackFun) {
                     position: "top-right",
                 });
             });
+    } else {
+        axios.post('/auth/staff/forgot/password', values)
+            .then((response) => {
+                if (response) {
+                    callBackFun(response);
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message, {
+                    position: "top-right",
+                });
+            });
     }
 }
 
@@ -93,6 +108,26 @@ function _reset(key, values, callBackFun) {
             token: values.query.token
         }
         axios.post('/auth/reset/password', payload)
+            .then((response) => {
+                if (response) {
+                    callBackFun();
+                    toast.success(response?.data?.message, {
+                        position: "top-right",
+                    });
+                }
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message, {
+                    position: "top-right",
+                });
+            });
+    } else {
+        let payload = {
+            new_password: values.password,
+            confirm_password: values.confirmPassword,
+            token: values.query.token
+        }
+        axios.post('/auth/staff/reset/password', payload)
             .then((response) => {
                 if (response) {
                     callBackFun();
