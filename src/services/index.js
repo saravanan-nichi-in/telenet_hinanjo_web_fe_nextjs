@@ -8,4 +8,4 @@ export * from "./statistics.services";
 export * from "./special_care.service";
 export * from "./system_setting.services";
 export * from "./admin_management.services";
-export * from "./public_evacuees.services";
+export * from "./user_place_list.services";
