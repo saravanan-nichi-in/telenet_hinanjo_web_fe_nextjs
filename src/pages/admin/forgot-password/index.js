@@ -30,7 +30,7 @@ const ForgotPasswordPage = () => {
     /**
      * Forgot success
      * @param {*} response 
-    */
+     */
     const onForgotSuccess = (response) => {
         if (response && response.data.success) {
             router.push("/admin/login");

@@ -172,8 +172,8 @@ export default function EvacueeFamilyDetail() {
             historyData.map((item) => {
                 let historyItem = {
                     shelter_place: item.placeName,
-                    admission_date_time: item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "",
-                    discharge_date_time: item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : ""
+                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                    discharge_date_time: item.status == 1 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : ""
                 }
                 admittedHistory.push(historyItem);
             });

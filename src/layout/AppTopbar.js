@@ -142,9 +142,12 @@ const AppTopbar = forwardRef((props, ref) => {
     ];
 
     useEffect(() => {
-        const adminData = JSON.parse(localStorage.getItem('admin')); // Assuming 'user' is the key in local storage
-        if (adminData && adminData.user && adminData.user.name) {
-            setUserName(adminData.user.name);
+        const adminData = JSON.parse(localStorage.getItem('admin'));
+        const staffData = JSON.parse(localStorage.getItem('staff'));
+        if (url.startsWith('/admin')) {
+            setUserName(adminData?.user?.name);
+        } else {
+            setUserName(staffData?.user?.name);
         }
     }, []);
 

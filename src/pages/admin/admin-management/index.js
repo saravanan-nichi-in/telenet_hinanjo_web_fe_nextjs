@@ -37,7 +37,7 @@ export default function AdminManagementPage() {
         filters: {
             start: 0,
             limit: 5,
-            sort_by: "",
+            sort_by: "updated_at",
             order_by: "desc",
         },
         search: "",

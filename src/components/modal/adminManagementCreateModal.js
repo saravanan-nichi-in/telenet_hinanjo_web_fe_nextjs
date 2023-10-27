@@ -28,6 +28,7 @@ export default function AdminManagementCreateModal(props) {
             ),
         fullName: Yup.string()
             .required(translate(localeJson, 'admin_name_required'))
+            .max(200, translate(localeJson, 'admin_name_max_200_characters')),
     });
     const [initialValues, setInitialValues] = useState({
         email: "",
