@@ -467,7 +467,8 @@
       "forgot_password_caption": "パスワードがわからない場合",
       "send": "送信",
       "save": "保存",
-      "addition": "追加"
+      "addition": "追加",
+      "add_stockpile":"新規登録"
     },
     "footer": {}
   },

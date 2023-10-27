@@ -467,7 +467,8 @@
       "forgot_password_caption": "If you don't know your password",
       "send": "Send",
       "save": "Save",
-      "addition": "addition"
+      "addition": "addition",
+      "add_stockpile":"Add Stockpile"
     },
     "footer": {}
   },
