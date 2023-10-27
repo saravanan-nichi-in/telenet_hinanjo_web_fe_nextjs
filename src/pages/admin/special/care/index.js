@@ -10,7 +10,7 @@ import { SpecialCareServices } from "@/services";
 import _ from "lodash";
 
 export default function AdminSpecialCarePage() {
-    const { localeJson, setLoader,locale } = useContext(LayoutContext);
+    const { localeJson, setLoader, locale } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const [specialCareCreateDialogVisible, setSpecialCareCreateDialogVisible] = useState(false);
@@ -21,27 +21,26 @@ export default function AdminSpecialCarePage() {
     const [totalCount, setTotalCount] = useState(0);
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
-    const [id,setId] = useState(0)
+    const [id, setId] = useState(0)
     const [currentEditObj, setCurrentEditObj] = useState({});
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [getPayload, setPayload] = useState({
         filters: {
-          start: 0,
-          limit: 5,
-          sort_by: "updated_at",
-          order_by: "asc",
+            start: 0,
+            limit: 5,
+            sort_by: "updated_at",
+            order_by: "asc",
         },
         search: "",
-      });
+    });
     const onClickCancelButton = () => {
         setSpecialCareCreateDialogVisible(false);
     };
     const onClickOkButton = (res) => {
-        if(res)
-        {
-        setSpecialCareCreateDialogVisible(false);
-        onGetSpecialCareListOnMounting()
-      }
+        if (res) {
+            setSpecialCareCreateDialogVisible(false);
+            onGetSpecialCareListOnMounting()
+        }
     };
     const onSpecialCareEditSuccess = (response) => {
         setSpecialCareEditOpen(false);
@@ -55,9 +54,9 @@ export default function AdminSpecialCarePage() {
     }
 
     const columnsData = [
-        { field: 'index', header:translate(localeJson,'s_no'),className:"sno_class" },
+        { field: 'index', header: translate(localeJson, 's_no'), className: "sno_class" },
         {
-            field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem", 
+            field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem",
         },
         { field: 'name_en', header: translate(localeJson, 'special_care_name_en'), minWidth: "14rem" },
         {
@@ -65,145 +64,140 @@ export default function AdminSpecialCarePage() {
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
             alignHeader: "center",
-           className:"action_class",
-            body: (rowData) =>
-            { 
+            className: "action_class",
+            body: (rowData) => {
                 return (
-                <div className='flex flex-wrap justify-content-center gap-2'>
+                    <div className='flex flex-wrap justify-content-center gap-2'>
                         <Button buttonProps={{
-                        text: translate(localeJson, 'edit'), 
-                        buttonClass: "text-primary ",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => {
-                            setRegisterModalAction("edit")
-                            setCurrentEditObj({
-                                id:rowData.id,
-                                name:rowData.name,
-                                name_en:rowData.name_en
-                            })
-                            setSpecialCareEditOpen(true)
-                        },
-                    }} />
-                     <Button buttonProps={{
-                        text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                        bg: "bg-red-600 text-white",
-                        hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => 
-                        {
-                        setId(rowData.id)
-                        setSpecialCareCreateDialogVisible(true)
-                        }
-                    }} />
-                </div>
-            )
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "text-primary ",
+                            bg: "bg-white",
+                            hoverBg: "hover:bg-primary hover:text-white",
+                            onClick: () => {
+                                setRegisterModalAction("edit")
+                                setCurrentEditObj({
+                                    id: rowData.id,
+                                    name: rowData.name,
+                                    name_en: rowData.name_en
+                                })
+                                setSpecialCareEditOpen(true)
+                            },
+                        }} />
+                        <Button buttonProps={{
+                            text: translate(localeJson, 'delete'), buttonClass: "text-primary",
+                            bg: "bg-red-600 text-white",
+                            hoverBg: "hover:bg-red-500 hover:text-white",
+                            onClick: () => {
+                                setId(rowData.id)
+                                setSpecialCareCreateDialogVisible(true)
+                            }
+                        }} />
+                    </div>
+                )
             }
         }
     ];
 
-      /* Services */
-  const { getList,importData,exportData,deleteSpecialCare,create,update } = SpecialCareServices;
+    /* Services */
+    const { getList, importData, exportData, deleteSpecialCare, create, update } = SpecialCareServices;
 
-  useEffect(() => {
-    setTableLoading(true);
-    const fetchData = async () => {
-      await onGetSpecialCareListOnMounting();
-      setLoader(false);
-    };
-    fetchData();
-  }, [locale,getPayload]);
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetSpecialCareListOnMounting();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale, getPayload]);
 
-  /**
-   * Get place list on mounting
-   */
-  const onGetSpecialCareListOnMounting = async () => {
-    // Get places list
-    getList(getPayload, fetchData);
-  };
-
-  function fetchData(response) {
-    if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-        setLoader(true)
-        const data = response.data.model.list;
-        var additionalColumnsArrayWithOldData = [...columnsData];
-        let preparedList = [];
-        // Update prepared list to the state
-        // Preparing row data for specific column to display
-        data.map((obj, i) => {
-            let preparedObj = {
-                index: getPayload.filters.start+i + 1,
-                id: obj.id || "",
-                name: obj.name || "",
-                name_en: obj.name_en || "",
-            }
-            preparedList.push(preparedObj);
-        })
-
-        setList(preparedList);
-        setColumns(additionalColumnsArrayWithOldData);
-        setTotalCount(response.data.model.total);
-        setTableLoading(false);
-        setLoader(false)
-    }
-    setTableLoading(false);
-  }
-
-   /**
-     * Pagination handler
-     * @param {*} e 
+    /**
+     * Get place list on mounting
      */
-   const onPaginationChange = async (e) => {
-    setTableLoading(true);
-    if (!_.isEmpty(e)) {
-        const newStartValue = e.first; // Replace with your desired page value
-        const newLimitValue = e.rows; // Replace with your desired limit value
-        await setPayload(prevState => ({
-            ...prevState,
-            filters: {
-                ...prevState.filters,
-                start: newStartValue,
-                limit: newLimitValue
-            }
-        }));
-    }
-}
+    const onGetSpecialCareListOnMounting = async () => {
+        // Get places list
+        getList(getPayload, fetchData);
+    };
 
+    function fetchData(response) {
+        if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+            setLoader(true)
+            const data = response.data.model.list;
+            var additionalColumnsArrayWithOldData = [...columnsData];
+            let preparedList = [];
+            // Update prepared list to the state
+            // Preparing row data for specific column to display
+            data.map((obj, i) => {
+                let preparedObj = {
+                    index: getPayload.filters.start + i + 1,
+                    id: obj.id || "",
+                    name: obj.name || "",
+                    name_en: obj.name_en || "",
+                }
+                preparedList.push(preparedObj);
+            })
 
-  const importFileApi = (file) => {
-      const formData = new FormData()
-      formData.append('file',file)
-      importData(formData)
-      setImportSpecialCareOpen(false);
-      onGetSpecialCareListOnMounting();
-  };
-
-  const submitForm=(res)=> {
-    if(res.id)
-    {
-    update(res,isUpdated)
-    
-    }
-    else {
-    create(res,isCreated)
+            setList(preparedList);
+            setColumns(additionalColumnsArrayWithOldData);
+            setTotalCount(response.data.model.total);
+            setTableLoading(false);
+            setLoader(false)
+        }
+        setTableLoading(false);
     }
 
-  }
-  const isCreated = (res) => {
-    if(res)
-    {
-        onSpecialCareEditSuccess()
+    /**
+      * Pagination handler
+      * @param {*} e 
+      */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
+
+    const importFileApi = (file) => {
+        const formData = new FormData()
+        formData.append('file', file)
+        importData(formData)
+        setImportSpecialCareOpen(false);
         onGetSpecialCareListOnMounting();
+    };
+
+    const submitForm = (res) => {
+        if (res.id) {
+            update(res, isUpdated)
+
+        }
+        else {
+            create(res, isCreated)
+        }
+
     }
-  }
-  const isUpdated = (res) => {
-    if(res)
-    {
-        setCurrentEditObj({})
-        setId(0)
-        onSpecialCareEditSuccess()
-        onGetSpecialCareListOnMounting();
+    const isCreated = (res) => {
+        if (res) {
+            onSpecialCareEditSuccess()
+            onGetSpecialCareListOnMounting();
+        }
     }
-  }
+    const isUpdated = (res) => {
+        if (res) {
+            setCurrentEditObj({})
+            setId(0)
+            onSpecialCareEditSuccess()
+            onGetSpecialCareListOnMounting();
+        }
+    }
 
     return (
         <>
@@ -236,9 +230,9 @@ export default function AdminSpecialCarePage() {
                             type: "submit",
                             text: translate(localeJson, 'ok'),
                             severity: "danger",
-                            onClick: () =>{
+                            onClick: () => {
                                 setLoader(true)
-                                deleteSpecialCare(id,onClickOkButton)
+                                deleteSpecialCare(id, onClickOkButton)
                                 setLoader(false)
                             },
                         },
@@ -251,9 +245,9 @@ export default function AdminSpecialCarePage() {
             />
             <SpecialCareEditModal
                 open={specialCareEditOpen}
-                header={translate(localeJson, 'special_care_edit')}
+                header={translate(localeJson, registerModalAction == "create" ? 'special_care_create' : 'special_care_edit')}
                 close={() => setSpecialCareEditOpen(false)}
-                buttonText={translate(localeJson,registerModalAction=="create"?'submit': 'update')}
+                buttonText={translate(localeJson, registerModalAction == "create" ? 'submit' : 'update')}
                 submitForm={submitForm}
                 onSpecialCareEditSuccess={onSpecialCareEditSuccess}
                 currentEditObj={currentEditObj}
@@ -294,7 +288,7 @@ export default function AdminSpecialCarePage() {
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'create_special_care'),
-                                onClick: () =>{ 
+                                onClick: () => {
                                     setRegisterModalAction("create")
                                     setCurrentEditObj({ name: "", name_en: "" })
                                     setSpecialCareEditOpen(true)
@@ -303,21 +297,21 @@ export default function AdminSpecialCarePage() {
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                         <div className='mt-3'>
-                            <NormalTable 
-                            lazy
-                            totalRecords={totalCount}
-                            loading={tableLoading}
-                            showGridlines={"true"}
-                            paginator={"true"}
-                            columnStyle={{ textAlign: "center" }}
-                            className={"custom-table-cell"}
-                            value={list}
-                            columns={columns}
-                            emptyMessage= {translate(localeJson,"data_not_found")}
-                            first={getPayload.filters.start}
-                            rows={getPayload.filters.limit}
-                            paginatorLeft={true}
-                            onPageHandler={(e) => onPaginationChange(e)} />
+                            <NormalTable
+                                lazy
+                                totalRecords={totalCount}
+                                loading={tableLoading}
+                                showGridlines={"true"}
+                                paginator={"true"}
+                                columnStyle={{ textAlign: "center" }}
+                                className={"custom-table-cell"}
+                                value={list}
+                                columns={columns}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                first={getPayload.filters.start}
+                                rows={getPayload.filters.limit}
+                                paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)} />
                         </div>
                     </div>
                 </div>

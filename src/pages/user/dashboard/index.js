@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button } from "@/components";
+import { AuthenticationAuthorizationService } from '@/services';
 
 export default function PublicDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -47,9 +48,15 @@ export default function PublicDashboard() {
                                     {translate(localeJson, 'user_dashboard_note')}
                                 </p>
                                 <div className="mt-3 flex justify-content-end text-higlight clickable-row" onClick={() => {
-                                    router.push({
-                                        pathname: '/staff/dashboard',
-                                    });
+                                    if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
+                                        router.push({
+                                            pathname: '/staff/login',
+                                        });
+                                    } else {
+                                        router.push({
+                                            pathname: '/staff/dashboard',
+                                        });
+                                    }
                                 }}>
                                     {translate(localeJson, 'go_to_staff_screen')}
                                 </div>
@@ -58,6 +65,6 @@ export default function PublicDashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

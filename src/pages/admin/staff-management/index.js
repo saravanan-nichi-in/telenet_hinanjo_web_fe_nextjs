@@ -68,6 +68,7 @@ export default function StaffManagementPage() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
+            className: "action_class",
             body: (rowData) => (
                 <div>
                     <Button 

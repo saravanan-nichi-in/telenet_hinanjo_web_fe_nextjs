@@ -62,7 +62,7 @@ function _logout() {
     } else {
         localStorage.removeItem('staff');
         staff.next(null);
-        window.location.href = "/staff/login?hinan=1";
+        window.location.href = "/user/list";
     }
 }
 
