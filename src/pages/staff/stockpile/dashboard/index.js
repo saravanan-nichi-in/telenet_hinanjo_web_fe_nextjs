@@ -13,14 +13,14 @@ function StockpileDashboard() {
     const [staffStockpileDashboardValues, setStaffStockpileDashboardValues] = useState([]);
 
     const staffStockpileDashboard = [
-        { field: 'id', header: translate(localeJson, 's_no'), className: "sno_class", },
-        { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true },
-        { field: 'product_name', header: translate(localeJson, 'product_name') },
-        { field: 'quantity', header: translate(localeJson, 'quantity') },
-        { field: 'inventory_date', header: translate(localeJson, 'inventory_date') },
-        { field: 'confirmer', header: translate(localeJson, 'confirmer') },
-        { field: 'expiry_date', header: translate(localeJson, 'expiry_date') },
-        { field: 'remarks', header: translate(localeJson, 'remarks') },
+        { field: 'id', header: translate(localeJson, 's_no'), className: "sno_class" },
+        { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
+        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
+        { field: 'quantity', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
+        { field: 'inventory_date', header: translate(localeJson, 'inventory_date'), minWidth: "7rem" },
+        { field: 'confirmer', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
+        { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "7rem" },
+        { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'image'),
@@ -36,7 +36,7 @@ function StockpileDashboard() {
             field: 'actions',
             header: translate(localeJson, 'edit'),
             textAlign: "center",
-            minWidth: "5rem",
+            minWidth: "7rem",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
@@ -109,6 +109,21 @@ function StockpileDashboard() {
                                 emptyMessage={translate(localeJson, "data_not_found")}
                                 paginatorLeft={true}
                             />
+                        </div>
+                        <div className="text-center">
+                            <Button buttonProps={{
+                                buttonClass: "w-8rem",
+                                severity: "primary",
+                                text: translate(localeJson, 'back_to_top'),
+                                onClick: () => router.push('/staff/dashboard'),
+                            }} parentClass={"inline"} />
+                            <Button buttonProps={{
+                                buttonClass: "text-600 w-8rem",
+                                type: "button",
+                                bg: "bg-white",
+                                hoverBg: "hover:surface-500 hover:text-white",
+                                text: translate(localeJson, 'inventory'),
+                            }} parentClass={"inline pl-2"} />
                         </div>
                     </div>
                 </div>

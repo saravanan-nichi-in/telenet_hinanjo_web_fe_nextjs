@@ -16,14 +16,14 @@ function StockpileHistory() {
 
     const staffStockpileHistory = [
         { field: 'id', header: translate(localeJson, 's_no'), className: "sno_class", },
-        { field: 'working_date', header: translate(localeJson, 'working_date') },
-        { field: 'inventory_date', header: translate(localeJson, 'inventory_date') },
-        { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true },
-        { field: 'product_name', header: translate(localeJson, 'product_name') },
-        { field: 'quantity_before', header: translate(localeJson, 'quantity_before') },
-        { field: 'quantity_after', header: translate(localeJson, 'quantity_after') },
-        { field: 'confirmer', header: translate(localeJson, 'confirmer') },
-        { field: 'expiry_date', header: translate(localeJson, 'expiry_date') },
+        { field: 'working_date', header: translate(localeJson, 'working_date'), minWidth: "7rem" },
+        { field: 'inventory_date', header: translate(localeJson, 'inventory_date'), minWidth: "7rem" },
+        { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
+        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
+        { field: 'quantity_before', header: translate(localeJson, 'quantity_before'), minWidth: "5rem" },
+        { field: 'quantity_after', header: translate(localeJson, 'quantity_after'), minWidth: "5rem" },
+        { field: 'confirmer', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
+        { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "7rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks') },
     ];
 
