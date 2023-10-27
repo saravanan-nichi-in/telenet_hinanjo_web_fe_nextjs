@@ -3,19 +3,41 @@ import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MailFilled } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
+import { AuthenticationAuthorizationService } from '@/services';
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
+    const router = useRouter();
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'email_required'))
-            .email(translate(localeJson, 'email_valid')),
+            .test('trim-and-validate', translate(localeJson, 'email_valid'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
     });
+
+    /* Services */
+    const { forgot } = AuthenticationAuthorizationService;
+
+    /**
+     * Forgot success
+     * @param {*} response 
+     */
+    const onForgotSuccess = (response) => {
+        if (response && response.data.success) {
+            router.push("/staff/login");
+        } else {
+            console.log(response.data);
+        }
+    };
 
     return (
         <>
@@ -23,6 +45,9 @@ const ForgotPasswordPage = () => {
                 validationSchema={schema}
                 initialValues={{ email: "" }}
                 onSubmit={(values) => {
+                    let preparedPayload = values;
+                    preparedPayload['email'] = preparedPayload.email.trim();
+                    forgot('staff', preparedPayload, onForgotSuccess);
                 }}
             >
                 {({
@@ -62,7 +87,6 @@ const ForgotPasswordPage = () => {
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     antdRightIcon: <MailFilled />,
-                                                    placeholder: translate(localeJson, 'mail_address'),
                                                     value: values.email
                                                 }}
                                                     parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
