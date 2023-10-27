@@ -45,7 +45,7 @@ function _callExport(payload) {
             if (response && response.data) {
                 if (response.data?.result?.filePath) {
                     let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
-                    downloadBase64File(response.data.result.filePath, `Admin_management_${date}.csv`);
+                    downloadBase64File(response.data.result.filePath, `AdminManagement_${date}.csv`);
                 }
                 toast.success(response?.data?.message, {
                     position: "top-right",
