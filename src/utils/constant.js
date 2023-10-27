@@ -107,9 +107,9 @@ const dashboardTableColumns = [
 ];
 
 const MailSettingsOption1 = [
-    { name: 'なし' , value: 0},
+    { name: 'なし', value: 0 },
     { name: '1時間毎', value: 1 },
-    { name: '2時間毎', value: 2},
+    { name: '2時間毎', value: 2 },
     { name: '3時間毎', value: 3 },
     { name: '4時間毎', value: 4 },
     { name: '6時間毎', value: 6 },
@@ -428,7 +428,9 @@ export {
     currentEvacueesCountOptions,
     evacuationCenterCrowdingRateOptions,
     considerationEvacueesCountOptions,
-    mapScaleRateOptions
+    mapScaleRateOptions,
+    productName_options,
+    productType_options
 }
 
 export const prefectures = [
@@ -531,4 +533,16 @@ export const prefectures_en = [
     { value: 45, name: 'Miyazaki' },
     { value: 46, name: 'Kagoshima' },
     { value: 47, name: 'Okinawa' },
+];
+
+const productType_options= [
+    { name: '--'},
+    { name: '食料'},
+    { name: '備蓄品'},
+];
+const productName_options = [
+    { name: '--'},
+    { name: 'こめ'},
+    { name: "アルファ米（50食箱）五目ごはん"},
+    { name: "栄養補助食品"}
 ];

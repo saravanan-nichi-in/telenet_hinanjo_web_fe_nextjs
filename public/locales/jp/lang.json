@@ -261,7 +261,11 @@
       "inactive":"無効",
       "new_to_admission_procedures":"入所手続き",
       "Evacuee_Search_random_order":"避難者検索（順不同）",
-      "name_public_evacuee":"氏名"
+      "name_public_evacuee":"氏名",
+      "working_date":"作業日時",
+      "quantity_before":"数量(前)",
+      "quantity_after":"数量(後)",
+      "expiry_date":"有効期限"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -307,7 +311,8 @@
       "logo_img_not_greater_than_3mb": "画像サイズは3MB以内のものをご使用ください。",
       "admin_name_max_200_characters":"管理者名は最大200文字です。",
       "special_care_name_max_required":"要配慮者事項は255文字以下で指定してください。",
-      "special_care_name_en_max_required":"要配慮者事項（英語）を255文字以内でご指定ください。"
+      "special_care_name_en_max_required":"要配慮者事項（英語）を255文字以内でご指定ください。",
+      "staff_name_max_required":"スタッフ名は最大200文字です。"
     },
     "buttons": {
       "import": "インポート",
@@ -364,7 +369,11 @@
       "logo_image": "ロゴ画像",
       "name_phonetic": "氏名 (フリガナ)",
       "name_kanji": "氏名 (漢字)",
-      "default_shelf_life_days": "デフォルト保持期間 (日)"
+      "default_shelf_life_days": "デフォルト保持期間 (日)",
+      "inventory_date":"棚卸日",
+      "product_type":"種別",
+      "product_name":"備蓄品名",
+      "confirmer":"確認者"
     },
     "others": {
       "not": "無し",
@@ -415,7 +424,7 @@
       "name": "Staff",
       "staff_login_screen": "スタッフ用ログイン画面",
       "mail_address": "メールアドレス",
-      "email_required": "メールアドレス は必須です。",
+      "email_required": "メールアドレスは必須です。",
       "email_valid": "正しいメールアドレスをご入力ください。",
       "password": "パスワード",
       "password_required": "パスワードは必須です。",
