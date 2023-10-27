@@ -306,7 +306,9 @@
       "default_shell_life_days_required": "Default shelf life(Days) is required.",
       "logo_img_correct_format": "The logo image must be correct format.",
       "logo_img_not_greater_than_3mb": "The logo image must not be greater than 3 MB.",
-      "admin_name_max_200_characters":"The admin name should be 200 characters or less."
+      "admin_name_max_200_characters":"The admin name should be 200 characters or less.",
+      "special_care_name_max_required":"Name 255 characters or less.",
+      "special_care_name_en_max_required":"Name (English) 255 characters or less."
     },
     "buttons": {
       "import": "Import",

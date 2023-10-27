@@ -305,7 +305,9 @@
       "default_shell_life_days_required": "デフォルト保持期間(日)は必須です。",
       "logo_img_correct_format": "ロゴ画像のフォーマットが正しいものをご使用ください。",
       "logo_img_not_greater_than_3mb": "画像サイズは3MB以内のものをご使用ください。",
-      "admin_name_max_200_characters":"管理者名は最大200文字です。"
+      "admin_name_max_200_characters":"管理者名は最大200文字です。",
+      "special_care_name_max_required":"要配慮者事項は255文字以下で指定してください。",
+      "special_care_name_en_max_required":"要配慮者事項（英語）を255文字以内でご指定ください。"
     },
     "buttons": {
       "import": "インポート",
