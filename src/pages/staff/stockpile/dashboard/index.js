@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 function StockpileDashboard() {
     const { localeJson, setLoader } = useContext(LayoutContext);
-    const router =useRouter();
+    const router = useRouter();
     const [staffStockpileDashboardValues, setStaffStockpileDashboardValues] = useState([]);
 
     const staffStockpileDashboard = [
@@ -49,6 +49,7 @@ function StockpileDashboard() {
             ),
         },
     ];
+
     useEffect(() => {
         const fetchData = async () => {
             setLoader(false);
@@ -71,7 +72,7 @@ function StockpileDashboard() {
                                 buttonClass: "evacuation_button_height",
                                 text: translate(localeJson, 'stockpile_history'),
                                 severity: "primary",
-                                onClick:()=>router.push("/staff/stockpile/history?hinan=1")
+                                onClick: () => router.push("/staff/stockpile/history?hinan=1")
                             }} parentClass={"mr-1 mt-1"} />
                             <Button buttonProps={{
                                 type: 'submit',
@@ -118,4 +119,3 @@ function StockpileDashboard() {
 }
 
 export default StockpileDashboard;
-

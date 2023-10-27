@@ -9,29 +9,29 @@ export const StaffStockpileDashboardService = {
                 product_type: "食料",
                 product_name: "栄養補助食品",
                 quantity: 0,
-                confirmer:"Qa",
-                expiry_date:"2023-12-31",
-                remarks:"remarks check update",
+                confirmer: "Qa",
+                expiry_date: "2023-12-31",
+                remarks: "remarks check update",
             },
             {
                 id: 2,
                 inventory_date: "-",
                 product_type: "食料",
                 product_name: "栄養補助食品",
-                confirmer:"-",
+                confirmer: "-",
                 quantity: 0,
-                expiry_date:"-",
-                remarks:"-"
+                expiry_date: "-",
+                remarks: "-"
             },
             {
                 id: 3,
                 inventory_date: "2023-09-14	",
                 product_type: "食料",
                 product_name: "栄養補助食品",
-                confirmer:"QA",
+                confirmer: "QA",
                 quantity: 0,
-                expiry_date:"2023-09-25",
-                remarks:"test update"
+                expiry_date: "2023-09-25",
+                remarks: "test update"
             },
         ]
     },
