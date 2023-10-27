@@ -15,7 +15,7 @@ const Layout = (props) => {
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
     const router = useRouter();
-
+    const url = window.location.pathname;
 
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',
