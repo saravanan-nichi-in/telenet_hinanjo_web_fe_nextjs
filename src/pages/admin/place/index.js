@@ -52,6 +52,7 @@ export default function AdminPlacePage() {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
       minWidth: "20rem",
+      maxWidth: "20rem",
       body: (rowData) => {
         return (
           <a className="text-link-class cursor-pointer" onClick={() => handleRowClick(rowData)}>

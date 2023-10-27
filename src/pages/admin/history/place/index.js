@@ -45,8 +45,8 @@ export default function AdminHistoryPlacePage() {
     const historyTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'),sortable: false, textAlign: 'left',className: "sno_class"},
         { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "10rem", sortable: false },
-        { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", sortable: false },
-        { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", sortable: false },
+        { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem",maxWidth:"12rem", sortable: false },
+        { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem",maxWidth:"12rem", sortable: false },
         { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: "place_address", header: translate(localeJson, 'location_name'), minWidth: "10rem", sortable: false },
         { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
