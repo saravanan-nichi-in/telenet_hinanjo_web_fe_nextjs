@@ -251,7 +251,7 @@ export default function AdminSpecialCarePage() {
             />
             <SpecialCareEditModal
                 open={specialCareEditOpen}
-                header={translate(localeJson, 'special_care_edit')}
+                header={translate(localeJson,registerModalAction=="create"?'special_care_create':'special_care_edit')}
                 close={() => setSpecialCareEditOpen(false)}
                 buttonText={translate(localeJson,registerModalAction=="create"?'submit': 'update')}
                 submitForm={submitForm}

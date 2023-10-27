@@ -15,9 +15,11 @@ export default function SpecialCareEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
         name: Yup.string()
-            .required(translate(localeJson, 'special_care_name_jp_required')),
+            .required(translate(localeJson, 'special_care_name_jp_required'))
+            .max(255, translate(localeJson, 'special_care_name_max_required')),
         name_en: Yup.string()
-            .required(translate(localeJson, 'special_care_name_en_required')),
+            .required(translate(localeJson, 'special_care_name_en_required'))
+            .max(255, translate(localeJson, 'special_care_name_en_max_required')),
     });
     const { open, close, onSpecialCareEditSuccess, header, buttonText } = props && props;
 
