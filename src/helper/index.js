@@ -75,7 +75,7 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        timeZone: 'Asia/Tokyo'
+        timeZone: 'Asia/Kolkata'
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
