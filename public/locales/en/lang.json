@@ -428,7 +428,10 @@
       "confirm_password_notMatch": "The confirmed password does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
       "forgot_password_success": "A password reset email has been sent to the email address you entered.",
-      "staff_page_dashboard":"STAFF DASHBOARD (TOP)"
+      "staff_page_dashboard":"STAFF DASHBOARD (TOP)",
+      "shelter_situation":"SHELTER SITUATION",
+      "person_consideration":"Persons requiring consideration",
+      "accommodation_status":"Accommodation status"
     },
     "form": {
       "type": "type",
