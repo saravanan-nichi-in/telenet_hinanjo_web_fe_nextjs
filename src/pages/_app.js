@@ -67,8 +67,8 @@ function MyApp({ Component, pageProps }) {
             '/admin/reset-password/'
         ];
         const staffPublicPaths = [
-            '/staff/login',
-            '/staff/login/',
+            // '/staff/login',
+            // '/staff/login/',
             '/staff/forgot-password',
             '/staff/forgot-password/',
             '/staff/reset-password',

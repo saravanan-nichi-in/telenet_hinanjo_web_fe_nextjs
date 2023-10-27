@@ -11,3 +11,4 @@ export * from "./admin_management.services";
 export * from "./staff_dashboard.service"
 export * from "./public_evacuees.services";
 export * from "./supplies.services";
+export * from "./user_place_list.services";
