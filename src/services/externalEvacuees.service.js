@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 export const ExternalEvacueesService = {
     exportData: _exportData,
     getList: _getList,
+    getEvacueeList: _getEvacueeList
 };
 
 
@@ -41,9 +42,32 @@ function _exportData(payload) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
-    console.log(payload);
     axios
         .post("/staff/external/family/list", payload)
+        .then((response) => {
+            // console.log(response);
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get Evacuee list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getEvacueeList(payload, callBackFun) {
+    console.log(payload);
+    axios
+        .post("/staff/external/family/detail", payload)
         .then((response) => {
             // console.log(response);
             if (response && response.data) {

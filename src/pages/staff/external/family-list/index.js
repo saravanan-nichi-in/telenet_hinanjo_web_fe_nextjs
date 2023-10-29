@@ -6,25 +6,35 @@ import { useSelector } from 'react-redux';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ExternalEvacueesService } from '@/services/externalEvacuees.service';
 import { Button, NormalTable } from '@/components';
+import EvacueeDetailModal from './evacueeDetailModal';
 
 function ExternalFamilyList() {
     
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
-    // Sl No	避難場所種別	場所	食料等の支援	人数	避難所	メールアドレス	郵便番号	県	住所
+    const [staff, setStaff] = useState(null);
+    const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class" },
-        { field: 'place_category', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'place_detail', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'food_required', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'external_person_count', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'hinan_id', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'email', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'zipcode', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'prefecture_name', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'address', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class" },
+        { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'place_detail', header: translate(localeJson, 'external_evecuee_list_table_place'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "15rem", maxWidth: "15rem",
+        body: (rowData) => (
+            <p className='text-link-class clickable-row' onClick={() => {
+                setStaff(rowData);
+                setStaffDetailsOpen(true);
+            }}>
+                {rowData['external_person_count']}
+            </p>
+        ) },
+        { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'prefecture_name', header: translate(localeJson, 'external_evecuee_list_table_prefacture'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'address', header: translate(localeJson, 'external_evecuee_list_table_address'), minWidth: "15rem", maxWidth: "15rem" },
     ];
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const [getListPayload, setGetListPayload] = useState({
@@ -70,6 +80,7 @@ function ExternalFamilyList() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
+                        id:obj.id,
                         place_category: obj.place_category ?? "",
                         place_detail: obj.place_detail ?? "",
                         food_required: obj.food_required ?? "",
@@ -182,14 +193,24 @@ function ExternalFamilyList() {
 
     const [registerModalAction, setRegisterModalAction] = useState('');
     const [currentEditObj, setCurrentEditObj] = useState('');
+    const onStaffDetailClose = () => {
+        setStaff(null);
+        setStaffDetailsOpen(false);
+
+    };
 
     return (
         <>
-
+            {staff && <EvacueeDetailModal
+                open={staffDetailsOpen}
+                close={onStaffDetailClose}
+                staff={staff}
+            />}
+            
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                            <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
+                            <h5 className='page-header1'>{translate(localeJson, 'external_evecuee_list_header')}</h5>
                             <hr />
                             <div>
                                 <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
