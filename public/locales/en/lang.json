@@ -266,7 +266,8 @@
       "working_date":"Working Date",
       "quantity_before":"Quantity (Before)",
       "quantity_after":"Quantity (After)",
-      "expiry_date":"Expiry Date"
+      "expiry_date":"Expiry Date",
+      "loc_not_found": "location not found"
     },
     "validation": {
       "staff_name_required": "Staff name is required",
@@ -282,6 +283,7 @@
       "file_csv_required": "File CVS is required.",
       "select_csv_format": "Please select a CSV format file.",
       "max_length_200": " must be 200 characters or less.",
+      "max_length_255": " must be 255 characters or less.",
       "phone": "Please enter 10 or 11  digits for the phone number.",
       "password_new_not_equal_to_current": "The current password and new password cannot be the same.",
       "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
@@ -443,7 +445,13 @@
       "staff_page_dashboard":"STAFF DASHBOARD (TOP)",
       "shelter_situation":"SHELTER SITUATION",
       "person_consideration":"Persons requiring consideration",
-      "accommodation_status":"Accommodation status"
+      "accommodation_status":"Accommodation status",
+      "staff_supplies":"REGISTRATION OF NECESSARY GOODS",
+      "remarks":"Remarks",
+      "comment":"Comment",
+      "comment_placeholder":"Enter items that are not included in the supply list prepared by the operation.",
+      "remark_placeholder":"Other information",
+      "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management."
     },
     "form": {
       "type": "type",
