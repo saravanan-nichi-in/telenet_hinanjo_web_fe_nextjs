@@ -284,7 +284,7 @@
       "quantity_before":"Quantity (Before)",
       "quantity_after":"Quantity (After)",
       "expiry_date":"Expiry Date",
-      "loc_not_found": "location not found"
+      "loc_not_found": "Location not found."
     },
     "validation": {
       "staff_name_required": "Staff name is required",
