@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import Doughnut from "@/components/chart";
-import { getValueByKeyRecursively as translate,generateColors } from "@/helper";
+import { getValueByKeyRecursively as translate, generateColors } from "@/helper";
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { useSelector } from "react-redux";
-import {staff_dashboard_status_jp,staff_dashboard_status_en} from '@/utils/constant'
+import { staff_dashboard_status_jp, staff_dashboard_status_en } from '@/utils/constant'
 
 function StaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -33,23 +33,23 @@ function StaffDashboard() {
   };
 
   const fetchData = (res) => {
-    try{
-    if (res) {
-      let personTotal2 = res?.data.personTotal;
-      setLabelsSpecialCares(Object.keys(personTotal2?.specialCares));
-      setDataSpecialCares(Object.values(personTotal2?.specialCares));
-      setLabelsTotalCapacityBreakdown(Object.keys(personTotal2?.other_stats));
-      setDataTotalCapacityBreakdown(Object.values(personTotal2?.other_stats));
-      let keysInOrder = locale=='ja'?staff_dashboard_status_jp:staff_dashboard_status_en;
-      let accommodationStats = personTotal2?.accomidation_stats;
-      let valuesInOrder = keysInOrder.map(key => accommodationStats[key]);
-      setLabelsOther(keysInOrder);
-      setDataOther(Object.values(valuesInOrder));
+    try {
+      if (res) {
+        let personTotal2 = res?.data.personTotal;
+        setLabelsSpecialCares(Object.keys(personTotal2?.specialCares));
+        setDataSpecialCares(Object.values(personTotal2?.specialCares));
+        setLabelsTotalCapacityBreakdown(Object.keys(personTotal2?.other_stats));
+        setDataTotalCapacityBreakdown(Object.values(personTotal2?.other_stats));
+        let keysInOrder = locale == 'ja' ? staff_dashboard_status_jp : staff_dashboard_status_en;
+        let accommodationStats = personTotal2?.accomidation_stats;
+        let valuesInOrder = keysInOrder.map(key => accommodationStats[key]);
+        setLabelsOther(keysInOrder);
+        setDataOther(Object.values(valuesInOrder));
+      }
     }
-  }
-  finally{
-    setLoader(false);
-  }
+    finally {
+      setLoader(false);
+    }
   };
   return (
     <>
