@@ -469,7 +469,8 @@
       "comment_placeholder":"Enter items that are not included in the supply list prepared by the operation.",
       "remark_placeholder":"Other information",
       "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management.",
-      "staff_management_inventory_import_processing":"Staff Management Inventory Import Processing"
+      "staff_management_inventory_import_processing":"Staff Management Inventory Import Processing",
+      "edit_product":"Edit Product"
     },
     "form": {
       "type": "type",
@@ -486,7 +487,11 @@
       "number_field": "Field should be a valid number.",
       "valid_image_file": "Image format should be valid.",
       "image_size_validation": "Image size must not exceed 5 MB.",
-      "stockpile_shelf_life_max": "Shelf life should not exceed 999."
+      "stockpile_shelf_life_max": "Shelf life should not exceed 999.",
+      "quantity_is_required":"Quantity is required.",
+      "inventory_date_is_required":"Inventory is required.",
+      "expiry_date_is_required":"Expiry date is required.",
+      "expiry_date_must_be_equal_or_greater_than_today":"Expiry date must be a date equal or greater than today date."
     },
     "buttons": {
       "login": "Login",
