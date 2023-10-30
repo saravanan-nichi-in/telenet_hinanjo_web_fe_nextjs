@@ -1,165 +1,266 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, NormalTable,Counter } from '@/components';
-import { StaffSuppliesServices } from '@/services/supplies.services';
-import _ from 'lodash';
+import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import * as Yup from "yup";
+import { getValueByKeyRecursively as translate } from "@/helper";
+import { LayoutContext } from "@/layout/context/layoutcontext";
+import {
+  Button,
+  DividerComponent,
+  NormalTable,
+  Counter,
+  TextAreaFloatLabel,
+  ValidationError
+} from "@/components";
+import { StaffSuppliesServices } from "@/services/supplies.services";
+import _ from "lodash";
+import { useSelector } from "react-redux";
+import { Formik } from "formik";
 
 export default function Supplies() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class" },
-        { field: 'name', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'unit', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "10rem", maxWidth: "10rem",
-        body: (rowData) => (
-            <>
-            <Counter 
-                    inputClass={'border-noround-bottom border-noround-top text-center'}
-                    onValueChange= {(value)=>{
-                        rowData.number= value+""
-                    } }
-                    value={rowData?.number+""}
-                />
-            </>
-        ), },
-    ];
+  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const schema = Yup.object().shape({
+    comment: Yup.string().max(
+      200,
+      translate(localeJson, "comment") + translate(localeJson, "max_length_200")
+    ),
+    remarks: Yup.string().max(
+      200,
+      translate(localeJson, "remarks") + translate(localeJson, "max_length_200")
+    ),
+  });
 
-    const [getListPayload, setGetListPayload] = useState({
-       place_id:"2"
-    });
+  const router = useRouter();
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+  const initialValues = {
+    comment: "",
+    remarks: "",
+  };
+  const columnsData = [
+    {
+      field: "slno",
+      header: translate(localeJson, "supplies_slno"),
+      className: "sno_class",
+    },
+    {
+      field: "name",
+      header: translate(localeJson, "supplies_name"),
+      minWidth: "15rem",
+      maxWidth: "15rem",
+    },
+    {
+      field: "unit",
+      header: translate(localeJson, "supplies_unit"),
+      minWidth: "10rem",
+      maxWidth: "10rem",
+      body: (rowData) => (
+        <div className="border-top-none">
+          <Counter
+            inputClass={"border-noround-bottom border-noround-top text-center"}
+            onValueChange={(value) => {
+              rowData.number = value + "";
+            }}
+            value={rowData?.number + ""}
+          />
+        </div>
+      ),
+    },
+  ];
 
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+  const [getListPayload, setGetListPayload] = useState({
+    place_id: layoutReducer?.user?.place?.id,
+  });
 
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [tableLoading, setTableLoading] = useState(false);
 
-    /* Services */
-    const { getList,create } = StaffSuppliesServices;
+  /* Services */
+  const { getList, create } = StaffSuppliesServices;
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetMaterialListOnMounting()
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale, getListPayload]);
+  useEffect(() => {
+    setTableLoading(true);
+    const fetchData = async () => {
+      await onGetMaterialListOnMounting();
+      setLoader(false);
+    };
+    fetchData();
+  }, [locale, getListPayload]);
 
-    /**
-     * Get dashboard list on mounting
-     */
-    const onGetMaterialListOnMounting = () => {
-        // Get dashboard list
-        getList(getListPayload, (response) => {
-            console.log(response)
-            if (response.success && !_.isEmpty(response.data) && response.data.supplies?.length > 0) {
-                const data = response.data.supplies;
-                console.log(data)
-                // var additionalColumnsArrayWithOldData = [...columnsData];
-                let preparedList = [];
-                // Update prepared list to the state
-                // Preparing row data for specific column to display
-                data.map((obj, i) => {
-                    let preparedObj = {
-                        slno: i,
-                        id: obj.id ?? "",
-                        name: obj.name ?? "",
-                        unit: obj.unit ?? "",
-                        number:obj.number??""
-                    }
-                    preparedList.push(preparedObj);
-                })
-
-                setList(preparedList);
-                // setColumns(additionalColumnsArrayWithOldData);
-                // setTotalCount(response.data.model.total);
-                setTableLoading(false);
-            } else {
-                setTableLoading(false);
-                setList([]);
-            }
-
+  /**
+   * Get supplies list on mounting
+   */
+  const onGetMaterialListOnMounting = () => {
+    // Get supplies list
+    getList(getListPayload, (response) => {
+      if (
+        response.success &&
+        !_.isEmpty(response.data) &&
+        response.data.supplies?.length > 0
+      ) {
+        const data = response.data.supplies;
+        const supplies_notes = response.data.supplyNotes;
+        if (supplies_notes) {
+          initialValues.comment = supplies_notes.comment;
+          initialValues.remarks = supplies_notes.note;
+        }
+        let preparedList = [];
+        data.map((obj, i) => {
+          let preparedObj = {
+            slno: i + 1,
+            id: obj.id ?? "",
+            name: obj.name ?? "",
+            unit: obj.unit ?? "",
+            number: obj.number ?? "",
+          };
+          preparedList.push(preparedObj);
         });
+        setList(preparedList);
+        setTableLoading(false);
+      } else {
+        setTableLoading(false);
+        setList([]);
+      }
+    });
+  };
+
+  const isCreated = (res) => {
+    if (res) {
+      onGetMaterialListOnMounting();
     }
+  };
 
-
-
-
-
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-
-    /**
-     * Pagination handler
-     * @param {*} e 
-     */
-    // const onPaginationChange = async (e) => {
-    //     setTableLoading(true);
-    //     if (!_.isEmpty(e)) {
-    //         const newStartValue = e.first; // Replace with your desired page value
-    //         const newLimitValue = e.rows; // Replace with your desired limit value
-    //         await setGetListPayload(prevState => ({
-    //             ...prevState,
-    //             filters: {
-    //                 ...prevState.filters,
-    //                 start: newStartValue,
-    //                 limit: newLimitValue
-    //             }
-    //         }));
-    //     }
-    // }
-
-    return (
-        <>
-
-            <div className="grid">
-                <div className="col-12">
-                    <div className='card'>
-                            <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
-                            <hr />
-                            <div>
-                                <div className='mt-3'>
-                                    <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columnsData}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        // paginator={true}
-                                        // first={getListPayload.filters.start}
-                                        // rows={getListPayload.filters.limit}
-                                        // paginatorLeft={true}
-                                        // onPageHandler={(e) => onPaginationChange(e)}
-                                    />
-                                </div>
-                                <div className='mt-3'>
-                                <Button 
-                        parentStyle={{ display: "inline" }}
-                        buttonProps={{
-                        text: translate(localeJson, 'edit'), 
-                        buttonClass: "text-primary ",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => {
-                            console.log(list)
-                        },
-                    }} />
-                                </div>
-                            </div>
+  return (
+    <>
+      <Formik
+        validationSchema={schema}
+        initialValues={initialValues}
+        onSubmit={(values) => {
+          let payload = {
+            place_id: layoutReducer?.user?.place?.id,
+            supply: list?.map((item) => {
+              return {
+                m_supply_id: item.id,
+                number: item.number,
+              };
+            }),
+            comment: values.comment,
+            note: values.remarks,
+          };
+          try {
+            setLoader(true)
+            create(payload, isCreated);
+          } finally {
+            setLoader(false)
+          }
+          
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+        }) => (
+          <div className="grid">
+            <div className="col-12">
+              <div className="card">
+                <h5 className="page-header1">
+                  {translate(localeJson, "staff_supplies")}
+                </h5>
+                <hr />
+                <form onSubmit={handleSubmit}>
+                <div>
+                  <h5 className="page-header1">
+                    {translate(localeJson, "supplies_registration")}
+                  </h5>
+                  <div className="mt-3">
+                    <NormalTable
+                      lazy
+                      totalRecords={totalCount}
+                      loading={tableLoading}
+                      stripedRows={true}
+                      className={"custom-table-cell"}
+                      showGridlines={"true"}
+                      value={list}
+                      columns={columnsData}
+                      filterDisplay="menu"
+                      emptyMessage={translate(localeJson, "data_not_found")}
+                    />
+                  </div>
+                  <div className="grid col-12 m-0 pl-0 pr-0">
+                    <div className="mt-3 col-6 pl-0">
+                      <TextAreaFloatLabel
+                        textAreaFloatLabelProps={{
+                          textAreaClass:
+                            "w-full lg:w-full md:w-23rem sm:w-21rem ",
+                          row: 5,
+                          cols: 30,
+                          name: "comment",
+                          placeholder: translate(
+                            localeJson,
+                            "comment_placeholder"
+                          ),
+                          text: translate(localeJson, "comment"),
+                          value: values.comment,
+                          onChange: handleChange,
+                          onblur:handleBlur
+                        }}
+                        parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                        <ValidationError errorBlock={errors.comment && touched.comment && errors.comment} />
                     </div>
+                    <div className="mt-3 col-6 pr-0">
+                      <TextAreaFloatLabel
+                        textAreaFloatLabelProps={{
+                          textAreaClass:
+                            "w-full lg:w-full md:w-23rem sm:w-21rem ",
+                          row: 5,
+                          cols: 50,
+                          name: "remarks",
+                          text: translate(localeJson, "remarks"),
+                          value: values.remarks,
+                          placeholder: translate(
+                            localeJson,
+                            "remark_placeholder"
+                          ),
+                          onChange: handleChange,
+                          onblur:handleBlur
+                        }}
+                        parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                        <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />
+                    </div>
+                  </div>
+                  <div className="text-center mt-3">
+                    <Button
+                      buttonProps={{
+                        type:"button",
+                        buttonClass: "w-8rem",
+                        severity: "primary",
+                        text: translate(localeJson, "back_to_top"),
+                        onClick: () => router.push("/staff/dashboard"),
+                      }}
+                      parentClass={"inline"}
+                    />
+                    <Button
+                      buttonProps={{
+                        buttonClass: "text-600 w-8rem",
+                        type: "submit",
+                        bg: "bg-white",
+                        hoverBg: "hover:surface-500 hover:text-white",
+                        text: translate(localeJson, "registration"),
+                      }}
+                      parentClass={"inline pl-2"}
+                    />
+                  </div>
                 </div>
+                </form>
+              </div>
             </div>
-        </>
-    )
+          </div>
+        )}
+      </Formik>
+    </>
+  );
 }

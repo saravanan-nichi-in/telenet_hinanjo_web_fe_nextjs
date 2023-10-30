@@ -64,29 +64,58 @@ export default function Setting() {
 ]
 
   const schema = Yup.object().shape({
-    footer: Yup.string().required(translate(localeJson, "footer_required")),
+    map_scale: Yup.string().required(translate(localeJson, "map_scale_required")),
+    footer: Yup.string().required(translate(localeJson, "footer_required")).max(
+      200,
+      translate(localeJson, "footer_display") +
+        translate(localeJson, "max_length_200")
+    ),
     type_name_ja: Yup.string().required(
       translate(localeJson, "type_name_jp_required")
+    ).max(
+      200,
+      translate(localeJson, "type_name") +
+        translate(localeJson, "max_length_200")
     ),
     system_name_ja: Yup.string().required(
       translate(localeJson, "system_name_jp_required")
+    ).max(
+      200,
+      translate(localeJson, "system_name") +
+        translate(localeJson, "max_length_200")
     ),
     disclosure_info_ja: Yup.string().required(
       translate(localeJson, "disclosure_info_jp_required")
+    ).max(
+      255,
+      translate(localeJson, "disclosure_information") +
+        translate(localeJson, "max_length_255")
     ),
     type_name_en: Yup.string().required(
       translate(localeJson, "type_name_en_required")
+    ).max(
+      200,
+      translate(localeJson, "type_name") +
+        translate(localeJson, "max_length_200")
     ),
     system_name_en: Yup.string().required(
       translate(localeJson, "system_name_en_required")
+    ).max(
+      200,
+      translate(localeJson, "system_name") +
+        translate(localeJson, "max_length_200")
     ),
     disclosure_info_en: Yup.string().required(
       translate(localeJson, "disclosure_info_en_required")
+    ).max(
+      255,
+      translate(localeJson, "disclosure_information") +
+        translate(localeJson, "max_length_255")
     ),
     latitude: Yup.number().required(translate(localeJson, "latitude_required")),
     default_shelf_life: Yup.number().required(
       translate(localeJson, "default_shell_life_days_required")
-    ),
+    ).min(1,translate(localeJson,"default_shelf_life_min_length")).max(999,translate(localeJson,"default_shelf_life_max_length")),
     longitude: Yup.number().required(
       translate(localeJson, "longitude_required")
     ),
@@ -128,7 +157,7 @@ export default function Setting() {
     longitude: "",
     initial_load_status: false,
     default_shelf_life: "",
-    scheduler_option: true,
+    scheduler_option: false,
     image_logo: "",
   };
   const [data, setData] = useState([]);
@@ -179,7 +208,7 @@ export default function Setting() {
       initialValues.initial_load_status =
         data?.initial_load_status == "1" ? true : false || "";
       initialValues.default_shelf_life = data?.default_shelf_life || "",
-        initialValues.scheduler_option = data?.initial_load_status == "1" ? true : false || "";
+        initialValues.scheduler_option = data?.scheduler_option == "1" ? true : false || "";
       setLoader(false);
       let public_data= data?.public_display_order||public_display_order_data
       const PublicData = public_data.map((item) => {
@@ -292,19 +321,30 @@ export default function Setting() {
                       <div>
                         <SelectFloatLabel
                           selectFloatLabelProps={{
+                            id:"map_scale",
                             name: "map_scale",
                             optionLabel: "name",
                             selectClass: "w-full",
                             options: mapScaleRateOptions,
                             value: values.map_scale,
-                            onChange: handleChange,
+                            onChange: (e) =>
+                            { 
+                              setFieldValue("map_scale",e.value||"")
+                          },
                             onBlur: handleBlur,
                             text: translate(
                               localeJson,
                               "overall_map_size_setting"
                             ),
                           }}
-                          parentClass="w-full"
+                          parentClass={`w-full ${
+                            errors.map_scale && touched.map_scale && "p-invalid pb-1"
+                          }`}
+                        />
+                        <ValidationError
+                          errorBlock={
+                            errors.map_scale && touched.map_scale && errors.map_scale
+                          }
                         />
                       </div>
                       <div className="pt-5">
@@ -629,7 +669,7 @@ export default function Setting() {
                                 setFieldValue("default_shelf_life", evt.value);
                             },
                             onBlur: handleBlur,
-                            text: translate(localeJson, "default_shelf_life"),
+                            text: translate(localeJson, "default_shelf_life_days"),
                             inputNumberClass: "w-full",
                           }}
                           parentClass={`${

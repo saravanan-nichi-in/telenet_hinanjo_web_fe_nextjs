@@ -8,7 +8,6 @@ export const StaffSuppliesServices = {
 };
 
 function _getStaffSuppliesList(payload, callBackFun) {
-    let place_id=payload.place_id
   axios
     .get(`/staff/supplies`,{params:payload})
     .then((response) => {
@@ -23,10 +22,10 @@ function _getStaffSuppliesList(payload, callBackFun) {
 
 function _createStaffSupply(payload, callBackFun) {
   axios
-    .post("/api/staff/supplies/store", payload)
+    .post("/staff/supplies/store", payload)
     .then((response) => {
-      callBackFun(response.data);
-      if (response && response.data) {
+      callBackFun(response);
+      if (response) {
         toast.success(response?.data?.message, {
           position: "top-right",
         });
