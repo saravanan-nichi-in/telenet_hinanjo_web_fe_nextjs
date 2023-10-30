@@ -63,6 +63,7 @@ export default function AdminStockPileMaster() {
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
             minWidth: "5rem",
+            className: "action_class",
             body: (rowData) => (
                 <>
                 <Button 

@@ -21,6 +21,7 @@ export default function AdminMaterialPage() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
+            className: "action_class",
             minWidth: "2rem",
             body: (rowData) => (
                 <>

@@ -472,7 +472,8 @@
       "supplies_registration":"当避難所で現在不足している数量を入力してください。",
       "supplies_name":"物資名",
       "supplies_slno": "番号",
-      "supplies_unit": "単位"
+      "supplies_unit": "単位",
+      "staff_management_inventory_import_processing":"スタッフ管理棚卸インポート処理 "
     },
     "form": {
       "type": "種別",

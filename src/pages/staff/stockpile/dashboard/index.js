@@ -6,12 +6,21 @@ import { Button, NormalTable } from '@/components';
 import { StaffStockpileDashboardService } from '@/helper/staffStockpileDashboardService';
 import { AiFillEye } from 'react-icons/ai';
 import { useRouter } from 'next/router';
+import { AdminManagementImportModal, StaffStockpileCreateModal, StockpileSummaryImageModal } from '@/components/modal';
 
 function StockpileDashboard() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const [staffStockpileDashboardValues, setStaffStockpileDashboardValues] = useState([]);
-
+    const [staffStockpileCreateOpen, setStaffStockpileCreateOpen] = useState(false);
+    const [imageModal, setImageModal] = useState(false);
+    const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
+    const onStaffStockpileCreateSuccess = () => {
+        staffStockpileCreateOpen(false);
+    };
+    const onRegister = (values) => {
+        setImportStaffStockpileOpen(false);
+    }
     const staffStockpileDashboard = [
         { field: 'id', header: translate(localeJson, 's_no'), className: "sno_class" },
         { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
@@ -28,7 +37,7 @@ function StockpileDashboard() {
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    <AiFillEye style={{ fontSize: '20px' }} />
+                    <AiFillEye onClick={() => setImageModal(true)} style={{ fontSize: '20px' }} />
                 </div>
             ),
         },
@@ -59,77 +68,97 @@ function StockpileDashboard() {
     }, []);
 
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <h5 className='page-header1'>{translate(localeJson, 'stockpile_list')}</h5>
-                    <hr />
-                    <div>
-                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'stockpile_history'),
-                                severity: "primary",
-                                onClick: () => router.push("/staff/stockpile/history?hinan=1")
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'import'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'export'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'add_stockpile'),
-                                severity: "success"
-                            }} parentClass={"mr-1 mt-1"} />
-                        </div>
-                        <div className="mt-3">
-                            <NormalTable
-                                customActionsField="actions"
-                                value={staffStockpileDashboardValues}
-                                columns={staffStockpileDashboard}
-                                showGridlines={"true"}
-                                stripedRows={true}
-                                paginator={"true"}
-                                columnStyle={{ textAlign: "center" }}
-                                className={"custom-table-cell"}
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                paginatorLeft={true}
-                            />
-                        </div>
-                        <div className="text-center mt-3">
-                            <Button buttonProps={{
-                                buttonClass: "w-8rem",
-                                severity: "primary",
-                                text: translate(localeJson, 'back_to_top'),
-                                onClick: () => router.push('/staff/dashboard'),
-                            }} parentClass={"inline"} />
-                            <Button buttonProps={{
-                                buttonClass: "text-600 w-8rem",
-                                type: "button",
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
-                                text: translate(localeJson, 'inventory'),
-                            }} parentClass={"inline pl-2"} />
+        <>
+            <StaffStockpileCreateModal
+                open={staffStockpileCreateOpen}
+                header={translate(localeJson, 'add_stockpile')}
+                close={() => setStaffStockpileCreateOpen(false)}
+                buttonText={translate(localeJson, 'save')}
+                onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
+            />
+            <StockpileSummaryImageModal
+                open={imageModal}
+                close={() => setImageModal(false)}
+            />
+            <AdminManagementImportModal
+                open={importStaffStockpileOpen}
+                close={() => setImportStaffStockpileOpen(false)}
+                register={onRegister}
+                modalHeaderText={translate(localeJson, 'staff_management_inventory_import_processing')}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <h5 className='page-header1'>{translate(localeJson, 'stockpile_list')}</h5>
+                        <hr />
+                        <div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'stockpile_history'),
+                                    severity: "primary",
+                                    onClick: () => router.push("/staff/stockpile/history?hinan=1")
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    onClick: () => setImportStaffStockpileOpen(true),
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'add_stockpile'),
+                                    severity: "success",
+                                    onClick: () => setStaffStockpileCreateOpen(true),
+                                }} parentClass={"mr-1 mt-1"} />
+                            </div>
+                            <div className="mt-3">
+                                <NormalTable
+                                    customActionsField="actions"
+                                    value={staffStockpileDashboardValues}
+                                    columns={staffStockpileDashboard}
+                                    showGridlines={"true"}
+                                    stripedRows={true}
+                                    paginator={"true"}
+                                    columnStyle={{ textAlign: "center" }}
+                                    className={"custom-table-cell"}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginatorLeft={true}
+                                />
+                            </div>
+                            <div className="text-center mt-3">
+                                <Button buttonProps={{
+                                    buttonClass: "w-8rem",
+                                    severity: "primary",
+                                    text: translate(localeJson, 'back_to_top'),
+                                    onClick: () => router.push('/staff/dashboard'),
+                                }} parentClass={"inline"} />
+                                <Button buttonProps={{
+                                    buttonClass: "text-600 w-8rem",
+                                    type: "button",
+                                    bg: "bg-white",
+                                    hoverBg: "hover:surface-500 hover:text-white",
+                                    text: translate(localeJson, 'inventory'),
+                                }} parentClass={"inline pl-2"} />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </>
     )
 }
 
