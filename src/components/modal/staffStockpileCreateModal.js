@@ -45,7 +45,7 @@ export default function StaffStockpileCreate(props) {
             ),
     });
     const { open, close, header, buttonText } = props && props;
-    const initialValues = { productType: "", productName: "", file: "" }
+    const initialValues = { productType: "", productName: "", file: "", shelfDays: "" }
 
     return (
         <>
@@ -105,69 +105,69 @@ export default function StaffStockpileCreate(props) {
                             >
                                 <div className={`modal-content`}>
                                     <div className="mt-5 mb-3">
-                                        <div className="mb-5">
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "productType",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.productType,
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_category'),
-
-                                            }} />
-                                            <ValidationError errorBlock={errors.productType && touched.productType && errors.productType} />
-                                        </div>
-                                        <div className="mt-5 ">
-                                            <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                inputId: "productName",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                options: props.categories,
-                                                value: values.productName,
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
-                                            }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
-                                            <ValidationError errorBlock={errors.productName && touched.productName && errors.productName} />
-                                        </div>
-                                        <div className="mt-5">
-                                            <InputNumberFloatLabel
-                                                inputNumberFloatProps={{
-                                                    id: "altitude",
-                                                    inputId: "integeronly",
-                                                    name: "altitude",
-                                                    text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
-                                                    inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="mt-2">
-                                            <div className="mb-1">
-                                                <NormalLabel text={translate(localeJson, 'header_stockpile_image')} />
+                                            <div className="mb-5 ">
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "productType",
+                                                    spanText: "*",
+                                                    spanClass: "p-error",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                    options: props.categories,
+                                                    value: values.productType,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    text: translate(localeJson, 'stockpile_management_create_edit_field_category'),
+                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                                <ValidationError errorBlock={errors.productType && touched.productType && errors.productType} />
                                             </div>
-                                            <div>
-                                                <InputFile
-                                                    inputFileProps={{
-                                                        onChange: handleChange,
-                                                        name: "file",
-                                                        accept: ".jpg,.png",
-                                                        onBlur: handleBlur,
+                                            <div className="mt-5 ">
+                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
+                                                    inputId: "productName",
+                                                    spanText: "*",
+                                                    spanClass: "p-error",
+                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                    options: props.categories,
+                                                    value: values.productName,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                    text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
+                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                                <ValidationError errorBlock={errors.productName && touched.productName && errors.productName} />
+                                            </div>
+                                            <div className="mt-5">
+                                                <InputNumberFloatLabel
+                                                    inputNumberFloatProps={{
+                                                        id: "altitude",
+                                                        inputId: "integeronly",
+                                                        name: "altitude",
+                                                        text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
+                                                        inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     }}
-                                                    parentClass={`${errors.file && touched.file && "p-invalid mt-2 pb-1"
-                                                        }`}
                                                 />
-                                                <ValidationError
-                                                    errorBlock={
-                                                        errors.file && touched.file && errors.file
-                                                    }
-                                                />
+                                            </div>
+                                            <div className="mt-2">
+                                                <div className="mb-1">
+                                                    <NormalLabel text={translate(localeJson, 'header_stockpile_image')} />
+                                                </div>
+                                                <div>
+                                                    <InputFile
+                                                        inputFileProps={{
+                                                            onChange: handleChange,
+                                                            name: "file",
+                                                            accept: ".jpg,.png",
+                                                            onBlur: handleBlur,
+                                                        }}
+                                                        parentClass={`${errors.file && touched.file && "p-invalid mt-2 pb-1"
+                                                            }`}
+                                                    />
+                                                    <ValidationError
+                                                        errorBlock={
+                                                            errors.file && touched.file && errors.file
+                                                        }
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </Dialog>
                         </form>
                     </div>
