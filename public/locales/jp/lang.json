@@ -464,7 +464,7 @@
       "accommodation_status":"収容状況",
       "staff_supplies":"必要物資登録",
       "remarks":"備考",
-      "comment":"comment",
+      "comment":"コメント",
       "comment_placeholder":"上記一覧以外で不足しているものを記載してください。",
       "remark_placeholder":"その他共有情報などを入力してください。",
       "supplies_registration":"当避難所で現在不足している数量を入力してください。"
