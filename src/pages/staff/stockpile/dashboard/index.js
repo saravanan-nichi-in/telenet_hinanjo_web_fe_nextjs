@@ -6,21 +6,26 @@ import { Button, NormalTable } from '@/components';
 import { StaffStockpileDashboardService } from '@/helper/staffStockpileDashboardService';
 import { AiFillEye } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import { AdminManagementImportModal, StaffStockpileCreateModal, StockpileSummaryImageModal } from '@/components/modal';
+import { AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
 
 function StockpileDashboard() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const [staffStockpileDashboardValues, setStaffStockpileDashboardValues] = useState([]);
     const [staffStockpileCreateOpen, setStaffStockpileCreateOpen] = useState(false);
+    const [staffStockpileEditOpen, setStaffStockpileEditOpen] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
+
     const onStaffStockpileCreateSuccess = () => {
         staffStockpileCreateOpen(false);
+        staffStockpileEditOpen(false);
     };
+
     const onRegister = (values) => {
         setImportStaffStockpileOpen(false);
     }
+
     const staffStockpileDashboard = [
         { field: 'id', header: translate(localeJson, 's_no'), className: "sno_class" },
         { field: 'product_type', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
@@ -51,6 +56,7 @@ function StockpileDashboard() {
                     <Button buttonProps={{
                         text: translate(localeJson, 'edit'),
                         buttonClass: "text-primary ",
+                        onClick: () => setStaffStockpileEditOpen(true),
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
                     }} />
@@ -69,6 +75,13 @@ function StockpileDashboard() {
 
     return (
         <>
+            <StaffStockpileEditModal
+                open={staffStockpileEditOpen}
+                header={translate(localeJson, 'edit_product')}
+                close={() => setStaffStockpileEditOpen(false)}
+                buttonText={translate(localeJson, 'save')}
+                onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
+            />
             <StaffStockpileCreateModal
                 open={staffStockpileCreateOpen}
                 header={translate(localeJson, 'add_stockpile')}
@@ -141,16 +154,16 @@ function StockpileDashboard() {
                             </div>
                             <div className="text-center mt-3">
                                 <Button buttonProps={{
-                                    buttonClass: "w-8rem",
-                                    severity: "primary",
+                                    buttonClass: "text-600 w-8rem",
+                                    bg: "bg-white",
+                                    hoverBg: "hover:surface-500 hover:text-white",
                                     text: translate(localeJson, 'back_to_top'),
                                     onClick: () => router.push('/staff/dashboard'),
                                 }} parentClass={"inline"} />
                                 <Button buttonProps={{
-                                    buttonClass: "text-600 w-8rem",
+                                    buttonClass: "w-8rem",
                                     type: "button",
-                                    bg: "bg-white",
-                                    hoverBg: "hover:surface-500 hover:text-white",
+                                    severity: "primary",
                                     text: translate(localeJson, 'inventory'),
                                 }} parentClass={"inline pl-2"} />
                             </div>

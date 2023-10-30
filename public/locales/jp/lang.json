@@ -468,7 +468,8 @@
       "comment_placeholder":"上記一覧以外で不足しているものを記載してください。",
       "remark_placeholder":"その他共有情報などを入力してください。",
       "supplies_registration":"当避難所で現在不足している数量を入力してください。",
-      "staff_management_inventory_import_processing":"スタッフ管理棚卸インポート処理 "
+      "staff_management_inventory_import_processing":"スタッフ管理棚卸インポート処理 ",
+      "edit_product":"製品の編集"
     },
     "form": {
       "type": "種別",
@@ -485,7 +486,11 @@
       "number_field": "フィールドは有効な数字である必要があります。",
       "valid_image_file": "画像のフォーマットが正しいものをご使用ください。",
       "image_size_validation": "画像サイズは5MB以内のものをご使用ください。",
-      "stockpile_shelf_life_max": "賞味期限は 999 を超えてはなりません。"
+      "stockpile_shelf_life_max": "賞味期限は 999 を超えてはなりません。",
+      "quantity_is_required":"数量は必須です。",
+      "inventory_date_is_required":"棚卸日は必須です。",
+      "expiry_date_is_required":"有効期限は必須です。",
+      "expiry_date_must_be_equal_or_greater_than_today":" 有効期限日付は将来の日付である必要があります。"
     },
     "buttons": {
       "login": "ログイン",
