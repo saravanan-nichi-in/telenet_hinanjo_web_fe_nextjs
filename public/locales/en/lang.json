@@ -332,7 +332,9 @@
       "admin_name_max_200_characters":"The admin name should be 200 characters or less.",
       "special_care_name_max_required":"Name 255 characters or less.",
       "special_care_name_en_max_required":"Name (English) 255 characters or less.",
-      "staff_name_max_required":"The staff name should be 200 characters or less."
+      "staff_name_max_required":"The staff name should be 200 characters or less.",
+      "default_shelf_life_min_length": "Please enter a value greater than or equal to 1.",
+      "default_shelf_life_max_length" : "Please enter a value less than or equal to 999."
     },
     "buttons": {
       "import": "Import",
@@ -468,7 +470,10 @@
       "comment":"Comment",
       "comment_placeholder":"Enter items that are not included in the supply list prepared by the operation.",
       "remark_placeholder":"Other information",
-      "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management."
+      "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management.",
+      "supplies_name":"Name of substance",
+      "supplies_slno": "S No",
+      "supplies_unit": "Unit"
     },
     "form": {
       "type": "type",
@@ -495,7 +500,8 @@
       "addition": "addition",
       "add_stockpile":"Add Stockpile",
       "back_to_top":"Back To Top",
-      "inventory":"Inventory"
+      "inventory":"Inventory",
+      "registration": "Save"
     },
     "footer": {}
   },
