@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { useSelector } from 'react-redux';
-
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ExternalEvacueesService } from '@/services/externalEvacuees.service';
 import { Button, NormalTable } from '@/components';
 import EvacueeDetailModal from './evacueeDetailModal';
 
 function ExternalFamilyList() {
-    
+
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
@@ -21,15 +21,17 @@ function ExternalFamilyList() {
         { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'place_detail', header: translate(localeJson, 'external_evecuee_list_table_place'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "15rem", maxWidth: "15rem",
-        body: (rowData) => (
-            <p className='text-link-class clickable-row' onClick={() => {
-                setStaff(rowData);
-                setStaffDetailsOpen(true);
-            }}>
-                {rowData['external_person_count']}
-            </p>
-        ) },
+        {
+            field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "15rem", maxWidth: "15rem",
+            body: (rowData) => (
+                <p className='text-link-class clickable-row' onClick={() => {
+                    setStaff(rowData);
+                    setStaffDetailsOpen(true);
+                }}>
+                    {rowData['external_person_count']}
+                </p>
+            )
+        },
         { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "15rem", maxWidth: "15rem" },
@@ -80,7 +82,7 @@ function ExternalFamilyList() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
-                        id:obj.id,
+                        id: obj.id,
                         place_category: obj.place_category ?? "",
                         place_detail: obj.place_detail ?? "",
                         food_required: obj.food_required ?? "",
@@ -115,15 +117,15 @@ function ExternalFamilyList() {
         hideOverFlow();
     }
 
-    const onStaffDeleteClose = (action = "close") => {
-        if (action == "confirm") {
-            MaterialService.delete(deleteId, (resData) => {
-                onGetMaterialListOnMounting()
-            });
-        }
-        setDeleteStaffOpen(!deleteStaffOpen);
-        showOverFlow();
-    };
+    // const onStaffDeleteClose = (action = "close") => {
+    //     if (action == "confirm") {
+    //         MaterialService.delete(deleteId, (resData) => {
+    //             onGetMaterialListOnMounting()
+    //         });
+    //     }
+    //     setDeleteStaffOpen(!deleteStaffOpen);
+    //     showOverFlow();
+    // };
 
     const hideOverFlow = () => {
         document.body.style.overflow = 'hidden';
@@ -162,14 +164,14 @@ function ExternalFamilyList() {
         hideOverFlow();
     };
 
-    const importFileApi = (file) => {
-        console.log(file);
-        const formData = new FormData();
-        formData.append('file', file);
-        MaterialService.importData(formData, () => {
-        });
-        onStaffImportClose();
-    }
+    // const importFileApi = (file) => {
+    //     console.log(file);
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //     MaterialService.importData(formData, () => {
+    //     });
+    //     onStaffImportClose();
+    // }
 
     /**
      * Pagination handler
@@ -206,47 +208,47 @@ function ExternalFamilyList() {
                 close={onStaffDetailClose}
                 staff={staff}
             />}
-            
+
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                            <h5 className='page-header1'>{translate(localeJson, 'external_evecuee_list_header')}</h5>
-                            <hr />
-                            <div>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            exportData(getListPayload)
-                                        }
-                                    }} parentClass={"mr-1 mt-1"} />
+                        <h5 className='page-header1'>{translate(localeJson, 'external_evecuee_list_header')}</h5>
+                        <hr />
+                        <div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
 
-                                </div>
-                                <div className='mt-3'>
-                                    <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columnsData}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                    />
-                                </div>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary",
+                                    onClick: () => {
+                                        exportData(getListPayload)
+                                    }
+                                }} parentClass={"mr-1 mt-1"} />
+
                             </div>
+                            <div className='mt-3'>
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columnsData}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
