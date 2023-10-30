@@ -468,7 +468,8 @@
       "comment":"Comment",
       "comment_placeholder":"Enter items that are not included in the supply list prepared by the operation.",
       "remark_placeholder":"Other information",
-      "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management."
+      "supplies_registration":" In the registration column for necessary supplies, enter numerical values according to the list registered by the management.",
+      "staff_management_inventory_import_processing":"Staff Management Inventory Import Processing"
     },
     "form": {
       "type": "type",

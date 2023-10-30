@@ -467,7 +467,8 @@
       "comment":"コメント",
       "comment_placeholder":"上記一覧以外で不足しているものを記載してください。",
       "remark_placeholder":"その他共有情報などを入力してください。",
-      "supplies_registration":"当避難所で現在不足している数量を入力してください。"
+      "supplies_registration":"当避難所で現在不足している数量を入力してください。",
+      "staff_management_inventory_import_processing":"スタッフ管理棚卸インポート処理 "
     },
     "form": {
       "type": "種別",
