@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -111,7 +111,6 @@ export default function StaffStockpileCreate(props) {
                                                 spanText: "*",
                                                 spanClass: "p-error",
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                options: props.categories,
                                                 value: values.productType,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,

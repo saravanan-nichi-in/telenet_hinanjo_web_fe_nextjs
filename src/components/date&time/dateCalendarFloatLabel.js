@@ -28,6 +28,8 @@ const DateCalendarFloatLabel = (props) => {
         readOnlyInput,
         placeholder,
         text,
+        spanClass,
+        spanText,
         ...restProps
     } = dateFloatLabelProps;
 
@@ -76,7 +78,7 @@ const DateCalendarFloatLabel = (props) => {
                     placeholder={placeholder}
                     {...restProps}
                 />
-                <label htmlFor={id}>{text}</label>
+                <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
             </div>
         </div>
     );
