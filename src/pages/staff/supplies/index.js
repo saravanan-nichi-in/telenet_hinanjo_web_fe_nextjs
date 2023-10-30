@@ -235,6 +235,7 @@ export default function Supplies() {
                   <div className="text-center mt-3">
                     <Button
                       buttonProps={{
+                        type:"button",
                         buttonClass: "w-8rem",
                         severity: "primary",
                         text: translate(localeJson, "back_to_top"),
