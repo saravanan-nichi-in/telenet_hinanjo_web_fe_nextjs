@@ -57,6 +57,7 @@ export default function AdminManagementImportModal(props) {
                                 style={style}
                                 draggable={false}
                                 onHide={() => {
+                                    errors.file=undefined;
                                     close();
                                     values.file = null
                                 }}

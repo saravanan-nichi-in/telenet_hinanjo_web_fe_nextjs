@@ -9,6 +9,7 @@ import {
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
 import { useAppSelector } from "@/redux/hooks";
+import toast from "react-hot-toast";
 import {
   Button,
   DividerComponent,
@@ -298,7 +299,9 @@ export default function PlaceUpdatePage() {
           lng: location.lng(),
         });
       } else {
-        alert("Location not found");
+        toast.error(translate(localeJson,"loc_not_found"), {
+          position: "top-right",
+        });
       }
     });
   };
