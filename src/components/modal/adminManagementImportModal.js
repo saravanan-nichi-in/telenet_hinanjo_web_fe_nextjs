@@ -17,6 +17,8 @@ export default function AdminManagementImportModal(props) {
             {modalHeaderText}
         </div>
     );
+    const initialValues = { file: null};
+
     const schema = Yup.object().shape({
         file: Yup.mixed()
             .required(translate(localeJson, 'file_csv_required'))
@@ -35,10 +37,12 @@ export default function AdminManagementImportModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ file: null }}
-                onSubmit={(values) => {
+                initialValues={initialValues}
+                onSubmit={(values,actions) => {
                     importFile(values.file)
+                    close();
                     values.file = null;
+                    actions.resetForm({ values: initialValues });
                 }}
             >
                 {({
@@ -47,6 +51,7 @@ export default function AdminManagementImportModal(props) {
                     touched,
                     setFieldValue,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div className="">
                         <form onSubmit={handleSubmit}>
@@ -60,6 +65,7 @@ export default function AdminManagementImportModal(props) {
                                     errors.file=undefined;
                                     close();
                                     values.file = null
+                                    resetForm({ values: initialValues });
                                 }}
                                 footer={
                                     <div className="text-center">
