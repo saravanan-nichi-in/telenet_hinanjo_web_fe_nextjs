@@ -2,18 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import Doughnut from "@/components/chart";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getValueByKeyRecursively as translate,generateColors } from "@/helper";
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { useSelector } from "react-redux";
-import { generateColors } from "@/helper";
+import {staff_dashboard_status_jp,staff_dashboard_status_en} from '@/utils/constant'
 
 function StaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const [selectedInfo, setSelectedInfo] = useState(false);
-  const [selectedInfoTotalCapacity, setSelectedInfoTotalCapacity] =
-    useState(false);
-  const [selectedInfoSpecialCares, setSelectedInfoSpecialCares] =
-    useState(false);
   const [labelsSpecialCares, setLabelsSpecialCares] = useState(null);
   const [dataSpecialCares, setDataSpecialCares] = useState(null);
   const [labelsTotalCapacityBreakdown, setLabelsTotalCapacityBreakdown] =
@@ -45,24 +40,16 @@ function StaffDashboard() {
       setDataSpecialCares(Object.values(personTotal2?.specialCares));
       setLabelsTotalCapacityBreakdown(Object.keys(personTotal2?.other_stats));
       setDataTotalCapacityBreakdown(Object.values(personTotal2?.other_stats));
-      setLabelsOther(Object.keys(personTotal2?.accomidation_stats));
-      setDataOther(Object.values(personTotal2?.accomidation_stats));
+      let keysInOrder = locale=='ja'?staff_dashboard_status_jp:staff_dashboard_status_en;
+      let accommodationStats = personTotal2?.accomidation_stats;
+      let valuesInOrder = keysInOrder.map(key => accommodationStats[key]);
+      setLabelsOther(keysInOrder);
+      setDataOther(Object.values(valuesInOrder));
     }
   }
   finally{
     setLoader(false);
   }
-  };
-
-  const handleIconClick = () => {
-    setSelectedInfo(!selectedInfo);
-  };
-  const handleIconClickTotalCapacity = () => {
-    setSelectedInfoTotalCapacity(!selectedInfoTotalCapacity);
-  };
-
-  const handleIconClickSpecialCares = () => {
-    setSelectedInfoSpecialCares(!selectedInfoSpecialCares);
   };
   return (
     <>

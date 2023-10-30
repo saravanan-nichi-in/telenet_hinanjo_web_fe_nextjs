@@ -20,9 +20,6 @@ const Doughnut = ({ labels, data, title, style,bgClr,hvrClr }) => {
                     title: () => null,
                     label: function(context) {
                         let val = context.raw || '';
-                        if (context.raw == 1) {
-                            val = '0'; // Display "0" on hover if value is 0
-                        }
                         return context.label+" "+val;
                     }
                 }
