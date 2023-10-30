@@ -6,6 +6,7 @@ import { getValueByKeyRecursively as translate,getGeneralDateTimeDisplayFormat }
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
 import { useAppSelector } from "@/redux/hooks";
+import toast from "react-hot-toast"; 
 import {
   Button,
   DividerComponent,
@@ -150,7 +151,7 @@ export default function PlaceCreatePage() {
       ),
     remarks: Yup.string().max(
       255,
-      translate(localeJson, "default_address_en") +
+      translate(localeJson, "remarks") +
         translate(localeJson, "max_length_255")
     ),
     opening_date: Yup.date().nullable(),
@@ -242,7 +243,9 @@ export default function PlaceCreatePage() {
           lng: location.lng(),
         });
       } else {
-        alert("Location not found");
+        toast.error(translate(localeJson,"loc_not_found"), {
+          position: "top-right",
+        });
       }
     });
   };

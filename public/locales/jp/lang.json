@@ -282,7 +282,8 @@
       "working_date":"作業日時",
       "quantity_before":"数量(前)",
       "quantity_after":"数量(後)",
-      "expiry_date":"有効期限"
+      "expiry_date":"有効期限",
+      "loc_not_found": "場所が見つかりません。"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -460,7 +461,13 @@
       "staff_page_dashboard":"スタッフ用のダッシュボード",
       "shelter_situation":"避難所の状況",
       "person_consideration":"要配慮者",
-      "accommodation_status":"収容状況"
+      "accommodation_status":"収容状況",
+      "staff_supplies":"必要物資登録",
+      "remarks":"備考",
+      "comment":"コメント",
+      "comment_placeholder":"上記一覧以外で不足しているものを記載してください。",
+      "remark_placeholder":"その他共有情報などを入力してください。",
+      "supplies_registration":"当避難所で現在不足している数量を入力してください。"
     },
     "form": {
       "type": "種別",

@@ -164,7 +164,7 @@ export default function PlaceUpdatePage() {
       ),
     remarks: Yup.string().max(
       255,
-      translate(localeJson, "default_address_en") +
+      translate(localeJson, "remarks") +
         translate(localeJson, "max_length_255")
     ),
     opening_date: Yup.date().nullable(),
