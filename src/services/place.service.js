@@ -198,7 +198,7 @@ function _details(id, callBackFun) {
  */
 function _updateStatus(payload, callBackFun) {
   axios
-    .put(`/admin/place/status/update/${payload.place_id}`, payload)
+    .put(`/admin/place/status/update`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun();
