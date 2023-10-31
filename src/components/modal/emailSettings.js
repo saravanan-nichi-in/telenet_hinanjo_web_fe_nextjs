@@ -29,7 +29,7 @@ export default function EmailSettings(props) {
         email: Yup.string()
             .required(translate(localeJson, 'notification_email_id_required'))
             .test('is-email', translate(localeJson, 'format_notification'), value => {
-                /** Check if it's a single valid email or a list of valid emails separated by commas */ 
+                /** Check if it's a single valid email or a list of valid emails separated by commas */
                 return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
@@ -67,8 +67,9 @@ export default function EmailSettings(props) {
                 validationSchema={schema}
                 initialValues={initialValues}
                 enableReinitialize
-                onSubmit={() => {
-                    router.push("/admin/history/place")
+                onSubmit={(values, actions) => {
+                    close();
+                    actions.resetForm({ values: initialValues });
                 }}
             >
                 {({
@@ -78,6 +79,7 @@ export default function EmailSettings(props) {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    resetForm
                 }) => (
                     <div>
                         <Dialog
@@ -86,7 +88,10 @@ export default function EmailSettings(props) {
                             visible={open}
                             draggable={false}
                             blockScroll={true}
-                            onHide={() => close()}
+                            onHide={() =>{ 
+                                close();
+                                resetForm({ values: initialValues });
+                            }}
                             footer={
                                 <div className="text-center">
                                     <Button buttonProps={{
@@ -94,7 +99,10 @@ export default function EmailSettings(props) {
                                         bg: "bg-white",
                                         hoverBg: "hover:surface-500 hover:text-white",
                                         text: translate(localeJson, 'cancel'),
-                                        onClick: () => close(),
+                                        onClick: () =>{
+                                             close();
+                                             resetForm({ values: initialValues });
+                                            }
                                     }} parentClass={"inline"} />
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",

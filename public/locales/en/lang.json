@@ -342,7 +342,7 @@
       "import": "Import",
       "export": "Export",
       "search": "Search",
-      "signup": "Signup",
+      "signup": "Sign Up",
       "cancel": "Cancel",
       "update": "Update",
       "registration": "Save",
@@ -481,7 +481,14 @@
       "supplies_slno": "S No",
       "supplies_unit": "Unit",
       "staff_management_inventory_import_processing":"Staff Management Inventory Import Processing",
-      "edit_product":"Edit Product"
+      "edit_product":"Edit Product",
+      "number_of_household":"Number of households",
+      "household_representative":"Household representative",
+      "age_m":"Age(m)",
+      "special_Care_type":"Special Care Type",
+      "connecting_code":"Connecting Code",
+      "date_created":"Date created",
+      "evacuation_days":"Evacuation days"
     },
     "form": {
       "type": "type",
@@ -490,7 +497,8 @@
       "days": "days",
       "image": "Image",
       "quantity": "Quantity",
-      "expiration_date": "Expiration Date"
+      "expiration_date": "Expiration Date",
+      "total_summary":"Total (Summary)"
     },
     "validation": {
       "type_required": "Product Type is required.",
