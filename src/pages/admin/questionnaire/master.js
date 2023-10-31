@@ -21,23 +21,6 @@ export default function MasterQuestionnaire() {
         search: ""
     });
     const [questionnaires, setQuestionnaires] = useState([]);
-
-    const [newItem, setNewItem] = useState({
-        "id": questionnaires.length + 1,
-        "title": "",
-        "questiontitle": "",
-        "questiontitle_en": "",
-        "option": [""],
-        "option_en": [""],
-        "selected_type": 1,
-        "inner_question_type": 1,
-        "is_required": false,
-        "is_visible": false,
-        "is_voice_type": false
-    });
-
-
-
     const router = useRouter();
 
     const dragProps = {
@@ -93,20 +76,37 @@ export default function MasterQuestionnaire() {
                     "inner_question_type": item.type == 1 ? 1 : 2,
                     "is_required": item.isRequired == 1 ? true : false,
                     "is_visible": item.isVisible == 1 ? true : false,
-                    "is_voice_type": item.isVoiceRequired == 1 ? true : false
+                    "is_voice_type": item.isVoiceRequired == 1 ? true : false,
+                    "db_data": true
                 };
                 questionList.push(question);
             });
             setQuestionnaires(questionList);
         }
         else {
-            setQuestionnaires([]);
+            setQuestionnaires([
+                {
+                    "id": questionnaires.length + 1,
+                    "title": "",
+                    "questiontitle": "",
+                    "questiontitle_en": "",
+                    "option": [""],
+                    "option_en": [""],
+                    "selected_type": 1,
+                    "inner_question_type": 1,
+                    "is_required": true,
+                    "is_visible": false,
+                    "is_voice_type": false,
+                    "db_data": false
+                }
+            ]);
         }
     }
 
     useEffect(() => {
         const fetchData = async () => {
             await onGetQuestionnaireListMounting();
+            setLoader(false);
         };
         fetchData();
     }, []);
@@ -144,11 +144,16 @@ export default function MasterQuestionnaire() {
                 "isVoiceRequire": item.is_voice_type ? 1 : 0,
                 "qVisibility": item.is_visible ? 1 : 0
             };
+            if (item.db_data) {
+                question['id'] = item.id
+            }
             payloadData.push(question);
         });
         registerQuestionnaire({
             question: [...payloadData]
-        }, updateAfterQuestionReg)
+        }, ((response) => {
+            getList(getListPayload, getQuestionnaireList)
+        }))
     }
 
     const updateAfterQuestionReg = (response) => {
@@ -156,17 +161,22 @@ export default function MasterQuestionnaire() {
     }
 
     const handleAddNewItem = () => {
-        // Add the new item to the questionnaires state
-        setQuestionnaires([...questionnaires, newItem]);
-        // Clear the newItem state for the next addition
-        setNewItem({
+        let newItem = {
             "id": questionnaires.length + 1,
             "title": "",
             "questiontitle": "",
             "questiontitle_en": "",
-            "option": [" "],
-            "option_en": [" "]
-        });
+            "option": [""],
+            "option_en": [""],
+            "selected_type": 1,
+            "inner_question_type": 1,
+            "is_required": false,
+            "is_visible": false,
+            "is_voice_type": false,
+            "db_data": false
+        }
+        // Add the new item to the questionnaires state
+        setQuestionnaires([...questionnaires, newItem]);
     };
     return (
         <>

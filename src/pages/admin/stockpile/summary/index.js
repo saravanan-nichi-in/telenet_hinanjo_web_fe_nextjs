@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AiFillEye } from 'react-icons/ai';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import _ from 'lodash';
 
 import { RowExpansionTable, Button, InputSwitch } from '@/components';
@@ -55,29 +55,20 @@ function AdminStockpileSummary() {
         { field: "notification_email", header: translate(localeJson, 'notification_email') },
     ]
     const stockPileRowExpansionColumn = [
-        { field: "type", header: translate(localeJson, 'type') },
-        { field: "stock_pile_name", header: translate(localeJson, 'stockpile_item_name') },
+        { field: "type", header: translate(localeJson, 'product_type') },
+        { field: "stock_pile_name", header: translate(localeJson, 'product_name') },
         { field: "quantity", header: translate(localeJson, 'quantity') },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
-        { field: "stock_pile_image", header: "", display: 'none' },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'image'),
-            textAlign: "center",
-            minWidth: "5rem",
-            body: (rowData) => (
-                <div>
-                    <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(rowData)} />
-                </div>
-            ),
-        },
+        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "5rem"}
     ];
 
-    const bindImageModalData = (rowData) => {
-        setImageUrl(rowData.stock_pile_image);
+    const bindImageModalData = (image) => {
+        setImageUrl(imageBaseUrl + image);
         setImageModal(true);
     }
+
+    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,28 +113,38 @@ function AdminStockpileSummary() {
         let payload = {
             place_id: rowData.place_id
         }
-        getStockPileEmailData(payload, (response) => {
-            if (response.success && !_.isEmpty(response.data)) {
-                const data = response.data.model;
-                let emailData = {
-                    email: data.email,
-                    place_name: rowData.shelter_place.props.children,
-                    place_id: rowData.place_id
+        if (rowData.notification_email) {
+            getStockPileEmailData(payload, (response) => {
+                if (response.success && !_.isEmpty(response.data)) {
+                    const data = response.data.model;
+                    let emailData = {
+                        email: data.email,
+                        place_name: rowData.shelter_place.props.children,
+                        place_id: rowData.place_id
+                    }
+                    setEmailSettingValues(emailData);
+                    setEmailModal(true);
                 }
-                setEmailSettingValues(emailData);
-                setEmailModal(true);
-            }
-            else {
-                let emailData = {
-                    email: "",
-                    place_name: rowData.shelter_place.props.children,
-                    place_id: rowData.place_id
-                };
-                setEmailSettingValues(emailData);
-                setEmailModal(true);
-            }
-        });
-        
+                else {
+                    let emailData = {
+                        email: "",
+                        place_name: rowData.shelter_place.props.children,
+                        place_id: rowData.place_id
+                    };
+                    setEmailSettingValues(emailData);
+                    setEmailModal(true);
+                }
+            });
+        }
+        else {
+            let emailData = {
+                email: "",
+                place_name: rowData.shelter_place.props.children,
+                place_id: rowData.place_id
+            };
+            setEmailSettingValues(emailData);
+            setEmailModal(true);
+        }
     };
 
 
@@ -177,8 +178,8 @@ function AdminStockpileSummary() {
             }
             getStockPileEmailUpdate(payload);
             setEmailSettingValues(emailData);
-            setEmailModal(false);
             getSummaryList(getListPayload, onGetStockPileSummaryList);
+            setEmailModal(false);
         }
     };
 
@@ -212,7 +213,7 @@ function AdminStockpileSummary() {
                         quantity: item.after_count,
                         expiry_date: item.expiry_date,
                         expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
-                        stock_pile_image: item.stockpile_image
+                        stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
                     }],
                 };
                 let isAvailable = stockPileList.some(obj => obj.place_id == item.place_id);
@@ -229,7 +230,7 @@ function AdminStockpileSummary() {
                             quantity: item.after_count,
                             expiry_date: item.expiry_date,
                             expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
-                            stock_pile_image: item.stockpile_image
+                            stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
                         }
                         stockPileList[index].orders.push(newOrder);
                     }

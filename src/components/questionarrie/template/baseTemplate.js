@@ -44,54 +44,48 @@ const BaseTemplate = (props) => {
         }
     ];
 
-    const updateOptionList = (operation, index) => {
-        const updatedData = { ...item };
-        if (operation == "add") {
-            updatedData.option.push("");
-            updatedData.option_en.push("");
-            setItem(updatedData);
-        }
-        else {
-            updatedData.option.splice(index, 1)
-            updatedData.option_en.splice(index, 1)
-            setItem(updatedData);
-        }
-    }
-
     const updateInputFieldValue = (value, index, field) => {
         let updatedData = { ...item };
         if (field == "jp") {
             updatedData.option[index] = value;
-            setItem(updatedData);
         }
         else {
             updatedData.option_en[index] = value;
-            setItem(updatedData);
         }
+        setItem(updatedData);
+        handleItemChange(updatedData);
     }
 
     const updateFormChangeData = (value, field) => {
         let updatedData = { ...item };
-        if(field == "required"){
+        if (field == "required") {
             updatedData.is_required = value;
         }
-        if(field == "visible"){
+        if (field == "visible") {
             updatedData.is_visible = value;
         }
-        if(field == "voice"){
+        if (field == "voice") {
             updatedData.is_voice_type = value;
         }
-        if(field == "selection_mode"){
+        if (field == "selection_mode") {
             updatedData.selected_type = value;
         }
-        if(field == "sub_selection"){
+        if (field == "sub_selection") {
             updatedData.inner_question_type = value;
         }
-        if(field == "jp_title"){
+        if (field == "jp_title") {
             updatedData.questiontitle = value;
         }
-        if(field == "en_title"){
+        if (field == "en_title") {
             updatedData.questiontitle_en = value;
+        }
+        if (field == "add") {
+            updatedData.option.push("");
+            updatedData.option_en.push("");
+        }
+        if (field == "delete") {
+            updatedData.option.splice(value, 1)
+            updatedData.option_en.splice(value, 1)
         }
         setItem(updatedData);
         handleItemChange(updatedData);
@@ -403,7 +397,7 @@ const BaseTemplate = (props) => {
                                                     severity: "success",
                                                     rounded: "true",
                                                     type: "button",
-                                                    onClick: () => updateOptionList('add', i)
+                                                    onClick: () => updateFormChangeData(i, "add")
                                                 }}
                                                 />
                                             ) : (
@@ -412,7 +406,7 @@ const BaseTemplate = (props) => {
                                                     severity: "danger",
                                                     rounded: "true",
                                                     type: "button",
-                                                    onClick: () => updateOptionList('delete', i)
+                                                    onClick: () => updateFormChangeData(i, 'delete')
                                                 }}
                                                 />
                                             )}
