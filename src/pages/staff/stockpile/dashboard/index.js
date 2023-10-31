@@ -112,7 +112,7 @@ function StockpileDashboard() {
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'stockpile_history'),
                                     severity: "primary",
-                                    onClick: () => router.push("/staff/stockpile/history?hinan=1")
+                                    onClick: () => router.push("/staff/stockpile/history")
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{
                                     type: 'submit',
