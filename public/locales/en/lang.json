@@ -170,6 +170,12 @@
           "sno": "S No"
         }
       },
+      "public_evacuee_table_placeName": "Place Name",
+      "public_evacuee_table_name": "Name",
+      "public_evacuee_table_refugee_name": "Name (furigana)",
+      "public_evacuee_table_gender": "Gender",
+      "public_evacuee_table_address": "Address",
+      "public_evacuee_table_age": "Age",
       "external_evecuee_list_table_slno":"S No",
        "external_evecuee_list_table_place_category":"Evacuation place type",
        "external_evecuee_list_table_place":"Location",

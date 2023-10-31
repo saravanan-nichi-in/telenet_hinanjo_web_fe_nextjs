@@ -168,6 +168,12 @@
           "sno": "番号"
         }
       },
+      "public_evacuee_table_placeName": "地名",
+      "public_evacuee_table_name": "氏名 (漢字)",
+      "public_evacuee_table_refugee_name": "氏名 (フリガナ)",
+      "public_evacuee_table_gender": "性別",
+      "public_evacuee_table_address": "住所",
+      "public_evacuee_table_age": "年齢",
       "external_evecuee_list_table_slno":"番号",
       "external_evecuee_list_table_place_category":"避難場所種別",
       "external_evecuee_list_table_place":"場所",
