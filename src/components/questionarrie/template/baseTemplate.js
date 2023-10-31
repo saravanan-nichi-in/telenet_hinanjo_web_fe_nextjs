@@ -20,11 +20,11 @@ const BaseTemplate = (props) => {
             "name": translate(localeJson, 'selection')
         },
         {
-            "key": 2,
+            "key": 3,
             "name": translate(localeJson, 'description')
         },
         {
-            "key": 3,
+            "key": 4,
             "name": translate(localeJson, 'numeric')
         }
     ];
@@ -39,7 +39,7 @@ const BaseTemplate = (props) => {
             "name": translate(localeJson, 'radio')
         },
         {
-            "key": 3,
+            "key": 5,
             "name": translate(localeJson, 'dropdown')
         }
     ];

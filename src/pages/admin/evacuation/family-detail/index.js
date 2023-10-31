@@ -24,7 +24,7 @@ export default function EvacueeFamilyDetail() {
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
 
     const evacueeFamilyDetailColumns = [
-        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem",className: "sno_class" },
+        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem", className: "sno_class" },
         { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
         { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
         { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
@@ -51,6 +51,7 @@ export default function EvacueeFamilyDetail() {
     ];
 
     const familyAdmissionColumns = [
+        { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem" },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
@@ -171,11 +172,18 @@ export default function EvacueeFamilyDetail() {
             let admittedHistory = [];
             historyData.map((item) => {
                 let historyItem = {
+                    place_id: item.place_id,
                     shelter_place: item.placeName,
                     admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
-                    discharge_date_time: item.status == 1 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : ""
+                };
+                let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
+                if (index >= 0 && item.status == 1) {
+                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
                 }
-                admittedHistory.push(historyItem);
+                else {
+                    admittedHistory.push(historyItem);
+                }
+
             });
             setFamilyAdmittedData(admittedHistory);
 

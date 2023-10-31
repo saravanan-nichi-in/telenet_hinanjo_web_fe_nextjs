@@ -20,19 +20,7 @@ export default function MasterQuestionnaire() {
         },
         search: ""
     });
-    const [questionnaires, setQuestionnaires] = useState([{
-        "id": 1,
-        "title": "",
-        "questiontitle": "",
-        "questiontitle_en": "",
-        "option": [""],
-        "option_en": [""],
-        "selected_type": 1,
-        "inner_question_type": 1,
-        "is_required": false,
-        "is_visible": false,
-        "is_voice_type": false
-    }]);
+    const [questionnaires, setQuestionnaires] = useState([]);
 
     const [newItem, setNewItem] = useState({
         "id": questionnaires.length + 1,
@@ -95,7 +83,7 @@ export default function MasterQuestionnaire() {
             let questionList = [];
             data.map((item, index) => {
                 let question = {
-                    "id": index + 1,
+                    "id": item.id,
                     "title": "",
                     "questiontitle": item.title,
                     "questiontitle_en": item.title_en,
@@ -151,7 +139,10 @@ export default function MasterQuestionnaire() {
                 "questiontitle": item.questiontitle,
                 "questiontitle_en": item.questiontitle_en,
                 "option": item.selected_type == 1 ? item.option : [],
-                "option_en": item.selected_type == 1 ? item.option_en : []
+                "option_en": item.selected_type == 1 ? item.option_en : [],
+                "qRequire": item.is_required ? 1 : 0,
+                "isVoiceRequire": item.is_voice_type ? 1 : 0,
+                "qVisibility": item.is_visible ? 1 : 0
             };
             payloadData.push(question);
         });
