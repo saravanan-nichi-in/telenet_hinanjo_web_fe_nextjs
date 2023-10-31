@@ -37,7 +37,7 @@ export default function RadioBtn(props) {
             />
             <NormalLabel htmlFor={inputId}
                 className={`${labelClass}`}
-                text={value}
+                text={name}
             />
         </div>
     );

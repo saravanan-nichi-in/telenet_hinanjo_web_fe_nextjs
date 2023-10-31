@@ -131,6 +131,7 @@
       "update_isActive_status": "避難所の運営状態を変更しますか？",
       "s_no": "番号",
       "place_details": "避難所の詳細",
+      "place_detail": "場所",
       "place_csv_import": "避難所マスタCSVインポート",
       "place_search": "避難所の住所をご入力ください。",
       "download_sample_csv": "サンプルCSVのダウンロード",
@@ -222,8 +223,8 @@
       "item_title": "項目タイトル",
       "choice": "選択肢",
       "del_item": "項目削除",
-      "del_choice": "選択肢削",
-      "add_choice": "選択肢追",
+      "del_choice": "選択肢削除",
+      "add_choice": "選択肢追加",
       "display_in_registration_screen": "避難者登録画面表示",
       "add_item": "項目追加",
       "individual_questionaries": "個人ごとの個別項目",
@@ -420,7 +421,10 @@
       "japanese": "日本語",
       "people_count": "人数",
       "notification_email": "通知先",
-      "user_dashboard_note":"※ 退所する時は、必ず「退所」の手続きをしてください。"
+      "user_dashboard_note":"※ 退所する時は、必ず「退所」の手続きをしてください。",
+      "checkbox": "チェックボックス",
+      "radio": "ラジオボタン",
+      "dropdown": "ドロップダウン"
     }
   },
   "staff": {

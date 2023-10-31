@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
 import { Button } from '@/components/button';
@@ -10,8 +10,93 @@ import { Input } from '@/components/input';
 import { RadioBtn } from '@/components/radioButton';
 
 const BaseTemplate = (props) => {
-    const { item } = props;
+    const [item, setItem] = useState(props.item);
+    const { removeQuestion, handleItemChange } = props;
     const { localeJson } = useContext(LayoutContext);
+
+    const selectionMode = [
+        {
+            "key": 1,
+            "name": translate(localeJson, 'selection')
+        },
+        {
+            "key": 2,
+            "name": translate(localeJson, 'description')
+        },
+        {
+            "key": 3,
+            "name": translate(localeJson, 'numeric')
+        }
+    ];
+
+    const innerSelectionMode = [
+        {
+            "key": 1,
+            "name": translate(localeJson, 'checkbox')
+        },
+        {
+            "key": 2,
+            "name": translate(localeJson, 'radio')
+        },
+        {
+            "key": 3,
+            "name": translate(localeJson, 'dropdown')
+        }
+    ];
+
+    const updateOptionList = (operation, index) => {
+        const updatedData = { ...item };
+        if (operation == "add") {
+            updatedData.option.push("");
+            updatedData.option_en.push("");
+            setItem(updatedData);
+        }
+        else {
+            updatedData.option.splice(index, 1)
+            updatedData.option_en.splice(index, 1)
+            setItem(updatedData);
+        }
+    }
+
+    const updateInputFieldValue = (value, index, field) => {
+        let updatedData = { ...item };
+        if (field == "jp") {
+            updatedData.option[index] = value;
+            setItem(updatedData);
+        }
+        else {
+            updatedData.option_en[index] = value;
+            setItem(updatedData);
+        }
+    }
+
+    const updateFormChangeData = (value, field) => {
+        let updatedData = { ...item };
+        if(field == "required"){
+            updatedData.is_required = value;
+        }
+        if(field == "visible"){
+            updatedData.is_visible = value;
+        }
+        if(field == "voice"){
+            updatedData.is_voice_type = value;
+        }
+        if(field == "selection_mode"){
+            updatedData.selected_type = value;
+        }
+        if(field == "sub_selection"){
+            updatedData.inner_question_type = value;
+        }
+        if(field == "jp_title"){
+            updatedData.questiontitle = value;
+        }
+        if(field == "en_title"){
+            updatedData.questiontitle_en = value;
+        }
+        setItem(updatedData);
+        handleItemChange(updatedData);
+    }
+
     const itemTemplate = (item) => {
         return (
             <div>
@@ -43,8 +128,8 @@ const BaseTemplate = (props) => {
                                                 </div>
                                             </div>
                                             <div className='align-items-center pt-2 pb-2'>
-                                                <div className=''>
-                                                    <div className=" pb-2 flex align-items-center">
+                                                <div className='flex'>
+                                                    <div className="pb-2 flex align-items-center">
                                                         <RadioBtn radioBtnProps={{
                                                             checked: true
                                                         }} parentClass={"pr-2"}
@@ -101,7 +186,7 @@ const BaseTemplate = (props) => {
                                                 text: `－ ${translate(localeJson, 'del_item')}`,
                                                 severity: "danger",
                                                 rounded: "true",
-                                                type:"button"
+                                                type: "button"
                                             }} />
                                         </div>
                                     </div>
@@ -133,7 +218,7 @@ const BaseTemplate = (props) => {
                                                     <Button buttonProps={{
                                                         text: `－ ${translate(localeJson, 'del_choice')}`,
                                                         severity: "danger",
-                                                        type:"button",
+                                                        type: "button",
                                                         rounded: "true"
                                                     }}
                                                     />
@@ -141,7 +226,7 @@ const BaseTemplate = (props) => {
                                                     <Button buttonProps={{
                                                         text: `＋  ${translate(localeJson, 'add_choice')}`,
                                                         severity: "success",
-                                                        type:"button",
+                                                        type: "button",
                                                         rounded: "true",
                                                     }}
                                                     />
@@ -167,47 +252,69 @@ const BaseTemplate = (props) => {
                                     borderLeft: "1px solid #000"
                                 }}>
                                     <div className='flex'>
-                                        <div className='col-6 flex gap-2 align-items-center justify-content-start'>
+                                        <div className='col-8 flex gap-2 align-items-center justify-content-start'>
                                             <NormalCheckBox checkBoxProps={{
-                                                checked: true,
-
+                                                checked: item.is_required,
+                                                onChange: (e) => updateFormChangeData(e.checked, "required")
                                             }} />
                                             {translate(localeJson, 'required')}
                                         </div>
-                                        <div className='col-6 flex  gap-2 align-items-center justify-content-end '>
+                                        <div className='col-4 flex  gap-2 align-items-center justify-content-start ' style={{ fontSize: "14px" }}>
                                             <InputSwitch inputSwitchProps={{
-                                                checked: true
+                                                checked: item.is_visible,
+                                                onChange: (e) => updateFormChangeData(e.value, "visible")
                                             }} />
                                             {translate(localeJson, 'display_in_registration_screen')}
                                         </div>
                                     </div>
                                     <div className='flex align-items-center justify-content-between'>
-                                        <div className='col-6 xl:flex gap-3'>
-                                            <div className='flex pb-2 gap-2 align-items-center justify-content-start'>
-                                                <RadioBtn radioBtnProps={{
-                                                    checked: true
-                                                }}
-                                                />
-                                                {translate(localeJson, 'selection')}
+                                        <div className='col-8 xl:flex gap-3'>
+                                            <div className="flex align-items-center">
+                                                {selectionMode.map((type) => {
+                                                    return (
+                                                        <div key={type.key} style={{ fontSize: "14px" }} >
+                                                            <RadioBtn
+                                                                radioBtnProps={{
+                                                                    checked: item.selected_type == type.key,
+                                                                    inputId: type.key,
+                                                                    name: type.name,
+                                                                    value: type,
+                                                                    labelClass: "pl-2 pr-2",
+                                                                    onChange: (e) => updateFormChangeData(e.value.key, "selection_mode")
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
-                                            <div className='flex  pb-2 gap-2 align-items-center justify-content-start'>
-                                                <RadioBtn radioBtnProps={{
-                                                    checked: true
-                                                }}
-                                                />
-                                                {translate(localeJson, 'description')}
-                                            </div>
-                                            <div className='flex pb-2 gap-2 align-items-center justify-content-start'>
-                                                <RadioBtn radioBtnProps={{
-                                                    checked: true
-                                                }}
-                                                />
-                                                {translate(localeJson, 'numeric')}
-                                            </div>
+
+                                            {item.selected_type == 1 && (
+                                                <div className="flex align-items-center pt-2">
+                                                    {innerSelectionMode.map((type) => {
+                                                        return (
+                                                            <div key={type.key} style={{ fontSize: "14px" }} >
+                                                                <RadioBtn
+                                                                    radioBtnProps={{
+                                                                        checked: item.inner_question_type == type.key,
+                                                                        inputId: type.key,
+                                                                        name: type.name,
+                                                                        value: type,
+                                                                        labelClass: "pl-2 pr-2",
+                                                                        onChange: (e) => updateFormChangeData(e.value.key, "sub_selection")
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+
                                         </div>
-                                        <div style={{ paddingRight: "54px" }} className='col-6 custom-switch flex gap-2 align-items-center justify-content-end'>
+                                        <div style={{ paddingRight: "54px", fontSize: "14px" }} className='col-4 custom-switch flex gap-2 align-items-center justify-content-start'>
                                             <InputSwitch inputSwitchProps={{
-                                                checked: true
+                                                checked: item.is_voice_type,
+                                                onChange: (e) => updateFormChangeData(e.value, "voice"),
+                                                disabled: item.selected_type == 1 ? true : false
                                             }} />
                                             {translate(localeJson, 'voice_input')}
                                         </div>
@@ -228,16 +335,18 @@ const BaseTemplate = (props) => {
                                 <div className="col-7" style={{
                                     borderLeft: "1px solid #000",
                                 }}>
-                                    <div className='col-12'>
+                                    <div className='pb-2'>
                                         <Input inputProps={{
-                                            inputClass: "col-12",
-                                            value: item.questiontitle
+                                            inputClass: "w-full",
+                                            value: item.questiontitle,
+                                            onChange: (e) => updateFormChangeData(e.target.value, 'jp_title')
                                         }} />
                                     </div>
-                                    <div className='col-12 align-items-center'>
+                                    <div className='align-items-center'>
                                         <Input inputProps={{
-                                            inputClass: "col-12 ",
+                                            inputClass: "w-full",
                                             value: item.questiontitle_en,
+                                            onChange: (e) => updateFormChangeData(e.target.value, 'en_title')
                                         }} />
                                     </div>
                                 </div>
@@ -248,67 +357,69 @@ const BaseTemplate = (props) => {
                                         text: `－ ${translate(localeJson, 'del_item')}`,
                                         severity: "danger",
                                         rounded: "true",
-                                        type:"button",
+                                        type: "button",
+                                        onClick: () => removeQuestion(item)
                                     }} />
                                 </div>
                             </div>
                             {/* Questionnaires options */}
-                            {Array.isArray(item.option) && item.option.map((option, i) => (
-                                <div key={i} className="flex" style={{
-                                    borderRight: "1px solid #000",
-                                    borderBottom: "1px solid #000",
-                                    borderLeft: "1px solid #000",
-                                }}>
-
-                                    <div className="col-fixed col-2 flex align-items-center justify-content-center">
-
-                                        {translate(localeJson, 'choice')} {i + 1}<span style={{
-                                            color: i < 1 ? "red" : "white"
-                                        }} >*</span>
-
-                                    </div>
-                                    <div className="col-7" style={{
+                            {item.selected_type == 1 && (
+                                Array.isArray(item.option) && item.option.map((option, i) => (
+                                    <div key={i} className="flex" style={{
+                                        borderRight: "1px solid #000",
+                                        borderBottom: "1px solid #000",
                                         borderLeft: "1px solid #000",
                                     }}>
-                                        <div className='col-12 xl:flex gap-1 p-0 align-items-center ' style={{ justifyContent: "start", flexWrap: "wrap" }}>
-                                            <Input inputProps={{
-                                                name: "choice",
-                                                value: option,
-                                                inputClass: "w-full"
-                                            }} parentClass={'col p-inputtext-lg md:w-full'} />
-                                            {Array.isArray(item.option_en) && item.option_en.map((option_en, j) => (
 
-                                                <div key={j}>
-                                                    <Input inputProps={{
-                                                        value: i == j ? option_en : "",
-                                                        inputClass: "w-full"
-                                                    }} parentClass="col p-inputtext-lg md:w-full " />
-                                                </div>))}
+                                        <div className="col-fixed col-2 flex align-items-center justify-content-center">
+
+                                            {translate(localeJson, 'choice')} {i + 1}<span style={{
+                                                color: i < 1 ? "red" : "white"
+                                            }} >*</span>
+
+                                        </div>
+                                        <div className="col-7" style={{
+                                            borderLeft: "1px solid #000",
+                                        }}>
+                                            <div className='flex gap-1 p-0 align-items-center'>
+                                                <Input inputProps={{
+                                                    value: option,
+                                                    inputClass: "w-full",
+                                                    onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
+                                                }} />
+                                                <Input inputProps={{
+                                                    value: item.option_en[i],
+                                                    inputClass: "w-full",
+                                                    onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
+                                                }} />
+                                            </div>
+                                        </div>
+                                        <div className='col-3 flex align-items-center justify-content-center' style={{
+                                            borderLeft: "1px solid #000",
+                                        }}>
+                                            {item.option.length == i + 1 ? (
+                                                <Button buttonProps={{
+                                                    text: `＋ ${translate(localeJson, 'add_choice')}`,
+                                                    severity: "success",
+                                                    rounded: "true",
+                                                    type: "button",
+                                                    onClick: () => updateOptionList('add', i)
+                                                }}
+                                                />
+                                            ) : (
+                                                <Button buttonProps={{
+                                                    text: `－  ${translate(localeJson, 'del_choice')}`,
+                                                    severity: "danger",
+                                                    rounded: "true",
+                                                    type: "button",
+                                                    onClick: () => updateOptionList('delete', i)
+                                                }}
+                                                />
+                                            )}
                                         </div>
                                     </div>
-                                    <div className='col-3 flex align-items-center justify-content-center' style={{
-                                        borderLeft: "1px solid #000",
-                                    }}>
-                                        {i < 2 ? (
-                                            <Button buttonProps={{
-                                                text: `－ ${translate(localeJson, 'del_choice')}`,
-                                                severity: "danger",
-                                                rounded: "true",
-                                                type:"button"
-                                            }}
-                                            />
-                                        ) : (
-                                            <Button buttonProps={{
-                                                text: `＋  ${translate(localeJson, 'add_choice')}`,
-                                                severity: "success",
-                                                rounded: "true",
-                                                type:"button"
-                                            }}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                     </div>
                 </form>
