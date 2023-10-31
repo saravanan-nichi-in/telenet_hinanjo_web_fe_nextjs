@@ -114,7 +114,7 @@ function MyApp({ Component, pageProps }) {
             } else {
                 if (staffPublicPaths.includes(path)) {
                     router.push({
-                        pathname: '/staff/dashboard',
+                        pathname: '/user/list',
                     });
                 } else {
                     router.push({

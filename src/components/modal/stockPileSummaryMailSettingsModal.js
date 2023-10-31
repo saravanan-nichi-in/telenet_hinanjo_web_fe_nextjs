@@ -63,7 +63,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                 validationSchema={schema}
                 initialValues={initialValues}
                 enableReinitialize
-                onSubmit={(values, actions) => {
+                onSubmit={(values, { resetForm }) => {
                     close();
                     resetForm({ values: initialValues });
                 }}
