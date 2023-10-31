@@ -309,6 +309,8 @@ export default function AdminHistoryPlacePage() {
         }
     }
 
+    console.log(selectedCity);
+
     return (
         <React.Fragment>
             {/* {emailSettingsOpen && */}

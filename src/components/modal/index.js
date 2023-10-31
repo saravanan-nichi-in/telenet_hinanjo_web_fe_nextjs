@@ -15,4 +15,6 @@ export { default as StaffManagementDetailModal } from './staffManagementDetailMo
 export { default as StaffManagementEditModal } from './StaffManagementEditModal';
 export { default as ChangePasswordModal } from './changePasswordModal';
 export { default as CommonDialog } from './commonDialog';
-export { default as SpecialCareEditModal} from './SpecialCareEditModal'
+export { default as SpecialCareEditModal } from './SpecialCareEditModal'
+export { default as StaffStockpileCreateModal } from './staffStockpileCreateModal'
+export { default as StaffStockpileEditModal } from './staffStockpileEditModal'

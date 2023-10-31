@@ -22,6 +22,7 @@ const TextAreaFloatLabel = (props) => {
         spanClass,
         spanText,
         onBlur,
+        placeholder,
         ...restProps
     } = textAreaFloatLabelProps;
 
@@ -30,6 +31,7 @@ const TextAreaFloatLabel = (props) => {
             <div className={`${parentClass}  ${custom || 'custom-textArea'} p-float-label`} style={parentStyle}>
             <InputTextarea name={name}
                 className={`${textAreaClass} `}
+                placeholder={placeholder}
                 value={value}
                 id={id}
                 style={style}

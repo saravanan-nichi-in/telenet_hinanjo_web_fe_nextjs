@@ -27,11 +27,11 @@ export default function SelectFloatLabel(props) {
         spanText,
         ...restProps
     } = selectFloatLabelProps;
-
+    const isFloating = value || value === ""; // Check if value is provided
     return (
         <div className="custom-align-label">
-        <div className={`p-float-label ${parentClass} ${custom || 'custom-select'} `} style={parentStyle}>
-            <Dropdown className={`${selectClass}  `}
+        <div className={`p-float-label ${parentClass} ${custom || 'custom-select'}`} style={parentStyle}>
+            <Dropdown className={`${selectClass} ${isFloating ? 'p-inputwrapper-filled' : ''} `}
                 value={value}
                 name={name}
                 inputId={inputId}

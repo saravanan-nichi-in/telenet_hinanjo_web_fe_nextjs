@@ -375,7 +375,7 @@ const considerationEvacueesCountOptions = {
 
 
 const mapScaleRateOptions = [
-    { name: "--", value: null },
+    { value:"",name: "--"},
     { value: "1", name: "1" },
     { value: "2", name: "2" },
     { value: "3", name: "3" },
