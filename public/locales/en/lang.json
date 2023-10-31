@@ -114,6 +114,7 @@
       "closed_date_time": "Closed Date And Time",
       "detail_staff_management": "Detail Staff Management",
       "family_count": "Family Count",
+      "people_count": "Count",
       "family_code": "Family Code",
       "representative": "Representative",
       "refugee_name": "Name (Phonetic)",
@@ -203,6 +204,7 @@
       "yes": "Yes",
       "no": "No",
       "place": "Place",
+      "place_detail": "Place Detail",
       "prefecture_symbol": "Prefecture",
       "current_number_of_evacuees": "Current Number of Evacuees",
       "evacuation_center_occupancy_rate": "Evacuation Center Occupancy Rate",
@@ -415,7 +417,7 @@
       "external_evacuees_food_support": "External Evacuees Food Support",
       "external_evacuee_details": "External Evacuees Details",
       "food_support": "Food Support",
-      "shelter_site_type": "Sheletr Site Type",
+      "shelter_site_type": "Place Category",
       "food_support_calculation": "Food Support Calculation",
       "evacuation_location_aggregation": "Evacuation Location Aggregation",
       "notification_settings": "Notificaion settings",
@@ -425,7 +427,10 @@
       "post_letter": "〒",
       "english": "English",
       "japanese": "Japanese",
-      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'."
+      "user_dashboard_note":"Note: When you exit the evacuation centre, follow the procedures for 'Exit'.",
+      "checkbox": "Checkbpx",
+      "radio": "RadioButton",
+      "dropdown": "DropDown"
     }
   },
   "staff": {
@@ -444,7 +449,7 @@
     },
     "pages": {
       "staff_login_screen": "Staff login screen",
-      "mail_address": "Mail address",
+      "mail_address": "Email Address",
       "email_required": "The email must be required.",
       "email_valid": "The email must be a valid email address.",
       "password": "Password",

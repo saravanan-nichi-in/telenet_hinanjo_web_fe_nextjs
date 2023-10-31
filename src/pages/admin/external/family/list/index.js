@@ -58,7 +58,7 @@ export default function ExteranalEvacuationPage() {
         { field: "si_no", header: translate(localeJson, 'si_no'),className: "sno_class",sortable: false },
         { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none' ,className: "sno_class"},
         { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
-        { field: "place", header: translate(localeJson, 'place'), minWidth: "7rem", sortable: false },
+        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "7rem", sortable: false },
         { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
         { field: "people_count", header: translate(localeJson, 'people_count'), minWidth: "5rem", sortable: false },
         { field: "shelter_place", header: translate(localeJson, 'shelter_place'), minWidth: "10rem", sortable: false },
@@ -128,13 +128,13 @@ export default function ExteranalEvacuationPage() {
                     evacuation_site_type: item.place_category,
                     place: item.place_detail,
                     food_support: item.food_required,
-                    people_count: <Link className="text-higlight" href={{
+                    people_count: item.external_person_count > 0 ? <Link className="text-higlight" href={{
                         pathname: '/admin/external/family/detail',
                         query: { evacuee_id: item.id }
-                    }}>{item.external_person_count}</Link>,
+                    }}>{item.external_person_count}</Link> : item.external_person_count,
                     shelter_place: item.hinan_id,
                     mail_address: item.email,
-                    post_code: item.post_code ? getFormattedPostCode(item.zipcode) : "",
+                    post_code: item.zipcode ? getFormattedPostCode(item.zipcode) : "",
                     prefecture: item.prefecture_name,
                     address: item.address
                 };
@@ -245,7 +245,8 @@ export default function ExteranalEvacuationPage() {
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
                                             style: { height: "40px" },
                                             onChange: (e) => setSelectedOption(e.value),
-                                            text: translate(localeJson, 'shelter_place')
+                                            text: translate(localeJson, 'shelter_place'),
+                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3 
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
@@ -259,7 +260,8 @@ export default function ExteranalEvacuationPage() {
                                             style: { height: "40px" },
                                             onChange: (e) => setSelectedFoodSupport(e.value),
                                             text: translate(localeJson, 'food_support'),
-                                            custom: "mobile-input"
+                                            custom: "mobile-input",
+                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3 
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
