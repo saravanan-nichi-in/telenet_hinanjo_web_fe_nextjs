@@ -66,9 +66,15 @@ function MyApp({ Component, pageProps }) {
             '/admin/reset-password',
             '/admin/reset-password/'
         ];
-        const staffPublicPaths = [
-            // '/staff/login',
-            // '/staff/login/',
+        const staffPublicPathsWithoutLogin = [
+            '/staff/forgot-password',
+            '/staff/forgot-password/',
+            '/staff/reset-password',
+            '/staff/reset-password/'
+        ];
+        const staffPublicPathsWithLogin = [
+            '/staff/login',
+            '/staff/login/',
             '/staff/forgot-password',
             '/staff/forgot-password/',
             '/staff/reset-password',
@@ -103,7 +109,7 @@ function MyApp({ Component, pageProps }) {
             }
         } else if (path.startsWith('/staff')) {
             if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
-                if (!staffPublicPaths.includes(path)) {
+                if (!staffPublicPathsWithoutLogin.includes(path)) {
                     router.push('/user/list');
                 } else {
                     router.push({
@@ -112,7 +118,7 @@ function MyApp({ Component, pageProps }) {
                     });
                 }
             } else {
-                if (staffPublicPaths.includes(path)) {
+                if (staffPublicPathsWithLogin.includes(path)) {
                     router.push({
                         pathname: '/user/list',
                     });
