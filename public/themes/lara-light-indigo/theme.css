@@ -940,6 +940,10 @@
   background: transparent;
   transition: box-shadow 0.2s;
   border-radius: 0;
+  min-width: 20rem;
+  max-width: 25rem;
+  text-overflow: ellipsis;
+  /* white-space: noWrap; */
 }
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
