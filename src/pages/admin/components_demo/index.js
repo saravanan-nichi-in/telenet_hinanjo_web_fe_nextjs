@@ -11,6 +11,7 @@ import {
     InputIcon, InputLeftRightGroup, InputGroup, TextArea, MicroPhoneButton
 } from '@/components';
 import { Input } from '@/components/input';
+import { Dropdown } from 'primereact/dropdown';
 
 export default function ComponentsDemo() {
     const [checked1, setChecked1] = useState(false);
@@ -410,6 +411,17 @@ export default function ComponentsDemo() {
                                         className=' col p-inputtext-lg md:w-full content-width'
                                     /> */}
                                 </div>
+                                <div className='w-full'>
+                                <Dropdown
+            editable={false}
+            optionLabel="name"
+            options={cities}
+            id="shelterCity"
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.value)}
+            className="p-invalid w-full md:w-14rem"
+          />
+          </div>
                     </section>
                 </div>
             </div>

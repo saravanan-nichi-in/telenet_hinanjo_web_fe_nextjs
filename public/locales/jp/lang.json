@@ -481,8 +481,15 @@
       "edit_product":"製品の編集",
       "staff_check_in":"個人情報を取得しない簡易登録",
       "residence_with_information":"個人情報なし入所者数",
-      "residence_with_out_information":"個人情報ありの入所者数"
-    },
+      "residence_with_out_information":"個人情報ありの入所者数",
+      "number_of_household":"世帯人数",
+      "household_representative":"代表者",
+      "age_m":"年齢_月",
+      "special_Care_type":"要配慮者番号",
+      "connecting_code":"紐付コード",
+      "date_created":"入所日時",
+      "evacuation_days":"避難日数"
+    },  
     "form": {
       "type": "種別",
       "stockpile_item_name": "備蓄品名",
@@ -490,7 +497,8 @@
       "days": "(日)",
       "image": "画像",
       "quantity": "数量",
-      "expiration_date": "有効期限"
+      "expiration_date": "有効期限",
+      "total_summary":"現在の避難者数"
     },
     "validation": {
       "type_required": "種別は必須です。",

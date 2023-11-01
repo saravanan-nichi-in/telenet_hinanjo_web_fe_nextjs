@@ -20,36 +20,7 @@ export default function MasterQuestionnaire() {
         },
         search: ""
     });
-    const [questionnaires, setQuestionnaires] = useState([{
-        "id": 1,
-        "title": "",
-        "questiontitle": "",
-        "questiontitle_en": "",
-        "option": [""],
-        "option_en": [""],
-        "selected_type": 1,
-        "inner_question_type": 1,
-        "is_required": false,
-        "is_visible": false,
-        "is_voice_type": false
-    }]);
-
-    const [newItem, setNewItem] = useState({
-        "id": questionnaires.length + 1,
-        "title": "",
-        "questiontitle": "",
-        "questiontitle_en": "",
-        "option": [""],
-        "option_en": [""],
-        "selected_type": 1,
-        "inner_question_type": 1,
-        "is_required": false,
-        "is_visible": false,
-        "is_voice_type": false
-    });
-
-
-
+    const [questionnaires, setQuestionnaires] = useState([]);
     const router = useRouter();
 
     const dragProps = {
@@ -95,7 +66,7 @@ export default function MasterQuestionnaire() {
             let questionList = [];
             data.map((item, index) => {
                 let question = {
-                    "id": index + 1,
+                    "id": item.id,
                     "title": "",
                     "questiontitle": item.title,
                     "questiontitle_en": item.title_en,
@@ -105,20 +76,37 @@ export default function MasterQuestionnaire() {
                     "inner_question_type": item.type == 1 ? 1 : 2,
                     "is_required": item.isRequired == 1 ? true : false,
                     "is_visible": item.isVisible == 1 ? true : false,
-                    "is_voice_type": item.isVoiceRequired == 1 ? true : false
+                    "is_voice_type": item.isVoiceRequired == 1 ? true : false,
+                    "db_data": true
                 };
                 questionList.push(question);
             });
             setQuestionnaires(questionList);
         }
         else {
-            setQuestionnaires([]);
+            setQuestionnaires([
+                {
+                    "id": questionnaires.length + 1,
+                    "title": "",
+                    "questiontitle": "",
+                    "questiontitle_en": "",
+                    "option": [""],
+                    "option_en": [""],
+                    "selected_type": 1,
+                    "inner_question_type": 1,
+                    "is_required": true,
+                    "is_visible": false,
+                    "is_voice_type": false,
+                    "db_data": false
+                }
+            ]);
         }
     }
 
     useEffect(() => {
         const fetchData = async () => {
             await onGetQuestionnaireListMounting();
+            setLoader(false);
         };
         fetchData();
     }, []);
@@ -151,13 +139,21 @@ export default function MasterQuestionnaire() {
                 "questiontitle": item.questiontitle,
                 "questiontitle_en": item.questiontitle_en,
                 "option": item.selected_type == 1 ? item.option : [],
-                "option_en": item.selected_type == 1 ? item.option_en : []
+                "option_en": item.selected_type == 1 ? item.option_en : [],
+                "qRequire": item.is_required ? 1 : 0,
+                "isVoiceRequire": item.is_voice_type ? 1 : 0,
+                "qVisibility": item.is_visible ? 1 : 0
             };
+            if (item.db_data) {
+                question['id'] = item.id
+            }
             payloadData.push(question);
         });
         registerQuestionnaire({
             question: [...payloadData]
-        }, updateAfterQuestionReg)
+        }, ((response) => {
+            getList(getListPayload, getQuestionnaireList)
+        }))
     }
 
     const updateAfterQuestionReg = (response) => {
@@ -165,17 +161,22 @@ export default function MasterQuestionnaire() {
     }
 
     const handleAddNewItem = () => {
-        // Add the new item to the questionnaires state
-        setQuestionnaires([...questionnaires, newItem]);
-        // Clear the newItem state for the next addition
-        setNewItem({
+        let newItem = {
             "id": questionnaires.length + 1,
             "title": "",
             "questiontitle": "",
             "questiontitle_en": "",
-            "option": [" "],
-            "option_en": [" "]
-        });
+            "option": [""],
+            "option_en": [""],
+            "selected_type": 1,
+            "inner_question_type": 1,
+            "is_required": false,
+            "is_visible": false,
+            "is_voice_type": false,
+            "db_data": false
+        }
+        // Add the new item to the questionnaires state
+        setQuestionnaires([...questionnaires, newItem]);
     };
     return (
         <>
