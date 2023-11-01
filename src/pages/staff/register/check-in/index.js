@@ -18,6 +18,7 @@ export default function RegisterCheckIn() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
+  const initialValues = {};
   const columnsData = [
     {
       field: "slno",
@@ -120,6 +121,7 @@ export default function RegisterCheckIn() {
   };
 
   const isCreated = (res) => {
+    setLoader(false)
     if (res) {
       onGetMaterialListOnMounting();
     }
@@ -128,7 +130,9 @@ export default function RegisterCheckIn() {
   return (
     <>
       <Formik
+        initialValues={initialValues}
         onSubmit={(values) => {
+          setLoader(true)
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
             people_checkin: list?.map((item) => {
@@ -138,18 +142,11 @@ export default function RegisterCheckIn() {
               };
             }),
           };
-          try {
-            setLoader(true)
             create(payload, isCreated);
-          } finally {
-            setLoader(false)
-          }
-          
         }}
       >
         {({
           values,
-          errors,
           touched,
           handleChange,
           handleBlur,
