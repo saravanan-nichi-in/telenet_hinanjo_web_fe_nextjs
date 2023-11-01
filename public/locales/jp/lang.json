@@ -478,7 +478,10 @@
       "supplies_slno": "番号",
       "supplies_unit": "単位",
       "staff_management_inventory_import_processing":"スタッフ管理棚卸インポート処理 ",
-      "edit_product":"製品の編集"
+      "edit_product":"製品の編集",
+      "staff_check_in":"個人情報を取得しない簡易登録",
+      "residence_with_information":"個人情報なし入所者数",
+      "residence_with_out_information":"個人情報ありの入所者数"
     },
     "form": {
       "type": "種別",

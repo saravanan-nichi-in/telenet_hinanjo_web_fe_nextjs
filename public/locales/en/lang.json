@@ -480,7 +480,10 @@
       "supplies_slno": "S No",
       "supplies_unit": "Unit",
       "staff_management_inventory_import_processing":"Staff Management Inventory Import Processing",
-      "edit_product":"Edit Product"
+      "edit_product":"Edit Product",
+      "staff_check_in":"REGISTRATION WITHOUT GETTING PERSONAL INFORMATION",
+      "residence_with_information":"Residents without Personal Information",
+      "residence_with_out_information":"Residents with Personal Information"
     },
     "form": {
       "type": "type",
