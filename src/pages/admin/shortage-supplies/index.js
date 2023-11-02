@@ -141,7 +141,7 @@ function ShortageSupplies() {
         <React.Fragment>
             <DetailModal detailModalProps={{
                 headerContent: () => (
-                    <div>
+                    <div className='w-full white-space-nowrap overflow-hidden text-overflow-ellipsis'>
                         {locale === "en" && !_.isNull(selectedRow.place_name_en) ? selectedRow.place_name_en : selectedRow.place_name}
                     </div>
                 ),
