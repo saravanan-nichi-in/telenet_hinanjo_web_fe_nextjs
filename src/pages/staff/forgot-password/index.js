@@ -33,7 +33,7 @@ const ForgotPasswordPage = () => {
      */
     const onForgotSuccess = (response) => {
         if (response && response.data.success) {
-            router.push("/staff/login");
+            router.push("/user/list");
         } else {
             console.log(response.data);
         }
