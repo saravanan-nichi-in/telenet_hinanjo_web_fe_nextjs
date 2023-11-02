@@ -4,6 +4,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/helper/publicEvacueeService";
 import { Button, InputFloatLabel, NormalTable } from "@/components";
+import _ from "lodash";
 
 export default function PublicEvacuee() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
@@ -64,7 +65,6 @@ export default function PublicEvacuee() {
                         family_id: obj.family_id ?? "",
                         family_code: obj.family_code ?? "",
                         gender: obj.gender ?? "",
-                        gender: obj.gender ?? "",
                         address: obj.address ?? "",
                         address_default: obj.address_default ?? "",
                         refugee_name: obj.refugee_name ?? "",
@@ -89,6 +89,26 @@ export default function PublicEvacuee() {
             }
 
         });
+    }
+
+     /**
+     * Pagination handler
+     * @param {*} e 
+     */
+     const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
     }
 
     return (
