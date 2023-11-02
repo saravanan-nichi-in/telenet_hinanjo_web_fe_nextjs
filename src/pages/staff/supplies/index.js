@@ -125,6 +125,7 @@ export default function Supplies() {
   };
 
   const isCreated = (res) => {
+    setLoader(false)
     if (res) {
       onGetMaterialListOnMounting();
     }
@@ -136,6 +137,7 @@ export default function Supplies() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values) => {
+          setLoader(true)
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
             supply: list?.map((item) => {
@@ -147,13 +149,7 @@ export default function Supplies() {
             comment: values.comment,
             note: values.remarks,
           };
-          try {
-            setLoader(true)
-            create(payload, isCreated);
-          } finally {
-            setLoader(false)
-          }
-          
+          create(payload, isCreated);
         }}
       >
         {({
@@ -206,7 +202,7 @@ export default function Supplies() {
                           text: translate(localeJson, "comment"),
                           value: values.comment,
                           onChange: handleChange,
-                          onblur:handleBlur
+                          onBlur:handleBlur
                         }}
                         parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
                         <ValidationError errorBlock={errors.comment && touched.comment && errors.comment} />
@@ -226,7 +222,7 @@ export default function Supplies() {
                             "remark_placeholder"
                           ),
                           onChange: handleChange,
-                          onblur:handleBlur
+                          onBlur:handleBlur
                         }}
                         parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
                         <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />

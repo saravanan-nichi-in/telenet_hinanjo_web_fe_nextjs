@@ -30,7 +30,8 @@ const LoginPage = () => {
             }),
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
+            .min(8, translate(localeJson, 'password_atLeast_8_characters'))
+            .max(15, translate(localeJson, 'password_max_15_characters')),
     });
 
     /* Services */

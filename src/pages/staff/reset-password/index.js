@@ -19,11 +19,14 @@ const ResetPasswordPage = () => {
             .required(translate(localeJson, 'new_password_required'))
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/,
                 translate(localeJson, 'new_password_not_matched')
-            ),
+            )
+            .min(8, translate(localeJson, 'password_atLeast_8_characters'))
+            .max(15, translate(localeJson, 'new_password_max_15_characters')),
         confirmPassword: Yup.string()
             .required(translate(localeJson, 'confirm_password_required'))
             .oneOf([Yup.ref("password"), null], translate(localeJson, 'confirm_password_notMatch'))
-            .min(8, translate(localeJson, 'password_atLeast_8_characters')),
+            .min(8, translate(localeJson, 'password_atLeast_8_characters'))
+            .max(15, translate(localeJson, 'new_password_max_15_characters')),
     });
 
     /* Services */

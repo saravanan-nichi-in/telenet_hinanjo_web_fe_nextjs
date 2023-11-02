@@ -1,5 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import toast from 'react-hot-toast';
+import { isObject } from "lodash";
 
 import axios from '@/utils/api';
 
@@ -30,9 +31,26 @@ function _login(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     } else {
         axios.post('/auth/staff/login', values)
@@ -46,9 +64,26 @@ function _login(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     }
 }
@@ -78,9 +113,26 @@ function _forgot(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     } else {
         axios.post('/auth/staff/forgot/password', values)
@@ -93,9 +145,26 @@ function _forgot(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     }
 }
@@ -117,9 +186,26 @@ function _reset(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     } else {
         let payload = {
@@ -137,9 +223,26 @@ function _reset(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     }
 }
@@ -156,9 +259,26 @@ function _changePassword(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.message, {
-                    position: "top-right",
-                });
+                if (error.response.status == 422) {
+                    if (isObject(error.response.data.message)) {
+                        let errorMessages = Object.values(error.response.data.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: "top-right",
+                        });
+                    }
+                } else {
+                    toast.error(error.response.data.message, {
+                        position: "top-right",
+                    });
+                }
             });
     }
 }

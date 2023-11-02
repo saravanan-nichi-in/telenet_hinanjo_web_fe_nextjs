@@ -4,28 +4,113 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/helper/publicEvacueeService";
 import { Button, InputFloatLabel, NormalTable } from "@/components";
+import _ from "lodash";
 
 export default function PublicEvacuee() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader, locale } = useContext(LayoutContext);
     const [tableLoading, setTableLoading] = useState(false);
     const [customers, setCustomers] = useState([]);
-    const columns = [
-        { field: 'place_name', header: translate(localeJson, 'place_name_list') },
-        { field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), minWidth: "15rem" },
-        { field: 'name_kanji', header: translate(localeJson, 'name_kanji') },
-        { field: 'age', header: translate(localeJson, 'age') },
-        { field: 'gender', header: translate(localeJson, 'gender') },
-        { field: 'Address', header: translate(localeJson, 'address') },
-    ];
+    const [columns, setColumns] = useState([
+    ]);
+    const [searchName, setSearchName] = useState('');
+
+    const [getListPayload, setGetListPayload] = useState({
+        "filters": {
+            "start": 0,
+            "limit": 5
+        },
+        "search": ""
+    });
+
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+
+    /* Services */
+    const { getList } = PublicEvacueeService;
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
+            await onGetMaterialListOnMounting()
             setLoader(false);
         };
-        PublicEvacueeService.getPublicEvacueeListMedium().then((data) => setCustomers(data));
         fetchData();
-    }, []);
+    }, [locale, getListPayload]);
+
+    /**
+     * Get dashboard list on mounting
+     */
+    const onGetMaterialListOnMounting = () => {
+        // Get dashboard list
+        getList(getListPayload, (response) => {
+            if (response.success && !_.isEmpty(response.data) && response.data.count > 0) {
+                const data = response.data.list;
+                const dynamicColumns = response.data.public_display_order;
+                let columnHeaders = [];
+
+                dynamicColumns.map((value, index) => {
+                    if(value.is_visible==1) {
+                        let tempHeader = { field: value.column_name, header: translate(localeJson, `public_evacuee_table_${value.column_name}`) };
+                        columnHeaders.push(tempHeader);
+                    }
+                });
+                setColumns(columnHeaders);
+
+                let preparedList = [];
+                // Update prepared list to the state
+                // Preparing row data for specific column to display
+                data.map((obj, i) => {
+                    let preparedObj = {
+                        slno: i + getListPayload.filters.start + 1,
+                        family_id: obj.family_id ?? "",
+                        family_code: obj.family_code ?? "",
+                        gender: obj.gender ?? "",
+                        address: obj.address ?? "",
+                        address_default: obj.address_default ?? "",
+                        refugee_name: obj.refugee_name ?? "",
+                        placeNameEn: obj.placeNameEn ?? "",
+                        personId: obj.personId ?? "",
+                        name: obj.name ?? "",
+                        month: obj.month ?? "",
+                        age: obj.age ?? "",
+                        is_registered: obj.is_registered ?? "",
+                        is_owner: obj.is_owner ?? "",
+                    }
+                    preparedList.push(preparedObj);
+                })
+
+                setList(preparedList);
+                // setColumns(additionalColumnsArrayWithOldData);
+                setTotalCount(response.data.count);
+                setTableLoading(false);
+            } else {
+                setTableLoading(false);
+                setList([]);
+            }
+
+        });
+    }
+
+     /**
+     * Pagination handler
+     * @param {*} e 
+     */
+     const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
     return (
         <div>
             <div className="grid">
@@ -42,6 +127,7 @@ export default function PublicEvacuee() {
                                             inputClass: "w-20rem lg:w-13rem md:w-15rem sm:w-14rem",
                                             text: translate(localeJson, 'name_public_evacuee'),
                                             custom: "mobile-input custom_input",
+                                            onChange: (e) => {setSearchName(e.target.value)}
                                         }}
                                     />
                                     <div className="">
@@ -51,24 +137,31 @@ export default function PublicEvacuee() {
                                             icon: "pi pi-search",
                                             severity: "primary",
                                             type: "button",
-                                            // onClick: () => searchListWithCriteria()
+                                            onClick: () => {
+                                                setGetListPayload({ ...getListPayload, search: searchName });
+                                            }
                                         }} />
                                     </div>
                                 </div>
                             </form>
                             <div className="mt-3">
-                                <NormalTable
-                                    customActionsField="actions"
-                                    value={customers} columns={columns}
-                                    // loading={tableLoading}
-                                    showGridlines={"true"}
-                                    stripedRows={true}
-                                    paginator={"true"}
-                                    columnStyle={{ textAlign: "center" }}
-                                    className={"custom-table-cell"}
-                                    emptyMessage={translate(localeJson, "data_not_found")}
-                                    paginatorLeft={true}
-                                />
+                            <NormalTable
+                                        lazy
+                                        totalRecords={totalCount}
+                                        loading={tableLoading}
+                                        stripedRows={true}
+                                        className={"custom-table-cell"}
+                                        showGridlines={"true"}
+                                        value={list}
+                                        columns={columns}
+                                        filterDisplay="menu"
+                                        emptyMessage={translate(localeJson, "data_not_found")}
+                                        paginator={true}
+                                        first={getListPayload.filters.start}
+                                        rows={getListPayload.filters.limit}
+                                        paginatorLeft={true}
+                                        onPageHandler={(e) => onPaginationChange(e)}
+                                    />
                             </div>
                         </div>
                     </div>
