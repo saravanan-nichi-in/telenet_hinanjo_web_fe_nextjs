@@ -497,7 +497,8 @@
       "special_Care_type": "要配慮者番号",
       "connecting_code": "紐付コード",
       "date_created": "入所日時",
-      "evacuation_days": "避難日数"
+      "evacuation_days": "避難日数",
+      "do_you_want_to_exit_the_shelter":"退所手続きして良いですか？"
     },
     "form": {
       "type": "種別",

@@ -18,7 +18,7 @@ function StaffFamily() {
         {
             field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem", body: (rowData) => (
                 <div className='text-link'>
-                    <a className='text-decoration'>
+                    <a className='text-decoration'style={{ cursor: "pointer" }} onClick={() => router.push("/staff/family/family-detail")}>
                         {rowData['name_phonetic']}
                     </a>
                 </div>
