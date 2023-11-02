@@ -20,9 +20,10 @@ export default function PublicEvacuees() {
         { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
         { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "15rem",maxWidth:"15rem",textAlign: 'left' },
         { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", textAlign: 'left' },
-        { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", textAlign: 'left' },
-        { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", textAlign: 'left' },
-        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center' }
+        { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header",minWidth:"6rem", textAlign: 'left' },
+        { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header",minWidth:"6rem", textAlign: 'left' },
+            
+            { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header",className: "action_class", textAlign: 'center', }
     ];
     const [getListPayload, setGetListPayload] = useState({
         filters: {
