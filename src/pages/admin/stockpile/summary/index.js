@@ -43,7 +43,7 @@ function AdminStockpileSummary() {
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
-            field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", textAlign: "left",
+            field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem",maxWidth:'10rem', textAlign: "left",
             body: (rowData) => (
                 <div className='text-link'>
                     <a className='text-decoration' style={{ color: "grren" }} onClick={() => bindEmailDataConfig(rowData)}>
@@ -52,7 +52,7 @@ function AdminStockpileSummary() {
                 </div>
             )
         },
-        { field: "notification_email", header: translate(localeJson, 'notification_email') },
+        { field: "notification_email", header: translate(localeJson, 'notification_email'),minWidth:"10rem" },
     ]
     const stockPileRowExpansionColumn = [
         { field: "type", header: translate(localeJson, 'product_type') },

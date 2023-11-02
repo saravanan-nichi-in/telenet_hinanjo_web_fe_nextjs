@@ -155,8 +155,11 @@ export default function RowExpansionTable(props) {
                         headerClassName={col.headerClassName}
                         style={{
                             minWidth: col.minWidth && col.minWidth,
+                            maxWidth: col.maxWidth && col.maxWidth,
                             display: col.display,
-                            textAlign: col.textAlign && col.textAlign, ...columnStyle
+                            textAlign: col.textAlign && col.textAlign,
+                            wordWrap: "break-word",
+                            ...columnStyle
                         }}
                         body={col.field === props.customActionsField ? col.body : col.body} />
                 ))}
