@@ -9,10 +9,12 @@ import { InputSwitch } from '@/components/switch';
 import { Input } from '@/components/input';
 import { RadioBtn } from '@/components/radioButton';
 
-const BaseTemplate = (props) => {
+const BaseTemplate = React.forwardRef((props, ref) => {
     const [item, setItem] = useState(props.item);
-    const { removeQuestion, handleItemChange } = props;
+    const { removeQuestion, handleItemChange, triggerFinalSubmit, itemIndex } = props;
     const { localeJson } = useContext(LayoutContext);
+    const [jpTitleError, setJpTitleError] = useState('');
+    const [choiceError, setChoiceError] = useState('');
 
     const selectionMode = [
         {
@@ -48,13 +50,28 @@ const BaseTemplate = (props) => {
         let updatedData = { ...item };
         if (field == "jp") {
             updatedData.option[index] = value;
+            if(updatedData.selected_type == 1 && updatedData.option[0] == "") {
+                setChoiceError(translate(localeJson, "option_is_required"))
+            }
+            else {
+                setChoiceError("");
+            }
         }
         else {
             updatedData.option_en[index] = value;
         }
         setItem(updatedData);
-        handleItemChange(updatedData);
+        handleItemChange(updatedData, itemIndex);
     }
+
+    const validateInput = (value, field) => {
+        let isValid = true;
+        if (field == "jp_title" && !value.trim()) {
+            setJpTitleError(translate(localeJson, 'item_title_is_required'));
+            isValid = false;
+        }
+        return isValid;
+    };
 
     const updateFormChangeData = (value, field) => {
         let updatedData = { ...item };
@@ -74,7 +91,13 @@ const BaseTemplate = (props) => {
             updatedData.inner_question_type = value;
         }
         if (field == "jp_title") {
-            updatedData.questiontitle = value;
+            const isValid = validateInput(value, field);
+            if (isValid) {
+                setJpTitleError("");
+                updatedData.questiontitle = value;
+            } else {
+                updatedData.questiontitle = value;
+            }
         }
         if (field == "en_title") {
             updatedData.questiontitle_en = value;
@@ -88,7 +111,31 @@ const BaseTemplate = (props) => {
             updatedData.option_en.splice(value, 1)
         }
         setItem(updatedData);
-        handleItemChange(updatedData);
+        handleItemChange(updatedData, itemIndex);
+    }
+
+    React.useImperativeHandle(ref, () => ({
+        validateQuestionnaires,
+    }));
+
+    const validateQuestionnaires = (data) => {
+        let validFlag = true;
+        data.map((question) => {
+            if(question.questiontitle == '' || (question.selected_type == 1 && question.option[0] == '')){
+                validFlag = false
+            }
+        })
+        if (validFlag && item.questiontitle != "" && ((item.selected_type == 1 && item.option[0] != '') || item.selected_type != 1)) {
+            triggerFinalSubmit();
+        }
+        else {
+            if(item.questiontitle == ""){
+                setJpTitleError(translate(localeJson, 'item_title_is_required'));
+            }
+            if(item.option[0] == ""){
+                setChoiceError(translate(localeJson, "option_is_required"));
+            }
+        }
     }
 
     const itemTemplate = (item) => {
@@ -333,14 +380,20 @@ const BaseTemplate = (props) => {
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle,
-                                            onChange: (e) => updateFormChangeData(e.target.value, 'jp_title')
+                                            onChange: (e) => {
+                                                updateFormChangeData(e.target.value, 'jp_title')
+                                            }
+
                                         }} />
+                                        {jpTitleError && <div className="error-message">{jpTitleError}</div>}
                                     </div>
                                     <div className='align-items-center'>
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle_en,
-                                            onChange: (e) => updateFormChangeData(e.target.value, 'en_title')
+                                            onChange: (e) => {
+                                                updateFormChangeData(e.target.value, 'en_title')
+                                            }
                                         }} />
                                     </div>
                                 </div>
@@ -352,7 +405,7 @@ const BaseTemplate = (props) => {
                                         severity: "danger",
                                         rounded: "true",
                                         type: "button",
-                                        onClick: () => removeQuestion(item)
+                                        onClick: () => removeQuestion(item, itemIndex)
                                     }} />
                                 </div>
                             </div>
@@ -387,6 +440,7 @@ const BaseTemplate = (props) => {
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
                                                 }} />
                                             </div>
+                                            {choiceError && (i==0) && <div className="error-message">{choiceError}</div>}
                                         </div>
                                         <div className='col-3 flex align-items-center justify-content-center' style={{
                                             borderLeft: "1px solid #000",
@@ -430,6 +484,6 @@ const BaseTemplate = (props) => {
             </div>
         </>
     )
-};
-
+});
+BaseTemplate.displayName = 'BaseTemplate';
 export default BaseTemplate;

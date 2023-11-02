@@ -343,7 +343,9 @@
       "special_care_name_en_max_required": "Name (English) 255 characters or less.",
       "staff_name_max_required": "The staff name should be 200 characters or less.",
       "default_shelf_life_min_length": "Please enter a value greater than or equal to 1.",
-      "default_shelf_life_max_length": "Please enter a value less than or equal to 999."
+      "default_shelf_life_max_length" : "Please enter a value less than or equal to 999.",
+      "item_title_is_required": "Item Title is required",
+      "option_is_required": "Choice is required"
     },
     "buttons": {
       "import": "Import",
