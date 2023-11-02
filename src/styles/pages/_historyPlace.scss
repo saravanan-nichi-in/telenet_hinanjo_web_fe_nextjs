@@ -12,6 +12,11 @@
     border-width: 0px 1px 1px 1px;
 }
 
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
     text-overflow: ellipsis;
     width: 20rem;
@@ -31,8 +36,8 @@
     }
 }
 
-.p-dropdown-panel.p-component.p-connected-overlay-enter-done{
-    min-width:300px !important;
+.p-dropdown-panel.p-component.p-connected-overlay-enter-done {
+    min-width: 300px !important;
     max-width: 400px !important;
     width: fit-content !important;
 }

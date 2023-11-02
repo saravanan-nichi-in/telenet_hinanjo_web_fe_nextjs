@@ -333,7 +333,9 @@
       "special_care_name_en_max_required":"要配慮者事項（英語）を255文字以内でご指定ください。",
       "staff_name_max_required":"スタッフ名は最大200文字です。",
       "default_shelf_life_min_length": "デフォルト保持期間(日)の値は1 以上である必要です。",
-      "default_shelf_life_max_length" : "デフォルト保持期間(日)の値は999 以下である必要です。"
+      "default_shelf_life_max_length" : "デフォルト保持期間(日)の値は999 以下である必要です。",
+      "item_title_is_required": "項目タイトルは必須です。",
+      "option_is_required": "選択肢が必須です。"
     },
     "buttons": {
       "import": "インポート",
