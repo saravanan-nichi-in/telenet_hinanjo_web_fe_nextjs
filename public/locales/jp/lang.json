@@ -527,7 +527,10 @@
       "add_stockpile":"新規登録",
       "back_to_top":"TOPに戻る",
       "inventory":"棚卸",
-      "registration": "登録"
+      "registration": "登録",
+      "qr_search":"QR検索",
+      "list_of_evacuees":"避難者一覧へ",
+      "check_in":"入所"
     },
     "footer": {}
   },
