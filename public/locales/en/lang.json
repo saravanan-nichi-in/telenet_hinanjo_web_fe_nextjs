@@ -500,7 +500,8 @@
       "special_Care_type": "Special Care Type",
       "connecting_code": "Connecting Code",
       "date_created": "Date created",
-      "evacuation_days": "Evacuation days"
+      "evacuation_days": "Evacuation days",
+      "do_you_want_to_exit_the_shelter":"Do you want to exit the shelter?"
     },
     "form": {
       "type": "type",

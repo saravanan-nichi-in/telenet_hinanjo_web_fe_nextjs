@@ -19,7 +19,7 @@ export default function PublicDashboard() {
             <div className="grid">
                 <div className="col-12">
                     <div className="card">
-                        <h5 className="page-header1">{locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}</h5>
+                        <h5 className="page-header1 white-space-nowrap overflow-hidden text-overflow-ellipsis">{locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}</h5>
                         <hr />
                         <div>
                             <div className="mt-3">
