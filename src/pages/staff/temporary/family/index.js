@@ -34,7 +34,7 @@ function TemporaryFamily() {
         {
             field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem", body: (rowData) => (
                 <div className='text-link'>
-                    <a className='text-decoration'>
+                    <a className='text-decoration' style={{ cursor: "pointer" }} onClick={() => router.push("/staff/temporary/family-detail")}>
                         {rowData['name_phonetic']}
                     </a>
                 </div>
@@ -97,23 +97,23 @@ function TemporaryFamily() {
                                             icon: "pi pi-search",
                                             severity: "primary",
                                             type: "button",
-                                        }} parentClass="inline pr-2"/> 
-                                         <Button buttonProps={{
+                                        }} parentClass="inline pr-2" />
+                                        <Button buttonProps={{
                                             buttonClass: "w-12 search-button mobile-input ",
-                                            text:translate(localeJson,'qr_search'),
+                                            text: translate(localeJson, 'qr_search'),
                                             severity: "primary",
                                             type: "button",
-                                        }}parentClass="inline" /> 
+                                        }} parentClass="inline" />
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                        <Button buttonProps={{
+                            <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
                                 buttonClass: "evacuation_button_height",
-                                text:translate(localeJson,'list_of_evacuees'),
+                                text: translate(localeJson, 'list_of_evacuees'),
                                 onClick: () => router.push('/staff/family'),
                                 severity: "primary",
                             }} parentClass={"mr-1 mt-1"} />
