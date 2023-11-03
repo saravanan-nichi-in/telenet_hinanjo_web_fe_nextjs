@@ -20,6 +20,7 @@ function AdminStockpileSummary() {
     const [filteredStockpileSummaryList, setFilteredStockpileSummaryList] = useState([]);
     const [placeListOptions, setPlaceListOptions] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
+    const [expandRows, setExpandRows] = useState();
     const [tableLoading, setTableLoading] = useState(false);
     const [selectedPlaceName, setSelectedPlaceName] = useState({
         name: "--",
@@ -43,7 +44,7 @@ function AdminStockpileSummary() {
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
-            field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem",maxWidth:'10rem', textAlign: "left",
+            field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: '10rem', textAlign: "left",
             body: (rowData) => (
                 <div className='text-link'>
                     <a className='text-decoration' style={{ color: "grren" }} onClick={() => bindEmailDataConfig(rowData)}>
@@ -52,7 +53,7 @@ function AdminStockpileSummary() {
                 </div>
             )
         },
-        { field: "notification_email", header: translate(localeJson, 'notification_email'),minWidth:"10rem" },
+        { field: "notification_email", header: translate(localeJson, 'notification_email'), minWidth: "10rem" },
     ]
     const stockPileRowExpansionColumn = [
         { field: "type", header: translate(localeJson, 'product_type') },
@@ -60,7 +61,7 @@ function AdminStockpileSummary() {
         { field: "quantity", header: translate(localeJson, 'quantity') },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
-        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "5rem"}
+        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "5rem" }
     ];
 
     const bindImageModalData = (image) => {
@@ -236,10 +237,13 @@ function AdminStockpileSummary() {
                     }
                 }
             });
+            let _expandedRows = {};
+            stockPileList.forEach((p) => (_expandedRows[`${p.id}`] = true));
             setStockpileSummaryList(stockPileList);
             setFilteredStockpileSummaryList(stockPileList);
             setTotalCount(response.data.model.total);
             setTableLoading(false);
+            setExpandRows(_expandedRows);
         }
         else {
             setTotalCount(0);
@@ -393,7 +397,7 @@ function AdminStockpileSummary() {
                             </div>
                         </div>
                         <div>
-                            <RowExpansionTable
+                            { !tableLoading && <RowExpansionTable
                                 columnStyle={{ textAlign: 'left' }}
                                 paginator="true"
                                 totalRecords={totalCount}
@@ -407,9 +411,11 @@ function AdminStockpileSummary() {
                                 emptyMessage={translate(localeJson, "data_not_found")}
                                 first={getListPayload.filters.start}
                                 rows={getListPayload.filters.limit}
+                                onRowExpand={expandRows}
                                 paginatorLeft={true}
                                 onPageHandler={(e) => onPaginationChange(e)}
-                            />
+                            /> }
+                            
                         </div>
                     </div>
                 </div>

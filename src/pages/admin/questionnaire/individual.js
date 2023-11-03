@@ -231,7 +231,7 @@ export default function IndividualQuestionnaire() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'master_questionaries')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'individual_questionaries')}</h5>
                         <hr />
                         <div className='w-full'>
                             <DND dragProps={dragProps}>
