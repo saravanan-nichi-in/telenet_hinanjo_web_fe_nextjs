@@ -499,7 +499,7 @@
       "age_m": "Age(m)",
       "special_Care_type": "Special Care Type",
       "connecting_code": "Connecting Code",
-      "date_created": "Date created",
+      "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
       "do_you_want_to_exit_the_shelter":"Do you want to exit the shelter?"
     },
@@ -532,7 +532,7 @@
       "save": "Save",
       "addition": "addition",
       "add_stockpile": "Add Stockpile",
-      "back_to_top": "Back To Top",
+      "back_to_top": "Back to Top",
       "inventory": "Inventory",
       "registration": "Save",
       "qr_search": "QR Search",
