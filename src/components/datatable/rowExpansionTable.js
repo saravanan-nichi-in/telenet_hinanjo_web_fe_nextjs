@@ -41,10 +41,11 @@ export default function RowExpansionTable(props) {
         rowExpansionOnRowClick,
         onRowClick,
         expandAllButtonProps,
+        onRowExpand,
         ...restProps
     } = props;
-
-    const [expandedRows, setExpandedRows] = useState(null);
+    
+    const [expandedRows, setExpandedRows] = useState(onRowExpand);
 
     const toast = useRef(null);
 

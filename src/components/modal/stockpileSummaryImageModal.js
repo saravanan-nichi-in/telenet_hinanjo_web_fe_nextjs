@@ -16,6 +16,7 @@ export default function StockpileSummaryImageModal(props) {
                 className="custom-modal"
                 visible={open}
                 draggable={false}
+                blockScroll={true}
                 onHide={() => close()}
             >
                 <div class={`text-1rem`}>

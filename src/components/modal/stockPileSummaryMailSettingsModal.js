@@ -83,6 +83,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                             header={translate(localeJson, 'notification_settings')}
                             visible={open}
                             draggable={false}
+                            blockScroll={true}
                             onHide={() => {
                                 close();
                                 resetForm({ values: initialValues });
