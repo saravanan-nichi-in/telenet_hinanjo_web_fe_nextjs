@@ -5,6 +5,8 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button, InputFloatLabel, InputNumberFloatLabel, NormalTable } from '@/components';
 import { StaffFamilyService } from '@/helper/staffFamilyService';
+import { QrCodeModal } from '@/components/modal';
+import { MdFlipCameraIos } from 'react-icons/md';
 
 function TemporaryFamily() {
     const router = useRouter();
@@ -52,7 +54,21 @@ function TemporaryFamily() {
         { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
 
     ];
+    const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
 
+    /**
+     * CommonDialog modal close
+     */
+    const onClickCancelButton = () => {
+        setStaffFamilyDialogVisible(false);
+    };
+
+    /**
+     * CommonDialog modal open
+     */
+    const onClickOkButton = () => {
+        setStaffFamilyDialogVisible(false);
+    };
     useEffect(() => {
         const fetchData = async () => {
             setLoader(false);
@@ -62,95 +78,121 @@ function TemporaryFamily() {
     }, []);
 
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                        <h5 className='page-header1'>{translate(localeJson, 'temporary_registrants')}</h5>
-                        <span>{translate(localeJson, 'total_summary') + ": " + 12 + translate(localeJson, 'people')}</span>
-                    </div>
-                    <hr />
-                    <div>
+        <>
+            <QrCodeModal
+                open={staffFamilyDialogVisible}
+                dialogBodyClassName="p-3 text-center"
+                header={translate(localeJson, 'qr_Code_scan')}
+                position={"center"}
+                footerParentClassName={"text-left"}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "w-5rem",
+                            type: "submit",
+                            // text: translate(localeJson, 'continue'),
+                            severity: "primary",
+                            icon: <MdFlipCameraIos size={"30px"} />,
+                            onClick: () => onClickOkButton(),
+                        },
+                        parentClass: "inline"
+                    }
+                ]}
+                close={() => {
+                    setStaffFamilyDialogVisible(false);
+                }}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+                            <h5 className='page-header1'>{translate(localeJson, 'temporary_registrants')}</h5>
+                            <span>{translate(localeJson, 'total_summary') + ": " + 12 + translate(localeJson, 'people')}</span>
+                        </div>
+                        <hr />
                         <div>
-                            <form>
-                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                    <InputNumberFloatLabel
-                                        inputNumberFloatProps={{
-                                            id: "familyCode",
-                                            inputId: "integeronly",
-                                            name: "familyCode",
-                                            text: translate(localeJson, "family_code"),
-                                            inputNumberClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                        }}
-                                    />
-                                    <InputFloatLabel
-                                        inputFloatLabelProps={{
-                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            text: translate(localeJson, 'name'),
-                                            custom: "mobile-input custom_input",
-                                        }}
-                                    />
-                                    <div className="flex">
-                                        <Button buttonProps={{
-                                            buttonClass: "w-12 search-button mobile-input ",
-                                            text: translate(localeJson, "search_text"),
-                                            icon: "pi pi-search",
-                                            severity: "primary",
-                                            type: "button",
-                                        }} parentClass="inline pr-2" />
-                                        <Button buttonProps={{
-                                            buttonClass: "w-12 search-button mobile-input ",
-                                            text: translate(localeJson, 'qr_search'),
-                                            severity: "primary",
-                                            type: "button",
-                                        }} parentClass="inline" />
+                            <div>
+                                <form>
+                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
+                                        <InputNumberFloatLabel
+                                            inputNumberFloatProps={{
+                                                id: "familyCode",
+                                                inputId: "integeronly",
+                                                name: "familyCode",
+                                                text: translate(localeJson, "family_code"),
+                                                inputNumberClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                            }}
+                                        />
+                                        <InputFloatLabel
+                                            inputFloatLabelProps={{
+                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                                                text: translate(localeJson, 'name'),
+                                                custom: "mobile-input custom_input",
+                                            }}
+                                        />
+                                        <div className="flex">
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button mobile-input ",
+                                                text: translate(localeJson, "search_text"),
+                                                icon: "pi pi-search",
+                                                severity: "primary",
+                                                type: "button",
+                                            }} parentClass="inline pr-2" />
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button mobile-input ",
+                                                text: translate(localeJson, 'qr_search'),
+                                                severity: "primary",
+                                                type: "button",
+                                                onClick: () => setStaffFamilyDialogVisible(true),
+                                            }} parentClass="inline" />
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'list_of_evacuees'),
-                                onClick: () => router.push('/staff/family'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'back_to_top'),
-                                onClick: () => router.push('/staff/dashboard'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'export'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                        </div>
-                        <div className="mt-3">
-                            <NormalTable
-                                customActionsField="actions"
-                                value={staffFamilyValues}
-                                columns={staffFamily}
-                                showGridlines={"true"}
-                                stripedRows={true}
-                                paginator={"true"}
-                                columnStyle={{ textAlign: "center" }}
-                                className={"custom-table-cell"}
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                paginatorLeft={true}
-                            />
+                                </form>
+                            </div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'list_of_evacuees'),
+                                    onClick: () => router.push('/staff/family'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'back_to_top'),
+                                    onClick: () => router.push('/staff/dashboard'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                            </div>
+                            <div className="mt-3">
+                                <NormalTable
+                                    customActionsField="actions"
+                                    value={staffFamilyValues}
+                                    columns={staffFamily}
+                                    showGridlines={"true"}
+                                    stripedRows={true}
+                                    paginator={"true"}
+                                    columnStyle={{ textAlign: "center" }}
+                                    className={"custom-table-cell"}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginatorLeft={true}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

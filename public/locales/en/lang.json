@@ -546,7 +546,8 @@
       "evacuee_registration_for_household_family":"Evacuee registration for each household (family)",
       "how_many_people_evacuated":"How many people have evacuated?",
       "please_tell_how_many_households":"Please tell us how many households (family members) have evacuated with you, including yourself.",
-      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually."
+      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually.",
+      "qr_Code_scan":"QR Code Scan"
     },
     "buttons":{
       "continue":"Continue"

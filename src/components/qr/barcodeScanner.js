@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useZxing } from "react-zxing";
 
-const BarcodeScanner = () => {
+const BarcodeScanner = (props) => {
     const [result, setResult] = useState("");
     const { ref,
         torch: { on, off, isOn, isAvailable },
@@ -14,7 +14,7 @@ const BarcodeScanner = () => {
 
     return (
         <>
-            <video ref={ref} />
+            <video ref={ref} width={props.width} />
         </>
     );
 };
