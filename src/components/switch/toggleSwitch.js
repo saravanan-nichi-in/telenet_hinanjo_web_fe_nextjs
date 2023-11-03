@@ -15,7 +15,7 @@ const ToggleSwitch = (props) => {
         onChange,
         disabled,
         ...restProps
-    } = props && props.togglProps;
+    } = props && props;
 
     return (
         <div>
