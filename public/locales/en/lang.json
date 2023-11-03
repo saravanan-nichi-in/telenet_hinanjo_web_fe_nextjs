@@ -499,7 +499,7 @@
       "age_m": "Age(m)",
       "special_Care_type": "Special Care Type",
       "connecting_code": "Connecting Code",
-      "date_created": "Date created",
+      "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
       "do_you_want_to_exit_the_shelter":"Do you want to exit the shelter?"
     },
@@ -532,7 +532,7 @@
       "save": "Save",
       "addition": "addition",
       "add_stockpile": "Add Stockpile",
-      "back_to_top": "Back To Top",
+      "back_to_top": "Back to Top",
       "inventory": "Inventory",
       "registration": "Save",
       "qr_search": "QR Search",
@@ -546,7 +546,8 @@
       "evacuee_registration_for_household_family":"Evacuee registration for each household (family)",
       "how_many_people_evacuated":"How many people have evacuated?",
       "please_tell_how_many_households":"Please tell us how many households (family members) have evacuated with you, including yourself.",
-      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually."
+      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually.",
+      "qr_Code_scan":"QR Code Scan"
     },
     "buttons":{
       "continue":"Continue"

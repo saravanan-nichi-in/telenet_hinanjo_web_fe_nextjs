@@ -13,7 +13,7 @@ function StaffFamily() {
     const [staffFamilyValues, setStaffFamilyValues] = useState([]);
     const staffFamily = [
         { field: 'id', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class" },
-        { field: 'number_of_households', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'number_of_households', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "6rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "7rem" },
         { field: 'household_representative', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
         {
