@@ -24,7 +24,7 @@ export default function StockpileSummaryImageModal(props) {
                         imageProps={{
                             width: "300",
                             height: "200",
-                            src: imageUrl,
+                            src: props.image,
                             alt: "scan-image"
                         }}
 
