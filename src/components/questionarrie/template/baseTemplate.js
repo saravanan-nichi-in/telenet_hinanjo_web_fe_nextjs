@@ -405,7 +405,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         severity: "danger",
                                         rounded: "true",
                                         type: "button",
-                                        onClick: () => removeQuestion(item, itemIndex)
+                                        onClick: () => removeQuestion()
                                     }} />
                                 </div>
                             </div>
