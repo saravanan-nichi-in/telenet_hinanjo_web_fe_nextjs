@@ -360,7 +360,7 @@ function AdminStockpileSummary() {
                                         <div class="summary_flex_search float-right mt-5" >
                                             <div class="flex flex-row justify-content-end" >
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    text: translate(localeJson, 'shelter_place'),
+                                                    text: translate(localeJson, 'evacuation_place'),
                                                     inputId: "float label",
                                                     optionLabel: "name",
                                                     options: placeListOptions,

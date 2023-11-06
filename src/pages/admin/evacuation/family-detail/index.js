@@ -14,8 +14,6 @@ export default function EvacueeFamilyDetail() {
     const param = router.query;
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
-    const [totalCount, setTotalCount] = useState(0);
-    const [emptyTableMessage, setEmptyTableMessage] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
     const [familyDetailData, setfamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
@@ -211,7 +209,6 @@ export default function EvacueeFamilyDetail() {
         }
         else {
             setTableLoading(false);
-            setEmptyTableMessage(response.message);
         }
     }
 

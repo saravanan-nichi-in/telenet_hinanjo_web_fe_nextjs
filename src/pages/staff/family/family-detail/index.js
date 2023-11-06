@@ -1,22 +1,38 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateDisplayFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, RowExpansionTable } from '@/components';
-import { StaffDetailColumnService } from '@/helper/staffFamilyDetailColumnService';
-import { StaffFamilyAdmissionService } from '@/helper/staffFamilyAdmissionService';
-import { TemporaryFamilyRowExpansionService } from '@/helper/staffFamilyDetailService';
-import { StaffFamilyDetailQuestionsService } from '@/helper/staffFamilyDetailQuestionsService';
+import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
+import { prefectures } from '@/utils/constant';
 
 export default function StaffFamilyDetail() {
     const router = useRouter();
-    const { localeJson } = useContext(LayoutContext);
-    const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    // Getting storage data with help of reducers
+    const layoutReducer = useSelector((state) => state.layoutReducer);
     const [familyAdmission, setFamilyAdmission] = useState([]);
     const [familyDetails, setFamilyDetails] = useState([]);
     const [familyDetailQue, setFamilyDetailQue] = useState([]);
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [familyCode, setFamilyCode] = useState(null);
+    const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
+    const [familyDetailData, setfamilyDetailData] = useState(null);
+    const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
+    const [neighbourData, setNeighbourData] = useState(null);
+    const [townAssociationColumn, setTownAssociationColumn] = useState([]);
+    const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
+    const param = {
+        place_id: 1,
+        family_id: router.query.family_id
+    };
+
+    /* Services */
+    const { getFamilyEvacueesDetail, updateCheckoutDetail } = StaffEvacuationServices;
 
     /**
      * CommonDialog modal close
@@ -29,14 +45,41 @@ export default function StaffFamilyDetail() {
      * CommonDialog modal open
      */
     const onClickOkButton = () => {
+
+        updateCheckoutDetail(param, (response)=> {
+            console.log(response)
+            if(response.success){
+                router.push("/staff/family");
+            }
+        });
         setStaffFamilyDialogVisible(false);
     };
+
+    const evacueeFamilyDetailColumns = [
+        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem", className: "sno_class" },
+        { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
+        { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
+        { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
+        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
+        { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
+        { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
+        { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
+        { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },
+    ];
 
     const familyDetailColumns = [
         { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
         { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'left' },
         { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
+    ];
+
+    const evacueeFamilyDetailRowExpansionColumns = [
+        { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem" },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
+        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
+        { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
     ];
 
     const familyAdmissionColumns = [
@@ -46,38 +89,166 @@ export default function StaffFamilyDetail() {
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
     ];
 
-    const houseHoldListOuterColumn = [
-        { field: 'id', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class" },
-        { field: 'representative', header: translate(localeJson, 'representative'), headerClassName: "custom-header", minWidth: "9rem" },
-        { field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem" },
-        { field: 'name_kanji', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'age_m', header: translate(localeJson, 'age_m'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'created_date', header: translate(localeJson, 'created_date'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'updated_date', header: translate(localeJson, 'updated_date'), headerClassName: "custom-header", minWidth: "8rem" },
-    ];
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else {
+            return translate(localeJson, 'others_count');
+        }
+    }
 
-    const houseHoldListInnerColumn = [
-        { field: 'street_address', header: translate(localeJson, 'address'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'special_Care_type', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: "current_place_of_stay", header: translate(localeJson, 'current_location') },
-    ]
+    const getRegisteredLanguage = (language) => {
+        if (language == "en") {
+            return translate(localeJson, 'english');
+        }
+        else {
+            return translate(localeJson, 'japanese');
+        }
+    }
 
-    const QuestionColumn = [
-        { field: 'neighborhood_association_name', header: "町内会名", headerClassName: "custom-header", minWidth: "8rem" },
-        { field: "test_payload", header: "test payload" }
-    ]
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
+        });
+        return specialCareName;
+    }
+
+    const getAnswerData = (answer) => {
+        let answerData = null;
+        answer.map((item) => {
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
+    }
+
+    const getPrefectureName = (id) => {
+        if (id) {
+            let p_name = prefectures.find((item) => item.value === id);
+            return p_name.name;
+        }
+        return "";
+    }
+
+    const onGetEvacueesFamilyDetailOnMounting = () => {
+        getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
+    }
+
+    const getEvacueesFamilyDetail = (response) => {
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.data;
+            const historyData = response.data.history.list;
+            let basicDetailList = [];
+            let basicData = {
+                evacuation_date_time: data.join_date_modified,
+                address: translate(localeJson, 'post_letter') + data.zip_code + " " + getPrefectureName(data.prefecture_id) + " " + data.address,
+                representative_number: data.tel,
+                registered_lang_environment: getRegisteredLanguage(data.language_register)
+            };
+            basicDetailList.push(basicData);
+            setBasicFamilyDetail(basicDetailList);
+            setFamilyCode(data.family_code);
+            const personList = data.person;
+            const familyDataList = [];
+            let personInnerColumns = [...evacueeFamilyDetailRowExpansionColumns];
+            let individualQuestion = personList[0].individualQuestions;
+            if (individualQuestion.length > 0) {
+                individualQuestion.map((ques, index) => {
+                    let column = {
+                        field: "question_" + index,
+                        header: (locale == "ja" ? ques.title : ques.title_en),
+                        minWidth: "10rem"
+                    };
+                    personInnerColumns.push(column);
+                });
+            }
+            setEvacueePersonInnerColumns(personInnerColumns);
+
+            personList.map((person, index) => {
+                let familyData = {
+                    id: index + 1,
+                    is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    refugee_name: person.refugee_name,
+                    name: person.name,
+                    dob: getJapaneseDateDisplayFormat(person.dob),
+                    age: person.age,
+                    age_month: person.month,
+                    gender: getGenderValue(person.gender),
+                    created_date: person.created_at_day,
+                    updated_date: data.updated_at_day,
+                    orders: [{
+                        address: person.address ? person.address : "",
+                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
+                        connecting_code: person.connecting_code,
+                        remarks: person.note,
+                    },
+                    ]
+                };
+
+                let question = person.individualQuestions;
+                if (question.length > 0) {
+                    question.map((ques, index) => {
+                        familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+                    })
+                }
+                familyDataList.push(familyData);
+            })
+            setfamilyDetailData(familyDataList);
+            let admittedHistory = [];
+            historyData.map((item) => {
+                let historyItem = {
+                    place_id: item.place_id,
+                    shelter_place: item.placeName,
+                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                };
+                let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
+                if (index >= 0 && item.status == 1) {
+                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
+                }
+                else {
+                    admittedHistory.push(historyItem);
+                }
+
+            });
+            setFamilyAdmittedData(admittedHistory);
+
+            let neighbourDataList = [];
+
+            const questionnaire = data.question;
+            let townAssociateColumnSet = [];
+            questionnaire.map((ques, index) => {
+                let column = {
+                    field: "question_" + index,
+                    header: (locale == "ja" ? ques.title : ques.title_en),
+                    minWidth: "10rem"
+                };
+                townAssociateColumnSet.push(column);
+            });
+            setTownAssociationColumn(townAssociateColumnSet);
+
+            let neighbourData = {};
+            questionnaire.map((ques, index) => {
+                neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+            });
+            neighbourDataList.push(neighbourData);
+            setNeighbourData(neighbourDataList);
+            setTableLoading(false)
+        }
+        else {
+            setTableLoading(false);
+        }
+    }
 
     useEffect(() => {
-        StaffDetailColumnService.getStaffDetailColumnDetailMedium().then((data) => setBasicFamilyDetail(data));
-        StaffFamilyAdmissionService.getStaffFamilyAdmissionDetailMedium().then((data) => setFamilyAdmission(data))
-        StaffFamilyDetailQuestionsService.getStaffFamilyDetailQuestionsDetailMedium().then((data) => setFamilyDetailQue(data))
-        TemporaryFamilyRowExpansionService.getTemporaryFamilyRowExpansionWithOrdersSmall().then((data) => setFamilyDetails(data))
-    }, []);
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyDetailOnMounting();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale]);
 
     return (
         <>
@@ -126,20 +297,20 @@ export default function StaffFamilyDetail() {
                         <div>
                             <div className='mb-2'>
                                 <div className='flex justify-content-end'>
-                                    {translate(localeJson, 'household_number')} 001-012
+                                    {translate(localeJson, 'household_number')} {familyCode}
                                 </div>
                             </div>
                             <NormalTable
                                 id="evacuee-family-detail"
                                 size={"small"}
-                                // tableLoading={tableLoading}
+                                tableLoading={tableLoading}
                                 emptyMessage={translate(localeJson, "data_not_found")}
                                 stripedRows={true}
                                 paginator={false}
                                 showGridlines={true}
                                 value={basicFamilyDetail}
                                 columns={familyDetailColumns}
-                                parentClass="mb-3"
+                                parentClass="mb-2"
                             />
                             <div className='mb-2'>
                                 <h5>{translate(localeJson, 'household_list')}</h5>
@@ -152,29 +323,36 @@ export default function StaffFamilyDetail() {
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'exit'),
                                     onClick: () => setStaffFamilyDialogVisible(true)
-                                    // onClick: () => router.push('/staff/family'),
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
                             <RowExpansionTable
+                                id={"evacuation-detail-list"}
+                                rows={10}
+                                paginatorLeft={true}
+                                tableLoading={tableLoading}
+                                emptyMessage={translate(localeJson, "data_not_found")}
                                 paginator="true"
                                 customRowExpansionActionsField="actions"
-                                value={familyDetails}
-                                paginatorLeft={true}
-                                innerColumn={houseHoldListInnerColumn}
-                                outerColumn={houseHoldListOuterColumn}
+                                value={familyDetailData}
+                                innerColumn={evacueePersonInnerColumns}
+                                outerColumn={evacueeFamilyDetailColumns}
                                 rowExpansionField="orders"
                             />
-                            <div className='mt-3'>
-                                <NormalTable
-                                    size={"small"}
-                                    stripedRows={true}
-                                    paginator={false}
-                                    showGridlines={true}
-                                    value={familyDetailQue}
-                                    columns={QuestionColumn}
-                                    parentClass="pb-2 mb-2"
-                                />
-                            </div>
+                            {townAssociationColumn.length > 0 &&
+                                <div className='mt-2'>
+                                    <NormalTable
+                                        id="evacuee-family-detail"
+                                        size={"small"}
+                                        tableLoading={tableLoading}
+                                        emptyMessage={translate(localeJson, "data_not_found")}
+                                        stripedRows={true}
+                                        paginator={false}
+                                        showGridlines={true}
+                                        value={neighbourData}
+                                        columns={townAssociationColumn}
+                                    />
+                                </div>
+                            }
                             <div className='flex mt-2 mb-2' style={{ justifyContent: "center", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
@@ -196,14 +374,16 @@ export default function StaffFamilyDetail() {
                             </div>
                             <div className='mt-3 flex justify-content-center overflow-x-auto'>
                                 <NormalTable
+                                    id="evacuee-family-detail"
                                     size={"small"}
+                                    tableLoading={tableLoading}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
                                     stripedRows={true}
                                     paginator={false}
                                     showGridlines={true}
                                     tableStyle={{ maxWidth: "20rem" }}
-                                    value={familyAdmission}
+                                    value={familyAdmittedData}
                                     columns={familyAdmissionColumns}
-                                    parentClass="pb-2 mb-2"
                                 />
                             </div>
                         </div>
