@@ -538,5 +538,16 @@
     },
     "footer": {}
   },
-  "user": {}
+  "user": {
+    "pages":{
+      "evacuee_registration_for_household_family":"世帯(家族)ごとの避難者登録",
+      "how_many_people_evacuated":"何人で避難してきましたか？",
+      "please_tell_how_many_households":"ご自身も含めていっしょに避難してきた世帯(家族)の人数を教えてください。",
+      "do_not_register_each_member_family_individually":"※ 家族の方がそれぞれ登録せず、世帯の代表者がまとめて入力してください。",
+      "qr_Code_scan":"QRコードスキャンします"
+    },
+    "buttons":{
+      "continue":"次に進む"
+    }
+  }
 }

@@ -18,3 +18,5 @@ export { default as CommonDialog } from './commonDialog';
 export { default as SpecialCareEditModal } from './SpecialCareEditModal'
 export { default as StaffStockpileCreateModal } from './staffStockpileCreateModal'
 export { default as StaffStockpileEditModal } from './staffStockpileEditModal'
+export { default as PersonCountModal } from './personCountModal'
+export { default as QrCodeModal } from './qrCodeModal'
