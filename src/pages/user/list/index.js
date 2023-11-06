@@ -19,10 +19,10 @@ export default function PublicEvacuees() {
     const columnsData = [
         { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
         { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "13rem", maxWidth: "13rem", textAlign: 'left' },
-        { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header",minWidth:"10rem", textAlign: 'left' },
+        { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", minWidth: "10rem", textAlign: 'left' },
         { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", minWidth: "6rem", textAlign: 'left' },
         { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", minWidth: "6rem", textAlign: 'left' },
-        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header",textAlign: 'center'}
+        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center' }
     ];
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -82,7 +82,7 @@ export default function PublicEvacuees() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         number: getListPayload.filters.start + i + 1,
-                        name: <div className={obj.active_flg === 1 ? "text-higlight clickable-row" : ""} onClick={() => onClickPlaceName(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}</div>,
+                        name: <div className={obj.active_flg === 1 ? "text-higlight clickable-row" : ""} onClick={() => obj.active_flg === 1 && onClickPlaceName(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}</div>,
                         address_place: obj.address_place,
                         total_capacity: getTotalCapacity(obj),
                         percent: obj.full_status == 1 ? "100%" : obj.percent > 100 ? "100%" : `${obj.percent}%`,
@@ -191,7 +191,7 @@ export default function PublicEvacuees() {
                                 first={getListPayload.filters.start}
                                 rows={getListPayload.filters.limit}
                                 paginatorLeft={true}
-                                tableStyle={{minWidth:"70rem"}}
+                                tableStyle={{ minWidth: "70rem" }}
                                 onPageHandler={(e) => onPaginationChange(e)}
                             />
                         </div>
