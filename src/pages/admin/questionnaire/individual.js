@@ -133,13 +133,12 @@ export default function IndividualQuestionnaire() {
 
     const bindQuestion = () => {
         return (
-            questionnaires.length > 0 &&
             <ol>
                 {questionnaires.map((item, index) => (
                     <li key={index}>
                         <div className='ml-1 mr-1' style={{ width: "95%" }}>
                             <BaseTemplate
-                                // ref={baseTemplateRef}
+                                ref={baseTemplateRef}
                                 item={item}
                                 itemIndex={index}
                                 removeQuestion={() => removeQuestionData(item, index)}

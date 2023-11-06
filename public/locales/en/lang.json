@@ -41,7 +41,7 @@
       "house_hold_information_details": "Household Information Details",
       "admin_details": "Admin Details",
       "number": "S No",
-      "evacuation_place": "Evacuation place",
+      "evacuation_place": "Evacuation Place",
       "max_capacity": "Max capacity",
       "number_of_evacuees": "Number of evacuees",
       "accommodation_rate": "Accommodation rate",
@@ -438,7 +438,7 @@
       "english": "English",
       "japanese": "Japanese",
       "user_dashboard_note": "Note: When you exit the evacuation centre, follow the procedures for 'Exit'.",
-      "checkbox": "Checkbpx",
+      "checkbox": "CheckBox",
       "radio": "RadioButton",
       "dropdown": "DropDown"
     }
