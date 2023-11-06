@@ -3,7 +3,8 @@
     "header": {
       "evacuation_shelter_management_system": "避難所管理システム",
       "logout": "ログアウト",
-      "change_password": "パスワード変更"
+      "change_password": "パスワード変更",
+      "language": "言語"
     },
     "sidebar": {
       "vault_info": "避難所情報",
@@ -550,5 +551,8 @@
     "buttons": {
       "continue": "次に進む"
     }
+  },
+  "lang_others": {
+    "reset_password_title": "パスワードを再設定する"
   }
 }
