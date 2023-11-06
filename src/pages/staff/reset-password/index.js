@@ -26,7 +26,7 @@ const ResetPasswordPage = () => {
             .required(translate(localeJson, 'confirm_password_required'))
             .oneOf([Yup.ref("password"), null], translate(localeJson, 'confirm_password_notMatch'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters'))
-            .max(15, translate(localeJson, 'new_password_max_15_characters')),
+            .max(15, translate(localeJson, 'new_confirm_password_max_15_characters')),
     });
 
     /* Services */
@@ -69,7 +69,7 @@ const ResetPasswordPage = () => {
                                             }} />
                                         </div>
                                         <br />
-                                        <div className="flex justify-content-center w-100 mb-5">
+                                        <div className="flex justify-content-center w-100 mb-5 auth-header">
                                             {translate(localeJson, 'password_reset')}
                                         </div>
                                         <div>

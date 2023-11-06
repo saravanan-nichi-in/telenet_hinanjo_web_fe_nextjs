@@ -311,7 +311,8 @@
       "current_password_atLeast_8_characters": "現在のパスワードは 8 文字以上である必要があります。",
       "current_password_max_15_characters": "現在のパスワードは15文字以内で入力してください。",
       "password_max_15_characters": "パスワードは15文字より大きくないである必要です。",
-      "new_password_max_15_characters": "新しいパスワード確認は15文字より大きくないである必要です。",
+      "new_password_max_15_characters": "新しいパスワードは15文字より大きくないである必要です。",
+      "new_confirm_password_max_15_characters": "新しいパスワード確認は15文字より大きくないである必要です。",
       "postal_code_1_validation": "郵便番号は3桁で指定してください。",
       "postal_code_2_validation": "郵便番号は4桁で指定してください。",
       "max_length_255": "は255文字以内で入力してください。",
@@ -340,7 +341,7 @@
       "special_care_name_en_max_required": "要配慮者事項（英語）を255文字以内でご指定ください。",
       "staff_name_max_required": "スタッフ名は最大200文字です。",
       "default_shelf_life_min_length": "デフォルト保持期間(日)の値は1 以上である必要です。",
-      "default_shelf_life_max_length" : "デフォルト保持期間(日)の値は999 以下である必要です。",
+      "default_shelf_life_max_length": "デフォルト保持期間(日)の値は999 以下である必要です。",
       "item_title_is_required": "項目タイトルは必須です。",
       "option_is_required": "選択肢が必須です。"
     },
@@ -455,7 +456,7 @@
     },
     "pages": {
       "name": "Staff",
-      "staff_login_screen": "スタッフ用ログイン画面",
+      "staff_login_screen": "スタッフ用ログイン",
       "mail_address": "メールアドレス",
       "email_required": "メールアドレスは必須です。",
       "email_valid": "正しいメールアドレスをご入力ください。",
@@ -498,7 +499,7 @@
       "connecting_code": "紐付コード",
       "date_created": "入所日時",
       "evacuation_days": "避難日数",
-      "do_you_want_to_exit_the_shelter":"退所手続きして良いですか？"
+      "do_you_want_to_exit_the_shelter": "退所手続きして良いですか？"
     },
     "form": {
       "type": "種別",
@@ -539,15 +540,15 @@
     "footer": {}
   },
   "user": {
-    "pages":{
-      "evacuee_registration_for_household_family":"世帯(家族)ごとの避難者登録",
-      "how_many_people_evacuated":"何人で避難してきましたか？",
-      "please_tell_how_many_households":"ご自身も含めていっしょに避難してきた世帯(家族)の人数を教えてください。",
-      "do_not_register_each_member_family_individually":"※ 家族の方がそれぞれ登録せず、世帯の代表者がまとめて入力してください。",
-      "qr_Code_scan":"QRコードスキャンします"
+    "pages": {
+      "evacuee_registration_for_household_family": "世帯(家族)ごとの避難者登録",
+      "how_many_people_evacuated": "何人で避難してきましたか？",
+      "please_tell_how_many_households": "ご自身も含めていっしょに避難してきた世帯(家族)の人数を教えてください。",
+      "do_not_register_each_member_family_individually": "※ 家族の方がそれぞれ登録せず、世帯の代表者がまとめて入力してください。",
+      "qr_Code_scan": "QRコードスキャンします"
     },
-    "buttons":{
-      "continue":"次に進む"
+    "buttons": {
+      "continue": "次に進む"
     }
   }
 }

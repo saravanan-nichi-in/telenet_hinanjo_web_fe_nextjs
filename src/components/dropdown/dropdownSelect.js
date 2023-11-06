@@ -26,7 +26,7 @@ export default function DropdownSelect(props) {
                     <div className='header-details-first'>
                         {text}
                     </div>
-                    <i className={`${icon} ml-1`}>{antdIcon}</i>
+                    <i className={`${icon} ml-2`}>{antdIcon}</i>
                     <span style={{ color: "black" }}>{spanText}</span>
                 </button>
             </Dropdown>

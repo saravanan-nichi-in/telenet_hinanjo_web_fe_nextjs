@@ -46,6 +46,7 @@
             }
 
             background-color: rgba(255, 255, 255, 0.2);
+            // background-color: lightseagreen;
             border-bottom: 1px solid #2b3d51;
         }
 
@@ -91,13 +92,15 @@
 
             &.active-route {
                 font-weight: 500;
-                background-color: #556373;
+                // background-color: darkcyan;
+                background-color: rgba(255, 255, 255, 0.2);
                 color: white;
                 border: 0;
             }
 
             &:hover {
-                background-color: #556373;
+                background-color: rgba(255, 255, 255, 0.2);
+                // background-color: lightseagreen;
                 color: white;
             }
 
@@ -110,10 +113,11 @@
             overflow: hidden;
             max-height: 0;
             // border-radius: 12px;
+            // margin-top: .2rem;
 
             li {
                 a {
-                    // margin-left: 1rem;
+                    margin-left: 2rem;
                 }
 
                 li {

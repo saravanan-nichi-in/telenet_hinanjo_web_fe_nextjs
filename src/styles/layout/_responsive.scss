@@ -73,6 +73,16 @@
                     .layout-submenu-toggler {
                         display: none;
                     }
+
+                    ul {
+                        ul {
+                            // margin-top: 0.2rem;
+
+                            a {
+                                margin-left: 0rem;
+                            }
+                        }
+                    }
                 }
 
                 .layout-topbar {
