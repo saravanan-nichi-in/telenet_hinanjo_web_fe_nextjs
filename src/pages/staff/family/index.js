@@ -324,7 +324,7 @@ function StaffFamily() {
                     <div className='card'>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                             <h5 className='page-header1'>{translate(localeJson, 'list_of_evacuees')}</h5>
-                            <span>{translate(localeJson, 'total_summary') + ": " +  familyCount  + translate(localeJson, 'people')}</span>
+                            <span>{translate(localeJson, 'total_summary') + ": " + familyCount + translate(localeJson, 'people')}</span>
                         </div>
                         <hr />
                         <div>
@@ -392,40 +392,40 @@ function StaffFamily() {
                             </div>
                             <div className="mt-3">
                                 <NormalTable
-                                 lazy
-                                 id={"evacuation-list"}
-                                 className="evacuation-list"
-                                 totalRecords={totalCount}
-                                 loading={tableLoading}
-                                 size={"small"}
-                                 stripedRows={true}
-                                 paginator={"true"}
-                                 showGridlines={"true"}
-                                 value={evacueesDataList}
-                                 columns={evacuationTableFields}
-                                 emptyMessage={translate(localeJson, "data_not_found")}
-                                 first={getListPayload.filters.start}
-                                 rows={getListPayload.filters.limit}
-                                 paginatorLeft={true}
-                                 onPageHandler={(e) => onPaginationChange(e)}
-                                    // lazy
-                                    // id={"evacuation-list"}
-                                    // className="evacuation-list"
-                                    // totalRecords={totalCount}
-                                    // loading={tableLoading}
-                                    // size={"small"}
-                                    // stripedRows={true}
-                                    // paginator={"true"}
-                                    // showGridlines={"true"}
-                                    // customActionsField="actions"
-                                    // value={evacueesDataList}
-                                    // columns={evacuationTableFields}
-                                    // columnStyle={{ textAlign: "center" }}
-                                    // emptyMessage={translate(localeJson, "data_not_found")}
-                                    // first={getListPayload.filters.start}
-                                    // rows={getListPayload.filters.limit}
-                                    // paginatorLeft={true}
-                                    // onPageHandler={(e) => onPaginationChange(e)}
+                                    lazy
+                                    id={"evacuation-list"}
+                                    className="evacuation-list"
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    size={"small"}
+                                    stripedRows={true}
+                                    paginator={"true"}
+                                    showGridlines={"true"}
+                                    value={evacueesDataList}
+                                    columns={evacuationTableFields}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                // lazy
+                                // id={"evacuation-list"}
+                                // className="evacuation-list"
+                                // totalRecords={totalCount}
+                                // loading={tableLoading}
+                                // size={"small"}
+                                // stripedRows={true}
+                                // paginator={"true"}
+                                // showGridlines={"true"}
+                                // customActionsField="actions"
+                                // value={evacueesDataList}
+                                // columns={evacuationTableFields}
+                                // columnStyle={{ textAlign: "center" }}
+                                // emptyMessage={translate(localeJson, "data_not_found")}
+                                // first={getListPayload.filters.start}
+                                // rows={getListPayload.filters.limit}
+                                // paginatorLeft={true}
+                                // onPageHandler={(e) => onPaginationChange(e)}
                                 />
                             </div>
                         </div>
