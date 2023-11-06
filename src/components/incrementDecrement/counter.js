@@ -13,13 +13,13 @@ export default function Counter(props) {
     const [value, setValue] = useState(props.value);
 
     const handleIncrement = () => {
-        const newValue = parseInt(value) + 1;
+        const newValue =parseInt(value)? parseInt(value) + 1:1;
         setValue(newValue);
         props.onValueChange(newValue);
     };
 
     const handleDecrement = () => {
-        const newValue = parseInt(value) - 1;
+        const newValue = parseInt(value)?parseInt(value) - 1: -1;
         setValue(newValue);
         props.onValueChange(newValue);
     };
@@ -30,7 +30,9 @@ export default function Counter(props) {
             id: props.id,
             value: value,
             name: name,
-            onChange: (e) => setValue(parseInt(e.target.value)),
+            onChange: (e) =>{ 
+                props.onValueChange(e.target.value?parseInt(e.target.value):0)
+                setValue(parseInt(e.target.value)?parseInt(e.target.value):0)},
             onRightClick: handleIncrement,
             onLeftClick: handleDecrement,
             rightIcon: "pi pi-plus",

@@ -30,3 +30,14 @@
 .modal-page-header2{
     font-size: $pageHeaderFontSize2;
 }
+
+.custom-card {
+    background-color: #ffffff; /* Set your desired background color */
+    border-radius: 8px; /* Set your desired border radius */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Set your desired box shadow */
+    padding: 20px; /* Set your desired padding */
+  }
+
+  .sub-header {
+    font-size: $subHeaderFontSize;
+  }
