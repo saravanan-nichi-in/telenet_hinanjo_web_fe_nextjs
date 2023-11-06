@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
-import { MdDashboard, MdManageAccounts, MdSettings } from "react-icons/md";
+import { MdDashboard, MdManageAccounts, MdSettings, MdSpaceDashboard, MdAddCircle } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";
 import { RiAdminFill } from "react-icons/ri";
 import { FaQrcode, FaUserPlus } from "react-icons/fa";
@@ -8,7 +8,15 @@ import { ImUser, ImUsers } from "react-icons/im";
 import { IoMdToday } from "react-icons/io";
 import { AiOutlineAreaChart, AiFillSetting } from "react-icons/ai";
 import { MdPlace } from "react-icons/md";
-import { BiSolidPurchaseTagAlt } from "react-icons/bi";
+import { BiSolidPurchaseTagAlt, BiQrScan, BiSolidAddToQueue, BiSolidTime } from "react-icons/bi";
+import { RiHome5Fill, RiFileHistoryFill, RiFileSettingsFill } from "react-icons/ri";
+import { IoMdListBox, IoIosPaper } from "react-icons/io";
+import { PiUserListFill, PiHandTapFill } from "react-icons/pi";
+import { FaPeopleGroup, FaUsersGear } from "react-icons/fa6";
+import { HiArchiveBoxXMark, HiInformationCircle } from "react-icons/hi2";
+import { FaBoxes, FaChartPie, FaUserTie } from "react-icons/fa"
+import { BsHouseGearFill, BsPeopleFill, BsFillPersonPlusFill } from "react-icons/bs";
+import { GiClothes } from "react-icons/gi";
 
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
@@ -23,51 +31,51 @@ const AppMenu = () => {
     const adminModel = [
         {
             label: translate(localeJson, 'vault_info'),
-            icon: <MdDashboard size={20} />,
+            icon: <RiHome5Fill size={20} />,
             items: [
                 {
                     label: translate(localeJson, 'vault_info'),
-                    icon: <MdDashboard size={20} />,
+                    icon: <RiHome5Fill size={20} />,
                     items: [
                         {
                             label: translate(localeJson, 'evacuation_status_list'),
-                            icon: <ImUsers size={20} />,
+                            icon: <IoMdListBox size={20} />,
                             to: '/admin/dashboard',
                             active: router.pathname.startsWith('/admin/dashboard')
                         },
                         {
                             label: translate(localeJson, 'history_place'),
-                            icon: <HiDocumentText size={20} />,
+                            icon: <RiFileHistoryFill size={20} />,
                             to: '/admin/history/place',
                             active: router.pathname.startsWith('/admin/history/place'),
                         },
                         {
                             label: translate(localeJson, 'list_of_evacuees'),
-                            icon: <HiDocumentText size={20} />,
+                            icon: <PiUserListFill size={20} />,
                             to: '/admin/evacuation',
                             active: router.pathname.startsWith('/admin/evacuation')
                         },
                         {
                             label: translate(localeJson, 'external_evacuees_tally'),
-                            icon: <HiDocumentText size={20} />,
+                            icon: <FaPeopleGroup size={20} />,
                             to: '/admin/external/family',
                             active: router.pathname.startsWith('/admin/external/family')
                         },
                         {
                             label: translate(localeJson, 'shortage_supplies_list'),
-                            icon: <IoMdToday size={20} />,
+                            icon: <HiArchiveBoxXMark size={20} />,
                             to: '/admin/shortage-supplies',
                             active: router.pathname.startsWith('/admin/shortage-supplies')
                         },
                         {
                             label: translate(localeJson, 'stockpile_summary'),
-                            icon: <IoMdToday size={20} />,
+                            icon: <FaBoxes size={20} />,
                             to: '/admin/stockpile/summary',
                             active: router.pathname.startsWith('/admin/stockpile/summary')
                         },
                         {
                             label: translate(localeJson, 'statistics'),
-                            icon: <AiOutlineAreaChart size={20} />,
+                            icon: <FaChartPie size={20} />,
                             to: '/admin/statistics',
                             active: router.pathname.startsWith('/admin/statistics')
                         }
@@ -85,19 +93,19 @@ const AppMenu = () => {
                     items: [
                         {
                             label: translate(localeJson, 'qr_code_create'),
-                            icon: <FaQrcode size={20} />,
+                            icon: <BiQrScan size={20} />,
                             to: '/admin/qrcode/csv/import',
                             active: router.pathname.startsWith('/admin/qrcode/csv/import')
                         },
                         {
                             label: translate(localeJson, 'staff_management'),
-                            icon: <ImUser size={20} />,
+                            icon: <FaUsersGear size={20} />,
                             to: '/admin/staff-management',
                             active: router.pathname.startsWith('/admin/staff-management')
                         },
                         {
                             label: translate(localeJson, 'admin_management'),
-                            icon: <RiAdminFill size={20} />,
+                            icon: <FaUserTie size={20} />,
                             to: '/admin/admin-management',
                             active: router.pathname.startsWith('/admin/admin-management')
                         }
@@ -114,31 +122,31 @@ const AppMenu = () => {
                     icon: <MdSettings size={20} />,
                     items: [{
                         label: translate(localeJson, 'places'),
-                        icon: <MdPlace size={20} />,
+                        icon: <BsHouseGearFill size={20} />,
                         to: '/admin/place',
                         active: router.pathname.startsWith('/admin/place')
                     },
                     {
                         label: translate(localeJson, 'material'),
-                        icon: <BiSolidPurchaseTagAlt size={20} />,
+                        icon: <GiClothes size={20} />,
                         to: '/admin/material'
                     },
                     {
                         label: translate(localeJson, 'stockpile_master_management'),
-                        icon: <BiSolidPurchaseTagAlt size={20} />,
+                        icon: <FaBoxes size={20} />,
                         to: '/admin/stockpile/master'
                     }, {
                         label: translate(localeJson, 'special_care_list'),
-                        icon: <ImUser size={20} />,
+                        icon: <PiHandTapFill size={20} />,
                         to: '/admin/special/care'
                     }, {
                         label: translate(localeJson, 'questionnaire'),
-                        icon: <FaUserPlus size={20} />,
+                        icon: <BiSolidAddToQueue size={20} />,
                         to: '/admin/questionnaire'
                     },
                     {
                         label: translate(localeJson, 'setting_systems'),
-                        icon: <AiFillSetting size={20} />,
+                        icon: <RiFileSettingsFill size={20} />,
                         to: '/admin/setting'
                     },
                     ]
@@ -150,11 +158,11 @@ const AppMenu = () => {
     const staffModel = [
         {
             label: translate(localeJson, 'staff_dashboard'),
-            icon: <MdDashboard size={20} />,
+            icon: <MdSpaceDashboard size={20} />,
             items: [
                 {
                     label: translate(localeJson, 'staff_dashboard'),
-                    icon: <MdDashboard size={20} />,
+                    icon: <MdSpaceDashboard size={20} />,
                     to: '/staff/dashboard',
                     active: router.pathname.startsWith('/staff/dashboard')
                 },
@@ -162,27 +170,27 @@ const AppMenu = () => {
         },
         {
             label: translate(localeJson, 'evacuee_information'),
-            icon: <MdDashboard size={20} />,
+            icon: <HiInformationCircle size={20} />,
             items: [
                 {
                     label: translate(localeJson, 'evacuee_information'),
-                    icon: <MdDashboard size={20} />,
+                    icon: <HiInformationCircle size={20} />,
                     items: [
                         {
                             label: translate(localeJson, 'list_of_evacuees'),
-                            icon: <ImUsers size={20} />,
+                            icon: <BsPeopleFill size={20} />,
                             to: '/staff/family',
                             active: router.pathname.startsWith('/staff/family')
                         },
                         {
                             label: translate(localeJson, 'temporary_registrants'),
-                            icon: <ImUsers size={20} />,
+                            icon: <BiSolidTime size={20} />,
                             to: '/staff/temporary/family',
                             active: router.pathname.startsWith('/staff/temporary/family')
                         },
                         {
                             label: translate(localeJson, 'external_evacuees_list'),
-                            icon: <ImUsers size={20} />,
+                            icon: <FaPeopleGroup size={20} />,
                             to: '/staff/external/family-list',
                             active: router.pathname.startsWith('/staff/external/family-list')
                         },
@@ -192,21 +200,21 @@ const AppMenu = () => {
         },
         {
             label: translate(localeJson, 'staff_stockpile_management'),
-            icon: <MdDashboard size={20} />,
+            icon: <FaBoxes size={20} />,
             items: [
                 {
                     label: translate(localeJson, 'staff_stockpile_management'),
-                    icon: <MdDashboard size={20} />,
+                    icon: <FaBoxes size={20} />,
                     items: [
                         {
                             label: translate(localeJson, 'stockpile_list'),
-                            icon: <ImUsers size={20} />,
+                            icon: <IoIosPaper size={20} />,
                             to: '/staff/stockpile/dashboard',
                             active: router.pathname.startsWith('/staff/stockpile/dashboard')
                         },
                         {
                             label: translate(localeJson, 'stockpile_history'),
-                            icon: <ImUsers size={20} />,
+                            icon: <RiFileHistoryFill size={20} />,
                             to: '/staff/stockpile/history',
                             active: router.pathname.startsWith('/staff/stockpile/history')
                         }
@@ -216,21 +224,21 @@ const AppMenu = () => {
         },
         {
             label: translate(localeJson, 'setting'),
-            icon: <MdDashboard size={20} />,
+            icon: <MdSettings size={20} />,
             items: [
                 {
                     label: translate(localeJson, 'setting'),
-                    icon: <MdDashboard size={20} />,
+                    icon: <MdSettings size={20} />,
                     items: [
                         {
                             label: translate(localeJson, 'necessary_supplies_registration'),
-                            icon: <ImUsers size={20} />,
+                            icon: <MdAddCircle size={20} />,
                             to: '/staff/supplies',
                             active: router.pathname.startsWith('/staff/supplies')
                         },
                         {
                             label: translate(localeJson, 'manual_registration_of_evacuees'),
-                            icon: <ImUsers size={20} />,
+                            icon: <BsFillPersonPlusFill size={20} />,
                             to: '/staff/register/check-in',
                             active: router.pathname.startsWith('/staff/register/check-in')
                         },
