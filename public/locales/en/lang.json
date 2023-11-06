@@ -314,7 +314,7 @@
       "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
       "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
       "password_max_15_characters": "The password must not be greater than 15 characters.",
-      "new_password_max_15_characters": "The new password must not be greater than 15 characters.",
+      "new_password_max_15_characters": "The new confirmed password must be no larger than 15 characters.",
       "postal_code_1_validation": "Please specify the postal code using 3 digits.",
       "postal_code_2_validation": "Please specify the postal code using 4 digits.",
       "capacity_max_length": " must not be greater than 999999999.",
@@ -343,7 +343,7 @@
       "special_care_name_en_max_required": "Name (English) 255 characters or less.",
       "staff_name_max_required": "The staff name should be 200 characters or less.",
       "default_shelf_life_min_length": "Please enter a value greater than or equal to 1.",
-      "default_shelf_life_max_length" : "Please enter a value less than or equal to 999.",
+      "default_shelf_life_max_length": "Please enter a value less than or equal to 999.",
       "item_title_is_required": "Item Title is required",
       "option_is_required": "Choice is required"
     },
@@ -501,7 +501,7 @@
       "connecting_code": "Connecting Code",
       "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
-      "do_you_want_to_exit_the_shelter":"Do you want to exit the shelter?"
+      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?"
     },
     "form": {
       "type": "type",
@@ -542,15 +542,15 @@
     "footer": {}
   },
   "user": {
-    "pages":{
-      "evacuee_registration_for_household_family":"Evacuee registration for each household (family)",
-      "how_many_people_evacuated":"How many people have evacuated?",
-      "please_tell_how_many_households":"Please tell us how many households (family members) have evacuated with you, including yourself.",
-      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually.",
-      "qr_Code_scan":"QR Code Scan"
+    "pages": {
+      "evacuee_registration_for_household_family": "Evacuee registration for each household (family)",
+      "how_many_people_evacuated": "How many people have evacuated?",
+      "please_tell_how_many_households": "Please tell us how many households (family members) have evacuated with you, including yourself.",
+      "do_not_register_each_member_family_individually": "Note: Do not register each member of the family individually.",
+      "qr_Code_scan": "QR Code Scan"
     },
-    "buttons":{
-      "continue":"Continue"
+    "buttons": {
+      "continue": "Continue"
     }
   }
 }

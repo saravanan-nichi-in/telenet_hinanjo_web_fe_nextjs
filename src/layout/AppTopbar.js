@@ -179,8 +179,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 {layoutConfig.menuMode === 'static' && (
                     <div className="logo-details">
                         <div className='logo-view'>
-                             {/* <img src={settings_data.image_logo_path} width={"280px"} height={"45px"} /> */}
-                            <DiAtom size={35} className='logo-icon' />
+                             <img src={settings_data.image_logo_path} width={"280px"} height={"45px"} />
                         </div>
                     </div>
                 )}
