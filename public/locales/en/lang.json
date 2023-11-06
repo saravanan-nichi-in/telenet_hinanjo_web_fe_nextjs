@@ -3,7 +3,8 @@
     "header": {
       "evacuation_shelter_management_system": "Evacuation Shelter Management System",
       "logout": "Logout",
-      "change_password": "Change Password"
+      "change_password": "Change Password",
+      "language": "Language"
     },
     "sidebar": {
       "vault_info": "Evacuation Information",
@@ -553,5 +554,8 @@
     "buttons": {
       "continue": "Continue"
     }
+  },
+  "lang_others": {
+    "reset_password_title": "Reset Password"
   }
 }

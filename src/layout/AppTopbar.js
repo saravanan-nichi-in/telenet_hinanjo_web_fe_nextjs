@@ -1,5 +1,6 @@
 import React, { forwardRef, useContext, useImperativeHandle, useRef, useState, useEffect } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
 import { MdOutlineResetTv } from 'react-icons/md';
 
 import { LayoutContext } from './context/layoutcontext';
@@ -31,120 +32,81 @@ const AppTopbar = forwardRef((props, ref) => {
 
         return <span>{props.placeholder}</span>;
     };
-    // Admin menu information
-    const AdminItems = [
-        {
-            key: '1',
-            label: (
-                <div onClick={() => setChangePasswordOpen(true)}>
-                    {translate(localeJson, 'change_password')}
-                </div>
-            ),
-            // icon: <MdOutlineResetTv onClick={() => setChangePasswordOpen(true)} style={{ fontSize: "14px" }} />,
-            children: [
-                {
-                    label: selectedCountryTemplate({
-                        name: 'JP',
-                        code: 'JP',
-                        placeholder: '',
-                        image: "/layout/images/jp.png"
-                    }),
-                },
-                {
-                    label: selectedCountryTemplate({
-                        name: 'EN',
-                        code: 'US',
-                        placeholder: '',
-                        image: "/layout/images/us.png"
-                    }),
-                },
-            ],
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: (
-                <div onClick={() => setChangePasswordOpen(true)}>
-                    {translate(localeJson, 'change_password')}
-                </div>
-            ),
-            icon: <MdOutlineResetTv onClick={() => setChangePasswordOpen(true)} style={{ fontSize: "14px" }} />,
-            key: '2',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: (
-                <div onClick={() => logout()}>
-                    {translate(localeJson, 'logout')}
-                </div>
-            ),
-            icon: <LogoutOutlined />,
-            key: '3',
-        },
-    ];
-    // Staff menu information
-    const StaffItems = [
-        {
-            label: selectedCountryTemplate({
-                name: 'JP',
-                code: 'JP',
-                placeholder: '',
-                image: "/layout/images/jp.png"
-            }),
-            key: '0',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: selectedCountryTemplate({
-                name: 'EN',
-                code: 'US',
-                placeholder: '',
-                image: "/layout/images/us.png"
-            }),
-            key: '1',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: (
-                <div onClick={() => logout()}>
-                    {translate(localeJson, 'logout')}
-                </div>
-            ),
-            icon: <LogoutOutlined />,
-            key: '3',
-        },
-    ];
-    // User menu information
-    const UserItems = [
-        {
-            label: selectedCountryTemplate({
-                name: 'JP',
-                code: 'JP',
-                placeholder: '',
-                image: "/layout/images/jp.png"
-            }),
-            key: '0',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: selectedCountryTemplate({
-                name: 'EN',
-                code: 'US',
-                placeholder: '',
-                image: "/layout/images/us.png"
-            }),
-            key: '1',
-        },
-    ];
+
+    // Dynamic menu setting for top bar
+    const settingView = (
+        <Menu>
+            {url.startsWith('/user') ? (
+                <>
+                    <Menu.Item key="jp">
+                        {selectedCountryTemplate({
+                            name: 'JP',
+                            code: 'JP',
+                            placeholder: '',
+                            image: "/layout/images/jp.png"
+                        })}
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item key="en">
+                        {selectedCountryTemplate({
+                            name: 'EN',
+                            code: 'US',
+                            placeholder: '',
+                            image: "/layout/images/us.png"
+                        })}
+                    </Menu.Item>
+                </>
+            ) : (
+                <Menu.SubMenu key="language" title={translate(localeJson, 'language')}>
+                    <Menu.Item key="jp">
+                        {selectedCountryTemplate({
+                            name: 'JP',
+                            code: 'JP',
+                            placeholder: '',
+                            image: "/layout/images/jp.png"
+                        })}
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item key="en">
+                        {selectedCountryTemplate({
+                            name: 'EN',
+                            code: 'US',
+                            placeholder: '',
+                            image: "/layout/images/us.png"
+                        })}
+                    </Menu.Item>
+                </Menu.SubMenu>
+            )}
+            {url.startsWith('/admin') && (
+                <>
+                    <Menu.Divider />
+                    <Menu.Item key="change-password" icon={<MdOutlineResetTv style={{ fontSize: "14px" }} />} onClick={() => setChangePasswordOpen(true)}>
+                        <div>
+                            {translate(localeJson, 'change_password')}
+                        </div>
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
+                        <div>
+                            {translate(localeJson, 'logout')}
+                        </div>
+                    </Menu.Item>
+                </>
+
+            )}
+            {url.startsWith('/staff') && (
+                <>
+
+                    <Menu.Divider />
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
+                        <div>
+                            {translate(localeJson, 'logout')}
+                        </div>
+                    </Menu.Item>
+                </>
+            )}
+        </Menu>
+    );
 
     useEffect(() => {
         const adminData = JSON.parse(localStorage.getItem('admin'));
@@ -216,8 +178,7 @@ const AppTopbar = forwardRef((props, ref) => {
                             <DropdownSelect
                                 icon={"pi pi-cog"}
                                 text={layoutConfig.menuMode === 'overlay' ? "" : userName}
-                                items={layoutConfig.menuMode === 'overlay' ? UserItems : url.startsWith('/admin') ? AdminItems : StaffItems}
-                                spanText={"Settings"}
+                                items={settingView}
                             />
                         </div>
                     </div>

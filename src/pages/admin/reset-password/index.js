@@ -70,7 +70,7 @@ const ResetPasswordPage = () => {
                                         </div>
                                         <br />
                                         <div className="flex justify-content-center w-100 mb-5 auth-header">
-                                            {translate(localeJson, 'password_reset')}
+                                            {translate(localeJson, 'reset_password_title')}
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
