@@ -3,7 +3,8 @@
     "header": {
       "evacuation_shelter_management_system": "Evacuation Shelter Management System",
       "logout": "Logout",
-      "change_password": "Change Password"
+      "change_password": "Change Password",
+      "language": "Language"
     },
     "sidebar": {
       "vault_info": "Evacuation Information",
@@ -314,7 +315,8 @@
       "current_password_atLeast_8_characters": "The current password must be at least 8 characters.",
       "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
       "password_max_15_characters": "The password must not be greater than 15 characters.",
-      "new_password_max_15_characters": "The new confirmed password must be no larger than 15 characters.",
+      "new_password_max_15_characters": "The new password must not be greater than 15 characters.",
+      "new_confirm_password_max_15_characters": "The new confirmed password must not be greater than 15 characters.",
       "postal_code_1_validation": "Please specify the postal code using 3 digits.",
       "postal_code_2_validation": "Please specify the postal code using 4 digits.",
       "capacity_max_length": " must not be greater than 999999999.",
@@ -480,15 +482,15 @@
       "shelter_situation": "SHELTER SITUATION",
       "person_consideration": "Persons requiring consideration",
       "accommodation_status": "Accommodation status",
-      "staff_supplies": "REGISTRATION OF NECESSARY GOODS",
+      "staff_supplies": "Registration of Necessary Goods",
       "remarks": "Remarks",
       "comment": "Comment",
       "comment_placeholder": "Enter items that are not included in the supply list prepared by the operation.",
       "remark_placeholder": "Other information",
       "supplies_registration": " In the registration column for necessary supplies, enter numerical values according to the list registered by the management.",
-      "supplies_name": "Name of substance",
+      "supplies_name": "Name of Substance",
       "supplies_slno": "S No",
-      "supplies_unit": "Unit",
+      "supplies_unit": "Quantity",
       "staff_management_inventory_import_processing": "Staff Management Inventory Import Processing",
       "edit_product": "Edit Product",
       "staff_check_in": "REGISTRATION WITHOUT GETTING PERSONAL INFORMATION",
@@ -552,5 +554,8 @@
     "buttons": {
       "continue": "Continue"
     }
+  },
+  "lang_others": {
+    "reset_password_title": "Reset Password"
   }
 }

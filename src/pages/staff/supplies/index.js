@@ -169,7 +169,7 @@ export default function Supplies() {
                 <hr />
                 <form onSubmit={handleSubmit}>
                 <div>
-                  <h5 className="page-header1">
+                  <h5 className="sub-header">
                     {translate(localeJson, "supplies_registration")}
                   </h5>
                   <div className="mt-3">

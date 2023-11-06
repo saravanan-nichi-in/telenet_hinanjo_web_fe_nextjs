@@ -80,7 +80,7 @@ const LoginPage = () => {
                                             }} />
                                         </div>
                                         <br />
-                                        <div className="flex justify-content-center w-100 mb-5">
+                                        <div className="flex justify-content-center w-100 mb-5 auth-header">
                                             {translate(localeJson, 'staff_login_screen')}
                                         </div>
                                         <div>
