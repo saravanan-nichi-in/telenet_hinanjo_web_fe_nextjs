@@ -130,7 +130,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                                         spanText: "*",
                                                         disabled: "true",
                                                         inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                        text: translate(localeJson, 'shelter_place'),
+                                                        text: translate(localeJson, 'evacuation_place'),
                                                     }}
                                                 />
                                             </div>

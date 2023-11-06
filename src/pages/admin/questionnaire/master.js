@@ -91,7 +91,7 @@ export default function IndividualQuestionnaire() {
                     "title": "",
                     "questiontitle": item.title,
                     "questiontitle_en": item.title_en,
-                    "option": item.options,
+                    "option": item.type == 1 ? (item.options.length > 0 ? item.options : [""]): item.options,
                     "option_en": item.options_en,
                     "selected_type": (item.type == 3 || item.type == 4) ? item.type : 1,
                     "inner_question_type": !(item.type == 3 || item.type == 4) ? item.type : 1,
@@ -103,6 +103,7 @@ export default function IndividualQuestionnaire() {
                 questionList.push(question);
             });
             setQuestionnaires(questionList);
+            console.log(questionList)
         }
         else {
             setQuestionnaires([
