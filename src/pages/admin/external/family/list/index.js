@@ -127,7 +127,7 @@ export default function ExteranalEvacuationPage() {
                     id: item.id,
                     evacuation_site_type: item.place_category,
                     place: item.place_detail,
-                    food_support: item.food_required,
+                    food_support: item.food_required ? item.food_required : translate(localeJson, 'no'),
                     people_count: item.external_person_count > 0 ? <Link className="text-higlight" href={{
                         pathname: '/admin/external/family/detail',
                         query: { evacuee_id: item.id }
