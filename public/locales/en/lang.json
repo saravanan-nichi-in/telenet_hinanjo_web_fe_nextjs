@@ -456,8 +456,8 @@
       "staff_stockpile_management": "Stockpile Management",
       "stockpile_list": "Stockpile List",
       "stockpile_history": "Stockpile History",
-      "necessary_supplies_registration": "Necessary supplies registration",
-      "manual_registration_of_evacuees": "Manual registration of evacuees"
+      "necessary_supplies_registration": "Necessary Supplies Registration",
+      "manual_registration_of_evacuees": "Manual Registration of Evacuees"
     },
     "pages": {
       "staff_login_screen": "Staff Login",
@@ -493,9 +493,9 @@
       "supplies_unit": "Quantity",
       "staff_management_inventory_import_processing": "Staff Management Inventory Import Processing",
       "edit_product": "Edit Product",
-      "staff_check_in": "REGISTRATION WITHOUT GETTING PERSONAL INFORMATION",
-      "residence_with_information": "Residents without Personal Information",
-      "residence_with_out_information": "Residents with Personal Information",
+      "staff_check_in": "Registration Without Getting Personal Information",
+      "residence_with_information": "Residents Without Personal Information",
+      "residence_with_out_information": "Residents With Personal Information",
       "number_of_household": "Number of households",
       "household_representative": "Household representative",
       "age_m": "Age(m)",
@@ -503,7 +503,8 @@
       "connecting_code": "Connecting Code",
       "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
-      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?"
+      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?",
+      "staff_support":"In which, those who need special support"
     },
     "form": {
       "type": "type",
@@ -549,7 +550,12 @@
       "how_many_people_evacuated": "How many people have evacuated?",
       "please_tell_how_many_households": "Please tell us how many households (family members) have evacuated with you, including yourself.",
       "do_not_register_each_member_family_individually": "Note: Do not register each member of the family individually.",
-      "qr_Code_scan": "QR Code Scan"
+      "qr_Code_scan": "QR Code Scan",
+      "check_in_first":"CheckIn First Times",
+      "shelter_search":"Those who came from other shelters",
+      "shelter_name":"Name",
+      "shelter_password":"Password",
+      "shelter_code":"Family Code"
     },
     "buttons": {
       "continue": "Continue"

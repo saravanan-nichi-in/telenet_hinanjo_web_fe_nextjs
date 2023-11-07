@@ -18,6 +18,7 @@ export default function RegisterCheckIn() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
+  const [frozenArray, setFrozenArray] = useState([]);
   const initialValues = {};
   const columnsData = [
     {
@@ -99,9 +100,10 @@ export default function RegisterCheckIn() {
       ) {
         const data = response.data.detail;
         let preparedList = [];
+        let frozenData = []
         data.map((obj, i) => {
           let preparedObj = {
-            slno: i + 1,
+            slno: i>0?i:"",
             special_care_id: obj.id ?? "",
             name: locale=='ja'?obj.name ?? "":obj.name_en??"",
             count: obj.count ?? "",
@@ -109,8 +111,16 @@ export default function RegisterCheckIn() {
             number: obj.number ?? "",
             specialCarePersonsCount:obj.person_total||obj.specialCarePersonsCount
           };
+          if(i==0)
+          {
+            frozenData.push(preparedObj)
+          }
+          else {
           preparedList.push(preparedObj);
+          }
         });
+       
+       setFrozenArray([frozenData[0]])
         setList(preparedList);
         setTableLoading(false);
       } else {
@@ -132,18 +142,36 @@ export default function RegisterCheckIn() {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          setLoader(true)
+          setLoader(true);
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
-            people_checkin: list?.map((item) => {
-              return {
-                special_care_id: item.special_care_id,
-                count: item.count,
-              };
-            }),
+            people_checkin: [],
           };
-            create(payload, isCreated);
+        
+          if (list) {
+            payload.people_checkin.push(
+              ...list.map((item) => {
+                return {
+                  special_care_id: item.special_care_id,
+                  count: item.count,
+                };
+              })
+            );
+          }
+        
+          if (frozenArray) {
+            payload.people_checkin.push(
+              ...frozenArray.map((item) => {
+                return {
+                  special_care_id: item.special_care_id,
+                  count: item.count,
+                };
+              })
+            );
+          }
+          create(payload, isCreated);
         }}
+        
       >
         {({
           values,
@@ -161,6 +189,7 @@ export default function RegisterCheckIn() {
                 <hr />
                 <form onSubmit={handleSubmit}>
                 <div>
+                  <div className="mt-3 sub-heading">{translate(localeJson, "staff_support")}</div>
                   <div className="mt-3">
                     <NormalTable
                       lazy
@@ -170,6 +199,7 @@ export default function RegisterCheckIn() {
                       className={"custom-table-cell"}
                       showGridlines={"true"}
                       value={list}
+                      frozenValue={_.size(list) > 0 && frozenArray}
                       columns={columnsData}
                       filterDisplay="menu"
                       emptyMessage={translate(localeJson, "data_not_found")}

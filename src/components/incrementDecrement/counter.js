@@ -19,7 +19,7 @@ export default function Counter(props) {
     };
 
     const handleDecrement = () => {
-        const newValue = parseInt(value)?parseInt(value) - 1: -1;
+        const newValue = parseInt(value)?parseInt(value) - 1:0;
         setValue(newValue);
         props.onValueChange(newValue);
     };
@@ -30,6 +30,7 @@ export default function Counter(props) {
             id: props.id,
             value: value,
             name: name,
+            custom:"custom-input font-bold",
             onChange: (e) =>{ 
                 props.onValueChange(e.target.value?parseInt(e.target.value):0)
                 setValue(parseInt(e.target.value)?parseInt(e.target.value):0)},

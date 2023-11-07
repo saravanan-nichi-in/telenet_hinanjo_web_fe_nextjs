@@ -61,20 +61,21 @@ function StaffDashboard() {
             </h5>
             <hr />
 
-            <div className="grid col-12">
+            <div className="">
               <h5 className="page-header1 mb-3 col-12 flex justify-content-center">
                 {translate(localeJson, "shelter_situation")}
               </h5>
               <h5 className="page-header1 mb-3 col-12">
                 {translate(localeJson, "accommodation_status")}
               </h5>
-              <div className="card col-12 lg:col-6">
+              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
+              <div className="col-12 lg:col-6">
                 <Doughnut
-                  labels={labelsOther}
-                  data={dataOther}
+                   labels={labelsOther?.slice(1)} 
+                   data={dataOther?.slice(1)}
                   title="Other"
-                  bgClr={generateColors(labelsOther?.length)}
-                  hvrClr={generateColors(labelsOther?.length)}
+                  bgClr={generateColors(labelsOther?.length-1)}
+                  hvrClr={generateColors(labelsOther?.length-1)}
                 />
               </div>
               <div className="col-12 lg:col-6">
@@ -87,12 +88,14 @@ function StaffDashboard() {
                   ))}
                 </ul>
               </div>
-              <div className="card col-12 lg:col-6">
+              </div>
+              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
+              <div className="col-12 lg:col-6">
                 <Doughnut
-                  labels={labelsTotalCapacityBreakdown}
-                  data={dataTotalCapacityBreakdown}
-                  bgClr={generateColors(labelsTotalCapacityBreakdown?.length)}
-                  hvrClr={generateColors(labelsTotalCapacityBreakdown?.length)}
+                  labels={labelsTotalCapacityBreakdown?.slice(1)}
+                  data={dataTotalCapacityBreakdown?.slice(1)}
+                  bgClr={generateColors(labelsTotalCapacityBreakdown?.length-1)}
+                  hvrClr={generateColors(labelsTotalCapacityBreakdown?.length-1)}
                   title="Total Capacity Breakdown"
                 />
               </div>
@@ -108,10 +111,12 @@ function StaffDashboard() {
                   ))}
                 </ul>
               </div>
+              </div>
               <h5 className="page-header1 mb-3 col-12">
                 {translate(localeJson, "person_consideration")}
               </h5>
-              <div className="card col-12 lg:col-6">
+              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
+              <div className="col-12 lg:col-6">
                 <Doughnut
                   labels={labelsSpecialCares}
                   data={dataSpecialCares}
@@ -129,6 +134,7 @@ function StaffDashboard() {
                     </li>
                   ))}
                 </ul>
+              </div>
               </div>
             </div>
           </div>

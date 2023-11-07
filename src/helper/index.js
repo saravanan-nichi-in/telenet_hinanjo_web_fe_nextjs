@@ -265,16 +265,16 @@ export const importErrorToastDisplay = (response) => {
 
 export const generateColors = (length) => {
     const colors = [];
-    for (let i = 0; i < length; i++) {
-        let hue = (i * 360) / length; // Calculate hue based on index
+    const hueIncrement = 360 / length; // Divide the hue spectrum evenly
 
-        // Adjust hue to avoid red and blue ranges
-        if (hue >= 0 && hue < 60) {
-            hue = 30 + (i * 300) / length;
-        } else if (hue >= 240 && hue <= 300) {
-            hue = 210 - (i * 300) / length;
-        }
-        colors.push(`hsl(${hue}, 80%, 50%)`); // Generate color using HSL color model
+    for (let i = 0; i < length; i++) {
+        const hue = i * hueIncrement;
+
+        const color = `hsl(${hue}, 80%, 50%)`;
+        colors.push(color);
     }
+
     return colors;
 }
+
+

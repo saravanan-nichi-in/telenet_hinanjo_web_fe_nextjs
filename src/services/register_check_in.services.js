@@ -53,7 +53,9 @@ function _createRegisterCheckIn(payload, callBackFun) {
           });
         }
       } else {
-        console.error(error);
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+      });
       }
     });
 }
