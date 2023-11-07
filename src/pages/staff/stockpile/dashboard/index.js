@@ -18,7 +18,7 @@ function StockpileDashboard() {
     const [imageModal, setImageModal] = useState(false);
     const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
     const [image, setImage] = useState('');
-    const [editObject, setEditObject] = useState(null);
+    const [editObject, setEditObject] = useState({});
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const [categories, setCategories] = useState([]);
     const [productNames, setProductNames] = useState([]);
@@ -90,7 +90,9 @@ function StockpileDashboard() {
                     <Button buttonProps={{
                         text: translate(localeJson, 'edit'),
                         buttonClass: "text-primary ",
-                        onClick: () => {setEditObject(rowData);setStaffStockpileEditOpen(true);
+                        onClick: () => {setEditObject(rowData);
+                            console.log(rowData);
+                            setStaffStockpileEditOpen(true);
                         },
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
@@ -197,17 +199,17 @@ function StockpileDashboard() {
 
     return (
         <>
-            {editObject &&<StaffStockpileEditModal
+            <StaffStockpileEditModal
                 open={staffStockpileEditOpen}
                 header={translate(localeJson, 'edit_product')}
                 close={() => setStaffStockpileEditOpen(false)}
                 buttonText={translate(localeJson, 'save')}
-                editObject={...editObject}
+                editObject={{...editObject}}
                 setEditObject={setEditObject}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
                 categories={categories}
                 refreshList={onGetMaterialListOnMounting}
-            />}
+            />
             <StaffStockpileCreateModal
                 open={staffStockpileCreateOpen}
                 header={translate(localeJson, 'add_stockpile')}

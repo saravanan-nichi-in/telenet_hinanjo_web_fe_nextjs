@@ -15,6 +15,16 @@ import { StockpileStaffService } from "@/services/stockpilestaff.service";
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
+        category: Yup.string()
+            .required(translate(localeJson, 'type_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+        product_name: Yup.string()
+            .required(translate(localeJson, 'stockpile_name_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+        shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
+            .positive(translate(localeJson, 'number_field'))
+            .integer(translate(localeJson, 'number_field'))
+            .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
         inventoryDate: Yup.string()
@@ -39,26 +49,26 @@ export default function StaffStockpileEdit(props) {
                     "remarks": "",
                     "expiry_date": "",
                     "history_flag": 0,
-                    "Inspection_date_time": "2023-10-30 00:00:00",
+                    "Inspection_date_time": "",
                     "category": "",
                     "shelf_life": 0,
-                    "stockpile_image": "https://rakurakuapi.nichi.in/images/default.jpg",
-                    "product_name": "アルファ米（小分）"
+                    "product_name": ""
                 };
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={props.editObject}
+                initialValues={...props.editObject}
+                enableReinitialize={true}
                 onSubmit={(values, actions) => {
                     // close();
                     let temp = []
                     console.log({...props.editObject})
-                    StockpileStaffService.update(props.editObject.id, {...props.editObject, ...values}, ()=> {
+                    StockpileStaffService.update(props.editObject.id, [{...props.editObject, ...values}], ()=> {
                         
                     })
-                    props.setEditObject(null)
+                    actions.resetForm()
                     // actions.resetForm({ values: initialValues });
                     
                 }}
@@ -81,8 +91,9 @@ export default function StaffStockpileEdit(props) {
                                 draggable={false}
                                 blockScroll={true}
                                 onHide={() => {
+                                    resetForm();
                                     close();
-                                    // resetForm({ values: initialValues });
+                                    
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -92,8 +103,9 @@ export default function StaffStockpileEdit(props) {
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
                                             onClick: () => {
+                                                resetForm();
                                                 close();
-                                                // resetForm({ values: initialValues });
+                                                
                                             },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
@@ -111,38 +123,43 @@ export default function StaffStockpileEdit(props) {
                                 <div className={`modal-content`}>
                                     <div className="mt-5 mb-3">
                                         <div className="mb-5">
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "productType",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.category,
-                                                name:"category",
-                                                disabled: true,
-                                                readOnly: true,
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_category'),
-                                            }} />
+                                        <SelectFloatLabel selectFloatLabelProps={{
+                                                    inputId: "category",
+                                                    spanText: "*",
+                                                    spanClass: "p-error",
+                                                    selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                    options: props.categories,
+                                                    value: values.category,
+                                                    onChange: (e) => {
+                                                        if(e.value=="--") {
+                                                            values.category=''
+                                                        } else {
+                                                            values.category=e.value
+                                                        }
+                                                    },
+                                                    onBlur: handleBlur,
+                                                    text: translate(localeJson, "stockpile_management_create_edit_field_category"),
+                                                    
+                                                }}/>
+                                                <ValidationError errorBlock={errors.category && touched.category && errors.category} />
                                         </div>
                                         <div className="mt-5 ">
-                                            <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                inputId: "productName",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.product_name,
-                                                name:"product_name",
-                                                disabled: true,
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
-                                            }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                        <InputFloatLabel inputFloatLabelProps={{
+                                                        name: "product_name",
+                                                        spanText: "*",
+                                                        spanClass: "p-error",
+                                                        value: values.product_name,
+                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        text : translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
+                                                    }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
                                         </div>
                                         <div className="mt-5">
                                             <InputNumberFloatLabel
                                                 inputNumberFloatProps={{
-                                                    id: "shelfDays",
+                                                    id: "shelf_life",
                                                     inputId: "integeronly",
                                                     name: "shelf_life",
                                                     disabled: true,
