@@ -93,7 +93,7 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
     const options = {
         year: 'numeric',
         month: '2-digit', // Use '2-digit' to get leading zeros for months
-        day: '2-digit',   // Use '2-digit' to get leading zeros for days
+        day: '2-digit', // Use '2-digit' to get leading zeros for days
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
