@@ -556,7 +556,8 @@
       "shelter_code":"世帯番号"
     },
     "buttons": {
-      "continue": "次に進む"
+      "continue": "次に進む",
+      "mem_search": "検索"
     }
   },
   "lang_others": {

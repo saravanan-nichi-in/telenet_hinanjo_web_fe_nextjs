@@ -348,6 +348,24 @@ export default function Admission() {
                               </div>
                             </div>
                           </div>
+                          <div className="mt-3">
+                      <div
+                        className="flex"
+                        style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
+                      >
+                        <Button
+                          buttonProps={{
+                            type: "submit",
+                            rounded: "true",
+                            buttonClass: "text-600 ",
+                            text: translate(localeJson, "mem_search"),
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                          }}
+                          parentClass={"ml-3 mr-3 mt-1"}
+                        />
+                      </div>
+                    </div>
                         </form>
                       </div>
                       <div className="mt-3 col-12 lg:col-6">

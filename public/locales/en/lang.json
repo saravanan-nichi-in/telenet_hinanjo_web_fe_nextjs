@@ -559,7 +559,8 @@
       "shelter_code":"Family Code"
     },
     "buttons": {
-      "continue": "Continue"
+      "continue": "Continue",
+      "mem_search": "Search"
     }
   },
   "lang_others": {
