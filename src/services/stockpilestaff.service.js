@@ -120,7 +120,7 @@ function _getCategoryAndProductList(callBackFun) {
  */
 function _create(payload, callBackFun) {
     axios
-        .post("/admin/stockpile", payload)
+        .post("/staff/stockpile/create", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

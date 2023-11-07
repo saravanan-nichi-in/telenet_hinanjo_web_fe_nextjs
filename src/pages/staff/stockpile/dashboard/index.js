@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
 import { StockpileStaffService } from '@/services/stockpilestaff.service';
 import { useSelector } from 'react-redux';
+import { StockpileService } from '@/services/stockpilemaster.service';
 
 function StockpileDashboard() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
@@ -19,6 +20,8 @@ function StockpileDashboard() {
     const [image, setImage] = useState('');
     const [editObject, setEditObject] = useState(null);
     const layoutReducer = useSelector((state) => state.layoutReducer);
+    const [categories, setCategories] = useState([]);
+    const [productNames, setProductNames] = useState([]);
 
     const onStaffStockpileCreateSuccess = () => {
         staffStockpileCreateOpen(false);
@@ -29,6 +32,20 @@ function StockpileDashboard() {
         setImportStaffStockpileOpen(false);
     }
 
+    const callDropDownApi = () => {
+        StockpileService.getCategoryAndProductList((res) => {
+            let data = res.data;
+            let tempProducts = ["--"];
+            let tempCategories = new Set();
+            data.forEach((value, index) => {
+                tempProducts.push(value.product_name);
+                tempCategories.add(value.category);
+            })
+            console.log([...tempCategories], tempProducts);
+            setCategories(["--", ...tempCategories]);
+            setProductNames(tempProducts);
+        });
+    }
 
 
     const columns = [
@@ -36,8 +53,8 @@ function StockpileDashboard() {
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
         { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
-        { field: 'inventory_date', header: translate(localeJson, 'inventory_date'), minWidth: "7rem" },
-        { field: 'confirmer', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
+        { field: 'Inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "7rem" },
+        { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
         { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "7rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
         {
@@ -119,6 +136,7 @@ function StockpileDashboard() {
                         shelf_life: obj.shelf_life ?? "",
                         stockpile_image: obj.stockpile_image ?? "",
                         product_name: obj.product_name ?? "",
+                        Inspection_date_time: obj.Inspection_date_time ?? ""
                     }
                     preparedList.push(preparedObj);
                 })
@@ -162,6 +180,7 @@ function StockpileDashboard() {
             setLoader(false);
         };
         fetchData();
+        // callDropDownApi()
     }, [locale, getListPayload]);
 
 
@@ -175,6 +194,8 @@ function StockpileDashboard() {
                 editObject={...editObject}
                 setEditObject={setEditObject}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
+                categories={categories}
+                refreshList={onGetMaterialListOnMounting}
             />}
             <StaffStockpileCreateModal
                 open={staffStockpileCreateOpen}
@@ -182,6 +203,8 @@ function StockpileDashboard() {
                 close={() => setStaffStockpileCreateOpen(false)}
                 buttonText={translate(localeJson, 'save')}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
+                categories={categories}
+                refreshList={onGetMaterialListOnMounting}
             />
             <StockpileSummaryImageModal
                 open={imageModal}
