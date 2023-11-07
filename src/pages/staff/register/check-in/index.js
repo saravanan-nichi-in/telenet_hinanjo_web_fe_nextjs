@@ -45,6 +45,8 @@ export default function RegisterCheckIn() {
               rowData.count = value + "";
             }}
             value={rowData?.count + ""}
+            min={0}
+            max={9999}
           />
         </div>
       ),
