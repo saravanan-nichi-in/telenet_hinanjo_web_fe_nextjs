@@ -408,24 +408,6 @@ function StaffFamily() {
                                     rows={getListPayload.filters.limit}
                                     paginatorLeft={true}
                                     onPageHandler={(e) => onPaginationChange(e)}
-                                // lazy
-                                // id={"evacuation-list"}
-                                // className="evacuation-list"
-                                // totalRecords={totalCount}
-                                // loading={tableLoading}
-                                // size={"small"}
-                                // stripedRows={true}
-                                // paginator={"true"}
-                                // showGridlines={"true"}
-                                // customActionsField="actions"
-                                // value={evacueesDataList}
-                                // columns={evacuationTableFields}
-                                // columnStyle={{ textAlign: "center" }}
-                                // emptyMessage={translate(localeJson, "data_not_found")}
-                                // first={getListPayload.filters.start}
-                                // rows={getListPayload.filters.limit}
-                                // paginatorLeft={true}
-                                // onPageHandler={(e) => onPaginationChange(e)}
                                 />
                             </div>
                         </div>
