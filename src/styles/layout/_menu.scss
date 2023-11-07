@@ -37,6 +37,7 @@
         >a {
             display: none;
         }
+
     }
 
     li.active-menuitem {
@@ -45,13 +46,22 @@
                 transform: rotate(-180deg);
             }
 
-            background-color: rgba(255, 255, 255, 0.2);
-            border-bottom: 1px solid #2b3d51;
+            background-color: #19C2FA;
+
+            &:hover {
+                background-color: #0285B1;
+                color: white;
+            }
         }
 
         >ul {
             max-height: auto;
         }
+    }
+
+    .active-parent-menu {
+        background-color: #0285B1;
+        margin-bottom: 2px;
     }
 
     ul {
@@ -91,29 +101,35 @@
 
             &.active-route {
                 font-weight: 500;
-                background-color: #556373;
+                background-color: #007C7C;
                 color: white;
                 border: 0;
-            }
 
-            &:hover {
-                background-color: #556373;
-                color: white;
-            }
+                &:hover {
+                    background-color: #1D525F;
+                    color: white;
+                }
 
-            // &:focus {
-            //     @include focused-inset();
-            // }
+            }
         }
 
         ul {
             overflow: hidden;
             max-height: 0;
-            // border-radius: 12px;
 
             li {
                 a {
-                    // margin-left: 1rem;
+                    margin-bottom: 2px;
+                    margin-left: 2rem;
+
+                    &:hover {
+                        background-color: #1D525F;
+                        color: white;
+                    }
+
+                    &:focus {
+                        background-color: #007C7C;
+                    }
                 }
 
                 li {

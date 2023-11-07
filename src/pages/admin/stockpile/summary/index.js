@@ -44,7 +44,7 @@ function AdminStockpileSummary() {
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
-            field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: '10rem', textAlign: "left",
+            field: 'shelter_place', header: translate(localeJson, 'evacuation_place'), minWidth: "10rem", maxWidth: '10rem', textAlign: "left",
             body: (rowData) => (
                 <div className='text-link'>
                     <a className='text-decoration' style={{ color: "grren" }} onClick={() => bindEmailDataConfig(rowData)}>
@@ -360,7 +360,7 @@ function AdminStockpileSummary() {
                                         <div class="summary_flex_search float-right mt-5" >
                                             <div class="flex flex-row justify-content-end" >
                                                 <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    text: translate(localeJson, 'shelter_place'),
+                                                    text: translate(localeJson, 'evacuation_place'),
                                                     inputId: "float label",
                                                     optionLabel: "name",
                                                     options: placeListOptions,

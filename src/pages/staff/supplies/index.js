@@ -60,6 +60,8 @@ export default function Supplies() {
               rowData.number = value + "";
             }}
             value={rowData?.number + ""}
+            min={0}
+            max={999999999}
           />
         </div>
       ),
@@ -169,7 +171,7 @@ export default function Supplies() {
                 <hr />
                 <form onSubmit={handleSubmit}>
                 <div>
-                  <h5 className="page-header1">
+                  <h5 className="sub-header">
                     {translate(localeJson, "supplies_registration")}
                   </h5>
                   <div className="mt-3">

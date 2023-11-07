@@ -107,7 +107,7 @@ export default function IndividualQuestionnaire() {
         else {
             setQuestionnaires([
                 {
-                    "id": questionnaires.length + 1,
+                    // "id": questionnaires.length + 1,
                     "title": "",
                     "questiontitle": "",
                     "questiontitle_en": "",
@@ -133,7 +133,6 @@ export default function IndividualQuestionnaire() {
 
     const bindQuestion = () => {
         return (
-            questionnaires.length > 0 && 
             <ol>
                 {questionnaires.map((item, index) => (
                     <li key={index}>
@@ -142,7 +141,7 @@ export default function IndividualQuestionnaire() {
                                 ref={baseTemplateRef}
                                 item={item}
                                 itemIndex={index}
-                                removeQuestion={removeQuestionData}
+                                removeQuestion={() => removeQuestionData(item, index)}
                                 handleItemChange={handleItemChange}
                                 triggerFinalSubmit={sumbitQuestionnaire}
                             />

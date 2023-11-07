@@ -3,7 +3,8 @@
     "header": {
       "evacuation_shelter_management_system": "Evacuation Shelter Management System",
       "logout": "Logout",
-      "change_password": "Change Password"
+      "change_password": "Change Password",
+      "language": "Language"
     },
     "sidebar": {
       "vault_info": "Evacuation Information",
@@ -41,7 +42,7 @@
       "house_hold_information_details": "Household Information Details",
       "admin_details": "Admin Details",
       "number": "S No",
-      "evacuation_place": "Evacuation place",
+      "evacuation_place": "Evacuation Place",
       "max_capacity": "Max capacity",
       "number_of_evacuees": "Number of evacuees",
       "accommodation_rate": "Accommodation rate",
@@ -101,7 +102,7 @@
       "si_no": "S No",
       "report_date_time": "Report Date and Time",
       "prefecture": "Prefecture",
-      "location_name": "Location (name)",
+      "location_name": "Location (Name)",
       "place_name": "Place Name",
       "place_name_furigana": "Place Name (Furigana)",
       "location_latitude": "Location (Latitude)",
@@ -117,7 +118,7 @@
       "people_count": "Count",
       "family_code": "Family Code",
       "representative": "Representative",
-      "refugee_name": "Name (Phonetic)",
+      "refugee_name": "Name (phonetic)",
       "name": "Name",
       "gender": "Gender",
       "dob": "DOB",
@@ -142,9 +143,9 @@
       "neighbour_association_name": "Neighbour Association Name",
       "created_date": "Created Date",
       "updated_date": "Updated Date",
-      "representative_number": "Representative Phone Number",
+      "representative_number": "Phone Number (representative)",
       "registered_lang_environment": "Registered Language",
-      "evacuation_date_time": "Evacuation Date Time",
+      "evacuation_date_time": "Evacuation Date and Time",
       "test_payload": "Test Payload",
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "Create QrCodes successfully.",
@@ -315,6 +316,7 @@
       "current_password_max_15_characters": "The current password must not be greater than 15 characters.",
       "password_max_15_characters": "The password must not be greater than 15 characters.",
       "new_password_max_15_characters": "The new password must not be greater than 15 characters.",
+      "new_confirm_password_max_15_characters": "The new confirmed password must not be greater than 15 characters.",
       "postal_code_1_validation": "Please specify the postal code using 3 digits.",
       "postal_code_2_validation": "Please specify the postal code using 4 digits.",
       "capacity_max_length": " must not be greater than 999999999.",
@@ -343,7 +345,7 @@
       "special_care_name_en_max_required": "Name (English) 255 characters or less.",
       "staff_name_max_required": "The staff name should be 200 characters or less.",
       "default_shelf_life_min_length": "Please enter a value greater than or equal to 1.",
-      "default_shelf_life_max_length" : "Please enter a value less than or equal to 999.",
+      "default_shelf_life_max_length": "Please enter a value less than or equal to 999.",
       "item_title_is_required": "Item Title is required",
       "option_is_required": "Choice is required"
     },
@@ -403,8 +405,8 @@
       "display_by_default": "Display by Default",
       "display_items_setting": "Display Items Setting",
       "logo_image": "Logo Image",
-      "name_phonetic": "Name (Phonetic)",
-      "name_kanji": "Name (Kanji)",
+      "name_phonetic": "Name (phonetic)",
+      "name_kanji": "Name (kanji)",
       "default_shelf_life_days": "Default Shelf Life (Days)",
       "inventory_date": "Inventory Date",
       "product_type": "Product Type",
@@ -438,7 +440,7 @@
       "english": "English",
       "japanese": "Japanese",
       "user_dashboard_note": "Note: When you exit the evacuation centre, follow the procedures for 'Exit'.",
-      "checkbox": "Checkbpx",
+      "checkbox": "CheckBox",
       "radio": "RadioButton",
       "dropdown": "DropDown"
     }
@@ -454,8 +456,8 @@
       "staff_stockpile_management": "Stockpile Management",
       "stockpile_list": "Stockpile List",
       "stockpile_history": "Stockpile History",
-      "necessary_supplies_registration": "Necessary supplies registration",
-      "manual_registration_of_evacuees": "Manual registration of evacuees"
+      "necessary_supplies_registration": "Necessary Supplies Registration",
+      "manual_registration_of_evacuees": "Manual Registration of Evacuees"
     },
     "pages": {
       "staff_login_screen": "Staff Login",
@@ -480,28 +482,30 @@
       "shelter_situation": "SHELTER SITUATION",
       "person_consideration": "Persons requiring consideration",
       "accommodation_status": "Accommodation status",
-      "staff_supplies": "REGISTRATION OF NECESSARY GOODS",
+      "staff_supplies": "Registration of Necessary Goods",
       "remarks": "Remarks",
       "comment": "Comment",
       "comment_placeholder": "Enter items that are not included in the supply list prepared by the operation.",
       "remark_placeholder": "Other information",
       "supplies_registration": " In the registration column for necessary supplies, enter numerical values according to the list registered by the management.",
-      "supplies_name": "Name of substance",
+      "supplies_name": "Name of Substance",
       "supplies_slno": "S No",
-      "supplies_unit": "Unit",
+      "supplies_unit": "Quantity",
       "staff_management_inventory_import_processing": "Staff Management Inventory Import Processing",
       "edit_product": "Edit Product",
-      "staff_check_in": "REGISTRATION WITHOUT GETTING PERSONAL INFORMATION",
-      "residence_with_information": "Residents without Personal Information",
-      "residence_with_out_information": "Residents with Personal Information",
+      "staff_check_in": "Registration Without Getting Personal Information",
+      "residence_with_information": "Residents Without Personal Information",
+      "residence_with_out_information": "Residents With Personal Information",
       "number_of_household": "Number of households",
-      "household_representative": "Household representative",
+      "household_representative": "Household Representative",
       "age_m": "Age(m)",
       "special_Care_type": "Special Care Type",
       "connecting_code": "Connecting Code",
       "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
-      "do_you_want_to_exit_the_shelter":"Do you want to exit the shelter?"
+      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?",
+      "staff_support":"In which, those who need special support",
+      "do_you_want_to_enter_the_shelter": "Do you want to enter the shelter?"
     },
     "form": {
       "type": "type",
@@ -542,15 +546,24 @@
     "footer": {}
   },
   "user": {
-    "pages":{
-      "evacuee_registration_for_household_family":"Evacuee registration for each household (family)",
-      "how_many_people_evacuated":"How many people have evacuated?",
-      "please_tell_how_many_households":"Please tell us how many households (family members) have evacuated with you, including yourself.",
-      "do_not_register_each_member_family_individually":"Note: Do not register each member of the family individually.",
-      "qr_Code_scan":"QR Code Scan"
+    "pages": {
+      "evacuee_registration_for_household_family": "Evacuee registration for each household (family)",
+      "how_many_people_evacuated": "How many people have evacuated?",
+      "please_tell_how_many_households": "Please tell us how many households (family members) have evacuated with you, including yourself.",
+      "do_not_register_each_member_family_individually": "Note: Do not register each member of the family individually.",
+      "qr_Code_scan": "QR Code Scan",
+      "check_in_first":"CheckIn First Times",
+      "shelter_search":"Those who came from other shelters",
+      "shelter_name":"Name",
+      "shelter_password":"Password",
+      "shelter_code":"Family Code"
     },
-    "buttons":{
-      "continue":"Continue"
+    "buttons": {
+      "continue": "Continue",
+      "mem_search": "Search"
     }
+  },
+  "lang_others": {
+    "reset_password_title": "Reset Password"
   }
 }

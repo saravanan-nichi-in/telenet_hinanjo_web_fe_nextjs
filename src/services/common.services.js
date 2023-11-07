@@ -1,5 +1,11 @@
+import toast from 'react-hot-toast';
+
+import axios from '@/utils/api';
+
+
 export const CommonServices = {
     zipDownload: _zipDownload,
+    getText: _getText,
 };
 
 /**
@@ -34,4 +40,21 @@ function _zipDownload(zipUrl) {
                 console.error('Error downloading ZIP file:', error);
             });
     }
+}
+
+/**
+ * Get audio text
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getText(payload, callBackFun) {
+    axios.post('/user/speech_to_text', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
 }

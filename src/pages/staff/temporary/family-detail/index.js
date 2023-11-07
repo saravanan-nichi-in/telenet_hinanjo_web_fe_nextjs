@@ -1,27 +1,58 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateDisplayFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable, RowExpansionTable } from '@/components';
-import { StaffDetailColumnService } from '@/helper/staffFamilyDetailColumnService';
-import { StaffFamilyAdmissionService } from '@/helper/staffFamilyAdmissionService';
-import { TemporaryFamilyRowExpansionService } from '@/helper/staffFamilyDetailService';
-import { StaffFamilyDetailQuestionsService } from '@/helper/staffFamilyDetailQuestionsService';
+import { Button, NormalTable, CommonDialog, RowExpansionTable } from '@/components';
+import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
+import { prefectures } from '@/utils/constant';
 
 export default function TemporaryFamilyDetail() {
     const router = useRouter();
-    const { localeJson } = useContext(LayoutContext);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    // Getting storage data with help of reducers
+    const layoutReducer = useSelector((state) => state.layoutReducer);
+    const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [familyCode, setFamilyCode] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
-    const [familyAdmission, setFamilyAdmission] = useState([]);
-    const [familyDetailTemp, setFamilyDetailTemp] = useState([]);
-    const [familyDetailQue, setFamilyDetailQue] = useState([]);
+    const [familyDetailData, setfamilyDetailData] = useState(null);
+    const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
+    const [neighbourData, setNeighbourData] = useState(null);
+    const [townAssociationColumn, setTownAssociationColumn] = useState([]);
+    const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
+    const param = {
+        place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
+        family_id: router.query.family_id
+    };
+
+    const evacueeFamilyDetailColumns = [
+        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem", className: "sno_class" },
+        { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
+        { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
+        { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
+        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
+        { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
+        { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
+        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
+        { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
+        { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },
+    ];
 
     const familyDetailColumns = [
         { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
         { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'left' },
         { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
+    ];
+
+    const evacueeFamilyDetailRowExpansionColumns = [
+        { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem" },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_type'), minWidth: "8rem" },
+        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
+        { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
     ];
 
     const familyAdmissionColumns = [
@@ -31,128 +62,333 @@ export default function TemporaryFamilyDetail() {
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
     ];
 
-    const houseHoldListOuterColumn = [
-        { field: 'id', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class" },
-        { field: 'representative', header: translate(localeJson, 'representative'), headerClassName: "custom-header", minWidth: "9rem" },
-        { field: 'name_phonetic', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem" },
-        { field: 'name_kanji', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'age_m', header: translate(localeJson, 'age_m'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'created_date', header: translate(localeJson, 'created_date'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'updated_date', header: translate(localeJson, 'updated_date'), headerClassName: "custom-header", minWidth: "8rem" },
-    ];
+    /* Services */
+    const { getFamilyTemporaryEvacueesDetail, updateCheckInDetail } = TemporaryStaffRegistrantServices;
 
-    const houseHoldListInnerColumn = [
-        { field: 'street_address', header: translate(localeJson, 'address'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'special_Care_type', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: "current_place_of_stay", header: translate(localeJson, 'current_location') },
-    ]
-    const QuestionColumn = [
-        { field: 'neighborhood_association_name', header: "町内会名", headerClassName: "custom-header", minWidth: "8rem" },
-        { field: "test_payload", header: "test payload" }
-    ]
+    /**
+     * CommonDialog modal close
+     */
+    const onClickCancelButton = () => {
+        setStaffFamilyDialogVisible(false);
+    };
+
+    /**
+     * CommonDialog modal open
+     */
+    const onClickOkButton = () => {
+
+        updateCheckInDetail(param, (response) => {
+            console.log(response)
+            if (response.success) {
+                router.push("/staff/temporary/family");
+            }
+        });
+        setStaffFamilyDialogVisible(false);
+    };
+
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else {
+            return translate(localeJson, 'others_count');
+        }
+    }
+
+    const getRegisteredLanguage = (language) => {
+        if (language == "en") {
+            return translate(localeJson, 'english');
+        }
+        else {
+            return translate(localeJson, 'japanese');
+        }
+    }
+
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
+        });
+        return specialCareName;
+    }
+
+    const getAnswerData = (answer) => {
+        let answerData = null;
+        answer.map((item) => {
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
+    }
+
+    const getPrefectureName = (id) => {
+        if (id) {
+            let p_name = prefectures.find((item) => item.value === id);
+            return p_name.name;
+        }
+        return "";
+    }
+
+    const onGetTemporaryEvacueesFamilyDetailOnMounting = () => {
+        getFamilyTemporaryEvacueesDetail(param, getEvacueesFamilyDetail)
+    }
+
+    const getEvacueesFamilyDetail = (response) => {
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.data;
+            const historyData = response.data.history.list;
+            let basicDetailList = [];
+            let basicData = {
+                evacuation_date_time: data.join_date_modified,
+                address: translate(localeJson, 'post_letter') + data.zip_code + " " + getPrefectureName(data.prefecture_id) + " " + data.address,
+                representative_number: data.tel,
+                registered_lang_environment: getRegisteredLanguage(data.language_register)
+            };
+            basicDetailList.push(basicData);
+            setBasicFamilyDetail(basicDetailList);
+            setFamilyCode(data.family_code);
+            const personList = data.person;
+            const familyDataList = [];
+            let personInnerColumns = [...evacueeFamilyDetailRowExpansionColumns];
+            let individualQuestion = personList[0].individualQuestions;
+            if (individualQuestion.length > 0) {
+                individualQuestion.map((ques, index) => {
+                    let column = {
+                        field: "question_" + index,
+                        header: (locale == "ja" ? ques.title : ques.title_en),
+                        minWidth: "10rem"
+                    };
+                    personInnerColumns.push(column);
+                });
+            }
+            setEvacueePersonInnerColumns(personInnerColumns);
+
+            personList.map((person, index) => {
+                let familyData = {
+                    id: index + 1,
+                    is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    refugee_name: person.refugee_name,
+                    name: person.name,
+                    dob: getJapaneseDateDisplayFormat(person.dob),
+                    age: person.age,
+                    age_month: person.month,
+                    gender: getGenderValue(person.gender),
+                    created_date: person.created_at_day,
+                    updated_date: data.updated_at_day,
+                    orders: [{
+                        address: person.address ? person.address : "",
+                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
+                        connecting_code: person.connecting_code,
+                        remarks: person.note,
+                    },
+                    ]
+                };
+
+                let question = person.individualQuestions;
+                if (question.length > 0) {
+                    question.map((ques, index) => {
+                        familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+                    })
+                }
+                familyDataList.push(familyData);
+            })
+            setfamilyDetailData(familyDataList);
+            let admittedHistory = [];
+            historyData.map((item) => {
+                let historyItem = {
+                    place_id: item.place_id,
+                    shelter_place: item.placeName,
+                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                };
+                let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
+                if (index >= 0 && item.status == 1) {
+                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
+                }
+                else {
+                    admittedHistory.push(historyItem);
+                }
+
+            });
+            setFamilyAdmittedData(admittedHistory);
+
+            let neighbourDataList = [];
+
+            const questionnaire = data.question;
+            let townAssociateColumnSet = [];
+            questionnaire.map((ques, index) => {
+                let column = {
+                    field: "question_" + index,
+                    header: (locale == "ja" ? ques.title : ques.title_en),
+                    minWidth: "10rem"
+                };
+                townAssociateColumnSet.push(column);
+            });
+            setTownAssociationColumn(townAssociateColumnSet);
+
+            let neighbourData = {};
+            questionnaire.map((ques, index) => {
+                neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
+            });
+            neighbourDataList.push(neighbourData);
+            setNeighbourData(neighbourDataList);
+            setTableLoading(false)
+        }
+        else {
+            setTableLoading(false);
+        }
+    }
+
+
     useEffect(() => {
-        StaffDetailColumnService.getStaffDetailColumnDetailMedium().then((data) => setBasicFamilyDetail(data));
-        StaffFamilyAdmissionService.getStaffFamilyAdmissionDetailMedium().then((data) => setFamilyAdmission(data))
-        StaffFamilyDetailQuestionsService.getStaffFamilyDetailQuestionsDetailMedium().then((data) => setFamilyDetailQue(data))
-        TemporaryFamilyRowExpansionService.getTemporaryFamilyRowExpansionWithOrdersSmall().then((data) => setFamilyDetailTemp(data))
-        // AdminEvacueeFamilyDetailService.getEvacueeFamilyDetailWithOrdersSmall().then((data) => setAdmins(data));
-    }, []);
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetTemporaryEvacueesFamilyDetailOnMounting();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale]);
 
 
 
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <h5 className='page_header'>{translate(localeJson, 'house_hold_information_details')}</h5>
-                    <hr />
+        <>
+            <CommonDialog
+                open={staffFamilyDialogVisible}
+                dialogBodyClassName="p-3 text-center"
+                header={translate(localeJson, 'confirmation_information')}
+                content={
                     <div>
-                        <div className='mb-2'>
-                            <div className='flex justify-content-end'>
-                                {translate(localeJson, 'household_number')} 001-012
+                        <p>{translate(localeJson, 'do_you_want_to_enter_the_shelter')}</p>
+                    </div>
+                }
+                position={"center"}
+                footerParentClassName={"text-center"}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "text-600 w-8rem",
+                            bg: "bg-white",
+                            hoverBg: "hover:surface-500 hover:text-white",
+                            text: translate(localeJson, 'cancel'),
+                            onClick: () => onClickCancelButton(),
+                        },
+                        parentClass: "inline"
+                    },
+                    {
+                        buttonProps: {
+                            buttonClass: "w-8rem",
+                            type: "submit",
+                            text: translate(localeJson, 'submit'),
+                            severity: "danger",
+                            onClick: () => onClickOkButton(),
+                        },
+                        parentClass: "inline"
+                    }
+                ]}
+                close={() => {
+                    setStaffFamilyDialogVisible(false);
+                }}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
+                        <hr />
+                        <div>
+                            <div className='mb-2'>
+                                <div className='flex justify-content-end' style={{fontWeight:"bold"}}>
+                                    {translate(localeJson, 'household_number')} {familyCode}
+                                </div>
                             </div>
-                        </div>
-                        <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            // tableLoading={tableLoading}
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            value={basicFamilyDetail}
-                            columns={familyDetailColumns}
-                            parentClass="mb-2"
-                        />
-                        <div className='mb-2'>
-                            <h5>{translate(localeJson, 'household_list')}</h5>
-                        </div>
+                            <NormalTable
+                                id="evacuee-family-detail"
+                                size={"small"}
+                                tableLoading={tableLoading}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                stripedRows={true}
+                                paginator={false}
+                                showGridlines={true}
+                                value={basicFamilyDetail}
+                                columns={familyDetailColumns}
+                                parentClass="mb-2"
+                            />
+                            <div className='mb-2 page-header2'>
+                                {translate(localeJson, 'household_list')}
+                            </div>
 
-                        <RowExpansionTable
-                            paginator="true"
-                            customRowExpansionActionsField="actions"
-                            value={familyDetailTemp}
-                            paginatorLeft={true}
-                            innerColumn={houseHoldListInnerColumn}
-                            outerColumn={houseHoldListOuterColumn}
-                            rowExpansionField="orders"
-                        />
-                        <div className='flex mt-2 mb-2' style={{ justifyContent: "center", flexWrap: "wrap" }}>
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
-                                buttonClass: "text-600 evacuation_button_height",
-                                text: translate(localeJson, 'cancel'),
-                                onClick: () => router.push('/staff/temporary/family'),
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'edit'),
-                                severity: "primary",
-                            }} parentClass={"mr-1 mt-1"} />
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'check_in'),
-                                severity: "success",
-                            }} parentClass={"mr-1 mt-1"} />
-                        </div>
-                        <div className='mt-3'>
-                            <NormalTable
-                                size={"small"}
-                                stripedRows={true}
-                                paginator={false}
-                                showGridlines={true}
-                                value={familyDetailQue}
-                                columns={QuestionColumn}
-                                parentClass="pb-2 mb-2"
+                            <RowExpansionTable
+                                id={"evacuation-detail-list"}
+                                rows={10}
+                                paginatorLeft={true}
+                                tableLoading={tableLoading}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                paginator="true"
+                                customRowExpansionActionsField="actions"
+                                value={familyDetailData}
+                                innerColumn={evacueePersonInnerColumns}
+                                outerColumn={evacueeFamilyDetailColumns}
+                                rowExpansionField="orders"
                             />
-                        </div>
-                        <div className='mt-2 flex justify-content-center overflow-x-auto'>
-                            <NormalTable
-                                size={"small"}
-                                stripedRows={true}
-                                paginator={false}
-                                showGridlines={true}
-                                tableStyle={{ maxWidth: "20rem" }}
-                                value={familyAdmission}
-                                columns={familyAdmissionColumns}
-                                parentClass="pb-2 mb-2"
-                            />
+                            <div className='flex mt-2 mb-2' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    bg: "bg-white",
+                                    hoverBg: "hover:surface-500 hover:text-white",
+                                    buttonClass: "text-600 evacuation_button_height",
+                                    text: translate(localeJson, 'cancel'),
+                                    onClick: () => router.push('/staff/temporary/family'),
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'edit'),
+                                    severity: "primary",
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'check_in'),
+                                    severity: "success",
+                                    onClick: () => setStaffFamilyDialogVisible(true)
+                                }} parentClass={"mr-1 mt-1"} />
+                            </div>
+                            {townAssociationColumn.length > 0 &&
+                                <div className='mt-2'>
+                                    <NormalTable
+                                        id="evacuee-family-detail"
+                                        size={"small"}
+                                        tableLoading={tableLoading}
+                                        emptyMessage={translate(localeJson, "data_not_found")}
+                                        stripedRows={true}
+                                        paginator={false}
+                                        showGridlines={true}
+                                        value={neighbourData}
+                                        columns={townAssociationColumn}
+                                    />
+                                </div>
+                            }
+                            <div className='mt-2 flex justify-content-center overflow-x-auto'>
+                                <NormalTable
+                                    id="evacuee-family-detail"
+                                    size={"small"}
+                                    tableLoading={tableLoading}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    stripedRows={true}
+                                    paginator={false}
+                                    showGridlines={true}
+                                    tableStyle={{ maxWidth: "20rem" }}
+                                    value={familyAdmittedData}
+                                    columns={familyAdmissionColumns}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
+
     )
 }
