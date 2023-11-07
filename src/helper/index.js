@@ -92,13 +92,41 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
 
     const options = {
         year: 'numeric',
-        month: 'long',
-        day: '2-digit'
+        month: '2-digit', // Use '2-digit' to get leading zeros for months
+        day: '2-digit',   // Use '2-digit' to get leading zeros for days
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
-    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')
-    return formattedJPDateTime;
+    return formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ');
+}
+
+/**
+ * Get japanese display format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getJapaneseDateDisplayYYYYMMDDFormat = (dateTime) => {
+    const date = new Date(dateTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}年${month}月${day}日`;
+}
+
+/**
+ * Get English display format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateDisplayFormat = (dateTime) => {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
 
 /**

@@ -5,6 +5,7 @@ const ToggleSwitch = (props) => {
     const {
         bgColor,
         parentClass,
+        custom,
         id,
         style,
         onLabel,
@@ -19,7 +20,7 @@ const ToggleSwitch = (props) => {
 
     return (
         <div>
-            <ToggleButton className={`${bgColor} ${parentClass}`}
+            <ToggleButton className={`${bgColor} ${parentClass} ${custom || 'person-count-button'}`}
                 id={id}
                 style={style}
                 onLabel={onLabel}
