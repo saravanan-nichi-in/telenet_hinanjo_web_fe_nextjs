@@ -14,9 +14,6 @@ export default function StaffFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const [familyAdmission, setFamilyAdmission] = useState([]);
-    const [familyDetails, setFamilyDetails] = useState([]);
-    const [familyDetailQue, setFamilyDetailQue] = useState([]);
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
@@ -27,7 +24,7 @@ export default function StaffFamilyDetail() {
     const [townAssociationColumn, setTownAssociationColumn] = useState([]);
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
     const param = {
-        place_id: 1,
+        place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         family_id: router.query.family_id
     };
 
