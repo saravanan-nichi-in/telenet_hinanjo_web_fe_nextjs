@@ -6,6 +6,7 @@ import { getValueByKeyRecursively as translate, generateColors } from "@/helper"
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { useSelector } from "react-redux";
 import { staff_dashboard_status_jp, staff_dashboard_status_en } from '@/utils/constant'
+import _ from "lodash";
 
 function StaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -17,22 +18,22 @@ function StaffDashboard() {
     useState(null);
   const [labelsOther, setLabelsOther] = useState(null);
   const [dataOther, setDataOther] = useState(null);
+  const [labelsDetailsOther, setLabelsDetailsOther] = useState(null);
+  const [dataDetailsOther, setDataDetailsOther] = useState(null);
+  
   const layoutReducer = useSelector((state) => state.layoutReducer);
   useEffect(() => {
-    const fetchData = async () => {
       getListDataOnMount();
-    };
-    fetchData();
   }, [locale]);
 
   const { getList } = StaffDashBoardServices;
 
-  const getListDataOnMount = () => {
+  const getListDataOnMount = async () => {
     let payload = { place_id: layoutReducer?.user?.place?.id };
     getList(payload, fetchData);
   };
 
-  const fetchData = (res) => {
+  const fetchData = async (res) => {
     try {
       if (res) {
         let personTotal2 = res?.data.personTotal;
@@ -40,9 +41,24 @@ function StaffDashboard() {
         setDataSpecialCares(Object.values(personTotal2?.specialCares));
         setLabelsTotalCapacityBreakdown(Object.keys(personTotal2?.other_stats));
         setDataTotalCapacityBreakdown(Object.values(personTotal2?.other_stats));
-        let keysInOrder = locale == 'ja' ? staff_dashboard_status_jp : staff_dashboard_status_en;
+        let keysInDataOrder = locale == 'ja' ? staff_dashboard_status_jp : staff_dashboard_status_en;
+        let keysInOrder = _.cloneDeep(keysInDataOrder);
+        console.log(keysInDataOrder)
         let accommodationStats = personTotal2?.accomidation_stats;
+        let maxCapacity = accommodationStats[keysInOrder[0]];
+        let totalFamily = accommodationStats[keysInOrder[1]];
+        if(totalFamily && maxCapacity)
+        {
+        if (maxCapacity < totalFamily) {
+          keysInOrder?.splice(1, 2); // Remove elements at index 1 and 2
+        } else {
+          keysInOrder?.splice(0, 1); // Remove element at index 0
+        }
+      }
         let valuesInOrder = keysInOrder.map(key => accommodationStats[key]);
+        let valuesDataOrder = keysInDataOrder.map(key => accommodationStats[key]);
+        setLabelsDetailsOther(keysInDataOrder);
+        setDataDetailsOther(Object.values(valuesDataOrder));
         setLabelsOther(keysInOrder);
         setDataOther(Object.values(valuesInOrder));
       }
@@ -71,19 +87,19 @@ function StaffDashboard() {
               <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
               <div className="col-12 lg:col-6">
                 <Doughnut
-                   labels={labelsOther?.slice(1)} 
-                   data={dataOther?.slice(1)}
+                   labels={labelsOther} 
+                   data={dataOther}
                   title="Other"
-                  bgClr={generateColors(labelsOther?.length-1)}
-                  hvrClr={generateColors(labelsOther?.length-1)}
+                  bgClr={generateColors(labelsOther?.length)}
+                  hvrClr={generateColors(labelsOther?.length)}
                 />
               </div>
               <div className="col-12 lg:col-6">
                 <ul className="staff-list">
-                  {labelsOther?.map((label, index) => (
+                  {labelsDetailsOther?.map((label, index) => (
                     <li key={index}>
                       <div className="label">{label}</div>
-                      <div className="value">{dataOther[index]}</div>
+                      <div className="value">{dataDetailsOther[index]}</div>
                     </li>
                   ))}
                 </ul>
