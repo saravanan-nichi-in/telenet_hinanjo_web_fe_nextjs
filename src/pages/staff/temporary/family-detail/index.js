@@ -50,7 +50,7 @@ export default function TemporaryFamilyDetail() {
 
     const evacueeFamilyDetailRowExpansionColumns = [
         { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem" },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_type'), minWidth: "8rem" },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
     ];
@@ -292,11 +292,11 @@ export default function TemporaryFamilyDetail() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'house_hold_information_details')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
                         <hr />
                         <div>
                             <div className='mb-2'>
-                                <div className='flex justify-content-end'>
+                                <div className='flex justify-content-end' style={{fontWeight:"bold"}}>
                                     {translate(localeJson, 'household_number')} {familyCode}
                                 </div>
                             </div>
@@ -312,8 +312,8 @@ export default function TemporaryFamilyDetail() {
                                 columns={familyDetailColumns}
                                 parentClass="mb-2"
                             />
-                            <div className='mb-2'>
-                                <h5>{translate(localeJson, 'household_list')}</h5>
+                            <div className='mb-2 page-header2'>
+                                {translate(localeJson, 'household_list')}
                             </div>
 
                             <RowExpansionTable

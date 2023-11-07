@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, RowExpansionTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
@@ -43,9 +43,9 @@ export default function StaffFamilyDetail() {
      */
     const onClickOkButton = () => {
 
-        updateCheckoutDetail(param, (response)=> {
+        updateCheckoutDetail(param, (response) => {
             console.log(response)
-            if(response.success){
+            if (response.success) {
                 router.push("/staff/family");
             }
         });
@@ -74,7 +74,7 @@ export default function StaffFamilyDetail() {
 
     const evacueeFamilyDetailRowExpansionColumns = [
         { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem" },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_type'), minWidth: "8rem" },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
         { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
     ];
@@ -169,7 +169,7 @@ export default function StaffFamilyDetail() {
                     is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     refugee_name: person.refugee_name,
                     name: person.name,
-                    dob: getJapaneseDateDisplayFormat(person.dob),
+                    dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob) : getEnglishDateDisplayFormat(person.dob),
                     age: person.age,
                     age_month: person.month,
                     gender: getGenderValue(person.gender),
@@ -289,11 +289,11 @@ export default function StaffFamilyDetail() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page_header'>{translate(localeJson, 'house_hold_information_details')}</h5>
+                        <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
                         <hr />
                         <div>
                             <div className='mb-2'>
-                                <div className='flex justify-content-end'>
+                                <div className='flex justify-content-end' style={{ fontWeight: "bold" }}>
                                     {translate(localeJson, 'household_number')} {familyCode}
                                 </div>
                             </div>
@@ -309,8 +309,8 @@ export default function StaffFamilyDetail() {
                                 columns={familyDetailColumns}
                                 parentClass="mb-2"
                             />
-                            <div className='mb-2'>
-                                <h5>{translate(localeJson, 'household_list')}</h5>
+                            <div className='mb-2 '>
+                                <h5 className='page-header2'>{translate(localeJson, 'household_list')}</h5>
                             </div>
                             <div className='flex mt-2 mb-2' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
