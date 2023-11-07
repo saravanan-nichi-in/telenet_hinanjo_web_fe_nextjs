@@ -503,7 +503,8 @@
       "connecting_code": "Connecting Code",
       "date_created": "Admission date and time",
       "evacuation_days": "Evacuation days",
-      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?"
+      "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?",
+      "do_you_want_to_enter_the_shelter": "Do you want to enter the shelter?"
     },
     "form": {
       "type": "type",
