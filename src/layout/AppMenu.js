@@ -1,22 +1,14 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
-import { MdDashboard, MdManageAccounts, MdSettings, MdSpaceDashboard, MdAddCircle } from "react-icons/md";
-import { HiDocumentText } from "react-icons/hi";
-import { RiAdminFill } from "react-icons/ri";
-import { FaQrcode, FaUserPlus } from "react-icons/fa";
-import { ImUser, ImUsers } from "react-icons/im";
-import { IoMdToday } from "react-icons/io";
-import { AiOutlineAreaChart, AiFillSetting } from "react-icons/ai";
-import { MdPlace } from "react-icons/md";
-import { BiSolidPurchaseTagAlt, BiQrScan, BiSolidAddToQueue, BiSolidTime } from "react-icons/bi";
+import { MdManageAccounts, MdSettings, MdSpaceDashboard, MdAddCircle } from "react-icons/md";
+import { BiQrScan, BiSolidAddToQueue, BiSolidTime } from "react-icons/bi";
 import { RiHome5Fill, RiFileHistoryFill, RiFileSettingsFill } from "react-icons/ri";
 import { IoMdListBox, IoIosPaper } from "react-icons/io";
 import { PiUserListFill, PiHandTapFill } from "react-icons/pi";
 import { FaPeopleGroup, FaUsersGear } from "react-icons/fa6";
 import { HiArchiveBoxXMark, HiInformationCircle } from "react-icons/hi2";
-import { FaBoxes, FaChartPie, FaUserTie } from "react-icons/fa"
+import { FaBoxes, FaChartPie, FaUserTie, FaLuggageCart } from "react-icons/fa"
 import { BsHouseGearFill, BsPeopleFill, BsFillPersonPlusFill } from "react-icons/bs";
-import { GiClothes } from "react-icons/gi";
 
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
@@ -128,7 +120,7 @@ const AppMenu = () => {
                     },
                     {
                         label: translate(localeJson, 'material'),
-                        icon: <GiClothes size={20} />,
+                        icon: <FaLuggageCart size={20} />,
                         to: '/admin/material'
                     },
                     {
