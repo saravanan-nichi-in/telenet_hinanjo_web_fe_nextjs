@@ -1,0 +1,13 @@
+.person-count-button.p-togglebutton.p-button {
+    background-color: #19c2fa;
+}
+
+.person-count-button.p-togglebutton.p-button:not(.p-disabled):not(.p-highlight):hover{
+    background:#0285B1;
+    border-color:#0285B1;
+    color:white;
+}
+.person-count-button.p-togglebutton.p-button.p-highlight{
+    background:#0285B1;
+    border-color:#0285B1;
+}
