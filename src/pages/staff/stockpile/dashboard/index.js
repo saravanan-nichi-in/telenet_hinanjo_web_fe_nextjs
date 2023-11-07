@@ -47,6 +47,17 @@ function StockpileDashboard() {
         });
     }
 
+    const importFileApi = (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('place_id', layoutReducer?.user?.place?.id);
+        StockpileStaffService.importData(formData, () => {
+
+        });
+        setImportStaffStockpileOpen(false);
+    }
+
 
     const columns = [
         { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class" },
@@ -215,6 +226,7 @@ function StockpileDashboard() {
                 open={importStaffStockpileOpen}
                 close={() => setImportStaffStockpileOpen(false)}
                 register={onRegister}
+                importFile={importFileApi}
                 modalHeaderText={translate(localeJson, 'staff_management_inventory_import_processing')}
             />
             <div className="grid">
@@ -245,6 +257,9 @@ function StockpileDashboard() {
                                     rounded: "true",
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'export'),
+                                    onClick: () => {
+                                        exportData(getListPayload);
+                                    },
                                     severity: "primary",
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{

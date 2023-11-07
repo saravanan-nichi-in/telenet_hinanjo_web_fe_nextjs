@@ -19,7 +19,7 @@ export const StockpileStaffService = {
  */
 function _importData(payload, callBackFun) {
     axios
-        .post("/admin/stockpile/import", payload)
+        .post("/staff/stockpile/import", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -50,11 +50,11 @@ function _importData(payload, callBackFun) {
  */
 function _exportData(payload, callBackFun) {
         axios
-        .post("/admin/stockpile/export", payload)
+        .post("/staff/stockpile/summary/export", payload)
         .then((response) => {
                 if (response && response.data && response.data.result.filePath) {
                     
-                    downloadBase64File(response.data.result.filePath, timestampFile("MasterStockpile"));
+                    downloadBase64File(response.data.result.filePath, timestampFile("StaffStockpile"));
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
