@@ -26,12 +26,16 @@ const InputNumberFloatLabel = (props) => {
         maxFractionDigits,
         useGrouping,
         onBlur,
+        isLoading,
+        hasIcon,
         ...restProps
+        
     } = inputNumberFloatProps;
 
     return (
         <div className='custom-align-label'>
-        <div className={`${parentClass} ${custom || 'custom_input'} p-float-label`}>
+        <div className={`${parentClass} ${ custom || 'custom_input' } p-float-label ${hasIcon?'p-input-icon-right':""}`}>
+        {isLoading &&<i className="pi pi-spin pi-spinner" /> }
             <InputNum className={`${inputNumberClass} `}
                 id={id}
                 value={value}
@@ -51,6 +55,7 @@ const InputNumberFloatLabel = (props) => {
                 {...restProps} />
             <label htmlFor={id}>{text}<span className={spanClass}>{spanText}</span></label>
         </div>
+        <icon />
         </div>
     )
 }
