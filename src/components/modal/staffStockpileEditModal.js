@@ -10,15 +10,16 @@ import { ValidationError } from "../error";
 import { InputFloatLabel, InputNumberFloatLabel } from "../input";
 import { InputSelectFloatLabel, SelectFloatLabel } from "../dropdown";
 import { DateCalendarFloatLabel } from "../date&time";
+import { StockpileStaffService } from "@/services/stockpilestaff.service";
 
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
-        quantity: Yup.number()
+        after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
         inventoryDate: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
-        expiryDate: Yup.string()
+        expiry_date: Yup.string()
             .required(translate(localeJson, 'expiry_date_is_required'))
             .test('is-valid-date', translate(localeJson, 'expiry_date_must_be_equal_or_greater_than_today'), function (value) {
                 if (!value) return true; // Allow empty values  
@@ -28,16 +29,38 @@ export default function StaffStockpileEdit(props) {
             }),
     });
     const { open, close, header, buttonText } = props && props;
-    const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    // const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    const initialValues = {
+                    "id": "",
+                    "hinan_id": 1,
+                    "before_count": 0,
+                    "after_count": 0,
+                    "incharge": "",
+                    "remarks": "",
+                    "expiry_date": "",
+                    "history_flag": 0,
+                    "Inspection_date_time": "2023-10-30 00:00:00",
+                    "category": "",
+                    "shelf_life": 0,
+                    "stockpile_image": "https://rakurakuapi.nichi.in/images/default.jpg",
+                    "product_name": "アルファ米（小分）"
+                };
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={initialValues}
+                initialValues={props.editObject}
                 onSubmit={(values, actions) => {
-                    close();
-                    actions.resetForm({ values: initialValues });
+                    // close();
+                    let temp = []
+                    console.log({...props.editObject})
+                    StockpileStaffService.update(props.editObject.id, {...props.editObject, ...values}, ()=> {
+                        
+                    })
+                    props.setEditObject(null)
+                    // actions.resetForm({ values: initialValues });
+                    
                 }}
             >
                 {({
@@ -59,7 +82,7 @@ export default function StaffStockpileEdit(props) {
                                 blockScroll={true}
                                 onHide={() => {
                                     close();
-                                    resetForm({ values: initialValues });
+                                    // resetForm({ values: initialValues });
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -70,7 +93,7 @@ export default function StaffStockpileEdit(props) {
                                             text: translate(localeJson, 'cancel'),
                                             onClick: () => {
                                                 close();
-                                                resetForm({ values: initialValues });
+                                                // resetForm({ values: initialValues });
                                             },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
@@ -93,7 +116,8 @@ export default function StaffStockpileEdit(props) {
                                                 spanText: "*",
                                                 spanClass: "p-error",
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.productType,
+                                                value: values.category,
+                                                name:"category",
                                                 disabled: true,
                                                 readOnly: true,
                                                 onChange: handleChange,
@@ -107,7 +131,8 @@ export default function StaffStockpileEdit(props) {
                                                 spanText: "*",
                                                 spanClass: "p-error",
                                                 inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.productName,
+                                                value: values.product_name,
+                                                name:"product_name",
                                                 disabled: true,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
@@ -119,9 +144,9 @@ export default function StaffStockpileEdit(props) {
                                                 inputNumberFloatProps={{
                                                     id: "shelfDays",
                                                     inputId: "integeronly",
-                                                    name: "shelfDays",
+                                                    name: "shelf_life",
                                                     disabled: true,
-                                                    value: values.shelfDays,
+                                                    value: values.shelf_life,
                                                     text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
                                                     inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 }}
@@ -134,22 +159,22 @@ export default function StaffStockpileEdit(props) {
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     inputId: "quantity",
-                                                    name: "quantity",
-                                                    value: values.quantity,
+                                                    name: "after_count",
+                                                    value: values.after_count,
                                                     onValueChange: handleChange,
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson, "quantity"),
                                                     inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 }}
                                             />
-                                            <ValidationError errorBlock={errors.quantity && touched.quantity && errors.quantity} />
+                                            <ValidationError errorBlock={errors.after_count && touched.after_count && errors.after_count} />
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
-                                                    value: values.inventoryDate,
+                                                    value: values.Inspection_date_time,
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: handleChange,
@@ -160,13 +185,13 @@ export default function StaffStockpileEdit(props) {
                                                         "inventory_date"
                                                     ),
                                                 }} />
-                                            <ValidationError errorBlock={errors.inventoryDate && touched.inventoryDate && errors.inventoryDate} />
+                                            <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 id: 'confirmer',
-                                                name: 'confirmer',
-                                                value: values.confirmer,
+                                                name: 'incharge',
+                                                value: values.incharge,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'confirmer'),
@@ -180,7 +205,8 @@ export default function StaffStockpileEdit(props) {
                                                     id: "expiryDate",
                                                     spanText: "*",
                                                     spanClass: "p-error",
-                                                    value: values.expiryDate,
+                                                    value: values.expiry_date,
+                                                    name: "expiry_date",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     placeholder: "yyyy-mm-dd",
@@ -189,12 +215,13 @@ export default function StaffStockpileEdit(props) {
                                                         "expiry_date"
                                                     ),
                                                 }} />
-                                            <ValidationError errorBlock={errors.expiryDate && touched.expiryDate && errors.expiryDate} />
+                                            <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 spanClass: "p-error",
                                                 value: values.remarks,
+                                                name: 'remarks',
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'remarks'),

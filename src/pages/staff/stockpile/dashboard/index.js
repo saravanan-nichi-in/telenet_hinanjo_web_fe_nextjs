@@ -17,6 +17,7 @@ function StockpileDashboard() {
     const [imageModal, setImageModal] = useState(false);
     const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
     const [image, setImage] = useState('');
+    const [editObject, setEditObject] = useState(null);
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
     const onStaffStockpileCreateSuccess = () => {
@@ -61,7 +62,8 @@ function StockpileDashboard() {
                     <Button buttonProps={{
                         text: translate(localeJson, 'edit'),
                         buttonClass: "text-primary ",
-                        onClick: () => setStaffStockpileEditOpen(true),
+                        onClick: () => {setEditObject(rowData);setStaffStockpileEditOpen(true);
+                        },
                         bg: "bg-white",
                         hoverBg: "hover:bg-primary hover:text-white",
                     }} />
@@ -165,13 +167,15 @@ function StockpileDashboard() {
 
     return (
         <>
-            <StaffStockpileEditModal
+            {editObject &&<StaffStockpileEditModal
                 open={staffStockpileEditOpen}
                 header={translate(localeJson, 'edit_product')}
                 close={() => setStaffStockpileEditOpen(false)}
                 buttonText={translate(localeJson, 'save')}
+                editObject={...editObject}
+                setEditObject={setEditObject}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
-            />
+            />}
             <StaffStockpileCreateModal
                 open={staffStockpileCreateOpen}
                 header={translate(localeJson, 'add_stockpile')}

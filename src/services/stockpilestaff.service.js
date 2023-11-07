@@ -8,6 +8,8 @@ export const StockpileStaffService = {
     importData: _importData,
     exportData: _exportData,
     getList: _getList,
+    update: _update,
+    create: _create
 };
 
 /**
@@ -161,8 +163,9 @@ function _create(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _update(id, payload, callBackFun) {
+    console.log(payload);
     axios
-        .post(`/admin/stockpile/update`, payload)
+        .post(`/staff/stockpile/summary/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun();
