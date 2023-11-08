@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BsFillMicFill } from "react-icons/bs";
 
-function AudioRecorder({ onAudioRecorded, onRecordingStateChange }) {
+function AudioRecorder({ onAudioRecorded, onRecordingStateChange,disabled }) {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   let audioChunks = [];
@@ -41,8 +41,9 @@ function AudioRecorder({ onAudioRecorded, onRecordingStateChange }) {
     <div className="flex justify-content-center align-items-center h-full">
       <div>
         <BsFillMicFill
-          onClick={recording ? stopRecording : startRecording}
-          className={`w-full  ${recording ? "text-red-700" : ""}`}
+          onClick={()=>{if(!disabled ){(recording) ? stopRecording() : startRecording()}}}
+          cursor={disabled? "not-allowed" : "pointer"}
+          className={`w-full   ${recording ? "text-red-700" : ""}`}
           size={28}
         />
       </div>

@@ -478,9 +478,9 @@
       "confirm_password_notMatch": "The confirmed password does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
       "forgot_password_success": "A password reset email has been sent to the email address you entered.",
-      "staff_page_dashboard": "STAFF DASHBOARD (TOP)",
-      "shelter_situation": "SHELTER SITUATION",
-      "person_consideration": "Persons requiring consideration",
+      "staff_page_dashboard": "Staff Dashboard(Top)",
+      "shelter_situation": "Shelter Situation",
+      "person_consideration": "Persons Requiring Consideration",
       "accommodation_status": "Accommodation status",
       "staff_supplies": "Registration of Necessary Goods",
       "remarks": "Remarks",
@@ -527,7 +527,12 @@
       "quantity_is_required": "Quantity is required.",
       "inventory_date_is_required": "Inventory is required.",
       "expiry_date_is_required": "Expiry date is required.",
-      "expiry_date_must_be_equal_or_greater_than_today": "Expiry date must be a date equal or greater than today date."
+      "expiry_date_must_be_equal_or_greater_than_today": "Expiry date must be a date equal or greater than today date.",
+      "family_name_required":"name or family code is required.",
+      "family_code_required":"name or family code is required.",
+      "family_password_required":"password is required",
+      "family_password_min_max":"password min and max 4 characters",
+      "family_password_min":"password input min 4 characters"
     },
     "buttons": {
       "login": "Login",
@@ -584,11 +589,13 @@
       "c_evacuation_date_time": "Evacuation Date and Time",
       "c_name_kanji": "Name (kanji)",
       "c_remarks": "Remarks",
-      "c_address": "Address"
+      "c_address": "Address",
+      "c_confirm_register":"Are you sure you want to register with this information?"
     },
     "buttons": {
       "continue": "Continue",
-      "mem_search": "Search"
+      "mem_search": "Search",
+      "reg_shelter":"Enter The Shelter"
     }
   },
   "lang_others": {
