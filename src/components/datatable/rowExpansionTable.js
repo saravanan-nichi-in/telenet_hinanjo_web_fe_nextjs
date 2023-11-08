@@ -78,6 +78,7 @@ export default function RowExpansionTable(props) {
                             headerClassName={column.headerClassName}
                             style={{
                                 minWidth: column.minWidth && column.minWidth,
+                                maxWidth:column.maxWidth && column.maxWidth,
                                 display: column.display,
                                 textAlign: column.textAlign && column.textAlign, ...rowExpansionColumnStyle
                             }}
