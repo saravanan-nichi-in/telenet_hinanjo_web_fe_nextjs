@@ -20,3 +20,4 @@ export { default as StaffStockpileCreateModal } from './staffStockpileCreateModa
 export { default as StaffStockpileEditModal } from './staffStockpileEditModal'
 export { default as PersonCountModal } from './personCountModal'
 export { default as QrCodeModal } from './qrCodeModal'
+export {default as QuestionnairesCreateEditModal} from './questionariesCreateEditModal'

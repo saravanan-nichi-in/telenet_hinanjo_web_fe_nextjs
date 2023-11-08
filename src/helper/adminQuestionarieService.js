@@ -1,32 +1,69 @@
-/*eslint no-undef: 0*/
+// /*eslint no-undef: 0*/
 
 export const AdminQuestionarieService = {
-    getData() {
+    getAdminQuestionarieRowExpansionData() {
         return [
             {
-                "Name": "Master questionaries",
-                "Description": "MasterQuestionaries",
+                id: 1,
+                "Name": "Flood",
+                "Description": "FloodQuestionnaires",
             },
             {
-                "Name": "Individual questionaries",
-                "Description": "IndividualQuestionaries",
-            }
-        ]
-    },
-    getAdminsQuestionarieSmall() {
-        return Promise.resolve(this.getData().slice(0, 10));
+                id: 2,
+                "Name": "Flood2",
+                "Description": "FloodQuestionnaires2",
+            },
+
+        ];
     },
 
-    getAdminsQuestionarieMedium() {
-        return Promise.resolve(this.getData().slice(0, 50));
+    getAdminQuestionarieRowExpansionWithOrdersData() {
+        return [
+            {
+                id: 1,
+                "Name": "Flood",
+                "Description": "FloodQuestionnaires",
+                orders: [{
+                    "Name": "Master questionnaires"
+                }, 
+                {
+                    "Name": "Individual questionnaires",
+                    "actions":"",
+                }
+            ],
+            },
+            {
+                id: 2,
+                "Name": "Flood2",
+                "Description": "FloodQuestionnaires2",
+                orders: [{
+                    "Name": "Master questionnaires"
+                }, 
+                {
+                    "Name": "Individual questionnaires"
+                }
+            ]
+            },
+        ];
     },
 
-    getAdminsQuestionarieLarge() {
-        return Promise.resolve(this.getData().slice(0, 200));
+    getAdminQuestionarieRowExpansionMini() {
+        return Promise.resolve(this.getAdminQuestionarieRowExpansionData().slice(0, 5));
     },
 
-    getAdminsQuestionarieXLarge() {
-        return Promise.resolve(this.getData());
+    getAdminQuestionarieRowExpansionSmall() {
+        return Promise.resolve(this.getAdminQuestionarieRowExpansionData().slice(0, 10));
     },
 
-}
+    getAdminQuestionarieRowExpansion() {
+        return Promise.resolve(this.getAdminQuestionarieRowExpansionData());
+    },
+
+    getAdminQuestionarieRowExpansionWithOrdersSmall() {
+        return Promise.resolve(this.getAdminQuestionarieRowExpansionWithOrdersData().slice(0, 10));
+    },
+
+    getAdminQuestionarieRowExpansionWithOrders() {
+        return Promise.resolve(this.getAdminQuestionarieRowExpansionWithOrdersData());
+    }
+};

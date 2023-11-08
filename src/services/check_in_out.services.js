@@ -5,6 +5,8 @@ import axios from '@/utils/api';
 /* Identity and Access management (IAM) */
 export const CheckInOutServices = {
     getList: _getList,
+    checkIn: _checkIn,
+    checkOut:_checkOut
 };
 
 /**
@@ -20,7 +22,10 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
+          callBackFun()
+          toast.error(error?.response?.data?.message, {
+            position: "top-right",
+        });
         });
 }
 
@@ -32,7 +37,7 @@ function _getList(payload, callBackFun) {
  */
 function _checkIn(payload, callBackFun) {
     axios
-      .post("/user/update/family/checkin", payload)
+      .put("/user/update/family/checkin", payload)
       .then((response) => {
         callBackFun(response.data);
         if (response && response.data) {
@@ -65,7 +70,9 @@ function _checkIn(payload, callBackFun) {
             });
           }
         } else {
-          console.error(error);
+          toast.error(error?.response?.data?.message, {
+            position: "top-right",
+        });
         }
       });
   }

@@ -294,7 +294,11 @@
       "quantity_before": "Quantity (Before)",
       "quantity_after": "Quantity (After)",
       "expiry_date": "Expiry Date",
-      "loc_not_found": "Location not found."
+      "loc_not_found": "Location not found.",
+      "questionnaire_add_event":"Add Event",
+      "questionnaire_event_registration":"Event Registration",
+      "questionnaire_event_info_edit":"Event Information Edit",
+      "do_you_want_to_change_status_of_the_questionnaire":"Do you want to change status of the questionnaire?"
     },
     "validation": {
       "staff_name_required": "Staff name is required",
@@ -348,7 +352,10 @@
       "default_shelf_life_min_length": "Please enter a value greater than or equal to 1.",
       "default_shelf_life_max_length": "Please enter a value less than or equal to 999.",
       "item_title_is_required": "Item Title is required",
-      "option_is_required": "Choice is required"
+      "option_is_required": "Choice is required",
+      "questionnaire_name_is_required":"Name is required.",
+      "questionnaire_name_max":"The name should be 200 characters or less.",
+      "questionnaire_remarks_max_required":"Remarks must be 255 characters or less."
     },
     "buttons": {
       "import": "Import",
@@ -479,10 +486,10 @@
       "confirm_password_notMatch": "The confirmed password does not match the new password.",
       "forgot_password_failure": "An error has occurred Please try again.",
       "forgot_password_success": "A password reset email has been sent to the email address you entered.",
-      "staff_page_dashboard": "STAFF DASHBOARD (TOP)",
-      "shelter_situation": "SHELTER SITUATION",
-      "person_consideration": "Persons requiring consideration",
-      "accommodation_status": "Accommodation status",
+      "staff_page_dashboard": "Staff Dashboard(Top)",
+      "shelter_situation": "Shelter Situation",
+      "person_consideration": "Persons Requiring Consideration",
+      "accommodation_status": "Accommodation Status",
       "staff_supplies": "Registration of Necessary Goods",
       "remarks": "Remarks",
       "comment": "Comment",
@@ -528,7 +535,12 @@
       "quantity_is_required": "Quantity is required.",
       "inventory_date_is_required": "Inventory is required.",
       "expiry_date_is_required": "Expiry date is required.",
-      "expiry_date_must_be_equal_or_greater_than_today": "Expiry date must be a date equal or greater than today date."
+      "expiry_date_must_be_equal_or_greater_than_today": "Expiry date must be a date equal or greater than today date.",
+      "family_name_required":"name or family code is required.",
+      "family_code_required":"name or family code is required.",
+      "family_password_required":"password is required",
+      "family_password_min_max":"password min and max 4 characters",
+      "family_password_min":"password input min 4 characters"
     },
     "buttons": {
       "login": "Login",
@@ -585,11 +597,13 @@
       "c_evacuation_date_time": "Evacuation Date and Time",
       "c_name_kanji": "Name (kanji)",
       "c_remarks": "Remarks",
-      "c_address": "Address"
+      "c_address": "Address",
+      "c_confirm_register":"Are you sure you want to register with this information?"
     },
     "buttons": {
       "continue": "Continue",
-      "mem_search": "Search"
+      "mem_search": "Search",
+      "reg_shelter":"Enter The Shelter"
     }
   },
   "lang_others": {

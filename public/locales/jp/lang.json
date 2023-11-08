@@ -292,7 +292,11 @@
       "quantity_before": "数量(前)",
       "quantity_after": "数量(後)",
       "expiry_date": "有効期限",
-      "loc_not_found": "場所が見つかりません。"
+      "loc_not_found": "場所が見つかりません。",
+      "questionnaire_add_event":"イベント追加",
+      "questionnaire_event_registration":"イベント登録",
+      "questionnaire_event_info_edit":"イベント登録",
+      "do_you_want_to_change_status_of_the_questionnaire":"イベントの状態を変更しますか？"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
@@ -345,7 +349,10 @@
       "default_shelf_life_min_length": "デフォルト保持期間(日)の値は1 以上である必要です。",
       "default_shelf_life_max_length": "デフォルト保持期間(日)の値は999 以下である必要です。",
       "item_title_is_required": "項目タイトルは必須です。",
-      "option_is_required": "選択肢が必須です。"
+      "option_is_required": "選択肢が必須です。",
+      "questionnaire_name_is_required":" 氏名が必要です。",
+      "questionnaire_name_max":"氏名は最大200文字です。",
+      "questionnaire_remarks_is_max_required":" 備考は255文字以内で入力してください。"
     },
     "buttons": {
       "import": "インポート",
@@ -525,7 +532,12 @@
       "quantity_is_required": "数量は必須です。",
       "inventory_date_is_required": "棚卸日は必須です。",
       "expiry_date_is_required": "有効期限は必須です。",
-      "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。"
+      "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。",
+      "family_name_required":"氏名や世帯番号を入力してください。",
+      "family_code_required":"氏名や世帯番号を入力してください。",
+      "family_password_required":"パスワードが必要です。",
+      "family_password_min_max":"パスワードは正確に4文字である必要があります。",
+      "family_password_min":"パスワードは最小4文字です。"
     },
     "buttons": {
       "login": "ログイン",
@@ -583,12 +595,14 @@
       "c_address": "住所",
       "c_remarks": "備考",
       "c_male": "男",
-      "c_female": "女"
+      "c_female": "女",
+      "c_confirm_register":"こちらの内容でよろしいですか？"
       
     },
     "buttons": {
       "continue": "次に進む",
-      "mem_search": "検索"
+      "mem_search": "検索",
+      "reg_shelter":"避難所に入所する"
     }
   },
   "lang_others": {

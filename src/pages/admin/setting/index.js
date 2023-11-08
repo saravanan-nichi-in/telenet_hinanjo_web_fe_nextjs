@@ -158,7 +158,7 @@ export default function Setting() {
     initial_load_status: false,
     default_shelf_life: "",
     scheduler_option: false,
-    image_logo: "",
+    logo: "",
   };
   const [data, setData] = useState([]);
   const dragProps = {
@@ -701,9 +701,9 @@ export default function Setting() {
                         <InputFile
                           inputFileProps={{
                             onChange: (event) => {
-                                setFieldValue("image_logo", event.currentTarget.files[0]);
+                                setFieldValue("logo", event.currentTarget.files[0]);
                             },
-                            name: "image_logo",
+                            name: "logo",
                             accept: ".jpg,.png",
                             onBlur: handleBlur,
                           }}
