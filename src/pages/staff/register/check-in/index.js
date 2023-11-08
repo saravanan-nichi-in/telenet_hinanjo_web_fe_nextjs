@@ -59,7 +59,7 @@ export default function RegisterCheckIn() {
         body: (rowData) => (
           <div className="border-top-none">
             <Input inputProps={{
-            inputClass: "col-12 p-inputtext-sm",
+            inputClass: "col-12 p-inputtext-sm text-center",
              value: rowData.specialCarePersonsCount,
              disabled:true
               }} />

@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { Formik } from "formik";
 import { BsFillMicFill } from "react-icons/bs";
 import AudioRecorder from "@/components/audio";
-import { CommonServices } from "@/services";
+import { CommonServices,CheckInOutServices } from "@/services";
 
 export default function Admission() {
   const { localeJson, setLoader } = useContext(LayoutContext);
@@ -50,6 +50,7 @@ export default function Admission() {
   });
 
   const { getText } = CommonServices;
+  const {getList} = CheckInOutServices
   const initialValues = { name: "", password: "", familyCode: "" };
 
   useEffect(() => {
@@ -128,6 +129,10 @@ export default function Admission() {
     }
   };
 
+  const getSearchResult = (res) => {
+    console.log(res)
+  }
+
   return (
     <>
       <Formik
@@ -137,6 +142,12 @@ export default function Admission() {
         enableReinitialize
         onSubmit={(values) => {
           console.log(values);
+          let payload = {
+            "family_code" : "001-001",
+            "refugee_name" : "",
+            "password" : "1234"
+        }
+          getList(payload,getSearchResult)
         }}
       >
         {({
@@ -400,8 +411,21 @@ export default function Admission() {
                           </div>
                         </div>
                       </div>
+
+                      <div className="mt-3 col-12">
+                        <div className="custom-card">
+                        <ul className="custom-list">
+                  
+                    <li>
+                      <div className="label">TEST</div>
+                      <div className="value">111111111</div>
+                    </li>
+                </ul>
+                        </div>
+
+                      </div>
                     </div>
-                    <hr />
+                    
                   </div>
                 </div>
               </div>
