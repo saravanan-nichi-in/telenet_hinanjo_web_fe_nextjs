@@ -20,9 +20,9 @@ function ExternalFamilyList() {
         { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class" },
         { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'place_detail', header: translate(localeJson, 'external_evecuee_list_table_place'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "8rem", maxWidth: "8rem" },
         {
-            field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "15rem", maxWidth: "15rem",
+            field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "5rem", maxWidth: "5rem",
             body: (rowData) => (
                 <p className='text-link-class clickable-row' onClick={() => {
                     setStaff(rowData);
@@ -34,8 +34,8 @@ function ExternalFamilyList() {
         },
         { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'prefecture_name', header: translate(localeJson, 'external_evecuee_list_table_prefacture'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "6rem", maxWidth: "6rem" },
+        { field: 'prefecture_name', header: translate(localeJson, 'external_evecuee_list_table_prefacture'), minWidth: "6rem", maxWidth: "6rem" },
         { field: 'address', header: translate(localeJson, 'external_evecuee_list_table_address'), minWidth: "15rem", maxWidth: "15rem" },
     ];
     const layoutReducer = useSelector((state) => state.layoutReducer);

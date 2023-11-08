@@ -9,6 +9,7 @@ export default function Counter(props) {
         disabled,
         parentClass,
         inputClass,
+        style,
         min,
         max
     } = props;
@@ -27,11 +28,13 @@ export default function Counter(props) {
     };
 
     return (
-        <InputGroup inputGroupProps={{
+        <InputGroup
+         inputGroupProps={{
             inputClass: inputClass,
             id: props.id,
             value: value,
             name: name,
+            style: style,
             custom:"custom-input font-bold",
             onChange: (e) =>{
                 let val=e.target.value; 
