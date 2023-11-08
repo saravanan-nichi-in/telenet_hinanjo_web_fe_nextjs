@@ -25,13 +25,16 @@ export default function PublicDashboard() {
                             <div className="mt-3">
                                 <div className='flex' style={{ justifyContent: "center", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
-                                        type: 'submit',
+                                        type:"button",
                                         rounded: "true",
                                         custom: "userDashboard",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'admission'),
                                         severity: "primary",
-                                        disabled: true,
+                                        onClick:()=> {
+                                            router.push({
+                                            pathname: 'register/member',
+                                        })},
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard "} />
                                     <Button buttonProps={{
                                         type: 'submit',
