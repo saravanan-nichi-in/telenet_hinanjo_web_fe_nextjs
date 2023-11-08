@@ -11,15 +11,27 @@ import { ChangePasswordModal } from '@/components/modal';
 import { useAppSelector } from "@/redux/hooks";
 
 const AppTopbar = forwardRef((props, ref) => {
-    const { layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const { locale, localeJson, layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    // Getting storage data with help of reducers
+    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
     const topbarmenubuttonRef = useRef(null);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
-    const { localeJson, locale } = useContext(LayoutContext);
-    const url = window.location.pathname;
     const [userName, setUserName] = useState(null);
-    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const url = window.location.pathname;
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Tokyo'
+    };
+    const formattedDateTime = currentDateTime.toLocaleString('ja-JP', options);
+
+    // Helper function country template
     const selectedCountryTemplate = (option, props) => {
         if (option) {
             return (
@@ -96,7 +108,6 @@ const AppTopbar = forwardRef((props, ref) => {
             )}
             {url.startsWith('/staff') && (
                 <>
-
                     <Menu.Divider />
                     <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
                         <div>
@@ -116,6 +127,16 @@ const AppTopbar = forwardRef((props, ref) => {
         } else {
             setUserName(staffData?.user?.name);
         }
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 60000); // Update every minute
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
     /* Services */
@@ -160,21 +181,25 @@ const AppTopbar = forwardRef((props, ref) => {
                 }}>
                     {layoutConfig.menuMode === 'static' && (
                         <div className='hamburger'>
-                            <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
+                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button" onClick={onMenuToggle}>
                                 <i className="pi pi-bars" />
                             </button>
                         </div>
                     )}
-                    <div className='header-details-first'>
-                        {
-                            locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en
-                        }
-                    </div>
-                    <div className='header-details-second'>
-                        <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                            <i className="pi pi-ellipsis-v" />
-                        </button>
-                        <div ref={topbarmenuRef} >
+                    <div className='header-details-first-view'>
+                        <div title={locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en} className='header-details-first'>
+                            {locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en}
+                        </div>
+                        <div ref={topbarmenuRef} className='header-details-second'>
+                            <div>
+                                <div className='header-details-second-date-time-picker'>
+                                    {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
+                                </div>
+                                <div title={formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
+                                    className='header-details-second-date-time-picker-icon'>
+                                    <i className="pi pi-clock" />
+                                </div>
+                            </div>
                             <DropdownSelect
                                 icon={"pi pi-cog"}
                                 text={layoutConfig.menuMode === 'overlay' ? "" : userName}
