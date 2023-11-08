@@ -26,6 +26,7 @@ export default function Admission() {
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
   const formikRef = useRef();
   const [tableLoading, setTableLoading] = useState(false);
+  const [searchFlag, setSearchFlag] = useState(false);
   const [familyCode, setFamilyCode] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
     const [familyDetailData, setfamilyDetailData] = useState(null);
@@ -38,27 +39,24 @@ export default function Admission() {
         const { familyCode } = this.parent;
         return Boolean(familyCode) || Boolean(value);
       },
-      message: "name is required",
+      message: translate(localeJson,"family_name_required"),
     }),
     password: Yup.number()
-      .required("Password is required")
-      .min(0, "Password is too short")
-      .max(9999, "Password is too long")
-      .test("is-four-digits", "Password must be four digits", (value) => {
+      .required(translate(localeJson,"family_password_required"))
+      .test("is-four-digits", translate(localeJson,"family_password_min_max"), (value) => {
         return value >= 0 && value <= 9999 && String(value).length === 4;
-      })
-      .integer("Password must be an integer"),
+      }),
     familyCode: Yup.string().test({
       test: function (value) {
         const { name } = this.parent;
         return Boolean(name) || Boolean(value);
       },
-      message: 'familyCode" is required',
+      message: translate(localeJson,"family_code_required"),
     }),
   });
 
   const { getText } = CommonServices;
-  const { getList } = CheckInOutServices;
+  const { getList , checkIn } = CheckInOutServices;
   const initialValues = { name: "", password: "", familyCode: "" };
 
   const evacueeFamilyDetailColumns = [
@@ -83,7 +81,7 @@ const familyDetailColumns = [
 
 const evacueeFamilyDetailRowExpansionColumns = [
     { field: "address", header: translate(localeJson, 'c_address'), minWidth: "10rem" },
-    { field: "special_care_name", header: translate(localeJson, 'c_special_care_type'), minWidth: "8rem" },
+    { field: "special_care_name", header: translate(localeJson, 'c_special_care_name'), minWidth: "8rem" },
     { field: "connecting_code", header: translate(localeJson, 'c_connecting_code'), minWidth: "7rem" },
     { field: "remarks", header: translate(localeJson, 'c_remarks'), minWidth: "7rem" },
 ];
@@ -205,7 +203,7 @@ const getPrefectureName = (id) => {
   };
 
   const getSearchResult = (res) => {
-    if (res.success && !_.isEmpty(res.data)) {
+    if (res?.success && !_.isEmpty(res?.data)) {
       const data = res.data.model;
       let basicDetailList = [];
       let basicData = {
@@ -285,12 +283,19 @@ const getPrefectureName = (id) => {
       });
       neighbourDataList.push(neighbourData);
       setNeighbourData(neighbourDataList);
+      setSearchFlag(true)
       setTableLoading(false)
   }
   else {
+      setSearchFlag(false)
       setTableLoading(false);
+    
   }
   };
+
+  const isCheckedIn = (res) => {
+    console.log(res)
+  }
 
   return (
     <>
@@ -301,9 +306,9 @@ const getPrefectureName = (id) => {
         enableReinitialize
         onSubmit={(values) => {
           let payload = {
-            family_code: "001-021",
-            refugee_name: "",
-            password: "1234",
+            family_code: values.familyCode,//"001-021",
+            refugee_name:values.name,
+            password:values.password,
           };
           getList(payload, getSearchResult);
         }}
@@ -350,7 +355,7 @@ const getPrefectureName = (id) => {
                           onSubmit={handleSubmit}
                           className="custom-card m-2 shadow-4"
                         >
-                          <div> {translate(localeJson, "shelter_search")}</div>
+                          <div className="page-header2"> {translate(localeJson, "shelter_search")}</div>
                           <div className="mt-5">
                             <div className="mb-5  w-12">
                               <div className="flex align-items-center w-12">
@@ -359,8 +364,8 @@ const getPrefectureName = (id) => {
                                     inputFloatLabelProps={{
                                       id: "name",
                                       name: "name",
-                                      spanText: "",
-                                      spanClass: "",
+                                      spanText: "*",
+                                      spanClass: "p-error",
                                       value: values.name,
                                       onChange: handleChange,
                                       onBlur: handleBlur,
@@ -385,6 +390,7 @@ const getPrefectureName = (id) => {
                                 <div className="w-1 flex justify-content-center">
                                   <AudioRecorder
                                     onAudioRecorded={handleNameAudioRecorded}
+                                    disabled={audioPasswordLoader|| audioFamilyCodeLoader}
                                     onRecordingStateChange={
                                       handleNameRecordingStateChange
                                     }
@@ -436,6 +442,7 @@ const getPrefectureName = (id) => {
                                 <div className="w-1 flex justify-content-center">
                                   <AudioRecorder
                                     onAudioRecorded={handleAudioRecorded}
+                                    disabled={audioNameLoader|| audioFamilyCodeLoader}
                                     onRecordingStateChange={
                                       handleRecordingStateChange
                                     }
@@ -504,6 +511,7 @@ const getPrefectureName = (id) => {
                                     onAudioRecorded={
                                       handleFamilyCodeAudioRecorded
                                     }
+                                    disabled={audioNameLoader||audioPasswordLoader}
                                     onRecordingStateChange={
                                       handleFamilyCodeRecordingStateChange
                                     }
@@ -533,10 +541,8 @@ const getPrefectureName = (id) => {
                                 buttonProps={{
                                   type: "submit",
                                   rounded: "true",
-                                  buttonClass: "text-600 ",
                                   text: translate(localeJson, "mem_search"),
-                                  bg: "bg-white",
-                                  hoverBg: "hover:surface-500 hover:text-white",
+                                  severity:"primary"
                                 }}
                                 parentClass={"ml-3 mr-3 mt-1"}
                               />
@@ -546,15 +552,7 @@ const getPrefectureName = (id) => {
                       </div>
                       <div className="mt-3 col-12 lg:col-6">
                         <div className="custom-card m-2 shadow-4">
-                          <div
-                            className="col-12 lg:col-6 flex align-items-center justify-content-start"
-                            style={{
-                              justifyContent: "flex-end",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {translate(localeJson, "check_in_first")}
-                          </div>
+                        <div className="page-header2"> {translate(localeJson, "check_in_first")}</div>
                           <div
                             className="flex col-12 lg:col-6"
                             style={{
@@ -566,20 +564,25 @@ const getPrefectureName = (id) => {
                               buttonProps={{
                                 type: "submit",
                                 rounded: "true",
-                                buttonClass: "text-600 ",
                                 text: translate(localeJson, "signup"),
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
+                                severity:"success"
+                                
                               }}
                               parentClass={"ml-3 mr-3 mt-1"}
                             />
                           </div>
                         </div>
                       </div>
-
+                      {searchFlag&&
                       <div className="mt-3 col-12">
                         <div className="custom-card shadow-4">
-                        <div>
+                        <div>  
+                        <div className='mb-2'>
+                                <div className='flex page-header2'>
+                                    {translate(localeJson, 'c_confirm_register')} 
+                                </div>
+                                <hr/>
+                            </div>
                             <div className='mb-2'>
                                 <div className='flex justify-content-end' style={{ fontWeight: "bold" }}>
                                     {translate(localeJson, 'household_number')} {familyCode}
@@ -629,8 +632,27 @@ const getPrefectureName = (id) => {
                                 </div>
                             }
                         </div>
+                        <div>
+                        <Button
+                              buttonProps={{
+                                type: "button",
+                                rounded: "true",
+                                severity:"primary",
+                                text: translate(localeJson, "reg_shelter"),
+                                onClick:()=>{
+                                  let payload = {
+                                      "family_id" : familyCode,
+                                      "place_id" : 1
+                                  }
+                                  checkIn(payload,isCheckedIn)
+                                }
+                              }}
+                              parentClass={"mt-3"}
+                            />
+                        </div>
                         </div>
                       </div>
+                      }
                     </div>
                   </div>
                 </div>

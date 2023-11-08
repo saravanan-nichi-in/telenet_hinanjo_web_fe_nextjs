@@ -524,7 +524,12 @@
       "quantity_is_required": "数量は必須です。",
       "inventory_date_is_required": "棚卸日は必須です。",
       "expiry_date_is_required": "有効期限は必須です。",
-      "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。"
+      "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。",
+      "family_name_required":"氏名や世帯番号を入力してください。",
+      "family_code_required":"氏名や世帯番号を入力してください。",
+      "family_password_required":"パスワードが必要です。",
+      "family_password_min_max":"パスワードは正確に4文字である必要があります。",
+      "family_password_min":"パスワードは最小4文字です。"
     },
     "buttons": {
       "login": "ログイン",
@@ -582,12 +587,14 @@
       "c_address": "住所",
       "c_remarks": "備考",
       "c_male": "男",
-      "c_female": "女"
+      "c_female": "女",
+      "c_confirm_register":"こちらの内容でよろしいですか？"
       
     },
     "buttons": {
       "continue": "次に進む",
-      "mem_search": "検索"
+      "mem_search": "検索",
+      "reg_shelter":"避難所に入所する"
     }
   },
   "lang_others": {
