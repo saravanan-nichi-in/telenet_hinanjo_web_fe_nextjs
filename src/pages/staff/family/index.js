@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { PersonCountModal } from '@/components/modal';
@@ -239,7 +239,7 @@ function StaffFamily() {
                     }}>{item.refugee_name}</Link>,
                     "name": item.name,
                     "gender": getGenderValue(item.gender),
-                    "dob": getJapaneseDateDisplayFormat(item.dob),
+                    "dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),
                     "age": item.age,
                     "age_month": item.month,
                     "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares) : "-",

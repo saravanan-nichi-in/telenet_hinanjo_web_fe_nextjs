@@ -501,6 +501,7 @@
       "date_created": "入所日時",
       "evacuation_days": "避難日数",
       "do_you_want_to_exit_the_shelter": "退所手続きして良いですか？",
+      "staff_support":"うち要配慮者",
       "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？"
     },
     "form": {
@@ -547,13 +548,19 @@
       "how_many_people_evacuated": "何人で避難してきましたか？",
       "please_tell_how_many_households": "ご自身も含めていっしょに避難してきた世帯(家族)の人数を教えてください。",
       "do_not_register_each_member_family_individually": "※ 家族の方がそれぞれ登録せず、世帯の代表者がまとめて入力してください。",
-      "qr_Code_scan": "QRコードスキャンします"
+      "qr_Code_scan": "QRコードスキャンします",
+      "check_in_first":"はじめて避難して来た方",
+      "shelter_search":"他の避難所から移動して来た方",
+      "shelter_name":"氏名",
+      "shelter_password":"パスワード",
+      "shelter_code":"世帯番号"
     },
     "buttons": {
-      "continue": "次に進む"
+      "continue": "次に進む",
+      "mem_search": "検索"
     }
   },
   "lang_others": {
-    "reset_password_title": "パスワードを再設定する"
+    "reset_password_title": "パスワード再設定"
   }
 }

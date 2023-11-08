@@ -1,4 +1,4 @@
-import { InputText } from 'primereact/inputtext';
+import { InputText } from 'primereact/inputtext';   
 
 const InputFloatLabel = (props) => {
     const {
@@ -28,12 +28,15 @@ const InputFloatLabel = (props) => {
         text,
         spanClass,
         spanText,
+        isLoading,
+        hasIcon,
         ...restProps
     } = inputFloatLabelProps;
 
     return (
         <div className='custom-align-label'>
-        <div className={`${custom || 'custom_input'} p-float-label`}>
+        <div className={`${custom || 'custom_input'} p-float-label ${hasIcon?'p-input-icon-right':""}`}>
+        {isLoading &&<i className="pi pi-spin pi-spinner" /> }
             <InputText className={inputClass}
                 id={id}
                 value={value}

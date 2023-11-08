@@ -60,6 +60,8 @@ export default function Supplies() {
               rowData.number = value + "";
             }}
             value={rowData?.number + ""}
+            min={0}
+            max={999999999}
           />
         </div>
       ),

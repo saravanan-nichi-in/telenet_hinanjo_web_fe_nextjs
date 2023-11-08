@@ -5617,7 +5617,7 @@
 }
 
 .p-tooltip .p-tooltip-text {
-  background: #495057;
+  background: #2b3d51;
   color: #ffffff;
   padding: 0.75rem 0.75rem;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -5625,19 +5625,19 @@
 }
 
 .p-tooltip.p-tooltip-right .p-tooltip-arrow {
-  border-right-color: #495057;
+  border-right-color: #2b3d51;
 }
 
 .p-tooltip.p-tooltip-left .p-tooltip-arrow {
-  border-left-color: #495057;
+  border-left-color: #2b3d51;
 }
 
 .p-tooltip.p-tooltip-top .p-tooltip-arrow {
-  border-top-color: #495057;
+  border-top-color: #2b3d51;
 }
 
 .p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
-  border-bottom-color: #495057;
+  border-bottom-color: #2b3d51;
 }
 
 .p-fileupload .p-fileupload-buttonbar {
