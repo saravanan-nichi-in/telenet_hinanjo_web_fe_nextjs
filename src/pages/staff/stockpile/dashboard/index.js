@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -75,8 +76,10 @@ function StockpileDashboard() {
             minWidth: "5rem",
             body: (rowData) => (
                 <div>
-                    <AiFillEye onClick={() => {setImageModal(true)
-                    setImage(rowData.stockpile_image)}} style={{ fontSize: '20px' }} />
+                    <AiFillEye onClick={() => {
+                        setImageModal(true)
+                        setImage(rowData.stockpile_image)
+                    }} style={{ fontSize: '20px' }} />
                 </div>
             ),
         },
@@ -90,7 +93,8 @@ function StockpileDashboard() {
                     <Button buttonProps={{
                         text: translate(localeJson, 'edit'),
                         buttonClass: "text-primary ",
-                        onClick: () => {setEditObject(rowData);
+                        onClick: () => {
+                            setEditObject(rowData);
                             console.log(rowData);
                             setStaffStockpileEditOpen(true);
                         },
@@ -168,14 +172,14 @@ function StockpileDashboard() {
 
     const [getListPayload, setGetListPayload] = useState({
         "filters": {
-        "start": 0,
-        limit:5,
-        "sort_by" : "category",
-        "order_by" : "asc"
-    },
-    // place_id: layoutReducer?.user?.place?.id,
-    place_id: 1
-});
+            "start": 0,
+            limit: 5,
+            "sort_by": "category",
+            "order_by": "asc"
+        },
+        // place_id: layoutReducer?.user?.place?.id,
+        place_id: 1
+    });
 
     // const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
@@ -204,7 +208,7 @@ function StockpileDashboard() {
                 header={translate(localeJson, 'edit_product')}
                 close={() => setStaffStockpileEditOpen(false)}
                 buttonText={translate(localeJson, 'save')}
-                editObject={{...editObject}}
+                editObject={{ ...editObject }}
                 setEditObject={setEditObject}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
                 categories={categories}
@@ -274,33 +278,33 @@ function StockpileDashboard() {
                                 }} parentClass={"mr-1 mt-1"} />
                             </div>
                             <div className="mt-3">
-                            <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columns}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                        onSort= {(data) => {
-                                            setGetListPayload({
-                                                ...getListPayload,
-                                                filters: {
-                                                  ...getListPayload.filters,
-                                                  order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
-                                                }
-                                              }
-                                              )
-                                        }}
-                                    />
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columns}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                    onSort={(data) => {
+                                        setGetListPayload({
+                                            ...getListPayload,
+                                            filters: {
+                                                ...getListPayload.filters,
+                                                order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                            }
+                                        }
+                                        )
+                                    }}
+                                />
                             </div>
                             <div className="text-center mt-3">
                                 <Button buttonProps={{
