@@ -177,10 +177,12 @@ function AdminStockpileSummary() {
                 place_name: values.place_name,
                 place_id: emailSettingValues.place_id
             }
-            getStockPileEmailUpdate(payload);
-            setEmailSettingValues(emailData);
-            getSummaryList(getListPayload, onGetStockPileSummaryList);
-            setEmailModal(false);
+            
+            getStockPileEmailUpdate(payload,(response)=>{
+                setEmailSettingValues(emailData);
+                getSummaryList(getListPayload, onGetStockPileSummaryList);
+                setEmailModal(false);
+            });
         }
     };
 
