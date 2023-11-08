@@ -10,15 +10,26 @@ import { ValidationError } from "../error";
 import { InputFloatLabel, InputNumberFloatLabel } from "../input";
 import { InputSelectFloatLabel, SelectFloatLabel } from "../dropdown";
 import { DateCalendarFloatLabel } from "../date&time";
+import { StockpileStaffService } from "@/services/stockpilestaff.service";
 
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
-        quantity: Yup.number()
+        category: Yup.string()
+            .required(translate(localeJson, 'type_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+        product_name: Yup.string()
+            .required(translate(localeJson, 'stockpile_name_required'))
+            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+        shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
+            .positive(translate(localeJson, 'number_field'))
+            .integer(translate(localeJson, 'number_field'))
+            .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
+        after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
         inventoryDate: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
-        expiryDate: Yup.string()
+        expiry_date: Yup.string()
             .required(translate(localeJson, 'expiry_date_is_required'))
             .test('is-valid-date', translate(localeJson, 'expiry_date_must_be_equal_or_greater_than_today'), function (value) {
                 if (!value) return true; // Allow empty values  
@@ -28,16 +39,38 @@ export default function StaffStockpileEdit(props) {
             }),
     });
     const { open, close, header, buttonText } = props && props;
-    const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    // const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    const initialValues = {
+        "id": "",
+        "hinan_id": 1,
+        "before_count": 0,
+        "after_count": 0,
+        "incharge": "",
+        "remarks": "",
+        "expiry_date": "",
+        "history_flag": 0,
+        "Inspection_date_time": "",
+        "category": "",
+        "shelf_life": 0,
+        "product_name": ""
+    };
 
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={initialValues}
+                initialValues={props.editObject}
+                enableReinitialize={true}
                 onSubmit={(values, actions) => {
-                    close();
-                    actions.resetForm({ values: initialValues });
+                    // close();
+                    let temp = []
+                    console.log({ ...props.editObject })
+                    StockpileStaffService.update(props.editObject.id, [{ ...props.editObject, ...values }], () => {
+
+                    })
+                    actions.resetForm()
+                    // actions.resetForm({ values: initialValues });
+
                 }}
             >
                 {({
@@ -58,8 +91,9 @@ export default function StaffStockpileEdit(props) {
                                 draggable={false}
                                 blockScroll={true}
                                 onHide={() => {
+                                    resetForm();
                                     close();
-                                    resetForm({ values: initialValues });
+
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -69,8 +103,9 @@ export default function StaffStockpileEdit(props) {
                                             hoverBg: "hover:surface-500 hover:text-white",
                                             text: translate(localeJson, 'cancel'),
                                             onClick: () => {
+                                                resetForm();
                                                 close();
-                                                resetForm({ values: initialValues });
+
                                             },
                                         }} parentClass={"inline"} />
                                         <Button buttonProps={{
@@ -89,39 +124,46 @@ export default function StaffStockpileEdit(props) {
                                     <div className="mt-5 mb-3">
                                         <div className="mb-5">
                                             <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "productType",
+                                                inputId: "category",
                                                 spanText: "*",
                                                 spanClass: "p-error",
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.productType,
-                                                disabled: true,
-                                                readOnly: true,
-                                                onChange: handleChange,
+                                                options: props.categories,
+                                                value: values.category,
+                                                onChange: (e) => {
+                                                    if (e.value == "--") {
+                                                        values.category = ''
+                                                    } else {
+                                                        values.category = e.value
+                                                    }
+                                                },
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_category'),
+                                                text: translate(localeJson, "stockpile_management_create_edit_field_category"),
+
                                             }} />
+                                            <ValidationError errorBlock={errors.category && touched.category && errors.category} />
                                         </div>
                                         <div className="mt-5 ">
-                                            <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                inputId: "productName",
+                                            <InputFloatLabel inputFloatLabelProps={{
+                                                name: "product_name",
                                                 spanText: "*",
                                                 spanClass: "p-error",
-                                                inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                value: values.productName,
-                                                disabled: true,
+                                                value: values.product_name,
+                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
-                                            }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                            }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
+                                            <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
                                         </div>
                                         <div className="mt-5">
                                             <InputNumberFloatLabel
                                                 inputNumberFloatProps={{
-                                                    id: "shelfDays",
+                                                    id: "shelf_life",
                                                     inputId: "integeronly",
-                                                    name: "shelfDays",
+                                                    name: "shelf_life",
                                                     disabled: true,
-                                                    value: values.shelfDays,
+                                                    value: values.shelf_life,
                                                     text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
                                                     inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 }}
@@ -134,22 +176,22 @@ export default function StaffStockpileEdit(props) {
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     inputId: "quantity",
-                                                    name: "quantity",
-                                                    value: values.quantity,
+                                                    name: "after_count",
+                                                    value: values.after_count,
                                                     onValueChange: handleChange,
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson, "quantity"),
                                                     inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 }}
                                             />
-                                            <ValidationError errorBlock={errors.quantity && touched.quantity && errors.quantity} />
+                                            <ValidationError errorBlock={errors.after_count && touched.after_count && errors.after_count} />
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
-                                                    value: values.inventoryDate,
+                                                    value: values.Inspection_date_time,
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: handleChange,
@@ -160,13 +202,13 @@ export default function StaffStockpileEdit(props) {
                                                         "inventory_date"
                                                     ),
                                                 }} />
-                                            <ValidationError errorBlock={errors.inventoryDate && touched.inventoryDate && errors.inventoryDate} />
+                                            <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 id: 'confirmer',
-                                                name: 'confirmer',
-                                                value: values.confirmer,
+                                                name: 'incharge',
+                                                value: values.incharge,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'confirmer'),
@@ -180,7 +222,8 @@ export default function StaffStockpileEdit(props) {
                                                     id: "expiryDate",
                                                     spanText: "*",
                                                     spanClass: "p-error",
-                                                    value: values.expiryDate,
+                                                    value: values.expiry_date,
+                                                    name: "expiry_date",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     placeholder: "yyyy-mm-dd",
@@ -189,12 +232,13 @@ export default function StaffStockpileEdit(props) {
                                                         "expiry_date"
                                                     ),
                                                 }} />
-                                            <ValidationError errorBlock={errors.expiryDate && touched.expiryDate && errors.expiryDate} />
+                                            <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 spanClass: "p-error",
                                                 value: values.remarks,
+                                                name: 'remarks',
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, 'remarks'),

@@ -11,7 +11,7 @@ import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from './context/layoutcontext';
 
 const AppMenuitem = (props) => {
-    const { setLoader, localeJson } = useContext(LayoutContext);
+    const { layoutConfig, layoutState, setLoader, localeJson } = useContext(LayoutContext);
     const { activeMenu, setActiveMenu } = useContext(MenuContext);
     const router = useRouter();
     const item = props.item;
@@ -76,7 +76,9 @@ const AppMenuitem = (props) => {
 
     return (
         <React.Fragment>
-            <Tooltip target={menuRef.current} position="right" className="sidebar-custom-tooltip" />
+            {layoutState.staticMenuDesktopInactive && layoutConfig.menuMode === 'static' && (
+                <Tooltip target={menuRef.current} position="right" className="sidebar-custom-tooltip" />
+            )}
             <li className={classNames({ 'layout-root-menuitem': props.root, 'active-menuitem': active })}>
                 {/* {props.root && item.visible !== false && <div className="layout-menuitem-root-text">{item.label}</div>} */}
                 {(!item.to || item.items) && item.visible !== false ? (
