@@ -547,6 +547,6 @@ const productName_options = [
     { name: "栄養補助食品"}
 ];
 
-export const staff_dashboard_status_en = ['Maximum capacity', 'Total family', 'Blank'];
+export const staff_dashboard_status_en = ['Maximum Capacity', 'Total Family', 'Blank'];
 
 export const staff_dashboard_status_jp = ['避難可能人数', '現在の避難者数', '追加受入可能人数'];
