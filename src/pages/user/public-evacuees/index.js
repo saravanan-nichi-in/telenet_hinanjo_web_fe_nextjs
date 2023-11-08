@@ -49,8 +49,11 @@ export default function PublicEvacuee() {
                 let columnHeaders = [];
 
                 dynamicColumns.map((value, index) => {
-                    if(value.is_visible==1) {
-                        let tempHeader = { field: value.column_name, header: translate(localeJson, `public_evacuee_table_${value.column_name}`) };
+                    if (value.is_visible == 1) {
+                        let tempHeader = { field: value.column_name, header: translate(localeJson, `public_evacuee_table_${value.column_name}`), minWidth: '4rem' };
+                        if(value.column_name == "gender"){
+                            tempHeader['minWidth'] = "7rem";
+                        }
                         columnHeaders.push(tempHeader);
                     }
                 });
@@ -64,7 +67,7 @@ export default function PublicEvacuee() {
                         slno: i + getListPayload.filters.start + 1,
                         family_id: obj.family_id ?? "",
                         family_code: obj.family_code ?? "",
-                        gender: obj.gender ?? "",
+                        gender: getGenderValue(obj.gender) ?? "",
                         address: obj.address ?? "",
                         address_default: obj.address_default ?? "",
                         refugee_name: obj.refugee_name ?? "",
@@ -86,16 +89,27 @@ export default function PublicEvacuee() {
             } else {
                 setTableLoading(false);
                 setList([]);
+                setTotalCount(0);
             }
 
         });
     }
 
-     /**
-     * Pagination handler
-     * @param {*} e 
-     */
-     const onPaginationChange = async (e) => {
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else {
+            return translate(localeJson, 'others_count');
+        }
+    }
+
+    /**
+    * Pagination handler
+    * @param {*} e 
+    */
+    const onPaginationChange = async (e) => {
         setTableLoading(true);
         if (!_.isEmpty(e)) {
             const newStartValue = e.first; // Replace with your desired page value
@@ -127,7 +141,7 @@ export default function PublicEvacuee() {
                                             inputClass: "w-20rem lg:w-13rem md:w-15rem sm:w-14rem",
                                             text: translate(localeJson, 'name_public_evacuee'),
                                             custom: "mobile-input custom_input",
-                                            onChange: (e) => {setSearchName(e.target.value)}
+                                            onChange: (e) => { setSearchName(e.target.value) }
                                         }}
                                     />
                                     <div className="">
@@ -145,23 +159,23 @@ export default function PublicEvacuee() {
                                 </div>
                             </form>
                             <div className="mt-3">
-                            <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columns}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                    />
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columns}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                />
                             </div>
                         </div>
                     </div>

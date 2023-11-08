@@ -97,10 +97,11 @@ function _getStockPileEmailData(payload, callBackFun) {
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getStockPileEmailUpdate(payload) {
+function _getStockPileEmailUpdate(payload, callBackFun) {
     axios.post('admin/stockpile/summary/mail', payload)
         .then((response) => {
             if (response && response.data) {
+                callBackFun(response.data);
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
