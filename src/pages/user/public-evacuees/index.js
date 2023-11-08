@@ -11,6 +11,7 @@ export default function PublicEvacuee() {
     const [tableLoading, setTableLoading] = useState(false);
     const [customers, setCustomers] = useState([]);
     const [columns, setColumns] = useState([
+        { field: 'place_name', header: translate(localeJson, 'shelter_place'), minWidth: '10rem' }
     ]);
     const [searchName, setSearchName] = useState('');
 
@@ -42,16 +43,15 @@ export default function PublicEvacuee() {
      */
     const onGetMaterialListOnMounting = () => {
         // Get dashboard list
+        let columnHeaders = [...columns];
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.count > 0) {
                 const data = response.data.list;
                 const dynamicColumns = response.data.public_display_order;
-                let columnHeaders = [];
-
                 dynamicColumns.map((value, index) => {
                     if (value.is_visible == 1) {
                         let tempHeader = { field: value.column_name, header: translate(localeJson, `public_evacuee_table_${value.column_name}`), minWidth: '4rem' };
-                        if(value.column_name == "gender"){
+                        if (value.column_name == "gender") {
                             tempHeader['minWidth'] = "7rem";
                         }
                         columnHeaders.push(tempHeader);
@@ -65,6 +65,7 @@ export default function PublicEvacuee() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
+                        place_name: locale == 'ja' ? obj.placeName : (obj.placeNameEn ? obj.placeNameEn : obj.placeName),
                         family_id: obj.family_id ?? "",
                         family_code: obj.family_code ?? "",
                         gender: getGenderValue(obj.gender) ?? "",

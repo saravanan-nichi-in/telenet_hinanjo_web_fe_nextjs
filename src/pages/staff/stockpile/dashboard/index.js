@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, NormalTable } from '@/components';
 import { AiFillEye } from 'react-icons/ai';
 import { useRouter } from 'next/router';
@@ -36,14 +36,13 @@ function StockpileDashboard() {
     const callDropDownApi = () => {
         StockpileService.getCategoryAndProductList((res) => {
             let data = res.data;
-            let tempProducts = ["--"];
             let tempCategories = new Set();
             data.forEach((value, index) => {
                 tempProducts.push(value.product_name);
                 tempCategories.add(value.category);
             })
             console.log([...tempCategories], tempProducts);
-            setCategories(["--", ...tempCategories]);
+            setCategories([...tempCategories]);
             setProductNames(tempProducts);
         });
     }
@@ -65,9 +64,9 @@ function StockpileDashboard() {
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
         { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
-        { field: 'Inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "7rem" },
+        { field: 'inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
-        { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "7rem" },
+        { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
         {
             field: 'actions',
@@ -147,13 +146,13 @@ function StockpileDashboard() {
                         after_count: obj.after_count ?? "",
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
-                        expiry_date: obj.expiry_date ?? "",
+                        expiry_date: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
                         stockpile_image: obj.stockpile_image ?? "",
                         product_name: obj.product_name ?? "",
-                        Inspection_date_time: obj.Inspection_date_time ?? ""
+                        inspection_date_time: obj.inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.inspection_date_time) : ""
                     }
                     preparedList.push(preparedObj);
                 })

@@ -19,7 +19,6 @@ function ExternalFamilyList() {
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class" },
         { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'place_detail', header: translate(localeJson, 'external_evecuee_list_table_place'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "8rem", maxWidth: "8rem" },
         {
             field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "5rem", maxWidth: "5rem",
@@ -84,7 +83,6 @@ function ExternalFamilyList() {
                         slno: i + getListPayload.filters.start + 1,
                         id: obj.id,
                         place_category: obj.place_category ?? "",
-                        place_detail: obj.place_detail ?? "",
                         food_required: obj.food_required ?? "",
                         external_person_count: obj.external_person_count ?? "",
                         hinan_id: obj.hinan_id ?? "",

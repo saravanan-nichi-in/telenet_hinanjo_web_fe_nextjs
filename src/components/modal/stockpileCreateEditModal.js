@@ -54,7 +54,8 @@ export default function StockpileCreateEditModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson, 'stockpile_management_create_edit_modal_header')}
+            { props.registerModalAction == "create" && translate(localeJson, 'stockpile_management_create_modal_header')}
+            { props.registerModalAction == "edit" && translate(localeJson, 'stockpile_management_edit_modal_header')}
         </div>
     );
 
@@ -130,7 +131,7 @@ export default function StockpileCreateEditModal(props) {
                                     <Button buttonProps={{
                                         buttonClass: "w-8rem",
                                         type: "submit",
-                                        text: translate(localeJson, 'registration'),
+                                        text: props.registerModalAction == "create" ? translate(localeJson, 'registration') : translate(localeJson, 'update'),
                                         severity: "primary",
                                         onClick: () => {
                                             handleSubmit();

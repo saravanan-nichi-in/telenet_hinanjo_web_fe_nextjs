@@ -27,7 +27,7 @@ export default function StaffStockpileEdit(props) {
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
-        inventoryDate: Yup.string()
+        inspection_date_time: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
         expiry_date: Yup.string()
             .required(translate(localeJson, 'expiry_date_is_required'))
@@ -49,7 +49,7 @@ export default function StaffStockpileEdit(props) {
         "remarks": "",
         "expiry_date": "",
         "history_flag": 0,
-        "Inspection_date_time": "",
+        "inspection_date_time": "",
         "category": "",
         "shelf_life": 0,
         "product_name": ""
@@ -188,21 +188,18 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
+                                                date = {"2023年11月07日"} //values.inspection_date_time,
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
-                                                    value: values.Inspection_date_time,
+                                                    value: "2023年11月07日", //values.inspection_date_time,
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    placeholder: "yyyy-mm-dd",
-                                                    text: translate(
-                                                        localeJson,
-                                                        "inventory_date"
-                                                    ),
+                                                    text: translate(localeJson,"inventory_date"),
                                                 }} />
-                                            <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
+                                            <ValidationError errorBlock={errors.inspection_date_time && touched.inspection_date_time && errors.inspection_date_time} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
@@ -223,14 +220,11 @@ export default function StaffStockpileEdit(props) {
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     value: values.expiry_date,
+                                                    date: values.expiry_date,
                                                     name: "expiry_date",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    placeholder: "yyyy-mm-dd",
-                                                    text: translate(
-                                                        localeJson,
-                                                        "expiry_date"
-                                                    ),
+                                                    text: translate(localeJson,"expiry_date"),
                                                 }} />
                                             <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>

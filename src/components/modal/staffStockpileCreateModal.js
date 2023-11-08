@@ -51,13 +51,7 @@ export default function StaffStockpileCreateModal(props) {
     /**
      * Destructing
     */
-    const { open, close, register } = props;
-
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'stockpile_management_create_edit_modal_header')}
-        </div>
-    );
+    const { open, close, register, header } = props;
 
     const resetAndCloseForm = (callback) => {
         close();
@@ -145,11 +139,12 @@ export default function StaffStockpileCreateModal(props) {
                                                     options: props.categories,
                                                     value: values.category,
                                                     onChange: (e) => {
-                                                        if(e.value=="--") {
-                                                            values.category=''
-                                                        } else {
-                                                            values.category=e.value
-                                                        }
+                                                        values.category = e.value
+                                                        // if(e.value=="--") {
+                                                        //     values.category=''
+                                                        // } else {
+                                                        //     values.category=e.value
+                                                        // }
                                                     },
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson, "stockpile_management_create_edit_field_category"),
