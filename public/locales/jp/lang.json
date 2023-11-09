@@ -597,8 +597,8 @@
       "c_male": "男",
       "c_female": "女",
       "c_confirm_register":"こちらの内容でよろしいですか？",
-      "alert_info_for_unsaved_contents": "編集した備蓄品の情報まだ保存されてないですか。 よろしいでしょうか？\n 保存する場合は、「棚卸」 ボタンクリックしてください。"
-      
+      "alert_info_for_unsaved_contents": "編集した備蓄品の情報まだ保存されてないですか。 よろしいでしょうか？\n 保存する場合は、「棚卸」 ボタンクリックしてください。",
+      "temporary_admission_time": "版登録日時"
     },
     "buttons": {
       "continue": "次に進む",
