@@ -8,7 +8,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { QrCodeModal } from '@/components/modal';
 import { MdFlipCameraIos } from 'react-icons/md';
-import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getNumberOfEvacuationDays, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 
 function TemporaryRegistrants() {
@@ -100,20 +100,20 @@ function TemporaryRegistrants() {
         },
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem" },
         { field: 'id', header: translate(localeJson, 'si_no'), headerClassName: "custom-header", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'is_owner', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem"},
-        { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'age_month', header: translate(localeJson, 'age_month'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'special_care_name', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'date_created', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'out_date', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
+        { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
 
     ];
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
@@ -258,14 +258,15 @@ function TemporaryRegistrants() {
                     }}>{item.refugee_name}</Link>,
                     "name": item.name,
                     "gender": getGenderValue(item.gender),
-                    "dob": getJapaneseDateDisplayFormat(item.dob),
+                    "dob": item.dob ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : "",
                     "age": item.age,
                     "age_month": item.month,
                     "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares) : "-",
                     "remarks": item.note,
                     "place": response.locale == 'ja' ? (item.temp_families.place ? item.temp_families.place.name : (item.temp_families.place ? item.temp_families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
-                    "out_date": item.temp_families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.temp_families.out_date) : "",
+                    "check_in_date": item.created_at ? getGeneralDateTimeSlashDisplayFormat(item.created_at) : "",
+                    "evacuation_days": item.created_at ? getNumberOfEvacuationDays(item.created_at): ""
                 };
                 if (item.add_question.length > 0) {
                     item.add_question.map((ques) => {
@@ -298,7 +299,7 @@ function TemporaryRegistrants() {
             setLoader(false);
         };
         fetchData();
-    }, []);
+    }, [locale, getListPayload]);
 
     
 

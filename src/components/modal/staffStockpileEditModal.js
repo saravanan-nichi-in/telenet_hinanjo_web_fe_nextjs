@@ -27,7 +27,7 @@ export default function StaffStockpileEdit(props) {
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
-        inventoryDate: Yup.string()
+        Inspection_date_time: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
         expiry_date: Yup.string()
             .required(translate(localeJson, 'expiry_date_is_required'))
@@ -38,8 +38,7 @@ export default function StaffStockpileEdit(props) {
                 return inputDate >= today;
             }),
     });
-    const { open, close, header, buttonText } = props && props;
-    // const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    const { open, close, header, buttonText, onUpdate } = props && props;
     const initialValues = {
         "id": "",
         "hinan_id": 1,
@@ -52,7 +51,7 @@ export default function StaffStockpileEdit(props) {
         "Inspection_date_time": "",
         "category": "",
         "shelf_life": 0,
-        "product_name": ""
+        "product_name": "",
     };
 
     return (
@@ -62,15 +61,13 @@ export default function StaffStockpileEdit(props) {
                 initialValues={props.editObject}
                 enableReinitialize={true}
                 onSubmit={(values, actions) => {
-                    // close();
-                    let temp = []
+                    
                     console.log({ ...props.editObject })
-                    StockpileStaffService.update(props.editObject.id, [{ ...props.editObject, ...values }], () => {
+                    onUpdate({ ...props.editObject, ...values }, props.editObject.summary_id)
+                    // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {
 
-                    })
+                    // })
                     actions.resetForm()
-                    // actions.resetForm({ values: initialValues });
-
                 }}
             >
                 {({
@@ -192,15 +189,13 @@ export default function StaffStockpileEdit(props) {
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
                                                     value: values.Inspection_date_time,
+                                                    date: values.Inspection_date_time,
+                                                    name:"Inspection_date_time",
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    placeholder: "yyyy-mm-dd",
-                                                    text: translate(
-                                                        localeJson,
-                                                        "inventory_date"
-                                                    ),
+                                                    text: translate(localeJson,"inventory_date"),
                                                 }} />
                                             <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
@@ -223,14 +218,11 @@ export default function StaffStockpileEdit(props) {
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     value: values.expiry_date,
+                                                    date: values.expiry_date,
                                                     name: "expiry_date",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    placeholder: "yyyy-mm-dd",
-                                                    text: translate(
-                                                        localeJson,
-                                                        "expiry_date"
-                                                    ),
+                                                    text: translate(localeJson,"expiry_date"),
                                                 }} />
                                             <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>
