@@ -21,7 +21,7 @@ export default function StaffStockpileCreateModal(props) {
 
     const schema = Yup.object().shape({
         category: Yup.string()
-            // .required(translate(localeJson, 'type_required'))
+             .required(translate(localeJson, 'type_required'))
             .max(100, translate(localeJson, 'material_page_create_update_name_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
@@ -51,13 +51,7 @@ export default function StaffStockpileCreateModal(props) {
     /**
      * Destructing
     */
-    const { open, close, register } = props;
-
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'stockpile_management_create_edit_modal_header')}
-        </div>
-    );
+    const { open, close, register, header } = props;
 
     const resetAndCloseForm = (callback) => {
         close();
@@ -74,7 +68,6 @@ export default function StaffStockpileCreateModal(props) {
                 onSubmit={(values, {resetForm}) => {
                     let formData = new FormData();
                     formData.append('category', values.category);
-                    // formData.append('category', "Prdouct Delete Testing 1");
                     formData.append('product_name', values.product_name);
                     formData.append('shelf_life', values.shelf_life);
                     formData.append('place_id', layoutReducer?.user?.place?.id);
@@ -145,11 +138,12 @@ export default function StaffStockpileCreateModal(props) {
                                                     options: props.categories,
                                                     value: values.category,
                                                     onChange: (e) => {
-                                                        if(e.value=="--") {
-                                                            values.category=''
-                                                        } else {
-                                                            values.category=e.value
-                                                        }
+                                                        values.category = e.value
+                                                        // if(e.value=="--") {
+                                                        //     values.category=''
+                                                        // } else {
+                                                        //     values.category=e.value
+                                                        // }
                                                     },
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson, "stockpile_management_create_edit_field_category"),

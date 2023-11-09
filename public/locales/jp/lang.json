@@ -33,7 +33,7 @@
       "Other_shortage_items": "その他不足物資",
       "add_staff_management": "スタッフ情報登録",
       "edit_staff_management": "スタッフ管理編集",
-      "edit_admin_management": "管理者詳細情報",
+      "edit_admin_management": "管理者管理編集",
       "admin_information_registration": "管理者情報の登録",
       "material_information_registration": "新規登録",
       "special_care_create": "要配慮者事項登録",
@@ -148,7 +148,8 @@
       "dropdown_related_questionnaire": "DropDown Related Questionnaire",
       "create_qr_codes_successfully": "QRコードが正常に生成されました。",
       "import_special_care_data_csv": "要配慮者事項CSVインポート ",
-      "stockpile_management_create_edit_modal_header": "備蓄品登録",
+      "stockpile_management_create_modal_header": "備蓄品登録",
+      "stockpile_management_edit_modal_header": "備蓄品情報編集",
       "stockpile_management_create_edit_field_product_name": "備蓄品名",
       "stockpile_management_create_edit_field_category": "種別",
       "stockpile_management_create_edit_field_shelf_life": "保管期間 (日)",
@@ -595,7 +596,8 @@
       "c_remarks": "備考",
       "c_male": "男",
       "c_female": "女",
-      "c_confirm_register":"こちらの内容でよろしいですか？"
+      "c_confirm_register":"こちらの内容でよろしいですか？",
+      "alert_info_for_unsaved_contents": "編集した備蓄品の情報まだ保存されてないですか。 よろしいでしょうか？\n 保存する場合は、「棚卸」 ボタンクリックしてください。"
       
     },
     "buttons": {
