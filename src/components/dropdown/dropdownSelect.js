@@ -17,9 +17,11 @@ export default function DropdownSelect(props) {
                 overlay={items}
             >
                 <button type="button" className="p-link layout-topbar-button">
-                    <div className='header-dropdown-name'>
-                        {text}
-                    </div>
+                    {text && (
+                        <div className='header-dropdown-name'>
+                            {text}
+                        </div>
+                    )}
                     <i className={`${icon}`} />
                 </button>
             </Dropdown>

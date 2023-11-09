@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import jpJson from '../../../public/locales/jp/lang.json'
 import enJson from '../../../public/locales/en/lang.json'
+import { CommonServices } from '@/services';
 
 export const LayoutContext = React.createContext();
 
@@ -27,6 +28,9 @@ export const LayoutProvider = (props) => {
     const [localeJson, setLocaleJson] = useState(jpJson);
     const [locale, setLocale] = useState(localStorage.getItem("locale"));
     const [loader, setLoader] = useState(false);
+
+    /* Services */
+    const { getSystemSettingDetails } = CommonServices;
 
     useEffect(() => {
         router.events.on('routeChangeComplete', () => {
@@ -54,7 +58,15 @@ export const LayoutProvider = (props) => {
             setLocale("ja");
             setLocaleJson(jpJson);
         }
+
+        /* Fetch default API details */
+
+        // Fetch system settings details
+        getSystemSettingDetails((response) => {
+            console.log(response);
+        });
     }, [])
+
 
     const onMenuToggle = () => {
         if (isOverlay()) {
