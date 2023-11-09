@@ -9,7 +9,8 @@ export const StockpileStaffService = {
     exportData: _exportData,
     getList: _getList,
     update: _update,
-    create: _create
+    create: _create,
+    dropdown: _dropdown
 };
 
 /**
@@ -200,26 +201,21 @@ function _update(payload, callBackFun) {
           });
 }
 
+
 /**
- * Get stockpile master details by id
- * @param {*} id
- * @param {*} callBackFun
+ * Get Category dropdown Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
  */
-function _delete(id, callBackFun) {
-    axios
-        .delete(`/admin/stockpile/delete`, {data: {"product_id": id}})
+function _dropdown(payload, callBackFun) {
+    const queryParams = new URLSearchParams(payload).toString();
+    axios.get(`/staff/stockpile/dropdown/category?${queryParams}`)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
             }
         })
         .catch((error) => {
-            console.log(error);
-            // Handle errors here
-            // console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
