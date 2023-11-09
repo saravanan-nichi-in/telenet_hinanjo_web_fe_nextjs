@@ -14,8 +14,6 @@ export default function Questionnaire() {
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
 
-
-
     const cols = [
         { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
         { field: 'Description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header" },
@@ -143,7 +141,7 @@ export default function Questionnaire() {
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                         <div>
-                            <RowExpansionTable showGridlines={"true"} rowExpansionField={"orders"} customRowExpansionActionsField={"actions"} innerColumn={innerColumn} columnStyle={{ textAlign: 'left' }} customActionsField="actions" value={admins} outerColumn={cols} />
+                            <RowExpansionTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} rowExpansionField={"orders"} customRowExpansionActionsField={"actions"} innerColumn={innerColumn} columnStyle={{ textAlign: 'left' }} customActionsField="actions" value={admins} outerColumn={cols} />
                         </div>
                     </div>
                 </div>
