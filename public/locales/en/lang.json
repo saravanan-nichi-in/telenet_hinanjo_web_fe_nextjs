@@ -601,6 +601,8 @@
       "c_male": "Male",
       "c_female": "Female",
       "c_others_count": "Others",
+      "c_checkout_procedure":"I will go through the procedures to leave this shelter",
+      "c_checkout_title":"Exit Procedure",
       "c_confirm_register":"Are you sure you want to register with this information?",
       "alert_info_for_unsaved_contents": "Is the edited stockpile information not saved yet? is this good ? \n To save, click the [Inventory] button.",
       "temporary_admission_time": "Temporary Registration Date"
@@ -608,7 +610,9 @@
     "buttons": {
       "continue": "Continue",
       "mem_search": "Search",
-      "reg_shelter":"Enter The Shelter"
+      "checkout_shelter":"The above information will leave for you",
+      "reg_shelter":"Enter The Shelter",
+      "check_out_shelter":"For those who are new to admission procedures"
     }
   },
   "lang_others": {
