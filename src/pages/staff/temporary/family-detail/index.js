@@ -58,8 +58,7 @@ export default function TemporaryFamilyDetail() {
     const familyAdmissionColumns = [
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem" },
-        { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
+        { field: 'admission_date_time', header: translate(localeJson, 'temporary_admission_time'), minWidth: "10rem", textAlign: 'left' },
     ];
 
     /* Services */
@@ -200,13 +199,7 @@ export default function TemporaryFamilyDetail() {
                     shelter_place: item.placeName,
                     admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
                 };
-                let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
-                if (index >= 0 && item.status == 1) {
-                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
-                }
-                else {
-                    admittedHistory.push(historyItem);
-                }
+                admittedHistory.push(historyItem);
 
             });
             setFamilyAdmittedData(admittedHistory);

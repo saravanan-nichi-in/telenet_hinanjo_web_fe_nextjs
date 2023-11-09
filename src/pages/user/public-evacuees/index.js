@@ -13,6 +13,7 @@ export default function PublicEvacuee() {
     const [columns, setColumns] = useState([
         { field: 'place_name', header: translate(localeJson, 'shelter_place'), minWidth: '10rem' }
     ]);
+    const [publicEvacueesColumn, setPublicEvacueesColumn] = useState([])
     const [searchName, setSearchName] = useState('');
 
     const [getListPayload, setGetListPayload] = useState({
@@ -57,7 +58,7 @@ export default function PublicEvacuee() {
                         columnHeaders.push(tempHeader);
                     }
                 });
-                setColumns(columnHeaders);
+                setPublicEvacueesColumn(columnHeaders);
 
                 let preparedList = [];
                 // Update prepared list to the state
@@ -84,11 +85,11 @@ export default function PublicEvacuee() {
                 })
 
                 setList(preparedList);
-                // setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.count);
                 setTableLoading(false);
             } else {
                 setTableLoading(false);
+                setPublicEvacueesColumn(columnHeaders);
                 setList([]);
                 setTotalCount(0);
             }
@@ -168,7 +169,7 @@ export default function PublicEvacuee() {
                                     className={"custom-table-cell"}
                                     showGridlines={"true"}
                                     value={list}
-                                    columns={columns}
+                                    columns={publicEvacueesColumn}
                                     filterDisplay="menu"
                                     emptyMessage={translate(localeJson, "data_not_found")}
                                     paginator={true}

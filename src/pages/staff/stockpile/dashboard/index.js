@@ -35,16 +35,17 @@ function StockpileDashboard() {
 
     const callDropDownApi = () => {
         let tempProducts = [];
-        StockpileService.getCategoryAndProductList((res) => {
-            let data = res.data;
+        let payload = {
+            place_id : layoutReducer?.user?.place?.id
+        }
+        StockpileStaffService.dropdown(payload, (response) => {
+            const data = response.data.model;
             let tempCategories = new Set();
-            data.forEach((value, index) => {
-                tempProducts.push(value.product_name);
+            data.forEach((value) => {
                 tempCategories.add(value.category);
             })
             console.log([...tempCategories], tempProducts);
             setCategories([...tempCategories]);
-            setProductNames(tempProducts);
         });
     }
 
@@ -243,10 +244,11 @@ function StockpileDashboard() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetMaterialListOnMounting()
+            callDropDownApi()
             setLoader(false);
         };
         fetchData();
-        // callDropDownApi()
+         
     }, [locale, getListPayload]);
 
 
