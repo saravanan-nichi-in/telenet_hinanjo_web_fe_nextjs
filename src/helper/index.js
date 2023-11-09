@@ -305,4 +305,11 @@ export const generateColors = (length) => {
     return colors;
 }
 
+export const getNumberOfEvacuationDays = (createdDate) => {
+    let givenDate = new Date(createdDate);
+    let todayDate = new Date();
+    let timeDifference = todayDate - givenDate;
+    return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+}
+
 

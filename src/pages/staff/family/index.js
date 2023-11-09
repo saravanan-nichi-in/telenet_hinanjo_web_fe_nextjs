@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getNumberOfEvacuationDays, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { PersonCountModal } from '@/components/modal';
@@ -84,19 +84,19 @@ function StaffFamily() {
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem" },
         { field: 'id', header: translate(localeJson, 'si_no'), headerClassName: "custom-header", display: "none" },
         { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "6rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'is_owner', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem" },
-        { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'age_month', header: translate(localeJson, 'age_m'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'special_care_name', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "7rem" },
+        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'date_created', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "7rem" },
-        { field: 'out_date', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
+        { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
 
     ];
 
@@ -123,7 +123,7 @@ function StaffFamily() {
             setLoader(false);
         };
         fetchData();
-    }, []);
+    }, [locale, getListPayload]);
 
     const downloadEvacueesListCSV = () => {
         exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
@@ -246,7 +246,8 @@ function StaffFamily() {
                     "remarks": item.note,
                     "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
-                    "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "",
+                    "check_in_date": item.created_at ? getGeneralDateTimeSlashDisplayFormat(item.created_at) : "",
+                    "evacuation_days": item.created_at ? getNumberOfEvacuationDays(item.created_at): ""
                 };
                 if (item.add_question.length > 0) {
                     item.add_question.map((ques) => {

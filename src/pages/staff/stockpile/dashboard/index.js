@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, NormalTable } from '@/components';
-import { AiFillEye } from 'react-icons/ai';
-import { useRouter } from 'next/router';
 import { AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
 import { StockpileStaffService } from '@/services/stockpilestaff.service';
-import { useSelector } from 'react-redux';
 import { StockpileService } from '@/services/stockpilemaster.service';
 
 function StockpileDashboard() {
@@ -21,7 +21,7 @@ function StockpileDashboard() {
     const [image, setImage] = useState('');
     const [editObject, setEditObject] = useState({});
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState(["食料"]);
     const [productNames, setProductNames] = useState([]);
 
     const onStaffStockpileCreateSuccess = () => {
@@ -34,6 +34,7 @@ function StockpileDashboard() {
     }
 
     const callDropDownApi = () => {
+        let tempProducts = [];
         StockpileService.getCategoryAndProductList((res) => {
             let data = res.data;
             let tempCategories = new Set();
@@ -64,24 +65,11 @@ function StockpileDashboard() {
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
         { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
-        { field: 'inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
+        { field: 'Inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
         { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'image'),
-            textAlign: "center",
-            minWidth: "5rem",
-            body: (rowData) => (
-                <div>
-                    <AiFillEye onClick={() => {
-                        setImageModal(true)
-                        setImage(rowData.stockpile_image)
-                    }} style={{ fontSize: '20px' }} />
-                </div>
-            ),
-        },
+        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'edit'),
@@ -140,7 +128,7 @@ function StockpileDashboard() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
-                        id: obj.id ?? "",
+                        summary_id: obj.id ?? "",
                         hinan_id: obj.hinan_id ?? "",
                         before_count: obj.before_count ?? "",
                         after_count: obj.after_count ?? "",
@@ -150,40 +138,102 @@ function StockpileDashboard() {
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
-                        stockpile_image: obj.stockpile_image ?? "",
+                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => {bindImageModalData(obj.stockpile_image)}} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
-                        inspection_date_time: obj.inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.inspection_date_time) : ""
+                        Inspection_date_time: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
+                        save_flag: false
                     }
                     preparedList.push(preparedObj);
                 })
 
-                setList(preparedList);
+                setStockPileList(preparedList);
                 // setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
             } else {
                 setTableLoading(false);
-                setList([]);
+                setStockPileList([]);
             }
 
         });
     }
 
+    const bindImageModalData = (image) => {
+        setImage(image)
+        setImageModal(true)
+    }
+
     const [getListPayload, setGetListPayload] = useState({
         "filters": {
             "start": 0,
-            limit: 5,
+            "limit": 5,
             "sort_by": "category",
             "order_by": "asc"
         },
-        // place_id: layoutReducer?.user?.place?.id,
-        place_id: 1
+        place_id: layoutReducer?.user?.place?.id,
     });
 
     // const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
+    const [stockPileList, setStockPileList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
+
+    const updateStockPileBufferList = (data, id) => {
+        let updatedList = stockPileList.map(stock =>{ return stock });
+        let index = stockPileList.findIndex((item)=> item.summary_id == id);
+        alert(updatedList.length);
+        if(index !== -1) {
+            data['expiry_date'] = getEnglishDateDisplayFormat(data.expiry_date);
+            data['Inspection_date_time'] = getEnglishDateDisplayFormat(data.Inspection_date_time);
+            data['save_flag'] = true
+            updatedList.splice(index, 1);
+            updatedList.unshift(data);
+            let newSortedList = updatedList.map((item, i)=> {
+                item['slno'] = i + getListPayload.filters.start + 1;
+                return item;
+            })
+            console.log(newSortedList);
+            setStockPileList(newSortedList);
+            setStaffStockpileEditOpen(false);
+        }
+    }
+
+    const bulkUpdateStockPileData = () => {
+        StockpileStaffService.update(stockPileList, (response)=>{
+            console.log(response);
+            onGetMaterialListOnMounting();
+        })
+    }
+
+    const checkForEditedStockPile = (screenFlag) => {
+        const index = stockPileList.findIndex(obj => obj['save_flag'] === true);
+        console.log(stockPileList, index)
+        if(index == -1){
+            if(screenFlag == "history"){
+                router.push("/staff/stockpile/history")
+            }
+            if(screenFlag == "import"){
+                setImportStaffStockpileOpen(true)
+            }
+            if(screenFlag == "toTop"){
+                router.push('/staff/dashboard')
+            }
+        }
+        else{
+            let result = window.confirm(translate(localeJson, 'alert_info_for_unsaved_contents'));
+            if(result){
+                if(screenFlag == "history"){
+                    router.push("/staff/stockpile/history")
+                }
+                if(screenFlag == "import"){
+                    setImportStaffStockpileOpen(true)
+                }
+                if(screenFlag == "toTop"){
+                    router.push('/staff/dashboard')
+                }
+            }
+        }
+    }
 
 
     /* Services */
@@ -211,6 +261,7 @@ function StockpileDashboard() {
                 setEditObject={setEditObject}
                 onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
                 categories={categories}
+                onUpdate={updateStockPileBufferList}
                 refreshList={onGetMaterialListOnMounting}
             />
             <StaffStockpileCreateModal
@@ -247,12 +298,12 @@ function StockpileDashboard() {
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'stockpile_history'),
                                     severity: "primary",
-                                    onClick: () => router.push("/staff/stockpile/history")
+                                    onClick: () => checkForEditedStockPile("history")
                                 }} parentClass={"mr-1 mt-1"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    onClick: () => setImportStaffStockpileOpen(true),
+                                    onClick: () => checkForEditedStockPile("import"),
                                     buttonClass: "evacuation_button_height",
                                     text: translate(localeJson, 'import'),
                                     severity: "primary",
@@ -284,7 +335,7 @@ function StockpileDashboard() {
                                     stripedRows={true}
                                     className={"custom-table-cell"}
                                     showGridlines={"true"}
-                                    value={list}
+                                    value={stockPileList}
                                     columns={columns}
                                     filterDisplay="menu"
                                     emptyMessage={translate(localeJson, "data_not_found")}
@@ -311,13 +362,14 @@ function StockpileDashboard() {
                                     bg: "bg-white",
                                     hoverBg: "hover:surface-500 hover:text-white",
                                     text: translate(localeJson, 'back_to_top'),
-                                    onClick: () => router.push('/staff/dashboard'),
+                                    onClick: () => checkForEditedStockPile("toTop"),
                                 }} parentClass={"inline"} />
                                 <Button buttonProps={{
                                     buttonClass: "w-8rem",
                                     type: "button",
                                     severity: "primary",
                                     text: translate(localeJson, 'inventory'),
+                                    onClick: () => bulkUpdateStockPileData()
                                 }} parentClass={"inline pl-2"} />
                             </div>
                         </div>

@@ -149,7 +149,6 @@ function _create(payload, callBackFun) {
               }
             } else {
                 callBackFun();
-                console.error(error);
                 toast.error(error.response.data.message, {
                     position: "top-right",
                 });
@@ -162,8 +161,7 @@ function _create(payload, callBackFun) {
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _update(id, payload, callBackFun) {
-    console.log(payload);
+function _update(payload, callBackFun) {
     axios
         .post(`/staff/stockpile/summary/update`, payload)
         .then((response) => {

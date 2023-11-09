@@ -27,7 +27,7 @@ export default function StaffStockpileEdit(props) {
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.number()
             .required(translate(localeJson, 'quantity_is_required')),
-        inspection_date_time: Yup.string()
+        Inspection_date_time: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
         expiry_date: Yup.string()
             .required(translate(localeJson, 'expiry_date_is_required'))
@@ -38,8 +38,7 @@ export default function StaffStockpileEdit(props) {
                 return inputDate >= today;
             }),
     });
-    const { open, close, header, buttonText } = props && props;
-    // const initialValues = { productType: "", productName: "", shelfDays: "3", quantity: "", inventoryDate: "", confirmer: "", expiryDate: "", remarks: "" }
+    const { open, close, header, buttonText, onUpdate } = props && props;
     const initialValues = {
         "id": "",
         "hinan_id": 1,
@@ -49,10 +48,10 @@ export default function StaffStockpileEdit(props) {
         "remarks": "",
         "expiry_date": "",
         "history_flag": 0,
-        "inspection_date_time": "",
+        "Inspection_date_time": "",
         "category": "",
         "shelf_life": 0,
-        "product_name": ""
+        "product_name": "",
     };
 
     return (
@@ -62,15 +61,13 @@ export default function StaffStockpileEdit(props) {
                 initialValues={props.editObject}
                 enableReinitialize={true}
                 onSubmit={(values, actions) => {
-                    // close();
-                    let temp = []
+                    
                     console.log({ ...props.editObject })
-                    StockpileStaffService.update(props.editObject.id, [{ ...props.editObject, ...values }], () => {
+                    onUpdate({ ...props.editObject, ...values }, props.editObject.summary_id)
+                    // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {
 
-                    })
+                    // })
                     actions.resetForm()
-                    // actions.resetForm({ values: initialValues });
-
                 }}
             >
                 {({
@@ -188,18 +185,19 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
-                                                date = {"2023年11月07日"} //values.inspection_date_time,
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
-                                                    value: "2023年11月07日", //values.inspection_date_time,
+                                                    value: values.Inspection_date_time,
+                                                    date: values.Inspection_date_time,
+                                                    name:"Inspection_date_time",
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson,"inventory_date"),
                                                 }} />
-                                            <ValidationError errorBlock={errors.inspection_date_time && touched.inspection_date_time && errors.inspection_date_time} />
+                                            <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
                                         <div className="mt-5">
                                             < InputFloatLabel inputFloatLabelProps={{
