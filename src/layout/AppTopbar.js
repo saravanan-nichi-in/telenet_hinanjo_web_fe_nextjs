@@ -2,6 +2,8 @@ import React, { forwardRef, useContext, useImperativeHandle, useRef, useState, u
 import { LogoutOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { MdOutlineResetTv } from 'react-icons/md';
+import _ from 'lodash';
+import { useRouter } from 'next/router';
 
 import { LayoutContext } from './context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper';
@@ -12,6 +14,7 @@ import { useAppSelector } from "@/redux/hooks";
 
 const AppTopbar = forwardRef((props, ref) => {
     const { locale, localeJson, layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const router = useRouter();
     // Getting storage data with help of reducers
     const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const menubuttonRef = useRef(null);
@@ -20,7 +23,7 @@ const AppTopbar = forwardRef((props, ref) => {
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
     const [userName, setUserName] = useState(null);
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
-    const url = window.location.pathname;
+    const url = router.pathname;
     const options = {
         year: 'numeric',
         month: 'long',
@@ -119,14 +122,14 @@ const AppTopbar = forwardRef((props, ref) => {
         </Menu>
     );
 
+    /* Services */
+    const { logout } = AuthenticationAuthorizationService;
+
     useEffect(() => {
-        const adminData = JSON.parse(localStorage.getItem('admin'));
-        const staffData = JSON.parse(localStorage.getItem('staff'));
-        if (url.startsWith('/admin')) {
-            setUserName(adminData?.user?.name);
-        } else {
-            setUserName(staffData?.user?.name);
-        }
+        layoutUpdate(url);
+        router.events.on('routeChangeComplete', (responseUrl) => {
+            layoutUpdate(responseUrl);
+        });
     }, []);
 
     useEffect(() => {
@@ -139,8 +142,20 @@ const AppTopbar = forwardRef((props, ref) => {
         };
     }, []);
 
-    /* Services */
-    const { logout } = AuthenticationAuthorizationService;
+    /**
+     * Layout update
+     */
+    const layoutUpdate = (responseUrl) => {
+        const adminData = JSON.parse(localStorage.getItem('admin'));
+        const staffData = JSON.parse(localStorage.getItem('staff'));
+        if (responseUrl.startsWith('/admin')) {
+            setUserName(adminData?.user?.name);
+        } else if (responseUrl.startsWith('/staff')) {
+            setUserName(staffData?.user?.name);
+        } else {
+            setUserName("");
+        }
+    }
 
     /**
      * On password changed successfully
@@ -191,7 +206,7 @@ const AppTopbar = forwardRef((props, ref) => {
                             {locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en}
                         </div>
                         <div ref={topbarmenuRef} className='header-details-second'>
-                            <div>
+                            <div className={`${_.isEmpty(userName) ? "mr-2" : "mr-2"}`}>
                                 <div className='header-details-second-date-time-picker'>
                                     {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
                                 </div>
@@ -202,7 +217,7 @@ const AppTopbar = forwardRef((props, ref) => {
                             </div>
                             <DropdownSelect
                                 icon={"pi pi-cog"}
-                                text={layoutConfig.menuMode === 'overlay' ? "" : userName}
+                                text={userName}
                                 items={settingView}
                             />
                         </div>

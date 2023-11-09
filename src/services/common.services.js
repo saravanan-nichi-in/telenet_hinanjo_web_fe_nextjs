@@ -6,6 +6,7 @@ import axios from '@/utils/api';
 export const CommonServices = {
     zipDownload: _zipDownload,
     getText: _getText,
+    getSystemSettingDetails: _getSystemSettingDetails,
 };
 
 /**
@@ -49,6 +50,22 @@ function _zipDownload(zipUrl) {
  */
 function _getText(payload, callBackFun) {
     axios.post('/user/speech_to_text', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+/**
+ * Get system settings details
+ * @param {*} callBackFun 
+ */
+function _getSystemSettingDetails(callBackFun) {
+    axios.get('/image/logo')
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
