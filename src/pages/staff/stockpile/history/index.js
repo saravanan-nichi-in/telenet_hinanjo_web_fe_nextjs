@@ -92,8 +92,8 @@ function StockpileHistory() {
                     }
                     productTypesArray.push(preparedObj);
                 })
-                setProductTypes(productTypesArray);
             }
+            setProductTypes(productTypesArray);
         });
     }
 
@@ -105,29 +105,28 @@ function StockpileHistory() {
             place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : ""
         }
         getProductNames(payload, (response) => {
-            if (response.data && response.data.data) {
-                let productNamesArray = [
-                    {
-                        name: "--",
-                        product_id: "",
-                        category: "",
-                        product_name: ""
-                    }
-                ];
-                if (response.data && response.data.data) {
-                    const data = response.data.data;
-                    data.map((obj, i) => {
-                        let preparedObj = {
-                            name: obj.product_name,
-                            product_id: obj.product_id,
-                            category: obj.category,
-                            product_name: obj.product_name
-                        }
-                        productNamesArray.push(preparedObj);
-                    })
-                    setProductNames(productNamesArray);
+            console.log(response);
+            let productNamesArray = [
+                {
+                    name: "--",
+                    product_id: "",
+                    category: "",
+                    product_name: ""
                 }
+            ];
+            if (response.data && response.data.model) {
+                const data = response.data.model;
+                data.map((obj, i) => {
+                    let preparedObj = {
+                        name: obj.product_name,
+                        product_id: obj.product_id,
+                        category: obj.category,
+                        product_name: obj.product_name
+                    }
+                    productNamesArray.push(preparedObj);
+                })
             }
+            setProductNames(productNamesArray);
         });
     }
 
@@ -146,6 +145,7 @@ function StockpileHistory() {
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
         var totalCount;
+        console.log(response.data.total);
         if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
             const data = response.data.list;
             // Preparing row data for specific column to display
