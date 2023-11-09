@@ -597,6 +597,9 @@
       "c_name_kanji": "Name (kanji)",
       "c_remarks": "Remarks",
       "c_address": "Address",
+      "c_male": "Male",
+      "c_female": "Female",
+      "c_others_count": "Others",
       "c_confirm_register":"Are you sure you want to register with this information?"
     },
     "buttons": {

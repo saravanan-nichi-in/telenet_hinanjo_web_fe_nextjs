@@ -69,14 +69,12 @@ export default function Admission() {
     { field: "age_month", header: translate(localeJson, 'c_age_month'), minWidth: "5rem" },
     { field: "gender", header: translate(localeJson, 'c_gender'), minWidth: "8rem" },
     { field: "created_date", header: translate(localeJson, 'c_created_date'), minWidth: "10rem" },
-    { field: "updated_date", header: translate(localeJson, 'c_updated_date'), minWidth: "10rem" },
 ];
 
 const familyDetailColumns = [
     { field: 'evacuation_date_time', header: translate(localeJson, 'c_evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
     { field: 'address', header: translate(localeJson, 'c_address'), minWidth: "10rem", textAlign: 'left' },
     { field: 'representative_number', header: translate(localeJson, 'c_representative_number'), minWidth: "10rem", textAlign: 'left' },
-    { field: 'registered_lang_environment', header: translate(localeJson, 'c_registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
 ];
 
 const evacueeFamilyDetailRowExpansionColumns = [
@@ -224,7 +222,8 @@ const getPrefectureName = (id) => {
               let column = {
                   field: "question_" + index,
                   header: (locale == "ja" ? ques.title : ques.title_en),
-                  minWidth: "10rem"
+                  minWidth: "10rem",
+                  required:ques.isRequired==1?true:false
               };
               personInnerColumns.push(column);
           });
@@ -241,8 +240,8 @@ const getPrefectureName = (id) => {
               age: person.age,
               age_month: person.month,
               gender: getGenderValue(person.gender),
-              created_date: person.created_at_day,
-              updated_date: data.updated_at_day,
+              created_date: person.createdDate,
+              updated_date: data.updated_at,
               orders: [{
                   address: person.address ? person.address : "",
                   special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
@@ -271,7 +270,8 @@ const getPrefectureName = (id) => {
           let column = {
               field: "question_" + index,
               header: (locale == "ja" ? ques.title : ques.title_en),
-              minWidth: "10rem"
+              minWidth: "10rem",
+              required:ques.isRequired==1?true:false
           };
           townAssociateColumnSet.push(column);
       });
@@ -554,7 +554,7 @@ const getPrefectureName = (id) => {
                         <div className="custom-card m-2 shadow-4">
                         <div className="page-header2"> {translate(localeJson, "check_in_first")}</div>
                           <div
-                            className="flex col-12 lg:col-6"
+                            className="flex col-12 lg:col-6 mt-3"
                             style={{
                               justifyContent: "flex-end",
                               flexWrap: "wrap",
@@ -584,7 +584,7 @@ const getPrefectureName = (id) => {
                                 <hr/>
                             </div>
                             <div className='mb-2'>
-                                <div className='flex justify-content-end' style={{ fontWeight: "bold" }}>
+                                <div className='flex justify-content-end underline' style={{ fontWeight: "bold" }}>
                                     {translate(localeJson, 'household_number')} {familyCode}
                                 </div>
                             </div>

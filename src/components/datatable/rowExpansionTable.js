@@ -71,7 +71,10 @@ export default function RowExpansionTable(props) {
                         <Column
                             key={index}
                             field={column.field}
-                            header={column.header}
+                            header={<span>
+                                {column.header}
+                                {column.required && <span className="p-error">*</span>}
+                              </span>}
                             sortable={column.sortable}
                             className={column.className}
                             alignHeader={column.alignHeader}
@@ -93,7 +96,10 @@ export default function RowExpansionTable(props) {
                             <Column
                                 key={index}
                                 field={column1.field}
-                                header={column1.header}
+                                header={<span>
+                                    {column1.header}
+                                    {column1.required && <span className="p-error">*</span>}
+                                  </span>}
                                 sortable={column1.sortable}
                                 className={column1.className}
                                 alignHeader={column1.alignHeader}
@@ -148,7 +154,10 @@ export default function RowExpansionTable(props) {
                 {outerColumn.map((col, index) => (
                     <Column key={index}
                         field={col.field}
-                        header={col.header}
+                        header={<span>
+                            {col.header}
+                            {col.required && <span className="p-error">*</span>}
+                          </span>}
                         sortable={col.sortable}
                         expander={col.expander}
                         className={col.className}
