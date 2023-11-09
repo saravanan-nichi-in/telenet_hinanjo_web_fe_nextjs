@@ -285,16 +285,18 @@ const getPrefectureName = (id) => {
       setNeighbourData(neighbourDataList);
       setSearchFlag(true)
       setTableLoading(false)
+      setLoader(false)
   }
   else {
       setSearchFlag(false)
       setTableLoading(false);
+      setLoader(false)
     
   }
   };
 
   const isCheckedIn = (res) => {
-    console.log(res)
+    setLoader(false)
   }
 
   return (
@@ -306,10 +308,11 @@ const getPrefectureName = (id) => {
         enableReinitialize
         onSubmit={(values) => {
           let payload = {
-            family_code: values.familyCode,//"001-021",
+            family_code: values.familyCode,
             refugee_name:values.name,
             password:values.password,
           };
+          setLoader(true)
           getList(payload, getSearchResult);
         }}
       >
@@ -644,6 +647,7 @@ const getPrefectureName = (id) => {
                                       "family_id" : familyCode,
                                       "place_id" : 1
                                   }
+                                  setLoader(true)
                                   checkIn(payload,isCheckedIn)
                                 }
                               }}
