@@ -77,7 +77,8 @@ export default function StaffStockpileEdit(props) {
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    resetForm
+                    resetForm,
+                    setFieldValue
                 }) => (
                     <div>
                         <form onSubmit={handleSubmit}>
@@ -185,15 +186,20 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
+                                            date={values.Inspection_date_time}
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
-                                                    value: values.Inspection_date_time,
-                                                    date: values.Inspection_date_time,
+                                                    date: initialValues.Inspection_date_time,
                                                     name:"Inspection_date_time",
                                                     spanText: "*",
                                                     spanClass: "p-error",
-                                                    onChange: handleChange,
+                                                    onChange: (evt) => {
+                                                        setFieldValue(
+                                                          "inventoryDate",
+                                                          evt.target.value
+                                                        );
+                                                      },
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson,"inventory_date"),
                                                 }} />
@@ -212,15 +218,20 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
+                                            date={values.expiry_date}
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "expiryDate",
                                                     spanText: "*",
                                                     spanClass: "p-error",
-                                                    value: values.expiry_date,
-                                                    date: values.expiry_date,
+                                                    date: initialValues.expiry_date,
                                                     name: "expiry_date",
-                                                    onChange: handleChange,
+                                                    onChange: (evt) => {
+                                                        setFieldValue(
+                                                          "expiry_date",
+                                                          evt.target.value
+                                                        );
+                                                      },
                                                     onBlur: handleBlur,
                                                     text: translate(localeJson,"expiry_date"),
                                                 }} />
