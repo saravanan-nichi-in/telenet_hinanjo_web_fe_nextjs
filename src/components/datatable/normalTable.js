@@ -42,6 +42,7 @@ export default function NormalTable(props) {
     onPageHandler,
     ...restProps
   } = props;
+ 
 
   return (
     <div className={`${parentClass} ${custom || "custom-table"}`}>
@@ -77,10 +78,14 @@ export default function NormalTable(props) {
         {...restProps}
       >
         {columns.map((col, index) => (
+      
           <Column
             key={index}
             field={col.field}
-            header={col.header}
+            header={<span>
+              {col.header}
+              {col.required && <span className="p-error">*</span>}
+            </span>}
             sortable={col.sortable}
             headerStyle={col.headerStyle}
             alignHeader={alignHeader}

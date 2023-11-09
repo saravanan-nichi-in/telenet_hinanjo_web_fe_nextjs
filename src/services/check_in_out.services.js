@@ -22,6 +22,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
+          toast.dismiss()
           callBackFun()
           toast.error(error?.response?.data?.message, {
             position: "top-right",
