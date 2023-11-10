@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
+import crypto from 'crypto';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -14,6 +15,13 @@ export default function PublicDashboard() {
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
+    const encryptId = (id, key) => {
+        const cipher = crypto.createCipher('aes-256-cbc', key);
+        let encryptedId = cipher.update(id.toString(), 'utf-8', 'hex');
+        encryptedId += cipher.final('hex');
+        return encryptedId;
+    };
+
     return (
         <div>
             <div className="grid">
@@ -25,16 +33,17 @@ export default function PublicDashboard() {
                             <div className="mt-3">
                                 <div className='flex' style={{ justifyContent: "center", flexWrap: "wrap" }}>
                                     <Button buttonProps={{
-                                        type:"button",
+                                        type: "button",
                                         rounded: "true",
                                         custom: "userDashboard",
                                         buttonClass: "evacuation_button_height",
                                         text: translate(localeJson, 'admission'),
                                         severity: "primary",
-                                        onClick:()=> {
+                                        onClick: () => {
                                             router.push({
-                                            pathname: 'register/member',
-                                        })},
+                                                pathname: 'register/member',
+                                            })
+                                        },
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard "} />
                                     <Button buttonProps={{
                                         type: 'submit',
@@ -54,6 +63,7 @@ export default function PublicDashboard() {
                                     if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
                                         router.push({
                                             pathname: '/staff/login',
+                                            query: { hinan: encryptId("yourData", "sample") },
                                         });
                                     } else {
                                         router.push({

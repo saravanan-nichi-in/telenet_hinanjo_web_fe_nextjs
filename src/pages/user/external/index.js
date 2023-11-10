@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import _ from 'lodash';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
