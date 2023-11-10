@@ -353,11 +353,11 @@
       "default_shelf_life_max_length": "Please enter a value less than or equal to 999.",
       "item_title_is_required": "Item Title is required",
       "option_is_required": "Choice is required",
-      "questionnaire_name_is_required": "Name is required.",
+      "questionnaire_name_is_required": "Event Name is required.",
       "questionnaire_name_max": "The name should be 200 characters or less.",
       "questionnaire_remarks_max_required": "Remarks must be 255 characters or less.",
       "master_questionnaire": "Master",
-      "individual_questionnaire": "Individual",
+      "individual_questionnaires": "Individual",
       "details_table": "Details"
     },
     "buttons": {
