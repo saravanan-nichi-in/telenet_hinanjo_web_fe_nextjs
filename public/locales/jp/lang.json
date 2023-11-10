@@ -24,7 +24,7 @@
       "material": "物資マスタ管理",
       "stockpile_master_management": "備蓄品マスタ管理",
       "special_care_list": "要配慮者事項",
-      "questionnaire": "個別項目追加表示(世带全体)",
+      "questionnaire": "イベントマスタ管理",
       "individual_questionnaire": "個別項目追加表示(個人ごと)",
       "setting_systems": "環境設定"
     },
@@ -237,7 +237,7 @@
       "add_item": "項目追加",
       "individual_questionaries": "個人ごとの個別項目",
       "master_questionaries": "全体の個別項目",
-      "questionnaire_name": "項目",
+      "questionnaire_name": "イベント名",
       "questionnaire_description": "詳細",
       "action": "アクション",
       "dateFormat": "yy年mm月dd日",
@@ -352,7 +352,10 @@
       "option_is_required": "選択肢が必須です。",
       "questionnaire_name_is_required":" 氏名が必要です。",
       "questionnaire_name_max":"氏名は最大200文字です。",
-      "questionnaire_remarks_is_max_required":" 備考は255文字以内で入力してください。"
+      "questionnaire_remarks_is_max_required":" 備考は255文字以内で入力してください。",
+      "master_questionnaire":"個別項目追加（世帯全体）",
+      "individual_questionnaire":"個別項目追加（個人ごと）",
+      "details_table":"詳細"
     },
     "buttons": {
       "import": "インポート",
@@ -413,7 +416,9 @@
       "inventory_date": "棚卸日",
       "product_type": "種別",
       "product_name": "備蓄品名",
-      "confirmer": "確認者"
+      "confirmer": "確認者",
+      "questionnaires_name_jp":"イベント名",
+      "questionnaires_name_en": "イベント名（英語)"
     },
     "others": {
       "not": "無し",

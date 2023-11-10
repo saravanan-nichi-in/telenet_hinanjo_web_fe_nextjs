@@ -22,18 +22,19 @@ export default function SpecialCareEditModal(props) {
             .max(255, translate(localeJson, 'special_care_name_en_max_required')),
     });
     const { open, close, onSpecialCareEditSuccess, header, buttonText } = props && props;
-
+    const initialValues=props.currentEditObj
     return (
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={props.currentEditObj}
+                initialValues={initialValues}
                 enableReinitialize
                 onSubmit={(values, actions) => {
                     if (props.registerModalAction == "create" || props.registerModalAction == "edit") {
                         props.submitForm(values);
                     }
-
+                    close();
+                    actions.resetForm({ values: initialValues });
                 }}
             >
                 {({

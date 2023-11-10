@@ -60,10 +60,17 @@ export default function Questionnaire() {
     ]
 
     const innerColumn = [
-        { field: "Name", header: translate(localeJson, 'name') },
+        { field: "Name", header: translate(localeJson, 'name'),body: (rowData) => {
+            if (rowData.Name === 'Master questionnaires') {
+                return translate(localeJson,'master_questionnaire');
+            } else {
+                // Default content or text for other cases
+                return translate(localeJson,'individual_questionnaire');
+            }
+        } },
         {
             field: 'actions',
-            header: translate(localeJson, 'details'),
+            header: translate(localeJson, 'details_table'),
             className: "action_class",
             body: (rowData) => {
                 return (
