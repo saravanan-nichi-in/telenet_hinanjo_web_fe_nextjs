@@ -515,7 +515,13 @@
       "evacuation_days": "避難日数",
       "do_you_want_to_exit_the_shelter": "退所手続きして良いですか？",
       "staff_support":"うち要配慮者",
-      "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？"
+      "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？",
+      "public_external":"この画面では避難所に行かず",
+      "not_visiting_the_shelter":"自宅避難や車中泊避難をする方の避難者登録を行います。",
+      "which_place_Are_you_planning_to_evacuate":"質問1.避難している場所はどこですか？" ,     
+      "within_city":"市内",
+      "city_outskirts":"市外",
+      "outside_prefecture":"県外"
     },
     "form": {
       "type": "種別",

@@ -518,7 +518,13 @@
       "evacuation_days": "Evacuation Days",
       "do_you_want_to_exit_the_shelter": "Do you want to exit the shelter?",
       "staff_support":"In which, those who need special support",
-      "do_you_want_to_enter_the_shelter": "Do you want to enter the shelter?"
+      "do_you_want_to_enter_the_shelter": "Do you want to enter the shelter?",
+      "within_city":"Within City",
+      "city_outskirts":"City Outskirts",
+      "outside_prefecture":"Outside Prefecture",
+      "public_external":"Registration for Evacuees",
+      "not_visiting_the_shelter":"not visiting the shelter, those who have opted to stay in the car or at home, etc.",
+      "which_place_Are_you_planning_to_evacuate":"1. Which place are you planning to evacuate?"
     },
     "form": {
       "type": "type",
