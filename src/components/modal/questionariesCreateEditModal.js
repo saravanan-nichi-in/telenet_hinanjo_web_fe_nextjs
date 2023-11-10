@@ -113,9 +113,7 @@ export default function QuestionnairesCreateEditModal(props) {
                                         <div className="mt-5 ">
                                             < InputFloatLabel inputFloatLabelProps={{
                                                 id: 'remarks',
-                                                spanText: "*",
                                                 name: 'remarks',
-                                                spanClass: "p-error",
                                                 value: values.remarks,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
