@@ -36,10 +36,10 @@ export default function EvacuationPage() {
     });
 
     const evacuationTableColumns = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem"},
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', className: "sno_class" },
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: 'left', minWidth: "6rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: 'left' },
+        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "right", alignHeader: "center", minWidth: "6rem" },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
         { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
         { field: "name", header: translate(localeJson, 'name_kanji'), sortable: false, textAlign: 'left', minWidth: "8rem" },
@@ -160,7 +160,7 @@ export default function EvacuationPage() {
 
                 if (item.add_question.length > 0) {
                     item.add_question.map((ques) => {
-                        evacuees[`question_${ques.question_id}`] = (locale == 'ja' ? (ques.answer.length > 0 ? getAnswerData(ques.answer) : ""): (ques.answer_en.length > 0 ? getAnswerData(ques.answer_en) : ""));
+                        evacuees[`question_${ques.question_id}`] = (locale == 'ja' ? (ques.answer.length > 0 ? getAnswerData(ques.answer) : "") : (ques.answer_en.length > 0 ? getAnswerData(ques.answer_en) : ""));
                     })
                 }
                 previousItem = evacuees;
@@ -252,7 +252,7 @@ export default function EvacuationPage() {
             if (newValue.indexOf("-") !== -1) {
                 setFamilyCode(e.target.value);
             }
-            else{
+            else {
                 const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
                 setFamilyCode(formattedValue);
             }

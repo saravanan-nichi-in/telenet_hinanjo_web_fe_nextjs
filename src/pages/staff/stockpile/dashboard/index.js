@@ -36,7 +36,7 @@ function StockpileDashboard() {
     const callDropDownApi = () => {
         let tempProducts = [];
         let payload = {
-            place_id : layoutReducer?.user?.place?.id
+            place_id: layoutReducer?.user?.place?.id
         }
         StockpileStaffService.dropdown(payload, (response) => {
             const data = response.data.model;
@@ -62,10 +62,10 @@ function StockpileDashboard() {
 
 
     const columns = [
-        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class" },
+        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
-        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
+        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
         { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
@@ -135,14 +135,14 @@ function StockpileDashboard() {
                         after_count: obj.after_count ?? "",
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
-                        expiry_date:obj.expiry_date?new Date(obj.expiry_date):"",
+                        expiry_date: obj.expiry_date ? new Date(obj.expiry_date) : "",
                         expiryDate: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
-                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => {bindImageModalData(obj.stockpile_image)}} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
+                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => { bindImageModalData(obj.stockpile_image) }} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
-                        Inspection_date_time:obj.Inspection_date_time?new Date(obj.Inspection_date_time):"",
+                        Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
                         InspectionDateTime: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
                         save_flag: false
                     }
@@ -182,16 +182,16 @@ function StockpileDashboard() {
     const [tableLoading, setTableLoading] = useState(false);
 
     const updateStockPileBufferList = (data, id) => {
-        let updatedList = stockPileList.map(stock =>{ return stock });
-        let index = stockPileList.findIndex((item)=> item.summary_id == id);
+        let updatedList = stockPileList.map(stock => { return stock });
+        let index = stockPileList.findIndex((item) => item.summary_id == id);
         alert(updatedList.length);
-        if(index !== -1) {
+        if (index !== -1) {
             data['expiry_date'] = getEnglishDateDisplayFormat(data.expiry_date);
             data['Inspection_date_time'] = getEnglishDateDisplayFormat(data.Inspection_date_time);
             data['save_flag'] = true
             updatedList.splice(index, 1);
             updatedList.unshift(data);
-            let newSortedList = updatedList.map((item, i)=> {
+            let newSortedList = updatedList.map((item, i) => {
                 item['slno'] = i + getListPayload.filters.start + 1;
                 return item;
             })
@@ -202,7 +202,7 @@ function StockpileDashboard() {
     }
 
     const bulkUpdateStockPileData = () => {
-        StockpileStaffService.update(stockPileList, (response)=>{
+        StockpileStaffService.update(stockPileList, (response) => {
             console.log(response);
             onGetMaterialListOnMounting();
         })
@@ -211,27 +211,27 @@ function StockpileDashboard() {
     const checkForEditedStockPile = (screenFlag) => {
         const index = stockPileList.findIndex(obj => obj['save_flag'] === true);
         console.log(stockPileList, index)
-        if(index == -1){
-            if(screenFlag == "history"){
+        if (index == -1) {
+            if (screenFlag == "history") {
                 router.push("/staff/stockpile/history")
             }
-            if(screenFlag == "import"){
+            if (screenFlag == "import") {
                 setImportStaffStockpileOpen(true)
             }
-            if(screenFlag == "toTop"){
+            if (screenFlag == "toTop") {
                 router.push('/staff/dashboard')
             }
         }
-        else{
+        else {
             let result = window.confirm(translate(localeJson, 'alert_info_for_unsaved_contents'));
-            if(result){
-                if(screenFlag == "history"){
+            if (result) {
+                if (screenFlag == "history") {
                     router.push("/staff/stockpile/history")
                 }
-                if(screenFlag == "import"){
+                if (screenFlag == "import") {
                     setImportStaffStockpileOpen(true)
                 }
-                if(screenFlag == "toTop"){
+                if (screenFlag == "toTop") {
                     router.push('/staff/dashboard')
                 }
             }
@@ -250,7 +250,7 @@ function StockpileDashboard() {
             setLoader(false);
         };
         fetchData();
-         
+
     }, [locale, getListPayload]);
 
 

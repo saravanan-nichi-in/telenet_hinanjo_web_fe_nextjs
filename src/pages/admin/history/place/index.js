@@ -43,17 +43,17 @@ export default function AdminHistoryPlacePage() {
         place_name: ""
     });
     const historyTableColumns = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', className: "sno_class" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', className: "sno_class" },
         { field: 'created_at', header: translate(localeJson, 'report_date_time'), minWidth: "10rem", sortable: false },
         { field: 'place_name', header: translate(localeJson, 'place_name'), minWidth: "12rem", maxWidth: "12rem", sortable: false },
         { field: 'place_name_en', header: translate(localeJson, 'place_name_furigana'), minWidth: "12rem", maxWidth: "12rem", sortable: false },
         { field: 'prefecture_name', header: translate(localeJson, 'prefecture'), minWidth: "6rem", sortable: false },
         { field: "place_address", header: translate(localeJson, 'location_name'), minWidth: "10rem", sortable: false },
-        { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false },
-        { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false },
+        { field: "place_latitude", header: translate(localeJson, 'location_latitude'), minWidth: "10rem", sortable: false, textAlign: "right", alignHeader: "center" },
+        { field: "place_longitude", header: translate(localeJson, 'location_longitude'), minWidth: "10rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "place_public_availability", header: translate(localeJson, 'place_public_availability'), minWidth: "8rem", sortable: false },
         { field: "place_opened_status", header: translate(localeJson, 'opened_status'), minWidth: "8rem", sortable: false },
-        { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false },
+        { field: "place_evacuees_count", header: translate(localeJson, 'evacuees_count'), minWidth: "7rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "place_full_status", header: translate(localeJson, 'availability_status'), minWidth: "7rem", sortable: false },
         { field: "place_opening_date_time", header: translate(localeJson, 'opened_date_time'), minWidth: "10rem", sortable: false },
         { field: "place_closing_date_time", header: translate(localeJson, 'closed_date_time'), minWidth: "10rem", sortable: false },

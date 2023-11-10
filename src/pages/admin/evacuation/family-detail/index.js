@@ -22,13 +22,13 @@ export default function EvacueeFamilyDetail() {
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
 
     const evacueeFamilyDetailColumns = [
-        { field: "id", header: translate(localeJson, 'number'), minWidth: "5rem", className: "sno_class" },
+        { field: "id", header: translate(localeJson, 'number'), className: "sno_class", textAlign: "center" },
         { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
         { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
         { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
-        { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem" },
-        { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem" },
+        { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem", textAlign: "right", alignHeader: "center" },
+        { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
         { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
         { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },

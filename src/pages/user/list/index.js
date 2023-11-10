@@ -17,11 +17,11 @@ export default function PublicEvacuees() {
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const columnsData = [
-        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
+        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center' },
         { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "13rem", maxWidth: "13rem", textAlign: 'left' },
         { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", minWidth: "10rem", textAlign: 'left' },
-        { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", minWidth: "6rem", textAlign: 'left' },
-        { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", minWidth: "6rem", textAlign: 'left' },
+        { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", minWidth: "6rem" },
+        { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "right", alignHeader: "center" },
         { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center' }
     ];
     const [getListPayload, setGetListPayload] = useState({
