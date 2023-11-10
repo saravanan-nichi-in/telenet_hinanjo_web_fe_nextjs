@@ -21,12 +21,21 @@ function StockpileDashboard() {
     const [image, setImage] = useState('');
     const [editObject, setEditObject] = useState({});
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const [categories, setCategories] = useState(["食料"]);
-    const [productNames, setProductNames] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [productNames, setProductNames] = useState({});
 
-    const onStaffStockpileCreateSuccess = () => {
+    const onStaffStockCreated = () => {
         staffStockpileCreateOpen(false);
         staffStockpileEditOpen(false);
+        let dataMapping = productNames;
+        stockPileList.map((obj) => {
+            if (dataMapping[`${obj.category}`].includes(obj.product_name)) {
+                const indexToRemove = dataMapping[`${obj.category}`].indexOf(obj.product_name);
+                dataMapping[`${obj.category}`].splice(indexToRemove, 1);
+            }
+        });
+        setProductNames(dataMapping);
     };
 
     const onRegister = (values) => {
@@ -34,9 +43,8 @@ function StockpileDashboard() {
     }
 
     const callDropDownApi = () => {
-        let tempProducts = [];
         let payload = {
-            place_id : layoutReducer?.user?.place?.id
+            place_id: layoutReducer?.user?.place?.id
         }
         StockpileStaffService.dropdown(payload, (response) => {
             const data = response.data.model;
@@ -44,8 +52,25 @@ function StockpileDashboard() {
             data.forEach((value) => {
                 tempCategories.add(value.category);
             })
-            console.log([...tempCategories], tempProducts);
+            let dataMapping = {};
+            data.map((stock) => {
+                let products = data.filter((item) => stock.category === item.category);
+                if (stock.category in dataMapping) {
+                    return;
+                }
+                let productNames = products.map(obj => obj.product_name);
+                dataMapping[`${stock.category}`] = productNames;
+            });
+            console.log(stockPileList);
+            stockPileList.map((obj) => {
+                if (dataMapping[`${obj.category}`].includes(obj.product_name)) {
+                    const indexToRemove = dataMapping[`${obj.category}`].indexOf(obj.product_name);
+                    dataMapping[`${obj.category}`].splice(indexToRemove, 1);
+                }
+            })
             setCategories([...tempCategories]);
+
+            setProductNames(dataMapping);
         });
     }
 
@@ -83,6 +108,7 @@ function StockpileDashboard() {
                         buttonClass: "text-primary ",
                         onClick: () => {
                             setEditObject(rowData);
+                            setSelectedCategory(rowData.category)
                             console.log(rowData);
                             setStaffStockpileEditOpen(true);
                         },
@@ -135,24 +161,23 @@ function StockpileDashboard() {
                         after_count: obj.after_count ?? "",
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
-                        expiry_date:obj.expiry_date?new Date(obj.expiry_date):"",
+                        expiry_date: obj.expiry_date ? new Date(obj.expiry_date) : "",
                         expiryDate: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
-                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => {bindImageModalData(obj.stockpile_image)}} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
+                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => { bindImageModalData(obj.stockpile_image) }} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
-                        Inspection_date_time:obj.Inspection_date_time?new Date(obj.Inspection_date_time):"",
+                        Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
                         InspectionDateTime: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
                         save_flag: false
                     }
                     preparedList.push(preparedObj);
                 })
-
                 setStockPileList(preparedList);
-                // setColumns(additionalColumnsArrayWithOldData);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
+                callDropDownApi();
             } else {
                 setTableLoading(false);
                 setStockPileList([]);
@@ -182,27 +207,36 @@ function StockpileDashboard() {
     const [tableLoading, setTableLoading] = useState(false);
 
     const updateStockPileBufferList = (data, id) => {
-        let updatedList = stockPileList.map(stock =>{ return stock });
-        let index = stockPileList.findIndex((item)=> item.summary_id == id);
-        alert(updatedList.length);
-        if(index !== -1) {
-            data['expiry_date'] = getEnglishDateDisplayFormat(data.expiry_date);
-            data['Inspection_date_time'] = getEnglishDateDisplayFormat(data.Inspection_date_time);
+        let updatedList = stockPileList.map(stock => { return stock });
+        let index = stockPileList.findIndex((item) => item.summary_id == id);
+        if (index !== -1) {
+            data['expiry_date'] = new Date(data.expiry_date);
+            data['expiryDate'] = getJapaneseDateDisplayYYYYMMDDFormat(data.expiry_date);
+            data['Inspection_date_time'] = new Date(data.Inspection_date_time);
+            data['InspectionDateTime'] = getJapaneseDateDisplayYYYYMMDDFormat(data.Inspection_date_time)
             data['save_flag'] = true
             updatedList.splice(index, 1);
             updatedList.unshift(data);
-            let newSortedList = updatedList.map((item, i)=> {
+            let newSortedList = updatedList.map((item, i) => {
                 item['slno'] = i + getListPayload.filters.start + 1;
                 return item;
             })
             console.log(newSortedList);
             setStockPileList(newSortedList);
             setStaffStockpileEditOpen(false);
+            setSelectedCategory("");
         }
     }
 
     const bulkUpdateStockPileData = () => {
-        StockpileStaffService.update(stockPileList, (response)=>{
+        let updatedList = stockPileList.filter((item) => item.save_flag === true);
+        if (updatedList.length > 0) {
+            updatedList.map((stock) => {
+                stock['Inspection_date_time'] = getEnglishDateDisplayFormat(stock.Inspection_date_time);
+                stock['expiry_date'] = getEnglishDateDisplayFormat(stock.expiry_date);
+            })
+        }
+        StockpileStaffService.update(updatedList, (response) => {
             console.log(response);
             onGetMaterialListOnMounting();
         })
@@ -211,31 +245,35 @@ function StockpileDashboard() {
     const checkForEditedStockPile = (screenFlag) => {
         const index = stockPileList.findIndex(obj => obj['save_flag'] === true);
         console.log(stockPileList, index)
-        if(index == -1){
-            if(screenFlag == "history"){
+        if (index == -1) {
+            if (screenFlag == "history") {
                 router.push("/staff/stockpile/history")
             }
-            if(screenFlag == "import"){
+            if (screenFlag == "import") {
                 setImportStaffStockpileOpen(true)
             }
-            if(screenFlag == "toTop"){
+            if (screenFlag == "toTop") {
                 router.push('/staff/dashboard')
             }
         }
-        else{
+        else {
             let result = window.confirm(translate(localeJson, 'alert_info_for_unsaved_contents'));
-            if(result){
-                if(screenFlag == "history"){
+            if (result) {
+                if (screenFlag == "history") {
                     router.push("/staff/stockpile/history")
                 }
-                if(screenFlag == "import"){
+                if (screenFlag == "import") {
                     setImportStaffStockpileOpen(true)
                 }
-                if(screenFlag == "toTop"){
+                if (screenFlag == "toTop") {
                     router.push('/staff/dashboard')
                 }
             }
         }
+    }
+
+    const updateCategoryChange = (value) => {
+        setSelectedCategory(value);
     }
 
 
@@ -246,11 +284,10 @@ function StockpileDashboard() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetMaterialListOnMounting()
-            callDropDownApi()
             setLoader(false);
         };
         fetchData();
-         
+
     }, [locale, getListPayload]);
 
 
@@ -263,8 +300,8 @@ function StockpileDashboard() {
                 buttonText={translate(localeJson, 'save')}
                 editObject={{ ...editObject }}
                 setEditObject={setEditObject}
-                onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
                 categories={categories}
+                products={productNames[`${selectedCategory}`]}
                 onUpdate={updateStockPileBufferList}
                 refreshList={onGetMaterialListOnMounting}
             />
@@ -273,8 +310,10 @@ function StockpileDashboard() {
                 header={translate(localeJson, 'add_stockpile')}
                 close={() => setStaffStockpileCreateOpen(false)}
                 buttonText={translate(localeJson, 'save')}
-                onstaffStockpileCreateSuccess={onStaffStockpileCreateSuccess}
+                createdStock={onStaffStockCreated}
                 categories={categories}
+                products={productNames[`${selectedCategory}`]}
+                onCategoryChange={updateCategoryChange}
                 refreshList={onGetMaterialListOnMounting}
             />
             <StockpileSummaryImageModal
