@@ -1,17 +1,17 @@
 /* Import the fonts using @font-face */
-@font-face {
-    font-family: 'Noto Sans JP';
-    font-style: normal;
-    font-weight: 500;
-    src: url('/public/fonts/NotoSansJP-Regular.ttf') format('ttf');
-}
+// @font-face {
+//     font-family: 'Noto Sans JP';
+//     font-style: normal;
+//     font-weight: 500;
+//     src: url('/public/fonts/NotoSansJP-Regular.ttf') format('ttf');
+// }
 
-@font-face {
-    font-family: 'Hiragino Kaku Gothic Pro';
-    font-style: normal;
-    font-weight: 500;
-    src: url('/public//fonts/hiragino-kaku-gothic-pro-regular.otf') format('otf');
-}
+// @font-face {
+//     font-family: 'Hiragino Kaku Gothic Pro';
+//     font-style: normal;
+//     font-weight: 500;
+//     src: url('/public//fonts/hiragino-kaku-gothic-pro-regular.otf') format('otf');
+// }
 
 * {
     box-sizing: border-box;
@@ -23,6 +23,8 @@ html {
 
 body {
     font-family: var(--font-family);
+    font-style: normal;
+    font-weight: 500;
     color: var(--text-color);
     background-color: var(--surface-ground);
     margin: 0;

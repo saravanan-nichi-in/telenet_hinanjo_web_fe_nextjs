@@ -47,6 +47,11 @@ const LoginPage = () => {
         }
     };
 
+    // Access the data passed from Page 1
+    const data = router?.query;
+
+    console.log(data, "aagagagagag", router);
+
     return (
         <>
             <Formik
