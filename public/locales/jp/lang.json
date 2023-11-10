@@ -545,6 +545,7 @@
       "expiry_date_is_required": "有効期限は必須です。",
       "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。",
       "family_name_required":"氏名や世帯番号を入力してください。",
+      "family_name_max":"氏名は100文字以内で入力してください。",
       "family_code_required":"氏名や世帯番号を入力してください。",
       "family_password_required":"パスワードが必要です。",
       "family_password_min_max":"パスワードは正確に4文字である必要があります。",
