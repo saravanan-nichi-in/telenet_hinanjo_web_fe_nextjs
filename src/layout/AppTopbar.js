@@ -196,7 +196,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 }}>
                     {layoutConfig.menuMode === 'static' && (
                         <div className='hamburger'>
-                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button" onClick={onMenuToggle}>
+                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button pt-1" onClick={onMenuToggle}>
                                 <i className="pi pi-bars" />
                             </button>
                         </div>
@@ -214,10 +214,14 @@ const AppTopbar = forwardRef((props, ref) => {
                                     className='header-details-second-date-time-picker-icon'>
                                     <i className="pi pi-clock" />
                                 </div>
+                               
+                            </div>
+                            <div className='header-dropdown-name'>
+                            {userName}
                             </div>
                             <DropdownSelect
                                 icon={"pi pi-cog"}
-                                text={userName}
+                                parentClass={"pt-1"}
                                 items={settingView}
                             />
                         </div>
