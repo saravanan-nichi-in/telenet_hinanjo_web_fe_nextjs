@@ -56,7 +56,7 @@ export default function PublicDashboard() {
                                         disabled: true,
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard"} />
                                 </div>
-                                <p className="p-error mt-3 flex justify-content-center" >
+                                <p className="p-error mt-3 flex justify-content-center" style={{fontWeight:"bold"}}>
                                     {translate(localeJson, 'user_dashboard_note')}
                                 </p>
                                 <div className="mt-3 flex justify-content-end text-higlight clickable-row" onClick={() => {

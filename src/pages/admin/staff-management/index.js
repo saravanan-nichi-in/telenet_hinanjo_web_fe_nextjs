@@ -50,9 +50,9 @@ export default function StaffManagementPage() {
     //delete related mehotds end
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class"},
+        { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: "center" },
         {
-            field: 'name', header:translate(localeJson, 'name'), minWidth: "5rem", 
+            field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem",
             body: (rowData) => (
                 <p className='text-link-class clickable-row' onClick={() => {
                     setStaff(rowData.id);
@@ -63,7 +63,7 @@ export default function StaffManagementPage() {
             )
         },
         { field: 'email', header: translate(localeJson, 'address_email'), minWidth: "5rem" },
-        { field: 'tel', header:translate(localeJson, 'tel') },
+        { field: 'tel', header: translate(localeJson, 'tel'), textAlign: "right", alignHeader: "center" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -71,30 +71,27 @@ export default function StaffManagementPage() {
             className: "action_class",
             body: (rowData) => (
                 <div>
-                    <Button 
+                    <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
-                        text: translate(localeJson, 'edit'), 
-                        buttonClass: "text-primary",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => {
-                            setRegisterModalAction("edit")
-                            setCurrentEditObj(rowData)
-                            setEditStaffOpen(true)
-                            hideOverFlow();
-                        }
-                    }} />
-                    <Button 
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "text-primary",
+                            bg: "bg-white",
+                            hoverBg: "hover:bg-primary hover:text-white",
+                            onClick: () => {
+                                setRegisterModalAction("edit")
+                                setCurrentEditObj(rowData)
+                                setEditStaffOpen(true)
+                                hideOverFlow();
+                            }
+                        }} />
+                    <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
-                        text: translate(localeJson, 'delete'), 
-                        buttonClass: "text-primary ml-2",
-                        bg: "bg-red-600 text-white",
-                        severity: "danger",
-                        hoverBg: "hover:bg-red-500 hover:text-white",
-                        onClick: () => openDeleteDialog(rowData.id)
-                    }} />  
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button ml-2",
+                            onClick: () => openDeleteDialog(rowData.id)
+                        }} parentClass={"delete-button"} />
                 </div>
             ),
         }
@@ -127,21 +124,21 @@ export default function StaffManagementPage() {
     // Main Table listing starts
     const { getList, exportData } = StaffManagementService;
 
-    const [getListPayload, setGetListPayload] = useState( {
+    const [getListPayload, setGetListPayload] = useState({
         "filters": {
             "start": 0,
             "limit": 5,
             "order_by": "desc",
             "sort_by": ""
         },
-        "name" : ""
+        "name": ""
     });
 
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
-    
+
     const getStaffList = () => {
         // Get dashboard list
         getList(getListPayload, (response) => {
@@ -219,7 +216,7 @@ export default function StaffManagementPage() {
         onStaffImportClose();
         showOverFlow();
     }
-    
+
     return (
         <React.Fragment>
             <AdminManagementImportModal
@@ -304,7 +301,7 @@ export default function StaffManagementPage() {
                                             <InputFloatLabel inputFloatLabelProps={{
                                                 id: 'householdNumber',
                                                 text: translate(localeJson, 'name'),
-                                                onChange: (e) => {setSearchName(e.target.value)},
+                                                onChange: (e) => { setSearchName(e.target.value) },
                                                 inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem "
                                             }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
                                             />
@@ -316,7 +313,7 @@ export default function StaffManagementPage() {
                                                 icon: "pi pi-search",
                                                 severity: "primary",
                                                 onClick: () => {
-                                                    setGetListPayload({...getListPayload, name: searchName})
+                                                    setGetListPayload({ ...getListPayload, name: searchName })
                                                 }
                                             }} />
                                         </div>
@@ -324,24 +321,24 @@ export default function StaffManagementPage() {
                                 </div>
                             </div>
                             <div className='mt-3'>
-                                    <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columnsData}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                    />
-                                </div>
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columnsData}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

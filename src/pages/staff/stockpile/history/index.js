@@ -20,13 +20,13 @@ function StockpileHistory() {
     const [productName, setProductName] = useState("");
     const [inCharge, setInCharge] = useState("");
     const columnsData = [
-        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
+        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center' },
         { field: 'created_at', header: translate(localeJson, 'working_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'inspection_date_time', header: translate(localeJson, 'inventory_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'category', header: translate(localeJson, 'product_type'), headerClassName: "custom-header", sortable: true, minWidth: "5rem", textAlign: 'left' },
         { field: 'product_name', header: translate(localeJson, 'product_name'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
-        { field: 'before_count', header: translate(localeJson, 'quantity_before'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
-        { field: 'after_count', header: translate(localeJson, 'quantity_after'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
+        { field: 'before_count', header: translate(localeJson, 'quantity_before'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
+        { field: 'after_count', header: translate(localeJson, 'quantity_after'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
         { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", textAlign: 'left' },

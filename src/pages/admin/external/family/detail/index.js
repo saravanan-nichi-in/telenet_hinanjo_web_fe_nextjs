@@ -23,11 +23,11 @@ export default function EvacuationPage() {
     });
 
     const externalEvacueesDetailColumns = [
-        { field: "si_no", header: translate(localeJson, "si_no"),className: "sno_class",sortable: false },
+        { field: "si_no", header: translate(localeJson, "si_no"), className: "sno_class", sortable: false, textAlign: "center" },
         { field: "id", header: translate(localeJson, "id"), minWidth: "7rem", sortable: false, display: 'none' },
         { field: "refugee_name", header: translate(localeJson, "refugee_name"), minWidth: "10rem", sortable: false },
         { field: "dob", header: translate(localeJson, "dob"), minWidth: "7rem", sortable: false },
-        { field: "age", header: translate(localeJson, "age"), minWidth: "10rem", sortable: false },
+        { field: "age", header: translate(localeJson, "age"), className: "sno_class", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "gender", header: translate(localeJson, "gender"), minWidth: "5rem", sortable: false }
     ]
 

@@ -14,7 +14,7 @@ export default function AdminMaterialPage() {
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class" },
+        { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class", textAlign: "center" },
         { field: 'name', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'unit', header: translate(localeJson, 'material_management_table_header_unit'), minWidth: "15rem", maxWidth: "15rem" },
         {
@@ -25,29 +25,26 @@ export default function AdminMaterialPage() {
             minWidth: "2rem",
             body: (rowData) => (
                 <>
-                <Button 
+                    <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
-                        text: translate(localeJson, 'edit'), 
-                        buttonClass: "text-primary ",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => {
-                            setRegisterModalAction("edit")
-                            setCurrentEditObj(rowData)
-                            setEmailSettingsOpen(true)
-                            hideOverFlow();
-                        },
-                    }} />
-                <Button parentStyle={{ display: "inline" }}
-                    buttonProps={{
-                    text: translate(localeJson, 'delete'), 
-                    buttonClass: "text-primary ml-2",
-                    bg: "bg-red-600 text-white",
-                    severity: "danger",
-                    hoverBg: "hover:bg-red-500 hover:text-white",
-                    onClick: () => openDeleteDialog(rowData.id)
-                }} />
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "text-primary ",
+                            bg: "bg-white",
+                            hoverBg: "hover:bg-primary hover:text-white",
+                            onClick: () => {
+                                setRegisterModalAction("edit")
+                                setCurrentEditObj(rowData)
+                                setEmailSettingsOpen(true)
+                                hideOverFlow();
+                            },
+                        }} />
+                    <Button parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button ml-2",
+                            onClick: () => openDeleteDialog(rowData.id)
+                        }} parentClass={"delete-button"} />
                 </>
             ),
         }
@@ -228,72 +225,72 @@ export default function AdminMaterialPage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                            <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
-                            <hr />
-                            <div>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            setImportPlaceOpen(true);
-                                            hideOverFlow();
-                                        },
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            exportData({
-                                                "filters": {
-                                                    "order_by": "asc",
-                                                    "sort_by": "created_at"
-                                                },
-                                                "search": ""
-                                            })
-                                        }
-                                    }} parentClass={"mr-1 mt-1"} />
+                        <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
+                        <hr />
+                        <div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary",
+                                    onClick: () => {
+                                        setImportPlaceOpen(true);
+                                        hideOverFlow();
+                                    },
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary",
+                                    onClick: () => {
+                                        exportData({
+                                            "filters": {
+                                                "order_by": "asc",
+                                                "sort_by": "created_at"
+                                            },
+                                            "search": ""
+                                        })
+                                    }
+                                }} parentClass={"mr-1 mt-1"} />
 
-                                    <Button buttonProps={{
-                                        type: 'submit',
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'material_information_registration'),
-                                        onClick: () => {
-                                            setRegisterModalAction("create")
-                                            setCurrentEditObj({ name: "", unit: "" })
-                                            setEmailSettingsOpen(true);
-                                            hideOverFlow();
-                                        },
-                                        severity: "success"
-                                    }} parentClass={"mt-1"} />
-                                </div>
-                                <div className='mt-3'>
-                                    <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columnsData}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                    />
-                                </div>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'material_information_registration'),
+                                    onClick: () => {
+                                        setRegisterModalAction("create")
+                                        setCurrentEditObj({ name: "", unit: "" })
+                                        setEmailSettingsOpen(true);
+                                        hideOverFlow();
+                                    },
+                                    severity: "success"
+                                }} parentClass={"mt-1"} />
                             </div>
+                            <div className='mt-3'>
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columnsData}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

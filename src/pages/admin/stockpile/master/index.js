@@ -38,16 +38,16 @@ export default function AdminStockPileMaster() {
     }
 
     const columnsData = [
-        { field: 'id', header: translate(localeJson, 'header_slno'), className: "sno_class" },
+        { field: 'id', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: 'center' },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), maxWidth: "10rem", minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), maxWidth: "10rem", minWidth: "5rem", sortable: true },
-        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem" },
+        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
             minWidth: "5rem",
             body: (rowData) => (
-                <div style={{textAlign: "center"}}>
+                <div style={{ textAlign: "center" }}>
                     {(rowData.stockpile_image && rowData.stockpile_image != "") ?
                         <FaEye style={{ fontSize: '20px', textAlign: "center" }} onClick={() => {
                             setSelectedImage(rowData.stockpile_image);
@@ -66,30 +66,27 @@ export default function AdminStockPileMaster() {
             className: "action_class",
             body: (rowData) => (
                 <>
-                <Button 
+                    <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
-                        text: translate(localeJson, 'edit'), 
-                        buttonClass: "text-primary ",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => {
-                            setRegisterModalAction("edit")
-                            setCurrentEditObj(rowData)
-                            setEmailSettingsOpen(true)
-                            hideOverFlow()
-                        },
-                    }} />
-                <Button 
-                    parentStyle={{ display: "inline" }}
-                    buttonProps={{
-                    text: translate(localeJson, 'delete'), 
-                    buttonClass: "text-primary ml-2",
-                    bg: "bg-red-600 text-white",
-                    severity: "danger",
-                    hoverBg: "hover:bg-red-500 hover:text-white",
-                    onClick: () => openDeleteDialog(rowData.product_id)
-                }} />
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "text-primary ",
+                            bg: "bg-white",
+                            hoverBg: "hover:bg-primary hover:text-white",
+                            onClick: () => {
+                                setRegisterModalAction("edit")
+                                setCurrentEditObj(rowData)
+                                setEmailSettingsOpen(true)
+                                hideOverFlow()
+                            },
+                        }} />
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button ml-2",
+                            onClick: () => openDeleteDialog(rowData.product_id)
+                        }} parentClass={"delete-button"} />
                 </>
             ),
         }
@@ -285,134 +282,134 @@ export default function AdminStockPileMaster() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                            <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
-                            <hr />
-                            <div>
-                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'import'),
-                                        severity: "primary",
-                                        onClick: () => {setImportPlaceOpen(true); hideOverFlow();},
-                                    }} parentClass={"mr-1 mt-1"} />
-                                    <Button buttonProps={{
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'export'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            exportData({
-                                                "filters": {
-                                                    "order_by": "desc",
-                                                    "sort_by": "created_at" // default:created_at, category 
-                                                },
-                                                "category": selectedCategory,
-                                                "product_name": selectedProductName
-                                            })
-                                        }
-                                    }} parentClass={"mr-1 mt-1"} />
+                        <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
+                        <hr />
+                        <div>
+                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                <Button buttonProps={{
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'import'),
+                                    severity: "primary",
+                                    onClick: () => { setImportPlaceOpen(true); hideOverFlow(); },
+                                }} parentClass={"mr-1 mt-1"} />
+                                <Button buttonProps={{
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'export'),
+                                    severity: "primary",
+                                    onClick: () => {
+                                        exportData({
+                                            "filters": {
+                                                "order_by": "desc",
+                                                "sort_by": "created_at" // default:created_at, category 
+                                            },
+                                            "category": selectedCategory,
+                                            "product_name": selectedProductName
+                                        })
+                                    }
+                                }} parentClass={"mr-1 mt-1"} />
 
-                                    <Button buttonProps={{
-                                        rounded: "true",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'stockpile_management_create_button'),
-                                        onClick: () => {
-                                            setRegisterModalAction("create");
-                                            setCurrentEditObj({ category: "", product_name: "", shelf_life: "" });
-                                            setEmailSettingsOpen(true);
-                                            hideOverFlow();
-                                        },
-                                        severity: "success"
-                                    }} parentClass={"mt-1"} />
-                                </div>
-                                <div>
-                                    <form >
-                                        <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
-                                            <div>
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "category_search",
-                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                                    options: categories,
-                                                    value: selectedCategory,
-                                                    onChange: (e) => {
-                                                        if(e.value=="--") {
-                                                            setSelectedCategory("")
-                                                        } else {
-                                                            setSelectedCategory(e.value)
-                                                        }
-                                                    },
-                                                    text: translate(localeJson, "search_category"),
-                                                    custom: "mobile-input custom-select"
-                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                            </div>
-                                            <div >
-                                                <SelectFloatLabel selectFloatLabelProps={{
-                                                    inputId: "product_name_search",
-                                                    selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                                    options: productNames,
-                                                    value: selectedProductName,
-                                                    onChange: (e) => {
-                                                        if(e.value=="--") {
-                                                            setSelectedProductName("")
-                                                        } else {
-                                                            setSelectedProductName(e.value)
-                                                        }
-                                                    },
-                                                    text: translate(localeJson, "search_product_name"),
-                                                    custom: "mobile-input custom-select"
-                                                }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                            </div>
-                                            <div className='pb-1'>
-                                                <Button buttonProps={{
-                                                    buttonClass: "evacuation_button_height",
-                                                    type: 'submit',
-                                                    text: translate(localeJson, 'stockpile_search_button'),
-                                                    rounded: "true",
-                                                    severity: "primary",
-                                                    onClick: (e) => {
-                                                        e.preventDefault();
-                                                        setGetListPayload({
-                                                            ...getListPayload,
-                                                            category: selectedCategory, product_name: selectedProductName
-                                                        })
-                                                    }
-                                                }} parentStyle={{ paddingLeft: "10px" }} />
-
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className='mt-3'>
-                                    <NormalTable
-                                        lazy
-                                        totalRecords={totalCount}
-                                        loading={tableLoading}
-                                        stripedRows={true}
-                                        className={"custom-table-cell"}
-                                        showGridlines={"true"}
-                                        value={list}
-                                        columns={columnsData}
-                                        filterDisplay="menu"
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
-                                        first={getListPayload.filters.start}
-                                        rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
-                                        onPageHandler={(e) => onPaginationChange(e)}
-                                        onSort= {(data) => {
-                                            setGetListPayload({
-                                                ...getListPayload,
-                                                filters: {
-                                                  ...getListPayload.filters,
-                                                  order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
-                                                }
-                                              }
-                                              )
-                                        }}
-                                    />
-                                </div>
+                                <Button buttonProps={{
+                                    rounded: "true",
+                                    buttonClass: "evacuation_button_height",
+                                    text: translate(localeJson, 'stockpile_management_create_button'),
+                                    onClick: () => {
+                                        setRegisterModalAction("create");
+                                        setCurrentEditObj({ category: "", product_name: "", shelf_life: "" });
+                                        setEmailSettingsOpen(true);
+                                        hideOverFlow();
+                                    },
+                                    severity: "success"
+                                }} parentClass={"mt-1"} />
                             </div>
+                            <div>
+                                <form >
+                                    <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
+                                        <div>
+                                            <SelectFloatLabel selectFloatLabelProps={{
+                                                inputId: "category_search",
+                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                options: categories,
+                                                value: selectedCategory,
+                                                onChange: (e) => {
+                                                    if (e.value == "--") {
+                                                        setSelectedCategory("")
+                                                    } else {
+                                                        setSelectedCategory(e.value)
+                                                    }
+                                                },
+                                                text: translate(localeJson, "search_category"),
+                                                custom: "mobile-input custom-select"
+                                            }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                        </div>
+                                        <div >
+                                            <SelectFloatLabel selectFloatLabelProps={{
+                                                inputId: "product_name_search",
+                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                                options: productNames,
+                                                value: selectedProductName,
+                                                onChange: (e) => {
+                                                    if (e.value == "--") {
+                                                        setSelectedProductName("")
+                                                    } else {
+                                                        setSelectedProductName(e.value)
+                                                    }
+                                                },
+                                                text: translate(localeJson, "search_product_name"),
+                                                custom: "mobile-input custom-select"
+                                            }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
+                                        </div>
+                                        <div className='pb-1'>
+                                            <Button buttonProps={{
+                                                buttonClass: "evacuation_button_height",
+                                                type: 'submit',
+                                                text: translate(localeJson, 'stockpile_search_button'),
+                                                rounded: "true",
+                                                severity: "primary",
+                                                onClick: (e) => {
+                                                    e.preventDefault();
+                                                    setGetListPayload({
+                                                        ...getListPayload,
+                                                        category: selectedCategory, product_name: selectedProductName
+                                                    })
+                                                }
+                                            }} parentStyle={{ paddingLeft: "10px" }} />
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className='mt-3'>
+                                <NormalTable
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    value={list}
+                                    columns={columnsData}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    first={getListPayload.filters.start}
+                                    rows={getListPayload.filters.limit}
+                                    paginatorLeft={true}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                    onSort={(data) => {
+                                        setGetListPayload({
+                                            ...getListPayload,
+                                            filters: {
+                                                ...getListPayload.filters,
+                                                order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                            }
+                                        }
+                                        )
+                                    }}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

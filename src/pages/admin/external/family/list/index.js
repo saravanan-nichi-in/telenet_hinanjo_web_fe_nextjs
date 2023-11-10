@@ -55,15 +55,15 @@ export default function ExteranalEvacuationPage() {
     ];
 
     const externalEvacueesListColumns = [
-        { field: "si_no", header: translate(localeJson, 'si_no'),className: "sno_class",sortable: false },
-        { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none' ,className: "sno_class"},
+        { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", sortable: false, textAlign: "center" },
+        { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none', className: "sno_class" },
         { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
         { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "7rem", sortable: false },
         { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
-        { field: "people_count", header: translate(localeJson, 'people_count'), minWidth: "5rem", sortable: false },
+        { field: "people_count", header: translate(localeJson, 'people_count'), minWidth: "5rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "shelter_place", header: translate(localeJson, 'shelter_place'), minWidth: "10rem", sortable: false },
         { field: "mail_address", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
-        { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false },
+        { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "prefecture", header: translate(localeJson, 'prefecture_symbol'), minWidth: "5rem", sortable: false },
         { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem", sortable: false }
     ];
@@ -246,7 +246,7 @@ export default function ExteranalEvacuationPage() {
                                             style: { height: "40px" },
                                             onChange: (e) => setSelectedOption(e.value),
                                             text: translate(localeJson, 'shelter_place'),
-                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3 
+                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
@@ -261,7 +261,7 @@ export default function ExteranalEvacuationPage() {
                                             onChange: (e) => setSelectedFoodSupport(e.value),
                                             text: translate(localeJson, 'food_support'),
                                             custom: "mobile-input",
-                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3 
+                                            disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3
                                         }}
                                         parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
                                     />
