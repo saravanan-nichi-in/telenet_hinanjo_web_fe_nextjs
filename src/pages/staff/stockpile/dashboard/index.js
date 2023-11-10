@@ -66,9 +66,9 @@ function StockpileDashboard() {
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
         { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
-        { field: 'Inspection_date_time', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
+        { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
-        { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
+        { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
         { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
         {
@@ -135,13 +135,15 @@ function StockpileDashboard() {
                         after_count: obj.after_count ?? "",
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
-                        expiry_date: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
+                        expiry_date:obj.expiry_date?new Date(obj.expiry_date):"",
+                        expiryDate: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
                         stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => {bindImageModalData(obj.stockpile_image)}} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
-                        Inspection_date_time: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
+                        Inspection_date_time:obj.Inspection_date_time?new Date(obj.Inspection_date_time):"",
+                        InspectionDateTime: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
                         save_flag: false
                     }
                     preparedList.push(preparedObj);

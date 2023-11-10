@@ -22,6 +22,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
+          toast.dismiss()
           callBackFun()
           toast.error(error?.response?.data?.message, {
             position: "top-right",
@@ -85,7 +86,7 @@ function _checkIn(payload, callBackFun) {
  */
 function _checkOut(payload, callBackFun) {
     axios
-      .post("/user/update/family/checkout", payload)
+      .put("/user/update/family/checkout", payload)
       .then((response) => {
         callBackFun(response.data);
         if (response && response.data) {
@@ -118,7 +119,9 @@ function _checkOut(payload, callBackFun) {
             });
           }
         } else {
-          console.error(error);
+          toast.error(error?.response?.data?.message, {
+            position: "top-right",
+        });
         }
       });
   }

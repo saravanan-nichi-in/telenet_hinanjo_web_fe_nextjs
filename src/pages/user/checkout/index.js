@@ -4,24 +4,20 @@ import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJ
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   Button,
-  InputSwitch,
   InputFloatLabel,
   InputNumberFloatLabel,
   ValidationError,
   NormalTable, RowExpansionTable
 } from "@/components";
-import Link from "next/link";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
 import { Formik } from "formik";
-import { BsFillMicFill } from "react-icons/bs";
 import AudioRecorder from "@/components/audio";
 import { CommonServices, CheckInOutServices } from "@/services";
 import { prefectures } from '@/utils/constant';
 import { useRouter } from "next/router";
+
 export default function Admission() {
   const router = useRouter();
-  const layoutReducer = useSelector((state) => state.layoutReducer);
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const [audioPasswordLoader, setAudioPasswordLoader] = useState(false);
   const [audioNameLoader, setAudioNameLoader] = useState(false);
@@ -58,7 +54,7 @@ export default function Admission() {
   });
 
   const { getText } = CommonServices;
-  const { getList , checkIn } = CheckInOutServices;
+  const { getList , checkOut } = CheckInOutServices;
   const initialValues = { name: "", password: "", familyCode: "" };
 
   const evacueeFamilyDetailColumns = [
@@ -297,7 +293,7 @@ const getPrefectureName = (id) => {
   }
   };
 
-  const isCheckedIn = (res) => {
+  const isCheckedOut = (res) => {
     setLoader(false)
   }
 
@@ -332,7 +328,7 @@ const getPrefectureName = (id) => {
               <div className="col-12">
                 <div className="card">
                   <h5 className="page-header1">
-                    {translate(localeJson, "new_to_admission_procedures")}
+                    {translate(localeJson, "c_checkout_title")}
                   </h5>
                   <hr />
                   <div>
@@ -346,13 +342,13 @@ const getPrefectureName = (id) => {
                             type: "button",
                             rounded: "true",
                             buttonClass: "text-600 ",
-                            text: translate(localeJson, "exit_procedure"),
+                            text: translate(localeJson, "check_out_shelter"),
                             bg: "bg-white",
                             hoverBg: "hover:surface-500 hover:text-white",
                             onClick:()=> {
-                              router.push({
-                              pathname: '/user/checkout',
-                          })},
+                                router.push({
+                                pathname: 'register/member',
+                            })},
                           }}
                           parentClass={"ml-3 mr-3 mt-1"}
                         />
@@ -364,7 +360,7 @@ const getPrefectureName = (id) => {
                           onSubmit={handleSubmit}
                           className="custom-card m-2 shadow-4"
                         >
-                          <div className="page-header2"> {translate(localeJson, "shelter_search")}</div>
+                          <div className="page-header2"> {translate(localeJson, "c_checkout_procedure")}</div>
                           <div className="mt-5">
                             <div className="mb-5  w-12">
                               <div className="flex align-items-center w-12">
@@ -559,29 +555,6 @@ const getPrefectureName = (id) => {
                           </div>
                         </form>
                       </div>
-                      <div className="mt-3 col-12 lg:col-6">
-                        <div className="custom-card m-2 shadow-4">
-                        <div className="page-header2"> {translate(localeJson, "check_in_first")}</div>
-                          <div
-                            className="flex col-12 lg:col-6 mt-3"
-                            style={{
-                              justifyContent: "flex-end",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            <Button
-                              buttonProps={{
-                                type: "submit",
-                                rounded: "true",
-                                text: translate(localeJson, "signup"),
-                                severity:"success"
-                                
-                              }}
-                              parentClass={"ml-3 mr-3 mt-1"}
-                            />
-                          </div>
-                        </div>
-                      </div>
                       {searchFlag&&
                       <div className="mt-3 col-12">
                         <div className="custom-card shadow-4">
@@ -647,14 +620,13 @@ const getPrefectureName = (id) => {
                                 type: "button",
                                 rounded: "true",
                                 severity:"primary",
-                                text: translate(localeJson, "reg_shelter"),
+                                text: translate(localeJson, "checkout_shelter"),
                                 onClick:()=>{
                                   let payload = {
-                                      "family_id" : familyCode,
-                                      "place_id" : layoutReducer?.user?.place?.id
+                                      "family_id" : familyCode
                                   }
                                   setLoader(true)
-                                  checkIn(payload,isCheckedIn)
+                                  checkOut(payload,isCheckedOut)
                                 }
                               }}
                               parentClass={"mt-3"}
