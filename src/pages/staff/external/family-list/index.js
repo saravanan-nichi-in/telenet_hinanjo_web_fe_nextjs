@@ -17,7 +17,7 @@ function ExternalFamilyList() {
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class" },
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class", textAlign: "center" },
         { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'food_required', header: translate(localeJson, 'external_evecuee_list_table_food_required'), minWidth: "8rem", maxWidth: "8rem" },
         {
@@ -29,11 +29,12 @@ function ExternalFamilyList() {
                 }}>
                     {rowData['external_person_count']}
                 </p>
-            )
+            ),
+            textAlign: "right", alignHeader: "center"
         },
         { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "6rem", maxWidth: "6rem" },
+        { field: 'zipcode', header: translate(localeJson, 'external_evecuee_list_table_postal_code'), minWidth: "6rem", maxWidth: "6rem", textAlign: "right", alignHeader: "center" },
         { field: 'prefecture_name', header: translate(localeJson, 'external_evecuee_list_table_prefacture'), minWidth: "6rem", maxWidth: "6rem" },
         { field: 'address', header: translate(localeJson, 'external_evecuee_list_table_address'), minWidth: "15rem", maxWidth: "15rem" },
     ];
@@ -255,4 +256,3 @@ function ExternalFamilyList() {
 }
 
 export default ExternalFamilyList;
-

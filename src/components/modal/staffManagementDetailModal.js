@@ -1,4 +1,4 @@
-import React, { useEffect,useContext, useState } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
@@ -22,15 +22,15 @@ export default function StaffManagementDetailModal(props) {
     };
     const onRegister = (values) => {
         setEditStaffOpen(false);
-    };  
+    };
 
-    const staffDetailData = [{ field: 'name', header: translate(localeJson, 'name')},
-    { field: 'tel', header: translate(localeJson, 'tel')}];
+    const staffDetailData = [{ field: 'name', header: translate(localeJson, 'name') },
+    { field: 'tel', header: translate(localeJson, 'tel'), textAlign: "right", alignHeader: "center" }];
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class"},
+        { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center" },
         { field: 'name', header: translate(localeJson, 'staff_management_detail_login_history_name'), maxWidth: "2rem" },
-        { field: 'login_datetime', header:translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" }];
+        { field: 'login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" }];
 
     // Main Table listing starts
     const { show } = StaffManagementService;
@@ -40,19 +40,19 @@ export default function StaffManagementDetailModal(props) {
             "start": 0,
             "limit": 5
         },
-        "id" : props.staff
+        "id": props.staff
     });
 
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
-    
+
     const getStaffList = () => {
         // Get dashboard list
         show(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data)) {
-                if(response.data.login_history.total > 0) {
+                if (response.data.login_history.total > 0) {
                     const data = response.data.login_history.list;
                     var additionalColumnsArrayWithOldData = [...columnsData];
                     let preparedList = [];
@@ -74,8 +74,8 @@ export default function StaffManagementDetailModal(props) {
                     setTableLoading(false);
                     setList([]);
                 }
-                if(response.data.model) {
-                    setStaffDetail([{name: response.data.model.name, tel: response.data.model.tel}]);
+                if (response.data.model) {
+                    setStaffDetail([{ name: response.data.model.name, tel: response.data.model.tel }]);
                 }
             } else {
                 setTableLoading(false);
@@ -127,7 +127,7 @@ export default function StaffManagementDetailModal(props) {
                 close={onStaffClose}
                 register={onRegister}
                 buttonText={translate(localeJson, 'update')}
-                modalHeaderText= {translate(localeJson, 'edit_staff_management')}
+                modalHeaderText={translate(localeJson, 'edit_staff_management')}
             />
             <div>
                 <Dialog
@@ -157,14 +157,14 @@ export default function StaffManagementDetailModal(props) {
                     }
                 >
                     <div className={`modal-content`}>
-                    <div>
+                        <div>
                             <div className="flex justify-content-center overflow-x-auto">
                                 <NormalTable tableStyle={{ maxWidth: "20rem" }} showGridlines={"true"} columnStyle={{ textAlign: 'center' }} customActionsField="actions" value={staffDetail} columns={staffDetailData} />
                             </div>
                             <div >
-                                <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson,'history_login_staff_management')}</h5>
+                                <h5 className='page-header2 pt-5 pb-1'>{translate(localeJson, 'history_login_staff_management')}</h5>
                                 <div>
-                                <NormalTable
+                                    <NormalTable
                                         lazy
                                         totalRecords={totalCount}
                                         loading={tableLoading}

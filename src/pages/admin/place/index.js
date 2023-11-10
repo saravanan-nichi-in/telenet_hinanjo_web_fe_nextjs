@@ -44,10 +44,10 @@ export default function AdminPlacePage() {
     router.push({
       pathname: `/admin/place/detail`,
       query: { id: rowData.ID },
-    },'/admin/place/detail');
+    }, '/admin/place/detail');
   };
   const columnsData = [
-    { field: "index", header: translate(localeJson, "s_no"), className: "sno_class" },
+    { field: "index", header: translate(localeJson, "s_no"), className: "sno_class", textAlign: "center" },
     {
       field: "evacuation_place",
       header: translate(localeJson, "evacuation_place"),
@@ -70,8 +70,10 @@ export default function AdminPlacePage() {
       field: "evacuation_possible_people",
       header: translate(localeJson, "capacity"),
       minWidth: "10rem",
+      textAlign: "right",
+      alignHeader: "center"
     },
-    { field: "phone_number", header: translate(localeJson, "phone_number") },
+    { field: "phone_number", header: translate(localeJson, "phone_number"), textAlign: "right", alignHeader: "center" },
     {
       field: "status",
       header: translate(localeJson, "status"),
@@ -89,16 +91,15 @@ export default function AdminPlacePage() {
         return (
           <div className="flex flex-wrap">
             <Button buttonProps={{
-              text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-              bg: "bg-red-600 text-white",
-              hoverBg: "hover:bg-red-500 hover:text-white",
+              text: translate(localeJson, 'delete'),
+              buttonClass: "delete-button",
               disabled: rowData.isActive,
               onClick: () => {
                 setId(rowData?.ID)
                 console.log(id, "id")
                 setPlaceEditDialogVisible(true)
               }
-            }} />
+            }} parentClass={"delete-button"} />
           </div>
         )
       },
