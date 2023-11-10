@@ -40,6 +40,7 @@ export default function Supplies() {
       field: "slno",
       header: translate(localeJson, "supplies_slno"),
       className: "sno_class",
+      textAlign: "center"
     },
     {
       field: "name",
@@ -170,89 +171,89 @@ export default function Supplies() {
                 </h5>
                 <hr />
                 <form onSubmit={handleSubmit}>
-                <div>
-                  <h5 className="sub-header">
-                    {translate(localeJson, "supplies_registration")}
-                  </h5>
-                  <div className="mt-3">
-                    <NormalTable
-                      lazy
-                      totalRecords={totalCount}
-                      loading={tableLoading}
-                      stripedRows={true}
-                      className={"custom-table-cell"}
-                      showGridlines={"true"}
-                      value={list}
-                      columns={columnsData}
-                      filterDisplay="menu"
-                      emptyMessage={translate(localeJson, "data_not_found")}
-                    />
-                  </div>
-                  <div className="grid col-12 m-0 pl-0 pr-0">
-                    <div className="mt-3 col-6 pl-0">
-                      <TextAreaFloatLabel
-                        textAreaFloatLabelProps={{
-                          textAreaClass:
-                            "w-full lg:w-full md:w-23rem sm:w-21rem ",
-                          row: 5,
-                          cols: 30,
-                          name: "comment",
-                          placeholder: translate(
-                            localeJson,
-                            "comment_placeholder"
-                          ),
-                          text: translate(localeJson, "comment"),
-                          value: values.comment,
-                          onChange: handleChange,
-                          onBlur:handleBlur
-                        }}
-                        parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                  <div>
+                    <h5 className="sub-header">
+                      {translate(localeJson, "supplies_registration")}
+                    </h5>
+                    <div className="mt-3">
+                      <NormalTable
+                        lazy
+                        totalRecords={totalCount}
+                        loading={tableLoading}
+                        stripedRows={true}
+                        className={"custom-table-cell"}
+                        showGridlines={"true"}
+                        value={list}
+                        columns={columnsData}
+                        filterDisplay="menu"
+                        emptyMessage={translate(localeJson, "data_not_found")}
+                      />
+                    </div>
+                    <div className="grid col-12 m-0 pl-0 pr-0">
+                      <div className="mt-3 col-6 pl-0">
+                        <TextAreaFloatLabel
+                          textAreaFloatLabelProps={{
+                            textAreaClass:
+                              "w-full lg:w-full md:w-23rem sm:w-21rem ",
+                            row: 5,
+                            cols: 30,
+                            name: "comment",
+                            placeholder: translate(
+                              localeJson,
+                              "comment_placeholder"
+                            ),
+                            text: translate(localeJson, "comment"),
+                            value: values.comment,
+                            onChange: handleChange,
+                            onBlur: handleBlur
+                          }}
+                          parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
                         <ValidationError errorBlock={errors.comment && touched.comment && errors.comment} />
-                    </div>
-                    <div className="mt-3 col-6 pr-0">
-                      <TextAreaFloatLabel
-                        textAreaFloatLabelProps={{
-                          textAreaClass:
-                            "w-full lg:w-full md:w-23rem sm:w-21rem ",
-                          row: 5,
-                          cols: 50,
-                          name: "remarks",
-                          text: translate(localeJson, "remarks"),
-                          value: values.remarks,
-                          placeholder: translate(
-                            localeJson,
-                            "remark_placeholder"
-                          ),
-                          onChange: handleChange,
-                          onBlur:handleBlur
-                        }}
-                        parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                      </div>
+                      <div className="mt-3 col-6 pr-0">
+                        <TextAreaFloatLabel
+                          textAreaFloatLabelProps={{
+                            textAreaClass:
+                              "w-full lg:w-full md:w-23rem sm:w-21rem ",
+                            row: 5,
+                            cols: 50,
+                            name: "remarks",
+                            text: translate(localeJson, "remarks"),
+                            value: values.remarks,
+                            placeholder: translate(
+                              localeJson,
+                              "remark_placeholder"
+                            ),
+                            onChange: handleChange,
+                            onBlur: handleBlur
+                          }}
+                          parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
                         <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />
+                      </div>
+                    </div>
+                    <div className="text-center mt-3">
+                      <Button
+                        buttonProps={{
+                          type: "button",
+                          buttonClass: "w-8rem",
+                          severity: "primary",
+                          text: translate(localeJson, "back_to_top"),
+                          onClick: () => router.push("/staff/dashboard"),
+                        }}
+                        parentClass={"inline"}
+                      />
+                      <Button
+                        buttonProps={{
+                          buttonClass: "text-600 w-8rem",
+                          type: "submit",
+                          bg: "bg-white",
+                          hoverBg: "hover:surface-500 hover:text-white",
+                          text: translate(localeJson, "registration"),
+                        }}
+                        parentClass={"inline pl-2"}
+                      />
                     </div>
                   </div>
-                  <div className="text-center mt-3">
-                    <Button
-                      buttonProps={{
-                        type:"button",
-                        buttonClass: "w-8rem",
-                        severity: "primary",
-                        text: translate(localeJson, "back_to_top"),
-                        onClick: () => router.push("/staff/dashboard"),
-                      }}
-                      parentClass={"inline"}
-                    />
-                    <Button
-                      buttonProps={{
-                        buttonClass: "text-600 w-8rem",
-                        type: "submit",
-                        bg: "bg-white",
-                        hoverBg: "hover:surface-500 hover:text-white",
-                        text: translate(localeJson, "registration"),
-                      }}
-                      parentClass={"inline pl-2"}
-                    />
-                  </div>
-                </div>
                 </form>
               </div>
             </div>

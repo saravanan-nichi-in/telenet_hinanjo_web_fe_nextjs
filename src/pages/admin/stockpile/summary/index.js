@@ -58,7 +58,7 @@ function AdminStockpileSummary() {
     const stockPileRowExpansionColumn = [
         { field: "type", header: translate(localeJson, 'product_type') },
         { field: "stock_pile_name", header: translate(localeJson, 'product_name') },
-        { field: "quantity", header: translate(localeJson, 'quantity') },
+        { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "right", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
         { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "5rem" }
@@ -177,8 +177,8 @@ function AdminStockpileSummary() {
                 place_name: values.place_name,
                 place_id: emailSettingValues.place_id
             }
-            
-            getStockPileEmailUpdate(payload,(response)=>{
+
+            getStockPileEmailUpdate(payload, (response) => {
                 setEmailSettingValues(emailData);
                 getSummaryList(getListPayload, onGetStockPileSummaryList);
                 setEmailModal(false);
@@ -399,7 +399,7 @@ function AdminStockpileSummary() {
                             </div>
                         </div>
                         <div>
-                            { !tableLoading && <RowExpansionTable
+                            {!tableLoading && <RowExpansionTable
                                 columnStyle={{ textAlign: 'left' }}
                                 paginator="true"
                                 totalRecords={totalCount}
@@ -416,8 +416,8 @@ function AdminStockpileSummary() {
                                 onRowExpand={expandRows}
                                 paginatorLeft={true}
                                 onPageHandler={(e) => onPaginationChange(e)}
-                            /> }
-                            
+                            />}
+
                         </div>
                     </div>
                 </div>

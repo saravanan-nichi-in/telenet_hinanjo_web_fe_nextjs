@@ -10,7 +10,7 @@ import { NormalTable } from '@/components';
 function ShortageSupplies() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const columnsData = [
-        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem',maxWidth:"15rem", headerClassName: "custom-header", textAlign: 'left' },
+        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header", textAlign: 'left' },
     ]
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -74,7 +74,7 @@ function ShortageSupplies() {
                                     </div>
                                 )}
                             </div>
-                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'left'
+                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'right', alignHeader: "center"
                     };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);

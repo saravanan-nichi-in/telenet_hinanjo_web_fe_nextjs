@@ -32,7 +32,7 @@ export default function AdminManagementDeleteModal(props) {
                             onClick: () => close(),
                         }} parentClass={"inline"} />
                         <Button buttonProps={{
-                            buttonClass: "w-8rem",
+                            buttonClass: "w-8rem ",
                             type: "submit",
                             text: translate(localeJson, 'ok'),
                             severity: "danger",

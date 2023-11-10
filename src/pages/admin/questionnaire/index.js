@@ -40,9 +40,8 @@ export default function Questionnaire() {
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
-                            buttonClass: "ml-2",
-                            severity: "danger"
-                        }} />
+                            buttonClass: "ml-2 delete-button",
+                        }} parentClass={"delete-button"} />
 
                 </div>
             ),
@@ -60,14 +59,16 @@ export default function Questionnaire() {
     ]
 
     const innerColumn = [
-        { field: "Name", header: translate(localeJson, 'name'),body: (rowData) => {
-            if (rowData.Name === 'Master questionnaires') {
-                return translate(localeJson,'master_questionnaire');
-            } else {
-                // Default content or text for other cases
-                return translate(localeJson,'individual_questionnaire');
+        {
+            field: "Name", header: translate(localeJson, 'name'), body: (rowData) => {
+                if (rowData.Name === 'Master questionnaires') {
+                    return translate(localeJson, 'master_questionnaire');
+                } else {
+                    // Default content or text for other cases
+                    return translate(localeJson, 'individual_questionnaire');
+                }
             }
-        } },
+        },
         {
             field: 'actions',
             header: translate(localeJson, 'details_table'),
