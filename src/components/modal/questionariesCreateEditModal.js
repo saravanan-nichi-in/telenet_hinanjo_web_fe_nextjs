@@ -93,7 +93,7 @@ export default function QuestionnairesCreateEditModal(props) {
                                                 value: values.name,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'special_care_name_jp'),
+                                                text: translate(localeJson, 'questionnaires_name_jp'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.name && touched.name && errors.name} />
@@ -105,7 +105,7 @@ export default function QuestionnairesCreateEditModal(props) {
                                                 value: values.name_en,
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, 'special_care_name_en'),
+                                                text: translate(localeJson, 'questionnaires_name_en'),
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
                                             }} parentClass={`${errors.name_en && touched.name_en && 'p-invalid pb-1'}`} />
                                             <ValidationError errorBlock={errors.name_en && touched.name_en && errors.name_en} />
