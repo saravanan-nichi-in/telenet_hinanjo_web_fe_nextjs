@@ -24,7 +24,7 @@
       "material": "物資マスタ管理",
       "stockpile_master_management": "備蓄品マスタ管理",
       "special_care_list": "要配慮者事項",
-      "questionnaire": "個別項目追加表示(世带全体)",
+      "questionnaire": "イベントマスタ管理",
       "individual_questionnaire": "個別項目追加表示(個人ごと)",
       "setting_systems": "環境設定"
     },
@@ -237,7 +237,7 @@
       "add_item": "項目追加",
       "individual_questionaries": "個人ごとの個別項目",
       "master_questionaries": "全体の個別項目",
-      "questionnaire_name": "項目",
+      "questionnaire_name": "イベント名",
       "questionnaire_description": "詳細",
       "action": "アクション",
       "dateFormat": "yy年mm月dd日",
@@ -350,9 +350,12 @@
       "default_shelf_life_max_length": "デフォルト保持期間(日)の値は999 以下である必要です。",
       "item_title_is_required": "項目タイトルは必須です。",
       "option_is_required": "選択肢が必須です。",
-      "questionnaire_name_is_required":" 氏名が必要です。",
+      "questionnaire_name_is_required":"イベント名が必要です。",
       "questionnaire_name_max":"氏名は最大200文字です。",
-      "questionnaire_remarks_is_max_required":" 備考は255文字以内で入力してください。"
+      "questionnaire_remarks_is_max_required":" 備考は255文字以内で入力してください。",
+      "master_questionnaire":"個別項目追加（世帯全体）",
+      "individual_questionnaires":"個別項目追加（個人ごと）",
+      "details_table":"詳細"
     },
     "buttons": {
       "import": "インポート",
@@ -413,7 +416,9 @@
       "inventory_date": "棚卸日",
       "product_type": "種別",
       "product_name": "備蓄品名",
-      "confirmer": "確認者"
+      "confirmer": "確認者",
+      "questionnaires_name_jp":"イベント名",
+      "questionnaires_name_en": "イベント名（英語)"
     },
     "others": {
       "not": "無し",
@@ -510,7 +515,13 @@
       "evacuation_days": "避難日数",
       "do_you_want_to_exit_the_shelter": "退所手続きして良いですか？",
       "staff_support":"うち要配慮者",
-      "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？"
+      "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？",
+      "public_external":"この画面では避難所に行かず",
+      "not_visiting_the_shelter":"自宅避難や車中泊避難をする方の避難者登録を行います。",
+      "which_place_Are_you_planning_to_evacuate":"質問1.避難している場所はどこですか？" ,     
+      "within_city":"市内",
+      "city_outskirts":"市外",
+      "outside_prefecture":"県外"
     },
     "form": {
       "type": "種別",
@@ -534,6 +545,7 @@
       "expiry_date_is_required": "有効期限は必須です。",
       "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。",
       "family_name_required":"氏名や世帯番号を入力してください。",
+      "family_name_max":"氏名は100文字以内で入力してください。",
       "family_code_required":"氏名や世帯番号を入力してください。",
       "family_password_required":"パスワードが必要です。",
       "family_password_min_max":"パスワードは正確に4文字である必要があります。",

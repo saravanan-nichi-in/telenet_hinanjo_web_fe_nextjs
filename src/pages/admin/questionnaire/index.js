@@ -15,6 +15,7 @@ export default function Questionnaire() {
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
 
     const cols = [
+        { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header" ,className: "sno_class", textAlign: "center" },
         { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
         { field: 'Description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header" },
         {
@@ -40,9 +41,8 @@ export default function Questionnaire() {
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
-                            buttonClass: "ml-2",
-                            severity: "danger"
-                        }} />
+                            buttonClass: "ml-2 delete-button",
+                        }} parentClass={"delete-button"} />
 
                 </div>
             ),
@@ -60,10 +60,19 @@ export default function Questionnaire() {
     ]
 
     const innerColumn = [
-        { field: "Name", header: translate(localeJson, 'name') },
+        {
+            field: "Name", header: translate(localeJson, 'name'), body: (rowData) => {
+                if (rowData.Name === 'Master questionnaires') {
+                    return translate(localeJson, 'master_questionnaire');
+                } else {
+                    // Default content or text for other cases
+                    return translate(localeJson, 'individual_questionnaires');
+                }
+            }
+        },
         {
             field: 'actions',
-            header: translate(localeJson, 'details'),
+            header: translate(localeJson, 'details_table'),
             className: "action_class",
             body: (rowData) => {
                 return (
@@ -71,7 +80,7 @@ export default function Questionnaire() {
                         <Button
                             parentStyle={{ display: "inline" }}
                             buttonProps={{
-                                text: translate(localeJson, 'details'),
+                                text: translate(localeJson, 'details_table'),
                                 buttonClass: "text-primary",
                                 bg: "bg-white",
                                 hoverBg: "hover:bg-primary hover:text-white",
@@ -141,7 +150,7 @@ export default function Questionnaire() {
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                         <div>
-                            <RowExpansionTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} rowExpansionField={"orders"} customRowExpansionActionsField={"actions"} innerColumn={innerColumn} columnStyle={{ textAlign: 'left' }} customActionsField="actions" value={admins} outerColumn={cols} />
+                            <RowExpansionTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} rowExpansionField={"orders"} customRowExpansionActionsField={"actions"} innerColumn={innerColumn} customActionsField="actions" value={admins} outerColumn={cols} />
                         </div>
                     </div>
                 </div>

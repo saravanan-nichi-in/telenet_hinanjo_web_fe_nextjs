@@ -87,10 +87,10 @@ function StockpileDashboard() {
 
 
     const columns = [
-        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class" },
+        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
-        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem" },
+        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
         { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },

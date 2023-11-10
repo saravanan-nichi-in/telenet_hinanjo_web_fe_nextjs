@@ -13,3 +13,17 @@
         margin-left: 5px;
     }
 }
+
+.delete-button {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+.delete-button {
+
+    .p-button:enabled:hover,
+    .p-button:not(button):not(a):not(.p-disabled):hover {
+        background-color: $deleteHoverBgColor;
+        color: white;
+    }
+}

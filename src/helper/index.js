@@ -291,6 +291,11 @@ export const importErrorToastDisplay = (response) => {
     }
 }
 
+/**
+ * Generate colors
+ * @param {*} length 
+ * @returns 
+ */
 export const generateColors = (length) => {
     const colors = [];
     const hueIncrement = 360 / length; // Divide the hue spectrum evenly
@@ -305,11 +310,108 @@ export const generateColors = (length) => {
     return colors;
 }
 
+/**
+ * Get number of evacuation days
+ * @param {*} createdDate 
+ * @returns 
+ */
 export const getNumberOfEvacuationDays = (createdDate) => {
     let givenDate = new Date(createdDate);
     let todayDate = new Date();
     let timeDifference = todayDate - givenDate;
     return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 }
+
+/**
+ * Remove duplicate object from array
+ * @param {*} array 
+ * @param {*} key 
+ * @returns 
+ */
+export const removeDuplicatesByKey = (array, key) => {
+    const uniqueKeys = new Set();
+    return array.filter((item) => {
+        const itemKey = item[key];
+        if (!uniqueKeys.has(itemKey)) {
+            uniqueKeys.add(itemKey);
+            return true;
+        }
+        return false;
+    });
+};
+
+/**
+ * Get japanese date & time format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'Asia/Kolkata'
+    };
+
+    const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
+
+    // Extracting individual components from the formatted string
+    const [, year, month, day, hour, minute, second] = formattedJPDateTime.match(/(\d+).(\d+).(\d+). (\d+):(\d+):(\d+)/);
+
+    // Mapping numeric month to its corresponding Japanese representation
+    const japaneseMonths = [
+        '1月', '2月', '3月', '4月', '5月', '6月',
+        '7月', '8月', '9月', '10月', '11月', '12月'
+    ];
+    const japaneseMonth = japaneseMonths[parseInt(month, 10) - 1];
+
+    // Getting the day of the week
+    const dayOfWeek = new Date(dateTime).toLocaleDateString('ja-JP', { weekday: 'long' });
+
+    // Constructing the final Japanese date string
+    const japaneseDateString = `${year}年${japaneseMonth}${day}日 (${dayOfWeek}) ${hour}:${minute}:${second}`;
+
+    return japaneseDateString;
+};
+
+/**
+ * Get english date & time format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateTimeDisplayActualFormat = (dateTime) => {
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'Asia/Kolkata'
+    };
+
+    const formattedENDateTime = new Date(dateTime).toLocaleString('en-US', options);
+
+    // Extracting individual components from the formatted string
+    const [, year, month, day, hour, minute, second] = formattedENDateTime.match(/(\d+).(\d+).(\d+). (\d+):(\d+):(\d+)/);
+
+    // Mapping numeric month to its corresponding English representation
+    const englishMonths = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const englishMonth = englishMonths[parseInt(month, 10) - 1];
+
+    // Getting the day of the week
+    const dayOfWeek = new Date(dateTime).toLocaleDateString('en-US', { weekday: 'long' });
+
+    // Constructing the final English date string
+    const englishDateString = `${year}-${month}-${day} (${dayOfWeek}) ${hour}:${minute}:${second}`;
+
+    return englishDateString;
+};
 
 

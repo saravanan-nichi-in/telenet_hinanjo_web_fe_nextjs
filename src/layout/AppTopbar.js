@@ -214,10 +214,15 @@ const AppTopbar = forwardRef((props, ref) => {
                                     className='header-details-second-date-time-picker-icon'>
                                     <i className="pi pi-clock" />
                                 </div>
+
                             </div>
+                            {userName && (
+                                <div className='header-dropdown-name'>
+                                    {userName}
+                                </div>
+                            )}
                             <DropdownSelect
                                 icon={"pi pi-cog"}
-                                text={userName}
                                 items={settingView}
                             />
                         </div>

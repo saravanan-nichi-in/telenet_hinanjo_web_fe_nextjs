@@ -84,14 +84,12 @@ export default function AdminSpecialCarePage() {
                             },
                         }} />
                         <Button buttonProps={{
-                            text: translate(localeJson, 'delete'), buttonClass: "text-primary",
-                            bg: "bg-red-600 text-white",
-                            hoverBg: "hover:bg-red-500 hover:text-white",
+                            text: translate(localeJson, 'delete'), buttonClass: "delete-button",
                             onClick: () => {
                                 setId(rowData.id)
                                 setSpecialCareCreateDialogVisible(true)
                             }
-                        }} />
+                        }} parentClass={"delete-button"} />
                     </div>
                 )
             }

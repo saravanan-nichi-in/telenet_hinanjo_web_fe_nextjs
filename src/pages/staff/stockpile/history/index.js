@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate, getGeneralDateTimeDisplayFormat } from "@/helper";
+import { getValueByKeyRecursively as translate, getJapaneseDateTimeDisplayActualFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayYYYYMMDDFormat, getEnglishDateDisplayFormat, getGeneralDateTimeDisplayFormat, removeDuplicatesByKey } from "@/helper";
 import { DateCalendarFloatLabel } from '@/components/date&time';
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { InputSelectFloatLabel } from '@/components/dropdown';
@@ -20,13 +20,13 @@ function StockpileHistory() {
     const [productName, setProductName] = useState("");
     const [inCharge, setInCharge] = useState("");
     const columnsData = [
-        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'left' },
+        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center' },
         { field: 'created_at', header: translate(localeJson, 'working_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'inspection_date_time', header: translate(localeJson, 'inventory_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'category', header: translate(localeJson, 'product_type'), headerClassName: "custom-header", sortable: true, minWidth: "5rem", textAlign: 'left' },
         { field: 'product_name', header: translate(localeJson, 'product_name'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
-        { field: 'before_count', header: translate(localeJson, 'quantity_before'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
-        { field: 'after_count', header: translate(localeJson, 'quantity_after'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
+        { field: 'before_count', header: translate(localeJson, 'quantity_before'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
+        { field: 'after_count', header: translate(localeJson, 'quantity_after'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
         { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), headerClassName: "custom-header", minWidth: "7rem", textAlign: 'left' },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", textAlign: 'left' },
@@ -93,7 +93,7 @@ function StockpileHistory() {
                     productTypesArray.push(preparedObj);
                 })
             }
-            setProductTypes(productTypesArray);
+            setProductTypes(removeDuplicatesByKey(productTypesArray, "name"));
         });
     }
 
@@ -105,7 +105,6 @@ function StockpileHistory() {
             place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : ""
         }
         getProductNames(payload, (response) => {
-            console.log(response);
             let productNamesArray = [
                 {
                     name: "--",
@@ -126,7 +125,7 @@ function StockpileHistory() {
                     productNamesArray.push(preparedObj);
                 })
             }
-            setProductNames(productNamesArray);
+            setProductNames(removeDuplicatesByKey(productNamesArray, "name"));
         });
     }
 
@@ -137,6 +136,8 @@ function StockpileHistory() {
         getHistoryList(getHistoryListPayload, onGetHistoryList);
     }
 
+
+
     /**
      * Function will get data & update history list
      * @param {*} response 
@@ -145,21 +146,20 @@ function StockpileHistory() {
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
         var totalCount;
-        console.log(response.data.total);
         if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
             const data = response.data.list;
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
                     number: getHistoryListPayload.filters.start + i + 1,
-                    created_at: obj.created_at,
-                    inspection_date_time: obj.Inspection_date_time,
+                    created_at: obj.created_at ? (locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.created_at) : getEnglishDateTimeDisplayActualFormat(obj.created_at)) : "",
+                    inspection_date_time: obj.Inspection_date_time ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : getEnglishDateDisplayFormat(obj.Inspection_date_time)) : "",
                     category: obj.category,
                     product_name: obj.product_name,
                     before_count: obj.before_count,
                     after_count: obj.after_count,
                     incharge: obj.incharge,
-                    expiry_date: obj.expiry_date,
+                    expiry_date: obj.expiry_date ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : getEnglishDateDisplayFormat(obj.expiry_date)) : "",
                     remarks: obj.remarks
                 }
                 preparedList.push(preparedObj);
