@@ -46,14 +46,18 @@ export default function PublicDashboard() {
                                         },
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard "} />
                                     <Button buttonProps={{
-                                        type: 'submit',
+                                        type: 'button',
                                         rounded: "true",
                                         custom: "userDashboard",
                                         buttonClass: "text-600",
                                         text: translate(localeJson, 'exit'),
                                         bg: "bg-white",
-                                        hoverBg: "hover:bg-primary hover:text-white",
-                                        disabled: true,
+                                        hoverBg: "hover:surface-500 hover:text-white",
+                                        onClick: () => {
+                                            router.push({
+                                                pathname: '/user/checkout',
+                                            })
+                                        },
                                     }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard"} />
                                 </div>
                                 <p className="p-error mt-3 flex justify-content-center" style={{fontWeight:"bold"}}>

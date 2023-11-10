@@ -384,7 +384,7 @@
       "admission": "Admission",
       "exit": "Exit",
       "go_to_staff_screen": "Go to staff screen",
-      "exit_procedure": "Exit procedure"
+      "exit_procedure": "Exit Procedure"
     },
     "footer": {},
     "form": {
@@ -547,10 +547,11 @@
       "inventory_date_is_required": "Inventory is required.",
       "expiry_date_is_required": "Expiry date is required.",
       "expiry_date_must_be_equal_or_greater_than_today": "Expiry date must be a date equal or greater than today date.",
-      "family_name_required":"name or family code is required.",
-      "family_code_required":"name or family code is required.",
-      "family_password_required":"password is required",
-      "family_password_min_max":"password min and max 4 characters",
+      "family_name_required":"Name or Family Code is required.",
+      "family_name_max":"The name must not be greater than 100 characters.",
+      "family_code_required":"Name or Family Code is required.",
+      "family_password_required":"Password is required.",
+      "family_password_min_max":" Password must be 4 characters.",
       "family_password_min":"password input min 4 characters"
     },
     "buttons": {
@@ -576,7 +577,7 @@
       "please_tell_how_many_households": "Please tell us how many households (family members) have evacuated with you, including yourself.",
       "do_not_register_each_member_family_individually": "Note: Do not register each member of the family individually.",
       "qr_Code_scan": "QR Code Scan",
-      "check_in_first":"CheckIn First Times",
+      "check_in_first":"Check-in first times",
       "shelter_search":"Those who came from other shelters",
       "shelter_name":"Name",
       "shelter_password":"Password",
@@ -585,7 +586,7 @@
       "c_people_count": "Count",
       "c_family_code": "Family Code",
       "c_representative": "Representative",
-      "c_refugee_name": "Name (phonetic)",
+      "c_refugee_name": "Name (Phonetic)",
       "c_name": "Name",
       "c_gender": "Gender",
       "c_dob": "DOB",
@@ -603,7 +604,7 @@
       "c_show_expiring_products": "Show expiring products",
       "c_update_isActive_status": "Do you want to change status of the evacuation center?",
       "c_s_no": "S No",
-      "c_representative_number": "Phone Number (representative)",
+      "c_representative_number": "Phone Number (Representative)",
       "c_registered_lang_environment": "Registered Language",
       "c_evacuation_date_time": "Evacuation Date and Time",
       "c_name_kanji": "Name (kanji)",
