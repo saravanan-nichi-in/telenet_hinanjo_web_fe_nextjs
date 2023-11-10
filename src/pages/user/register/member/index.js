@@ -36,7 +36,7 @@ export default function Admission() {
     const [townAssociationColumn, setTownAssociationColumn] = useState([]);
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
   const schema = Yup.object().shape({
-    name: Yup.string().test({
+    name: Yup.string().max(100,translate(localeJson,"family_name_max")).test({
       test: function (value) {
         const { familyCode } = this.parent;
         return Boolean(familyCode) || Boolean(value);
@@ -77,6 +77,7 @@ const familyDetailColumns = [
     { field: 'evacuation_date_time', header: translate(localeJson, 'c_evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
     { field: 'address', header: translate(localeJson, 'c_address'), minWidth: "10rem", textAlign: 'left' },
     { field: 'representative_number', header: translate(localeJson, 'c_representative_number'), minWidth: "10rem", textAlign: 'left' },
+    { field: 'registered_lang_environment', header: translate(localeJson, 'c_registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
 ];
 
 const evacueeFamilyDetailRowExpansionColumns = [
@@ -202,6 +203,26 @@ const getPrefectureName = (id) => {
     }
   };
 
+  useEffect(()=>
+  {
+    scrollToCenter()
+  },[searchFlag])
+
+  const scrollToCenter = () => {
+    if(searchFlag)
+    {
+    const windowHeight = window.innerHeight;
+    const scrollPosition = (windowHeight *1.7)/2;
+
+    // Scroll to the center of the page
+    window.scrollTo({
+      top: scrollPosition,
+      behavior: 'smooth', // You can change this to 'auto' for instant scrolling
+    });
+  }
+  };
+
+
   const getSearchResult = (res) => {
     if (res?.success && !_.isEmpty(res?.data)) {
       const data = res.data.model;
@@ -288,6 +309,7 @@ const getPrefectureName = (id) => {
       setSearchFlag(true)
       setTableLoading(false)
       setLoader(false)
+      scrollToCenter()
   }
   else {
       setSearchFlag(false)
@@ -641,7 +663,7 @@ const getPrefectureName = (id) => {
                                 </div>
                             }
                         </div>
-                        <div>
+                        <div className="flex justify-content-end">
                         <Button
                               buttonProps={{
                                 type: "button",
