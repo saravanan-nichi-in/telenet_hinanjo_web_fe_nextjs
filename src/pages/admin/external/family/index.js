@@ -38,7 +38,7 @@ export default function ExternalEvacuees() {
             borderColor: 'rgb(44, 160, 44)',
         },
         {
-            backgroundColor: 'rgba(214, 39, 40, 0.2)',
+            backgroundColor: 'rgba(214, 39, 40, 1)',
             borderColor: 'rgb(214, 39, 40)',
         }
     ];

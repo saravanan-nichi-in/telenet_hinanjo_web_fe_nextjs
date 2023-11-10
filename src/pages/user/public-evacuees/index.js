@@ -66,7 +66,7 @@ export default function PublicEvacuee() {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
-                        place_name: locale == 'ja' ? obj.placeName : (obj.placeNameEn ? obj.placeNameEn : obj.placeName),
+                        place_name: locale == 'ja' ? (obj.placeName ? obj.placeName : translate(localeJson, "no_place_to_enter")) : (obj.placeNameEn ? obj.placeNameEn : (obj.placeName ? obj.placeName : translate(localeJson, "no_place_to_enter"))),
                         family_id: obj.family_id ?? "",
                         family_code: obj.family_code ?? "",
                         gender: getGenderValue(obj.gender) ?? "",

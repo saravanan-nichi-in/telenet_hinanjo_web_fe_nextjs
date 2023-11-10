@@ -600,7 +600,8 @@
       "c_address": "Address",
       "c_confirm_register":"Are you sure you want to register with this information?",
       "alert_info_for_unsaved_contents": "Is the edited stockpile information not saved yet? is this good ? \n To save, click the [Inventory] button.",
-      "temporary_admission_time": "Temporary Registration Date"
+      "temporary_admission_time": "Temporary Registration Date",
+      "no_place_to_enter": "No Place To Enter"
     },
     "buttons": {
       "continue": "Continue",
