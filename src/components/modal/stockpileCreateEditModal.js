@@ -151,6 +151,7 @@ export default function StockpileCreateEditModal(props) {
                                                     selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     options: props.categories,
                                                     value: values.category,
+                                                    editable: true,
                                                     onChange: (e) => {
                                                         if(e.value=="--") {
                                                             values.category=''
