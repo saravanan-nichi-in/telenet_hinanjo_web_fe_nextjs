@@ -76,6 +76,8 @@ export default function AdminPlacePage() {
     { field: "phone_number", header: translate(localeJson, "phone_number"), textAlign: "right", alignHeader: "center" },
     {
       field: "status",
+      textAlign:"center",
+      alignHeader:"center",
       header: translate(localeJson, "status"),
       body: (rowData) => {
         return action(rowData);
@@ -163,7 +165,11 @@ export default function AdminPlacePage() {
       setTableLoading(false);
       setLoader(false)
     }
+    else{
+    setList([]);
+    setTotalCount(0);
     setTableLoading(false);
+    }
   }
 
   /**

@@ -69,7 +69,7 @@ export default function StaffFamilyDetail() {
     const familyDetailColumns = [
         { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'left' },
+        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'right',alignHeader:"center" },
         { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
     ];
 

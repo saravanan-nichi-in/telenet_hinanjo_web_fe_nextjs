@@ -298,7 +298,9 @@
       "questionnaire_add_event": "Add Event",
       "questionnaire_event_registration": "Event Registration",
       "questionnaire_event_info_edit": "Event Information Edit",
-      "do_you_want_to_change_status_of_the_questionnaire": "Do you want to change status of the questionnaire?"
+      "do_you_want_to_change_status_of_the_questionnaire": "Do you want to change status of the questionnaire?",
+      "staff_information":"Staff information",
+      "event_information":"Event information"
     },
     "validation": {
       "staff_name_required": "Staff name is required",

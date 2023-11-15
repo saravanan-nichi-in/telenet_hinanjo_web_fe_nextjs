@@ -8,3 +8,4 @@ export { default as InputFloatLabel } from './inputFloatLabel';
 export { default as TextAreaFloatLabel } from './textAreaFloatLabel';
 export { default as InputNumberFloatLabel} from './inputNumberFloatLabel'
 export {default as InputLeftRightGroupFloat} from './inputLeftRightGroupFloat'
+export {default as PasswordFloatLabel} from './passwordFloatLabel'

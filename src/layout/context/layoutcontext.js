@@ -4,10 +4,13 @@ import { useRouter } from 'next/router';
 import jpJson from '../../../public/locales/jp/lang.json'
 import enJson from '../../../public/locales/en/lang.json'
 import { CommonServices } from '@/services';
+import { useAppDispatch } from '@/redux/hooks';
+import { setLayout } from "@/redux/layout";
 
 export const LayoutContext = React.createContext();
 
 export const LayoutProvider = (props) => {
+    const dispatch = useAppDispatch();
     const router = useRouter();
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
@@ -63,7 +66,8 @@ export const LayoutProvider = (props) => {
 
         // Fetch system settings details
         getSystemSettingDetails((response) => {
-            console.log(response);
+            const data = response.data.model;
+            dispatch(setLayout(data));
         });
     }, [])
 

@@ -18,6 +18,12 @@ export const AuthenticationAuthorizationService = {
     changePassword: _changePassword,
 };
 
+/**
+ * Login functionality
+ * @param {*} key 
+ * @param {*} values 
+ * @param {*} callBackFun 
+ */
 function _login(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         axios.post('/auth/admin/login', values)
@@ -88,19 +94,29 @@ function _login(key, values, callBackFun) {
     }
 }
 
-function _logout() {
-    const url = window.location.pathname
-    if (url.startsWith('/admin')) {
+/**
+ * Logout functionality
+ * @param {*} key 
+ * @param {*} callBackFun 
+ */
+function _logout(key, callBackFun) {
+    if (key === 'admin') {
         localStorage.removeItem('admin');
         admin.next(null);
-        window.location.href = "/admin/login";
+        callBackFun('admin');
     } else {
         localStorage.removeItem('staff');
         staff.next(null);
-        window.location.href = "/user/list";
+        callBackFun('staff');
     }
 }
 
+/**
+ * Forgot functionality
+ * @param {*} key 
+ * @param {*} values 
+ * @param {*} callBackFun 
+ */
 function _forgot(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         axios.post('/auth/forgot/password', values)
@@ -169,6 +185,12 @@ function _forgot(key, values, callBackFun) {
     }
 }
 
+/**
+ * Reset functionality
+ * @param {*} key 
+ * @param {*} values 
+ * @param {*} callBackFun 
+ */
 function _reset(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         let payload = {
@@ -247,6 +269,12 @@ function _reset(key, values, callBackFun) {
     }
 }
 
+/**
+ * Change password functionality
+ * @param {*} key 
+ * @param {*} values 
+ * @param {*} callBackFun 
+ */
 function _changePassword(key, values, callBackFun) {
     if (key === 'admin' && values && callBackFun) {
         axios.put('/admin/change/password', values)
