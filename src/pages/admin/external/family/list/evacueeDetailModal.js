@@ -43,7 +43,7 @@ export default function EvacueeDetailModal(props) {
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
-                        name_furigana: obj.name_furigana ?  obj.name_furigana : "",
+                        name_furigana: obj.name_furigana ? obj.name_furigana : "",
                         dob: obj.dob ? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob) : "",
                         age: obj.age ? obj.age : "",
                         gender: obj.gender ? obj.gender : "",
