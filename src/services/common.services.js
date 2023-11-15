@@ -89,7 +89,7 @@ function _encrypt(id, key) {
         encryptedId += cipher.final('hex');
         return encryptedId;
     }
-};
+}
 
 /**
  * Decryption functionality
@@ -104,4 +104,4 @@ function _decrypt(encryptedId, key) {
         decryptedId += decipher.final('utf-8');
         return decryptedId;
     }
-};
+}
