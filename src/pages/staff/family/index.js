@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/redux/hooks';
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -8,7 +9,7 @@ import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJ
 import { Button, InputFloatLabel, NormalTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { PersonCountModal } from '@/components/modal';
-import Link from 'next/link';
+import { setFamily } from '@/redux/family';
 
 function StaffFamily() {
     const router = useRouter();
@@ -35,6 +36,7 @@ function StaffFamily() {
         refugee_name: ""
 
     });
+    const dispatch = useAppDispatch();
 
     /* Services */
     const { getList, exportEvacueesCSVList } = StaffEvacuationServices;
@@ -86,7 +88,18 @@ function StaffFamily() {
         { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "right", alignHeader: "center" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem", textAlign: "right", alignHeader: "center" },
         { field: 'is_owner', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem" },
+        { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem",
+            body: (rowData) => (
+                <p className='text-link-class clickable-row' onClick={() => {
+                    dispatch(setFamily({ family_id: rowData.id }));
+                    router.push({
+                        pathname: '/staff/family/family-detail',
+                    });
+                }}>
+                    {rowData['refugee_name']}
+                </p>
+            ),
+        },
         { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
@@ -233,10 +246,7 @@ function StaffFamily() {
                     "family_count": index,
                     "family_code": item.families.family_code,
                     "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "refugee_name": <Link className="text-higlight" href={{
-                        pathname: '/staff/family/family-detail',
-                        query: { family_id: item.family_id }
-                    }}>{item.refugee_name}</Link>,
+                    "refugee_name": item.refugee_name,
                     "name": item.name,
                     "gender": getGenderValue(item.gender),
                     "dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),

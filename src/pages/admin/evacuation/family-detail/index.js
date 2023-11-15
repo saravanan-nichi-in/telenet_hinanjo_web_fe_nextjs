@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
+import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
 import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
@@ -11,7 +12,7 @@ import { prefectures } from '@/utils/constant';
 export default function EvacueeFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
-    const param = router.query;
+    const param = useAppSelector((state) => state.familyReducer.family);
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
