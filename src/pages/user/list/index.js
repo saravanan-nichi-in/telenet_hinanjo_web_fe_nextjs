@@ -75,7 +75,6 @@ export default function PublicEvacuees() {
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
         if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-            console.log(response);
             const data = response.data.model.list;
             // Preparing row data for specific column to display
             if (data.length > 0) {

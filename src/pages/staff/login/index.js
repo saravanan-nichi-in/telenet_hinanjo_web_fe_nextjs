@@ -12,6 +12,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
 import { ImageComponent, NormalLabel, Button, InputLeftRightGroup, ValidationError } from '@/components';
+import { useAppSelector } from "@/redux/hooks";
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
@@ -19,6 +20,7 @@ const LoginPage = () => {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -47,11 +49,6 @@ const LoginPage = () => {
         }
     };
 
-    // Access the data passed from Page 1
-    const data = router?.query;
-
-    console.log(data, "aagagagagag", router);
-
     return (
         <>
             <Formik
@@ -78,9 +75,9 @@ const LoginPage = () => {
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
                                             <ImageComponent imageProps={{
-                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
-                                                width: 150,
-                                                height: 35,
+                                                src: settings_data.image_logo_path ? settings_data.image_logo_path : `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 280,
+                                                height: 45,
                                                 alt: "logo"
                                             }} />
                                         </div>
