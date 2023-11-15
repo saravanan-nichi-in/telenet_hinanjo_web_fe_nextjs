@@ -40,6 +40,11 @@ export default function NormalTable(props) {
     cellClassName,
     isDataSelectable,
     onPageHandler,
+    selectionMode,
+    selection,
+    onSelectionChange,
+    editMode,
+    onRowEditComplete,
     ...restProps
   } = props;
  
@@ -64,7 +69,12 @@ export default function NormalTable(props) {
         onRowToggle={onRowToggle}
         showGridlines={showGridlines}
         stripedRows={stripedRows}
+        selectionMode={selectionMode}
+        selection={selection}
+        onSelectionChange={onSelectionChange}
         responsiveLayout={responsiveLayout}
+        editMode={editMode}
+        onRowEditComplete={onRowEditComplete}
         tableStyle={tableStyle || { minWidth: "50rem" }}
         paginatorClassName={paginatorClassName}
         paginatorLeft={paginatorLeft}
@@ -82,6 +92,9 @@ export default function NormalTable(props) {
           <Column
             key={index}
             field={col.field}
+            selectionMode={col.selectionMode}
+            rowEditor={col.rowEditor}
+            editor={col.editor}
             header={<span>
               {col.header}
               {col.required && <span className="p-error">*</span>}

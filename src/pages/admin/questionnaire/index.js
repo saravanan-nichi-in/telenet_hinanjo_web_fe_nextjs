@@ -22,6 +22,7 @@ export default function Questionnaire() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
+            alignHeader:"center",
             className: "action_class",
             body: (rowData) => (
                 <div>
@@ -52,6 +53,8 @@ export default function Questionnaire() {
             field: "status",
             minWidth: "3.5rem",
             maxWidth: "3.5rem",
+            textAlign:"center",
+            alignHeader:"center",
             header: translate(localeJson, "status"),
             body: (rowData) => {
                 return action(rowData);
@@ -73,6 +76,8 @@ export default function Questionnaire() {
         {
             field: 'actions',
             header: translate(localeJson, 'details_table'),
+            textAlign:"center",
+            alignHeader:"center",
             className: "action_class",
             body: (rowData) => {
                 return (

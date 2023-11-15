@@ -727,8 +727,8 @@
 }
 
 .p-checkbox .p-checkbox-box.p-highlight {
-  border-color: #6366F1;
-  background: #6366F1;
+  border-color: var(--primary-color);
+  background: var(--primary-color);
 }
 
 .p-checkbox .p-checkbox-box.p-highlight:not(.p-disabled):hover {
@@ -738,19 +738,19 @@
 }
 
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
-  border-color: #6366F1;
+  border-color: var(--primary-color);
 }
 
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
-  border-color: #6366F1;
+  /* box-shadow: 0 0 0 0.2rem #C7D2FE; */
+  border-color: var(--primary-color);
 }
 
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
-  border-color: #4338CA;
-  background: #4338CA;
+  border-color: var(--primary-color);
+  background:  var(--primary-color);
   color: #ffffff;
 }
 
@@ -3600,7 +3600,7 @@
 
 .p-datatable .p-datatable-tbody>tr.p-highlight {
   background: #EEF2FF;
-  color: #4338CA;
+  color: var(--primary-color);
 }
 
 .p-datatable .p-datatable-tbody>tr.p-datatable-dragpoint-top>td {
@@ -5334,7 +5334,7 @@
 .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: inset 0 0 0 0.2rem #C7D2FE;
+  /* box-shadow: inset 0 0 0 0.2rem #C7D2FE; */
 }
 
 .p-tabview .p-tabview-nav li:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {

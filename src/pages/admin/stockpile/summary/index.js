@@ -61,7 +61,7 @@ function AdminStockpileSummary() {
         { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "right", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
-        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "5rem" }
+        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center",alignHeader:"center", minWidth: "5rem" }
     ];
 
     const bindImageModalData = (image) => {
