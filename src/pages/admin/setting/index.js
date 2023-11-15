@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -16,7 +15,7 @@ import {
   SelectFloatLabel,
   ValidationError,
 } from "@/components";
-import {InputFile} from '@/components/upload'
+import { InputFile } from '@/components/upload'
 import { mapScaleRateOptions } from "@/utils/constant";
 import { AiOutlineDrag } from "react-icons/ai";
 import { systemSettingServices } from "@/services";
@@ -30,92 +29,92 @@ export default function Setting() {
   const { getList, update } = systemSettingServices;
   const dispatch = useAppDispatch();
 
-  const public_display_order_data= [
+  const public_display_order_data = [
     {
-        "is_visible": "0",
-        "column_id": "0",
-        "column_name": "refugee_name",
-        "display_order": 1
+      "is_visible": "0",
+      "column_id": "0",
+      "column_name": "refugee_name",
+      "display_order": 1
     },
     {
-        "is_visible": "0",
-        "column_id": "1",
-        "column_name": "name",
-        "display_order": 2
+      "is_visible": "0",
+      "column_id": "1",
+      "column_name": "name",
+      "display_order": 2
     },
     {
-        "is_visible": "0",
-        "column_id": "2",
-        "column_name": "age",
-        "display_order": 3
+      "is_visible": "0",
+      "column_id": "2",
+      "column_name": "age",
+      "display_order": 3
     },
     {
-        "is_visible": "0",
-        "column_id": "3",
-        "column_name": "gender",
-        "display_order": 4
+      "is_visible": "0",
+      "column_id": "3",
+      "column_name": "gender",
+      "display_order": 4
     },
     {
-        "is_visible": "0",
-        "column_id": "4",
-        "column_name": "address",
-        "display_order": 5
+      "is_visible": "0",
+      "column_id": "4",
+      "column_name": "address",
+      "display_order": 5
     }
-]
+  ]
 
   const schema = Yup.object().shape({
     map_scale: Yup.string().required(translate(localeJson, "map_scale_required")),
     footer: Yup.string().required(translate(localeJson, "footer_required")).max(
       200,
       translate(localeJson, "footer_display") +
-        translate(localeJson, "max_length_200")
+      translate(localeJson, "max_length_200")
     ),
     type_name_ja: Yup.string().required(
       translate(localeJson, "type_name_jp_required")
     ).max(
       200,
       translate(localeJson, "type_name") +
-        translate(localeJson, "max_length_200")
+      translate(localeJson, "max_length_200")
     ),
     system_name_ja: Yup.string().required(
       translate(localeJson, "system_name_jp_required")
     ).max(
       200,
       translate(localeJson, "system_name") +
-        translate(localeJson, "max_length_200")
+      translate(localeJson, "max_length_200")
     ),
     disclosure_info_ja: Yup.string().required(
       translate(localeJson, "disclosure_info_jp_required")
     ).max(
       255,
       translate(localeJson, "disclosure_information") +
-        translate(localeJson, "max_length_255")
+      translate(localeJson, "max_length_255")
     ),
     type_name_en: Yup.string().required(
       translate(localeJson, "type_name_en_required")
     ).max(
       200,
       translate(localeJson, "type_name") +
-        translate(localeJson, "max_length_200")
+      translate(localeJson, "max_length_200")
     ),
     system_name_en: Yup.string().required(
       translate(localeJson, "system_name_en_required")
     ).max(
       200,
       translate(localeJson, "system_name") +
-        translate(localeJson, "max_length_200")
+      translate(localeJson, "max_length_200")
     ),
     disclosure_info_en: Yup.string().required(
       translate(localeJson, "disclosure_info_en_required")
     ).max(
       255,
       translate(localeJson, "disclosure_information") +
-        translate(localeJson, "max_length_255")
+      translate(localeJson, "max_length_255")
     ),
     latitude: Yup.number().required(translate(localeJson, "latitude_required")),
     default_shelf_life: Yup.number().required(
       translate(localeJson, "default_shell_life_days_required")
-    ).min(1,translate(localeJson,"default_shelf_life_min_length")).max(999,translate(localeJson,"default_shelf_life_max_length")),
+    ).min(1, translate(localeJson, "default_shelf_life_min_length")).max(999, translate(localeJson, "default_shelf_life_max_length")),
     longitude: Yup.number().required(
       translate(localeJson, "longitude_required")
     ),
@@ -194,7 +193,7 @@ export default function Setting() {
     if (res) {
       setLoader(true);
       const data = res.data.model;
-      dispatch(setLayout(data))
+      dispatch(setLayout(data));
       initialValues.map_scale = data?.map_scale + "" || "";
       initialValues.footer = data?.footer || "";
       initialValues.type_name_ja = data?.type_name_ja || "";
@@ -210,7 +209,7 @@ export default function Setting() {
       initialValues.default_shelf_life = data?.default_shelf_life || "",
         initialValues.scheduler_option = data?.scheduler_option == "1" ? true : false || "";
       setLoader(false);
-      let public_data= data?.public_display_order||public_display_order_data
+      let public_data = data?.public_display_order || public_display_order_data
       const PublicData = public_data.map((item) => {
         let namePublic;
         if (item.column_name == "name") {
@@ -259,12 +258,11 @@ export default function Setting() {
   );
 
   const isUpdated = (res) => {
-    if(res)
-    {
+    if (res) {
       onGetSystemListOnMounting()
     }
     setLoader(false)
-    
+
   };
 
   return (
@@ -275,18 +273,18 @@ export default function Setting() {
         onSubmit={(values, actions) => {
           setLoader(true)
           const formData = new FormData();
-           // Assuming values.initial_load_status and values.scheduler_option are boolean
-        formData.append('initial_load_status', values.initial_load_status ? '1' : '0');
-        formData.append('scheduler_option', values.scheduler_option ? '1' : '0');
+          // Assuming values.initial_load_status and values.scheduler_option are boolean
+          formData.append('initial_load_status', values.initial_load_status ? '1' : '0');
+          formData.append('scheduler_option', values.scheduler_option ? '1' : '0');
 
-       for (const key in values) {
-         if (values[key] && key !== 'initial_load_status' && key !== 'scheduler_option') {
-           formData.append(key, values[key]);
-         }
-       }
+          for (const key in values) {
+            if (values[key] && key !== 'initial_load_status' && key !== 'scheduler_option') {
+              formData.append(key, values[key]);
+            }
+          }
           data.forEach((item, index) => {
             for (const key in item) {
-            item.is_visible = item.is_visible==true?"1":"0"
+              item.is_visible = item.is_visible == true ? "1" : "0"
               if (key !== "title") {
                 formData.append(
                   `public_display_order[${index}][${key}]`,
@@ -321,25 +319,23 @@ export default function Setting() {
                       <div>
                         <SelectFloatLabel
                           selectFloatLabelProps={{
-                            id:"map_scale",
+                            id: "map_scale",
                             name: "map_scale",
                             optionLabel: "name",
                             selectClass: "w-full",
                             options: mapScaleRateOptions,
                             value: values.map_scale,
-                            onChange: (e) =>
-                            { 
-                              setFieldValue("map_scale",e.value||"")
-                          },
+                            onChange: (e) => {
+                              setFieldValue("map_scale", e.value || "")
+                            },
                             onBlur: handleBlur,
                             text: translate(
                               localeJson,
                               "overall_map_size_setting"
                             ),
                           }}
-                          parentClass={`w-full ${
-                            errors.map_scale && touched.map_scale && "p-invalid pb-1"
-                          }`}
+                          parentClass={`w-full ${errors.map_scale && touched.map_scale && "p-invalid pb-1"
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -357,9 +353,8 @@ export default function Setting() {
                             name: "footer",
                             inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${
-                            errors.footer && touched.footer && "p-invalid pb-1"
-                          }`}
+                          parentClass={`w-full ${errors.footer && touched.footer && "p-invalid pb-1"
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -385,11 +380,10 @@ export default function Setting() {
                             name: "type_name_ja",
                             inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${
-                            errors.type_name_ja &&
+                          parentClass={`w-full ${errors.type_name_ja &&
                             touched.type_name_ja &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -409,11 +403,10 @@ export default function Setting() {
                             name: "system_name_ja",
                             inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${
-                            errors.system_name_ja &&
+                          parentClass={`w-full ${errors.system_name_ja &&
                             touched.system_name_ja &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -436,11 +429,10 @@ export default function Setting() {
                             name: "disclosure_info_ja",
                             inputClass: "w-full",
                           }}
-                          parentClass={`${
-                            errors.disclosure_info_ja &&
+                          parentClass={`${errors.disclosure_info_ja &&
                             touched.disclosure_info_ja &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -468,11 +460,10 @@ export default function Setting() {
                             name: "type_name_en",
                             inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${
-                            errors.type_name_en &&
+                          parentClass={`w-full ${errors.type_name_en &&
                             touched.type_name_en &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -492,11 +483,10 @@ export default function Setting() {
                             name: "system_name_en",
                             inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${
-                            errors.system_name_en &&
+                          parentClass={`w-full ${errors.system_name_en &&
                             touched.system_name_en &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -519,11 +509,10 @@ export default function Setting() {
                             name: "disclosure_info_en",
                             inputClass: "w-full",
                           }}
-                          parentClass={`${
-                            errors.disclosure_info_en &&
+                          parentClass={`${errors.disclosure_info_en &&
                             touched.disclosure_info_en &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -559,11 +548,10 @@ export default function Setting() {
                             text: translate(localeJson, "latitude"),
                             inputNumberClass: "w-full",
                           }}
-                          parentClass={` ${
-                            errors.latitude &&
+                          parentClass={` ${errors.latitude &&
                             touched.latitude &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -592,11 +580,10 @@ export default function Setting() {
                             text: translate(localeJson, "longitude"),
                             inputNumberClass: "w-full",
                           }}
-                          parentClass={`${
-                            errors.longitude &&
+                          parentClass={`${errors.longitude &&
                             touched.longitude &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -672,11 +659,10 @@ export default function Setting() {
                             text: translate(localeJson, "default_shelf_life_days"),
                             inputNumberClass: "w-full",
                           }}
-                          parentClass={`${
-                            errors.default_shelf_life &&
+                          parentClass={`${errors.default_shelf_life &&
                             touched.default_shelf_life &&
                             "p-invalid pb-1"
-                          }`}
+                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -701,15 +687,14 @@ export default function Setting() {
                         <InputFile
                           inputFileProps={{
                             onChange: (event) => {
-                                setFieldValue("logo", event.currentTarget.files[0]);
+                              setFieldValue("logo", event.currentTarget.files[0]);
                             },
                             name: "logo",
                             accept: ".jpg,.png",
                             onBlur: handleBlur,
                           }}
-                          parentClass={`${
-                            errors.file && touched.file && "p-invalid pb-1"
-                          }`}
+                          parentClass={`${errors.file && touched.file && "p-invalid pb-1"
+                            }`}
                         />
                         <ValidationError
                           errorBlock={

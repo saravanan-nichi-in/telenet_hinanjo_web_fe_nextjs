@@ -3,20 +3,19 @@ import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, DividerComponent, GoogleMapComponent } from "@/components";
+import { Button, GoogleMapComponent } from "@/components";
 import { AdminPlaceDetailService } from "@/helper/adminPlaceDetailService";
-import { PlaceServices } from "@/services";
-import { identity } from "lodash";
+import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector } from "@/redux/hooks";
+
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const [admin, setAdmins] = useState([]);
   const router = useRouter();
   const Place = useAppSelector((state) => state.placeReducer.place);
   const id = Place?.id;
+  const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
-  /* Services */
-  const { details } = PlaceServices;
   const [apiResponse, setApiResponse] = useState({});
   const [placeName, setPlaceName] = useState("");
   const [zipCode, setZipCode] = useState("");
@@ -35,6 +34,10 @@ export default function StaffManagementEditPage() {
   const [totalPerson, setTotalPerson] = useState("");
   const [percent, setPercentage] = useState("");
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+
+  /* Services */
+  const { details } = PlaceServices;
+  const { encrypt } = CommonServices;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,8 +72,8 @@ export default function StaffManagementEditPage() {
     setCapacity(`${model.total_place}人`);
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
-    setUrl(`https://hinanjo.nichi.in/dashboard?hinan=${id}`);
-    setRegisterUrl(`https://hinanjo.nichi.in/temp_register_member?hinan=${id}`);
+    setUrl(`${window?.location?.origin}/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
+    setRegisterUrl(`${window?.location?.origin}/temp_register_member?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
     model.altitude && setAltitude(`${model.altitude}m`);
     setStatus(model.active_flg === 1 ? "有効" : "無効");
     setTotalPerson(model.total_person);
@@ -216,12 +219,12 @@ export default function StaffManagementEditPage() {
               </div>
 
               <div className="col-12 lg:col-5 lg:p-0 lg:pl-2 info-window">
-                    <GoogleMapComponent
-                      initialPosition={{ lat: latitude, lng: longitude }}
-                      height={"455px"}
-                      popoverContent={popoverContent}
-                      mapScale={settings_data?.map_scale}
-                    />
+                <GoogleMapComponent
+                  initialPosition={{ lat: latitude, lng: longitude }}
+                  height={"455px"}
+                  popoverContent={popoverContent}
+                  mapScale={settings_data?.map_scale}
+                />
               </div>
             </div>
             <div
