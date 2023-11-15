@@ -75,25 +75,27 @@ function StockpileDashboard() {
     }
 
     const importFileApi = (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append('file', file);
         formData.append('place_id', layoutReducer?.user?.place?.id);
         StockpileStaffService.importData(formData, () => {
+            setImportStaffStockpileOpen(false);
+            setTableLoading(true);
+            onGetMaterialListOnMounting();
 
         });
-        setImportStaffStockpileOpen(false);
+        
     }
 
 
     const columns = [
         { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
-        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "7rem" },
+        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "12rem" },
         { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
-        { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "8rem" },
+        { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "10rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
-        { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "8rem" },
+        { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "10rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
         { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
         {
@@ -324,7 +326,6 @@ function StockpileDashboard() {
             <AdminManagementImportModal
                 open={importStaffStockpileOpen}
                 close={() => setImportStaffStockpileOpen(false)}
-                register={onRegister}
                 importFile={importFileApi}
                 modalHeaderText={translate(localeJson, 'staff_management_inventory_import_processing')}
             />
