@@ -56,7 +56,7 @@ export default function StaffManagementEditModal(props) {
             maxWidth: "4rem",
             className: "action_class",
         },
-        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header", minWidth: "10rem", maxWidth: "10rem" },
+        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), headerClassName: "custom-header", minWidth: "10rem", maxWidth: "10rem" },
     ]
 
     useEffect(() => {
@@ -197,19 +197,19 @@ export default function StaffManagementEditModal(props) {
                                             <div className="mt-5">
 
                                                 <div className="flex justify-content-center overflow-x-auto">
-                                                            <NormalTable
-                                                                className={"custom-table-cell"}
-                                                                selection={selectedProducts}
-                                                                onSelectionChange={(e) => setSelectedProducts(e.value)}
-                                                                selectionMode={rowClick ? null : "checkbox"}
-                                                                paginator={"true"}
-                                                                tableStyle={{ maxWidth: "30rem" }}
-                                                                paginatorLeft={true}
-                                                                showGridlines={"true"}
-                                                                value={admins}
-                                                                columns={columns}
-                                                                filterDisplay="menu"
-                                                            />
+                                                    <NormalTable
+                                                        className={"custom-table-cell"}
+                                                        selection={selectedProducts}
+                                                        onSelectionChange={(e) => setSelectedProducts(e.value)}
+                                                        selectionMode={rowClick ? null : "checkbox"}
+                                                        paginator={"true"}
+                                                        tableStyle={{ maxWidth: "30rem" }}
+                                                        paginatorLeft={true}
+                                                        showGridlines={"true"}
+                                                        value={admins}
+                                                        columns={columns}
+                                                        filterDisplay="menu"
+                                                    />
                                                 </div>
                                             </div>
                                         </TabPanel>
