@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
+import { useRouter } from 'next/router'
+import { useAppDispatch } from '@/redux/hooks';
 
 import { getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -7,11 +9,12 @@ import { Button, NormalTable } from '@/components';
 import { InputFloatLabel } from '@/components/input';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { EvacuationServices } from '@/services/evacuation.services';
-import Link from 'next/link';
+import { setFamily } from '@/redux/family';
 
 export default function EvacuationPage() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [familyCount, setFamilyCount] = useState(0);
+    const router = useRouter();
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
@@ -34,6 +37,7 @@ export default function EvacuationPage() {
             refugee_name: ""
         }
     });
+    const dispatch = useAppDispatch();
 
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', className: "sno_class" },
@@ -41,7 +45,20 @@ export default function EvacuationPage() {
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "right", alignHeader: "center", minWidth: "6rem" },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
-        { field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem", sortable: false, textAlign: 'left' },
+        {
+            field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem",
+            sortable: false, textAlign: 'left',
+            body: (rowData) => (
+                <p className='text-link-class clickable-row' onClick={() => {
+                    dispatch(setFamily({ family_id: rowData.id }));
+                    router.push({
+                        pathname: '/admin/evacuation/family-detail',
+                    });
+                }}>
+                    {rowData['refugee_name']}
+                </p>
+            ),
+        },
         { field: "name", header: translate(localeJson, 'name_kanji'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' },
@@ -142,10 +159,7 @@ export default function EvacuationPage() {
                     "family_count": index,
                     "family_code": item.families.family_code,
                     "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "refugee_name": <Link className="text-higlight" href={{
-                        pathname: '/admin/evacuation/family-detail',
-                        query: { family_id: item.family_id }
-                    }}>{item.refugee_name}</Link>,
+                    "refugee_name": item.refugee_name,
                     "name": item.name,
                     "gender": getGenderValue(item.gender),
                     "dob": getJapaneseDateDisplayFormat(item.dob),
