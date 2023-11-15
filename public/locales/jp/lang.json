@@ -296,7 +296,9 @@
       "questionnaire_add_event":"イベント追加",
       "questionnaire_event_registration":"イベント登録",
       "questionnaire_event_info_edit":"イベント登録",
-      "do_you_want_to_change_status_of_the_questionnaire":"イベントの状態を変更しますか？"
+      "do_you_want_to_change_status_of_the_questionnaire":"イベントの状態を変更しますか？",
+      "staff_information":"スタッフ情報",
+      "event_information":"イベント情報"
     },
     "validation": {
       "admin_name_required": "管理者名が必要です。",
