@@ -165,7 +165,11 @@ export default function AdminPlacePage() {
       setTableLoading(false);
       setLoader(false)
     }
+    else{
+    setList([]);
+    setTotalCount(0);
     setTableLoading(false);
+    }
   }
 
   /**
