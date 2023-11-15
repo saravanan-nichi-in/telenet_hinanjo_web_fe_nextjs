@@ -196,7 +196,7 @@ const AppTopbar = forwardRef((props, ref) => {
                 }}>
                     {layoutConfig.menuMode === 'static' && (
                         <div className='hamburger'>
-                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button pt-1" onClick={onMenuToggle}>
+                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button" onClick={onMenuToggle}>
                                 <i className="pi pi-bars" />
                             </button>
                         </div>
@@ -223,7 +223,6 @@ const AppTopbar = forwardRef((props, ref) => {
                             )}
                             <DropdownSelect
                                 icon={"pi pi-cog"}
-                                parentClass={"pt-1"}
                                 items={settingView}
                             />
                         </div>

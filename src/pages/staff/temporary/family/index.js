@@ -85,7 +85,7 @@ function TemporaryRegistrants() {
             field: 'actions',
             header: translate(localeJson, 'action'),
             textAlign: "center",
-            minWidth: "7rem",
+            minWidth: "10rem",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{

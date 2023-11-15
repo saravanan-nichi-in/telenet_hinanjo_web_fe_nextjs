@@ -81,7 +81,7 @@ export default function StaffFamilyDetail() {
 
     const familyAdmissionColumns = [
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
-        { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem" },
+        { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
     ];

@@ -17,7 +17,7 @@ export default function StaffStockpileEdit(props) {
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'number_fieldmaterial_page_create_update_name_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'material_page_create_update_name_max')),
@@ -128,6 +128,7 @@ export default function StaffStockpileEdit(props) {
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 options: props.categories,
                                                 value: values.category,
+                                                disabled: true,
                                                 onChange: (e) => {
                                                     if (e.value == "--") {
                                                         values.category = ''
@@ -147,6 +148,7 @@ export default function StaffStockpileEdit(props) {
                                                 spanText: "*",
                                                 spanClass: "p-error",
                                                 value: values.product_name,
+                                                disabled: true,
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,
@@ -196,7 +198,7 @@ export default function StaffStockpileEdit(props) {
                                                     spanClass: "p-error",
                                                     onChange: (evt) => {
                                                         setFieldValue(
-                                                          "inventoryDate",
+                                                          "Inspection_date_time",
                                                           evt.target.value
                                                         );
                                                       },

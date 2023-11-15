@@ -25,6 +25,7 @@ export default function SelectFloatLabel(props) {
         text,
         spanClass,
         spanText,
+        editable,
         ...restProps
     } = selectFloatLabelProps;
     const isFloating = value || value === ""; // Check if value is provided
@@ -44,6 +45,7 @@ export default function SelectFloatLabel(props) {
                 onBlur={onBlur}
                 readOnly={readOnly}
                 disabled={disabled}
+                editable={editable}
                 {...restProps}
             />
             <label htmlFor={inputId}>{text}<span className={spanClass}>{spanText}</span></label>
