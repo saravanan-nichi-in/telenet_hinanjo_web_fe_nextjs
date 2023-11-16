@@ -56,8 +56,8 @@ function AdminStockpileSummary() {
         { field: "notification_email", header: translate(localeJson, 'notification_email'), minWidth: "10rem" },
     ]
     const stockPileRowExpansionColumn = [
-        { field: "type", header: translate(localeJson, 'product_type') },
-        { field: "stock_pile_name", header: translate(localeJson, 'product_name') },
+        { field: "type", header: translate(localeJson, 'product_type') ,minWidth:"7rem",maxWidth:"7rem"},
+        { field: "stock_pile_name", header: translate(localeJson, 'product_name'),minWidth:"10rem",maxWidth:"10rem" },
         { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "right", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
