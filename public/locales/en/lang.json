@@ -525,7 +525,13 @@
       "outside_prefecture": "Outside Prefecture",
       "public_external": "Registration for Evacuees",
       "not_visiting_the_shelter": "not visiting the shelter, those who have opted to stay in the car or at home, etc.",
-      "which_place_Are_you_planning_to_evacuate": "1. Which place are you planning to evacuate?"
+      "which_place_Are_you_planning_to_evacuate": "1. Which place are you planning to evacuate?",
+      "assistance_respect_food":"2. Do you need assistance with respect to food",
+      "shelter_question":"3. Please select the shelter from where you are planning to receive relief supplies such as food.",
+      "enter_current_address":"Please enter your current address. (the address listed on your resident card)",
+      "mail_address_for_reference":"Email address (for reference purpose)",
+      "out_side_city_question":" Please enter the specific location. (home, relative s house, overnight stay in the car, etc)",
+      "c_required":"This is a required item."
     },
     "form": {
       "type": "type",
@@ -619,14 +625,18 @@
       "c_confirm_register": "Are you sure you want to register with this information?",
       "alert_info_for_unsaved_contents": "Is the edited stockpile information not saved yet? is this good ? \n To save, click the [Inventory] button.",
       "temporary_admission_time": "Temporary Registration Date",
-      "no_place_to_enter": "No Place To Enter"
+      "no_place_to_enter": "No Place To Enter",
+      "c_name_furigana": "Name (phonetic)"
     },
     "buttons": {
       "continue": "Continue",
       "mem_search": "Search",
       "checkout_shelter": "The above information will leave for you",
       "reg_shelter": "Enter the Shelter",
-      "check_out_shelter": "For those who are new to admission procedures"
+      "check_out_shelter": "For those who are new to admission procedures",
+      "c_yes": "Yes",
+      "c_no": "No",
+      "c_enter_evacuee":"Enter evacuee"
     }
   },
   "lang_others": {
