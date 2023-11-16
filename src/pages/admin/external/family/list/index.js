@@ -61,7 +61,7 @@ export default function ExteranalEvacuationPage() {
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", sortable: false, textAlign: "center" },
         { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none', className: "sno_class" },
         { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
-        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "7rem", sortable: false },
+        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "10rem",maxWidth:"10rem", sortable: false },
         { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
         {
             field: "people_count", header: translate(localeJson, 'people_count'),
