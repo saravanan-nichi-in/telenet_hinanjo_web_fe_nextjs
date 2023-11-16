@@ -6,21 +6,47 @@ import _ from 'lodash';
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button } from "@/components";
-import { AuthenticationAuthorizationService } from '@/services';
+import { AuthenticationAuthorizationService, UserDashboardServices, CommonServices } from '@/services';
+import { useAppDispatch } from '@/redux/hooks';
+import { setUserDetails } from '@/redux/layout';
 
 export default function PublicDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
+    const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
-    // useEffect(() => {
-    //     setTableLoading(true);
-    //     const fetchData = async () => {
-    //         await getPublicEvacueesList();
-    //     };
-    //     fetchData();
-    // }, [locale, getListPayload]);
+    /* Services */
+    const { getListByID } = UserDashboardServices;
+    const { decrypt } = CommonServices;
+
+    useEffect(() => {
+        updatePlaceDetails();
+    }, []);
+
+    /**
+     * Update place details in redux / Place ID
+     */
+    const updatePlaceDetails = () => {
+        // Get the URLSearchParams object from the window location
+        const queryParams = new URLSearchParams(window.location.search);
+        let key = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
+        let decryptedData = decrypt(queryParams.get('hinan'), key);
+        if (decryptedData) {
+            let payload = {
+                id: decryptedData
+            }
+            getListByID(payload, (response) => {
+                if (response && response.data) {
+                    let obj = response.data.model;
+                    let payload = Object.assign({}, layoutReducer?.user);
+                    payload['place'] = obj;
+                    dispatch(setUserDetails(payload));
+                }
+            })
+        }
+    }
 
     return (
         <div>
