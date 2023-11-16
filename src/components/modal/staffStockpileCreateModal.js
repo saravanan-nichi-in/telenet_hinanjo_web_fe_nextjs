@@ -134,13 +134,16 @@ export default function StaffStockpileCreateModal(props) {
                                             <SelectFloatLabel selectFloatLabelProps={{
                                                 inputId: "category",
                                                 spanText: "*",
+                                                editable:true,
                                                 spanClass: "p-error",
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 options: props.categories,
                                                 value: values.category,
                                                 onChange: (e) => {
-                                                    values.category = e.value;
-                                                    onCategoryChange(values.category);
+                                                    setFieldValue('category', e.value);
+                                                    onCategoryChange(e.value);
+                                                    // values.category = e.value;
+                                                    // onCategoryChange(values.category);
                                                 },
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, "stockpile_management_create_edit_field_category"),
