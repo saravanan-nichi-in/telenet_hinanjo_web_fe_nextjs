@@ -63,7 +63,8 @@ function ShortageSupplies() {
             if (dynamicColumns) {
                 dynamicColumns.map((obj, i) => {
                     let preparedColumnObjToMerge = {
-                        field: obj.id, header: () => (
+                        field: obj.id, 
+                        header: (
                             <div className='table_header_flexColumn'>
                                 <div>
                                     {obj.name}
@@ -74,7 +75,8 @@ function ShortageSupplies() {
                                     </div>
                                 )}
                             </div>
-                        ), minWidth: "10rem", headerClassName: "custom-header", textAlign: 'right', alignHeader: "center"
+                        ), 
+                        minWidth: "10rem", headerClassName: "custom-header", textAlign: 'right', alignHeader: "center"
                     };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
