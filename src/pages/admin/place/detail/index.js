@@ -72,8 +72,8 @@ export default function StaffManagementEditPage() {
     setCapacity(`${model.total_place}人`);
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
-    setUrl(`${window?.location?.origin}/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
-    setRegisterUrl(`${window?.location?.origin}/temp_register_member?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
+    setUrl(`${window?.location?.origin}/user/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
+    setRegisterUrl(`${window?.location?.origin}/user/temp_register_member?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
     model.altitude && setAltitude(`${model.altitude}m`);
     setStatus(model.active_flg === 1 ? "有効" : "無効");
     setTotalPerson(model.total_person);

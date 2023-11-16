@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
@@ -13,6 +13,14 @@ export default function PublicDashboard() {
     const router = useRouter();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+
+    // useEffect(() => {
+    //     setTableLoading(true);
+    //     const fetchData = async () => {
+    //         await getPublicEvacueesList();
+    //     };
+    //     fetchData();
+    // }, [locale, getListPayload]);
 
     return (
         <div>
