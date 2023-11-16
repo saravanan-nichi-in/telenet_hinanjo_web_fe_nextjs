@@ -8,7 +8,7 @@ import { Button, NormalTable, RowExpansionTable } from '@/components';
 import { DeleteModal, QuestionnairesCreateEditModal } from '@/components/modal';
 
 export default function Questionnaire() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { locale,localeJson, setLoader } = useContext(LayoutContext);
     const [admins, setAdmins] = useState([]);
     const router = useRouter();
     const [registerModalAction, setRegisterModalAction] = useState('create');
@@ -16,12 +16,26 @@ export default function Questionnaire() {
 
     const cols = [
         { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header" ,className: "sno_class", textAlign: "center" },
-        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
-        { field: 'Description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header" },
+        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header", body: (rowData) => {
+            if (rowData.Name === 'Flood') {
+                return locale == "ja" ? "地震":"Earthquake"
+            } else {
+                return locale == "ja" ? "津波":"Tsunami"
+            }
+        } },
+        { field: 'Description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header", body: (rowData) => {
+            if (rowData.Description === 'FloodQuestionnaires') {
+                return locale == "ja" ? "	この巨大地震は、869年に発生した三陸地震のメカニズムの再発であり、その規模は少なくとも8.4Mwであると推定されている":"This massive earthquake is a recurrence of the Sanriku earthquake that occurred in the year 869, and its magnitude is estimated to be at least 8.4 Mw."
+            } else {
+                // Default content or text for other cases
+                return locale == "ja" ? "厳戒態勢":"High alert"
+            }
+        } },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
+            alignHeader:"center",
             className: "action_class",
             body: (rowData) => (
                 <div>
@@ -52,6 +66,8 @@ export default function Questionnaire() {
             field: "status",
             minWidth: "3.5rem",
             maxWidth: "3.5rem",
+            textAlign:"center",
+            alignHeader:"center",
             header: translate(localeJson, "status"),
             body: (rowData) => {
                 return action(rowData);
@@ -73,6 +89,8 @@ export default function Questionnaire() {
         {
             field: 'actions',
             header: translate(localeJson, 'details_table'),
+            textAlign:"center",
+            alignHeader:"center",
             className: "action_class",
             body: (rowData) => {
                 return (

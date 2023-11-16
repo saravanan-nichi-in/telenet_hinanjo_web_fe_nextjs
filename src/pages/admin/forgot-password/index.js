@@ -9,10 +9,13 @@ import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
+import { useAppSelector } from "@/redux/hooks";
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
+    // Getting storage data with help of reducers
+    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -65,9 +68,9 @@ const ForgotPasswordPage = () => {
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
                                             <ImageComponent imageProps={{
-                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
-                                                width: 150,
-                                                height: 35,
+                                                src: settings_data.image_logo_path ? settings_data.image_logo_path : `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 280,
+                                                height: 45,
                                                 alt: "logo"
                                             }} />
                                         </div>

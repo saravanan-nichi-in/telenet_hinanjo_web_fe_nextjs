@@ -117,6 +117,10 @@ const AppMenu = () => {
                         icon: <BsHouseGearFill size={20} />,
                         to: '/admin/place',
                         active: router.pathname.startsWith('/admin/place')
+                    }, {
+                        label: translate(localeJson, 'questionnaire'),
+                        icon: <BiSolidAddToQueue size={20} />,
+                        to: '/admin/questionnaire'
                     },
                     {
                         label: translate(localeJson, 'material'),
@@ -132,11 +136,6 @@ const AppMenu = () => {
                         icon: <PiHandTapFill size={20} />,
                         to: '/admin/special/care'
                     }, {
-                        label: translate(localeJson, 'questionnaire'),
-                        icon: <BiSolidAddToQueue size={20} />,
-                        to: '/admin/questionnaire'
-                    },
-                    {
                         label: translate(localeJson, 'setting_systems'),
                         icon: <RiFileSettingsFill size={20} />,
                         to: '/admin/setting'

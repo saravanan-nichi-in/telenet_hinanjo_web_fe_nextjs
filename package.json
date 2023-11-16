@@ -13,6 +13,9 @@
     "test:cypress": "cypress run --record --key $CYPRESS_RECORD_KEY",
     "cypress": "cypress open"
   },
+  "engines": {
+    "node": ">=18.16.1"
+  },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
     "@react-google-maps/api": "^2.19.2",

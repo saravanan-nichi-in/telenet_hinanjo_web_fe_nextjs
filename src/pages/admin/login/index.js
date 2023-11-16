@@ -11,14 +11,14 @@ import { setAdminValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ImageComponent, NormalLabel, Button, ValidationError, InputLeftRightGroup } from '@/components';
-import { setLayout } from "@/redux/layout";
-import { systemSettingServices } from "@/services";
+import { useAppSelector } from "@/redux/hooks";
 
 const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { getList } = systemSettingServices;
+    // Getting storage data with help of reducers
+    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
@@ -43,18 +43,9 @@ const LoginPage = () => {
             dispatch(setAdminValue({
                 admin: values.data
             }));
-            getList(fetchSettingData)
             router.push("/admin/dashboard");
         }
     };
-
-    const fetchSettingData = (res) => {
-        if (res) {
-            const data = res.data.model;
-            dispatch(setLayout(data))
-        }
-
-    }
 
     return (
         <>
@@ -82,9 +73,9 @@ const LoginPage = () => {
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-content-center w-100 mt-3">
                                             <ImageComponent imageProps={{
-                                                src: `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
-                                                width: 150,
-                                                height: 35,
+                                                src: settings_data.image_logo_path ? settings_data.image_logo_path : `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
+                                                width: 280,
+                                                height: 45,
                                                 alt: "logo"
                                             }} />
                                         </div>

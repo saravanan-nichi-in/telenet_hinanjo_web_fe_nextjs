@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
 import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
@@ -25,7 +26,7 @@ export default function StaffFamilyDetail() {
     const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
-        family_id: router.query.family_id
+        family_id: useAppSelector((state) => state.familyReducer.family.family_id)
     };
 
     /* Services */
@@ -68,7 +69,7 @@ export default function StaffFamilyDetail() {
     const familyDetailColumns = [
         { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'left' },
+        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'right',alignHeader:"center" },
         { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
     ];
 
@@ -82,8 +83,8 @@ export default function StaffFamilyDetail() {
     const familyAdmissionColumns = [
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
-        { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
+        { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "12rem", textAlign: 'left' },
+        { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "12rem", textAlign: 'left' },
     ];
 
     const getGenderValue = (gender) => {

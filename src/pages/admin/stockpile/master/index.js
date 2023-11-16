@@ -46,6 +46,7 @@ export default function AdminStockPileMaster() {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
             minWidth: "5rem",
+            alignHeader:"center",
             body: (rowData) => (
                 <div style={{ textAlign: "center" }}>
                     {(rowData.stockpile_image && rowData.stockpile_image != "") ?
@@ -62,6 +63,7 @@ export default function AdminStockPileMaster() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
+            alignHeader:"center",
             minWidth: "5rem",
             className: "action_class",
             body: (rowData) => (
@@ -331,6 +333,7 @@ export default function AdminStockPileMaster() {
                                                 inputId: "category_search",
                                                 selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
                                                 options: categories,
+                                                editable:true,
                                                 value: selectedCategory,
                                                 onChange: (e) => {
                                                     if (e.value == "--") {

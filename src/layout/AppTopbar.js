@@ -11,10 +11,13 @@ import { AuthenticationAuthorizationService } from '@/services';
 import { DropdownSelect, ImageComponent } from '@/components';
 import { ChangePasswordModal } from '@/components/modal';
 import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from '@/redux/hooks';
+import { setAdminValue, setStaffValue } from '@/redux/auth';
 
 const AppTopbar = forwardRef((props, ref) => {
     const { locale, localeJson, layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
     const router = useRouter();
+    const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const menubuttonRef = useRef(null);
@@ -101,7 +104,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         </div>
                     </Menu.Item>
                     <Menu.Divider />
-                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout('admin', onLogoutSuccess)}>
                         <div>
                             {translate(localeJson, 'logout')}
                         </div>
@@ -112,7 +115,7 @@ const AppTopbar = forwardRef((props, ref) => {
             {url.startsWith('/staff') && (
                 <>
                     <Menu.Divider />
-                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout('staff', onLogoutSuccess)}>
                         <div>
                             {translate(localeJson, 'logout')}
                         </div>
@@ -142,6 +145,12 @@ const AppTopbar = forwardRef((props, ref) => {
         };
     }, []);
 
+    useImperativeHandle(ref, () => ({
+        menubutton: menubuttonRef.current,
+        topbarmenu: topbarmenuRef.current,
+        topbarmenubutton: topbarmenubuttonRef.current
+    }));
+
     /**
      * Layout update
      */
@@ -165,11 +174,23 @@ const AppTopbar = forwardRef((props, ref) => {
         setChangePasswordOpen(false);
     };
 
-    useImperativeHandle(ref, () => ({
-        menubutton: menubuttonRef.current,
-        topbarmenu: topbarmenuRef.current,
-        topbarmenubutton: topbarmenubuttonRef.current
-    }));
+    /**
+     * Logout success
+     * @param key
+     */
+    const onLogoutSuccess = async (key) => {
+        if (key === 'admin') {
+            await router.push('/admin');
+            dispatch(setAdminValue({
+                admin: {}
+            }));
+        } else {
+            await router.push('/user/list');
+            dispatch(setStaffValue({
+                staff: {}
+            }));
+        }
+    }
 
     return (
         <React.Fragment>

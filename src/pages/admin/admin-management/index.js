@@ -13,7 +13,7 @@ export default function AdminManagementPage() {
         { field: 'number', header: translate(localeJson, 's_no'), minWidth: "3rem", headerClassName: "custom-header", className: "sno_class", textAlign: "center" },
         { field: 'name', header: translate(localeJson, 'name'), minWidth: "15rem", headerClassName: "custom-header", textAlign: "left" },
         { field: 'email', header: translate(localeJson, 'address_email'), headerClassName: "custom-header", textAlign: "left" },
-        { field: 'actions', header: translate(localeJson, 'common_action'), headerClassName: "custom-header", className: "action_class", textAlign: "center" },
+        { field: 'actions', header: translate(localeJson, 'common_action'), headerClassName: "custom-header", className: "action_class", textAlign: "center",alignHeader:"center" },
     ];
     const [importOpen, setImportOpen] = useState(false);
     const [exportPayload, setExportPayload] = useState({

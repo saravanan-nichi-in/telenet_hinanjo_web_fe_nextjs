@@ -22,7 +22,7 @@ export default function PublicEvacuees() {
         { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", minWidth: "10rem", textAlign: 'left' },
         { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", minWidth: "6rem" },
         { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "right", alignHeader: "center" },
-        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center' }
+        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center',alignHeader:"center"}
     ];
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -75,7 +75,6 @@ export default function PublicEvacuees() {
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
         if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-            console.log(response);
             const data = response.data.model.list;
             // Preparing row data for specific column to display
             if (data.length > 0) {
