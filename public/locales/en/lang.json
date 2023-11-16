@@ -279,7 +279,7 @@
           "dec": "Dec"
         }
       },
-      "evacuation_center_management_system_list": "Evacuation center management system List",
+      "evacuation_center_management_system_list": "List of Evacuation Center Management System",
       "place_name_list": "Place Name",
       "address_public_evacuees": "Address",
       "place_capacity": "Place Capacity",
@@ -299,10 +299,8 @@
       "questionnaire_event_registration": "Event Registration",
       "questionnaire_event_info_edit": "Event Information Edit",
       "do_you_want_to_change_status_of_the_questionnaire": "Do you want to change status of the questionnaire?",
-      "staff_information":"Staff information",
-      "event_information":"Event information",
-      "earthquake":"Earthquake",
-      "tsunami":"Tsunami"
+      "staff_information": "Staff information",
+      "event_information": "Event information"
     },
     "validation": {
       "staff_name_required": "Staff name is required",
@@ -359,7 +357,7 @@
       "option_is_required": "Choice is required",
       "questionnaire_name_is_required": "Event Name is required.",
       "questionnaire_name_max": "Event Name should be 200 characters or less.",
-      "questionnaire_name_en_max":"Event Name (English) should be 200 characters or less.",
+      "questionnaire_name_en_max": "Event Name (English) should be 200 characters or less.",
       "questionnaire_remarks_max_required": "Remarks must be 255 characters or less.",
       "master_questionnaire": "Master",
       "individual_questionnaires": "Individual",
