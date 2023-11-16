@@ -80,7 +80,7 @@ export default function ExteranalEvacuationPage() {
         { field: "mail_address", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
         { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "prefecture", header: translate(localeJson, 'prefecture_symbol'), minWidth: "5rem", sortable: false },
-        { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem", sortable: false }
+        { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem"}
     ];
 
     /* Services */
@@ -318,6 +318,7 @@ export default function ExteranalEvacuationPage() {
                             rows={getListPayload.filters.limit}
                             paginatorLeft={true}
                             onPageHandler={(e) => onPaginationChange(e)}
+                            parentClass={"external-family-table-border"}
                         />
 
                         <div className='mt-3 flex justify-content-center'>

@@ -333,6 +333,7 @@ export default function AdminStockPileMaster() {
                                                 inputId: "category_search",
                                                 selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
                                                 options: categories,
+                                                editable:true,
                                                 value: selectedCategory,
                                                 onChange: (e) => {
                                                     if (e.value == "--") {

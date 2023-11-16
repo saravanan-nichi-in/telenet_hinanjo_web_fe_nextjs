@@ -98,22 +98,22 @@ function TemporaryRegistrants() {
                 </div>
             ),
         },
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'left', minWidth: "4rem" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, minWidth: "4rem",className:"sno_class",textAlign:"center",alignHeader:"center" },
         { field: 'id', header: translate(localeJson, 'si_no'), headerClassName: "custom-header", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "8rem",textAlign:"right",alignHeader:"center" },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem",textAlign:"right",alignHeader:"center" },
         { field: 'is_owner', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem"},
         { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'age_month', header: translate(localeJson, 'age_month'), headerClassName: "custom-header", minWidth: "5rem" },
+        { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem",textAlign:"right",alignHeader:"center" },
+        { field: 'age_month', header: translate(localeJson, 'age_month'), headerClassName: "custom-header", minWidth: "5rem",textAlign:"right",alignHeader:"center" },
         { field: 'special_care_name', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem" },
+        { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem",textAlign:"right",alignHeader:"center" },
 
     ];
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
