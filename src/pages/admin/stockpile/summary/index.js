@@ -3,7 +3,7 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import _ from 'lodash';
 
 import { RowExpansionTable, Button, InputSwitch } from '@/components';
-import { getJapaneseDateDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { InputSelectFloatLabel } from '@/components/dropdown';
 import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
@@ -214,11 +214,11 @@ function AdminStockpileSummary() {
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
-                        expiry_date: item.expiry_date,
-                        expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
+                        expiry_date: item.expiry_date ?locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                        expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
                         stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
                     }],
-                };
+                }
                 let isAvailable = stockPileList.some(obj => obj.place_id == item.place_id);
                 if (!isAvailable) {
                     index = index + 1
@@ -232,7 +232,7 @@ function AdminStockpileSummary() {
                             stock_pile_name: item.product_name,
                             quantity: item.after_count,
                             expiry_date: item.expiry_date,
-                            expiration_date: item.expiry_date ? getJapaneseDateDisplayFormat(item.expiry_date) : "",
+                            expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
                             stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
                         }
                         stockPileList[index].orders.push(newOrder);
