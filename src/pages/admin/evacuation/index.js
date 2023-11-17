@@ -61,14 +61,14 @@ export default function EvacuationPage() {
         },
         { field: "name", header: translate(localeJson, 'name_kanji'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem", display: 'none' },
         { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left', display: 'none' },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: false, textAlign: 'left', display: 'none' },
         { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "8rem", display: 'none' },
         { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "12rem", display: 'none' },
-        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem", display: 'none' }
+        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem", display: 'none' },
+        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' }
     ];
 
     const downloadEvacueesListCSV = () => {

@@ -238,7 +238,7 @@ const AppTopbar = forwardRef((props, ref) => {
 
                             </div>
                             {userName && (
-                                <div className='header-dropdown-name'>
+                                <div title={userName} className='header-dropdown-name'>
                                     {userName}
                                 </div>
                             )}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -18,6 +18,11 @@ import { useSelector } from "react-redux";
 export default function StaffStockpileCreateModal(props) {
 
     const { localeJson } = useContext(LayoutContext);
+    const [initialValues, setInitialValues] = useState({
+        category: "",
+        product_name: "",
+        shelf_life: ""
+    });
 
     const schema = Yup.object().shape({
         category: Yup.string()
@@ -46,7 +51,6 @@ export default function StaffStockpileCreateModal(props) {
             }),
     });
 
-    const [category, setCategory] = useState("");
     const layoutReducer = useSelector((state) => state.layoutReducer);
     /**
      * Destructing
@@ -60,12 +64,22 @@ export default function StaffStockpileCreateModal(props) {
         createdStock
     }
 
+    useEffect(() => {
+        if (open) {
+            setInitialValues({
+                category: "",
+                product_name: "",
+                shelf_life: ""
+            });
+        }
+    }, [open]);
+
     return (
         <>
             <Formik
                 validationSchema={schema}
                 enableReinitialize={true}
-                initialValues={{ category: "", product_name: "", shelf_life: "" }}
+                initialValues={initialValues}
                 onSubmit={(values, { resetForm }) => {
                     let formData = new FormData();
                     formData.append('category', values.category);
@@ -134,13 +148,17 @@ export default function StaffStockpileCreateModal(props) {
                                             <SelectFloatLabel selectFloatLabelProps={{
                                                 inputId: "category",
                                                 spanText: "*",
+                                                editable:true,
                                                 spanClass: "p-error",
+                                                name:'category',
                                                 selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 options: props.categories,
                                                 value: values.category,
                                                 onChange: (e) => {
-                                                    values.category = e.value;
-                                                    onCategoryChange(values.category);
+                                                    setFieldValue('category', e.value);
+                                                    onCategoryChange(e.value);
+                                                    // values.category = e.value;
+                                                    // onCategoryChange(values.category);
                                                 },
                                                 onBlur: handleBlur,
                                                 text: translate(localeJson, "stockpile_management_create_edit_field_category"),
@@ -170,6 +188,7 @@ export default function StaffStockpileCreateModal(props) {
                                                 name: "shelf_life",
                                                 spanClass: "p-error",
                                                 value: values.shelf_life,
+                                                type: 'number',
                                                 inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
                                                 onChange: handleChange,
                                                 onBlur: handleBlur,

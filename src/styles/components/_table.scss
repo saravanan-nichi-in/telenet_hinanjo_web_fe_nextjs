@@ -61,9 +61,9 @@
 
 .external-family-table-border{
     .p-datatable.p-datatable-gridlines .p-datatable-thead>tr>th:last-child{
-        border-width: 1px 2px 1px 1px;
+        border-width: 1px 1px 1px 1px;
     }
     .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td:last-child{
-        border-width: 0px 2px 1px 1px;
+        border-width: 0px 1px 1px 1px;
     }
 }

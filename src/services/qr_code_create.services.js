@@ -44,9 +44,9 @@ function _callImport(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                // Handling import success && errors
-                importErrorToastDisplay(response);
             }
+            // Handling import success && errors
+            importErrorToastDisplay(response);
         })
         .catch((error) => {
             callBackFun(false);
