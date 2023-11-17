@@ -378,7 +378,10 @@ export default function PublicExternal() {
   }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
   const isCreated = (res) => {
-    console.log(res)
+    if(res) {
+      router.push('/user/external/success');
+    }
+    setLoader(false)
   }
 
   return (
@@ -421,7 +424,7 @@ export default function PublicExternal() {
         let convertedPayload = placeCategory === 1 ? {
           "place_category": placeCategory,
           "food_required": getTrueIndex(data.toggleFoodSwitches),
-          "hinan_id": getTrueIndex(data.togglePlaceSwitches),
+          "hinan_id": shelterData&&shelterData[getTrueIndex(data.togglePlaceSwitches)-1].id,
           "postal_code": data.postalCode.replace(/-/g, ''),
           "prefecture_id": data.prefecture_id,
           "address": data.address,
@@ -437,8 +440,8 @@ export default function PublicExternal() {
         "place_category": placeCategory,
         "place_detail": data.specific_location,
       };
+        setLoader(true)
         create(convertedPayload,isCreated)
-        // console.log(convertedPayload)
         }}
       >
         {({

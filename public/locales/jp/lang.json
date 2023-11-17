@@ -630,11 +630,14 @@
       "external_table_count_message":"少なくとも1人の避難者を貴殿の家族に追加してください。",
       "table_count_max":"最大20人までしか入力できません。",
       "enter_evacuee_event_registration": "避難者登録",
-      "enter_evacuee_event_info_edit": "避難者登録"
+      "enter_evacuee_event_info_edit": "避難者登録",
+      "reg_success":"避難者登録が完了しました。",
+      "stay_safe":"ご安全にお過ごしください。"
     },
     "validation": {
       "name_required": "名前は必須です。",
       "name_max": "名前は最大200文字までです。",
+      "name_min": "名前は最小3文字必要です。",
       "name_katakana": "名前はカタカナで入力してください。",
       "dob_required": "生年月日は必須です。",
       "min_dob": "生年月日は過去120年以内である必要があります。",
@@ -659,7 +662,8 @@
       "reg_shelter":"避難所に入所する",
       "check_out_shelter":"入所手続きへ戻る",
       "c_yes": "はい",
-      "c_no": "いいえ"
+      "c_no": "いいえ",
+      "close":" 閉じる"
     }
   },
   "lang_others": {
