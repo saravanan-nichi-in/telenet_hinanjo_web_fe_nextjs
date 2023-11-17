@@ -550,3 +550,19 @@ const productName_options = [
 export const staff_dashboard_status_en = ['Maximum Capacity', 'Total Family', 'Blank'];
 
 export const staff_dashboard_status_jp = ['避難可能人数', '現在の避難者数', '追加受入可能人数'];
+
+
+export const gender_jp = [
+    { value: "", name: '--' },
+    { value: "1", name: '男' },
+    { value: "2", name: '女' },
+    { value: "3", name: '答えたくない' },
+  ];
+  
+  export const gender_en = [
+    { value: "", name: '--' },
+    { value: "1", name: 'Male' },
+    { value: "2", name: 'Female' },
+    { value: "3", name: 'Other' },
+  ];
+  

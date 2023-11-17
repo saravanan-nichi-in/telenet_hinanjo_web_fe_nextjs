@@ -526,7 +526,7 @@
       "city_outskirts": "City Outskirts",
       "outside_prefecture": "Outside Prefecture",
       "public_external": "Registration for Evacuees",
-      "not_visiting_the_shelter": "not visiting the shelter, those who have opted to stay in the car or at home, etc.",
+      "not_visiting_the_shelter": "Not visiting the shelter, those who have opted to stay in the car or at home, etc.",
       "which_place_Are_you_planning_to_evacuate": "1. Which place are you planning to evacuate?",
       "assistance_respect_food":"2. Do you need assistance with respect to food",
       "shelter_question":"3. Please select the shelter from where you are planning to receive relief supplies such as food.",
@@ -629,7 +629,35 @@
       "alert_info_for_unsaved_contents": "Is the edited stockpile information not saved yet? is this good ? \n To save, click the [Inventory] button.",
       "temporary_admission_time": "Temporary Registration Date",
       "no_place_to_enter": "No Place To Enter",
-      "c_name_furigana": "Name (phonetic)"
+      "c_name_furigana": "Name (phonetic)",
+      "c_postal_code": "Postal Code",
+      "external_table_count_message":"Add at least one evacuee to your family.",
+      "table_count_max":"Up to 20 people can only be entered.",
+      "enter_evacuee_event_registration": "Evacuee registration",
+      "enter_evacuee_event_info_edit": "Evacuee edit",
+      "reg_success":"Evacuee registration has been completed.",
+      "stay_safe":"Stay safe."
+    },
+    "validation": {
+      "name_required": "Name is required.",
+      "name_max": "Name must be at most 200 characters.",
+      "name_min": "Name must be at least 3 characters.",
+      "name_katakana": "Name must be in Katakana characters.",
+      "dob_required": "Date of birth is required.",
+      "min_dob": "Date of birth must be within the last 120 years.",
+      "max_dob": "Date of birth cannot be in the future.",
+      "age_required": "Age is required.",
+      "age_max": "Age must be at most 120 years.",
+      "gender_required": "Gender is required.",
+      "c_required": "This field is required.",
+      "email_valid": "Please enter a valid email address.",
+      "postal_code_length": "Postal code must be 7 characters long.",
+      "address_max_length": "Address must be at most 190 characters.",
+      "email_max_length": "Email must be at most 100 characters.",
+      "postal_code_required": "Postal code is required.",
+      "address_required": "Address is required.",
+      "email_required": "Email is required.",
+      "prefecture_required": "Prefecture is required."  
     },
     "buttons": {
       "continue": "Continue",
@@ -639,7 +667,8 @@
       "check_out_shelter": "For those who are new to admission procedures",
       "c_yes": "Yes",
       "c_no": "No",
-      "c_enter_evacuee":"Enter evacuee"
+      "c_enter_evacuee":"Enter evacuee",
+      "close":" close"
     }
   },
   "lang_others": {

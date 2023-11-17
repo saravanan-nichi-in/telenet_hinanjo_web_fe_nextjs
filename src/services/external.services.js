@@ -33,13 +33,13 @@ function _getActivePlaceList(callBackFun) {
 }
 
 /**
- * Create a new place
+ * Register External
  * @param {*} payload
  * @param {*} callBackFun
  */
 function _create(payload, callBackFun) {
   axios
-    .post("/admin/place", payload)
+    .post("/user/external", payload)
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {
