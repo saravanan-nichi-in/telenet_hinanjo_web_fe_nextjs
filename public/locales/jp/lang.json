@@ -624,7 +624,32 @@
       "alert_info_for_unsaved_contents": "編集した備蓄品の情報まだ保存されてないですか。 よろしいでしょうか？\n 保存する場合は、「棚卸」 ボタンクリックしてください。",
       "temporary_admission_time": "版登録日時",
       "no_place_to_enter": "入所場所なし",
-      "c_name_furigana": "名前（カタカナ）"
+      "c_name_furigana": "名前（カタカナ）",
+      "c_postal_code": "郵便番号",
+      "external_table_count_message":"少なくとも1人の避難者を貴殿の家族に追加してください。",
+      "table_count_max":"最大20人までしか入力できません。",
+      "enter_evacuee_event_registration": "避難者登録",
+      "enter_evacuee_event_info_edit": "避難者登録"
+    },
+    "validation": {
+      "name_required": "名前は必須です。",
+      "name_max": "名前は最大200文字までです。",
+      "name_katakana": "名前はカタカナで入力してください。",
+      "dob_required": "生年月日は必須です。",
+      "min_dob": "生年月日は過去120年以内である必要があります。",
+      "max_dob": "生年月日は未来になることはできません。",
+      "age_required": "年齢は必須です。",
+      "age_max": "年齢は最大120歳までです。",
+      "gender_required": "性別は必須です。",
+      "c_required": "この項目は必須です。",
+      "email_valid": "有効なメールアドレスを入力してください。",
+      "postal_code_length": "郵便番号は7文字である必要があります。",
+      "address_max_length": "住所は最大190文字までです。",
+      "email_max_length": "メールアドレスは最大100文字までです。",
+      "postal_code_required": "郵便番号は必須です。",
+      "address_required": "住所は必須です。",
+      "email_required": "メールアドレスは必須です。",
+      "prefecture_required": "都道府県は必須です。"  
     },
     "buttons": {
       "continue": "次に進む",
