@@ -543,6 +543,7 @@
       "valid_image_file": "画像のフォーマットが正しいものをご使用ください。",
       "image_size_validation": "画像サイズは5MB以内のものをご使用ください。",
       "stockpile_shelf_life_max": "賞味期限は 999 を超えてはなりません。",
+      "quantity_max": "数量期限は 99999 を超えてはなりません。",
       "quantity_is_required": "数量は必須です。",
       "inventory_date_is_required": "棚卸日は必須です。",
       "expiry_date_is_required": "有効期限は必須です。",

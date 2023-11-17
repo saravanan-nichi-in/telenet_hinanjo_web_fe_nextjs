@@ -546,6 +546,7 @@
       "valid_image_file": "Image format should be valid.",
       "image_size_validation": "Image size must not exceed 5 MB.",
       "stockpile_shelf_life_max": "Shelf life should not exceed 999.",
+      "quantity_max": "Quantity Should not exceed 99999.",
       "quantity_is_required": "Quantity is required.",
       "inventory_date_is_required": "Inventory is required.",
       "expiry_date_is_required": "Expiry date is required.",

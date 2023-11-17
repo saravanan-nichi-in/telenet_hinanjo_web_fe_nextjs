@@ -42,7 +42,7 @@ function StockpileDashboard() {
         setImportStaffStockpileOpen(false);
     }
 
-    const callDropDownApi = () => {
+    const callDropDownApi = (stockList) => {
         let payload = {
             place_id: layoutReducer?.user?.place?.id
         }
@@ -61,8 +61,7 @@ function StockpileDashboard() {
                 let productNames = products.map(obj => obj.product_name);
                 dataMapping[`${stock.category}`] = productNames;
             });
-            console.log(stockPileList);
-            stockPileList.map((obj) => {
+            stockList.map((obj) => {
                 if (dataMapping[`${obj.category}`].includes(obj.product_name)) {
                     const indexToRemove = dataMapping[`${obj.category}`].indexOf(obj.product_name);
                     dataMapping[`${obj.category}`].splice(indexToRemove, 1);
@@ -111,7 +110,6 @@ function StockpileDashboard() {
                         onClick: () => {
                             setEditObject(rowData);
                             setSelectedCategory(rowData.category)
-                            console.log(rowData);
                             setStaffStockpileEditOpen(true);
                         },
                         bg: "bg-white",
@@ -150,7 +148,6 @@ function StockpileDashboard() {
         getList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                // var additionalColumnsArrayWithOldData = [...columnsData];
                 let preparedList = [];
                 // Update prepared list to the state
                 // Preparing row data for specific column to display
@@ -179,7 +176,7 @@ function StockpileDashboard() {
                 setStockPileList(preparedList);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
-                callDropDownApi();
+                callDropDownApi(preparedList);
             } else {
                 setTableLoading(false);
                 setStockPileList([]);
@@ -203,7 +200,6 @@ function StockpileDashboard() {
         place_id: layoutReducer?.user?.place?.id,
     });
 
-    // const [columns, setColumns] = useState([]);
     const [stockPileList, setStockPileList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
@@ -212,19 +208,12 @@ function StockpileDashboard() {
         let updatedList = stockPileList.map(stock => { return stock });
         let index = stockPileList.findIndex((item) => item.summary_id == id);
         if (index !== -1) {
-            data['expiry_date'] = new Date(data.expiry_date);
-            data['expiryDate'] = getJapaneseDateDisplayYYYYMMDDFormat(data.expiry_date);
-            data['Inspection_date_time'] = new Date(data.Inspection_date_time);
-            data['InspectionDateTime'] = getJapaneseDateDisplayYYYYMMDDFormat(data.Inspection_date_time)
-            data['save_flag'] = true
-            updatedList.splice(index, 1);
-            updatedList.unshift(data);
-            let newSortedList = updatedList.map((item, i) => {
-                item['slno'] = i + getListPayload.filters.start + 1;
-                return item;
-            })
-            console.log(newSortedList);
-            setStockPileList(newSortedList);
+            updatedList[index]['expiry_date'] = new Date(data.expiry_date);
+            updatedList[index]['expiryDate'] = getJapaneseDateDisplayYYYYMMDDFormat(data.expiry_date);
+            updatedList[index]['Inspection_date_time'] = new Date(data.Inspection_date_time);
+            updatedList[index]['InspectionDateTime'] = getJapaneseDateDisplayYYYYMMDDFormat(data.Inspection_date_time)
+            updatedList[index]['save_flag'] = true
+            setStockPileList(updatedList);
             setStaffStockpileEditOpen(false);
             setSelectedCategory("");
         }
@@ -276,6 +265,10 @@ function StockpileDashboard() {
 
     const updateCategoryChange = (value) => {
         setSelectedCategory(value);
+    }
+
+    const rowClassName = (rowData) => {
+        return rowData.save_flag === true ? 'highlight-row' : "";
     }
 
 
@@ -381,6 +374,7 @@ function StockpileDashboard() {
                                     showGridlines={"true"}
                                     value={stockPileList}
                                     columns={columns}
+                                    rowClassName={rowClassName}
                                     filterDisplay="menu"
                                     emptyMessage={translate(localeJson, "data_not_found")}
                                     paginator={true}
