@@ -15,7 +15,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import External from "@/components/modal/externalModal";
-import { prefectures, prefectures_en } from "@/utils/constant";
+import { prefectures, prefectures_en , gender_jp , gender_en } from "@/utils/constant";
 import { ExternalServices } from "@/services";
 
 export default function PublicExternal() {
@@ -24,109 +24,141 @@ export default function PublicExternal() {
   const [registerModalAction, setRegisterModalAction] = useState("create");
   const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
   const [evacueeValues, setEvacueeValues] = useState("");
-  const [shelterData,setShelterData] = useState([]);
+  const [shelterData, setShelterData] = useState([]);
   const [toggleSwitchShelterComponents, setToggleSwitchShelterComponents] = useState([]);
+  const [editObj, setEditObj] = useState({});
   /* Services */
-  const { getActivePlaceList,getAddressByZipCode } = ExternalServices;
+  const { getActivePlaceList, getAddressByZipCode , create } = ExternalServices;
   const [columns, setColumns] = useState([]);
   const formikRef = useRef();
   const initialValues = {
-    familyCode: "",
+    evacuee: [],
+    postalCode: "",
     prefecture_id: null,
     address: "",
     email: "",
     specific_location: "",
     toggleSwitches: Array(3).fill(false),
     toggleFoodSwitches: Array(2).fill(false),
-    togglePlaceSwitches:"",
+    togglePlaceSwitches: "",
   };
   const validationSchema = (localeJson) =>
-  Yup.object().shape({
-    toggleSwitches: Yup.array()
-      .of(Yup.boolean())
-      .test(
+    Yup.object().shape({
+      toggleSwitches: Yup.array()
+        .of(Yup.boolean())
+        .test(
+          "at-least-one-checked",
+          translate(localeJson, "c_required"),
+          (value) => value.includes(true)
+        ),
+      toggleFoodSwitches: Yup.array().test(
         "at-least-one-checked",
         translate(localeJson, "c_required"),
-        (value) => value.includes(true)
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true) {
+            return value.some((item) => item === true);
+          } else {
+            return true;
+          }
+        }
       ),
-    toggleFoodSwitches: Yup.array().test(
-      "at-least-one-checked",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true) {
-          return value.some((item) => item === true);
-        } else {
-          return true;
+      togglePlaceSwitches: Yup.array().test(
+        "at-least-one-checked",
+        translate(localeJson, "c_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true && parent.parent.toggleFoodSwitches[0] === true) {
+            return value.some((item) => item === true);
+          } else {
+            return true;
+          }
         }
-      }
-    ),
-    togglePlaceSwitches: Yup.array().test(
-      "at-least-one-checked",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true && parent.parent.toggleFoodSwitches[0] === true ) {
-          return value.some((item) => item === true);
-        } else {
-          return true;
+      ),
+      postalCode: Yup.string().test(
+        "required-when-toggleSwitches-true",
+        translate(localeJson, "postal_code_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true) {
+            return !!value;
+          } else {
+            return true;
+          }
         }
-      }
-    ),
-    familyCode: Yup.string().test(
-      "required-when-toggleSwitches-true",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true) {
-          return !!value;
-        } else {
-          return true;
+      ).min(8, translate(localeJson, "postal_code_length"))
+      .max(8, translate(localeJson, "postal_code_length")),
+      address: Yup.string().test(
+        "required-when-toggleSwitches-true",
+        translate(localeJson, "address_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true) {
+            return !!value;
+          } else {
+            return true;
+          }
         }
-      }
-    ),
-    address: Yup.string().test(
-      "required-when-toggleSwitches-true",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true) {
-          return !!value;
-        } else {
-          return true;
+      ).max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string().nullable().test(
+        "required-when-toggleSwitches-true",
+        translate(localeJson, "prefecture_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true) {
+            return !!value;
+          } else {
+            return true;
+          }
         }
-      }
-    ),
-    prefecture_id: Yup.string().nullable().test(
-      "required-when-toggleSwitches-true",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true) {
-          return !!value;
-        } else {
-          return true;
+      ),
+      email: Yup.string()
+      .test(
+        "required-when-toggleSwitches-true",
+        translate(localeJson, "email_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[0] === true) {
+            return !!value;
+          } else {
+            return true;
+          }
         }
-      }
-    ),
-    email: Yup.string().test({
-      name: "email_validation",
-      message: translate(localeJson, "email_valid"),
-      test: (value, parent) => {
-        if (parent.parent.toggleSwitches[0] === true) {
-          return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
-        } else {
-          return true;
+      )
+      .email(translate(localeJson, "email_valid"))
+      .matches(
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        translate(localeJson, "email_valid")
+      ),
+      specific_location: Yup.string().nullable().test(
+        "required-when-toggleSwitches-true",
+        translate(localeJson, "c_required"),
+        (value, parent) => {
+          if (parent.parent.toggleSwitches[1] === true || parent.parent.toggleSwitches[2] === true) {
+            return !!value;
+          } else {
+            return true;
+          }
         }
-      },
-    }),
-    specific_location: Yup.string().nullable().test(
-      "required-when-toggleSwitches-true",
-      translate(localeJson, "c_required"),
-      (value, parent) => {
-        if (parent.parent.toggleSwitches[1] === true || parent.parent.toggleSwitches[2] === true) {
-          return !!value;
-        } else {
-          return true;
-        }
-      }
-    ),
-  });
+      ),
+      evacuee: Yup.array()
+        .test(
+          "evacuee-required-when-toggleSwitches-true",
+          translate(localeJson, "c_required"),
+          (value, parent) => {
+            if (parent.parent.toggleSwitches[0] === true) {
+              return value.length > 0;
+            } else {
+              return true;
+            }
+          }
+        )
+        .test(
+          "evacuee-max-length",
+          translate(localeJson, "table_count_max"), // Change this message as needed
+          (value, parent) => {
+            if (parent.parent.toggleSwitches[0] === true) {
+              return value.length <= 20;
+            } else {
+              return true;
+            }
+          }
+        ),
+    });
 
 
   const router = useRouter();
@@ -140,12 +172,11 @@ export default function PublicExternal() {
   const [placeButtonStates, setPlaceButtonStates] = useState();
 
   const handleFoodButtonClick = (index) => {
-    formikRef.current.setTouched({});
     const newButtonStates = [...foodButtonStates];
     newButtonStates.fill(false); // Uncheck all buttons
     newButtonStates[index] = true; // Check the clicked button
     formikRef.current?.setFieldValue("toggleFoodSwitches", newButtonStates);
-  
+
     setFoodButtonStates(newButtonStates);
   };
 
@@ -159,7 +190,6 @@ export default function PublicExternal() {
   };
 
   const handlePlaceButtonClick = (index) => {
-    formikRef.current.setTouched({});
     const newButtonStates = [...placeButtonStates];
     newButtonStates.fill(false); // Uncheck all buttons
     newButtonStates[index] = true; // Check the clicked button
@@ -172,15 +202,15 @@ export default function PublicExternal() {
       index === 0
         ? translate(localeJson, "within_city")
         : index === 1
-        ? translate(localeJson, "city_outskirts")
-        : translate(localeJson, "outside_prefecture");
+          ? translate(localeJson, "city_outskirts")
+          : translate(localeJson, "outside_prefecture");
     return (
       <ToggleSwitch
         key={index}
         checked={checked}
         onLabel={offLabel}
         offLabel={offLabel}
-        parentClass={"w-11rem"}
+        parentClass={"w-15rem"}
         onChange={() => handleButtonClick(index)}
       />
     );
@@ -197,7 +227,7 @@ export default function PublicExternal() {
         checked={checked}
         onLabel={offLabel}
         offLabel={offLabel}
-        parentClass={"w-11rem"}
+        parentClass={"w-15rem"}
         onChange={() => handleFoodButtonClick(index)}
       />
     );
@@ -231,7 +261,15 @@ export default function PublicExternal() {
       minWidth: "18rem",
       maxWidth: "18rem",
       headerClassName: "custom-header",
+      body: (rowData) => {
+        const genderOptions = locale === 'ja' ? gender_jp : gender_en;
+        const selectedGenderOption = genderOptions.find(option => option.value === rowData.gender);
+        const displayedGenderName = selectedGenderOption ? selectedGenderOption.name : 'Unknown';
+    
+        return <span>{displayedGenderName}</span>;
+      },
     },
+    
     {
       field: "actions",
       header: translate(localeJson, "common_action"),
@@ -242,6 +280,7 @@ export default function PublicExternal() {
           <Button
             parentStyle={{ display: "inline" }}
             buttonProps={{
+              type: "button",
               text: translate(localeJson, "edit"),
               buttonClass: "text-primary",
               bg: "bg-white",
@@ -249,6 +288,15 @@ export default function PublicExternal() {
               onClick: () => {
                 setRegisterModalAction("edit");
                 setSpecialCareEditOpen(true);
+                let dob = new Date(rowData.dob)
+                let currentData = {
+                  id: rowData.id,
+                  name: rowData.name,
+                  dob: dob,
+                  age: rowData.age,
+                  gender: rowData.gender
+                }
+                setEditObj(currentData)
               },
             }}
           />
@@ -258,8 +306,16 @@ export default function PublicExternal() {
               type: "button",
               text: translate(localeJson, "delete"),
               buttonClass: "ml-2 delete-button",
+              onClick: () => {
+                setEvacuee((prevEvacuee) => {
+                  let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id)
+                  formikRef.current?.setFieldValue("evacuee", updated);
+                  return updated
+                });
+              }
             }}
             parentClass={"delete-button"}
+
           />
         </div>
       ),
@@ -268,16 +324,30 @@ export default function PublicExternal() {
 
   useEffect(() => {
     if (evacueeValues !== "") {
-      console.log(evacueeValues);
-      setEvacuee((prevEvacuee) => [...prevEvacuee, evacueeValues]);
+      setEvacuee((prevEvacuee) => {
+        const evacueeIndex = prevEvacuee.findIndex((evacuee) => evacuee.id === evacueeValues.id);
+
+        if (evacueeIndex !== -1) {
+          // Update existing evacuee
+          const updatedEvacuee = [...prevEvacuee];
+          updatedEvacuee[evacueeIndex] = evacueeValues;
+          formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
+          return updatedEvacuee;
+        } else {
+          // Add new evacuee
+          formikRef.current?.setFieldValue("evacuee", [...prevEvacuee, evacueeValues]);
+          return [...prevEvacuee, evacueeValues];
+        }
+      });
     }
   }, [evacueeValues, setEvacuee]);
+
 
   useEffect(() => {
     getDataOnMount()
   }, [locale]);
 
-  const getDataOnMount= ()=> {
+  const getDataOnMount = () => {
     getActivePlaceList(isActivePlaces)
   }
 
@@ -298,7 +368,7 @@ export default function PublicExternal() {
           checked={placeButtonStates[index]} // Assuming placeButtonStates is an array of booleans
           onLabel={offLabel}
           offLabel={offLabel}
-          parentClass={"w-full"}
+          parentClass={"w-15rem white-space-nowrap overflow-hidden text-overflow-ellipsis eli_button"}
           onChange={() => handlePlaceButtonClick(index)} // Assuming handleFoodButtonClick is your click handler
         />
       );
@@ -307,7 +377,12 @@ export default function PublicExternal() {
     setToggleSwitchShelterComponents(newToggleSwitchComponents);
   }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
-
+  const isCreated = (res) => {
+    if(res) {
+      router.push('/user/external/success');
+    }
+    setLoader(false)
+  }
 
   return (
     <div>
@@ -316,15 +391,18 @@ export default function PublicExternal() {
         header={translate(
           localeJson,
           registerModalAction == "create"
-            ? "questionnaire_event_registration"
-            : "questionnaire_event_info_edit"
+            ? "enter_evacuee_event_registration"
+            : "enter_evacuee_event_info_edit"
         )}
         close={() => setSpecialCareEditOpen(false)}
+        editObj={editObj}
         buttonText={translate(
           localeJson,
           registerModalAction == "create" ? "submit" : "update"
         )}
         setEvacueeValues={setEvacueeValues}
+        evacuee={evacuee}
+        registerModalAction={registerModalAction}
       />
       <Formik
         innerRef={formikRef}
@@ -332,7 +410,38 @@ export default function PublicExternal() {
         initialValues={initialValues}
         enableReinitialize
         onSubmit={(values) => {
-          console.log(values);
+          let data = values
+          let getTrueIndex = (toggleArray) => {
+            for (let i = 0; i < toggleArray.length; i++) {
+                if (toggleArray[i]) {
+                    return i + 1;
+                }
+            }
+            return 0; // Default value if no true found
+        };
+        
+        let placeCategory = getTrueIndex(data.toggleSwitches);
+        let convertedPayload = placeCategory === 1 ? {
+          "place_category": placeCategory,
+          "food_required": getTrueIndex(data.toggleFoodSwitches),
+          "hinan_id": shelterData&&shelterData[getTrueIndex(data.togglePlaceSwitches)-1].id,
+          "postal_code": data.postalCode.replace(/-/g, ''),
+          "prefecture_id": data.prefecture_id,
+          "address": data.address,
+          "email": data.email,
+          "person": data.evacuee.map((evacuee) => ({
+              "name": evacuee.name,
+              "dob": evacuee.dob.replace(/-/g, '/'),
+              "age": evacuee.age,
+              "gender": evacuee.gender
+          }))
+      } : 
+      {
+        "place_category": placeCategory,
+        "place_detail": data.specific_location,
+      };
+        setLoader(true)
+        create(convertedPayload,isCreated)
         }}
       >
         {({
@@ -394,26 +503,26 @@ export default function PublicExternal() {
                             errors.toggleFoodSwitches
                           }
                         />
-                         {values.toggleFoodSwitches[0] == true && (
+                        {values.toggleFoodSwitches[0] == true && (
                           <>
-                          <p>
-                          {translate(localeJson, "shelter_question")}
-                          <span className="p-error">*</span>
-                        </p>
-                        <div className=" flex flex-wrap justify-content-start gap-3">
-                          {toggleSwitchShelterComponents}
-                        </div>
-                        <ValidationError
-                          errorBlock={
-                            errors.togglePlaceSwitches &&
-                            touched.togglePlaceSwitches &&
-                            errors.togglePlaceSwitches
-                          }
-                        />
-                        </>
-                         )}
+                            <p>
+                              {translate(localeJson, "shelter_question")}
+                              <span className="p-error">*</span>
+                            </p>
+                            <div className=" flex flex-wrap justify-content-start gap-3">
+                              {toggleSwitchShelterComponents}
+                            </div>
+                            <ValidationError
+                              errorBlock={
+                                errors.togglePlaceSwitches &&
+                                touched.togglePlaceSwitches &&
+                                errors.togglePlaceSwitches
+                              }
+                            />
+                          </>
+                        )}
                         <div
-                          className="flex pb-3"
+                          className="flex pb-3 mt-3"
                           style={{
                             justifyContent: "flex-end",
                             flexWrap: "wrap",
@@ -448,6 +557,14 @@ export default function PublicExternal() {
                             columns={cols}
                             paginator={false}
                             paginatorLeft={false}
+                            emptyMessage={translate(localeJson, "external_table_count_message")}
+                          />
+                          <ValidationError
+                            errorBlock={
+                              errors.evacuee &&
+                              touched.evacuee &&
+                              errors.evacuee
+                            }
                           />
                         </div>
                         <p>
@@ -458,11 +575,11 @@ export default function PublicExternal() {
                           <div className="w-full">
                             <InputFloatLabel
                               inputFloatLabelProps={{
-                                id: "familyCode",
-                                name: "familyCode",
+                                id: "postalCode",
+                                name: "postalCode",
                                 spanText: "*",
                                 spanClass: "p-error",
-                                value: values.familyCode,
+                                value: values.postalCode,
                                 custom: "w-full custom_input",
                                 hasIcon: true,
                                 onChange: (evt) => {
@@ -477,7 +594,7 @@ export default function PublicExternal() {
                                       val =
                                         val.slice(0, 3) + "-" + val.slice(3);
                                     }
-                                    setFieldValue("familyCode", val);
+                                    setFieldValue("postalCode", val);
                                   }
                                   if (val.length >= 7) {
                                     let payload = val;
@@ -497,7 +614,7 @@ export default function PublicExternal() {
                                         setFieldValue(
                                           "address",
                                           address.address2 +
-                                            (address.address3 || "")
+                                          (address.address3 || "")
                                         );
                                       } else {
                                         setFieldValue("prefecture_id", "");
@@ -507,20 +624,19 @@ export default function PublicExternal() {
                                   }
                                 },
                                 onBlur: handleBlur,
-                                text: translate(localeJson, "shelter_code"),
+                                text: translate(localeJson, "c_postal_code"),
                                 inputClass: "w-full",
                               }}
-                              parentClass={`custom_input ${
-                                errors.familyCode &&
-                                touched.familyCode &&
+                              parentClass={`custom_input ${errors.postalCode &&
+                                touched.postalCode &&
                                 "p-invalid pb-1"
-                              }`}
+                                }`}
                             />
                             <ValidationError
                               errorBlock={
-                                errors.familyCode &&
-                                touched.familyCode &&
-                                errors.familyCode
+                                errors.postalCode &&
+                                touched.postalCode &&
+                                errors.postalCode
                               }
                             />
                           </div>
@@ -529,7 +645,7 @@ export default function PublicExternal() {
                               selectFloatLabelProps={{
                                 name: "prefecture_id",
                                 value: values.prefecture_id,
-                                options: prefectures,
+                                options: locale == "ja" ? prefectures : prefectures_en,
                                 optionLabel: "name",
                                 selectClass: "w-full",
                                 spanText: "*",
@@ -541,11 +657,10 @@ export default function PublicExternal() {
                                   "prefecture_places"
                                 ),
                               }}
-                              parentClass={`${
-                                errors.prefecture_id &&
+                              parentClass={`custom_input ${errors.prefecture_id &&
                                 touched.prefecture_id &&
                                 "p-invalid pb-1"
-                              }`}
+                                }`}
                             />
                             <ValidationError
                               errorBlock={
@@ -569,11 +684,10 @@ export default function PublicExternal() {
                                 text: translate(localeJson, "address"),
                                 inputClass: "w-full",
                               }}
-                              parentClass={`custom_input ${
-                                errors.address &&
+                              parentClass={`custom_input ${errors.address &&
                                 touched.address &&
                                 "p-invalid pb-1"
-                              }`}
+                                }`}
                             />
                             <ValidationError
                               errorBlock={
@@ -585,10 +699,6 @@ export default function PublicExternal() {
                           </div>
                         </div>
                         <div>
-                          {/* <p>
-                          {translate(localeJson, "mail_address_for_reference")}
-                          <span className="p-error">*</span>
-                        </p> */}
                           <div className="mt-5">
                             <InputFloatLabel
                               inputFloatLabelProps={{
@@ -605,11 +715,10 @@ export default function PublicExternal() {
                                 inputClass:
                                   "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                               }}
-                              parentClass={`${
-                                errors.email &&
+                              parentClass={`${errors.email &&
                                 touched.email &&
                                 "p-invalid pb-1"
-                              }`}
+                                }`}
                             />
                             <ValidationError
                               errorBlock={
@@ -622,45 +731,39 @@ export default function PublicExternal() {
                     )}
                     {(values.toggleSwitches[1] == true ||
                       values.toggleSwitches[2] == true) && (
-                      <div className="custom-card shadow-4 flex flex-column mt-3">
-                        <p>
-                        {translate(localeJson, "out_side_city_question")}
-                        <span className="p-error">*</span>
-                      </p>
-                        <div>
-                          <div className="">
-                            <InputFloatLabel
-                              inputFloatLabelProps={{
-                                // spanText: "*",
-                                name: "specific_location",
-                                spanClass: "p-error",
-                                value: values.specific_location,
-                                onChange: handleChange,
-                                onBlur: handleBlur,
-                                // text: translate(
-                                //   localeJson,
-                                //   "out_side_city_question"
-                                // ),
-                                inputClass:
-                                  "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                              }}
-                              parentClass={`${
-                                errors.specific_location &&
-                                touched.specific_location &&
-                                "p-invalid pb-1"
-                              }`}
-                            />
-                            <ValidationError
-                              errorBlock={
-                                errors.specific_location &&
-                                touched.specific_location &&
-                                errors.specific_location
-                              }
-                            />
+                        <div className="custom-card shadow-4 flex flex-column mt-3">
+                          <p>
+                            {translate(localeJson, "out_side_city_question")}
+                            <span className="p-error">*</span>
+                          </p>
+                          <div>
+                            <div className="">
+                              <InputFloatLabel
+                                inputFloatLabelProps={{
+                                  name: "specific_location",
+                                  spanClass: "p-error",
+                                  value: values.specific_location,
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+                                  inputClass:
+                                    "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
+                                }}
+                                parentClass={`${errors.specific_location &&
+                                  touched.specific_location &&
+                                  "p-invalid pb-1"
+                                  }`}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.specific_location &&
+                                  touched.specific_location &&
+                                  errors.specific_location
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                     <div className="mt-3">
                       <Button
                         buttonProps={{

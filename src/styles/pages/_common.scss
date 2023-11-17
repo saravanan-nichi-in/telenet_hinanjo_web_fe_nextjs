@@ -41,3 +41,9 @@
   .sub-header {
     font-size: $subHeaderFontSize;
   }
+
+  .eli_button .p-button-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
