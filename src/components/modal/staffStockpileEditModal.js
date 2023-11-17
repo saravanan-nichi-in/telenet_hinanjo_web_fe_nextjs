@@ -25,7 +25,10 @@ export default function StaffStockpileEdit(props) {
             .positive(translate(localeJson, 'number_field'))
             .integer(translate(localeJson, 'number_field'))
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
-        after_count: Yup.number()
+        after_count: Yup.number().typeError(translate(localeJson, 'number_field'))
+            .positive(translate(localeJson, 'number_field'))
+            .integer(translate(localeJson, 'number_field'))
+            .max(99999, translate(localeJson, 'quantity_max'))
             .required(translate(localeJson, 'quantity_is_required')),
         Inspection_date_time: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
@@ -61,7 +64,7 @@ export default function StaffStockpileEdit(props) {
                 initialValues={props.editObject}
                 enableReinitialize={true}
                 onSubmit={(values, actions) => {
-                    
+
                     console.log({ ...props.editObject })
                     onUpdate({ ...props.editObject, ...values }, props.editObject.summary_id)
                     // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {
@@ -188,22 +191,22 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
-                                            date={values.Inspection_date_time}
+                                                date={values.Inspection_date_time}
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "inventoryDate",
                                                     date: initialValues.Inspection_date_time,
-                                                    name:"Inspection_date_time",
+                                                    name: "Inspection_date_time",
                                                     spanText: "*",
                                                     spanClass: "p-error",
                                                     onChange: (evt) => {
                                                         setFieldValue(
-                                                          "Inspection_date_time",
-                                                          evt.target.value
+                                                            "Inspection_date_time",
+                                                            evt.target.value
                                                         );
-                                                      },
+                                                    },
                                                     onBlur: handleBlur,
-                                                    text: translate(localeJson,"inventory_date"),
+                                                    text: translate(localeJson, "inventory_date"),
                                                 }} />
                                             <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
@@ -220,7 +223,7 @@ export default function StaffStockpileEdit(props) {
                                         </div>
                                         <div className="mt-5">
                                             <DateCalendarFloatLabel
-                                            date={values.expiry_date}
+                                                date={values.expiry_date}
                                                 dateFloatLabelProps={{
                                                     dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                     id: "expiryDate",
@@ -230,12 +233,12 @@ export default function StaffStockpileEdit(props) {
                                                     name: "expiry_date",
                                                     onChange: (evt) => {
                                                         setFieldValue(
-                                                          "expiry_date",
-                                                          evt.target.value
+                                                            "expiry_date",
+                                                            evt.target.value
                                                         );
-                                                      },
+                                                    },
                                                     onBlur: handleBlur,
-                                                    text: translate(localeJson,"expiry_date"),
+                                                    text: translate(localeJson, "expiry_date"),
                                                 }} />
                                             <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>
