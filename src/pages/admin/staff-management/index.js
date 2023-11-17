@@ -68,7 +68,7 @@ export default function StaffManagementPage() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
-            alignHeader:"center",
+            alignHeader: "center",
             className: "action_class",
             body: (rowData) => (
                 <div>
@@ -208,11 +208,13 @@ export default function StaffManagementPage() {
 
     // Import api
     const importFileApi = (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append('file', file);
-        StaffManagementService.importData(formData, () => {
-
+        StaffManagementService.importData(formData, (response) => {
+            if (response) {
+                console.log(response);
+                getStaffList();
+            }
         });
         onStaffImportClose();
         showOverFlow();

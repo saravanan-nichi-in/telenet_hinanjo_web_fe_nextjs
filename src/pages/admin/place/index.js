@@ -91,7 +91,7 @@ export default function AdminPlacePage() {
       minWidth: "6rem",
       body: (rowData) => {
         return (
-          <div className="flex flex-wrap">
+          <div className="">
             <Button buttonProps={{
               text: translate(localeJson, 'delete'),
               buttonClass: "delete-button",

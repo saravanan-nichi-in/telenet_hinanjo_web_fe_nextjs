@@ -12,4 +12,6 @@ export * from "./staff_dashboard.service";
 export * from "./supplies.services";
 export * from "./user_place_list.services";
 export * from "./stockpile_history.services";
-export * from "./check_in_out.services"
+export * from "./check_in_out.services";
+export * from "./external.services";
+export * from "./user_dashboard.services";

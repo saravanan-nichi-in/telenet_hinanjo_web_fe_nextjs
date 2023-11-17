@@ -61,7 +61,7 @@ export default function ExteranalEvacuationPage() {
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", sortable: false, textAlign: "center" },
         { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none', className: "sno_class" },
         { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
-        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "7rem", sortable: false },
+        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "10rem",maxWidth:"10rem", sortable: false },
         { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
         {
             field: "people_count", header: translate(localeJson, 'people_count'),
@@ -80,7 +80,7 @@ export default function ExteranalEvacuationPage() {
         { field: "mail_address", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
         { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false, textAlign: "right", alignHeader: "center" },
         { field: "prefecture", header: translate(localeJson, 'prefecture_symbol'), minWidth: "5rem", sortable: false },
-        { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem", sortable: false }
+        { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem"}
     ];
 
     /* Services */
@@ -318,6 +318,7 @@ export default function ExteranalEvacuationPage() {
                             rows={getListPayload.filters.limit}
                             paginatorLeft={true}
                             onPageHandler={(e) => onPaginationChange(e)}
+                            parentClass={"external-family-table-border"}
                         />
 
                         <div className='mt-3 flex justify-content-center'>

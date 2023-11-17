@@ -519,12 +519,19 @@
       "do_you_want_to_exit_the_shelter": "退所手続きして良いですか？",
       "staff_support": "うち要配慮者",
       "do_you_want_to_enter_the_shelter": "入所手続きして良いですか？",
-      "public_external": "この画面では避難所に行かず",
-      "not_visiting_the_shelter": "自宅避難や車中泊避難をする方の避難者登録を行います。",
-      "which_place_Are_you_planning_to_evacuate": "質問1.避難している場所はどこですか？",
-      "within_city": "市内",
-      "city_outskirts": "市外",
-      "outside_prefecture": "県外"
+      "public_external":"この画面では避難所に行かず",
+      "not_visiting_the_shelter":"自宅避難や車中泊避難をする方の避難者登録を行います。",
+      "which_place_Are_you_planning_to_evacuate":"質問1. 避難している場所はどこですか？" ,
+      "assistance_respect_food":"質問2. 食糧等の支援は必要ですか？"  , 
+      "shelter_question":"質問3. 食糧等の支援物資を受け取りに行く避難所を選択してください。",
+      "enter_current_address":"現住所（住民票に記載されている住所）を入力してください。",  
+      "mail_address_for_reference":"メールアドレス（情報の修正について）",
+      "out_side_city_question":"質問2. 具体的な場所は？（自宅、親戚宅、車中泊 等）",
+      "within_city":"市内",
+      "city_outskirts":"市外",
+      "outside_prefecture":"県外",
+      "c_required":"必要項目です。",
+      "c_enter_evacuee":"避難者を入力する"
     },
     "form": {
       "type": "種別",
@@ -617,14 +624,17 @@
       "c_confirm_register": "こちらの内容でよろしいですか？",
       "alert_info_for_unsaved_contents": "編集した備蓄品の情報まだ保存されてないですか。 よろしいでしょうか？\n 保存する場合は、「棚卸」 ボタンクリックしてください。",
       "temporary_admission_time": "版登録日時",
-      "no_place_to_enter": "入所場所なし"
+      "no_place_to_enter": "入所場所なし",
+      "c_name_furigana": "名前（カタカナ）"
     },
     "buttons": {
       "continue": "次に進む",
       "mem_search": "検索",
-      "checkout_shelter": "上記の情報は本人のため退所します",
-      "reg_shelter": "避難所に入所する",
-      "check_out_shelter": "入所手続きへ戻る"
+      "checkout_shelter":"上記の情報は本人のため退所します",
+      "reg_shelter":"避難所に入所する",
+      "check_out_shelter":"入所手続きへ戻る",
+      "c_yes": "はい",
+      "c_no": "いいえ"
     }
   },
   "lang_others": {
