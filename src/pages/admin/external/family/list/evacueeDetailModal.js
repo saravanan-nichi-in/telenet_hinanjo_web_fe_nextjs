@@ -98,7 +98,18 @@ export default function EvacueeDetailModal(props) {
             {translate(localeJson, 'external_evecuee_details_popup_header')}
         </div>
     );
-
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    
+        return () => {
+            // Cleanup when the component unmounts
+            document.body.style.overflow = 'auto';
+        };
+    }, [open]);
     return (
         <React.Fragment>
             <div>
@@ -108,8 +119,8 @@ export default function EvacueeDetailModal(props) {
                     visible={open}
                     style={{ minWidth: "20rem" }}
                     draggable={false}
-                    onHide={() => close()}
                     blockScroll={true}
+                    onHide={() => close()}
                     footer={
                         <div className="text-center">
                             <Button buttonProps={{
