@@ -10,7 +10,7 @@ import { ValidationError } from "../error";
 import { InputFile } from "../upload";
 
 export default function AdminManagementImportModal(props) {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson,setLoader } = useContext(LayoutContext);
     const { open, close, importFile, modalHeaderText, style } = props && props;
     const header = (
         <div className="custom-modal">
@@ -46,6 +46,7 @@ export default function AdminManagementImportModal(props) {
                 onSubmit={(values, actions) => {
                     importFile(values.file)
                     close();
+                    setLoader(true);
                     values.file = null;
                     actions.resetForm({ values: initialValues });
                 }}
@@ -68,11 +69,8 @@ export default function AdminManagementImportModal(props) {
                                 style={style}
                                 draggable={false}
                                 onHide={() => {
-                                    if (dirty) {
                                         resetAndCloseForm(resetForm);
-                                    } else {
                                         close();
-                                    }
                                 }}
                                 footer={
                                     <div className="text-center">
