@@ -215,6 +215,8 @@ export default function External(props) {
                         selectFloatLabelProps={{
                           name: "gender",
                           value: values.gender,
+                          spanText: "*",
+                          spanClass: "p-error",
                           options: locale == "ja" ? gender_jp : gender_en,
                           optionLabel: "name",
                           selectClass:
