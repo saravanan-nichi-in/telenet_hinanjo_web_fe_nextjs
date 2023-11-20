@@ -208,6 +208,7 @@ function StockpileDashboard() {
         let updatedList = stockPileList.map(stock => { return stock });
         let index = stockPileList.findIndex((item) => item.summary_id == id);
         if (index !== -1) {
+            updatedList[index] = data;
             updatedList[index]['expiry_date'] = new Date(data.expiry_date);
             updatedList[index]['expiryDate'] = getJapaneseDateDisplayYYYYMMDDFormat(data.expiry_date);
             updatedList[index]['Inspection_date_time'] = new Date(data.Inspection_date_time);

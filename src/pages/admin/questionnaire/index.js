@@ -1,41 +1,45 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useAppDispatch } from '@/redux/hooks';
+import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { AdminQuestionarieService } from '@/helper/adminQuestionarieService';
-import { Button, NormalTable, RowExpansionTable } from '@/components';
+import { Button, RowExpansionTable } from '@/components';
 import { DeleteModal, QuestionnairesCreateEditModal } from '@/components/modal';
+import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
+import { setEvent } from '@/redux/event';
 
 export default function Questionnaire() {
-    const { locale,localeJson, setLoader } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
-
+    const [editObject, setEditObject] = useState({})
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            order_by: "asc",
+            sort_by: "created_at"
+        },
+        search: ""
+    });
+    const [tableLoading, setTableLoading] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
+    const [eventData, setEventData] = useState([]);
+    const dispatch = useAppDispatch();
     const cols = [
-        { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header" ,className: "sno_class", textAlign: "center" },
-        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header", body: (rowData) => {
-            if (rowData.Name === 'Flood') {
-                return locale == "ja" ? "地震":"Earthquake"
-            } else {
-                return locale == "ja" ? "津波":"Tsunami"
-            }
-        } },
-        { field: 'Description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header", body: (rowData) => {
-            if (rowData.Description === 'FloodQuestionnaires') {
-                return locale == "ja" ? "	この巨大地震は、869年に発生した三陸地震のメカニズムの再発であり、その規模は少なくとも8.4Mwであると推定されている":"This massive earthquake is a recurrence of the Sanriku earthquake that occurred in the year 869, and its magnitude is estimated to be at least 8.4 Mw."
-            } else {
-                // Default content or text for other cases
-                return locale == "ja" ? "厳戒態勢":"High alert"
-            }
-        } },
+        { field: "si_no", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center" },
+        { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center", display: 'none' },
+        { field: 'name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
+        { field: 'name_en', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header", display: 'none' },
+        { field: 'description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
-            alignHeader:"center",
+            alignHeader: "center",
             className: "action_class",
             body: (rowData) => (
                 <div>
@@ -48,6 +52,7 @@ export default function Questionnaire() {
                             hoverBg: "hover:bg-primary hover:text-white",
                             onClick: () => {
                                 setRegisterModalAction("edit")
+                                setEditObject(rowData)
                                 setSpecialCareEditOpen(true)
                             }
                         }} />
@@ -56,6 +61,9 @@ export default function Questionnaire() {
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
                             buttonClass: "ml-2 delete-button",
+                            onClick: () => {
+                                deleteEventData(rowData)
+                            }
                         }} parentClass={"delete-button"} />
 
                 </div>
@@ -66,8 +74,8 @@ export default function Questionnaire() {
             field: "status",
             minWidth: "3.5rem",
             maxWidth: "3.5rem",
-            textAlign:"center",
-            alignHeader:"center",
+            textAlign: "center",
+            alignHeader: "center",
             header: translate(localeJson, "status"),
             body: (rowData) => {
                 return action(rowData);
@@ -76,21 +84,13 @@ export default function Questionnaire() {
     ]
 
     const innerColumn = [
-        {
-            field: "Name", header: translate(localeJson, 'name'), body: (rowData) => {
-                if (rowData.Name === 'Master questionnaires') {
-                    return translate(localeJson, 'master_questionnaire');
-                } else {
-                    // Default content or text for other cases
-                    return translate(localeJson, 'individual_questionnaires');
-                }
-            }
-        },
+        { field: "id", header: translate(localeJson, 'id'), display: 'none' },
+        { field: "name", header: translate(localeJson, 'name') },
         {
             field: 'actions',
             header: translate(localeJson, 'details_table'),
-            textAlign:"center",
-            alignHeader:"center",
+            textAlign: "center",
+            alignHeader: "center",
             className: "action_class",
             body: (rowData) => {
                 return (
@@ -103,8 +103,9 @@ export default function Questionnaire() {
                                 bg: "bg-white",
                                 hoverBg: "hover:bg-primary hover:text-white",
                                 onClick: () => {
-                                    if (rowData.Name === 'Master questionnaires') {
-                                        router.push('/admin/questionnaire/master')
+                                    dispatch(setEvent({ event_id: rowData.id }));
+                                    if (rowData.name === translate(localeJson, 'master_questionnaire')) {
+                                        router.push('/admin/questionnaire/master');
                                     }
                                     else {
                                         router.push('/admin/questionnaire/individual')
@@ -116,6 +117,17 @@ export default function Questionnaire() {
             }
         }
     ]
+
+    const deleteEventData = (data) => {
+        let payload = {
+            id: data.id
+        };
+        deleteEvent(payload, (response) => {
+            console.log(response);
+            onGetEventList();
+        })
+
+    }
 
     const action = (obj) => {
         return (
@@ -133,11 +145,90 @@ export default function Questionnaire() {
         );
     };
 
+    /**
+     * Pagination handler
+     * @param {*} e 
+     */
+    const onPaginationChange = async (e) => {
+        setTableLoading(true);
+        if (!_.isEmpty(e)) {
+            const newStartValue = e.first; // Replace with your desired page value
+            const newLimitValue = e.rows; // Replace with your desired limit value
+            await setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    start: newStartValue,
+                    limit: newLimitValue
+                }
+            }));
+        }
+    }
+
+    const { getList, registerUpdateEvent, deleteEvent } = EventQuestionnaireServices
+
+    const onGetEventList = () => {
+        getList(getListPayload, (response) => {
+            if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
+                let eventListArray = [];
+                const data = response.data.model.list;
+                data.map((item, index) => {
+                    let event = {
+                        si_no: index + 1,
+                        id: item.id,
+                        name: item.name_ja,
+                        name_en: item.name_en,
+                        description: item.remarks,
+                        orders: [{
+                            id: item.id,
+                            name: translate(localeJson, 'master_questionnaire')
+                        },
+                        {
+                            id: item.id,
+                            name: translate(localeJson, 'individual_questionnaires')
+                        }
+                        ]
+                    };
+                    eventListArray.push(event);
+                })
+                setEventData(eventListArray);
+                setTotalCount(response.data.model.total);
+                setTableLoading(false)
+            }
+
+            else {
+                setTableLoading(false);
+                setEventData([]);
+                setTotalCount(0);
+            }
+        })
+    }
+    const onRegister = (values) => {
+        let payload = {
+            name_ja: values.name,
+            name_en: values.name_en,
+            remarks: values.remarks
+        };
+        if (registerModalAction == 'create') {
+            registerUpdateEvent(payload, () => {
+                onGetEventList()
+            })
+        }
+        else {
+            payload['event_id'] = editObject.id;
+            console.log("kkkkkk", payload)
+            registerUpdateEvent(payload, () => {
+                onGetEventList();
+            })
+        }
+    }
+
     useEffect(() => {
+        setTableLoading(true);
         const fetchData = async () => {
+            await onGetEventList()
             setLoader(false);
         };
-        AdminQuestionarieService.getAdminQuestionarieRowExpansionWithOrdersSmall().then((data) => setAdmins(data));
         fetchData();
     }, []);
 
@@ -147,6 +238,9 @@ export default function Questionnaire() {
                 open={specialCareEditOpen}
                 header={translate(localeJson, registerModalAction == "create" ? 'questionnaire_event_registration' : 'questionnaire_event_info_edit')}
                 close={() => setSpecialCareEditOpen(false)}
+                editObject={editObject}
+                modalAction={registerModalAction}
+                onRegister={onRegister}
                 buttonText={translate(localeJson, registerModalAction == "create" ? 'submit' : 'update')}
             />
             <div className="grid">
@@ -168,7 +262,22 @@ export default function Questionnaire() {
                             }} parentClass={"mr-1 mt-1"} />
                         </div>
                         <div>
-                            <RowExpansionTable paginator={"true"} paginatorLeft={true} showGridlines={"true"} rowExpansionField={"orders"} customRowExpansionActionsField={"actions"} innerColumn={innerColumn} customActionsField="actions" value={admins} outerColumn={cols} />
+                            <RowExpansionTable
+                                paginator={"true"}
+                                totalRecords={totalCount}
+                                loading={tableLoading}
+                                showGridlines={"true"}
+                                rowExpansionField={"orders"}
+                                customRowExpansionActionsField={"actions"}
+                                innerColumn={innerColumn}
+                                customActionsField="actions"
+                                value={eventData}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                first={getListPayload.filters.start}
+                                rows={getListPayload.filters.limit}
+                                paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)}
+                                outerColumn={cols} />
                         </div>
                     </div>
                 </div>
