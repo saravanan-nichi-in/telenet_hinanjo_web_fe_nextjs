@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 export default function App() {
     const { localeJson } = useContext(LayoutContext);
-    const item = localStorage.getItem('user_qr');
+    const qr_details = localStorage.getItem('user_qr');
     const [columnValues, setColumnValues] = useState([]);
     const [otherDetails, setOtherDetails] = useState({});
     const router = useRouter();
@@ -29,7 +29,9 @@ export default function App() {
         { field: 'address_default', header: translate(localeJson, 'qr_scanner_second_table_second_column_current_stay'), minWidth: "15rem", maxWidth: "15rem" },];
 
     const callApi = () => {
-        UserQrService.register({ content: item }, (item) => {
+        let formData = new FormData();
+        formData.append("content",qr_details);
+        UserQrService.register(formData, (item) => {
             setOtherDetails(item);
             setColumnValues(item.person);
         });
