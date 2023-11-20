@@ -11,7 +11,7 @@ const DateTimeCalendarFloatLabel = (props) => {
         parentClass,
         dateTimeFloatLabelProps = {}
     } = props;
-    
+
     const {
         custom,
         id,
@@ -37,18 +37,18 @@ const DateTimeCalendarFloatLabel = (props) => {
     } = dateTimeFloatLabelProps;
 
     const [date, setDate] = useState(props.date);
-    
+
     const { localeJson } = useContext(LayoutContext);
-   
+
     addLocale('en', {
         firstDayOfWeek: 0,
         dayNames: [translate(localeJson, 'sunday'), translate(localeJson, 'monday'), translate(localeJson, 'tuesday'), translate(localeJson, 'wednesday'), translate(localeJson, 'thursday'), translate(localeJson, 'friday'), translate(localeJson, 'saturday')],
         dayNamesShort: [translate(localeJson, 'su'), translate(localeJson, 'mo'), translate(localeJson, 'tu'), translate(localeJson, 'we'), translate(localeJson, 'th'), translate(localeJson, 'fr'), translate(localeJson, 'sa')],
         dayNamesMin: [translate(localeJson, 'su'), translate(localeJson, 'mo'), translate(localeJson, 'tu'), translate(localeJson, 'we'), translate(localeJson, 'th'), translate(localeJson, 'fr'), translate(localeJson, 'sa')],
-        monthNames: [translate(localeJson, 'jan'), translate(localeJson, 'feb'), translate(localeJson, 'mar'), translate(localeJson, 'apr'), translate(localeJson, 'may'), translate(localeJson, 'jun'), translate(localeJson, 'jul'),translate(localeJson, 'aug'),translate(localeJson, 'sep'),translate(localeJson, 'oct'),translate(localeJson, 'nov'),translate(localeJson, 'dec')],
-        monthNamesShort: [translate(localeJson, 'jan'), translate(localeJson, 'feb'), translate(localeJson, 'mar'), translate(localeJson, 'apr'), translate(localeJson, 'may'), translate(localeJson, 'jun'), translate(localeJson, 'jul'),translate(localeJson, 'aug'),translate(localeJson, 'sep'),translate(localeJson, 'oct'),translate(localeJson, 'nov'),translate(localeJson, 'dec')],
-        today: translate(localeJson,'today'),
-        clear: translate(localeJson,'clear')
+        monthNames: [translate(localeJson, 'jan'), translate(localeJson, 'feb'), translate(localeJson, 'mar'), translate(localeJson, 'apr'), translate(localeJson, 'may'), translate(localeJson, 'jun'), translate(localeJson, 'jul'), translate(localeJson, 'aug'), translate(localeJson, 'sep'), translate(localeJson, 'oct'), translate(localeJson, 'nov'), translate(localeJson, 'dec')],
+        monthNamesShort: [translate(localeJson, 'jan'), translate(localeJson, 'feb'), translate(localeJson, 'mar'), translate(localeJson, 'apr'), translate(localeJson, 'may'), translate(localeJson, 'jun'), translate(localeJson, 'jul'), translate(localeJson, 'aug'), translate(localeJson, 'sep'), translate(localeJson, 'oct'), translate(localeJson, 'nov'), translate(localeJson, 'dec')],
+        today: translate(localeJson, 'today'),
+        clear: translate(localeJson, 'clear')
     });
 
     const calendarRef = useRef(null);
@@ -70,6 +70,18 @@ const DateTimeCalendarFloatLabel = (props) => {
         closeCalendar();
     };
 
+    /**
+* Cancel function
+*/
+    const handleCancel = () => {
+        setDate(null);
+        setTimeout(() => {
+            if (calendarRef.current) {
+                calendarRef.current.hide();
+            }
+        }, 1);
+    };
+
     return (
         <div className='custom-align-label'>
             <div className={`${parentClass} ${custom || 'custom_input'} p-float-label`}>
@@ -89,7 +101,7 @@ const DateTimeCalendarFloatLabel = (props) => {
                         }
                     }
                     }
-                    dateFormat={translate(localeJson,'dateFormat')}
+                    dateFormat={translate(localeJson, 'dateFormat')}
                     disabledDates={disabledDates}
                     disabledDays={disabledDays}
                     minDate={minDate}
@@ -117,9 +129,7 @@ const DateTimeCalendarFloatLabel = (props) => {
                                     bg: "bg-white",
                                     hoverBg: "hover:surface-500 hover:text-white",
                                     text: translate(localeJson, 'cancel'),
-                                    onClick: () => {
-                                        closeCalendar();
-                                    }
+                                    onClick: handleCancel,
                                 }} parentClass={"inline pl-2"} />
 
                             </div>

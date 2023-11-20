@@ -102,13 +102,13 @@ function StaffFamily() {
         },
         { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "10rem" },
         { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'age_month', header: translate(localeJson, 'age_m'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'special_care_name', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "8rem" },
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "8rem" },
+        { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "10rem" },
         { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "right", alignHeader: "center" },
 
     ];
@@ -256,7 +256,7 @@ function StaffFamily() {
                     "remarks": item.note,
                     "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
                     "connecting_code": item.connecting_code,
-                    "check_in_date": item.created_at ? getGeneralDateTimeSlashDisplayFormat(item.created_at) : "",
+                    "check_in_date": item.created_at ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.created_at) : getEnglishDateDisplayFormat(item.created_at) : "",
                     "evacuation_days": item.created_at ? getNumberOfEvacuationDays(item.created_at) : ""
                 };
                 if (item.add_question.length > 0) {
