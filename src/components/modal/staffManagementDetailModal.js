@@ -62,7 +62,7 @@ export default function StaffManagementDetailModal(props) {
                         let preparedObj = {
                             slno: i + getListPayload.filters.start + 1,
                             name: obj.name ?? "",
-                            login_datetime: obj.login_datetime  ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.login_datetime) : getEnglishDateTimeDisplayActualFormat(obj.login_datetime) : ""
+                            login_datetime: obj.login_datetime ? locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.login_datetime) : getEnglishDateTimeDisplayActualFormat(obj.login_datetime) : ""
                         }
                         preparedList.push(preparedObj);
                     })
