@@ -357,10 +357,10 @@ export default function AdminHistoryPlacePage() {
                                                 inputId: "settingStartDate",
                                                 selectionMode: "range",
                                                 text: translate(localeJson, "report_date_time"),
-                                                dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                                dateTimeClass: "w-full lg:w-23rem md:w-20rem sm:w-14rem ",
 
                                                 onChange: (e) => setSelectedDate(e.value)
-                                            }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
+                                            }} parentClass="w-20rem lg:w-23rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
                                             id: "shelterCity",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",

@@ -25,7 +25,8 @@ export default function RegisterCheckIn() {
       field: "slno",
       header: translate(localeJson, "supplies_slno"),
       className: "sno_class",
-      textAlign: "center"
+      textAlign: "center",
+      headerAlign:"center"
     },
     {
       field: "name",
