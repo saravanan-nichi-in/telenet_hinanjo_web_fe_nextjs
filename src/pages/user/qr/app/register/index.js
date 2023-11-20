@@ -11,9 +11,10 @@ export default function App() {
     const qr_details = localStorage.getItem('user_qr');
     const [columnValues, setColumnValues] = useState([]);
     const [otherDetails, setOtherDetails] = useState({});
+    const [registerPayload, setRegisterPayload] = useState({});
     const router = useRouter();
     const columns = [
-        { field: 'id', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number'), className: "sno_class", textAlign: "center" },
+        { field: 'slno', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number'), className: "sno_class", textAlign: "center" },
         { field: 'is_owner_temp', header: translate(localeJson, 'qr_scanner_second_table_second_column_representative'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'refugee_name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name_chinese'), minWidth: "15rem", maxWidth: "15rem" },
@@ -39,6 +40,7 @@ export default function App() {
                 // if(element.is_owner==0) {
                 //     tempObj.is_owner_temp = element.is_owner==0? 
                 // }
+                tempObj.slno = index+1;
                 tempObj.address_full = `${element.zip_code} ${element.postal_code} ${element.prefecture_id} ${element.address} `;
                 tempObj.spacial_care_name_full = tempObj.specialCareName.join(', ');
                 tempObj.individual_questions_full = tempObj.individualQuestions.join(', ');
@@ -59,7 +61,7 @@ export default function App() {
                 <hr />
                 <div className="grid">
                     <div className="col-10"></div>
-                    <div className="col-2"><h5>{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</h5></div>
+                    <div className="col-2"><h6>{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</h6></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_refuge_date')}</h5>
                     </div>
@@ -106,7 +108,7 @@ export default function App() {
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_association_name')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.question.join(', ')}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.question?.join(', ')}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_test_payload')}</h5>
                     </div>
@@ -129,8 +131,15 @@ export default function App() {
                         size:"large",
                         text: translate(localeJson, 'qr_scanner_details_shelter'),
                         severity: "success",
-                        onClick: () => {localStorage.removeItem('user_qr');
-                        router.push("/user/qr/app")}
+                        onClick: () => {
+                        UserQrService.create({
+                            "family_id": otherDetails.id,
+                            "place_id": otherDetails.place_id
+                        }, (response) => {
+                            localStorage.removeItem('user_qr');
+                            router.push("/user/qr/app")
+                        });    
+                        }
                     }} parentClass={"mr-1 mt-1"} />
 
                 </div>
