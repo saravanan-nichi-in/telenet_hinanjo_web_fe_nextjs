@@ -137,7 +137,7 @@ export default function External(props) {
                           value: values.name,
                           onChange: handleChange,
                           onBlur: handleBlur,
-                          text: translate(localeJson, "c_name_furigana"),
+                          text: translate(localeJson, "c_refugee_name"),
                           inputClass:
                             "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                         }}

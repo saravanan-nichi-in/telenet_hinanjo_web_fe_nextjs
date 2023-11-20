@@ -348,37 +348,18 @@ export const removeDuplicatesByKey = (array, key) => {
 export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
     const options = {
         year: 'numeric',
-        month: '2-digit',
+        month: 'long',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
         timeZone: 'Asia/Kolkata'
     };
-
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
-    // Extracting individual components from the formatted string
-    const [, year, month, day, hour, minute, second] = formattedJPDateTime.match(/(\d+).(\d+).(\d+). (\d+):(\d+):(\d+)/);
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日, (\d+):(\d+):(\d+)/,'$1年$2月$3日 $4:$5:$6');
+    return formattedJPDateTime;
 
-    // Mapping numeric month to its corresponding Japanese representation
-    const japaneseMonths = [
-        '1月', '2月', '3月', '4月', '5月', '6月',
-        '7月', '8月', '9月', '10月', '11月', '12月'
-    ];
-    const japaneseMonth = japaneseMonths[parseInt(month, 10) - 1];
-
-    // Mapping the day of the week to its corresponding Japanese representation
-    const japaneseDaysOfWeek = [
-        '日', '月', '火', '水', '木', '金', '土'
-    ];
-    const dayOfWeek = new Date(dateTime).getDay();
-    const japaneseDayOfWeek = japaneseDaysOfWeek[dayOfWeek];
-
-    // Constructing the final Japanese date string
-    const japaneseDateString = `${year}年${japaneseMonth}${day}日 (${japaneseDayOfWeek}) ${hour}:${minute}:${second}`;
-
-    return japaneseDateString;
 };
 /**
  * Get english date & time format
