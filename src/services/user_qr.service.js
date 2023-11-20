@@ -51,7 +51,7 @@ function _register(payload, callBackFun) {
                   });
                 }
               } else {
-                  callBackFun();
+                //   callBackFun();
                   console.error(error);
                   toast.error(error.response.data.message, {
                       position: "top-right",

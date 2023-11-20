@@ -35,11 +35,12 @@ export default function App() {
         UserQrService.register(formData, (item) => {
             setOtherDetails(item);
             const tempArray = [];
-            item.person.forEach((element, index) => {
+            
+            item?.person?.forEach((element, index) => {
                 const tempObj = {...element};
-                // if(element.is_owner==0) {
-                //     tempObj.is_owner_temp = element.is_owner==0? 
-                // }
+                
+                tempObj.is_owner_temp = element.is_owner==0? translate(localeJson, 'qr_scanner_second_table_second_column_is_owner_mutated') : "-";
+                
                 tempObj.slno = index+1;
                 tempObj.address_full = `${element.zip_code} ${element.postal_code} ${element.prefecture_id} ${element.address} `;
                 tempObj.spacial_care_name_full = tempObj.specialCareName.join(', ');

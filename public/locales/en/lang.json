@@ -186,6 +186,7 @@
        "qr_scanner_first_table_town_test_payload": "test payload *",
        "qr_scanner_second_table_second_heading": "Household list",
        "qr_scanner_second_table_second_column_serial_number": "number",
+       "qr_scanner_second_table_second_column_is_owner_mutated": "Representative",
        "qr_scanner_second_table_second_column_representative": "Representative",
        "qr_scanner_second_table_second_column_family_name": "Name (furigana)",
        "qr_scanner_second_table_second_column_family_name_chinese": "Name (Kanji)",

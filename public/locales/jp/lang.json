@@ -184,6 +184,7 @@
       "qr_scanner_first_table_town_test_payload": "test payload *",
       "qr_scanner_second_table_second_heading": "世帯名簿",
       "qr_scanner_second_table_second_column_serial_number": "番号",
+      "qr_scanner_second_table_second_column_is_owner_mutated": "代表者",
       "qr_scanner_second_table_second_column_representative": "代表者",
       "qr_scanner_second_table_second_column_family_name": "氏名 (フリガナ)",
       "qr_scanner_second_table_second_column_family_name_chinese": "氏名 (漢字)",
