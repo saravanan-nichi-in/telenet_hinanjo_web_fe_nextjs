@@ -29,13 +29,13 @@ function StockpileHistory() {
         { field: 'after_count', header: translate(localeJson, 'quantity_after'), headerClassName: "custom-header", minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), headerClassName: "custom-header", minWidth: "5rem", textAlign: 'left' },
         { field: 'expiry_date', header: translate(localeJson, 'expiry_date'), headerClassName: "custom-header", minWidth: "9rem", textAlign: 'left' },
-        { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", textAlign: 'left',minWidth:"5rem" },
+        { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", textAlign: 'left', minWidth: "5rem" },
     ];
     const [getHistoryListPayload, setGetHistoryListPayload] = useState({
         filters: {
             start: 0,
             limit: 5,
-            order_by: "desc"
+            order_by: "desc",
         },
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         Inspection_date_time: "",
@@ -110,7 +110,7 @@ function StockpileHistory() {
                     name: "--",
                     product_id: "",
                     category: "",
-                    product_name: ""
+                    product_name: "",
                 }
             ];
             if (response.data && response.data.model) {
@@ -180,16 +180,15 @@ function StockpileHistory() {
      */
     const onSearchButtonClick = async () => {
         setTableLoading(true);
-        if (!_.isEmpty(inspectionDateTime) || !_.isEmpty(productType) || !_.isEmpty(productName) || !_.isEmpty(inCharge)) {
-            await setGetHistoryListPayload(prevState => ({
-                ...prevState,
-                place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
-                Inspection_date_time: inspectionDateTime ? getGeneralDateTimeDisplayFormat(inspectionDateTime) : "",
-                category: productType.category,
-                product_name: productName.product_name,
-                incharge: inCharge
-            }));
-        }
+        await setGetHistoryListPayload(prevState => ({
+            ...prevState,
+            place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
+            Inspection_date_time: inspectionDateTime ? getGeneralDateTimeDisplayFormat(inspectionDateTime) : "",
+            category: productType.category,
+            product_name: productName.product_name,
+            incharge: inCharge
+        }));
+
     }
 
     /**
