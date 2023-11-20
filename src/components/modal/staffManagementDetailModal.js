@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import _ from 'lodash';
 
 import Button from "../button/button";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "../datatable";
 import StaffManagementEditModal from "./StaffManagementEditModal";
@@ -62,7 +62,7 @@ export default function StaffManagementDetailModal(props) {
                         let preparedObj = {
                             slno: i + getListPayload.filters.start + 1,
                             name: obj.name ?? "",
-                            login_datetime: obj.login_datetime ?? "",
+                            login_datetime: obj.login_datetime  ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.login_datetime) : getEnglishDateTimeDisplayActualFormat(obj.login_datetime) : ""
                         }
                         preparedList.push(preparedObj);
                     })

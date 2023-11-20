@@ -368,15 +368,18 @@ export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
     ];
     const japaneseMonth = japaneseMonths[parseInt(month, 10) - 1];
 
-    // Getting the day of the week
-    const dayOfWeek = new Date(dateTime).toLocaleDateString('ja-JP', { weekday: 'long' });
+    // Mapping the day of the week to its corresponding Japanese representation
+    const japaneseDaysOfWeek = [
+        '日', '月', '火', '水', '木', '金', '土'
+    ];
+    const dayOfWeek = new Date(dateTime).getDay();
+    const japaneseDayOfWeek = japaneseDaysOfWeek[dayOfWeek];
 
     // Constructing the final Japanese date string
-    const japaneseDateString = `${year}年${japaneseMonth}${day}日 (${dayOfWeek}) ${hour}:${minute}:${second}`;
+    const japaneseDateString = `${year}年${japaneseMonth}${day}日 (${japaneseDayOfWeek}) ${hour}:${minute}:${second}`;
 
     return japaneseDateString;
 };
-
 /**
  * Get english date & time format
  * @param {*} dateTime 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
-import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate, getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
@@ -31,8 +31,8 @@ export default function EvacueeFamilyDetail() {
         { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem", textAlign: "right", alignHeader: "center" },
         { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
         { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
-        { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "10rem" },
-        { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "10rem" },
+        { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "14rem" },
+        { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "14rem" },
     ];
 
     const familyDetailColumns = [
@@ -143,7 +143,7 @@ export default function EvacueeFamilyDetail() {
                     is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     refugee_name: person.refugee_name,
                     name: person.name,
-                    dob: getJapaneseDateDisplayFormat(person.dob),
+                    dob:locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob) : getEnglishDateDisplayFormat(person.dob),
                     age: person.age,
                     age_month: person.month,
                     gender: getGenderValue(person.gender),
