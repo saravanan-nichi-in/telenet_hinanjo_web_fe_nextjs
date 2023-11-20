@@ -653,7 +653,8 @@
       "postal_code_required": "郵便番号は必須です。",
       "address_required": "住所は必須です。",
       "email_required": "メールアドレスは必須です。",
-      "prefecture_required": "都道府県は必須です。"  
+      "prefecture_required": "都道府県は必須です。"  ,
+      "specified_loc_max_len":"場所詳細は255文字以内で入力してください。"
     },
     "buttons": {
       "continue": "次に進む",
