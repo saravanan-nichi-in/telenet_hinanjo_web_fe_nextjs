@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/redux/hooks';
+import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
@@ -30,7 +31,7 @@ export default function Questionnaire() {
     const dispatch = useAppDispatch();
     const cols = [
         { field: "si_no", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center" },
-        { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center" , display: 'none'},
+        { field: "id", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center", display: 'none' },
         { field: 'name', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
         { field: 'name_en', header: translate(localeJson, 'questionnaire_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header", display: 'none' },
         { field: 'description', header: translate(localeJson, 'remarks'), minWidth: '18rem', maxWidth: '18rem', headerClassName: "custom-header" },
