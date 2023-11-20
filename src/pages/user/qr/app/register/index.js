@@ -104,7 +104,7 @@ export default function App() {
                 </div>
             </div>
             <div className="card">
-                <div className='grid'>
+                <div className='grid py-3'>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_association_name')}</h5>
                     </div>
@@ -114,8 +114,9 @@ export default function App() {
                     </div>
                     <div className="col-7"><h5>{otherDetails?.zip_code}</h5></div>
                     
-                    <div className="grid mt-5" style={{justifyContent: 'center', alignItems:"center"}}>
-                    <Button buttonProps={{
+                </div>
+                <div className="grid py-3" style={{justifyContent: 'center', alignItems:"center"}}>
+                <Button buttonProps={{
                         type: 'submit',
                         rounded: "true",
                         size:"large",
@@ -141,8 +142,6 @@ export default function App() {
                         });    
                         }
                     }} parentClass={"mr-1 mt-1"} />
-
-                </div>
 
                 </div>
             </div>
