@@ -26,8 +26,8 @@ export default function StaffStockpileEdit(props) {
             .integer(translate(localeJson, 'number_field'))
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.number().typeError(translate(localeJson, 'number_field'))
-            .positive(translate(localeJson, 'number_field'))
             .integer(translate(localeJson, 'number_field'))
+            .min(0, translate(localeJson, 'number_field'))
             .max(99999, translate(localeJson, 'quantity_max'))
             .required(translate(localeJson, 'quantity_is_required')),
         Inspection_date_time: Yup.string()

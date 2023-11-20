@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -10,7 +11,8 @@ import { Button, DND } from '@/components';
 import { QuestionnaireServices } from '@/services/questionnaire.services';
 
 export default function IndividualQuestionnaire() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const {locale, localeJson, setLoader } = useContext(LayoutContext);
+    const param = useAppSelector((state) => state.eventReducer.event);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -18,7 +20,8 @@ export default function IndividualQuestionnaire() {
             order_by: "asc",
             sort_by: "updated_at"
         },
-        search: ""
+        search: "",
+        event_id: param.event_id
     });
     const [questionnaires, setQuestionnaires] = useState([]);
     const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
@@ -129,7 +132,7 @@ export default function IndividualQuestionnaire() {
             await onGetQuestionnaireListMounting();
         };
         fetchData();
-    }, []);
+    }, [locale]);
 
     const bindQuestion = () => {
         return (
@@ -159,6 +162,7 @@ export default function IndividualQuestionnaire() {
         let payloadData = [];
         questionnaires.map((item) => {
             let question = {
+                "event_id": param.event_id,
                 "selectionOptions": "" + item.selected_type,
                 "questiontitle": item.questiontitle,
                 "questiontitle_en": item.questiontitle_en,
@@ -179,6 +183,7 @@ export default function IndividualQuestionnaire() {
 
         deletedQuestionnaire.map((item) => {
             let question = {
+                "event_id": param.event_id,
                 "selectionOptions": "" + item.selected_type,
                 "questiontitle": item.questiontitle,
                 "questiontitle_en": item.questiontitle_en,

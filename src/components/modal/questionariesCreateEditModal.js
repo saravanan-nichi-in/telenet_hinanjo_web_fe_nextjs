@@ -22,12 +22,32 @@ export default function QuestionnairesCreateEditModal(props) {
         remarks: Yup.string()
             .max(255, translate(localeJson, 'questionnaire_remarks_is_max_required')),
     });
-    const { open, close, onSpecialCareEditSuccess, header, buttonText } = props && props;
-    const [initialValues] = useState({
+    const { open, close, onRegister, header, buttonText, modalAction, editObject } = props && props;
+    const [initialValues, setInitialValues] = useState({
         name: "",
         name_en: "",
         remarks: ""
     })
+
+    useEffect(() => {
+        if (open) {
+            if(modalAction == "create"){
+                setInitialValues({
+                    name: "",
+                    name_en: "",
+                    remarks: ""
+                });
+            } else {
+                setInitialValues({
+                    name: editObject.name,
+                    name_en: editObject.name_en,
+                    remarks: editObject.description
+                });
+            }
+            
+        }
+    }, [open]);
+
     return (
         <>
             <Formik
@@ -36,7 +56,9 @@ export default function QuestionnairesCreateEditModal(props) {
                 enableReinitialize
                 onSubmit={(values, actions) => {
                     close();
+                    onRegister(values);
                     actions.resetForm({ values: initialValues });
+                    
                 }}
             >
                 {({
