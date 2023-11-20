@@ -245,7 +245,7 @@ export default function PublicExternal() {
       header: translate(localeJson, "c_dob"),
       minWidth: "6rem",
       maxWidth: "6rem",
-      headerClassName: "custom-header", //getJapaneseDateDisplayYYYYMMDDFormat
+      headerClassName: "custom-header",
       body: (rowData) => {
         const date = locale === 'ja' ? getJapaneseDateDisplayYYYYMMDDFormat(new Date(rowData.dob)) : rowData.dob;
     
