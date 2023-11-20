@@ -14,26 +14,37 @@ export default function App() {
     const router = useRouter();
     const columns = [
         { field: 'id', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number'), className: "sno_class", textAlign: "center" },
-        { field: 'name', header: translate(localeJson, 'qr_scanner_second_table_second_column_representative'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'family_id', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'family_id', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name_chinese'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'is_owner_temp', header: translate(localeJson, 'qr_scanner_second_table_second_column_representative'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'refugee_name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name_chinese'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'dob', header: translate(localeJson, 'qr_scanner_second_table_second_column_dob'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'age', header: translate(localeJson, 'qr_scanner_second_table_second_column_age'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'month', header: translate(localeJson, 'qr_scanner_second_table_second_column_year_month'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'gender', header: translate(localeJson, 'qr_scanner_second_table_second_column_gender'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'created_at_day', header: translate(localeJson, 'qr_scanner_second_table_second_column_completion_date'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'address', header: translate(localeJson, 'qr_scanner_second_table_second_column_residence'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'unit', header: translate(localeJson, 'qr_scanner_second_table_second_column_allocation_person'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'unit', header: translate(localeJson, 'qr_scanner_second_table_second_column_new_pay'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'unit', header: translate(localeJson, 'qr_scanner_second_table_second_column_prepare_for_exam'), minWidth: "15rem", maxWidth: "15rem" },
-        { field: 'address_default', header: translate(localeJson, 'qr_scanner_second_table_second_column_current_stay'), minWidth: "15rem", maxWidth: "15rem" },];
+        { field: 'address_full', header: translate(localeJson, 'qr_scanner_second_table_second_column_residence'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'spacial_care_name_full', header: translate(localeJson, 'qr_scanner_second_table_second_column_allocation_person'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'connecting_code', header: translate(localeJson, 'qr_scanner_second_table_second_column_new_pay'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'note', header: translate(localeJson, 'qr_scanner_second_table_second_column_prepare_for_exam'), minWidth: "15rem", maxWidth: "15rem" },
+        { field: 'individual_questions_full', header: translate(localeJson, 'qr_scanner_second_table_second_column_current_stay'), minWidth: "15rem", maxWidth: "15rem" },];
 
     const callApi = () => {
         let formData = new FormData();
         formData.append("content",qr_details);
         UserQrService.register(formData, (item) => {
             setOtherDetails(item);
-            setColumnValues(item.person);
+            const tempArray = [];
+            item.person.forEach((element, index) => {
+                const tempObj = {...element};
+                // if(element.is_owner==0) {
+                //     tempObj.is_owner_temp = element.is_owner==0? 
+                // }
+                tempObj.address_full = `${element.zip_code} ${element.postal_code} ${element.prefecture_id} ${element.address} `;
+                tempObj.spacial_care_name_full = tempObj.specialCareName.join(', ');
+                tempObj.individual_questions_full = tempObj.individualQuestions.join(', ');
+                tempArray.push(tempObj);
+            });
+            setColumnValues(tempArray);
         });
     }
 
@@ -48,19 +59,19 @@ export default function App() {
                 <hr />
                 <div className="grid">
                     <div className="col-10"></div>
-                    <div className="col-2"><h5>{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.zip_code}</h5></div>
+                    <div className="col-2"><h5>{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_refuge_date')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.join_date}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.join_date_modified}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_residence')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.address}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.zip_code} {otherDetails?.perfecture_name} {otherDetails?.address}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_tel_representative')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.address}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.tel}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_tel_login_locale')}</h5>
                     </div>
@@ -95,7 +106,7 @@ export default function App() {
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_association_name')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.perfecture_name}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.question.join(', ')}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_test_payload')}</h5>
                     </div>
