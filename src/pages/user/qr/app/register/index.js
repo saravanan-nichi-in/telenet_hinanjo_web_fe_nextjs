@@ -109,7 +109,7 @@ export default function App() {
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_association_name')}</h5>
                     </div>
-                    <div className="col-7"><h5>{otherDetails?.question?.join(', ')}</h5></div>
+                    <div className="col-7"><h5>{otherDetails?.question?.map(question => question.title).join(', ')}</h5></div>
                     <div className="col-5">
                         <h5>{translate(localeJson, 'qr_scanner_first_table_town_test_payload')}</h5>
                     </div>
