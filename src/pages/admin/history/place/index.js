@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getDefaultTodayDateTimeFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getDefaultTodayDateTimeFormat, getEnglishDateTimeDisplayActualFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { InputSelectFloatLabel } from '@/components/dropdown';
@@ -154,7 +154,7 @@ export default function AdminHistoryPlacePage() {
             data.map((obj, i) => {
                 let historyData = {
                     "si_no": index,
-                    "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
+                    "created_at": obj.created_at ? (locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.created_at) : getEnglishDateTimeDisplayActualFormat(obj.created_at)) : "",
                     "prefecture_name": obj.prefecture_name,
                     "place_name": obj.place_name,
                     "place_name_en": obj.place_name_en,
@@ -357,10 +357,10 @@ export default function AdminHistoryPlacePage() {
                                                 inputId: "settingStartDate",
                                                 selectionMode: "range",
                                                 text: translate(localeJson, "report_date_time"),
-                                                dateTimeClass: "w-full lg:w-22rem md:w-20rem sm:w-14rem ",
+                                                dateTimeClass: "w-full lg:w-23rem md:w-20rem sm:w-14rem ",
 
                                                 onChange: (e) => setSelectedDate(e.value)
-                                            }} parentClass="w-20rem lg:w-22rem md:w-20rem sm:w-14rem input-align" />
+                                            }} parentClass="w-20rem lg:w-23rem md:w-20rem sm:w-14rem input-align" />
                                         <InputSelectFloatLabel dropdownFloatLabelProps={{
                                             id: "shelterCity",
                                             inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-14rem",

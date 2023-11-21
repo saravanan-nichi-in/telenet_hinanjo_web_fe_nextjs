@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getValueByKeyRecursively as translate,getJapaneseDateDisplayYYYYMMDDFormat } from "@/helper";
 import {
   Button,
   ToggleSwitch,
   NormalTable,
   InputFloatLabel,
   SelectFloatLabel,
-  ValidationError,
+  ValidationError
 } from "@/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -246,6 +246,11 @@ export default function PublicExternal() {
       minWidth: "6rem",
       maxWidth: "6rem",
       headerClassName: "custom-header",
+      body: (rowData) => {
+        const date = locale === 'ja' ? getJapaneseDateDisplayYYYYMMDDFormat(new Date(rowData.dob)) : rowData.dob;
+    
+        return <span>{date}</span>;
+      },
     },
     {
       field: "age",
@@ -253,6 +258,8 @@ export default function PublicExternal() {
       minWidth: "6rem",
       maxWidth: "6rem",
       headerClassName: "custom-header",
+      textAlign:"right",
+      alignHeader:"center"
     },
     {
       field: "gender",

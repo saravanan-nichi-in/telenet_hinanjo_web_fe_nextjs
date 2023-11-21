@@ -25,7 +25,8 @@ export default function RegisterCheckIn() {
       field: "slno",
       header: translate(localeJson, "supplies_slno"),
       className: "sno_class",
-      textAlign: "center"
+      textAlign: "center",
+      alignHeader:"center"
     },
     {
       field: "name",
@@ -38,6 +39,7 @@ export default function RegisterCheckIn() {
       header: translate(localeJson, "residence_with_information"),
       minWidth: "10rem",
       maxWidth: "10rem",
+      alignHeader:"center",
       body: (rowData) => (
         <div className="border-top-none">
           <Counter
@@ -58,6 +60,7 @@ export default function RegisterCheckIn() {
       header: translate(localeJson, "residence_with_out_information"),
       minWidth: "10rem",
       maxWidth: "10rem",
+      alignHeader:"center",
       body: (rowData) => (
         <div className="border-top-none">
           <Input inputProps={{
