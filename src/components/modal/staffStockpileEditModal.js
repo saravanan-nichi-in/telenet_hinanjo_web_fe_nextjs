@@ -163,10 +163,9 @@ export default function StaffStockpileEdit(props) {
                                             <InputNumberFloatLabel
                                                 inputNumberFloatProps={{
                                                     id: "shelf_life",
-                                                    inputId: "integeronly",
                                                     name: "shelf_life",
                                                     disabled: true,
-                                                    value: values.shelf_life,
+                                                    value: values.shelf_life ? values.shelf_life : null,
                                                     text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
                                                     inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
                                                 }}
@@ -178,7 +177,6 @@ export default function StaffStockpileEdit(props) {
                                                     id: "quantity",
                                                     spanText: "*",
                                                     spanClass: "p-error",
-                                                    inputId: "quantity",
                                                     name: "after_count",
                                                     value: values.after_count,
                                                     onValueChange: handleChange,
