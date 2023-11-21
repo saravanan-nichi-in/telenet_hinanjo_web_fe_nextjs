@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
