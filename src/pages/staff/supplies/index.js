@@ -48,7 +48,6 @@ export default function Supplies() {
       header: translate(localeJson, "supplies_name"),
       minWidth: "15rem",
       maxWidth: "15rem",
-      
     },
     {
       field: "unit",
