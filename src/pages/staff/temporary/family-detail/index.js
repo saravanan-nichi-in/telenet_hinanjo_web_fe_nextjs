@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable, CommonDialog, RowExpansionTable } from '@/components';
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
@@ -168,7 +168,7 @@ export default function TemporaryFamilyDetail() {
                     is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
                     refugee_name: person.refugee_name,
                     name: person.name,
-                    dob: getJapaneseDateDisplayFormat(person.dob),
+                    dob:  person.dob? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(person.dob): getEnglishDateDisplayFormat(person.dob)): "",
                     age: person.age,
                     age_month: person.month,
                     gender: getGenderValue(person.gender),
@@ -197,7 +197,7 @@ export default function TemporaryFamilyDetail() {
                 let historyItem = {
                     place_id: item.place_id,
                     shelter_place: item.placeName,
-                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                    admission_date_time:item.status == 0? (item.access_datetime? (locale == "ja"? getJapaneseDateTimeDisplayActualFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)): ""): "",
                 };
                 admittedHistory.push(historyItem);
 

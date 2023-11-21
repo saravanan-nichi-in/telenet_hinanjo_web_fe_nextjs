@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { useRouter } from 'next/router';
 
 import { LayoutContext } from './context/layoutcontext';
-import { getValueByKeyRecursively as translate } from '@/helper';
+import { getEnglishDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from '@/helper';
 import { AuthenticationAuthorizationService } from '@/services';
 import { DropdownSelect, ImageComponent } from '@/components';
 import { ChangePasswordModal } from '@/components/modal';
@@ -35,7 +35,7 @@ const AppTopbar = forwardRef((props, ref) => {
         minute: '2-digit',
         timeZone: 'Asia/Tokyo'
     };
-    const formattedDateTime = currentDateTime.toLocaleString('ja-JP', options);
+    const formattedDateTime = currentDateTime;
 
     // Helper function country template
     const selectedCountryTemplate = (option, props) => {
@@ -229,9 +229,16 @@ const AppTopbar = forwardRef((props, ref) => {
                         <div ref={topbarmenuRef} className='header-details-second'>
                             <div className={`${_.isEmpty(userName) ? "mr-2" : "mr-2"}`}>
                                 <div className='header-details-second-date-time-picker'>
-                                    {formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
+                                    {locale === 'ja'
+                                        ? getJapaneseDateTimeDisplayActualFormat(formattedDateTime)
+                                        : getEnglishDateTimeDisplayActualFormat(formattedDateTime)}
                                 </div>
-                                <div title={formattedDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')}
+                                <div
+                                    title={
+                                        locale === 'ja'
+                                            ? getJapaneseDateTimeDisplayActualFormat(formattedDateTime)
+                                            : getEnglishDateTimeDisplayActualFormat(formattedDateTime)
+                                    }
                                     className='header-details-second-date-time-picker-icon'>
                                     <i className="pi pi-clock" />
                                 </div>
