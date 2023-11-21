@@ -214,8 +214,8 @@ function AdminStockpileSummary() {
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
-                        expiry_date: item.expiry_date ?locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
-                        expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                        expiry_date: item.expiry_date ?locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
+                        expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
                         stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
                     }],
                 }

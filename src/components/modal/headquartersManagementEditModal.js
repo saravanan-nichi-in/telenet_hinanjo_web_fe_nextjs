@@ -19,15 +19,16 @@ export default function StaffManagementEditModal(props) {
     const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const schema = Yup.object().shape({
-        email: Yup.string()
-            .required(translate(localeJson, 'email_required'))
-            .email(translate(localeJson, 'email_valid')),
+        userId: Yup.string()
+            .required(translate(localeJson, 'userId_required')),
         name: Yup.string()
             .required(translate(localeJson, 'staff_name_required'))
             .max(200, translate(localeJson, 'staff_name_max_required')),
-        tel: Yup.string()
-            .required(translate(localeJson, 'phone_no_required'))
-            .min(10, translate(localeJson, 'phone_min10_required')),
+        password: Yup.string()
+        .required(translate(localeJson, 'new_password_required'))
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>?]).{8,}$/,
+            translate(localeJson, 'new_password_not_matched')
+        ),
     });
     const [admins, setAdmins] = useState(null);
 
@@ -39,14 +40,9 @@ export default function StaffManagementEditModal(props) {
         </div>
     );
 
-    const resetAndCloseForm = (callback) => {
-        close();
-        callback();
-        props.refreshList();
-    }
     const [rowClick, setRowClick] = useState(true);
     const [selectedProducts, setSelectedProducts] = useState(null);
-
+    const initialValues={userId:"",name:"",password:""}
     const columns = [
         {
             selectionMode: "multiple",
@@ -56,7 +52,7 @@ export default function StaffManagementEditModal(props) {
             maxWidth: "4rem",
             className: "action_class",
         },
-        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), headerClassName: "custom-header", minWidth: "20rem", maxWidth: "20rem" },
+        { field: 'Name', header: translate(localeJson, 'questionnaire_name'), headerClassName: "custom-header", minWidth: "10rem", maxWidth: "10rem" },
     ]
 
     useEffect(() => {
@@ -67,19 +63,15 @@ export default function StaffManagementEditModal(props) {
     return (
         <>
             <Formik
-                initialValues={props.currentEditObj}
+                initialValues={initialValues}
                 validationSchema={schema}
                 enableReinitialize={true}
-                onSubmit={(values, { resetForm }) => {
+                onSubmit={(values, actions) => {
                     if (props.registerModalAction == "create") {
-                        StaffManagementService.create(values, () => {
-                            resetAndCloseForm(resetForm);
-                        })
+                        actions.resetForm({ values: initialValues });
+
                     } else if (props.registerModalAction == "edit") {
-                        StaffManagementService.update(props.currentEditObj.id, { id: props.currentEditObj.id, ...values },
-                            () => {
-                                resetAndCloseForm(resetForm);
-                            })
+                        actions.resetForm({ values: initialValues });
                     }
                     return false;
                 }}
@@ -100,8 +92,6 @@ export default function StaffManagementEditModal(props) {
                                 header={props.registerModalAction == 'create' ? translate(localeJson, 'add_staff_management') : translate(localeJson, 'edit_staff_management')}
                                 visible={open}
                                 draggable={false}
-                                blockScroll={true}
-                                style={{ maxWidth: '30rem'}}
                                 onHide={() => {
                                     resetForm();
                                     close();
@@ -152,47 +142,30 @@ export default function StaffManagementEditModal(props) {
                                                     < InputFloatLabel inputFloatLabelProps={{
                                                         id: 'householdNumber',
                                                         spanText: "*",
-                                                        name: 'email',
+                                                        name: 'userId',
                                                         spanClass: "p-error",
-                                                        value: values && values.email,
+                                                        value: values && values.userId,
                                                         onChange: handleChange,
                                                         onBlur: handleBlur,
-                                                        text: translate(localeJson, 'address_email'),
+                                                        text: translate(localeJson, 'address_userId'),
                                                         inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                                    }} parentClass={`${errors.email && touched.email && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.email && touched.email && errors.email} />
+                                                    }} parentClass={`${errors.userId && touched.userId && 'p-invalid pb-1'}`} />
+                                                    <ValidationError errorBlock={errors.userId && touched.userId && errors.userId} />
                                                 </div>
-                                                <div className="mt-5 ">
-                                                    < InputFloatLabel inputFloatLabelProps={{
+                                                <div className="mt-5">
+                                                    <PasswordFloatLabel passwordFloatLabelProps={{
                                                         id: 'householdNumber',
                                                         spanText: "*",
-                                                        name: 'tel',
-                                                        value: values && values.tel,
+                                                        name: 'password',
+                                                        value: values.password,
                                                         spanClass: "p-error",
-                                                        onChange: handleChange,
-                                                        onBlur: handleBlur,
-                                                        text: translate(localeJson, 'tel'),
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                                    }} parentClass={`w-full ${errors.tel && touched.tel && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.tel && touched.tel && errors.tel} />
+                                                        text: translate(localeJson, 'password'),
+                                                        passwordClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
+                                                    }}
+                                                        parentClass={`"w-full lg:w-25rem md:w-23rem sm:w-21rem `}
+                                                    />
+                                                    <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                                 </div>
-                                                {props.registerModalAction === "edit" && (
-                                                    <>
-                                                        <div className="mt-5">
-                                                            <PasswordFloatLabel passwordFloatLabelProps={{
-                                                                id: 'householdNumber',
-                                                                spanText: "*",
-                                                                name: 'password',
-                                                                value: "Admin@123",
-                                                                spanClass: "p-error",
-                                                                text: translate(localeJson, 'password'),
-                                                                passwordClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                                            }}
-                                                                parentClass={`"w-full lg:w-25rem md:w-23rem sm:w-21rem `}
-                                                            />
-                                                        </div>
-                                                    </>
-                                                )}
                                             </div>
                                         </TabPanel>
                                         <TabPanel header={translate(localeJson, 'event_information')}>
