@@ -377,6 +377,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle,
+                                            maxLength: 255,
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'jp_title')
                                             }
@@ -388,6 +389,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle_en,
+                                            maxLength: 255,
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'en_title')
                                             }
@@ -429,11 +431,13 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                                 <Input inputProps={{
                                                     value: option,
                                                     inputClass: "w-full",
+                                                    maxLength: 255,
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
                                                 }} />
                                                 <Input inputProps={{
                                                     value: item.option_en[i],
                                                     inputClass: "w-full",
+                                                    maxLength: 255,
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
                                                 }} />
                                             </div>
