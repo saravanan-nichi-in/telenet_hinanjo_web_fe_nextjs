@@ -56,7 +56,13 @@ export default function PublicEvacuee() {
                             tempHeader['minWidth'] = "7rem";
                         }
                         columnHeaders.push(tempHeader);
+                        if (value.column_name == "age") {
+                            tempHeader['minWidth'] = '4rem';
+                            tempHeader['textAlign'] = 'right';
+                            tempHeader['alignHeader'] = 'center';
+                        }
                     }
+
                 });
                 setPublicEvacueesColumn(columnHeaders);
 

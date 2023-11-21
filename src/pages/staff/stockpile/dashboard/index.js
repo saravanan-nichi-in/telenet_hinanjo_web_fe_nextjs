@@ -161,14 +161,14 @@ function StockpileDashboard() {
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
                         expiry_date: obj.expiry_date ? new Date(obj.expiry_date) : "",
-                        expiryDate: obj.expiry_date ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : "",
+                        expiryDate: obj.expiry_date? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date): getEnglishDateDisplayFormat(obj.expiry_date)): "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
                         stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => { bindImageModalData(obj.stockpile_image) }} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
                         Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
-                        InspectionDateTime: obj.Inspection_date_time ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : "",
+                        InspectionDateTime: obj.Inspection_date_time ? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time): getEnglishDateDisplayFormat(obj.Inspection_date_time)): "",
                         save_flag: false
                     }
                     preparedList.push(preparedObj);

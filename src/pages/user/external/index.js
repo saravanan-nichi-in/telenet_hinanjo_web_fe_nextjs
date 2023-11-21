@@ -258,6 +258,8 @@ export default function PublicExternal() {
       minWidth: "6rem",
       maxWidth: "6rem",
       headerClassName: "custom-header",
+      textAlign:"right",
+      alignHeader:"center"
     },
     {
       field: "gender",
