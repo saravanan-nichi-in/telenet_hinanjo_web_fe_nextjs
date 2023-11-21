@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import {getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "@/components/datatable";
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
@@ -13,10 +13,10 @@ export default function EvacueeDetailModal(props) {
     const { open, close } = props && props;
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class" ,textAlign:"center",alignHeader:"center"},
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
         { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
         { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
-        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem" ,textAlign:"right",alignHeader:"center"},
+        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", textAlign: "right", alignHeader: "center" },
         { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }];
 
     const { getExternalEvacueesDetail } = ExternalEvacuationServices;
@@ -44,7 +44,7 @@ export default function EvacueeDetailModal(props) {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
                         name_furigana: obj.name_furigana ? obj.name_furigana : "",
-                        dob: obj.dob ? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob) : "",
+                        dob: obj.dob? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob): getEnglishDateDisplayFormat(obj.dob)): "",
                         age: obj.age ? obj.age : "",
                         gender: obj.gender ? obj.gender : "",
                         id: obj.id ? obj.id : "",
@@ -104,7 +104,7 @@ export default function EvacueeDetailModal(props) {
         } else {
             document.body.style.overflow = 'auto';
         }
-    
+
         return () => {
             // Cleanup when the component unmounts
             document.body.style.overflow = 'auto';

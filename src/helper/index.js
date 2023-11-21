@@ -357,7 +357,7 @@ export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
-    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日, (\d+):(\d+):(\d+)/,'$1年$2月$3日 $4:$5:$6');
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日, (\d+):(\d+):(\d+)/, '$1年$2月$3日 $4:$5:$6');
     return formattedJPDateTime;
 
 };
@@ -367,35 +367,18 @@ export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
  * @returns 
  */
 export const getEnglishDateTimeDisplayActualFormat = (dateTime) => {
-    const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZone: 'Asia/Kolkata'
-    };
+    const date = new Date(dateTime);
 
-    const formattedENDateTime = new Date(dateTime).toLocaleString('en-US', options);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-    // Extracting individual components from the formatted string
-    const [, year, month, day, hour, minute, second] = formattedENDateTime.match(/(\d+).(\d+).(\d+). (\d+):(\d+):(\d+)/);
+    const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
 
-    // Mapping numeric month to its corresponding English representation
-    const englishMonths = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    const englishMonth = englishMonths[parseInt(month, 10) - 1];
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
 
-    // Getting the day of the week
-    const dayOfWeek = new Date(dateTime).toLocaleDateString('en-US', { weekday: 'long' });
+    return `${year}-${month}-${day}  (${dayOfWeek}) ${hour}:${minute}:${second}`;
 
-    // Constructing the final English date string
-    const englishDateString = `${year}-${month}-${day} (${dayOfWeek}) ${hour}:${minute}:${second}`;
-
-    return englishDateString;
 };
-
-
