@@ -101,7 +101,7 @@ export default function StaffManagementEditModal(props) {
                                 visible={open}
                                 draggable={false}
                                 blockScroll={true}
-                                style={{ maxWidth: '30rem'}}
+                                style={{ width: '27em'}}
                                 onHide={() => {
                                     resetForm();
                                     close();
