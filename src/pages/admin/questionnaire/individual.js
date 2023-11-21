@@ -116,7 +116,12 @@ export default function IndividualQuestionnaire() {
                 };
                 questionList.push(question);
             });
-            setQuestionnaires(questionList);
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(questionList);
+                setLoader(false)
+            }, 100);
+
         }
         else {
             setQuestionnaires([
@@ -134,6 +139,7 @@ export default function IndividualQuestionnaire() {
                     "db_data": false
                 }
             ]);
+            setLoader(false)
         }
     }
 
@@ -216,6 +222,7 @@ export default function IndividualQuestionnaire() {
             registerIndividualQuestionnaire({
                 question: [...payloadData]
             }, (() => {
+                setLoader(true);
                 getIndividualList(getListPayload, getQuestionnaireList)
             }))
         }
@@ -241,7 +248,6 @@ export default function IndividualQuestionnaire() {
         setQuestionnaires([...questionnaires, newItem]);
         // Clear the newItem state for the next addition
     };
-    console.log(questionnaires);
     return (
         <>
             <div className="grid">

@@ -116,8 +116,11 @@ export default function IndividualQuestionnaire() {
                 };
                 questionList.push(question);
             });
-            setQuestionnaires(questionList);
-            console.log(questionList)
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(questionList);
+                setLoader(false)
+            }, 100);
         }
         else {
             setQuestionnaires([
@@ -136,6 +139,7 @@ export default function IndividualQuestionnaire() {
                     "db_data": false
                 }
             ]);
+            setLoader(false);
         }
     }
 
@@ -217,6 +221,7 @@ export default function IndividualQuestionnaire() {
             registerQuestionnaire({
                 question: [...payloadData]
             }, ((response) => {
+                setLoader(true);
                 getList(getListPayload, getQuestionnaireList)
             }))
         }
