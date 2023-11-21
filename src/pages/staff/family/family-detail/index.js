@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
-import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, RowExpansionTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
@@ -199,11 +199,11 @@ export default function StaffFamilyDetail() {
                 let historyItem = {
                     place_id: item.place_id,
                     shelter_place: item.placeName,
-                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                    admission_date_time: item.status == 0? (item.access_datetime? (locale == "ja"? getJapaneseDateTimeDisplayActualFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)): ""): "",
                 };
                 let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
                 if (index >= 0 && item.status == 1) {
-                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
+                    admittedHistory[index]['discharge_date_time'] = locale == "ja"? getJapaneseDateTimeDisplayFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)
                 }
                 else {
                     admittedHistory.push(historyItem);

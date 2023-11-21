@@ -165,8 +165,8 @@ export default function AdminHistoryPlacePage() {
                     "place_opened_status": obj.place_opened_status,
                     "place_evacuees_count": obj.place_evacuees_count,
                     "place_full_status": obj.place_full_status,
-                    "place_opening_date_time": obj.place_opening_date_time ? getJapaneseDateTimeDisplayFormat(obj.place_opening_date_time) : "",
-                    "place_closing_date_time": obj.place_closing_date_time ? getJapaneseDateTimeDisplayFormat(obj.place_closing_date_time) : "",
+                    "place_opening_date_time": obj.place_opening_date_time ? (locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.place_opening_date_time) : getEnglishDateTimeDisplayActualFormat(obj.place_opening_date_time)) : "",
+                    "place_closing_date_time": obj.place_closing_date_time ? (locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.place_closing_date_time) : getEnglishDateTimeDisplayActualFormat(obj.place_closing_date_time)) : "",
                     "place_remarks": obj.place_remarks,
                 };
                 historyPlaceListData.push(historyData);
