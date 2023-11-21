@@ -635,10 +635,10 @@
       "stay_safe":"ご安全にお過ごしください。"
     },
     "validation": {
-      "name_required": "名前は必須です。",
-      "name_max": "名前は最大200文字までです。",
-      "name_min": "名前は最小3文字必要です。",
-      "name_katakana": "名前はカタカナで入力してください。",
+      "name_required": "氏名 (フリガナ)は必須です。",
+      "name_max": "氏名 (フリガナ)は最大200文字までです。",
+      "name_min": "氏名 (フリガナ)は最小3文字必要です。",
+      "name_katakana": "氏名 (フリガナ)はフリガナのみを入力してください。",
       "dob_required": "生年月日は必須です。",
       "min_dob": "生年月日は過去120年以内である必要があります。",
       "max_dob": "生年月日は未来になることはできません。",
@@ -653,7 +653,8 @@
       "postal_code_required": "郵便番号は必須です。",
       "address_required": "住所は必須です。",
       "email_required": "メールアドレスは必須です。",
-      "prefecture_required": "都道府県は必須です。"  
+      "prefecture_required": "都道府県は必須です。"  ,
+      "specified_loc_max_len":"場所詳細は255文字以内で入力してください。"
     },
     "buttons": {
       "continue": "次に進む",

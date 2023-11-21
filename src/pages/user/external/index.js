@@ -2,16 +2,15 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { getValueByKeyRecursively as translate,getJapaneseDateDisplayYYYYMMDDFormat } from "@/helper";
 import {
   Button,
   ToggleSwitch,
   NormalTable,
   InputFloatLabel,
   SelectFloatLabel,
-  ValidationError,
+  ValidationError
 } from "@/components";
-// import { AuthenticationAuthorizationService } from '@/services';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import External from "@/components/modal/externalModal";
@@ -134,7 +133,7 @@ export default function PublicExternal() {
             return true;
           }
         }
-      ),
+      ) .max(255, translate(localeJson, "specified_loc_max_len")),
       evacuee: Yup.array()
         .test(
           "evacuee-required-when-toggleSwitches-true",
@@ -236,30 +235,35 @@ export default function PublicExternal() {
   const cols = [
     {
       field: "name",
-      header: translate(localeJson, "c_name_furigana"),
-      minWidth: "11rem",
-      maxWidth: "11rem",
+      header: translate(localeJson, "c_refugee_name"),
+      minWidth: "16rem",
+      maxWidth: "16rem",
       headerClassName: "custom-header",
     },
     {
       field: "dob",
       header: translate(localeJson, "c_dob"),
-      minWidth: "11rem",
-      maxWidth: "11rem",
+      minWidth: "6rem",
+      maxWidth: "6rem",
       headerClassName: "custom-header",
+      body: (rowData) => {
+        const date = locale === 'ja' ? getJapaneseDateDisplayYYYYMMDDFormat(new Date(rowData.dob)) : rowData.dob;
+    
+        return <span>{date}</span>;
+      },
     },
     {
       field: "age",
       header: translate(localeJson, "c_age"),
-      minWidth: "11rem",
-      maxWidth: "11rem",
+      minWidth: "6rem",
+      maxWidth: "6rem",
       headerClassName: "custom-header",
     },
     {
       field: "gender",
       header: translate(localeJson, "c_gender"),
-      minWidth: "18rem",
-      maxWidth: "18rem",
+      minWidth: "6rem",
+      maxWidth: "6rem",
       headerClassName: "custom-header",
       body: (rowData) => {
         const genderOptions = locale === 'ja' ? gender_jp : gender_en;

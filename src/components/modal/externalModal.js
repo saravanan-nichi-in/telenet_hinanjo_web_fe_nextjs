@@ -27,7 +27,6 @@ export default function External(props) {
     name: Yup.string()
       .required(translate(localeJson, "name_required"))
       .max(200, translate(localeJson, "name_max"))
-      .min(3, translate(localeJson, "name_min"))
       .matches(katakanaRegex, translate(localeJson, "name_katakana")),
     dob: Yup.date().nullable().required(translate(localeJson, "dob_required"))
       .min(minDOBDate, translate(localeJson, "min_dob"))
@@ -138,7 +137,7 @@ export default function External(props) {
                           value: values.name,
                           onChange: handleChange,
                           onBlur: handleBlur,
-                          text: translate(localeJson, "c_name_furigana"),
+                          text: translate(localeJson, "c_refugee_name"),
                           inputClass:
                             "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
                         }}
@@ -215,6 +214,8 @@ export default function External(props) {
                         selectFloatLabelProps={{
                           name: "gender",
                           value: values.gender,
+                          spanText: "*",
+                          spanClass: "p-error",
                           options: locale == "ja" ? gender_jp : gender_en,
                           optionLabel: "name",
                           selectClass:
