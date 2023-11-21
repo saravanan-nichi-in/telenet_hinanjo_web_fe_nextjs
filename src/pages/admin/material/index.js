@@ -173,7 +173,12 @@ export default function AdminMaterialPage() {
         console.log(file);
         const formData = new FormData();
         formData.append('file', file);
-        MaterialService.importData(formData, () => {
+        MaterialService.importData(formData, (file) => {
+            if (file) {
+                console.log(file);
+                // setLoader(true);
+                onGetMaterialListOnMounting()
+            }
         });
         onStaffImportClose();
     }

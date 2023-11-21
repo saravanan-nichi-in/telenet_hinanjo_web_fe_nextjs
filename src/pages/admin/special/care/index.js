@@ -164,13 +164,27 @@ export default function AdminSpecialCarePage() {
     }
 
 
+    // const importFileApi = (file) => {
+    //     const formData = new FormData()
+    //     formData.append('file', file)
+    //     importData(formData)
+    //     setImportSpecialCareOpen(false);
+    //     // window.location.reload(); 
+    //     onGetSpecialCareListOnMounting();
+    // };
+
     const importFileApi = (file) => {
-        const formData = new FormData()
-        formData.append('file', file)
-        importData(formData)
+        const formData = new FormData();
+        formData.append('file', file);
+        importData(formData, (file) => {
+            if (file) {
+                console.log(file);
+                // setLoader(true);
+                onGetSpecialCareListOnMounting()
+            }
+        });
         setImportSpecialCareOpen(false);
-        onGetSpecialCareListOnMounting();
-    };
+    }
 
     const submitForm = (res) => {
         if (res.id) {
