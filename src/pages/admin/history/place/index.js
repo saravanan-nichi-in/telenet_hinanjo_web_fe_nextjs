@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getDefaultTodayDateTimeFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getDefaultTodayDateTimeFormat, getEnglishDateTimeDisplayActualFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { InputSelectFloatLabel } from '@/components/dropdown';
@@ -154,7 +154,7 @@ export default function AdminHistoryPlacePage() {
             data.map((obj, i) => {
                 let historyData = {
                     "si_no": index,
-                    "created_at": obj.created_at ? getJapaneseDateTimeDisplayFormat(obj.created_at) : "",
+                    "created_at": obj.created_at ? (locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.created_at) : getEnglishDateTimeDisplayActualFormat(obj.created_at)) : "",
                     "prefecture_name": obj.prefecture_name,
                     "place_name": obj.place_name,
                     "place_name_en": obj.place_name_en,
