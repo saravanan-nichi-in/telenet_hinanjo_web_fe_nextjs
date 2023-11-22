@@ -1,12 +1,12 @@
 // GoogleMapComponent.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import {
   GoogleMap,
   useJsApiLoader,
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-
+import { LayoutContext } from "@/layout/context/layoutcontext";
 
 
 const GoogleMapComponent = ({
@@ -23,9 +23,11 @@ const GoogleMapComponent = ({
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [center, setCenter] = useState(initialPosition);
+  const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: GOOGLE_API_KEY,
+    language: locale,
   });
   const [selectedMarker, setSelectedMarker] = useState(null);
 
