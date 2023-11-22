@@ -15,3 +15,4 @@ export * from "./stockpile_history.services";
 export * from "./check_in_out.services";
 export * from "./external.services";
 export * from "./user_dashboard.services";
+export * from "./map.services";
