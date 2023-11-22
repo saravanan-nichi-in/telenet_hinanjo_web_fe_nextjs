@@ -17,6 +17,7 @@ const Map = () => {
   const [longitude, setLangitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [selectedIndex, setSelectedIndex] = useState(null); 
   useEffect(() => {
     getLocation();
     getPlaceList(fetchMapData);
@@ -82,7 +83,8 @@ const Map = () => {
                   <p
                     className={
                       result?.lat === place.position.lat &&
-                      result?.lng === place.position.lng
+                      result?.lng === place.position.lng &&
+                      selectedIndex == index
                         ? "flex flex-1 common_bg text-white rounded py-2 px-4 items-center"
                         : "flex flex-1 py-2 px-4  mt-2 mb-2 rounded text-[#817E78] items-center map_hover_bg hover:text-white"
                     }
@@ -93,6 +95,7 @@ const Map = () => {
                       });
                       setLangitude(place?.lng);
                       setLatitude(place?.lat);
+                      setSelectedIndex(index);
                     }}
                   >
                     <p className="white-space-nowrap overflow-hidden text-overflow-ellipsis">
