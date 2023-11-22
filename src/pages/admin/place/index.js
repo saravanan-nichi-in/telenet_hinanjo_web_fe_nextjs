@@ -135,7 +135,14 @@ export default function AdminPlacePage() {
   const importFileApi = (file) => {
     const formData = new FormData()
     formData.append('file', file)
-    importData(formData)
+    // importData(formData)
+    importData(formData, (file) => {
+      if (file) {
+          console.log(file);
+          // setLoader(true);
+          onGetPlaceListOnMounting()
+      }
+  });
     setImportPlaceOpen(false);
   };
 
