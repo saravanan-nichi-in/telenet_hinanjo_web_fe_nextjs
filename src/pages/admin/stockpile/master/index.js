@@ -154,8 +154,12 @@ export default function AdminStockPileMaster() {
         console.log(file);
         const formData = new FormData();
         formData.append('file', file);
-        StockpileService.importData(formData, () => {
-
+        StockpileService.importData(formData, (file) => {
+            if (file) {
+                console.log(file);
+                // setLoader(true);
+                onGetMaterialListOnMounting()
+            }
         });
         onStaffImportClose();
         showOverFlow();
