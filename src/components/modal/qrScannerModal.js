@@ -21,7 +21,7 @@ export default function QrScannerModal(props) {
                 visible={open}
                 header={translate(localeJson, 'qr_scanner_popup_dialog')}
                 draggable={false}
-                style={{width:"30%"}}
+                style={{width:"400px"}}
                 onHide={() => close()}
             >
                 <div >
