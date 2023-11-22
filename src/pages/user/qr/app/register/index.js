@@ -11,10 +11,19 @@ export default function App() {
     const qr_details = localStorage.getItem('user_qr');
     const [columnValues, setColumnValues] = useState([]);
     const [otherDetails, setOtherDetails] = useState({});
+    const [mainTableArray, setMainTableArray] = useState([]);
     const [registerPayload, setRegisterPayload] = useState({});
     const router = useRouter();
+    const columnsFirst = [{ field: 'join_date_modified', header: translate(localeJson, 'qr_scanner_first_table_refuge_date') },
+    { field: 'full_address', header: translate(localeJson, 'qr_scanner_first_table_residence'), minWidth: "15rem", maxWidth: "15rem" },
+    { field: 'tel', header: translate(localeJson, 'qr_scanner_first_table_tel_representative'), minWidth: "15rem", maxWidth: "15rem" },
+    { field: 'language_register', header: translate(localeJson, 'qr_scanner_first_table_tel_login_locale'), minWidth: "15rem", maxWidth: "15rem" }];
+
+    const columnsLast = [{ field: 'question_combined', header: translate(localeJson, 'qr_scanner_first_table_town_association_name')},
+    { field: 'zip_code', header: translate(localeJson, 'qr_scanner_first_table_town_test_payload'), minWidth: "15rem", maxWidth: "15rem" }];
+
     const columns = [
-        { field: 'slno', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number'), className: "sno_class", textAlign: "center" },
+        { field: 'slno', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number')},
         { field: 'is_owner_temp', header: translate(localeJson, 'qr_scanner_second_table_second_column_representative'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'refugee_name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name_chinese'), minWidth: "15rem", maxWidth: "15rem" },
@@ -35,7 +44,14 @@ export default function App() {
         UserQrService.register(formData, (item) => {
             setOtherDetails(item);
             const tempArray = [];
-            
+            const tableArray = [];
+            const tableObject= {...item};
+            tableObject.full_address = `${tableObject?.zip_code} ${tableObject?.perfecture_name} ${tableObject?.address}`;
+            tableObject.question_combined = tableObject?.question?.map(question => question.title).join(', ');
+
+            tableArray.push(tableObject)
+            setMainTableArray(tableArray);
+
             item?.person?.forEach((element, index) => {
                 const tempObj = {...element};
                 
@@ -61,24 +77,20 @@ export default function App() {
                 <h5 className='page-header1'>{translate(localeJson, 'qr_scanner_main_heading')}</h5>
                 <hr />
                 <div className="grid">
-                    <div className="col-10"></div>
-                    <div className="col-2"><h6>{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</h6></div>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_refuge_date')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.join_date_modified}</h5></div>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_residence')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.zip_code} {otherDetails?.perfecture_name} {otherDetails?.address}</h5></div>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_tel_representative')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.tel}</h5></div>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_tel_login_locale')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.language_register}</h5></div>
+                    <div className="col-12 underline text-right">{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</div>
+                </div>
+                <div className='mt-2'>
+                    <NormalTable
+                        lazy
+                        stripedRows={true}
+                        className={"custom-table-cell"}
+                        showGridlines={"true"}
+                        value={mainTableArray}
+                        columns={columnsFirst}
+                        filterDisplay="menu"
+                        emptyMessage={translate(localeJson, "data_not_found")}
+                        paginator={false}
+                    />
                 </div>
             </div>
             <div className="card">
@@ -87,8 +99,6 @@ export default function App() {
                 <div className='mt-3'>
                     <NormalTable
                         lazy
-                        // totalRecords={totalCount}
-                        // loading={tableLoading}
                         stripedRows={true}
                         className={"custom-table-cell"}
                         showGridlines={"true"}
@@ -97,26 +107,24 @@ export default function App() {
                         filterDisplay="menu"
                         emptyMessage={translate(localeJson, "data_not_found")}
                         paginator={false}
-                    // first={getListPayload.filters.start}
-                    // rows={getListPayload.filters.limit}
-                    // paginatorLeft={true}
-                    // onPageHandler={(e) => onPaginationChange(e)}
                     />
                 </div>
             </div>
             <div className="card">
-                <div className='grid py-3'>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_town_association_name')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.question?.map(question => question.title).join(', ')}</h5></div>
-                    <div className="col-5">
-                        <h5>{translate(localeJson, 'qr_scanner_first_table_town_test_payload')}</h5>
-                    </div>
-                    <div className="col-7"><h5>{otherDetails?.zip_code}</h5></div>
-                    
-                </div>
-                <div className="grid py-3" style={{justifyContent: 'center', alignItems:"center"}}>
+                    <div className='mt-3'>
+                        <NormalTable
+                            lazy
+                            stripedRows={true}
+                            className={"custom-table-cell"}
+                            showGridlines={"true"}
+                            value={mainTableArray}
+                            columns={columnsLast}
+                            filterDisplay="menu"
+                            emptyMessage={translate(localeJson, "data_not_found")}
+                            paginator={false}
+                        />
+                   </div>
+                <div className="grid py-3" style={{justifyContent: 'flex-end', alignItems:"center"}}>
                 <Button buttonProps={{
                         type: 'submit',
                         rounded: "true",
@@ -125,7 +133,7 @@ export default function App() {
                         severity: "primary",
                         onClick: () => {localStorage.removeItem('user_qr');
                         router.push("/user/qr/app")}
-                    }} parentClass={"mr-1 mt-1"} />
+                    }} parentClass={"mr-1"} />
 
                     <Button buttonProps={{
                         type: 'submit',
@@ -142,8 +150,7 @@ export default function App() {
                             router.push("/user/qr/app")
                         });    
                         }
-                    }} parentClass={"mr-1 mt-1"} />
-
+                    }} parentClass={"mr-1"} />
                 </div>
             </div>
         </div>
