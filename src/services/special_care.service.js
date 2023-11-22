@@ -19,12 +19,14 @@ function _importSpecialCareData(payload, callBackFun) {
     .post("/admin/specialcare/import", payload)
     .then((response) => {
       if (response && response.data) {
+        callBackFun(response);
         toast.success(response?.data?.message, {
           position: "top-right",
         });
       }
     })
     .catch((error) => {
+      callBackFun(false);
       toast.error(error?.response?.data?.message, {
         position: "top-right",
       });

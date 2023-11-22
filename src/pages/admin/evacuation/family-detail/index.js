@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 
-import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate, getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat } from '@/helper'
+import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate, getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getEnglishDateTimeDisplayActualFormat } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, RowExpansionTable } from '@/components';
@@ -38,7 +38,7 @@ export default function EvacueeFamilyDetail() {
     const familyDetailColumns = [
         { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'left' },
+        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'right',alignHeader:"center" },
         { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
     ];
 
@@ -173,11 +173,11 @@ export default function EvacueeFamilyDetail() {
                 let historyItem = {
                     place_id: item.place_id,
                     shelter_place: item.placeName,
-                    admission_date_time: item.status == 0 ? (item.access_datetime ? getJapaneseDateTimeDisplayFormat(item.access_datetime) : "") : "",
+                    admission_date_time: item.status == 0? (item.access_datetime? (locale == "ja"? getJapaneseDateTimeDisplayFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)): ""): "",
                 };
                 let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
                 if (index >= 0 && item.status == 1) {
-                    admittedHistory[index]['discharge_date_time'] = getJapaneseDateTimeDisplayFormat(item.access_datetime);
+                    admittedHistory[index]['discharge_date_time'] = locale == "ja"? getJapaneseDateTimeDisplayFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)
                 }
                 else {
                     admittedHistory.push(historyItem);

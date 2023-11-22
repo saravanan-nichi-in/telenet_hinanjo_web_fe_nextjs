@@ -21,31 +21,43 @@ export default function IndividualQuestionnaire() {
             sort_by: "updated_at"
         },
         search: "",
-        event_id : param.event_id
+        event_id: param.event_id
     });
     const [questionnaires, setQuestionnaires] = useState([]);
     const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
 
     const router = useRouter();
-    const baseTemplateRef = useRef();
+    const baseTemplateRefs = useRef([]);
 
     const dragProps = {
         onDragEnd(fromIndex, toIndex) {
             const prepareData = [...questionnaires];
             const item = prepareData.splice(fromIndex, 1)[0];
             prepareData.splice(toIndex, 0, item);
-            setQuestionnaires(prepareData);
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(() => {
+                    return prepareData
+                });
+            }, 100);
         },
         nodeSelector: 'li',
         handleSelector: 'a'
     };
 
     const triggerSubmitCall = () => {
-        if (baseTemplateRef.current) {
-            // Call the function in the child component using the ref
-            baseTemplateRef.current.validateQuestionnaires(questionnaires);
+        let validationFlag = true;
+        questionnaires.map((item, index) => {
+            if (baseTemplateRefs.current[index]) {
+                let validFlag = baseTemplateRefs.current[index].validateQuestionnaires(item);
+                if (!validFlag) {
+                    validationFlag = validFlag
+                }
+            }
+        })
+        if (validationFlag) {
+            sumbitQuestionnaire();
         }
-
     };
 
     const sumbitQuestionnaire = () => {
@@ -61,12 +73,11 @@ export default function IndividualQuestionnaire() {
             })
         }
 
-        setQuestionnaires(prevQuestionnaires => {
-            const newQuestionnaires = [...prevQuestionnaires];
-            newQuestionnaires.splice(index, 1);
-            console.log(newQuestionnaires);
-            return newQuestionnaires;
-        });
+        const updatedQuestionnaires = questionnaires.filter((_, item) => item !== index);
+        setQuestionnaires([]);
+        setTimeout(() => {
+            setQuestionnaires(updatedQuestionnaires)
+        }, 100);
     }
 
     const handleItemChange = (item, index) => {
@@ -94,7 +105,7 @@ export default function IndividualQuestionnaire() {
                     "title": "",
                     "questiontitle": item.title,
                     "questiontitle_en": item.title_en,
-                    "option": item.type == 1 ? (item.options.length > 0 ? item.options : [""]): item.options,
+                    "option": item.type == 1 ? (item.options.length > 0 ? item.options : [""]) : item.options,
                     "option_en": item.options_en,
                     "selected_type": (item.type == 3 || item.type == 4) ? item.type : 1,
                     "inner_question_type": !(item.type == 3 || item.type == 4) ? item.type : 1,
@@ -105,8 +116,11 @@ export default function IndividualQuestionnaire() {
                 };
                 questionList.push(question);
             });
-            setQuestionnaires(questionList);
-            console.log(questionList)
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(questionList);
+                setLoader(false)
+            }, 100);
         }
         else {
             setQuestionnaires([
@@ -125,6 +139,7 @@ export default function IndividualQuestionnaire() {
                     "db_data": false
                 }
             ]);
+            setLoader(false);
         }
     }
 
@@ -137,18 +152,16 @@ export default function IndividualQuestionnaire() {
 
     const bindQuestion = () => {
         return (
-            questionnaires.length > 0 && 
             <ol>
                 {questionnaires.map((item, index) => (
                     <li key={index}>
                         <div className='ml-1 mr-1' style={{ width: "95%" }}>
                             <BaseTemplate
-                                ref={baseTemplateRef}
+                                ref={(el) => baseTemplateRefs.current[index] = el}
                                 item={item}
                                 itemIndex={index}
-                                removeQuestion={removeQuestionData}
+                                removeQuestion={() => removeQuestionData(item, index)}
                                 handleItemChange={handleItemChange}
-                                triggerFinalSubmit={sumbitQuestionnaire}
                             />
                         </div>
                         <a className='ml-2'>
@@ -204,18 +217,20 @@ export default function IndividualQuestionnaire() {
             }
             payloadData.push(question);
         })
+        if (payloadData.length > 0) {
+            registerQuestionnaire({
+                question: [...payloadData]
+            }, ((response) => {
+                setLoader(true);
+                getList(getListPayload, getQuestionnaireList)
+            }))
+        }
 
-        registerQuestionnaire({
-            question: [...payloadData]
-        }, ((response) => {
-            getList(getListPayload, getQuestionnaireList)
-        }))
     }
 
     const handleAddNewItem = () => {
         // Add the new item to the questionnaires state
         let newItem = {
-            // "id": questionnaires.length + 1,
             "title": "",
             "questiontitle": "",
             "questiontitle_en": "",
@@ -231,7 +246,6 @@ export default function IndividualQuestionnaire() {
         setQuestionnaires([...questionnaires, newItem]);
         // Clear the newItem state for the next addition
     };
-    console.log(questionnaires);
     return (
         <>
             <div className="grid">

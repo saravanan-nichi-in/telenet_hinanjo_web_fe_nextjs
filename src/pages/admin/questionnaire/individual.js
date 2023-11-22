@@ -11,7 +11,7 @@ import { Button, DND } from '@/components';
 import { QuestionnaireServices } from '@/services/questionnaire.services';
 
 export default function IndividualQuestionnaire() {
-    const {locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const param = useAppSelector((state) => state.eventReducer.event);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -27,25 +27,37 @@ export default function IndividualQuestionnaire() {
     const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
 
     const router = useRouter();
-    const baseTemplateRef = useRef();
+    const baseTemplateRefs = useRef([]);
 
     const dragProps = {
         onDragEnd(fromIndex, toIndex) {
             const prepareData = [...questionnaires];
             const item = prepareData.splice(fromIndex, 1)[0];
             prepareData.splice(toIndex, 0, item);
-            setQuestionnaires(prepareData);
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(() => {
+                    return prepareData
+                });
+            }, 100);
         },
         nodeSelector: 'li',
         handleSelector: 'a'
     };
 
     const triggerSubmitCall = () => {
-        if (baseTemplateRef.current) {
-            // Call the function in the child component using the ref
-            baseTemplateRef.current.validateQuestionnaires(questionnaires);
+        let validationFlag = true;
+        questionnaires.map((item, index) => {
+            if (baseTemplateRefs.current[index]) {
+                let validFlag = baseTemplateRefs.current[index].validateQuestionnaires(item);
+                if (!validFlag) {
+                    validationFlag = validFlag
+                }
+            }
+        })
+        if (validationFlag) {
+            sumbitQuestionnaire();
         }
-
     };
 
     const sumbitQuestionnaire = () => {
@@ -61,12 +73,11 @@ export default function IndividualQuestionnaire() {
             })
         }
 
-        setQuestionnaires(prevQuestionnaires => {
-            const newQuestionnaires = [...prevQuestionnaires];
-            newQuestionnaires.splice(index, 1);
-            console.log(newQuestionnaires);
-            return newQuestionnaires;
-        });
+        const updatedQuestionnaires = questionnaires.filter((_, item) => item !== index);
+        setQuestionnaires([]);
+        setTimeout(() => {
+            setQuestionnaires(updatedQuestionnaires)
+        }, 100);
     }
 
     const handleItemChange = (item, index) => {
@@ -105,12 +116,16 @@ export default function IndividualQuestionnaire() {
                 };
                 questionList.push(question);
             });
-            setQuestionnaires(questionList);
+            setQuestionnaires([]);
+            setTimeout(() => {
+                setQuestionnaires(questionList);
+                setLoader(false)
+            }, 100);
+
         }
         else {
             setQuestionnaires([
                 {
-                    // "id": questionnaires.length + 1,
                     "title": "",
                     "questiontitle": "",
                     "questiontitle_en": "",
@@ -124,6 +139,7 @@ export default function IndividualQuestionnaire() {
                     "db_data": false
                 }
             ]);
+            setLoader(false)
         }
     }
 
@@ -141,12 +157,11 @@ export default function IndividualQuestionnaire() {
                     <li key={index}>
                         <div className='ml-1 mr-1' style={{ width: "95%" }}>
                             <BaseTemplate
-                                ref={baseTemplateRef}
+                                ref={(el) => baseTemplateRefs.current[index] = el}
                                 item={item}
                                 itemIndex={index}
                                 removeQuestion={() => removeQuestionData(item, index)}
                                 handleItemChange={handleItemChange}
-                                triggerFinalSubmit={sumbitQuestionnaire}
                             />
                         </div>
                         <a className='ml-2'>
@@ -203,11 +218,15 @@ export default function IndividualQuestionnaire() {
             payloadData.push(question);
         })
 
-        registerIndividualQuestionnaire({
-            question: [...payloadData]
-        }, ((response) => {
-            getIndividualList(getListPayload, getQuestionnaireList)
-        }))
+        if (payloadData.length > 0) {
+            registerIndividualQuestionnaire({
+                question: [...payloadData]
+            }, (() => {
+                setLoader(true);
+                getIndividualList(getListPayload, getQuestionnaireList)
+            }))
+        }
+
     }
 
     const handleAddNewItem = () => {
@@ -229,7 +248,6 @@ export default function IndividualQuestionnaire() {
         setQuestionnaires([...questionnaires, newItem]);
         // Clear the newItem state for the next addition
     };
-    console.log(questionnaires);
     return (
         <>
             <div className="grid">

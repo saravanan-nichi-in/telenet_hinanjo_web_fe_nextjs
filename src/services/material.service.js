@@ -29,6 +29,7 @@ function _importData(payload, callBackFun) {
                         position: "top-right",
                     });
                 } else {
+                callBackFun(false);
                     toast.error(response?.data?.message, {
                         position: "top-right",
                     });

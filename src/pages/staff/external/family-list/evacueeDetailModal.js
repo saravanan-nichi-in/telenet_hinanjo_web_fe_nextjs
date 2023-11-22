@@ -1,8 +1,8 @@
-import React, { useEffect,useContext, useState } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import { getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "@/components/datatable";
 import { ExternalEvacueesService } from "@/services/externalEvacuees.service";
@@ -15,11 +15,11 @@ export default function EvacueeDetailModal(props) {
     const [staffDetail, setStaffDetail] = useState([]);
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign:"center",alignHeader:"center"},
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
         { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
-        { field: 'dob', header:translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
-        { field: 'age', header:translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem",alignHeader:"center",textAlign:"right" },
-        { field: 'gender', header:translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }];
+        { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
+        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", alignHeader: "center", textAlign: "right" },
+        { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }];
 
     // Main Table listing starts
     const { getEvacueeList } = ExternalEvacueesService;
@@ -38,12 +38,12 @@ export default function EvacueeDetailModal(props) {
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
-    
+
     const getStaffList = () => {
         // Get dashboard list
         getEvacueeList(getListPayload, (response) => {
             if (response.success && !_.isEmpty(response.data)) {
-                if(response.data.externalEvacueeDetailList.total > 0) {
+                if (response.data.externalEvacueeDetailList.total > 0) {
                     const data = response.data.externalEvacueeDetailList.list;
                     var additionalColumnsArrayWithOldData = [...columnsData];
                     let preparedList = [];
@@ -53,7 +53,7 @@ export default function EvacueeDetailModal(props) {
                         let preparedObj = {
                             slno: i + getListPayload.filters.start + 1,
                             name_furigana: obj.name_furigana ?? "",
-                            dob: getJapaneseDateDisplayYYYYMMDDFormat(obj.dob) ?? "",
+                            dob: obj.dob ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob) : getEnglishDateDisplayFormat(obj.dob)) : "",
                             age: obj.age ?? "",
                             gender: obj.gender ?? "",
                             id: obj.id ?? "",
@@ -107,7 +107,7 @@ export default function EvacueeDetailModal(props) {
 
     const header = (
         <div className="custom-modal">
-            {translate(localeJson,'external_evecuee_details_popup_header')}
+            {translate(localeJson, 'external_evecuee_details_popup_header')}
         </div>
     );
 
@@ -134,12 +134,12 @@ export default function EvacueeDetailModal(props) {
                     }
                 >
                     <div className={`modal-content`}>
-                    <div>
-            
+                        <div>
+
                             <div className="mt-5">
-                                
+
                                 <div>
-                                <NormalTable
+                                    <NormalTable
                                         lazy
                                         totalRecords={totalCount}
                                         loading={tableLoading}

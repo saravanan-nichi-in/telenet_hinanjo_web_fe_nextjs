@@ -118,24 +118,18 @@ const BaseTemplate = React.forwardRef((props, ref) => {
         validateQuestionnaires,
     }));
 
-    const validateQuestionnaires = (data) => {
+    const validateQuestionnaires = (question) => {
         let validFlag = true;
-        data.map((question) => {
-            if (question.questiontitle == '' || (question.selected_type == 1 && question.option[0] == '')) {
-                validFlag = false
-            }
-        })
-        if (validFlag && item.questiontitle != "" && ((item.selected_type == 1 && item.option[0] != '') || item.selected_type != 1)) {
-            triggerFinalSubmit();
+        if (question.questiontitle == '' || (question.selected_type == 1 && question.option[0] == '')) {
+            validFlag = false
         }
-        else {
-            if (item.questiontitle == "") {
-                setJpTitleError(translate(localeJson, 'item_title_is_required'));
-            }
-            if (item.option[0] == "") {
-                setChoiceError(translate(localeJson, "option_is_required"));
-            }
+        if (question.questiontitle == "") {
+            setJpTitleError(translate(localeJson, 'item_title_is_required'));
         }
+        if (question.option[0] == "") {
+            setChoiceError(translate(localeJson, "option_is_required"));
+        }
+        return validFlag;
     }
 
     const itemTemplate = (item) => {
@@ -151,7 +145,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         backgroundColor: "#afe1f9",
 
                                     }}>
-                                        <div className="" style={{flexWrap: "wrap" }}>
+                                        <div className="" style={{ flexWrap: "wrap" }}>
                                             <div className=''>
                                                 <div className='flex align-items-center pl-2 pt-2 pb-2'>
                                                     <NormalCheckBox checkBoxProps={{
@@ -383,6 +377,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle,
+                                            maxLength: 255,
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'jp_title')
                                             }
@@ -394,6 +389,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle_en,
+                                            maxLength: 255,
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'en_title')
                                             }
@@ -435,11 +431,13 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                                 <Input inputProps={{
                                                     value: option,
                                                     inputClass: "w-full",
+                                                    maxLength: 255,
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
                                                 }} />
                                                 <Input inputProps={{
                                                     value: item.option_en[i],
                                                     inputClass: "w-full",
+                                                    maxLength: 255,
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
                                                 }} />
                                             </div>

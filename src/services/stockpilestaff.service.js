@@ -24,11 +24,12 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                if(response?.data?.success) {
+                if (response?.data?.success) {
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
                 } else {
+                    callBackFun(false);
                     toast.error(response?.data?.message, {
                         position: "top-right",
                     });
@@ -50,16 +51,16 @@ function _importData(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _exportData(payload, callBackFun) {
-        axios
+    axios
         .post("/staff/stockpile/summary/export", payload)
         .then((response) => {
-                if (response && response.data && response.data.result.filePath) {
-                    
-                    downloadBase64File(response.data.result.filePath, timestampFile("StaffStockpile"));
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
-                }
+            if (response && response.data && response.data.result.filePath) {
+
+                downloadBase64File(response.data.result.filePath, timestampFile("StaffStockpile"));
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
         })
         .catch((error) => {
             // Handle errors here
@@ -132,29 +133,29 @@ function _create(payload, callBackFun) {
         })
         .catch((error) => {
             if (error.response && error.response.status == 422) {
-              if (isObject(error.response.data.message)) {
-                let errorMessages = Object.values(error.response.data.message);
-                let errorString = errorMessages.join('.')
-                let errorArray = errorString.split(".");
-                errorArray = errorArray.filter(message => message.trim() !== "");
-                // Join the error messages with line breaks
-                // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                let formattedErrorMessage = errorArray
-                  .map((message, index) => {
-                    return `${message.trim()}`;
-                  })
-                  .join("\n");
-                toast.error(formattedErrorMessage, {
-                  position: "top-right",
-                });
-              }
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    // Join the error messages with line breaks
+                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
             } else {
                 callBackFun();
                 toast.error(error.response.data.message, {
                     position: "top-right",
                 });
             }
-          });
+        });
 }
 
 /**
@@ -175,22 +176,22 @@ function _update(payload, callBackFun) {
         })
         .catch((error) => {
             if (error.response && error.response.status == 422) {
-              if (isObject(error.response.data.message)) {
-                let errorMessages = Object.values(error.response.data.message);
-                let errorString = errorMessages.join('.')
-                let errorArray = errorString.split(".");
-                errorArray = errorArray.filter(message => message.trim() !== "");
-                // Join the error messages with line breaks
-                // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                let formattedErrorMessage = errorArray
-                  .map((message, index) => {
-                    return `${message.trim()}`;
-                  })
-                  .join("\n");
-                toast.error(formattedErrorMessage, {
-                  position: "top-right",
-                });
-              }
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    // Join the error messages with line breaks
+                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
             } else {
                 callBackFun();
                 console.error(error);
@@ -198,7 +199,7 @@ function _update(payload, callBackFun) {
                     position: "top-right",
                 });
             }
-          });
+        });
 }
 
 

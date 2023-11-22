@@ -26,10 +26,12 @@ function _importData(payload, callBackFun) {
     .post("/admin/place/import", payload)
     .then((response) => {
       // Handling import success && errors
+      callBackFun(response);
       importErrorToastDisplay(response);
     })
     .catch((error) => {
       // Handling import errors
+      callBackFun(false);
       importErrorToastDisplay(error.response);
     });
 }

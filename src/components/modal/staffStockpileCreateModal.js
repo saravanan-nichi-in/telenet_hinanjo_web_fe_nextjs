@@ -113,6 +113,7 @@ export default function StaffStockpileCreateModal(props) {
                             header={header}
                             visible={open}
                             draggable={false}
+                            blockScroll={true}
                             onHide={() => {
                                 close()
                                 resetForm()

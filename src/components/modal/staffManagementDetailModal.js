@@ -28,7 +28,7 @@ export default function StaffManagementDetailModal(props) {
     { field: 'tel', header: translate(localeJson, 'tel'), textAlign: "right", alignHeader: "center" }];
 
     const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center" },
+        { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center",alignHeader:"center" },
         { field: 'name', header: translate(localeJson, 'staff_management_detail_login_history_name'), maxWidth: "2rem" },
         { field: 'login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" }];
 

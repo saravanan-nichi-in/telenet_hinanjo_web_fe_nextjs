@@ -40,7 +40,8 @@ export default function Supplies() {
       field: "slno",
       header: translate(localeJson, "supplies_slno"),
       className: "sno_class",
-      textAlign: "center"
+      textAlign: "center",
+      alignHeader:"center"
     },
     {
       field: "name",
@@ -53,6 +54,7 @@ export default function Supplies() {
       header: translate(localeJson, "supplies_unit"),
       minWidth: "10rem",
       maxWidth: "10rem",
+      alignHeader:"center",
       body: (rowData) => (
         <div className="border-top-none">
           <Counter

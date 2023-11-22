@@ -47,6 +47,9 @@ export default function AdminManagementImportModal(props) {
                     importFile(values.file)
                     close();
                     setLoader(true);
+                    setTimeout(() => {
+                    setLoader(false);
+                }, 1000);
                     values.file = null;
                     actions.resetForm({ values: initialValues });
                 }}
