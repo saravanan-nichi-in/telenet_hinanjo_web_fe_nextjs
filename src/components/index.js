@@ -10,7 +10,7 @@ export { NormalCheckBox } from "./checkbox";
 export { ToggleSwitch, InputSwitch } from "./switch";
 export { DividerComponent } from "./divider";
 export { DND, QuestionnairesView } from "./dragNdrop";
-export { GoogleMapComponent } from "./map";
+export { GoogleMapComponent,GoogleMapMultiMarkerComponent } from "./map";
 export { Button, MicroPhoneButton } from "./button";
 export { InputSelect, DropdownSelect, Select, LanguageDropdown, SelectFloatLabel } from "./dropdown";
 export { ProfileAvatar } from "./avatar";

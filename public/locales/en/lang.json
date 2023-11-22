@@ -685,7 +685,13 @@
       "postal_code_required": "Postal code is required.",
       "address_required": "Address is required.",
       "email_required": "Email is required.",
-      "prefecture_required": "Prefecture is required."  
+      "prefecture_required": "Prefecture is required." ,
+      "specified_loc_max_len":"The place details must not be greater than 100 characters.",
+      "empty": "Vacant",
+      "beginningToCrowd": "Starting to get crowded",
+      "crowded": "Crowded",
+      "closed": "Closed",
+      "c_evacuation_location": "Place Name"
     },
     "buttons": {
       "continue": "Continue",

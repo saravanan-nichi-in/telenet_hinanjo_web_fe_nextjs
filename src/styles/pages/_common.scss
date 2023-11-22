@@ -26,6 +26,9 @@
 .info-window .gm-style .gm-style-iw-t {
     bottom: 37px !important;
 }
+.selectedMarker .gm-style .gm-style-iw-t {
+    bottom: 80px !important;
+}
 
 .modal-page-header2{
     font-size: $pageHeaderFontSize2;
@@ -47,3 +50,46 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .common_bg {
+    background-color: #2b3d51;
+  }
+  .map_hover_bg:hover {
+    background-color: #2b3d51;
+  }
+
+  .legend_view_box {
+    width: 210px;
+    height: 160px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    margin: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.legend_main_view {
+    width: 100%;
+    margin-bottom: 5px;
+    display: flex;
+    font-size: 20px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.legend_first_view {
+    height: 30px;
+}
+
+.legend_second_view {
+    font-size: 15px;
+    padding-left: 10px;
+    color: black;
+}
+
+.callout_header {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    padding: 5px;
+}

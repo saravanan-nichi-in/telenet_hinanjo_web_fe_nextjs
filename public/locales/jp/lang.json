@@ -682,7 +682,12 @@
       "address_required": "住所は必須です。",
       "email_required": "メールアドレスは必須です。",
       "prefecture_required": "都道府県は必須です。"  ,
-      "specified_loc_max_len":"場所詳細は255文字以内で入力してください。"
+      "specified_loc_max_len":"場所詳細は255文字以内で入力してください。",
+      "empty": "空いています",
+      "beginningToCrowd": "混雑しはじめています",
+      "crowded": "混雑しています",
+      "closed": "クローズしています",
+      "c_evacuation_location": "避難所"
     },
     "buttons": {
       "continue": "次に進む",
