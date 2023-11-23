@@ -22,9 +22,8 @@ export default function App() {
                     type: 'submit',
                     rounded: "true",
                     size:"large",
-                    text: translate(localeJson, 'qr_scanner_popup_btn'),
+                    text: " " + translate(localeJson, 'qr_scanner_popup_btn'),
                     severity: "primary",
-                    style:{padding:"20px"},
                     className:"pi pi-qrcode",
                     onClick: () => {setOpenQrPopup(true)},
                 }} parentClass={"flex"} ></Button>
