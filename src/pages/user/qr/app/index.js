@@ -3,6 +3,8 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { useContext, useState } from "react";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import QrScannerModal from "@/components/modal/qrScannerModal";
+import { MdOutlineQrCodeScanner } from "react-icons/md";
+
 
 
 export default function App() {
@@ -12,17 +14,19 @@ export default function App() {
         setOpenQrPopup(false);
     }
 
-    return (<div className="grid">
-        <QrScannerModal
-            open={openQrPopup}
-            close={closeQrPopup}></QrScannerModal>
-        <div className="col-12" style={{marginTop: "15%", display:"flex" ,alignItems: "center", justifyContent: "center"}}>
-            <Button buttonProps={{
-                type: 'submit',
-                rounded: "true",
-                size:"large",
-                text: translate(localeJson, 'qr_scanner_popup_btn'),
-                severity: "primary",
-                onClick: () => {setOpenQrPopup(true)}
-            }} parentClass={"mr-1 mt-1"} /></div></div>);
+    return (<><QrScannerModal
+        open={openQrPopup}
+        close={closeQrPopup}></QrScannerModal>
+        <div style={{height:"500px", display:"flex", justifyContent: "center", alignItems:"center"}}>
+       <Button buttonProps={{
+                    type: 'submit',
+                    rounded: "true",
+                    size:"large",
+                    text: " " + translate(localeJson, 'qr_scanner_popup_btn'),
+                    severity: "primary",
+                    className:"pi pi-qrcode",
+                    onClick: () => {setOpenQrPopup(true)},
+                }} parentClass={"flex"} ></Button>
+                </div>
+                </>);
 }
