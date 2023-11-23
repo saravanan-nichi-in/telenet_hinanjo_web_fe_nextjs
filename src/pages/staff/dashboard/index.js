@@ -86,6 +86,7 @@ function StaffDashboard() {
               </h5>
               <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
               <div className="col-12 lg:col-6">
+                {dataDetailsOther && dataDetailsOther[1] > 0 && (
                 <Doughnut
                    labels={labelsOther} 
                    data={dataOther}
@@ -93,6 +94,7 @@ function StaffDashboard() {
                   bgClr={generateColors(labelsOther?.length)}
                   hvrClr={generateColors(labelsOther?.length)}
                 />
+                )}
               </div>
               <div className="col-12 lg:col-6">
                 <ul className="staff-list">
