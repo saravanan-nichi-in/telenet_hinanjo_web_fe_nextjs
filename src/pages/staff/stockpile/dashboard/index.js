@@ -24,6 +24,7 @@ function StockpileDashboard() {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [productNames, setProductNames] = useState({});
+    const [editedStockPile, setEditedStockPile] = useState([]);
 
     const onStaffStockCreated = () => {
         staffStockpileCreateOpen(false);
@@ -83,7 +84,7 @@ function StockpileDashboard() {
             onGetMaterialListOnMounting();
 
         });
-        
+
     }
 
 
@@ -161,17 +162,24 @@ function StockpileDashboard() {
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
                         expiry_date: obj.expiry_date ? new Date(obj.expiry_date) : "",
-                        expiryDate: obj.expiry_date? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date): getEnglishDateDisplayFormat(obj.expiry_date)): "",
+                        expiryDate: obj.expiry_date ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.expiry_date) : getEnglishDateDisplayFormat(obj.expiry_date)) : "",
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
                         stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => { bindImageModalData(obj.stockpile_image) }} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
                         product_name: obj.product_name ?? "",
                         Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
-                        InspectionDateTime: obj.Inspection_date_time ? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time): getEnglishDateDisplayFormat(obj.Inspection_date_time)): "",
+                        InspectionDateTime: obj.Inspection_date_time ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : getEnglishDateDisplayFormat(obj.Inspection_date_time)) : "",
                         save_flag: false
                     }
-                    preparedList.push(preparedObj);
+                    let findEditedIndex = editedStockPile.findIndex((item) => item.summary_id == obj.id);
+                    if (findEditedIndex !== -1) {
+                        let editedObject = editedStockPile[findEditedIndex];
+                        preparedList.push(editedObject)
+                    }
+                    else {
+                        preparedList.push(preparedObj);
+                    }
                 })
                 setStockPileList(preparedList);
                 setTotalCount(response.data.model.total);
@@ -217,6 +225,22 @@ function StockpileDashboard() {
             setStockPileList(updatedList);
             setStaffStockpileEditOpen(false);
             setSelectedCategory("");
+            if (editedStockPile.length > 0) {
+                let loopEditedList = [...editedStockPile]
+                let editedIndex = editedStockPile.findIndex((item) => item.summary_id == id);
+                if (editedIndex !== -1) {
+                    loopEditedList.splice(editedIndex, 1);
+                    loopEditedList.push(updatedList[index])
+                    setEditedStockPile(loopEditedList);
+                }
+                else {
+                    setEditedStockPile([...editedStockPile, updatedList[index]])
+                }
+
+            }
+            else {
+                setEditedStockPile([...editedStockPile, updatedList[index]])
+            }
         }
     }
 
@@ -229,7 +253,8 @@ function StockpileDashboard() {
             })
         }
         StockpileStaffService.update(updatedList, (response) => {
-            console.log(response);
+            setEditedStockPile([]);
+
             onGetMaterialListOnMounting();
         })
     }
