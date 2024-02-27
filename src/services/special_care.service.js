@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from "@/helper";
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from "@/helper";
 import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
@@ -20,16 +20,13 @@ function _importSpecialCareData(payload, callBackFun) {
     .then((response) => {
       if (response && response.data) {
         callBackFun(response);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        importErrorToastDisplay(response);
       }
     })
     .catch((error) => {
+      console.error("Error fetching data:", error);
       callBackFun(false);
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-      });
+      importErrorToastDisplay(error.response);
     });
 }
 
@@ -62,6 +59,7 @@ function _getSpecialCareList(payload, callBackFun) {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
+      callBackFun(false);
     });
 }
 

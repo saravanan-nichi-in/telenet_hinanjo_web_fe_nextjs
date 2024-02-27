@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import _ from 'lodash';
+import { setStaffEditedStockpile } from "@/redux/stockpile";
+import { useAppDispatch } from "@/redux/hooks";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
+import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, NormalTable } from '@/components';
 import { AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
 import { StockpileStaffService } from '@/services/stockpilestaff.service';
-import { StockpileService } from '@/services/stockpilemaster.service';
+import CustomHeader from '@/components/customHeader';
 
 function StockpileDashboard() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
@@ -18,13 +19,19 @@ function StockpileDashboard() {
     const [staffStockpileEditOpen, setStaffStockpileEditOpen] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
     const [editObject, setEditObject] = useState({});
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [productNames, setProductNames] = useState({});
+    const [productNameOptions, setProductNameOptions] = useState([]);
+    const [disableRowSelection, setDisableRowSelection] = useState(false);
     const [editedStockPile, setEditedStockPile] = useState([]);
+    const dispatch = useAppDispatch();
+
+    /* Services */
+    const { getList, exportData, getPlaceNamesByCategory } = StockpileStaffService;
 
     const onStaffStockCreated = () => {
         staffStockpileCreateOpen(false);
@@ -41,6 +48,7 @@ function StockpileDashboard() {
 
     const onRegister = (values) => {
         setImportStaffStockpileOpen(false);
+        showOverFlow();
     }
 
     const callDropDownApi = (stockList) => {
@@ -69,8 +77,7 @@ function StockpileDashboard() {
                 }
             })
             setCategories([...tempCategories]);
-
-            setProductNames(dataMapping);
+            // setProductNames(dataMapping);
         });
     }
 
@@ -80,19 +87,18 @@ function StockpileDashboard() {
         formData.append('place_id', layoutReducer?.user?.place?.id);
         StockpileStaffService.importData(formData, () => {
             setImportStaffStockpileOpen(false);
+            showOverFlow();
             setTableLoading(true);
             onGetMaterialListOnMounting();
 
         });
-
     }
-
 
     const columns = [
         { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
         { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
         { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "12rem" },
-        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
+        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "center", alignHeader: "center" },
         { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "10rem" },
         { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
         { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "10rem" },
@@ -100,22 +106,21 @@ function StockpileDashboard() {
         { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
         {
             field: 'actions',
-            header: translate(localeJson, 'edit'),
+            header: translate(localeJson, 'action'),
             textAlign: "center",
             minWidth: "7rem",
             body: (rowData) => (
                 <div>
                     <Button buttonProps={{
                         text: translate(localeJson, 'edit'),
-                        buttonClass: "text-primary ",
+                        buttonClass: "edit-button",
                         onClick: () => {
                             setEditObject(rowData);
                             setSelectedCategory(rowData.category)
                             setStaffStockpileEditOpen(true);
+                            hideOverFlow();
                         },
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                    }} />
+                    }} parentClass={"edit-button"} />
                 </div>
             ),
         },
@@ -146,11 +151,11 @@ function StockpileDashboard() {
      */
     const onGetMaterialListOnMounting = () => {
         // Get dashboard list
+        setTableLoading(true);
         getList(getListPayload, (response) => {
+            let preparedList = [];
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                let preparedList = [];
-                // Update prepared list to the state
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
@@ -158,7 +163,7 @@ function StockpileDashboard() {
                         summary_id: obj.id ?? "",
                         hinan_id: obj.hinan_id ?? "",
                         before_count: obj.before_count ?? "",
-                        after_count: obj.after_count ?? "",
+                        after_count: obj.after_count ?? 0,
                         incharge: obj.incharge ?? "",
                         remarks: obj.remarks ?? "",
                         expiry_date: obj.expiry_date ? new Date(obj.expiry_date) : "",
@@ -166,7 +171,11 @@ function StockpileDashboard() {
                         history_flag: obj.history_flag ?? "",
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
-                        stock_pile_image: obj.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => { bindImageModalData(obj.stockpile_image) }} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />,
+                        stock_pile_image: obj.stockpile_image ? <img style={{ cursor: "pointer" }} src={obj.stockpile_image} width={'20px'} height={'20px'} alt={"img" + i} onClick={() => {
+                            setDisableRowSelection(true);
+                            bindImageModalData(obj.stockpile_image);
+                        }}
+                        /> : "",
                         product_name: obj.product_name ?? "",
                         Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
                         InspectionDateTime: obj.Inspection_date_time ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : getEnglishDateDisplayFormat(obj.Inspection_date_time)) : "",
@@ -184,26 +193,26 @@ function StockpileDashboard() {
                 setStockPileList(preparedList);
                 setTotalCount(response.data.model.total);
                 setTableLoading(false);
-                callDropDownApi(preparedList);
             } else {
                 setTableLoading(false);
                 setStockPileList([]);
             }
-
+            callDropDownApi(preparedList);
         });
     }
 
     const bindImageModalData = (image) => {
         setImage(image)
         setImageModal(true)
+        hideOverFlow();
     }
 
     const [getListPayload, setGetListPayload] = useState({
         "filters": {
             "start": 0,
-            "limit": 5,
+            "limit": 10,
             "sort_by": "category",
-            "order_by": "asc"
+            "order_by": "desc"
         },
         place_id: layoutReducer?.user?.place?.id,
     });
@@ -224,6 +233,7 @@ function StockpileDashboard() {
             updatedList[index]['save_flag'] = true
             setStockPileList(updatedList);
             setStaffStockpileEditOpen(false);
+            showOverFlow();
             setSelectedCategory("");
             if (editedStockPile.length > 0) {
                 let loopEditedList = [...editedStockPile]
@@ -232,42 +242,49 @@ function StockpileDashboard() {
                     loopEditedList.splice(editedIndex, 1);
                     loopEditedList.push(updatedList[index])
                     setEditedStockPile(loopEditedList);
+                    dispatch(setStaffEditedStockpile(loopEditedList));
                 }
                 else {
                     setEditedStockPile([...editedStockPile, updatedList[index]])
+                    dispatch(setStaffEditedStockpile([...editedStockPile, updatedList[index]]));
                 }
 
             }
             else {
                 setEditedStockPile([...editedStockPile, updatedList[index]])
+                dispatch(setStaffEditedStockpile([...editedStockPile, updatedList[index]]));
             }
         }
     }
 
     const bulkUpdateStockPileData = () => {
         let updatedList = stockPileList.filter((item) => item.save_flag === true);
-        if (updatedList.length > 0) {
-            updatedList.map((stock) => {
-                stock['Inspection_date_time'] = getEnglishDateDisplayFormat(stock.Inspection_date_time);
-                stock['expiry_date'] = getEnglishDateDisplayFormat(stock.expiry_date);
+        let newUpdatedList = [...editedStockPile, ...updatedList].filter(
+            (obj, index, array) => array.findIndex((o) => o.summary_id === obj.summary_id) === index
+        );
+        if (newUpdatedList.length > 0) {
+            const payloadUpdatedList = newUpdatedList.map((stock) => ({
+                ...stock,
+                'Inspection_date_time': getEnglishDateDisplayFormat(stock.Inspection_date_time),
+                'expiry_date': getEnglishDateDisplayFormat(stock.expiry_date)
+            }));
+            StockpileStaffService.update(payloadUpdatedList, (response) => {
+                setEditedStockPile([]);
+                dispatch(setStaffEditedStockpile([]));
+                onGetMaterialListOnMounting();
             })
         }
-        StockpileStaffService.update(updatedList, (response) => {
-            setEditedStockPile([]);
 
-            onGetMaterialListOnMounting();
-        })
     }
 
     const checkForEditedStockPile = (screenFlag) => {
-        const index = stockPileList.findIndex(obj => obj['save_flag'] === true);
-        console.log(stockPileList, index)
-        if (index == -1) {
+        if (editedStockPile.length == 0) {
             if (screenFlag == "history") {
                 router.push("/staff/stockpile/history")
             }
             if (screenFlag == "import") {
                 setImportStaffStockpileOpen(true)
+                hideOverFlow();
             }
             if (screenFlag == "toTop") {
                 router.push('/staff/dashboard')
@@ -293,13 +310,22 @@ function StockpileDashboard() {
         setSelectedCategory(value);
     }
 
+    const updatePlaceNameOptionsByCategory = (value) => {
+        let payload = {
+            category: value,
+            place_id: layoutReducer?.user?.place?.id
+        }
+        getPlaceNamesByCategory(payload, (response) => {
+            if (response?.success && response?.data?.model?.length > 0) {
+                const data = response.data.model;
+                setProductNameOptions(data);
+            }
+        })
+    }
+
     const rowClassName = (rowData) => {
         return rowData.save_flag === true ? 'highlight-row' : "";
     }
-
-
-    /* Services */
-    const { getList, exportData } = StockpileStaffService;
 
     useEffect(() => {
         setTableLoading(true);
@@ -311,13 +337,15 @@ function StockpileDashboard() {
 
     }, [locale, getListPayload]);
 
-
     return (
         <>
             <StaffStockpileEditModal
                 open={staffStockpileEditOpen}
                 header={translate(localeJson, 'edit_product')}
-                close={() => setStaffStockpileEditOpen(false)}
+                close={() => {
+                    setStaffStockpileEditOpen(false)
+                    showOverFlow();
+                }}
                 buttonText={translate(localeJson, 'save')}
                 editObject={{ ...editObject }}
                 setEditObject={setEditObject}
@@ -328,67 +356,73 @@ function StockpileDashboard() {
             />
             <StaffStockpileCreateModal
                 open={staffStockpileCreateOpen}
-                header={translate(localeJson, 'add_stockpile')}
-                close={() => setStaffStockpileCreateOpen(false)}
+                header={translate(localeJson, 'add_stockpile_c')}
+                close={() => {
+                    setStaffStockpileCreateOpen(false);
+                    showOverFlow();
+                    setProductNameOptions([]);
+                }}
                 buttonText={translate(localeJson, 'save')}
                 createdStock={onStaffStockCreated}
                 categories={categories}
                 products={productNames[`${selectedCategory}`]}
-                onCategoryChange={updateCategoryChange}
+                onCategoryChange={updatePlaceNameOptionsByCategory}
                 refreshList={onGetMaterialListOnMounting}
+                productNameOptions={productNameOptions}
             />
             <StockpileSummaryImageModal
                 open={imageModal}
-                image={image}
-                close={() => setImageModal(false)}
+                imageUrl={image}
+                close={() => {
+                    setDisableRowSelection(false);
+                    setImageModal(false);
+                    showOverFlow();
+                }}
             />
             <AdminManagementImportModal
                 open={importStaffStockpileOpen}
-                close={() => setImportStaffStockpileOpen(false)}
+                close={() => {
+                    setImportStaffStockpileOpen(false)
+                    showOverFlow();
+                }}
                 importFile={importFileApi}
                 modalHeaderText={translate(localeJson, 'staff_management_inventory_import_processing')}
             />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'stockpile_list')}</h5>
-                        <hr />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_list")} />
                         <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'stockpile_history'),
-                                    severity: "primary",
-                                    onClick: () => checkForEditedStockPile("history")
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
+                                    import: true,
                                     onClick: () => checkForEditedStockPile("import"),
-                                    buttonClass: "evacuation_button_height",
+                                    buttonClass: "evacuation_button_height import-button-white-bg",
                                     text: translate(localeJson, 'import'),
-                                    severity: "primary",
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 import-button-white-bg"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button-white-bg",
                                     text: translate(localeJson, 'export'),
                                     onClick: () => {
                                         exportData(getListPayload);
                                     },
-                                    severity: "primary",
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 export-button-white-bg"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    create: true,
+                                    buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'add_stockpile'),
-                                    severity: "success",
-                                    onClick: () => setStaffStockpileCreateOpen(true),
-                                }} parentClass={"mr-1 mt-1"} />
+                                    onClick: () => {
+                                        setStaffStockpileCreateOpen(true)
+                                        hideOverFlow();
+                                    }
+                                }} parentClass={"mr-1 mt-1 primary-button"} />
                             </div>
                             <div className="mt-3">
                                 <NormalTable
@@ -396,7 +430,6 @@ function StockpileDashboard() {
                                     totalRecords={totalCount}
                                     loading={tableLoading}
                                     stripedRows={true}
-                                    className={"custom-table-cell"}
                                     showGridlines={"true"}
                                     value={stockPileList}
                                     columns={columns}
@@ -418,23 +451,16 @@ function StockpileDashboard() {
                                         }
                                         )
                                     }}
+                                    parentClass={"custom-table"}
                                 />
                             </div>
                             <div className="text-center mt-3">
                                 <Button buttonProps={{
-                                    buttonClass: "text-600 w-8rem",
-                                    bg: "bg-white",
-                                    hoverBg: "hover:surface-500 hover:text-white",
-                                    text: translate(localeJson, 'back_to_top'),
-                                    onClick: () => checkForEditedStockPile("toTop"),
-                                }} parentClass={"inline"} />
-                                <Button buttonProps={{
-                                    buttonClass: "w-8rem",
+                                    buttonClass: "w-8rem update-button",
                                     type: "button",
-                                    severity: "primary",
                                     text: translate(localeJson, 'inventory'),
                                     onClick: () => bulkUpdateStockPileData()
-                                }} parentClass={"inline pl-2"} />
+                                }} parentClass={"inline pl-2 update-button"} />
                             </div>
                         </div>
                     </div>

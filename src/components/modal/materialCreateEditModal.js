@@ -1,21 +1,18 @@
-import React,{ useContext } from "react"
+import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useRouter } from 'next/router'
 
-import Button from "../button/button";
+import {Button} from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
 import { ValidationError } from "../error";
-import { InputFloatLabel, InputIcon } from "../input";
 import { MaterialService } from "@/services/material.service";
+import { Input } from "../input";
 
 export default function MaterialCreateEditModal(props) {
- 
+
     const { localeJson } = useContext(LayoutContext);
-    const router = useRouter();
     const schema = Yup.object().shape({
         name: Yup.string()
             .required(translate(localeJson, 'supplies_necessary'))
@@ -32,11 +29,12 @@ export default function MaterialCreateEditModal(props) {
 
 
     const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'material_information_registration')}
+        <div className="new-custom-modal">
+            {props.registerModalAction == "create" ?
+                translate(localeJson, 'material_information_registration_c') : translate(localeJson, 'edit_material_information')}
         </div>
     );
-    
+
     const resetAndCloseForm = (callback) => {
         close();
         callback();
@@ -47,18 +45,18 @@ export default function MaterialCreateEditModal(props) {
         <>
             <Formik
                 validationSchema={schema}
-                enableReinitialize={true} 
+                enableReinitialize={true}
                 initialValues={props.currentEditObj}
-                onSubmit={(values, {resetForm}) => {
-                    if (props.registerModalAction=="create") {
-                        MaterialService.create(values, ()=> {
+                onSubmit={(values, { resetForm }) => {
+                    if (props.registerModalAction == "create") {
+                        MaterialService.create(values, () => {
                             resetAndCloseForm(resetForm)
                         })
-                    } else if(props.registerModalAction=="edit") {
-                        MaterialService.update(props.currentEditObj.id, {id: props.currentEditObj.id, ...values},
-                        ()=> {
-                            resetAndCloseForm(resetForm)
-                        })
+                    } else if (props.registerModalAction == "edit") {
+                        MaterialService.update(props.currentEditObj.id, { id: props.currentEditObj.id, ...values },
+                            () => {
+                                resetAndCloseForm(resetForm)
+                            })
                     }
                     return false;
                 }}
@@ -74,10 +72,11 @@ export default function MaterialCreateEditModal(props) {
                 }) => (
                     <div>
                         <Dialog
-                            className="custom-modal"
+                            className="new-custom-modal"
                             header={header}
                             visible={open}
                             draggable={false}
+                            blockScroll={true}
                             onHide={() => {
                                 resetForm();
                                 close();
@@ -85,54 +84,92 @@ export default function MaterialCreateEditModal(props) {
                             footer={
                                 <div className="text-center">
                                     <Button buttonProps={{
-                                        buttonClass: "text-600 w-8rem",
-                                        bg: "bg-white",
-                                        hoverBg: "hover:surface-500 hover:text-white",
+                                        buttonClass: "w-full back-button",
                                         text: translate(localeJson, 'cancel'),
                                         onClick: () => {
                                             resetForm();
-                                            close()},
-                                    }} parentClass={"inline"} />
+                                            close()
+                                        },
+                                    }} parentClass={"back-button"} />
                                     <Button buttonProps={{
-                                        buttonClass: "w-8rem",
+                                        buttonClass: "w-full update-button",
                                         type: "submit",
                                         text: translate(localeJson, 'registration'),
-                                        severity: "primary",
                                         onClick: () => {
                                             handleSubmit();
                                         },
-                                    }} parentClass={"inline"} />
+                                    }} parentClass={"update-button"} />
                                 </div>
                             }
                         >
                             <div className={`modal-content`}>
                                 <div>
-                                <form onSubmit={handleSubmit}>
-                                                <div className="mt-5">
-                                                    <InputFloatLabel inputFloatLabelProps={{
-                                                        name: "name",
+                                    <div className="modal-header">
+                                        {props.registerModalAction == "create" ?
+                                            translate(localeJson, 'material_information_registration_c') : translate(localeJson, 'edit_material_information')}
+                                    </div>
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="modal-field-bottom-space">
+                                            <Input
+                                                inputProps={{
+                                                    inputParentClassName: `${errors.name && touched.name && 'p-invalid pb-1'}`,
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'material_name'),
+                                                        inputLabelClassName: "block",
                                                         spanText: "*",
-                                                        spanClass: "p-error",
-                                                        value: values.name,
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
-                                                        onChange: handleChange,
-                                                        onBlur: handleBlur,
-                                                        text : translate(localeJson, 'material_name'),
-                                                    }} parentClass={`${errors.name && touched.name && 'p-invalid pb-1'}`} />
-                                                    <ValidationError errorBlock={errors.name && touched.name && errors.name} />
-                                                </div>
-                                                <div className='mt-5 mb-5'>
-                                                    <InputFloatLabel inputFloatLabelProps={{
-                                                        name: 'unit',
-                                                        value: values.unit,
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
-                                                        onChange: handleChange,
-                                                        onBlur: handleBlur,
+                                                        inputLabelSpanClassName: "p-error",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    inputClassName: "w-full",
+                                                    name: "name",
+                                                    value: values && values.name,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                }}
+                                            />
+                                            <ValidationError errorBlock={errors.name && touched.name && errors.name} />
+                                        </div>
+                                        <div className='modal-field-bottom-space'>
+                                            <Input
+                                                inputProps={{
+                                                    inputParentClassName: `${errors.unit && touched.unit && 'p-invalid pb-1'}`,
+                                                    labelProps: {
                                                         text: translate(localeJson, 'unit'),
-                                                    }} parentClass={`${errors.unit && touched.unit && 'p-invalid pb-1'}`}/>
-                                                    <ValidationError errorBlock={errors.unit && touched.unit && errors.unit} />
-                                                </div>
-                                            </form>
+                                                        inputLabelClassName: "block",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    inputClassName: "w-full",
+                                                    name: "unit",
+                                                    value: values && values.unit,
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                }}
+                                            />
+                                            <ValidationError errorBlock={errors.unit && touched.unit && errors.unit} />
+                                        </div>
+                                    </form>
+                                    <div className="text-center">
+                                        <div className="modal-button-footer-space">
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full update-button",
+                                                type: "submit",
+                                                text: translate(localeJson, 'registration'),
+                                                onClick: () => {
+                                                    handleSubmit();
+                                                },
+                                            }} parentClass={"update-button"} />
+                                        </div>
+                                        <div>
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full back-button",
+                                                text: translate(localeJson, 'cancel'),
+                                                onClick: () => {
+                                                    resetForm();
+                                                    close()
+                                                },
+                                            }} parentClass={"back-button"} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Dialog>

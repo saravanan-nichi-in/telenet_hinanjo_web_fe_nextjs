@@ -59,7 +59,6 @@ const ImageCropper = () => {
     }
 
     const submit = (name) => {
-        console.log("Submitted successfully");
     }
 
     const onHide = (name) => {
@@ -129,11 +128,9 @@ const ImageCropper = () => {
                     thMode: window.cv.ADAPTIVE_THRESH_GAUSSIAN_C
                 }
             })
-
-            console.log(res);
             setCompleted(true);
         } catch (e) {
-            console.log('error', e)
+            console.error('error', e)
         }
     }
 

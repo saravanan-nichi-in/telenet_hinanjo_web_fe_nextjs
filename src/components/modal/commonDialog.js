@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 
-import Button from "../button/button";
+import {Button} from "../button";
 
 const CommonDialog = (props) => {
   // Destructuring
@@ -10,11 +10,14 @@ const CommonDialog = (props) => {
     close,
     dialogParentClassName,
     dialogBodyClassName,
+    dialogBodyStyle,
     position,
     header,
     content,
+    content2,
     footerParentClassName,
     footerButtonsArray,
+    dialogClassName,
     ...restProps
   } = props;
   // Footer buttons
@@ -39,16 +42,24 @@ const CommonDialog = (props) => {
   return (
     <div className={dialogParentClassName}>
       <Dialog
-        className="custom-modal"
+        className={`new-custom-modal ${dialogClassName}`}
         header={header}
         visible={open}
         draggable={false}
+        blockScroll={true}
         position={position}
         onHide={() => close()}
         footer={footer()}
       >
-        <div className={dialogBodyClassName}>
+
+        <div className={dialogBodyClassName} style={dialogBodyStyle}>
+          <div className="modal-header">
+            {header}
+          </div>
           {content}
+          <div>
+            {footer()}
+          </div>
         </div>
       </Dialog>
     </div>

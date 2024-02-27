@@ -48,5 +48,6 @@ function _getList(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }

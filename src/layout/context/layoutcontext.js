@@ -7,6 +7,27 @@ import { CommonServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setLayout } from "@/redux/layout";
 
+const URLS = [
+    '/admin/login',
+    '/admin/login/',
+    '/admin/forgot-password',
+    '/admin/forgot-password/',
+    '/admin/reset-password',
+    '/admin/reset-password/',
+    '/staff/login',
+    '/staff/login/',
+    '/staff/forgot-password',
+    '/staff/forgot-password/',
+    '/staff/reset-password',
+    '/staff/reset-password/',
+    '/hq-staff/login',
+    '/hq-staff/login/',
+    '/hq-staff/forgot-password',
+    '/hq-staff/forgot-password/',
+    '/hq-staff/reset-password',
+    '/hq-staff/reset-password/'
+]
+
 export const LayoutContext = React.createContext();
 
 export const LayoutProvider = (props) => {
@@ -15,9 +36,9 @@ export const LayoutProvider = (props) => {
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
-        menuMode: window.location.pathname.startsWith('/user') ? 'overlay' : 'static',
+        menuMode: window.location.pathname.startsWith('/user') || URLS.includes(window.location.pathname) ? window.location.pathname.startsWith('/user/map') ? 'static' : 'overlay' : 'static',
         colorScheme: 'light',
-        theme: 'lara-light-indigo',
+        theme: 'default',
         scale: 14
     });
     const [layoutState, setLayoutState] = useState({
@@ -36,7 +57,7 @@ export const LayoutProvider = (props) => {
     const { getSystemSettingDetails } = CommonServices;
 
     useEffect(() => {
-        router.events.on('routeChangeComplete', () => {
+        router.events.on('routeChangeComplete', (url) => {
             updateLayoutConfigState();
         });
     }, []);
@@ -47,7 +68,7 @@ export const LayoutProvider = (props) => {
     const updateLayoutConfigState = () => {
         setLayoutConfig(prevState => ({
             ...prevState,
-            menuMode: window.location.pathname.startsWith('/user') ? 'overlay' : 'static',
+            menuMode: window.location.pathname.startsWith('/user') || URLS.includes(window.location.pathname) ? window.location.pathname.startsWith('/user/map') ? 'static' : 'overlay' : 'static',
         }));
     }
 
@@ -89,22 +110,27 @@ export const LayoutProvider = (props) => {
     };
 
     const onChangeLocale = (props) => {
-        if (props === "en") {
-            setLocale("en");
-            setLocaleJson(enJson);
-            localStorage.setItem('locale', 'en');
-            handleReload();
-        } else {
-            setLocale("ja");
-            setLocaleJson(jpJson);
-            localStorage.setItem('locale', 'ja');
-            handleReload();
+        if (locale != props) {
+            if (props === "en") {
+                setLocale("en");
+                setLocaleJson(enJson);
+                localStorage.setItem('locale', 'en');
+                if (window.location.pathname.startsWith('/user/map')) {
+                    window.location.reload();
+                }
+            } else {
+                setLocale("ja");
+                setLocaleJson(jpJson);
+                localStorage.setItem('locale', 'ja');
+                if (window.location.pathname.startsWith('/user/map')) {
+                    window.location.reload();
+                }
+            }
         }
+        setTimeout(() => {
+            setLoader(false);
+        }, 3000);
     }
-
-    const handleReload = () => {
-        window.location.reload();
-    };
 
     const isOverlay = () => {
         return layoutConfig.menuMode === 'overlay';

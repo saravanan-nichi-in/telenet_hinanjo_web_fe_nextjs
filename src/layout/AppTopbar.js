@@ -1,24 +1,45 @@
-import React, { forwardRef, useContext, useImperativeHandle, useRef, useState, useEffect } from 'react';
-import { LogoutOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
-import { MdOutlineResetTv } from 'react-icons/md';
-import _ from 'lodash';
-import { useRouter } from 'next/router';
+import React, {
+    forwardRef,
+    useContext,
+    useImperativeHandle,
+    useRef,
+    useState,
+    useEffect,
+} from "react";
+import { LogoutOutlined } from "@ant-design/icons";
+import { Menu } from "antd";
+import { useRouter } from "next/router";
+import _ from "lodash";
+import { TbUserCog } from "react-icons/tb";
+import { MdTranslate } from "react-icons/md";
 
-import { LayoutContext } from './context/layoutcontext';
-import { getEnglishDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from '@/helper';
-import { AuthenticationAuthorizationService } from '@/services';
-import { DropdownSelect, ImageComponent } from '@/components';
-import { ChangePasswordModal } from '@/components/modal';
+import { LayoutContext } from "@/layout/context/layoutcontext";
+import { getValueByKeyRecursively as translate } from "@/helper";
+import {
+    AuthenticationAuthorizationService,
+    TempRegisterServices,
+} from "@/services";
+import { ImageComponent, DropdownSelect } from "@/components";
 import { useAppSelector } from "@/redux/hooks";
-import { useAppDispatch } from '@/redux/hooks';
-import { setAdminValue, setStaffValue } from '@/redux/auth';
+import { useAppDispatch } from "@/redux/hooks";
+import { setAdminValue, setStaffValue, setHeadquaterValue } from "@/redux/auth";
+import { urlRegister } from "@/utils/constant";
+import { setStaffEditedStockpile } from "@/redux/stockpile";
 
 const AppTopbar = forwardRef((props, ref) => {
-    const { locale, localeJson, layoutConfig, onMenuToggle, showProfileSidebar, onChangeLocale } = useContext(LayoutContext);
+    const {
+        locale,
+        localeJson,
+        layoutConfig,
+        onMenuToggle,
+        setLoader,
+        onChangeLocale,
+    } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
+    const layoutReducer = useAppSelector((state) => state.layoutReducer);
+    const storeData = useAppSelector((state) => state.stockpileReducer);
     const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
     const menubuttonRef = useRef(null);
     const topbarmenuRef = useRef(null);
@@ -27,23 +48,77 @@ const AppTopbar = forwardRef((props, ref) => {
     const [userName, setUserName] = useState(null);
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const url = router.pathname;
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Asia/Tokyo'
-    };
-    const formattedDateTime = currentDateTime;
+    const path = router.asPath.split("?")[0];
+    const windowURL = window.location.pathname;
+    const windowURLSplitted = windowURL.split("/");
+    const staffLogoutKey =
+        layoutReducer?.user?.place?.type == "place" ? "place_id" : "event_id";
+    const [defaultEventData, setDefaultEventData] = useState({
+        topBarTitle: "",
+        topBarTitle_en: "",
+    });
+    const allowedUserIconPaths = [
+        "/user/dashboard",
+        "/user/register/member",
+        "/user/checkout",
+        "/user/dashboard/",
+        "/user/register/member/",
+        "/user/checkout/",
+    ];
+    
+    const eventHeaderTextStaticPaths = [
+        "/user/event-list",
+        "/user/event-list/",
+        "/user/dashboard",
+        "/user/register/member",
+        "/user/checkout",
+        "/user/dashboard/",
+        "/user/register/member/",
+        "/user/checkout/",
+        "/staff/login",
+        "/staff/login/",
+        "/staff/forgot-password",
+        "/staff/forgot-password/",
+        "/staff/reset-password",
+        "/staff/reset-password/",
+        "/staff/event-staff/dashboard",
+        "/staff/event-staff/dashboard/",
+        "/staff/event-staff/family",
+        "/staff/event-staff/family/",
+        "/staff/event-staff/family/family-detail",
+        "/staff/event-staff/family/family-detail/",
+    ];
+
+    const currentPath = window.location.pathname; // Assuming you are in a browser environment
+    const [layoutInformation, setLayoutInformation] = useState(settings_data);
 
     // Helper function country template
     const selectedCountryTemplate = (option, props) => {
         if (option) {
             return (
-                <div className="flex align-items-center" onClick={() => onChangeLocale(option.name === "JP" ? "jp" : "en")}>
-                    <img alt={option.name} src={option.image} className={`mr-1`} style={{ width: '14px' }} />
-                    <div className='pl-1'>{option.name}</div>
+                <div
+                    className="flex align-items-center"
+                    onClick={() => {
+                        setLoader(true);
+                        onChangeLocale(option.name === "JP" ? "jp" : "en");
+                    }}
+                >
+                    <img
+                        alt={option.name}
+                        src={option.image}
+                        className={`mr-1 ${!userName ? "hidden" : "hidden"} ${!userName && allowedUserIconPaths.includes(currentPath)
+                                ? "hidden"
+                                : " "
+                            }`}
+                        style={{ width: "14px" }}
+                    />
+                    <i
+                        className={`${userName ? "pr-1" : "pr-1"}`}
+                        style={{ width: "14px" }}
+                    >
+                        <MdTranslate />
+                    </i>
+                    <div className={"pl-1"}>{option.name}</div>
                 </div>
             );
         }
@@ -54,71 +129,159 @@ const AppTopbar = forwardRef((props, ref) => {
     // Dynamic menu setting for top bar
     const settingView = (
         <Menu>
-            {url.startsWith('/user') ? (
+            {url.startsWith("/user") && !userName ? (
                 <>
-                    <Menu.Item key="jp">
-                        {selectedCountryTemplate({
-                            name: 'JP',
-                            code: 'JP',
-                            placeholder: '',
-                            image: "/layout/images/jp.png"
-                        })}
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item key="en">
-                        {selectedCountryTemplate({
-                            name: 'EN',
-                            code: 'US',
-                            placeholder: '',
-                            image: "/layout/images/us.png"
-                        })}
-                    </Menu.Item>
+                    {locale == "en" ? (
+                        <Menu.Item key="jp">
+                            {selectedCountryTemplate({
+                                name: "JP",
+                                code: "JP",
+                                placeholder: "",
+                                image: "/layout/images/jp.png",
+                            })}
+                        </Menu.Item>
+                    ) : (
+                        <Menu.Item key="en">
+                            {selectedCountryTemplate({
+                                name: "EN",
+                                code: "US",
+                                placeholder: "",
+                                image: "/layout/images/us.png",
+                            })}
+                        </Menu.Item>
+                    )}
+
+                    {allowedUserIconPaths.includes(currentPath) && (
+                        <Menu.Item>
+                            <div
+                                className="flex justify-content-end clickable-row pr-2"
+                                onClick={() => {
+                                    if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
+                                        router.push({
+                                            pathname: "/staff/login",
+                                        });
+                                    } else if (layoutReducer?.user?.place?.type === "place") {
+                                        router.push({
+                                            pathname: "/staff/dashboard",
+                                        });
+                                    } else {
+                                        router.push({
+                                            pathname: "/staff/event-staff/dashboard",
+                                        });
+                                    }
+                                }}
+                            >
+                                <i className="pr-1">
+                                    <TbUserCog />
+                                </i>
+                                {translate(localeJson, "go_to_staff_screen")}
+                            </div>
+                        </Menu.Item>
+                    )}
+                </>
+            ) : userName ? (
+                <>
+                    {locale == "en" ? (
+                        <Menu.Item key="jp">
+                            {selectedCountryTemplate({
+                                name: "JP",
+                                code: "JP",
+                                placeholder: "",
+                                image: "/layout/images/jp.png",
+                            })}
+                        </Menu.Item>
+                    ) : (
+                        <Menu.Item key="en">
+                            {selectedCountryTemplate({
+                                name: "EN",
+                                code: "US",
+                                placeholder: "",
+                                image: "/layout/images/us.png",
+                            })}
+                        </Menu.Item>
+                    )}
                 </>
             ) : (
-                <Menu.SubMenu key="language" title={translate(localeJson, 'language')}>
-                    <Menu.Item key="jp">
-                        {selectedCountryTemplate({
-                            name: 'JP',
-                            code: 'JP',
-                            placeholder: '',
-                            image: "/layout/images/jp.png"
-                        })}
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item key="en">
-                        {selectedCountryTemplate({
-                            name: 'EN',
-                            code: 'US',
-                            placeholder: '',
-                            image: "/layout/images/us.png"
-                        })}
-                    </Menu.Item>
-                </Menu.SubMenu>
+                <>
+                    {locale == "en" ? (
+                        <Menu.Item key="jp">
+                            {selectedCountryTemplate({
+                                name: "JP",
+                                code: "JP",
+                                placeholder: "",
+                                image: "/layout/images/jp.png",
+                            })}
+                        </Menu.Item>
+                    ) : (
+                        <Menu.Item key="en">
+                            {selectedCountryTemplate({
+                                name: "EN",
+                                code: "US",
+                                placeholder: "",
+                                image: "/layout/images/us.png",
+                            })}
+                        </Menu.Item>
+                    )}
+                </>
             )}
-            {url.startsWith('/admin') && (
+            {url.startsWith("/admin") && userName && (
                 <>
                     <Menu.Divider />
-                    <Menu.Item key="change-password" icon={<MdOutlineResetTv style={{ fontSize: "14px" }} />} onClick={() => setChangePasswordOpen(true)}>
-                        <div>
-                            {translate(localeJson, 'change_password')}
-                        </div>
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout('admin', onLogoutSuccess)}>
-                        <div>
-                            {translate(localeJson, 'logout')}
-                        </div>
+                    <Menu.Item
+                        key="logout"
+                        icon={<LogoutOutlined />}
+                        onClick={() => logout("admin", {}, onLogoutSuccess)}
+                    >
+                        <div>{translate(localeJson, "logout")}</div>
                     </Menu.Item>
                 </>
-
             )}
-            {url.startsWith('/staff') && (
+            {url.startsWith("/staff") && userName && (
                 <>
                     <Menu.Divider />
-                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout('staff', onLogoutSuccess)}>
-                        <div>
-                            {translate(localeJson, 'logout')}
-                        </div>
+                    <Menu.Item
+                        key="logout"
+                        icon={<LogoutOutlined />}
+                        onClick={() => {
+                            if (storeData.staffEditedStockpile.length > 0) {
+                                let result = window.confirm(
+                                    translate(localeJson, "alert_info_for_unsaved_contents")
+                                );
+                                if (result) {
+                                    logout(
+                                        "staff",
+                                        {
+                                            [staffLogoutKey]: layoutReducer?.user?.place?.id,
+                                        },
+                                        onLogoutSuccess,
+                                        staffLogoutKey
+                                    );
+                                }
+                            } else {
+                                logout(
+                                    "staff",
+                                    {
+                                        [staffLogoutKey]: layoutReducer?.user?.place?.id,
+                                    },
+                                    onLogoutSuccess,
+                                    staffLogoutKey
+                                );
+                            }
+                        }}
+                    >
+                        <div>{translate(localeJson, "logout")}</div>
+                    </Menu.Item>
+                </>
+            )}
+            {url.startsWith("/hq-staff") && userName && (
+                <>
+                    <Menu.Divider />
+                    <Menu.Item
+                        key="logout"
+                        icon={<LogoutOutlined />}
+                        onClick={() => logout("headquaters", {}, onLogoutSuccess)}
+                    >
+                        <div>{translate(localeJson, "logout")}</div>
                     </Menu.Item>
                 </>
             )}
@@ -127,13 +290,25 @@ const AppTopbar = forwardRef((props, ref) => {
 
     /* Services */
     const { logout } = AuthenticationAuthorizationService;
+    const { getdefaultEventData } = TempRegisterServices;
 
     useEffect(() => {
         layoutUpdate(url);
-        router.events.on('routeChangeComplete', (responseUrl) => {
+        router.events.on("routeChangeComplete", (responseUrl) => {
             layoutUpdate(responseUrl);
         });
+        const fetchData = async () => {
+            await onGetTempRegisterDefaultEvent();
+        };
+
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        if (settings_data) {
+            setLayoutInformation(settings_data);
+        }
+    }, [settings_data]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -148,27 +323,30 @@ const AppTopbar = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
         topbarmenu: topbarmenuRef.current,
-        topbarmenubutton: topbarmenubuttonRef.current
+        topbarmenubutton: topbarmenubuttonRef.current,
     }));
 
     /**
      * Layout update
      */
     const layoutUpdate = (responseUrl) => {
-        const adminData = JSON.parse(localStorage.getItem('admin'));
-        const staffData = JSON.parse(localStorage.getItem('staff'));
-        if (responseUrl.startsWith('/admin')) {
+        const adminData = JSON.parse(localStorage.getItem("admin"));
+        const staffData = JSON.parse(localStorage.getItem("staff"));
+        const hqStaffData = JSON.parse(localStorage.getItem("hq-staff"));
+        if (responseUrl.startsWith("/admin")) {
             setUserName(adminData?.user?.name);
-        } else if (responseUrl.startsWith('/staff')) {
+        } else if (responseUrl.startsWith("/staff")) {
             setUserName(staffData?.user?.name);
+        } else if (responseUrl.startsWith("/hq-staff")) {
+            setUserName(hqStaffData?.user?.name);
         } else {
             setUserName("");
         }
-    }
+    };
 
     /**
      * On password changed successfully
-     * @param {*} response 
+     * @param {*} response
      */
     const onChangePasswordSuccess = (response) => {
         setChangePasswordOpen(false);
@@ -179,86 +357,274 @@ const AppTopbar = forwardRef((props, ref) => {
      * @param key
      */
     const onLogoutSuccess = async (key) => {
-        if (key === 'admin') {
-            await router.push('/admin');
-            dispatch(setAdminValue({
-                admin: {}
-            }));
-        } else {
-            await router.push('/user/list');
-            dispatch(setStaffValue({
-                staff: {}
-            }));
+        if (key === "admin") {
+            await router.push("/admin/login");
+            dispatch(
+                setAdminValue({
+                    admin: {},
+                })
+            );
+        } else if (key === "staff") {
+            if (staffLogoutKey === "place_id") {
+                dispatch(setStaffEditedStockpile([]));
+                await router.push("/user/list");
+            } else {
+                await router.push("/user/event-list");
+            }
+            dispatch(
+                setStaffValue({
+                    staff: {},
+                })
+            );
+        } else if (key === "headquaters") {
+            await router.push("/hq-staff/login");
+            dispatch(
+                setHeadquaterValue({
+                    headquaters: {},
+                })
+            );
         }
-    }
+    };
+
+    const onGetTempRegisterDefaultEvent = () => {
+        getdefaultEventData((response) => {
+            if (response.success) {
+                const data = response.data.model;
+                if (data) {
+                    setDefaultEventData({
+                        topBarTitle: data.name,
+                        topBarTitle_en: data.name_en,
+                    });
+                }
+            }
+        });
+    };
+
+    const checkAndRedirectToEntranceExitScreen = () => {
+        let confirmUrl = [
+            "/user/person-count",
+            "/user/register/member",
+            "/user/checkout",
+            "/user/checkout/details",
+            "/user/register/member/details/",
+        ];
+        let registerUrl = "/user/register";
+        if (confirmUrl.includes(windowURL)) {
+            router.push("/user/dashboard");
+        } else if (windowURL == registerUrl) {
+            let result = window.confirm(
+                translate(localeJson, "do_you_want_to_return_to_main")
+            );
+            if (result) {
+                router.push("/user/dashboard");
+            }
+        }
+    };
+
+    /**
+     * Get place or event name from redux & display
+     * @returns Name
+     */
+    const getSelectedUserPlaceOrEvent = () => {
+        const URLS = [
+            "/staff/login",
+            "/staff/login/",
+            "/staff/forgot-password",
+            "/staff/forgot-password/",
+            "/staff/reset-password",
+            "/staff/reset-password/",
+        ];
+        if (window.location.pathname.startsWith("/staff")) {
+            if (
+                !URLS.includes(path) &&
+                window.location.pathname.startsWith("/staff/event-staff")
+            ) {
+                return (
+                    <div className="header-details-first text-sm">
+                        {`${locale === "en" && !_.isNull(layoutReducer?.user?.event?.name_en)
+                                ? layoutReducer?.user?.event?.name_en
+                                : layoutReducer?.user?.event?.name
+                            }`}
+                    </div>
+                );
+            } else {
+                if (!URLS.includes(path)) {
+                    return (
+                        <div className="header-details-first text-sm">
+                            {`${locale === "en" &&
+                                    !_.isNull(layoutReducer?.user?.place?.name_en)
+                                    ? layoutReducer?.user?.place?.name_en
+                                    : layoutReducer?.user?.place?.name
+                                }`}
+                        </div>
+                    );
+                }
+            }
+        }
+    };
+
+    /**
+     * App top bar right functionality
+     */
+    const topBarRight = (
+        <div ref={topbarmenuRef} className="header-details-second">
+            {userName && (
+                <div title={userName} className="header-dropdown-name">
+                    <label className="text-base font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                        {userName}
+                    </label>
+                </div>
+            )}
+            {!userName && !allowedUserIconPaths.includes(currentPath) && (
+                <div className="pr-3">
+                    <DropdownSelect
+                        icon={<i className="pi pi-bars" />}
+                        items={settingView}
+                    />
+                </div>
+            )}
+            {userName &&
+                windowURLSplitted &&
+                !urlRegister.includes(windowURLSplitted[2]) ? (
+                <div className={`${!userName ? "pr-3" : ""}`}>
+                    <DropdownSelect
+                        icon={<i className="pi pi-cog" />}
+                        items={settingView}
+                    />
+                </div>
+            ) : !userName && allowedUserIconPaths.includes(currentPath) ? (
+                <div className="pr-3">
+                    <DropdownSelect
+                        icon={<i className="pi pi-bars" />}
+                        items={settingView}
+                    />
+                </div>
+            ) : (
+                <></>
+            )}
+        </div>
+    );
 
     return (
         <React.Fragment>
-            <ChangePasswordModal
-                open={changePasswordOpen}
-                close={() => setChangePasswordOpen(false)}
-                onChangePasswordSuccess={onChangePasswordSuccess}
-            />
             <div className="layout-topbar">
-                {layoutConfig.menuMode === 'static' && (
-                    <div className="logo-details">
-                        <div className='logo-view'>
-                            <ImageComponent imageProps={{
-                                src: settings_data.image_logo_path ? settings_data.image_logo_path : `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
-                                width: 280,
-                                height: 45,
-                                alt: "logo"
-                            }} />
+                {layoutConfig.menuMode === "static" &&
+                    !windowURL.startsWith("/user/map") && (
+                        <div className="logo-details">
+                            <div className="logo-view cursor-pointer">
+                                {layoutConfig.menuMode === "static" && (
+                                    <div className="hamburger px-2">
+                                        <button
+                                            ref={menubuttonRef}
+                                            type="button"
+                                            className="p-link layout-topbar-button"
+                                            onClick={onMenuToggle}
+                                        >
+                                            <i className="pi pi-bars" />
+                                        </button>
+                                    </div>
+                                )}
+                                <ImageComponent
+                                    imageProps={{
+                                        src: layoutInformation?.image_logo_path
+                                            ? layoutInformation?.image_logo_path
+                                            : ``,
+                                        width: 220,
+                                        height: 45,
+                                        alt: "logo",
+                                        onClick: () => {
+                                            if (
+                                                url.startsWith("/staff") &&
+                                                layoutReducer?.user?.place?.type === "place"
+                                            ) {
+                                                router.push("/staff/dashboard");
+                                            } else if (
+                                                url.startsWith("/staff") &&
+                                                layoutReducer?.user?.place?.type === "event"
+                                            ) {
+                                                router.push("/staff/event-staff/dashboard");
+                                            } else if (url.startsWith("/hq-staff")) {
+                                                router.push("/hq-staff/dashboard");
+                                            } else {
+                                                router.push("/admin/dashboard");
+                                            }
+                                        },
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                )}
-                <div className='header-details' style={{
-                    width: layoutConfig.menuMode === 'overlay' && "100%"
-                }}>
-                    {layoutConfig.menuMode === 'static' && (
-                        <div className='hamburger'>
-                            <button ref={menubuttonRef} type="button" className="p-link layout-topbar-button" onClick={onMenuToggle}>
+                    )}
+                <div
+                    className="header-details"
+                    style={{
+                        width:
+                            (layoutConfig.menuMode === "overlay" ||
+                                windowURL.startsWith("/user/map")) &&
+                            "100%",
+                    }}
+                >
+                    {layoutConfig.menuMode === "static" && (
+                        <div className="hamburger">
+                            <button
+                                ref={menubuttonRef}
+                                type="button"
+                                className="p-link layout-topbar-button"
+                                onClick={onMenuToggle}
+                            >
                                 <i className="pi pi-bars" />
                             </button>
                         </div>
                     )}
-                    <div className='header-details-first-view'>
-                        <div title={locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en} className='header-details-first'>
-                            {locale == "ja" ? settings_data?.system_name_ja : settings_data?.system_name_en}
-                        </div>
-                        <div ref={topbarmenuRef} className='header-details-second'>
-                            <div className={`${_.isEmpty(userName) ? "mr-2" : "mr-2"}`}>
-                                <div className='header-details-second-date-time-picker'>
-                                    {locale === 'ja'
-                                        ? getJapaneseDateTimeDisplayActualFormat(formattedDateTime)
-                                        : getEnglishDateTimeDisplayActualFormat(formattedDateTime)}
-                                </div>
+                    <div
+                        className={`header-details-first-view ${!userName ? "pr-0" : ""}`}
+                    >
+                        {windowURLSplitted &&
+                            !urlRegister.includes(windowURLSplitted[2]) ? (
+                            <div
+                                title={
+                                    locale == "ja"
+                                        ? settings_data?.system_name_ja
+                                        : settings_data?.system_name_en
+                                }
+                                className="header-details-first flex flex-column"
+                            >
                                 <div
-                                    title={
-                                        locale === 'ja'
-                                            ? getJapaneseDateTimeDisplayActualFormat(formattedDateTime)
-                                            : getEnglishDateTimeDisplayActualFormat(formattedDateTime)
-                                    }
-                                    className='header-details-second-date-time-picker-icon'>
-                                    <i className="pi pi-clock" />
+                                    className={`text-base white-space-nowrap overflow-hidden text-overflow-ellipsis cursor-pointer`}
+                                    onClick={checkAndRedirectToEntranceExitScreen}
+                                >
+                                    {layoutReducer?.user?.place?.type === "event" &&
+                                        eventHeaderTextStaticPaths.includes(currentPath) || window.location.pathname.startsWith("/user/event-list")
+                                        ? translate(localeJson,"event_management_system")
+                                        : locale === "ja"
+                                        ? settings_data?.system_name_ja
+                                        : settings_data?.system_name_en}
                                 </div>
-
+                                {getSelectedUserPlaceOrEvent()}
                             </div>
-                            {userName && (
-                                <div title={userName} className='header-dropdown-name'>
-                                    {userName}
-                                </div>
-                            )}
-                            <DropdownSelect
-                                icon={"pi pi-cog"}
-                                items={settingView}
-                            />
-                        </div>
+                        ) : (
+                            <div
+                                title={
+                                    locale == "ja"
+                                        ? defaultEventData.topBarTitle
+                                        : defaultEventData.topBarTitle_en
+                                }
+                                className="header-details-first"
+                            >
+                                {(locale == "ja"
+                                    ? defaultEventData.topBarTitle
+                                    : defaultEventData.topBarTitle_en) +
+                                    (windowURLSplitted[2] == "pre-register"
+                                        ? " " + translate(localeJson, "pre_registration")
+                                        : "")}
+                            </div>
+                        )}
+                        {topBarRight}
                     </div>
                 </div>
             </div>
         </React.Fragment>
     );
 });
-AppTopbar.displayName = "AppTopbar"
+
+AppTopbar.displayName = "AppTopbar";
 export default AppTopbar;

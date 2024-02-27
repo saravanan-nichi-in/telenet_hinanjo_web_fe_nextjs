@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import * as Yup from "yup";
-import { getValueByKeyRecursively as translate } from "@/helper";
-import { LayoutContext } from "@/layout/context/layoutcontext";
-import {
-  Button,
-  NormalTable,
-  Counter,
-  Input
-} from "@/components";
-import { StaffRegisterServices } from "@/services/register_check_in.services";
+import { Formik } from "formik";
 import _ from "lodash";
 import { useSelector } from "react-redux";
-import { Formik } from "formik";
+
+import { getValueByKeyRecursively as translate } from "@/helper";
+import { LayoutContext } from "@/layout/context/layoutcontext";
+import { Button, NormalTable, Counter, Input } from "@/components";
+import { StaffRegisterServices } from "@/services/register_check_in.services";
+import CustomHeader from "@/components/customHeader";
 
 export default function RegisterCheckIn() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -21,51 +17,58 @@ export default function RegisterCheckIn() {
   const [frozenArray, setFrozenArray] = useState([]);
   const initialValues = {};
   const columnsData = [
-    {
-      field: "slno",
-      header: translate(localeJson, "supplies_slno"),
-      className: "sno_class",
-      textAlign: "center",
-      alignHeader:"center"
-    },
+    // {
+    //   field: "slno",
+    //   header: translate(localeJson, "supplies_slno"),
+    //   className: "sno_class",
+    //   textAlign: "center",
+    //   alignHeader: "center"
+    // },
     {
       field: "name",
-      header: translate(localeJson, "supplies_name"),
-      minWidth: "15rem",
-      maxWidth: "15rem",
+      headerStyle: { fontSize: "16px", background: "white" },
+      // header: translate(localeJson, "supplies_name"),
+      minWidth: "10rem",
+      maxWidth: "10rem",
+
     },
     {
       field: "count",
+      headerStyle: { fontSize: "16px", background: "white" },
       header: translate(localeJson, "residence_with_information"),
-      minWidth: "10rem",
-      maxWidth: "10rem",
-      alignHeader:"center",
+      minWidth: "5rem",
+      maxWidth: "5rem",
+      alignHeader: "center",
       body: (rowData) => (
-        <div className="border-top-none">
+        <div className="border-top-none register-checkIn-group-border ">
           <Counter
-            inputClass={"border-noround-bottom border-noround-top text-center"}
+            inputClass={"text-center"}
             onValueChange={(value) => {
-              rowData.count = value + "";
+              rowData.count = value;
             }}
-            value={rowData?.count + ""}
+            value={rowData?.count}
             min={0}
             max={9999}
-            style={{ fontWeight: "bold" }}
+            style={{ fontWeight: "bold", padding: "8px" }}
+            leftStyle={{ fontWeight: "bold", padding: "8px" }}
+            rightStyle={{ fontWeight: "bold", padding: "8px" }}
           />
         </div>
       ),
     },
     {
       field: "specialCarePersonsCount",
+      headerStyle: { fontSize: "16px", background: "white" },
       header: translate(localeJson, "residence_with_out_information"),
       minWidth: "10rem",
       maxWidth: "10rem",
-      alignHeader:"center",
+      alignHeader: "center",
       body: (rowData) => (
         <div className="border-top-none">
           <Input inputProps={{
             inputClass: "col-12 p-inputtext-sm text-center",
             value: rowData.specialCarePersonsCount,
+            style: { border: "none", background: "rgba(0,0,0,0)", fontSize: "16px" },
             disabled: true
           }} />
         </div>
@@ -116,16 +119,46 @@ export default function RegisterCheckIn() {
             count: obj.count ?? "",
             unit: obj.unit ?? "",
             number: obj.number ?? "",
-            specialCarePersonsCount: obj.person_total || obj.specialCarePersonsCount
+            specialCarePersonsCount: obj.person_total || obj.specialCarePersonsCount,
+            frozenCount: obj.count ?? "",
           };
           if (i == 0) {
+            preparedObj['count'] = 
+            <div className="register-checkIn-group-border ">
+            <Counter
+              inputClass={"text-center"}
+              onValueChange={(value) => {
+                console.log("1", frozenArray);
+
+                if (frozenArray && frozenArray.length > 0) {
+                  let updateFrozenArray = frozenArray;
+                  updateFrozenArray[0]['frozenCount'] = value;
+                  setFrozenArray(updateFrozenArray);
+                } else {
+                  preparedObj['frozenCount'] = value;
+                }
+              }}
+              value={obj.count ?? ""}
+              min={0}
+              max={9999}
+              style={{ fontWeight: "bold", padding: "8px" }}
+              leftStyle={{ fontWeight: "bold", padding: "8px" }}
+              rightStyle={{ fontWeight: "bold", padding: "8px" }}
+            />
+            </div>;
+            preparedObj['specialCarePersonsCount'] = <div className="border-top-none checkIn">
+              <Input inputProps={{
+                inputClass: "col-12 p-inputtext-sm text-center",
+                value: obj.person_total || obj.specialCarePersonsCount,
+                style: { border: "none", background: "rgba(0,0,0,0)", fontSize: "16px" },
+                disabled: true
+              }} />
+            </div>
             frozenData.push(preparedObj)
-          }
-          else {
+          } else {
             preparedList.push(preparedObj);
           }
         });
-
         setFrozenArray([frozenData[0]])
         setList(preparedList);
         setTableLoading(false);
@@ -148,7 +181,7 @@ export default function RegisterCheckIn() {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          setLoader(true);
+
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
             people_checkin: [],
@@ -170,14 +203,16 @@ export default function RegisterCheckIn() {
               ...frozenArray.map((item) => {
                 return {
                   special_care_id: item.special_care_id,
-                  count: item.count,
+                  count: item.frozenCount,
                 };
               })
             );
           }
-          create(payload, isCreated);
+          setTableLoading(true);
+          StaffRegisterServices.bulkUpdateRegisterCheckIn(payload, () => {
+            setTableLoading(false);
+          })
         }}
-
       >
         {({
           values,
@@ -189,14 +224,11 @@ export default function RegisterCheckIn() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <h5 className="page-header1">
-                  {translate(localeJson, "staff_check_in")}
-                </h5>
-                <hr />
+                <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "manual_registration_of_evacuees")} />
                 <form onSubmit={handleSubmit}>
                   <div>
-                    <div className="mt-3 sub-heading">{translate(localeJson, "staff_support")}</div>
-                    <div className="mt-3">
+                    <div className="mt-3 sub-heading hidden">{translate(localeJson, "staff_support")}</div>
+                    <div className="custom-card-no-shadow mt-3">
                       <NormalTable
                         lazy
                         totalRecords={totalCount}
@@ -204,6 +236,7 @@ export default function RegisterCheckIn() {
                         stripedRows={true}
                         className={"custom-table-cell"}
                         showGridlines={"true"}
+                        parentClass={"custom-registerCheckIn-table"}
                         value={list}
                         frozenValue={_.size(list) > 0 && frozenArray}
                         columns={columnsData}
@@ -215,22 +248,19 @@ export default function RegisterCheckIn() {
                       <Button
                         buttonProps={{
                           type: "button",
-                          buttonClass: "w-8rem",
-                          severity: "primary",
+                          buttonClass: "w-8rem back-button hidden",
                           text: translate(localeJson, "back_to_top"),
                           onClick: () => router.push("/staff/dashboard"),
                         }}
-                        parentClass={"inline"}
+                        parentClass={"inline back-button"}
                       />
                       <Button
                         buttonProps={{
-                          buttonClass: "text-600 w-8rem",
+                          buttonClass: "w-8rem update-button",
                           type: "submit",
-                          bg: "bg-white",
-                          hoverBg: "hover:surface-500 hover:text-white",
-                          text: translate(localeJson, "registration"),
+                          text: translate(localeJson, "staff_supplies_save"),
                         }}
-                        parentClass={"inline pl-2"}
+                        parentClass={"inline update-button"}
                       />
                     </div>
                   </div>

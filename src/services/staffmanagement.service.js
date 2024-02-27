@@ -11,7 +11,7 @@ export const StaffManagementService = {
     create: _create,
     update: _update,
     delete: _delete,
-    show: _show
+    show: _show,
 };
 
 /**
@@ -21,17 +21,16 @@ export const StaffManagementService = {
  */
 function _importData(payload, callBackFun) {
     axios
-        .post("/admin/staff_management/import", payload)
+        .post("/admin/staff/management/import", payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun(response);
+                callBackFun(response.data);
+                importErrorToastDisplay(response);
             }
-            // Handling import success && errors
-            importErrorToastDisplay(response);
         })
         .catch((error) => {
+            console.error("Error fetching data:", error);
             callBackFun(false);
-            // Handling import errors
             importErrorToastDisplay(error.response);
         });
 }
@@ -43,7 +42,7 @@ function _importData(payload, callBackFun) {
  */
 function _exportData(payload) {
     axios
-        .post("/admin/staff_management/export", payload)
+        .post("/admin/staff/management/export", payload)
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
                 downloadBase64File(response.data.result.filePath, timestampFile("StaffManagement"));
@@ -53,7 +52,7 @@ function _exportData(payload) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -67,21 +66,16 @@ function _exportData(payload) {
  * @param {*} callBackFun
  */
 function _getList(payload, callBackFun) {
-    console.log(payload);
     axios
-        .post("/admin/staff_management/list", payload)
+        .post("/admin/staff/management/list", payload)
         .then((response) => {
-            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
         });
 }
 
@@ -91,21 +85,16 @@ function _getList(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _show(payload, callBackFun) {
-    console.log(payload);
     axios
-        .post("/admin/staff_management/detail", payload)
+        .post("/admin/staff/management/detail", payload)
         .then((response) => {
-            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
         });
 }
 
@@ -116,7 +105,7 @@ function _show(payload, callBackFun) {
  */
 function _create(payload, callBackFun) {
     axios
-        .post("/admin/staff_management/store", payload)
+        .post("/admin/staff/management/store", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -127,6 +116,7 @@ function _create(payload, callBackFun) {
         })
         .catch((error) => {
             if (error.response && error.response.status == 422) {
+                callBackFun();
                 if (isObject(error.response.data.message)) {
                     let errorMessages = Object.values(error.response.data.message);
                     let errorString = errorMessages.join('.')
@@ -145,7 +135,6 @@ function _create(payload, callBackFun) {
                 }
             } else {
                 callBackFun();
-                console.error(error);
                 toast.error(error.response.data.message, {
                     position: "top-right",
                 });
@@ -158,12 +147,12 @@ function _create(payload, callBackFun) {
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _update(id, payload, callBackFun) {
+function _update(payload, callBackFun) {
     axios
-        .post(`/admin/staff_management/update`, payload)
+        .post(`/admin/staff/management/update`, payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun();
+                callBackFun(response.data);
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
@@ -171,6 +160,7 @@ function _update(id, payload, callBackFun) {
         })
         .catch((error) => {
             if (error.response && error.response.status == 422) {
+                callBackFun();
                 if (isObject(error.response.data.message)) {
                     let errorMessages = Object.values(error.response.data.message);
                     let errorString = errorMessages.join('.')
@@ -204,7 +194,7 @@ function _update(id, payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/staff_management/delete`, { data: { "id": id } })
+        .delete(`/admin/staff/management/delete`, { data: { "id": id } })
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -214,7 +204,6 @@ function _delete(id, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",

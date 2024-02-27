@@ -7,6 +7,7 @@ export const StockpileHistoryServices = {
     getProductTypes: _getProductTypes,
     getProductNames: _getProductNames,
     getHistoryList: _getHistoryList,
+    exportStockpileHistoryCSVList: _exportStockpileHistoryCSVList,
 };
 
 /**
@@ -85,5 +86,27 @@ function _getHistoryList(payload, callBackFun) {
                     position: "top-right",
                 });
             }
+        });
+}
+
+/**
+ * Get Evacuees CSV list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _exportStockpileHistoryCSVList(payload, callBackFun) {
+    axios.post('/staff/stockpile/history/export', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }

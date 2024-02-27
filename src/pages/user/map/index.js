@@ -1,23 +1,23 @@
-import { Button } from "@/components";
-import { LayoutContext } from "@/layout/context/layoutcontext";
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { GoogleMapMultiMarkerComponent } from "@/components";
-import { getValueByKeyRecursively as translate } from "@/helper";
-import { useRouter } from "next/router";
 import { MapServices } from "@/services";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setPlaceDetails } from "@/redux/layout";
+import { LayoutContext } from "@/layout/context/layoutcontext";
+
 const Map = () => {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { loader } = useContext(LayoutContext);
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const { getPlaceList } = MapServices;
   const [maps, setMaps] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [result, setResult] = useState();
-  const [longitude, setLangitude] = useState(0);
-  const [latitude, setLatitude] = useState(0);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [selectedIndex, setSelectedIndex] = useState(null); 
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     getLocation();
     getPlaceList(fetchMapData);
@@ -32,6 +32,11 @@ const Map = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    setResult(layoutReducer?.position)
+  }, [layoutReducer?.position]);
+
   const fetchMapData = (res) => {
     setMaps(res.data.model.list);
     const marker = res.data.model.list.map((place) => ({
@@ -39,17 +44,20 @@ const Map = () => {
       content: place.name,
       address_place: place.address_place,
       altitude: place.altitude,
+      active_flg: place.active_flg,
       center:
         place.active_flg == 1
           ? place.full_status == 1
             ? 100
             : place.percent > 100
-            ? 100
-            : place.percent
+              ? 100
+              : place.percent
           : 0,
     }));
+    dispatch(setPlaceDetails(marker))
     setMarkers(marker);
   };
+
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -59,63 +67,29 @@ const Map = () => {
           setCurrentLongitude(longitude);
         },
         (error) => {
-          console.log(error.message);
+          console.error(error.message);
         }
       );
     } else {
-      console.log("Geolocation is not supported by your browser.");
+      console.warn("Geolocation is not supported by your browser.");
     }
   };
-  const router = useRouter();
 
   return (
     <div className="grid max-h-full flex-1">
-      <div className="col-12 flex-1">
-        <div className="col-12 lg:flex p-0 h-full max-h-full">
+      <div className="w-full flex-1">
+        <div className="w-full lg:flex p-0 h-full max-h-full">
           <div
-            className="col-12 lg:col-3 card shadow-4  mb-0 lg:p-0 pr-2" 
+            className="w-full h-full info-window selectedMarker overflow-auto"
           >
-            <p className="common_bg p-3 text-white mb-2">{translate(localeJson,"evacuation_location")}</p>
-            <ul style={{ maxHeight: windowHeight-201 }} className="overflow-auto">
-                
-              {markers?.map((place, index) => (
-                <li key={place.id}>
-                  <p
-                    className={
-                      result?.lat === place.position.lat &&
-                      result?.lng === place.position.lng &&
-                      selectedIndex == index
-                        ? "flex flex-1 common_bg text-white rounded py-2 px-4 items-center"
-                        : "flex flex-1 py-2 px-4  mt-2 mb-2 rounded text-[#817E78] items-center map_hover_bg hover:text-white"
-                    }
-                    onClick={() => {
-                      setResult({
-                        lat: place?.position?.lat,
-                        lng: place?.position?.lng,
-                      });
-                      setLangitude(place?.lng);
-                      setLatitude(place?.lat);
-                      setSelectedIndex(index);
-                    }}
-                  >
-                    <p className="white-space-nowrap overflow-hidden text-overflow-ellipsis">
-                      {place.content}
-                    </p>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div
-            className="col-12 lg:col-9 lg:p-0 lg:pl-2  info-window selectedMarker  shadow-4 overflow-auto"
-            style={{ maxHeight: windowHeight-133 }}
-          >
-            <GoogleMapMultiMarkerComponent
-              markers={markers}
-              searchResult={result}
-              mapScale={20}
-              height={windowHeight-133}
-            />
+            {!loader && (
+              <GoogleMapMultiMarkerComponent
+                markers={layoutReducer?.places}
+                searchResult={result}
+                mapScale={20}
+                height={"100%"}
+              />
+            )}
           </div>
         </div>
       </div>

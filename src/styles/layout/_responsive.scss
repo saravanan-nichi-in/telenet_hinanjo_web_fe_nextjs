@@ -37,7 +37,7 @@
 
                 .layout-sidebar {
                     left: 0;
-                    width: 60px;
+                    width: 0px;
                 }
 
                 .layout_sidebar_scroll {
@@ -47,7 +47,7 @@
 
                 .layout-main-container {
                     margin-left: 0;
-                    margin-left: 60px;
+                    margin-left: 0px;
                     padding-left: .5rem;
                 }
 
@@ -64,13 +64,39 @@
                         display: none;
                     }
 
+                    .layout-menuitem-root-text {
+                        display: none;
+                    }
+
                     ul {
+
+                        a:first-child {
+                            margin-top: 0.25rem;
+                        }
+
+                        a {
+                            margin-left: 0.25rem;
+                            margin-right: 0.5rem;
+                        }
+
                         ul {
                             a {
-                                margin-left: 0rem;
+                                margin-left: 0.25rem;
+                                margin-right: 0.25rem;
+                            }
+
+                            li {
+                                a {
+                                    margin-left: 0.25rem;
+                                    padding-left: 1rem;
+                                }
                             }
                         }
                     }
+                }
+
+                .sidebar-bottom-fixed-view {
+                    display: none;
                 }
 
                 .layout-topbar {
@@ -88,7 +114,6 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            border-right: 1px solid darkgray;
                             padding-right: 0.2rem;
                         }
 
@@ -113,7 +138,17 @@
             display: none;
         }
     }
+
+    .layout-wrapper.layout-static.layout-static-active .layout-topbar .header-details .hamburger {
+        display: flex;
+    }
+
+    .layout-topbar .header-details .hamburger {
+        display: none;
+    }
 }
+
+
 
 @media (min-width: 769px) and (max-width: 991px) {
     .blocked-scroll {
@@ -174,13 +209,6 @@
                     width: 100%;
                     white-space: noWrap;
 
-                    .header-details-first {
-                        width: 50%;
-                    }
-
-                    .header-details-second {
-                        width: 50%;
-                    }
                 }
             }
         }
@@ -247,12 +275,10 @@
                     margin-left: auto;
 
                     .header-details-first {
-                        width: 50%;
                         white-space: noWrap;
                     }
 
                     .header-details-second {
-                        width: 50%;
 
                         .header-details-second-date-time-picker {
                             display: none;
@@ -335,7 +361,7 @@
                     padding-right: 3rem;
 
                     .header-details-first {
-                        width: 50%;
+                        width: 100%;
                         white-space: noWrap;
                     }
 

@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
+import { downloadBase64File, importErrorToastDisplay, timestampFile } from '@/helper';
 
 
 /* Identity and Access management (IAM) */
@@ -9,7 +10,9 @@ export const StockPileSummaryServices = {
     getPlaceDropdownList: _getPlaceDropdownList,
     exportStockPileSummaryCSVList: _exportStockPileSummaryCSVList,
     getStockPileEmailData: _getStockPileEmailData,
-    getStockPileEmailUpdate: _getStockPileEmailUpdate
+    getStockPileEmailUpdate: _getStockPileEmailUpdate,
+    importData: _importData,
+    exportData: _exportData
 };
 
 /**
@@ -28,6 +31,7 @@ function _getSummaryList(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }
 
@@ -111,5 +115,46 @@ function _getStockPileEmailUpdate(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+        });
+}
+
+/**
+ * Import data
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _importData(payload, callBackFun) {
+    axios
+        .post("/admin/stockpile/dashboard/import", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                importErrorToastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
+            importErrorToastDisplay(error.response);
+
+        });
+}
+
+/**
+ * Export place data
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _exportData() {
+    axios
+        .post("/admin/stockpile/dashboard/export")
+        .then((response) => {
+            if (response && response.data && response.data.result.filePath) {
+                downloadBase64File(response.data.result.filePath, timestampFile("StockPileDetailsExport"));
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            importErrorToastDisplay(error.response);
         });
 }

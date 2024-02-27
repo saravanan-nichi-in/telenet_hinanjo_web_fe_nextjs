@@ -373,7 +373,6 @@ const considerationEvacueesCountOptions = {
     }
 };
 
-
 const mapScaleRateOptions = [
     { value:"",name: "--"},
     { value: "1", name: "1" },
@@ -432,6 +431,11 @@ export {
     productName_options,
     productType_options
 }
+
+export const urlRegister = [
+    'pre-register',
+    'pre-register-list'
+]
 
 export const prefectures = [
     { value: "", name: '--' },
@@ -559,10 +563,60 @@ export const gender_jp = [
     { value: "3", name: '答えたくない' },
   ];
   
-  export const gender_en = [
+export const gender_en = [
     { value: "", name: '--' },
     { value: "1", name: 'Male' },
     { value: "2", name: 'Female' },
     { value: "3", name: 'Other' },
-  ];
-  
+];
+
+export const prefecturesCombined = {
+    1: { en: 'Hokkaido', ja: '北海道' },
+    2: { en: 'Aomori', ja: '青森県' },
+    3: { en: 'Iwate', ja: '岩手県' },
+    4: { en: 'Miyagi', ja: '宮城県' },
+    5: { en: 'Akita', ja: '秋田県' },
+    6: { en: 'Yamagata', ja: '山形県' },
+    7: { en: 'Fukushima', ja: '福島県' },
+    8: { en: 'Ibaraki', ja: '茨城県' },
+    9: { en: 'Tochigi', ja: '栃木県' },
+    10: { en: 'Gunma', ja: '群馬県' },
+    11: { en: 'Saitama', ja: '埼玉県' },
+    12: { en: 'Chiba', ja: '千葉県' },
+    13: { en: 'Tokyo', ja: '東京都' },
+    14: { en: 'Kanagawa', ja: '神奈川県' },
+    15: { en: 'Niigata', ja: '新潟県' },
+    16: { en: 'Toyama', ja: '富山県' },
+    17: { en: 'Ishikawa', ja: '石川県' },
+    18: { en: 'Fukui', ja: '福井県' },
+    19: { en: 'Yamanashi', ja: '山梨県' },
+    20: { en: 'Nagano', ja: '長野県' },
+    21: { en: 'Gifu', ja: '岐阜県' },
+    22: { en: 'Shizuoka', ja: '静岡県' },
+    23: { en: 'Aichi', ja: '愛知県' },
+    24: { en: 'Mie', ja: '三重県' },
+    25: { en: 'Shiga', ja: '滋賀県' },
+    26: { en: 'Kyoto', ja: '京都府' },
+    27: { en: 'Osaka', ja: '大阪府' },
+    28: { en: 'Hyogo', ja: '兵庫県' },
+    29: { en: 'Nara', ja: '奈良県' },
+    30: { en: 'Wakayama', ja: '和歌山県' },
+    31: { en: 'Tottori', ja: '鳥取県' },
+    32: { en: 'Shimane', ja: '島根県' },
+    33: { en: 'Okayama', ja: '岡山県' },
+    34: { en: 'Hiroshima', ja: '広島県' },
+    35: { en: 'Yamaguchi', ja: '山口県' },
+    36: { en: 'Tokushima', ja: '徳島県' },
+    37: { en: 'Kagawa', ja: '香川県' },
+    38: { en: 'Ehime', ja: '愛媛県' },
+    39: { en: 'Kochi', ja: '高知県' },
+    40: { en: 'Fukuoka', ja: '福岡県' },
+    41: { en: 'Saga', ja: '佐賀県' },
+    42: { en: 'Nagasaki', ja: '長崎県' },
+    43: { en: 'Kumamoto', ja: '熊本県' },
+    44: { en: 'Oita', ja: '大分県' },
+    45: { en: 'Miyazaki', ja: '宮崎県' },
+    46: { en: 'Kagoshima', ja: '鹿児島県' },
+    47: { en: 'Okinawa', ja: '沖縄県' },
+};
+

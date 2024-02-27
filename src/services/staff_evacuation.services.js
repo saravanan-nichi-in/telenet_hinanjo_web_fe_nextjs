@@ -8,7 +8,11 @@ export const StaffEvacuationServices = {
     getList: _getList,
     exportEvacueesCSVList: _exportEvacueesCSVList,
     getFamilyEvacueesDetail: _getFamilyEvacueesDetail,
-    updateCheckoutDetail: _updateCheckoutDetail
+    updateCheckoutDetail: _updateCheckoutDetail,
+    getStaffEvecueesList: _getStaffEvecueesList,
+    getStaffPermanantEvecueesDetail: _getStaffPermanantEvecueesDetail,
+    getStaffAttendeesList: _getStaffAttendeesList,
+    getStaffFamilyEvacueesDetail: _getStaffFamilyEvacueesDetail
 };
 
 /**
@@ -73,12 +77,31 @@ function _getFamilyEvacueesDetail(payload, callBackFun) {
 }
 
 /**
+ * Get Evacuees Family Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getStaffFamilyEvacueesDetail(payload, callBackFun) {
+    axios.post('/staff/attendees/detail', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
  * Get History list
  * @param {*} payload 
  * @param {*} callBackFun 
  */
 function _updateCheckoutDetail(payload, callBackFun) {
-    axios.post('/staff/family/checkout', payload)
+    axios.post('/staff/evacuees/checkout', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -91,5 +114,64 @@ function _updateCheckoutDetail(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+        });
+}
+
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getStaffEvecueesList(payload, callBackFun) {
+    axios
+        .post("/staff/permanent/evacuees", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
+        });
+}
+
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getStaffPermanantEvecueesDetail(payload, callBackFun) {
+    axios
+        .post("/staff/evacuees/detail", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
+        });
+}
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getStaffAttendeesList(payload, callBackFun) {
+    axios
+        .post("/staff/attendees/list", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
         });
 }

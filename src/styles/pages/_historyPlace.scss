@@ -1,12 +1,12 @@
-.dropdown_width {
-    .p-dropdown-label {
-        width: 188px;
-    }
+// .dropdown_width {
+//     .p-dropdown-label {
+//         width: 188px;
+//     }
 
-    .p-dropdown-trigger {
-        width: 30px;
-    }
-}
+//     .p-dropdown-trigger {
+//         width: 30px;
+//     }
+// }
 
 .history-list.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td:last-child {
     border-width: 0px 1px 1px 1px;
@@ -15,13 +15,6 @@
 .error-message {
     color: red;
     font-size: 14px;
-}
-
-.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
-    text-overflow: ellipsis;
-    width: 20rem;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .text-alignment {
@@ -36,8 +29,8 @@
     }
 }
 
-.p-dropdown-panel.p-component.p-connected-overlay-enter-done {
-    min-width: 300px !important;
-    max-width: 400px !important;
-    width: fit-content !important;
+.custom_dropdownPanel{
+.p-dropdown-items-wrapper{
+    overflow-x: hidden;
+}
 }

@@ -2,62 +2,180 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
+import { IoIosArrowBack } from "react-icons/io";
 
-import { getJapaneseDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getValueByKeyRecursively as translate, getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getEnglishDateTimeDisplayActualFormat } from '@/helper'
+import {
+    getValueByKeyRecursively as translate,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getEnglishDateDisplayFormat,
+    getJapaneseDateTimeDayDisplayActualFormat,
+    getEnglishDateTimeDisplayActualFormat,
+} from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
-import { Button, NormalTable, RowExpansionTable } from '@/components';
-import { prefectures } from '@/utils/constant';
+import { Button, NormalTable, CommonDialog, CardSpinner } from '@/components';
+import CustomHeader from '@/components/customHeader';
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
+import { prefecturesCombined } from '@/utils/constant';
 
 export default function EvacueeFamilyDetail() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
     const [tableLoading, setTableLoading] = useState(false);
-    const [familyCode, setFamilyCode] = useState(null);
-    const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
-    const [familyDetailData, setfamilyDetailData] = useState(null);
+    const [familyDetailData, setFamilyDetailData] = useState(null);
+    const [checkoutVisible, setCheckoutVisible] = useState(false);
+    const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
+    const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
+    const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
-    const [neighbourData, setNeighbourData] = useState(null);
-    const [townAssociationColumn, setTownAssociationColumn] = useState([]);
-    const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
-
     const evacueeFamilyDetailColumns = [
-        { field: "id", header: translate(localeJson, 'number'), className: "sno_class", textAlign: "center" },
-        { field: "is_owner", header: translate(localeJson, 'representative'), minWidth: "10rem" },
-        { field: "refugee_name", header: translate(localeJson, 'refugee_name'), minWidth: "10rem" },
-        { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
-        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "10rem" },
-        { field: "age", header: translate(localeJson, 'age'), minWidth: "4rem", textAlign: "right", alignHeader: "center" },
-        { field: "age_month", header: translate(localeJson, 'age_month'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
-        { field: "gender", header: translate(localeJson, 'gender'), minWidth: "8rem" },
-        { field: "created_date", header: translate(localeJson, 'created_date'), minWidth: "14rem" },
-        { field: "updated_date", header: translate(localeJson, 'updated_date'), minWidth: "14rem" },
+        { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
+        {
+            field: 'name', header: translate(localeJson, 'name_public_evacuee'), sortable: false, alignHeader: "left",
+            body: (rowData) => {
+                return <div className="flex flex-column">
+                    <div className="custom-header">{rowData.name}</div>
+                    <div className="table-body-sub">{rowData.refugee_name}</div>
+                </div>
+            },
+        },
+        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "dob", header: translate(localeJson, 'dob'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
-
-    const familyDetailColumns = [
-        { field: 'evacuation_date_time', header: translate(localeJson, 'evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'address', header: translate(localeJson, 'address'), minWidth: "10rem", textAlign: 'left' },
-        { field: 'representative_number', header: translate(localeJson, 'representative_number'), minWidth: "10rem", textAlign: 'right',alignHeader:"center" },
-        { field: 'registered_lang_environment', header: translate(localeJson, 'registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
-    ];
-
-    const evacueeFamilyDetailRowExpansionColumns = [
-        { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem" },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem" },
-        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem" },
-        { field: "remarks", header: translate(localeJson, 'remarks'), minWidth: "7rem" },
-    ];
-
     const familyAdmissionColumns = [
-        { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
+        { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time'), minWidth: "10rem", textAlign: 'left' },
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
     ];
 
     /* Services */
     const { getFamilyEvacueesDetail } = EvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyDetailOnMounting();
+        };
+        fetchData();
+    }, [locale]);
+
+    const onGetEvacueesFamilyDetailOnMounting = () => {
+        getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
+    }
+
+    const getEvacueesFamilyDetail = (response) => {
+        var familyDataList = [];
+        var listOfIndividualQuestions = [];
+        var listOfOverallQuestions = [];
+        var admittedHistory = [];
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.data;
+            const individualQuestionArray = response.data.individualQuestions;
+            const overallQuestionArray = response.data.overallQuestions;
+            const historyData = response.data.history.list;
+            if (individualQuestionArray.length > 0) {
+                individualQuestionArray.map((ques) => {
+                    let data = {
+                        id: ques.id,
+                        question: (locale == "ja" ? ques.title : ques.title_en),
+                        is_required: ques.isRequired,
+                        display_order: ques.display_order
+                    };
+                    listOfIndividualQuestions.push(data);
+                });
+                if (listOfIndividualQuestions.length > 1) {
+                    listOfIndividualQuestions.sort((a, b) => {
+                        return a.display_order - b.display_order;
+                    });
+                }
+            }
+            if (data.length > 0) {
+                data.map((person, index) => {
+                    let familyData = {
+                        id: index + 1,
+                        name: <div className={"text-highlighter-user-list clickable-row"} onClick={() => {
+                            displayIndividualQuestionnaires(index);
+                            hideOverFlow();
+                        }}>{person.person_name}</div>,
+                        refugee_name: <div className={"clickable-row"} onClick={() => {
+                            displayIndividualQuestionnaires(index);
+                            hideOverFlow();
+                        }}>{person.person_refugee_name}</div>,
+                        gender: getGenderValue(person.person_gender),
+                        dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
+                        age: person.person_age,
+                        age_month: person.person_month,
+                        special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares) : "",
+                        connecting_code: person.person_connecting_code,
+                        remarks: person.person_note,
+                        family_count: 0,
+                        is_owner: person.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
+                        family_code: person.family_code,
+                        name_phonetic: person.person_refugee_name,
+                        name_kanji: person.person_name,
+                        address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.person_prefecture_id].ja : prefecturesCombined[person.person_prefecture_id].en) + " " + person.person_address,
+                        tel: person.family_tel,
+                        evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
+                        place_id: person.place_id,
+                        family_is_registered: person.family_is_registered,
+                    };
+                    let personAnswers = person.person_answers;
+                    if (listOfIndividualQuestions.length > 0) {
+                        let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
+                        preparedListOfIndividualQuestions.map((question) => {
+                            let indexOfMatchingAnswer = personAnswers.length > 0 && personAnswers.find(answer => answer.question_id == question.id);
+                            question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
+                        })
+                        familyData['individualQuestionnaires'] = preparedListOfIndividualQuestions;
+                    }
+                    familyDataList.push(familyData);
+                })
+            }
+            if (overallQuestionArray.length > 0) {
+                overallQuestionArray.map((ques) => {
+                    let data = {
+                        id: ques.id,
+                        question: (locale == "ja" ? ques.title : ques.title_en),
+                        is_required: ques.isRequired,
+                        display_order: ques.display_order
+                    };
+                    listOfOverallQuestions.push(data);
+                });
+                if (listOfOverallQuestions.length > 1) {
+                    listOfOverallQuestions.sort((a, b) => {
+                        return a.display_order - b.display_order;
+                    });
+                }
+                if (data.length > 0 && data[0].family_answers.length > 0) {
+                    let familyAnswers = data[0].family_answers;
+                    listOfOverallQuestions.map((question, i) => {
+                        let indexOfMatchingAnswer = familyAnswers.find(answer => answer.question_id == question.id);
+                        question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
+                    })
+                }
+            }
+            if (historyData.length > 0) {
+                historyData.map((item) => {
+                    console.log(item);
+                    let historyItem = {
+                        place_id: item.place_id,
+                        shelter_place: item.place_name,
+                        admission_date_time: item.checkin && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkin) : getEnglishDateTimeDisplayActualFormat(item.checkin)),
+                        discharge_date_time: item.checkout && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkout) : getEnglishDateTimeDisplayActualFormat(item.checkout)),
+                    };
+                    admittedHistory.push(historyItem);
+                });
+            }
+        }
+        setTableLoading(false);
+        setFamilyDetailData(familyDataList);
+        setOverallQuestionnaires(listOfOverallQuestions);
+        setFamilyAdmittedData(admittedHistory);
+    }
 
     const getGenderValue = (gender) => {
         if (gender == 1) {
@@ -69,23 +187,6 @@ export default function EvacueeFamilyDetail() {
         }
     }
 
-    const getRegisteredLanguage = (language) => {
-        if (language == "en") {
-            return translate(localeJson, 'english');
-        }
-        else {
-            return translate(localeJson, 'japanese');
-        }
-    }
-
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
-        });
-        return specialCareName;
-    }
-
     const getAnswerData = (answer) => {
         let answerData = null;
         answer.map((item) => {
@@ -94,213 +195,249 @@ export default function EvacueeFamilyDetail() {
         return answerData;
     }
 
-    const getPrefectureName = (id) => {
-        if (id) {
-            let p_name = prefectures.find((item) => item.value === id);
-            return p_name.name;
-        }
-        return "";
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + (locale == 'ja' ? (item.name) : item.name_en)) : (locale == 'ja' ? (item.name) : item.name_en);
+        });
+        return specialCareName;
     }
 
-    const onGetEvacueesFamilyDetailOnMounting = () => {
-        getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
+    /**
+     * Show individual questionnaires dialog
+     * @param {*} index 
+     */
+    const displayIndividualQuestionnaires = (index) => {
+        setIndividualQuestionnairesContentIDX(index);
+        setIndividualQuestionnairesVisible(true);
     }
 
-    const getEvacueesFamilyDetail = (response) => {
-        if (response.success && !_.isEmpty(response.data)) {
-            const data = response.data.data;
-            const historyData = response.data.history.list;
-            let basicDetailList = [];
-            let basicData = {
-                evacuation_date_time: data.join_date_modified,
-                address: translate(localeJson, 'post_letter') + data.zip_code + " " + getPrefectureName(data.prefecture_id) + " " + data.address,
-                representative_number: data.tel,
-                registered_lang_environment: getRegisteredLanguage(data.language_register)
-            };
-            basicDetailList.push(basicData);
-            setBasicFamilyDetail(basicDetailList);
-            setFamilyCode(data.family_code);
-
-            const personList = data.person;
-            const familyDataList = [];
-            let personInnerColumns = [...evacueeFamilyDetailRowExpansionColumns];
-            let individualQuestion = personList[0].individualQuestions;
-            if (individualQuestion.length > 0) {
-                individualQuestion.map((ques, index) => {
-                    let column = {
-                        field: "question_" + index,
-                        header: (locale == "ja" ? ques.title : ques.title_en),
-                        minWidth: "10rem"
-                    };
-                    personInnerColumns.push(column);
-                });
-            }
-            setEvacueePersonInnerColumns(personInnerColumns);
-
-            personList.map((person, index) => {
-                let familyData = {
-                    id: index + 1,
-                    is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    refugee_name: person.refugee_name,
-                    name: person.name,
-                    dob:locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob) : getEnglishDateDisplayFormat(person.dob),
-                    age: person.age,
-                    age_month: person.month,
-                    gender: getGenderValue(person.gender),
-                    created_date: person.created_at_day,
-                    updated_date: data.updated_at_day,
-                    orders: [{
-                        address: person.address ? person.address : "",
-                        special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
-                        connecting_code: person.connecting_code,
-                        remarks: person.note,
-                    },
-                    ]
-                };
-
-                let question = person.individualQuestions;
-                if (question.length > 0) {
-                    question.map((ques, index) => {
-                        familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
-                    })
-                }
-                familyDataList.push(familyData);
-            })
-            setfamilyDetailData(familyDataList);
-
-            let admittedHistory = [];
-            historyData.map((item) => {
-                let historyItem = {
-                    place_id: item.place_id,
-                    shelter_place: item.placeName,
-                    admission_date_time: item.status == 0? (item.access_datetime? (locale == "ja"? getJapaneseDateTimeDisplayFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)): ""): "",
-                };
-                let index = admittedHistory.findLastIndex((obj) => obj.place_id == item.place_id);
-                if (index >= 0 && item.status == 1) {
-                    admittedHistory[index]['discharge_date_time'] = locale == "ja"? getJapaneseDateTimeDisplayFormat(item.access_datetime): getEnglishDateTimeDisplayActualFormat(item.access_datetime)
-                }
-                else {
-                    admittedHistory.push(historyItem);
-                }
-
-            });
-            setFamilyAdmittedData(admittedHistory);
-
-            let neighbourDataList = [];
-
-            const questionnaire = data.question;
-            let townAssociateColumnSet = [];
-            questionnaire.map((ques, index) => {
-                let column = {
-                    field: "question_" + index,
-                    header: (locale == "ja" ? ques.title : ques.title_en),
-                    minWidth: "10rem"
-                };
-                townAssociateColumnSet.push(column);
-            });
-            setTownAssociationColumn(townAssociateColumnSet);
-
-            let neighbourData = {};
-            questionnaire.map((ques, index) => {
-                neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
-            });
-            neighbourDataList.push(neighbourData);
-            setNeighbourData(neighbourDataList);
-            setTableLoading(false)
-        }
-        else {
-            setTableLoading(false);
-        }
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesFamilyDetailOnMounting();
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale]);
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
+
+    const translationAndObjectKeys = [
+        "name_kanji",
+        "name_phonetic",
+        "dob",
+        "age",
+        "age_month",
+        "tel",
+        "address",
+        "family_code",
+        "connecting_code",
+        "special_care_name",
+        "remarks"
+    ];
 
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <h5 className='page-header1'>{translate(localeJson, 'house_hold_information_details')}</h5>
-                    <hr />
-                    <div className='mb-2'>
-                        <div className='flex justify-content-end household-number'>
-                            {translate(localeJson, 'household_number')} {familyCode}
+        <>
+            <CommonDialog
+                open={checkoutVisible}
+                dialogBodyClassName=""
+                header={translate(localeJson, "confirmation")}
+                content={
+                    <div className="text-center">
+                        {translate(localeJson, "do_you_want_to_exit_the_shelter")}
+                    </div>
+                }
+                position={"center"}
+                footerParentClassName={"text-center"}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "w-full del_ok-button",
+                            text: translate(localeJson, 'submit'),
+                            onClick: () => {
+                                let preparedParam = { ...param, place_id: familyDetailData.length > 0 && familyDetailData[0].place_id };
+                                EvacuationServices.evacuationCheckout(preparedParam, (response) => {
+                                    setCheckoutVisible(false);
+                                    showOverFlow();
+                                    if (response.success) {
+                                        router.push('/admin/evacuation/');
+                                    }
+                                })
+                            },
+                        },
+                        parentClass: "del_ok-button modal-button-footer-space",
+                    },
+                    {
+                        buttonProps: {
+                            buttonClass: "w-full back-button",
+                            text: translate(localeJson, "cancel"),
+                            onClick: () => {
+                                setCheckoutVisible(false);
+                                showOverFlow();
+                            },
+                        },
+                        parentClass: "back-button",
+                    },
+
+                ]}
+                close={() => {
+                    setCheckoutVisible(false);
+                    showOverFlow();
+                }}
+            />
+            {/* Individual questionnaires dialog */}
+            <CommonDialog
+                open={individualQuestionnairesVisible}
+                dialogClassName={"p-0"}
+                dialogBodyClassName=""
+                dialogBodyStyle={{
+                    background: "var(--primary-background)"
+                }}
+                footerButtonsArray={[
+                    {
+                        buttonProps: {
+                            buttonClass: "w-full back-button",
+                            text: translate(localeJson, "cancel"),
+                            onClick: () => {
+                                setIndividualQuestionnairesVisible(false);
+                                showOverFlow();
+                            },
+                        },
+                        parentClass: "back-button modal-button-footer-space-back",
+                    },
+                ]}
+                content={
+                    familyDetailData && !_.isNull(individualQuestionnairesContentIDX) && familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires && (
+                        <div>
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "house_hold_information")} />
+                            <div className='custom-card-info-with-zIndex p-2 my-3'>
+                                {
+                                    translationAndObjectKeys && translationAndObjectKeys.map((objectKey, ind) => (
+                                        <div className='flex align-items-center' key={ind}>
+                                            <div className='details-text-overflow'>
+                                                <span className='page-header3'>{translate(localeJson, objectKey)}: </span>
+                                                <span >{familyDetailData[individualQuestionnairesContentIDX][objectKey]}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_individual")} />
+                            <div className='custom-card-info-with-zIndex p-2 my-3 details-text-overflow'>
+                                {familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires.map((val, i) => (
+                                    <div className='flex align-items-center' key={i}>
+                                        <div><span className='page-header3'>{val.question}<span className={val.is_required == 1 ? "p-error" : "hidden"}>*</span><span className='font-bold'>:</span></span> {val.answer}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    <NormalTable
-                        id="evacuee-family-detail"
-                        size={"small"}
-                        tableLoading={tableLoading}
-                        emptyMessage={translate(localeJson, "data_not_found")}
-                        stripedRows={true}
-                        paginator={false}
-                        showGridlines={true}
-                        value={basicFamilyDetail}
-                        columns={familyDetailColumns}
-                        parentClass="mb-2"
-                    />
-                    <div className='mb-2'>
-                        <h5 className='page-header2'>{translate(localeJson, 'household_list')}</h5>
-                    </div>
-                    <RowExpansionTable
-                        id={"evacuation-detail-list"}
-                        rows={10}
-                        paginatorLeft={true}
-                        tableLoading={tableLoading}
-                        emptyMessage={translate(localeJson, "data_not_found")}
-                        paginator="true"
-                        customRowExpansionActionsField="actions"
-                        value={familyDetailData}
-                        innerColumn={evacueePersonInnerColumns}
-                        outerColumn={evacueeFamilyDetailColumns}
-                        rowExpansionField="orders"
-                    />
-                    {townAssociationColumn.length > 0 &&
-                        <div className='mt-2'>
+                    )
+                }
+                position={"center"}
+                close={() => {
+                    setIndividualQuestionnairesVisible(false);
+                    showOverFlow();
+                }}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <Button buttonProps={{
+                            buttonClass: "w-auto back-button-transparent mb-2 p-0",
+                            text: translate(localeJson, "return_to_evacuee_list_admin"),
+                            icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
+                            onClick: () => router.push('/admin/evacuation/'),
+                        }} parentClass={"inline back-button-transparent"} />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "house_hold_information")} />
+                        {tableLoading ? (
+                            <CardSpinner />
+                        ) : familyDetailData && familyDetailData.map((val, i) => (
+                            val.is_owner === translate(localeJson, 'representative') && (
+                                <div className='custom-card-info my-3' key={i}>
+                                    {
+                                        translationAndObjectKeys
+                                        && translationAndObjectKeys
+                                            .map((objectKey, ind) => (
+                                                <div className='flex align-items-center' key={ind}>
+                                                    <div className='details-text-overflow'>
+                                                        <span className='page-header3'>{translate(localeJson, objectKey)}: </span>
+                                                        <span>{val[objectKey]}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                    }
+                                </div>
+                            )
+                        ))}
+                        <div className='section-space'>
+                            <div>
+                                <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "household_list")} />
+                            </div>
                             <NormalTable
-                                id="evacuee-family-detail"
+                                id="evacuation-detail-list"
                                 size={"small"}
-                                tableLoading={tableLoading}
+                                loading={tableLoading}
                                 emptyMessage={translate(localeJson, "data_not_found")}
                                 stripedRows={true}
                                 paginator={false}
                                 showGridlines={true}
-                                value={neighbourData}
-                                columns={townAssociationColumn}
+                                value={familyDetailData}
+                                columns={evacueeFamilyDetailColumns}
+                                parentClass="custom-table my-4"
                             />
                         </div>
-                    }
-                    <div className='mt-2 flex justify-content-center overflow-x-auto'>
-                        <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            tableLoading={tableLoading}
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            tableStyle={{ maxWidth: "20rem" }}
-                            value={familyAdmittedData}
-                            columns={familyAdmissionColumns}
-                        />
-                    </div>
-                    <div className="text-center mt-2">
-                        <Button buttonProps={{
-                            buttonClass: "text-600 w-8rem",
-                            bg: "bg-white",
-                            hoverBg: "hover:surface-500 hover:text-white",
-                            text: translate(localeJson, 'back'),
-                            onClick: () => router.push('/admin/evacuation/'),
-                        }} parentClass={"inline"} />
+                        <div className='section-space'>
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_overall")} />
+                            {tableLoading ? (
+                                <CardSpinner />
+                            ) : overallQuestionnaires.length > 0 && (
+                                <div className='custom-card-info my-3'>
+                                    {overallQuestionnaires.map((val, i) => (
+                                        <div className='flex align-items-center' key={i}>
+                                            <div className='details-text-overflow'>
+                                                <span className='page-header3'>{val.question}
+                                                <span className={val.is_required == 1 ? "p-error" : "hidden"}>*</span><span className='font-bold'>:</span>
+                                                </span>
+                                                <span className='page-header3-sub ml-1'>{val.answer}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className='section-space'>
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "checkin_checkout_history")} />
+                            <div className='mt-2 flex overflow-x-auto'>
+                                <NormalTable
+                                    id="evacuee-family-detail"
+                                    size={"small"}
+                                    loading={tableLoading}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    stripedRows={true}
+                                    paginator={false}
+                                    showGridlines={true}
+                                    value={familyAdmittedData}
+                                    columns={familyAdmissionColumns}
+                                />
+                            </div>
+                        </div>
+                        <div className="flex mt-3 gap-2 justify-content-center">
+                            <Button buttonProps={{
+                                buttonClass: "w-10rem exit-procedure-button ",
+                                text: translate(localeJson, 'exit_procedures'),
+                                icon: <FaArrowRightFromBracket className='mr-1' />,
+                                disabled: (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) ? false : true,
+                                onClick: () => {
+                                    if (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) {
+                                        setCheckoutVisible(true)
+                                        hideOverFlow();
+                                    } else {
+                                        return null
+                                    }
+                                }
+                            }} parentClass={"inline exit-procedure-button "} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

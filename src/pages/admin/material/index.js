@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
+import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, NormalTable } from '@/components';
+import { Button, NormalTable } from '@/components';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import { MaterialService } from '@/services/material.service';
-import _ from 'lodash';
+import CustomHeader from '@/components/customHeader';
 
 export default function AdminMaterialPage() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson , setLoader} = useContext(LayoutContext);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-    const [deleteStaffOpen, setDeleteStaffOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteObj, setDeleteObj] = useState(null);
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class", textAlign: "center" },
         { field: 'name', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
@@ -21,7 +22,7 @@ export default function AdminMaterialPage() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
-            alignHeader:"center",
+            alignHeader: "center",
             className: "action_class",
             minWidth: "2rem",
             body: (rowData) => (
@@ -30,21 +31,19 @@ export default function AdminMaterialPage() {
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'edit'),
-                            buttonClass: "text-primary ",
-                            bg: "bg-white",
-                            hoverBg: "hover:bg-primary hover:text-white",
+                            buttonClass: "edit-button",
                             onClick: () => {
                                 setRegisterModalAction("edit")
                                 setCurrentEditObj(rowData)
                                 setEmailSettingsOpen(true)
                                 hideOverFlow();
                             },
-                        }} />
+                        }} parentClass={"edit-button"} />
                     <Button parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
                             buttonClass: "delete-button ml-2",
-                            onClick: () => openDeleteDialog(rowData.id)
+                            onClick: () => openDeleteDialog(rowData)
                         }} parentClass={"delete-button"} />
                 </>
             ),
@@ -54,14 +53,13 @@ export default function AdminMaterialPage() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 5,
+            limit: 10,
             sort_by: "",
             order_by: "desc",
         },
         search: "",
     });
 
-    const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
@@ -74,7 +72,6 @@ export default function AdminMaterialPage() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetMaterialListOnMounting()
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
@@ -84,12 +81,12 @@ export default function AdminMaterialPage() {
      */
     const onGetMaterialListOnMounting = () => {
         // Get dashboard list
+        setTableLoading(true);
         getList(getListPayload, (response) => {
+            var preparedList = [];
+            var listTotalCount = 0;
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                // var additionalColumnsArrayWithOldData = [...columnsData];
-                let preparedList = [];
-                // Update prepared list to the state
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
@@ -100,35 +97,37 @@ export default function AdminMaterialPage() {
                     }
                     preparedList.push(preparedObj);
                 })
-
-                setList(preparedList);
-                // setColumns(additionalColumnsArrayWithOldData);
-                setTotalCount(response.data.model.total);
-                setTableLoading(false);
-            } else {
-                setTableLoading(false);
-                setList([]);
+                listTotalCount = response.data.model.total;
             }
-
+            setTableLoading(false);
+            setList(preparedList);
+            setTotalCount(listTotalCount);
         });
     }
 
 
     const [deleteId, setDeleteId] = useState(null);
 
-    const openDeleteDialog = (id) => {
-        setDeleteId(id);
-        setDeleteStaffOpen(true);
+    const openDeleteDialog = (rowdata) => {
+        setDeleteId(rowdata.id);
+        setDeleteObj({
+            firstLabel: translate(localeJson, 'material_management_table_header_name'),
+            firstValue: rowdata.name,
+            secondLabel: translate(localeJson, 'material_management_table_header_unit'),
+            secondValue: rowdata.unit
+        });
+        setDeleteOpen(true);
         hideOverFlow();
     }
 
-    const onStaffDeleteClose = (action = "close") => {
-        if (action == "confirm") {
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            setTableLoading(true);
             MaterialService.delete(deleteId, (resData) => {
                 onGetMaterialListOnMounting()
             });
         }
-        setDeleteStaffOpen(!deleteStaffOpen);
+        setDeleteOpen(false);
         showOverFlow();
     };
 
@@ -170,14 +169,12 @@ export default function AdminMaterialPage() {
     };
 
     const importFileApi = (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append('file', file);
         MaterialService.importData(formData, (file) => {
             if (file) {
-                console.log(file);
-                // setLoader(true);
-                onGetMaterialListOnMounting()
+                setTableLoading(true);
+                onGetMaterialListOnMounting();
             }
         });
         onStaffImportClose();
@@ -216,9 +213,12 @@ export default function AdminMaterialPage() {
                 currentEditObj={{ ...currentEditObj }}
                 refreshList={onGetMaterialListOnMounting}
             />
+            
             <AdminManagementDeleteModal
-                open={deleteStaffOpen}
-                close={onStaffDeleteClose}
+                open={deleteOpen}
+                close={onDeleteClose}
+                refreshList={onGetMaterialListOnMounting}
+                deleteObj={deleteObj}
             />
 
             <AdminManagementImportModal
@@ -231,25 +231,26 @@ export default function AdminMaterialPage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'material')}</h5>
-                        <hr />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "material")} />
                         <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    buttonClass: "evacuation_button_height import-button",
                                     text: translate(localeJson, 'import'),
+                                    import: true,
                                     severity: "primary",
                                     onClick: () => {
                                         setImportPlaceOpen(true);
                                         hideOverFlow();
                                     },
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 import-button"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button",
                                     text: translate(localeJson, 'export'),
                                     severity: "primary",
                                     onClick: () => {
@@ -261,12 +262,13 @@ export default function AdminMaterialPage() {
                                             "search": ""
                                         })
                                     }
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 export-button"} />
 
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    create: true,
+                                    buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'material_information_registration'),
                                     onClick: () => {
                                         setRegisterModalAction("create")
@@ -274,8 +276,7 @@ export default function AdminMaterialPage() {
                                         setEmailSettingsOpen(true);
                                         hideOverFlow();
                                     },
-                                    severity: "success"
-                                }} parentClass={"mt-1"} />
+                                }} parentClass={"mt-1 create-button"} />
                             </div>
                             <div className='mt-3'>
                                 <NormalTable

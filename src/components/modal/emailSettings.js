@@ -2,22 +2,19 @@ import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useRouter } from 'next/router'
 
-import Button from "../button/button";
+import {Button} from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
-import { InputSelectFloatLabel } from "../dropdown";
 import { ValidationError } from "../error";
-import { TextAreaFloatLabel } from "../input";
+import { InputDropdown, TextArea } from "../input";
 
 export default function EmailSettings(props) {
     /**
      * Destructing
     */
     const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
-    const router = useRouter();
     const { localeJson } = useContext(LayoutContext);
     const [transmissionInterval, setTransmissionInterval] = useState(0);
     const [outputTargetArea, setOutputTargetArea] = useState(0);
@@ -42,11 +39,11 @@ export default function EmailSettings(props) {
             }
         }
 
-        return true; // Return true if all emails are valid
+         return emails.join(','); // Return true if all emails are valid
     };
 
     const header = (
-        <div className="custom-modal">
+        <div className="new-custom-modal">
             {translate(localeJson, 'mail_setting')}
         </div>
     );
@@ -83,91 +80,141 @@ export default function EmailSettings(props) {
                 }) => (
                     <div>
                         <Dialog
-                            className="custom-modal"
+                            className="new-custom-modal"
                             header={header}
                             visible={open}
                             draggable={false}
                             blockScroll={true}
-                            onHide={() =>{ 
+                            onHide={() => {
                                 close();
                                 resetForm({ values: initialValues });
                             }}
                             footer={
                                 <div className="text-center">
-                                    <Button buttonProps={{
-                                        buttonClass: "text-600 w-8rem",
-                                        bg: "bg-white",
-                                        hoverBg: "hover:surface-500 hover:text-white",
-                                        text: translate(localeJson, 'cancel'),
-                                        onClick: () =>{
-                                             close();
-                                             resetForm({ values: initialValues });
+                                    <div className="modal-button-footer-space">
+                                        <Button buttonProps={{
+                                            buttonClass: "w-full update-button",
+                                            type: "submit",
+                                            text: translate(localeJson, 'registration'),
+                                            onClick: () => {
+                                                register({
+                                                    transmissionInterval,
+                                                    outputTargetArea,
+                                                    email: values.email,
+                                                    errors: errors
+                                                });
+                                                handleSubmit();
+                                            },
+                                        }} parentClass={"update-button"} />
+                                    </div>
+                                    <div >
+                                        <Button buttonProps={{
+                                            buttonClass: "w-full back-button",
+                                            text: translate(localeJson, 'cancel'),
+                                            onClick: () => {
+                                                close();
+                                                resetForm({ values: initialValues });
                                             }
-                                    }} parentClass={"inline"} />
-                                    <Button buttonProps={{
-                                        buttonClass: "w-8rem",
-                                        type: "submit",
-                                        text: translate(localeJson, 'registration'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            register({
-                                                transmissionInterval,
-                                                outputTargetArea,
-                                                email: values.email,
-                                                errors: errors
-                                            });
-                                            handleSubmit();
-                                        },
-                                    }} parentClass={"inline"} />
+                                        }} parentClass={"back-button"} />
+                                    </div>
                                 </div>
                             }
                         >
                             <div className={`modal-content`}>
-                                <div>
+                                <div >
+                                    <div className="modal-header">
+                                        {translate(localeJson, 'mail_setting')}
+                                    </div>
                                     <form onSubmit={handleSubmit}>
-                                        <div >
-                                            <div className='mt-3 mb-5'>
-                                                <TextAreaFloatLabel textAreaFloatLabelProps={{
-                                                    textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                                                    row: 5,
-                                                    cols: 30,
-                                                    name: 'email',
-                                                    value: values.email,
-                                                    text: translate(localeJson, 'notification_email_id'),
-                                                    spanClass: "p-error",
-                                                    spanText: "*",
+                                        <div className="" >
+                                            <div className='modal-field-bottom-space'>
+                                                <TextArea textAreaProps={{
+                                                    textAreaParentClassName: `${errors.email && touched.email && 'p-invalid w-full'}`,
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'notification_email_id'),
+                                                        textAreaLabelSpanClassName: "p-error",
+                                                        spanText: "*",
+                                                        textAreaLabelClassName: "block",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    textAreaClass: "w-full",
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />
+                                                    row: 5,
+                                                    cols: 40,
+                                                    name: 'email',
+                                                    value: values.email,
+                                                }} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
-                                            <div className='mt-5 '>
-                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    id: "mailFrequency",
-                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                            <div className='modal-field-top-space modal-field-bottom-space'>
+                                                <InputDropdown inputDropdownProps={{
+                                                    inputDropdownParentClassName: "w-full",
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'transmission_interval'),
+                                                        inputDropdownLabelClassName: "block",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    inputDropdownClassName: "w-full",
                                                     value: transmissionInterval,
                                                     options: intervalFrequency,
                                                     optionLabel: "name",
                                                     onChange: (e) => setTransmissionInterval(e.value),
-                                                    text: translate(localeJson, "transmission_interval"),
-                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                                    emptyMessage: translate(localeJson, "data_not_found"),
+                                                }}
+                                                />
                                             </div>
-                                            <div className='mt-5'>
-                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    id: "prefecture",
-                                                    inputSelectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                            <div className=''>
+                                                <InputDropdown inputDropdownProps={{
+                                                    inputDropdownParentClassName: "w-full",
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'output_target_area'),
+                                                        inputDropdownLabelClassName: "block",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    inputDropdownClassName: "w-full",
                                                     value: outputTargetArea,
                                                     options: prefectureList,
                                                     optionLabel: "name",
                                                     onChange: (e) => setOutputTargetArea(e.value),
-                                                    text: translate(localeJson, "output_target_area"),
-                                                }} parentClass="w-full lg:w-25rem md:w-23rem sm:w-21rem " />
+                                                    emptyMessage: translate(localeJson, "data_not_found"),
+                                                }}
+                                                />
+
                                             </div>
-                                            <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
+                                            <div className='modal-field-top-space ml-1 w-full '>
                                                 <NormalLabel text={translate(localeJson, 'history_mail_message')} style={{ fontSize: "13px" }} />
                                             </div>
                                         </div>
                                     </form>
+                                    <div className="text-center">
+                                        <div className="modal-button-footer-space">
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full update-button",
+                                                type: "submit",
+                                                text: translate(localeJson, 'registration'),
+                                                onClick: () => {
+                                                    register({
+                                                        transmissionInterval,
+                                                        outputTargetArea,
+                                                        email: values.email,
+                                                        errors: errors
+                                                    });
+                                                    handleSubmit();
+                                                },
+                                            }} parentClass={"update-button"} />
+                                        </div>
+                                        <div >
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full back-button",
+                                                text: translate(localeJson, 'cancel'),
+                                                onClick: () => {
+                                                    close();
+                                                    resetForm({ values: initialValues });
+                                                }
+                                            }} parentClass={"back-button"} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Dialog>

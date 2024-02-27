@@ -38,7 +38,7 @@ function AudioRecorder({ onAudioRecorded, onRecordingStateChange,disabled }) {
   };
 
   return (
-    <div className="flex justify-content-center align-items-center h-full">
+    <div className="flex justify-content-center align-items-end h-full">
       <div>
         <BsFillMicFill
           onClick={()=>{if(!disabled ){(recording) ? stopRecording() : startRecording()}}}

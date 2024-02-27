@@ -6,8 +6,7 @@
     user-select: none;
     top: 4rem;
     transition: transform $transitionDuration, left $transitionDuration;
-    background: #2b3d51;
-    border-right: 1px solid darkgray;
+    background: #E6E6E6;
 }
 
 .layout_sidebar_scroll {
@@ -15,7 +14,6 @@
     overflow-y: auto;
     /* For Firefox */
     scrollbar-width: thin;
-    scrollbar-color: rgb(210, 210, 210) rgb(46, 54, 69) !important;
 }
 
 .layout-menu {
@@ -24,32 +22,87 @@
     list-style-type: none;
     user-select: none;
 
+    .without-top-element {
+        margin-top: 16px;
+    }
+
     .layout-root-menuitem {
+        margin-bottom: 24px;
+
         >.layout-menuitem-root-text {
-            font-size: 15px;
+            font-size: 12px;
             text-transform: uppercase;
             font-weight: 700;
-            color: white;
-            margin: .75rem 0;
+            color: #515652;
+            margin: 0.40rem 0;
             padding-left: 1rem;
+            display: flex;
+            align-items: center;
+
+            >.layout-menuitem-root-text-icon {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding-right: 0.25rem;
+                font-size: 16px;
+            }
         }
 
-        >a {
-            display: none;
-        }
+        >a.top-element {
+            display: flex;
+            align-items: center;
+            position: relative;
+            outline: 0 none;
+            color: black;
+            cursor: pointer;
+            padding: .40rem 0.50rem;
+            transition: background-color $transitionDuration, box-shadow $transitionDuration;
+            border-radius: 8px;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            margin-top: 16px;
+            font-weight: bold;
 
+            &:hover {
+                background-color: #CDCFCD;
+                color: #1F2620;
+            }
+
+            &.active-route {
+                font-weight: bold;
+                background-color: var(--primary-color);
+                color: white;
+                border: 0;
+
+                &:hover {
+                    background-color: var(--primary-color);
+                    color: white;
+                }
+            }
+        }
     }
 
     li.active-menuitem {
         >a {
+            background-color: var(--primary-color);
+            color: white;
+
+            &:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
             .layout-submenu-toggler {
                 transform: rotate(-180deg);
             }
+        }
 
-            background-color: #19C2FA;
+        >a.top-element {
+            background-color: var(--primary-color);
+            color: white;
 
             &:hover {
-                background-color: #0285B1;
+                background-color: var(--primary-color);
                 color: white;
             }
         }
@@ -60,8 +113,8 @@
     }
 
     .active-parent-menu {
-        background-color: #0285B1;
-        margin-bottom: 2px;
+        margin-bottom: 0.25rem;
+        padding-left: 0.75rem;
     }
 
     ul {
@@ -75,10 +128,14 @@
             align-items: center;
             position: relative;
             outline: 0 none;
-            color: white;
+            color: black;
             cursor: pointer;
-            padding: .75rem 1rem;
+            padding: .40rem 0.50rem;
             transition: background-color $transitionDuration, box-shadow $transitionDuration;
+            border-radius: 8px;
+            margin-bottom: 0.20rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
 
             .layout-menuitem-icon {
                 display: flex;
@@ -100,16 +157,20 @@
             }
 
             &.active-route {
-                font-weight: 500;
-                background-color: #007C7C;
+                font-weight: bold;
+                background-color: var(--primary-color);
                 color: white;
                 border: 0;
 
                 &:hover {
-                    background-color: #1D525F;
+                    background-color: var(--primary-color);
                     color: white;
                 }
+            }
 
+            &:hover {
+                background-color: #CDCFCD;
+                color: #1F2620;
             }
         }
 
@@ -119,16 +180,19 @@
 
             li {
                 a {
-                    margin-bottom: 2px;
-                    margin-left: 2rem;
+                    margin-bottom: .25rem;
+                    margin-left: .25rem;
+                    margin-right: .25rem;
+                    border-radius: 8px;
 
                     &:hover {
-                        background-color: #1D525F;
-                        color: white;
+                        background-color: #CDCFCD;
+                        color: #1F2620;
                     }
 
                     &:focus {
-                        background-color: #007C7C;
+                        background-color: var(--primary-color);
+                        color: white;
                     }
                 }
 
@@ -183,4 +247,11 @@
     overflow: hidden;
     max-height: 0 !important;
     transition: max-height 0.45s cubic-bezier(0, 1, 0, 1);
+}
+
+.sidebar-bottom-fixed-view {
+    width: 300px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }

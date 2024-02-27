@@ -6,6 +6,11 @@
     width: 150px;
 }
 
+.family-detail-data.p-dialog .p-dialog-content{
+    padding: 1.5rem;
+    padding-top: 0;
+}
+
 // .evacuation-list.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
 //     border-width: 0 1px 1px 1px;
 // }
@@ -28,7 +33,7 @@
 
 .evacuation_button_height {
     height: 40px;
-    width: 150px;
+    width: auto;
 }
 
 

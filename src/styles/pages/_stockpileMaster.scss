@@ -1,6 +1,6 @@
 .stockpileMaster_label {
     width: 150px;
 }
-.custom-table-cell .highlight-row {
-    background: #c1d5e6 !important;
+.custom-table .p-datatable .p-datatable-tbody > tr.highlight-row > td {
+    background: #c1d5e6;
 }

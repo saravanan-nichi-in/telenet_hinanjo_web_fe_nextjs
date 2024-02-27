@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -6,6 +6,8 @@ import { getValueByKeyRecursively as translate, zipDownloadWithURL } from '@/hel
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, InputFile, ValidationError, CommonDialog } from '@/components';
 import { QRCodeCreateServices } from '@/services';
+import CustomHeader from '@/components/customHeader';
+import { AdminManagementDeleteModal } from '@/components/modal';
 
 export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -13,6 +15,8 @@ export default function AdminQrCodeCreatePage() {
     const [initialValues, setInitialValues] = useState({
         file: null
     })
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteObj, setDeleteObj] = useState(null);
     const schema = Yup.object().shape({
         file: Yup.mixed()
             .required(translate(localeJson, 'file_csv_required'))
@@ -29,13 +33,6 @@ export default function AdminQrCodeCreatePage() {
 
     /* Services */
     const { callExport, callImport, callDelete, callZipDownload } = QRCodeCreateServices;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoader(false);
-        };
-        fetchData();
-    }, []);
 
     /**
      * Import file
@@ -101,34 +98,46 @@ export default function AdminQrCodeCreatePage() {
         setLoader(false);
     };
 
+    const openDeleteDialog = (rowdata) => {
+        setDeleteOpen(true);
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            setLoader(true);
+            callDelete(onDeleteSuccess)
+            
+        }
+        setDeleteOpen(false);
+    };
+
     return (
         <>
             {/* QR code create success modal */}
             <CommonDialog
                 open={qrCodeCreateDialogVisible}
-                dialogBodyClassName="p-3"
+                dialogBodyClassName="p-3 text-center"
                 header={translate(localeJson, 'qr_code_create')}
                 content={translate(localeJson, 'create_qr_codes_successfully')}
                 position={"center"}
-                footerParentClassName={"text-center"}
+                footerParentClassName={"text-center pt-5"}
                 footerButtonsArray={[
                     {
                         buttonProps: {
-                            buttonClass: "text-600",
+                            buttonClass: "text-600 w-full",
                             bg: "bg-white",
                             hoverBg: "hover:surface-500 hover:text-white",
                             text: translate(localeJson, "delete"),
                             onClick: () => {
                                 setQrCodeCreateDialogVisible(false);
-                                setLoader(true);
-                                callDelete(onDeleteSuccess)
+                                openDeleteDialog([]);
                             },
                         },
-                        parentClass: "inline"
+                        parentClass: "block"
                     },
                     {
                         buttonProps: {
-                            buttonClass: "",
+                            buttonClass: "mt-2 w-full",
                             type: "submit",
                             text: translate(localeJson, "download"),
                             severity: "danger",
@@ -138,7 +147,7 @@ export default function AdminQrCodeCreatePage() {
                                 callZipDownload(onZipDownloadSuccess)
                             },
                         },
-                        parentClass: "inline"
+                        parentClass: "block"
                     }
                 ]}
                 close={() => {
@@ -148,6 +157,12 @@ export default function AdminQrCodeCreatePage() {
                     }
                     setQrCodeCreateDialogVisible(false);
                 }}
+            />
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+                refreshList={()=>{}}
+                deleteObj={deleteObj}
             />
             <Formik
                 validationSchema={schema}
@@ -165,21 +180,20 @@ export default function AdminQrCodeCreatePage() {
                         <div className="col-12">
                             <div className='card'>
                                 <div className=''>
-                                    <h5 className='page-header1'>{translate(localeJson, 'qr_code_create')}</h5>
+                                    <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "qr_code_create")} />
                                 </div>
-                                <hr />
                                 <div>
                                     <div>
                                         <form onSubmit={handleSubmit}>
                                             <div>
-                                                <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                                <div className='flex pb-2' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                                     <Button buttonProps={{
                                                         type: 'button',
+                                                        rounded: "true",
+                                                        export:true,
                                                         text: translate(localeJson, 'download_sample_csv'),
                                                         onClick: () => callExport(),
-                                                        link: "true",
-                                                        style: { whiteSpace: 'nowrap', padding: 0 }
-                                                    }} />
+                                                    }} parentClass={"export-button"} />
                                                 </div>
                                             </div>
                                             <div>
@@ -192,21 +206,22 @@ export default function AdminQrCodeCreatePage() {
                                                     },
                                                     value: values.file,
                                                     accept: '.csv',
-                                                    ref: fileInputRef
-                                                }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
-                                                <div className='pt-1'>
+                                                    ref: fileInputRef,
+                                                    placeholder: translate(localeJson, 'default_csv_file_placeholder')
+                                                }} parentClass={`w-full bg-white ${errors.file && touched.file && 'p-invalid '}`} />
+                                                <div className=''>
                                                     <ValidationError errorBlock={errors.file && touched.file && errors.file} />
                                                 </div>
                                             </div>
                                             <div className='flex my-3' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
                                                 <div>
                                                     <Button buttonProps={{
-                                                        buttonClass: "evacuation_button_height",
+                                                        buttonClass: "evacuation_button_height import-button",
                                                         type: 'submit',
+                                                        import:true,
                                                         text: translate(localeJson, 'import'),
                                                         rounded: "true",
-                                                        severity: "primary",
-                                                    }} />
+                                                    }} parentClass={"import-button"} />
                                                 </div>
                                             </div>
                                         </form>

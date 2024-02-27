@@ -25,12 +25,11 @@ function _importData(payload, callBackFun) {
   axios
     .post("/admin/place/import", payload)
     .then((response) => {
-      // Handling import success && errors
       callBackFun(response);
       importErrorToastDisplay(response);
     })
     .catch((error) => {
-      // Handling import errors
+      console.error("Error fetching data:", error);
       callBackFun(false);
       importErrorToastDisplay(error.response);
     });
@@ -74,8 +73,8 @@ function _getList(payload, callBackFun) {
       }
     })
     .catch((error) => {
-      // Handle errors here
       console.error("Error fetching data:", error);
+      callBackFun(false);
     });
 }
 
@@ -176,19 +175,16 @@ function _update(payload, callBackFun) {
  */
 function _details(id, callBackFun) {
   const params = {
-    params: {
-      id: id,
-    },
+    id: id,
   };
   axios
-    .get(`/admin/place/detail`, params)
+    .post(`/admin/place/detail`, params)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
       }
     })
     .catch((error) => {
-      // Handle errors here
       console.error("Error fetching data:", error);
     });
 }
@@ -207,7 +203,7 @@ function _updateStatus(payload, callBackFun) {
       }
     })
     .catch((error) => {
-      // Handle errors here
+
       console.error("Error fetching data:", error);
     });
 }

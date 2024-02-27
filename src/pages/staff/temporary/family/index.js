@@ -1,21 +1,44 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import _ from 'lodash';
+import { useAppDispatch } from '@/redux/hooks';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, InputFloatLabel, NormalTable } from '@/components';
-import { QrCodeModal } from '@/components/modal';
-import { MdFlipCameraIos } from 'react-icons/md';
-import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getNumberOfEvacuationDays, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from "@/helper";
+import {
+    Button,
+    CommonDialog,
+    NormalTable
+} from '@/components';
+import {
+    getEnglishDateDisplayFormat,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getJapaneseDateTimeDisplayActualFormat,
+    hideOverFlow,
+    showOverFlow,
+    getValueByKeyRecursively as translate
+} from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
+import CustomHeader from '@/components/customHeader';
+import { Input } from '@/components/input';
+import YappleModal from '@/components/modal/yappleModal';
+import { setStaffTempFamily } from '@/redux/family';
+import { useAppSelector } from "@/redux/hooks";
+import { setSelfID } from '@/redux/self_id';
+import { CommonServices, TempRegisterServices } from '@/services';
+import BarcodeDialog from '@/components/modal/barcodeDialog';
+import toast from 'react-hot-toast';
 
 function TemporaryRegistrants() {
+    const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
-    const layoutReducer = useSelector((state) => state.layoutReducer);
+    const layoutReducer = useAppSelector((state) => state.layoutReducer);
+
+    const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+    const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
+    const [basicDataInfo, setBasicDataInfo] = useState(null);
+
     const [familyCount, setFamilyCount] = useState(0);
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
@@ -24,21 +47,181 @@ function TemporaryRegistrants() {
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
+    const temporaryRegistrantsColumns = [
+        { field: 'number', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: "5rem", alignHeader: 'left', className: "sno_class" },
+        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "3rem", display: 'none' },
+        {
+            field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), minWidth: "7rem",
+            sortable: true, textAlign: 'left', alignHeader: "left",
+            body: (rowData) => {
+                return <div className="flex flex-column cursor-pointer">
+                    <div className="custom-header text-highlighter-user-list">{rowData.name}</div>
+                    <div className="table-body-sub">{rowData.person_refugee_name}</div>
+                </div>
+            },
+        },
+        { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '7rem' },
+        { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "8rem" },
+        { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "5rem" },
+        { field: "person_dob", header: translate(localeJson, 'dob'), minWidth: "11rem", maxWidth: "11rem", sortable: true, textAlign: 'left', alignHeader: 'left' },
+        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: true, textAlign: "center", alignHeader: "left", minWidth: "6rem", display: 'none' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: true, textAlign: "center", alignHeader: "left" },
+        { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
+        { field: "age_month", header: translate(localeJson, 'age_month'), sortable: true, textAlign: 'left', minWidth: "7rem", display: 'none' },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: true, textAlign: 'left', display: 'none' },
+        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: true, textAlign: 'left', display: 'none' },
+        { field: "remarks", header: translate(localeJson, 'remarks'), sortable: true, textAlign: 'left', minWidth: "8rem", display: 'none' },
+        { field: "place", header: translate(localeJson, 'shelter_place'), sortable: true, textAlign: 'left', minWidth: "12rem", display: 'none' },
+        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: true, textAlign: 'left', minWidth: "9rem", display: 'none' },
+        {
+            field: 'actions',
+            header: '',
+            textAlign: "left",
+            alignHeader: 'left',
+            minWidth: "10rem",
+            body: (rowData) => (
+                <div>
+                    <Button buttonProps={{
+                        text: translate(localeJson, 'check_in'),
+                        buttonClass: "search-button",
+                        onClick: () => updateCheckInStatus(rowData)
+                    }} parentClass={"search-button"} />
+                </div>
+            ),
+        },
+    ];
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
             limit: 10,
             sort_by: "",
-            order_by: "desc"
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
         },
         place_id: placeID,
-        family_code: "",
-        refugee_name: ""
-
     });
+    const [importModalOpen, setImportModalOpen] = useState(false);
+    const [barcode, setBarcode] = useState(null);
+    const [eventDefaultDetails, setEventDefaultDetails] = useState(null);
+    const param = router?.query;
 
     /* Services */
-    const { getList, exportTemporaryEvacueesCSVList, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+    const { getDefaultEventDetails, getList, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+    const { getBasicDetailsInfoStaffTemp, getBasicDetailsUsingUUID,getPPID } = TempRegisterServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await getDefaultEventDetails({}, (response) => {
+                if (response.success && !_.isEmpty(response.data)) {
+                    setEventDefaultDetails(response?.data?.model)
+                }
+            });
+            await getTemporaryRegistrantList();
+            console.log(param,"KKKKKKKKKKKKKKKK");
+            if (param?.uuid) {
+                validateAndMoveToForm(param.uuid)
+            }
+        };
+        fetchData();
+    }, [locale, getListPayload]);
+
+    const validateAndMoveToForm = (id) => {
+        let ppid;
+        let payload = {
+            "uuid":id
+        }
+        getPPID(payload,(res)=>
+        {
+            console.log(res,"PPID")
+            if(res)
+            {
+            ppid= res?.result[0];
+            ppid && fetchBasicDetailsInfo(ppid);
+            }
+        })
+    }
+
+    const fetchBasicDetailsInfo = (id) => {
+        let payload = {
+            "ppid": id ? id : ""
+        };
+
+        getBasicDetailsUsingUUID(payload, (response) => {
+            if (response.success) {
+                const data = response.data;
+                setBasicDataInfo(data);
+                setOpenBarcodeDialog(false);
+                setOpenBasicDataInfoDialog(true);
+            }
+        })
+    }
+
+    /**
+     * Get temporary registrant list
+     */
+    const getTemporaryRegistrantList = () => {
+
+        getList(getListPayload, onGetTemporaryRegistrantListSuccess);
+    }
+
+    /**
+     * Get temporary registrant list / Success
+     */
+    const onGetTemporaryRegistrantListSuccess = async (response) => {
+        var evacuationColumns = [...temporaryRegistrantsColumns];
+        var evacueesList = [];
+        var totalFamilyCount = 0;
+        var listTotalCount = 0;
+        let placeIdObj = {};
+
+        if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
+            response.places.forEach((place, index) => {
+                placeIdObj[place.id] = locale == 'ja' ? place.name : (place.name_en ?? place.name)
+            });
+            const data = response.data.list;
+            data.map((item, i) => {
+                let evacuees = {
+                    number: i + getListPayload.filters.start + 1,
+                    id: item.f_id,
+                    place_name: placeIdObj[item.place_id],
+                    family_count: response.data.total_family,
+                    family_code: item.family_code,
+                    person_is_owner: item.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    person_refugee_name: item.person_refugee_name,
+                    name: item.person_name,
+                    person_gender: getGenderValue(item.person_gender),
+                    person_age: item.person_age,
+                    age_month: item.person_month,
+                    special_care_name: item.person_special_cares
+                        ? getSpecialCareName(item.person_special_cares)
+                        : "-", // Assuming you want to display a comma-separated list of special cares
+                    connecting_code: item.person_connecting_code,
+                    remarks: item.person_note,
+                    place: item.place_id, // You might need to fetch the actual place name based on place_id from your response data
+                    out_date: item.family_out_date,
+                    person_dob:
+                        locale == "ja"
+                            ? getJapaneseDateDisplayYYYYMMDDFormat(item.person_dob)
+                            : getEnglishDateDisplayFormat(item.person_dob)
+                };
+                evacueesList.push(evacuees);
+            });
+            totalFamilyCount = response.data.total_family;
+            listTotalCount = response.data.total;
+        }
+        setTableLoading(false);
+        setEvacuationTableFields(evacuationColumns);
+        setEvacueesDataList(evacueesList);
+        setTotalCount(listTotalCount);
+        setFamilyCount(totalFamilyCount);
+    }
+
+    const onImportModalClose = () => {
+        setImportModalOpen(false);
+        showOverFlow();
+    };
 
     const handleFamilyCode = (e) => {
         if ((e.target.value).length == 4) {
@@ -61,10 +244,56 @@ function TemporaryRegistrants() {
         }
     }
 
+    const updateCheckInStatus = (rowData) => {
+        let param = {
+            lgwan_family_id: rowData.id,
+            place_id: getListPayload.place_id,
+        }
+        updateCheckInDetail(param, (response) => {
+            if (response.success) {
+                getList(getListPayload, onGetTemporaryRegistrantListSuccess);
+            }
+        });
+    }
+
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else if (gender == 3) {
+            return translate(localeJson, 'others_count');
+        }
+    }
+
+    const getSpecialCareName = (nameList) => {
+        let specialCareName = null;
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
+        });
+        return specialCareName;
+    }
+
+    const searchListWithCriteria = () => {
+        let payload = {
+            filters: {
+                start: 0,
+                limit: getListPayload.filters.limit,
+                sort_by: "",
+                order_by: "desc",
+                family_code: familyCode,
+                refugee_name: refugeeName
+            },
+            place_id: getListPayload.place_id,
+        }
+        getList(payload, onGetTemporaryRegistrantListSuccess);
+        setGetListPayload(payload);
+    }
+
     /**
-     * Pagination handler
-     * @param {*} e 
-     */
+    * Pagination handler
+    * @param {*} e 
+    */
     const onPaginationChange = async (e) => {
         setTableLoading(true);
         if (!_.isEmpty(e)) {
@@ -80,354 +309,272 @@ function TemporaryRegistrants() {
             }));
         }
     }
-    const temporaryRegistrantsColumns = [
-        {
-            field: 'actions',
-            header: translate(localeJson, 'action'),
-            textAlign: "center",
-            minWidth: "10rem",
-            body: (rowData) => (
-                <div>
-                    <Button buttonProps={{
-                        text: translate(localeJson, 'check_in'),
-                        buttonClass: "text-primary ",
-                        bg: "bg-white",
-                        hoverBg: "hover:bg-primary hover:text-white",
-                        onClick: () => updateCheckInStatus(rowData)
-                    }} />
-                </div>
-            ),
-        },
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, minWidth: "4rem",className:"sno_class",textAlign:"center",alignHeader:"center" },
-        { field: 'id', header: translate(localeJson, 'si_no'), headerClassName: "custom-header", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'number_of_household'), headerClassName: "custom-header", minWidth: "8rem",textAlign:"right",alignHeader:"center" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", minWidth: "8rem",textAlign:"right",alignHeader:"center" },
-        { field: 'is_owner', header: translate(localeJson, 'household_representative'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'refugee_name', header: translate(localeJson, 'name_phonetic'), headerClassName: "custom-header", minWidth: "9rem"},
-        { field: 'name', header: translate(localeJson, 'name_kanji'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'dob', header: translate(localeJson, 'dob'), headerClassName: "custom-header", minWidth: "10rem" },
-        { field: 'age', header: translate(localeJson, 'age'), headerClassName: "custom-header", minWidth: "5rem",textAlign:"right",alignHeader:"center" },
-        { field: 'age_month', header: translate(localeJson, 'age_month'), headerClassName: "custom-header", minWidth: "5rem",textAlign:"right",alignHeader:"center" },
-        { field: 'special_care_name', header: translate(localeJson, 'special_Care_type'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'connecting_code', header: translate(localeJson, 'connecting_code'), headerClassName: "custom-header", minWidth: "8rem" },
-        { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
-        { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "10rem" },
-        { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem",textAlign:"right",alignHeader:"center" },
 
-    ];
-    const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
-
-    /**
-     * CommonDialog modal close
-     */
-    const onClickCancelButton = () => {
-        setStaffFamilyDialogVisible(false);
-    };
-
-    const updateCheckInStatus = (rowData) => {
-        let param = {
-            place_id: getListPayload.place_id,
-            family_id: rowData.id
-        }
-        updateCheckInDetail(param, (response) => {
-            if (response.success) {
-               getList(getListPayload, onGetEvacueesList)
-            }
-        });
+    const yappleModalSuccessCallBack = (res) => {
+        getList(getListPayload, onGetTemporaryRegistrantListSuccess);
     }
 
-    /**
-     * CommonDialog modal open
-     */
-    const onClickOkButton = () => {
-        setStaffFamilyDialogVisible(false);
-    };
-
-    const downloadEvacueesListCSV = () => {
-        exportTemporaryEvacueesCSVList(getListPayload, exportEvacueesCSV);
-    }
-
-    const exportEvacueesCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName = "TemporaryRegistrants_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    }
-
-    const getGenderValue = (gender) => {
-        if (gender == 1) {
-            return translate(localeJson, 'male');
-        } else if (gender == 2) {
-            return translate(localeJson, 'female');
-        } else {
-            return translate(localeJson, 'others_count');
-        }
-    }
-
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
-        });
-        return specialCareName;
-    }
-
-    const getAnswerData = (answer) => {
-        let answerData = null;
-        answer.map((item) => {
-            answerData = answerData ? (answerData + ", " + item) : item
-        });
-        return answerData;
-    }
-
-    const searchListWithCriteria = () => {
-        let payload = {
-            filters: {
-                start: 0,
-                limit: getListPayload.filters.limit,
-                sort_by: "",
-                order_by: "desc"
-            },
-            place_id: getListPayload.place_id,
-            family_code: familyCode,
-            refugee_name: refugeeName
-        }
-        getList(payload, onGetEvacueesList);
-        setGetListPayload(payload);
-    }
-
-    /**
-     * Get Evacuees list on mounting
-     */
-    const onGetTemporaryRegistrantListOnMounting = () => {
-        getList(getListPayload, onGetEvacueesList);
-    }
-
-    const onGetEvacueesList = (response) => {
-        let evacuationColumns = [...temporaryRegistrantsColumns];
-        if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
-            const data = response.data.list;
-            const questionnaire = response.data.questionnaire;
-            let evacueesList = [];
-            let index = 0;
-            let previousItem = null;
-            let siNo = getListPayload.filters.start + 1;
-            if (questionnaire.length > 0) {
-                questionnaire.map((ques, num) => {
-                    let column = {
-                        field: "question_" + ques.id,
-                        header: (locale == "ja" ? ques.title : ques.title_en),
-                        minWidth: "10rem",
-                        display: "none"
-                    };
-                    evacuationColumns.push(column);
-                });
-            }
-            setEvacuationTableFields(evacuationColumns);
-
-            data.map((item, i) => {
-                if (previousItem && previousItem.id == item.family_id) {
-                    index = index + 1;
-                } else {
-                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0) {
-                        let evacueesData = evacueesDataList[evacueesDataList.length - 1];
-                        if (evacueesData.id == item.family_id) {
-                            index = evacueesData.family_count + 1;
-                        }
-                        else {
-                            index = 1;
-                        }
-                    }
-                    else {
-                        index = 1;
-                    }
+    const doCheckIn = (place_id) => {
+        if (basicDataInfo.is_registered == 0) {
+            updateCheckInDetail({
+                place_id: place_id,
+                lgwan_family_id: basicDataInfo.lgwan_familiy_id
+            }, (response) => {
+                if (response.success) {
+                    setOpenBasicDataInfoDialog(false);
                 }
-                let evacuees = {
-                    "si_no": siNo,
-                    "id": item.family_id,
-                    "family_count": index,
-                    "family_code": item.temp_families.family_code,
-                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "refugee_name": <Link className="text-higlight" href={{
-                        pathname: '/staff/temporary/family-detail',
-                        query: { family_id: item.family_id }
-                    }}>{item.refugee_name}</Link>,
-                    "name": item.name,
-                    "gender": getGenderValue(item.gender),
-                    "dob":locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),
-                    "age": item.age,
-                    "age_month": item.month,
-                    "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares) : "-",
-                    "remarks": item.note,
-                    "place": response.locale == 'ja' ? (item.temp_families.place ? item.temp_families.place.name : (item.temp_families.place ? item.temp_families.place.name_en : "")) : "",
-                    "connecting_code": item.connecting_code,
-                    "check_in_date":item.created_at ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.created_at) : getEnglishDateDisplayFormat(item.created_at) : "",
-                    "evacuation_days": item.created_at ? getNumberOfEvacuationDays(item.created_at): ""
-                };
-                if (item.add_question.length > 0) {
-                    item.add_question.map((ques) => {
-                        evacuees[`question_${ques.question_id}`] = (locale == 'ja' ? (ques.answer.length > 0 ? getAnswerData(ques.answer) : "") : (ques.answer_en.length > 0 ? getAnswerData(ques.answer_en) : ""));
-                    })
-                }
-                previousItem = evacuees;
-                evacueesList.push(evacuees);
-                siNo = siNo + 1;
             });
-            setEvacuationTableFields(evacuationColumns);
-            setEvacueesDataList(evacueesList);
-            setFamilyCount(response.data.total_family);
-            setTableLoading(false);
-            setTotalCount(response.data.count);
+        }
+        else if (basicDataInfo.is_registered == 1) {
+            toast.error(translate(localeJson, 'already_checked_in'), {
+                position: "top-right",
+            });
         }
         else {
-            setEvacueesDataList([]);
-            setEvacuationTableFields(evacuationColumns);
-            setTableLoading(false);
-            setTotalCount(0);
-            setFamilyCount(0);
+            toast.error(translate(localeJson, 'not_pre_registered_yet'), {
+                position: "top-right",
+            });
         }
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetTemporaryRegistrantListOnMounting();
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale, getListPayload]);
+    const confirmRegistrationBeforeCheckin = () => {
+        if (layoutReducer?.user?.place?.id != basicDataInfo.place_id) {
+            let result = window.confirm(translate(localeJson, 'different_evacuation_confirmation'));
+            if (result) {
+                doCheckIn(placeID)
+            }
+        }
+        else {
+            doCheckIn(basicDataInfo.place_id)
+        }
 
-    
+    }
+
+    const basicInfoContent = () => {
+        return <div>
+            <div className='mt-2'>
+                <div className='flex align-items-center'>
+                    <div className='page-header3'>{translate(localeJson, "name_kanji")}:</div>
+                    <div className='page-header3-sub ml-1'>{basicDataInfo?.name}</div>
+                </div>
+            </div>
+            <div className='mt-2'>
+                <div className='flex align-items-center'>
+                    <div className='page-header3'>{translate(localeJson, "refugee_name")}:</div>
+                    <div className='page-header3-sub ml-1'>{basicDataInfo?.refugee_name}</div>
+                </div>
+            </div>
+
+            <div className='mt-2'>
+                <div className='flex'>
+                    <div className='page-header3' style={{ whiteSpace: 'nowrap' }}>{translate(localeJson, "address")}:</div>
+                    <div className='page-header3-sub ml-1' style={{ whiteSpace: 'normal' }}>{basicDataInfo?.address}</div>
+                </div>
+            </div>
+            <div className='mt-2'>
+                <div className='flex align-items-center'>
+                    <div className='page-header3'>{translate(localeJson, "tel")}:</div>
+                    <div className='page-header3-sub ml-1'>{basicDataInfo?.tel}</div>
+                </div>
+            </div>
+            <div className='mt-2'>
+                <div className='flex align-items-center'>
+                    <div className='page-header3'>{translate(localeJson, "evacuation_date_time")}:</div>
+                    <div className='page-header3-sub ml-1'>{basicDataInfo?.join_date ? getJapaneseDateTimeDisplayActualFormat(basicDataInfo.join_date) : ""}</div>
+                </div>
+            </div>
+            <div className='mt-2'>
+                <div className='flex align-items-center'>
+                    <div className='page-header3'>{translate(localeJson, "evacuation_place")}:</div>
+                    <div className='page-header3-sub ml-1'>{layoutReducer?.user?.place.name}</div>
+                </div>
+            </div>
+        </div>
+    }
 
     return (
-        <>
-            <QrCodeModal
-                open={staffFamilyDialogVisible}
-                dialogBodyClassName="p-3 text-center"
-                header={translate(localeJson, 'qr_Code_scan')}
+        <div className="grid">
+            <CommonDialog
+                open={openBasicDataInfoDialog}
+                dialogBodyClassName="p-0"
+                header={translate(localeJson, "pre_registration_info")}
+                content={basicInfoContent()}
                 position={"center"}
-                footerParentClassName={"text-left"}
+                footerParentClassName={"mt-5 w-12"}
+                dialogClassName={"w-10 sm:w-8 md:w-4 lg:w-4"}
                 footerButtonsArray={[
                     {
                         buttonProps: {
-                            buttonClass: "w-5rem",
-                            type: "submit",
-                            severity: "primary",
-                            icon: <MdFlipCameraIos size={"30px"} />,
-                            onClick: () => onClickOkButton(),
+                            buttonClass: "w-12",
+                            text: translate(localeJson, "yapple_modal_success_div_green_btn"),
+                            onClick: () => {
+                                confirmRegistrationBeforeCheckin()
+                            },
                         },
-                        parentClass: "inline"
-                    }
+                        parentClass: "mb-2",
+                    },
+                    {
+                        buttonProps: {
+                            buttonClass: "w-12 back-button",
+                            text: translate(localeJson, "yapple_modal_success_div_white_btn"),
+                            onClick: () => {
+                                setOpenBasicDataInfoDialog(false);
+                                setOpenBarcodeDialog(false)
+                            },
+                        },
+                        parentClass: "back-button",
+                    },
                 ]}
                 close={() => {
-                    setStaffFamilyDialogVisible(false);
+                    setOpenBasicDataInfoDialog(false);
                 }}
             />
-            <div className="grid">
-                <div className="col-12">
-                    <div className='card'>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                            <h5 className='page-header1'>{translate(localeJson, 'temporary_registrants')}</h5>
-                            <span>{translate(localeJson, 'total_summary') + ": " + familyCount + translate(localeJson, 'people')}</span>
-                        </div>
-                        <hr />
+            <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
+                visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}
+                title={translate(localeJson, 'barcode_mynumber_dialog_main_title')}
+                subTitle={translate(localeJson, 'barcode_mynumber_dialog_sub_title')}
+                validateAndMoveToTempReg={(data) => validateAndMoveToForm(data)}
+            ></BarcodeDialog>
+            <YappleModal
+                open={importModalOpen}
+                close={onImportModalClose}
+                barcode={barcode}
+                setBarcode={setBarcode}
+                isCheckIn={true}
+                successCallBack={yappleModalSuccessCallBack}
+                staffEventID={eventDefaultDetails?.id}
+                successHeader={"pre_registration_info"}
+                isEvent={false}
+                type={layoutReducer?.user?.place?.type}
+            />
+            <div className="col-12">
+                <div className='card'>
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "temporary_registrants")} />
+                        <span className='pl-2 text-lg pb-2'>{"(" + totalCount + translate(localeJson, 'people') + ")"}</span>
+                    </div>
+                    <div>
                         <div>
-                            <div>
-                                <form>
-                                    <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                        <InputFloatLabel
-                                            inputFloatLabelProps={{
-                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                text: translate(localeJson, "family_code"),
-                                                value: familyCode,
-                                                onChange: (e) => handleFamilyCode(e),
-                                            }}
-                                        />
-                                        <InputFloatLabel
-                                            inputFloatLabelProps={{
-                                                inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
+                            <div className="flex justify-between">
+                                <Button buttonProps={{
+                                    buttonClass: "w-full p-4",
+                                    text: translate(localeJson, "staff_temp_register_big_btn_one"),
+                                    type: "button",
+                                    onClick: () => {
+                                        router.push("https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202")
+                                    },
+                                    icon: <img src="/layout/images/Scanner.png" width={'30px'} height={'30px'} alt="scanner" />,
+                                }} parentClass="flex-1 p-2" />
+                                <Button buttonProps={{
+                                    buttonClass: "w-full p-4",
+                                    text: translate(localeJson, 'staff_temp_register_big_btn_two'),
+                                    type: "button",
+                                    icon: <img src="/layout/images/Scanner.png" width={'30px'} height={'30px'} alt="scanner" />,
+                                    onClick: () => {
+                                        setImportModalOpen(true)
+                                        hideOverFlow();
+                                    },
+                                }} parentClass="flex-1 p-2" />
+                            </div>
+                            <form>
+                                <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
+                                    <Input
+                                        inputProps={{
+                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            labelProps: {
+                                                text: translate(localeJson, 'family_code'),
+                                                inputLabelClassName: "block",
+                                            },
+                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            id: "familyCode",
+                                            name: "familyCode",
+                                            placeholder: translate(localeJson, 'family_code'),
+                                            value: familyCode,
+                                            onChange: (e) => handleFamilyCode(e),
+                                        }}
+                                    />
+                                    <Input
+                                        inputProps={{
+                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            labelProps: {
                                                 text: translate(localeJson, 'name'),
-                                                custom: "mobile-input custom_input",
-                                                value: refugeeName,
-                                                onChange: (e) => setRefugeeName(e.target.value)
-                                            }}
-                                        />
-                                        <div className="flex">
-                                            <Button buttonProps={{
-                                                buttonClass: "w-12 search-button mobile-input ",
-                                                text: translate(localeJson, "search_text"),
-                                                icon: "pi pi-search",
-                                                severity: "primary",
-                                                type: "button",
-                                                onClick: () => searchListWithCriteria()
-                                            }} parentClass="inline pr-2" />
-                                            <Button buttonProps={{
-                                                buttonClass: "w-12 search-button mobile-input ",
-                                                text: translate(localeJson, 'qr_search'),
-                                                severity: "primary",
-                                                type: "button",
-                                                onClick: () => setStaffFamilyDialogVisible(true),
-                                            }} parentClass="inline" />
-                                        </div>
+                                                inputLabelClassName: "block",
+                                            },
+                                            placeholder: translate(localeJson, 'name'),
+                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            value: refugeeName,
+                                            onChange: (e) => setRefugeeName(e.target.value)
+
+                                        }}
+                                    />
+                                    <div className="flex align-items-end">
+                                        <Button buttonProps={{
+                                            buttonClass: "w-12 search-button",
+                                            text: translate(localeJson, "search_text"),
+                                            icon: "pi pi-search",
+                                            type: "button",
+                                            onClick: () => searchListWithCriteria()
+                                        }} parentClass="inline pr-2 search-button" />
                                     </div>
-                                </form>
-                            </div>
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'list_of_evacuees'),
-                                    onClick: () => router.push('/staff/family'),
-                                    severity: "primary",
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'back_to_top'),
-                                    onClick: () => router.push('/staff/dashboard'),
-                                    severity: "primary",
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    severity: "primary",
-                                    onClick: () => downloadEvacueesListCSV(),
-                                }} parentClass={"mr-1 mt-1"} />
-                            </div>
-                            <div className="mt-3">
-                                <NormalTable
-                                    customActionsField="actions"
-                                    lazy
-                                    id="evacuation-list"
-                                    className="evacuation-list"
-                                    totalRecords={totalCount}
-                                    loading={tableLoading}
-                                    size={"small"}
-                                    stripedRows={true}
-                                    paginator={"true"}
-                                    showGridlines={"true"}
-                                    value={evacueesDataList}
-                                    columns={evacuationTableFields}
-                                    emptyMessage={translate(localeJson, "data_not_found")}
-                                    first={getListPayload.filters.start}
-                                    rows={getListPayload.filters.limit}
-                                    paginatorLeft={true}
-                                    onPageHandler={(e) => onPaginationChange(e)}
-                                />
-                            </div>
+                                </div>
+                            </form>
+                        </div>
+                        {/* 
+                        // Development
+                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                export: true,
+                                buttonClass: "evacuation_button_height export-button",
+                                text: translate(localeJson, 'export'),
+                            }} parentClass={"mr-1 mt-1 export-button"} />
+                        </div> */}
+                        <div className="mt-3">
+                            <NormalTable
+                                customActionsField="actions"
+                                lazy
+                                id="evacuation-list"
+                                className="evacuation-list"
+                                totalRecords={totalCount}
+                                loading={tableLoading}
+                                size={"small"}
+                                stripedRows={true}
+                                paginator={"true"}
+                                showGridlines={"true"}
+                                value={evacueesDataList}
+                                columns={evacuationTableFields}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                                first={getListPayload.filters.start}
+                                rows={getListPayload.filters.limit}
+                                paginatorLeft={true}
+                                onPageHandler={(e) => onPaginationChange(e)}
+                                selectionMode="single"
+                                onSort={(data) => {
+                                    setGetListPayload({
+                                        ...getListPayload,
+                                        filters: {
+                                            ...getListPayload.filters,
+                                            sort_by: data.sortField,
+                                            order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                        }
+                                    }
+                                    )
+                                }}
+                                onSelectionChange={
+                                    (e) => {
+                                        dispatch(setStaffTempFamily({ lgwan_family_id: e.value.id }));
+                                        router.push({
+                                            pathname: '/staff/temporary/family-detail',
+                                        });
+                                    }
+                                }
+                            />
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

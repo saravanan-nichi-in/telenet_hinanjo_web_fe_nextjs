@@ -2,29 +2,25 @@ import React, { useContext } from 'react';
 import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { MailFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import { useSelector } from "react-redux";
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ImageComponent, InputLeftRightGroup, NormalLabel, ValidationError, Button } from '@/components';
+import { ValidationError, Button } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
-import { useAppSelector } from "@/redux/hooks";
+import { InputGroup } from '@/components/input';
+import CustomHeader from '@/components/customHeader';
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
-    // Getting storage data with help of reducers
-    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
-    const containerClassName = classNames('auth_surface_ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+    const stateData = useSelector((state) => state.forgetPasswordReducer);
+    const containerClassName = classNames('flex align-items-start justify-content-center overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()
-            .required(translate(localeJson, 'email_required'))
-            .test('trim-and-validate', translate(localeJson, 'email_valid'), (value) => {
-                // Trim the email and check its validity
-                const trimmedEmail = value.trim();
-                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
-            }),
+            .required(translate(localeJson, 'user_id_required'))
+            .max(200, translate(localeJson, 'user_id_max'))
     });
 
     /* Services */
@@ -37,8 +33,6 @@ const ForgotPasswordPage = () => {
     const onForgotSuccess = (response) => {
         if (response && response.data.success) {
             router.push("/user/list");
-        } else {
-            console.log(response.data);
         }
     };
 
@@ -46,10 +40,10 @@ const ForgotPasswordPage = () => {
         <>
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "" }}
+                initialValues={{ email: stateData.forgetPassword ? stateData.forgetPassword.username : "" }}
                 onSubmit={(values) => {
                     let preparedPayload = values;
-                    preparedPayload['email'] = preparedPayload.email.trim();
+                    preparedPayload['username'] = preparedPayload.email.trim();
                     forgot('staff', preparedPayload, onForgotSuccess);
                 }}
             >
@@ -62,46 +56,36 @@ const ForgotPasswordPage = () => {
                     handleSubmit,
                 }) => (
                     <div className={containerClassName}>
-                        <div className="flex flex-column align-items-center justify-content-center">
-                            <div className="card w-full surface-card py-2 px-2" >
-                                <div className='auth_view py-4 px-4 auth_surface_ground_border'>
+                        <div className="auth_surface_ground flex flex-column align-items-center justify-content-center">
+                            <div className="w-full py-2 px-2" >
+                                <div className='auth_view py-4 px-4'>
                                     <form onSubmit={handleSubmit}>
-                                        <div className="flex justify-content-center w-100 mt-3">
-                                            <ImageComponent imageProps={{
-                                                src: settings_data.image_logo_path ? settings_data.image_logo_path : `/layout/images/telnetLogo-${layoutConfig.colorScheme !== 'light' ? 'dark' : 'dark'}.svg`,
-                                                width: 280,
-                                                height: 45,
-                                                alt: "logo"
-                                            }} />
-                                        </div>
-                                        <br />
-                                        <div className="flex justify-content-center w-100 mb-5 auth-header">
-                                            {translate(localeJson, 'password_reset')}
+                                        <div className="flex justify-content-start w-100 mb-5 auth-header">
+                                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "password_reset")} />
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
-                                                <NormalLabel htmlFor="email"
-                                                    labelClass={"block mb-2"}
-                                                    text={translate(localeJson, 'mail_address')}
-                                                    spanClass={"p-error"}
-                                                    spanText={"*"} />
-                                                <InputLeftRightGroup inputLrGroupProps={{
+                                                <InputGroup inpuGroupProps={{
+                                                    inputGroupParentClassName: `w-full ${errors.email && touched.email && 'p-invalid'}`,
                                                     name: 'email',
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    antdRightIcon: <MailFilled />,
-                                                    value: values.email
-                                                }}
-                                                    parentClass={`w-full ${errors.email && touched.email && 'p-invalid'}`} />
+                                                    value: values.email,
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'userId'),
+                                                        spanText: "*",
+                                                        inputGroupLabelClassName: "mb-2",
+                                                        inputGroupLabelSpanClassName: "p-error"
+                                                    },
+                                                }} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>
                                                 <Button buttonProps={{
                                                     type: 'submit',
                                                     text: translate(localeJson, 'send'),
-                                                    buttonClass: "custom_radiusBtn",
-                                                    severity: "primary"
-                                                }} />
+                                                    buttonClass: "custom_radiusBtn update-button w-full",
+                                                }} parentClass={"update-button w-full"} />
                                             </div>
                                         </div>
                                     </form>
@@ -112,14 +96,6 @@ const ForgotPasswordPage = () => {
                 )}
             </Formik>
         </>
-    );
-};
-
-ForgotPasswordPage.getLayout = function getLayout(page) {
-    return (
-        <React.Fragment>
-            {page}
-        </React.Fragment>
     );
 };
 

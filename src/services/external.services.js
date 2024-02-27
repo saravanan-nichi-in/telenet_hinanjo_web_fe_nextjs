@@ -9,8 +9,6 @@ export const ExternalServices = {
   getAddressByZipCode: _getAddressByZipCode,
 };
 
-
-
 /**
  * Get place list
  * @param {*} payload
@@ -25,7 +23,7 @@ function _getActivePlaceList(callBackFun) {
       }
     })
     .catch((error) => {
-      // Handle errors here
+      
       toast.error(error?.response?.data?.message, {
         position: "top-right",
     });
@@ -43,9 +41,10 @@ function _create(payload, callBackFun) {
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        // Commented for now as per ticket might be useful in future
+        // toast.success(response?.data?.message, {
+        //   position: "top-right",
+        // });
       }
     })
     .catch((error) => {

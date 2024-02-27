@@ -1,0 +1,57 @@
+.header_table {
+    font-size: $detailsHeaderFontSize;
+    font-weight: $detailsHeaderFontWeight;
+}
+
+.body_table {
+    font-size: $detailsBodyFontSize;
+    font-weight: $commonFontWeight;
+}
+
+@media (min-width: 1181px) {
+    .lg-padding-left {
+        padding-left: 150px;
+        /* Adjust the value as needed */
+    }
+
+    .lg-padding-right {
+        padding-right: 150px;
+        /* Adjust the value as needed */
+    }
+}
+
+
+@media only screen and (min-width: $tablet) and (max-width: $desktop) and (orientation: portrait) {
+    .mdScreenMaxWidth {
+        max-width: 480px,
+    }
+}
+
+@media only screen and (min-width: $tablet) and (max-width: $desktop) and (orientation: landscape) {
+    .mdScreenMaxWidth {
+        max-width: 580px,
+    }
+}
+
+@media only screen and (min-width: $desktop) {
+    .xlScreenMaxWidth {
+        max-width: 610px,
+    }
+}
+
+
+.household-register {
+    margin-top: 20px;
+}
+
+.household-space {
+    margin-bottom: 20px;
+}
+
+.checkbox-space {
+    margin-bottom: 40px;
+}
+
+.section-space {
+    margin-top: 40px;
+}

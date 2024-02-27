@@ -2,13 +2,15 @@ import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
 
-
 /* Identity and Access management (IAM) */
 export const EvacuationServices = {
     getList: _getList,
     getPlaceDropdownList: _getPlaceDropdownList,
     exportEvacueesCSVList: _exportEvacueesCSVList,
-    getFamilyEvacueesDetail: _getFamilyEvacueesDetail
+    getFamilyEvacueesDetail: _getFamilyEvacueesDetail,
+    evacuationCheckout: _evacuationCheckout,
+    eventAttendeesCheckout: _eventAttendeesCheckout,
+    getFamilyEvacueesAttendeesDetail: _getFamilyEvacueesAttendeesDetail
 };
 
 /**
@@ -24,8 +26,8 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error('Error fetching data:', error);
+            callBackFun(false);
         });
 }
 
@@ -64,7 +66,7 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+
             console.error('Error fetching data:', error);
         });
 }
@@ -75,8 +77,7 @@ function _getPlaceDropdownList(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _getFamilyEvacueesDetail(payload, callBackFun) {
-    const queryParams = new URLSearchParams(payload).toString();
-    axios.get(`/admin/evacuation/detail?${queryParams}`)
+    axios.post(`/admin/evacuation/detail`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -84,5 +85,73 @@ function _getFamilyEvacueesDetail(payload, callBackFun) {
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
+            callBackFun(false);
         });
 }
+
+/**
+ * Get Evacuees Family Attendees Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getFamilyEvacueesAttendeesDetail(payload, callBackFun) {
+    axios.post('/admin/attendees/detail', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get Evacuees CSV list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _evacuationCheckout(payload, callBackFun) {
+    axios.post('/admin/evacuation/checkout', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            callBackFun(error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get Event Attendees checkout
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _eventAttendeesCheckout(payload, callBackFun) {
+    axios.post('/admin/attendees/checkout', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            callBackFun(error);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+

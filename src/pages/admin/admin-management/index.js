@@ -1,172 +1,167 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, InputFloatLabel, NormalTable } from '@/components';
-import { AdminManagementCreateModal, AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementEditModal, AdminManagementImportModal } from '@/components/modal';
-import { AdminManagementServices } from '@/services';
+import { Button, NormalTable } from '@/components';
+import { AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementImportModal } from '@/components/modal';
+import CustomHeader from '@/components/customHeader';
+import { AdminManagementServices } from '@/services'
+import AdminManagementCreateEditModal from '@/components/modal/adminManagementCreateEditModal';
+import { CommonServices } from '@/services';
+import { Input } from '@/components/input';
 
 export default function AdminManagementPage() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const columnsData = [
-        { field: 'number', header: translate(localeJson, 's_no'), minWidth: "3rem", headerClassName: "custom-header", className: "sno_class", textAlign: "center" },
-        { field: 'name', header: translate(localeJson, 'name'), minWidth: "15rem", headerClassName: "custom-header", textAlign: "left" },
-        { field: 'email', header: translate(localeJson, 'address_email'), headerClassName: "custom-header", textAlign: "left" },
-        { field: 'actions', header: translate(localeJson, 'common_action'), headerClassName: "custom-header", className: "action_class", textAlign: "center", alignHeader: "center" },
-    ];
-    const [importOpen, setImportOpen] = useState(false);
-    const [exportPayload, setExportPayload] = useState({
-        filters: {
-            order_by: "desc",
-            sort_by: "updated_at"
-        },
-        name: ""
-    });
-    const [createOpen, setCreateOpen] = useState(false);
-    const [createPayload, setCreatePayload] = useState({
-        name: "",
-        name_kana: "",
-        email: "",
-        birthday: "",
-        gender: "",
-        password: ""
-    });
-    const [searchName, setSearchName] = useState("");
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 5,
-            sort_by: "",
-            order_by: "desc",
-        },
-        search: "",
-    });
-    const [tableLoading, setTableLoading] = useState(false);
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [editOpen, setEditOpen] = useState(false);
-    const [editPayload, setEditPayload] = useState({
-        id: "",
-        name: "",
-        name_kana: "",
-        email: "",
-        birthday: "",
-        gender: "",
-        password: ""
-    });
+    const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const [importModalOpen, setImportModalOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [deletePayload, setDeletePayload] = useState(0);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteObj, setDeleteObj] = useState(null);
+    const [editStaffOpen, setEditStaffOpen] = useState(false);
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [detailOpen, setDetailOpen] = useState(false);
+    const [currentObj, setCurrentObj] = useState({});
+    const [columnValues, setColumnValues] = useState([]);
+    const [searchField, setSearchField] = useState('');
+    const [detailId, setDetailId] = useState(null);
+    const [listPayload, setListPayload] = useState({
+        "filters": {
+            "start": "0",
+            "limit": 10,
+            "sort_by": "updated_at",
+            "order_by": "desc"
+        },
+        "search": ""
+    });
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const { decryptPassword } = CommonServices;
+    const PasswordColumn = ({ rowData }) => {
+        const [showPassword, setShowPassword] = useState(false);
+        return (
+            <span
+                onMouseEnter={() => setShowPassword(true)}
+                onMouseLeave={() => setShowPassword(false)}
+            >
+                {showPassword ? rowData.password : "********"}
+            </span>
+        );
+    };
 
-    /* Services */
-    const { callImport, callExport, callCreate, callGetList, callUpdate, callDelete } = AdminManagementServices;
+    const columnNames = [
+        { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: "center" },
+        {
+            field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem", maxWidth: "5rem",
+            body: (rowData) => (
+                <p className='text-link-class clickable-row' onClick={(e) => {
+                    e.preventDefault();
+                    setDetailId(rowData['id']);
+                    setDetailOpen(true);
+                    hideOverFlow();
+                }}>
+                    {rowData['name']}
+                </p>
+            )
+        },
+        { field: 'username', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        {
+            field: 'password',
+            header: translate(localeJson, 'password'),
+            body: (rowData) => {
+                return <PasswordColumn rowData={rowData} />
+            },
+            minWidth: "5rem", maxWidth: "5rem"
+        },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'common_action'),
+            textAlign: "center",
+            alignHeader: "center",
+            className: "action_class",
+            body: (rowData) => (
+                <div>
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "edit-button",
+                            onClick: () => {
+                                setCurrentObj(rowData);
+                                setRegisterModalAction("edit")
+                                setEditStaffOpen(true);
+                                hideOverFlow();
+                            }
+                        }} parentClass={"edit-button"} />
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button ml-2",
+                            onClick: () => {
+                                openDeleteDialog(rowData)
+                            }
+                        }} parentClass={"delete-button"} />
+                </div>
+            ),
+        }
+    ];
+
+    const onImportModalClose = () => {
+        setImportModalOpen(false);
+        showOverFlow();
+    };
+
+    const onStaffEditClose = () => {
+        setEditStaffOpen(false);
+        showOverFlow();
+    };
+
+    const onRegister = () => {
+        setEditStaffOpen(false);
+        hideOverFlow();
+    };
+
+    const importFileApi = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        AdminManagementServices.importData(formData, (response) => {
+            if (response) {
+                setTableLoading(true);
+                listApiCall();
+            }
+        });
+        onImportModalClose();
+    }
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
-            await onGetAdminList();
+            await listApiCall();
         };
         fetchData();
-    }, [locale, getListPayload]);
+    }, [locale, listPayload]);
 
-    /**
-     * Get admin list
-     */
-    const onGetAdminList = () => {
-        callGetList(getListPayload, onGetAdminListSuccess);
+    const listApiCall = async () => {
+        setTableLoading(true);
+        await AdminManagementServices.getList(listPayload, (response) => {
+            var tempList = [];
+            var listTotalCount = 0;
+            if (response && response?.success && !_.isEmpty(response?.data) && response?.data?.model?.total > 0) {
+                let actualList = response.data.model.list;
+                actualList.forEach((element, index) => {
+                    let key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
+                    let decryptedData = decryptPassword(element.passwordfe, key);
+                    let tempObj = { ...element, password: decryptedData, slno: index + parseInt(listPayload.filters.start) + 1 };
+                    tempList.push(tempObj);
+                });
+                listTotalCount = response.data.model.total;
+            }
+            setLoader(false);
+            setTableLoading(false);
+            setColumnValues(tempList);
+            setTotalCount(listTotalCount);
+        });
     }
-
-    /**
-     * Function will get data & update admin list
-     * @param {*} response 
-     */
-    const onGetAdminListSuccess = (response) => {
-        var additionalColumnsArrayWithOldData = [...columnsData];
-        var preparedList = [];
-        if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-            const data = response.data.model.list;
-            // Preparing row data for specific column to display
-            data.map((obj, i) => {
-                let preparedObj = {
-                    number: getListPayload.filters.start + i + 1,
-                    name: obj.name,
-                    email: obj.email,
-                    actions: action(obj),
-                }
-                preparedList.push(preparedObj);
-            })
-            // Update prepared list to the state
-            setColumns(additionalColumnsArrayWithOldData);
-            setList(preparedList);
-            setTotalCount(response.data.model.total);
-        }
-        setTableLoading(false);
-        setLoader(false);
-    }
-
-    /**
-     * Import file
-     * @param {*} file 
-     */
-    const onImportFile = async (file) => {
-        setImportOpen(false);
-        if (file) {
-            setLoader(true);
-            const payload = new FormData();
-            payload.append('file', file);
-            await callImport(payload, onImportSuccess);
-        }
-    }
-
-    /**
-     * Import on success callback function
-     * @param {*} response 
-     */
-    const onImportSuccess = (response) => {
-        onGetAdminList();
-        setImportOpen(false);
-        setLoader(false);
-    }
-
-    /**
-     * Action column for dashboard list
-     * @param {*} obj 
-     * @returns 
-     */
-    const action = (obj) => {
-        return (
-            <div className='flex flex-wrap justify-content-center gap-2'>
-                <Button buttonProps={{
-                    text: translate(localeJson, 'edit'),
-                    buttonClass: "text-primary ",
-                    bg: "bg-white",
-                    hoverBg: "hover:bg-primary hover:text-white",
-                    onClick: async () => {
-                        if (!_.isEmpty(obj)) {
-                            await setEditPayload(prevState => ({
-                                ...prevState,
-                                id: obj.id,
-                                name: obj.name,
-                                email: obj.email,
-                            }));
-                        }
-                        setEditOpen(true);
-                    }
-                }} />
-                <Button buttonProps={{
-                    text: translate(localeJson, 'delete'),
-                    buttonClass: "delete-button",
-                    onClick: () => {
-                        if (!_.isEmpty(obj)) {
-                            setDeletePayload(obj.id);
-                        }
-                        setDeleteOpen(true);
-                    }
-                }} parentClass={"delete-button"} />
-            </div>
-        );
-    };
 
     /**
      * Pagination handler
@@ -177,7 +172,7 @@ export default function AdminManagementPage() {
         if (!_.isEmpty(e)) {
             const newStartValue = e.first; // Replace with your desired page value
             const newLimitValue = e.rows; // Replace with your desired limit value
-            await setGetListPayload(prevState => ({
+            await setListPayload(prevState => ({
                 ...prevState,
                 filters: {
                     ...prevState.filters,
@@ -188,201 +183,153 @@ export default function AdminManagementPage() {
         }
     }
 
-    /**
-     * Create admin callback function
-     * @param {*} data 
-     */
-    const onCreate = async (data) => {
-        setCreateOpen(false);
-        if (data) {
-            setLoader(true);
-            let payload = createPayload;
-            const { fullName, email, password } = data;
-            payload['name'] = fullName;
-            payload['email'] = email;
-            payload['password'] = password;
-            await callCreate(payload, onCreateSuccess);
-            setCreatePayload(payload);
-        }
+    const openDeleteDialog = (rowdata) => {
+        setDeleteId(rowdata.id);
+        setDeleteObj({
+            firstLabel: translate(localeJson, 'name'),
+            firstValue: rowdata.name,
+            secondLabel: translate(localeJson, 'userId'),
+            secondValue: rowdata.username
+        });
+        setDeleteOpen(true);
+        hideOverFlow();
     }
 
-    /**
-     * Create success callback function
-     * @param {*} response 
-     */
-    const onCreateSuccess = (response) => {
-        onGetAdminList();
-    }
-
-    /**
-     * Create callback function
-     * @param {*} data 
-     */
-    const onEdit = async (data) => {
-        setEditOpen(false);
-        if (data) {
-            setLoader(true);
-            let payload = editPayload;
-            const { fullName, email } = data;
-            payload['name'] = fullName;
-            payload['email'] = email;
-            await callUpdate(payload, onEditSuccess);
-            setEditPayload(payload);
-        }
-    }
-
-    /**
-     * Edit success callback function
-     * @param {*} response 
-     */
-    const onEditSuccess = (response) => {
-        onGetAdminList();
-    }
-
-    const onDelete = async (string) => {
-        if (string === "confirm") {
-            setLoader(true);
-            callDelete(deletePayload, onDeleteSuccess)
+    const onDeleteClose = (status = '') => {setLoader
+        if (status == 'confirm') {
+            setTableLoading(true);
+            AdminManagementServices.delete(deleteId, () => {
+                listApiCall();
+            })
         }
         setDeleteOpen(false);
-    }
-
-    /**
-    * Delete success callback function
-    * @param {*} response 
-    */
-    const onDeleteSuccess = (response) => {
-        onGetAdminList();
-    }
+        showOverFlow();
+    };
 
     return (
         <React.Fragment>
-            {/* Import */}
             <AdminManagementImportModal
-                open={importOpen}
-                modalHeaderText={translate(localeJson, 'admin_management_import')}
-                close={() => {
-                    setImportOpen(false);
-                }}
-                importFile={onImportFile}
+                open={importModalOpen}
+                close={onImportModalClose}
+                importFile={importFileApi}
+                modalHeaderText={translate(localeJson, "admin_management_import")}
             />
-            {/* Create */}
-            <AdminManagementCreateModal
-                open={createOpen}
-                close={() => {
-                    setCreateOpen(false);
-                }}
-                callBackFunction={onCreate}
-            />
-            {/* Edit */}
-            <AdminManagementEditModal
-                open={editOpen}
-                close={() => {
-                    setEditOpen(false);
-                }}
-                values={editPayload}
-                callBackFunction={onEdit}
-            />
-            {/* Delete */}
             <AdminManagementDeleteModal
                 open={deleteOpen}
-                close={onDelete}
+                close={onDeleteClose}
+                refreshList={listApiCall}
+                deleteObj={deleteObj}
             />
+            <AdminManagementCreateEditModal
+                open={editStaffOpen}
+                close={onStaffEditClose}
+                register={onRegister}
+                currentObj={currentObj}
+                registerModalAction={registerModalAction}
+                refreshList={listApiCall}
+            />
+            {detailId && <AdminManagementDetailModal
+                open={detailOpen}
+                close={() => {
+                    setDetailOpen(false);
+                    showOverFlow();
+                    setDetailId(null);
+                }}
+                detailId={detailId}
+            />}
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'admin_management')}</h5>
-                        <hr />
-                        <div >
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "admin_management")} />
+                        <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'import'),
-                                    severity: "primary",
-                                    onClick: () => setImportOpen(true)
-                                }} parentClass={"mr-1 mt-1"} />
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    severity: "primary",
+                                    import: true,
                                     onClick: () => {
-                                        if (searchName) {
-                                            let payload = exportPayload;
-                                            payload['name'] = searchName;
-                                            callExport(payload);
-                                        } else {
-                                            callExport(exportPayload);
-                                        }
-                                    }
-                                }} parentClass={"mr-1 mt-1"} />
+                                        setImportModalOpen(true);
+                                        hideOverFlow();
+                                    },
+                                    buttonClass: "evacuation_button_height import-button",
+                                    text: translate(localeJson, 'import'),
+                                }} parentClass={"mr-1 mt-1 import-button"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button",
+                                    text: translate(localeJson, 'export'),
+                                    onClick: () => {
+                                        AdminManagementServices.exportData(listPayload);
+                                    }
+                                }} parentClass={"mr-1 mt-1 export-button"} />
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    create: true,
+                                    buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'create_admin'),
-                                    onClick: () => setCreateOpen(true),
-                                    severity: "success"
-                                }} parentClass={"mr-1 mt-1"} />
+                                    onClick: () => {
+                                        setCurrentObj({ username: "", name: "", password: "", tel: "" });
+                                        setRegisterModalAction("create")
+                                        setEditStaffOpen(true);
+                                        hideOverFlow();
+                                    },
+                                }} parentClass={"mt-1 create-button"} />
                             </div>
                         </div>
                         <div>
                             <div>
-                                <form>
-                                    <div className="flex justify-content-end gap-3 flex-wrap float-right mt-5 mb-3" >
-                                        <div>
-                                            <InputFloatLabel inputFloatLabelProps={{
+                                <div>
+                                    <div class="flex justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 flex-wrap float-right modal-field-top-space modal-field-bottom-space" >
+                                        <Input
+                                            inputProps={{
+                                                inputParentClassName: "w-full lg:w-17rem md:w-20rem sm:w-14rem",
+                                                labelProps: {
+                                                    text: translate(localeJson, 'name'),
+                                                    inputLabelClassName: "block",
+                                                },
+                                                inputClassName: "w-full lg:w-17rem md:w-20rem sm:w-14rem",
                                                 id: 'householdNumber',
-                                                text: translate(localeJson, 'name'),
-                                                inputClass: "w-17rem lg:w-17rem md:w-20rem sm:w-14rem",
-                                                value: searchName,
-                                                onChange: (e) => {
-                                                    setSearchName(e.target.value);
-                                                }
-                                            }} parentClass={"w-full lg:w-22rem md:w-20rem sm:w-14rem"}
-                                            />
-
-                                        </div>
-                                        <div>
+                                                onChange: (e) => { setSearchField(e.target.value) },
+                                            }}
+                                        />
+                                        <div className='flex align-items-end'>
                                             <Button buttonProps={{
-                                                type: "button",
                                                 buttonClass: "w-12 search-button",
                                                 text: translate(localeJson, "search_text"),
                                                 icon: "pi pi-search",
-                                                severity: "primary",
-                                                onClick: async () => {
-                                                    await setGetListPayload(prevState => ({
-                                                        ...prevState,
-                                                        search: searchName
-                                                    }));
+                                                onClick: () => {
+                                                    setListPayload({
+                                                        ...listPayload,
+                                                        search: searchField
+                                                    });
                                                 }
-                                            }} />
+                                            }} parentClass={"search-button"} />
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                            <div>
+                            <div className='mt-3'>
+                                <NormalTable
+                                    stripedRows={true}
+                                    className={"custom-table-cell"}
+                                    showGridlines={"true"}
+                                    columns={columnNames}
+                                    value={columnValues}
+                                    filterDisplay="menu"
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    paginator={true}
+                                    paginatorLeft={true}
+                                    lazy
+                                    totalRecords={totalCount}
+                                    loading={tableLoading}
+                                    first={listPayload.filters.start}
+                                    rows={listPayload.filters.limit}
+                                    onPageHandler={(e) => onPaginationChange(e)}
+                                />
                             </div>
-                            <NormalTable
-                                lazy
-                                totalRecords={totalCount}
-                                loading={tableLoading}
-                                stripedRows={true}
-                                className={"custom-table-cell"}
-                                showGridlines={"true"}
-                                value={list}
-                                columns={columns}
-                                filterDisplay="menu"
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                paginator={true}
-                                first={getListPayload.filters.start}
-                                rows={getListPayload.filters.limit}
-                                paginatorLeft={true}
-                                onPageHandler={(e) => onPaginationChange(e)}
-                            />
                         </div>
                     </div>
                 </div>

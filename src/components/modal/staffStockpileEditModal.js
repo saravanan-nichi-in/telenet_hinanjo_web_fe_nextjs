@@ -3,14 +3,12 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import Button from "../button/button";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import {Button} from "../button";
+import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
-import { InputFloatLabel, InputNumberFloatLabel } from "../input";
-import { InputSelectFloatLabel, SelectFloatLabel } from "../dropdown";
-import { DateCalendarFloatLabel } from "../date&time";
-import { StockpileStaffService } from "@/services/stockpilestaff.service";
+import { Input, InputDropdown, InputNumber } from "../input";
+import { Calendar } from "../date&time";
 
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);
@@ -25,10 +23,9 @@ export default function StaffStockpileEdit(props) {
             .positive(translate(localeJson, 'number_field'))
             .integer(translate(localeJson, 'number_field'))
             .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
-        after_count: Yup.number().typeError(translate(localeJson, 'number_field'))
-            .integer(translate(localeJson, 'number_field'))
+        after_count: Yup.string()
             .min(0, translate(localeJson, 'number_field'))
-            .max(99999, translate(localeJson, 'quantity_max'))
+            .max(5, translate(localeJson, 'quantity_max'))
             .required(translate(localeJson, 'quantity_is_required')),
         Inspection_date_time: Yup.string()
             .required(translate(localeJson, 'inventory_date_is_required')),
@@ -64,12 +61,9 @@ export default function StaffStockpileEdit(props) {
                 initialValues={props.editObject}
                 enableReinitialize={true}
                 onSubmit={(values, actions) => {
-
-                    console.log({ ...props.editObject })
+                    values.after_count = convertToSingleByte(values.after_count)
                     onUpdate({ ...props.editObject, ...values }, props.editObject.summary_id)
-                    // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {
-
-                    // })
+                    // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {// })
                     actions.resetForm()
                 }}
             >
@@ -86,7 +80,7 @@ export default function StaffStockpileEdit(props) {
                     <div>
                         <form onSubmit={handleSubmit}>
                             <Dialog
-                                className="custom-modal"
+                                className="new-custom-modal"
                                 header={header}
                                 visible={open}
                                 draggable={false}
@@ -99,38 +93,43 @@ export default function StaffStockpileEdit(props) {
                                 footer={
                                     <div className="text-center">
                                         <Button buttonProps={{
-                                            buttonClass: "text-600 w-8rem",
-                                            bg: "bg-white",
-                                            hoverBg: "hover:surface-500 hover:text-white",
+                                            buttonClass: "w-8rem back-button",
                                             text: translate(localeJson, 'cancel'),
                                             onClick: () => {
                                                 resetForm();
                                                 close();
 
                                             },
-                                        }} parentClass={"inline"} />
+                                        }} parentClass={"inline back-button"} />
                                         <Button buttonProps={{
-                                            buttonClass: "w-8rem",
+                                            buttonClass: "w-8rem update-button",
                                             type: "submit",
                                             text: buttonText,
-                                            severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
                                             },
-                                        }} parentClass={"inline"} />
+                                        }} parentClass={"inline update-button"} />
                                     </div>
                                 }
                             >
                                 <div className={`modal-content`}>
-                                    <div className="mt-5 mb-3">
-                                        <div className="mb-5">
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "category",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                selectClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                    <div className="">
+                                        <div className="modal-header">
+                                            {header}
+                                        </div>
+                                        <div className="modal-field-bottom-space">
+                                            <InputDropdown inputDropdownProps={{
+                                                labelProps: {
+                                                    text: translate(localeJson, 'stockpile_management_create_edit_field_category'),
+                                                    inputDropdownLabelClassName: "block",
+                                                    inputDropdownLabelSpanClassName: "p-error",
+                                                    spanText: "*"
+                                                },
+                                                inputDropdownClassName: "w-full",
                                                 options: props.categories,
                                                 value: values.category,
+                                                name: 'category',
+                                                inputId: "category",
                                                 disabled: true,
                                                 onChange: (e) => {
                                                     if (e.value == "--") {
@@ -140,116 +139,175 @@ export default function StaffStockpileEdit(props) {
                                                     }
                                                 },
                                                 onBlur: handleBlur,
-                                                text: translate(localeJson, "stockpile_management_create_edit_field_category"),
-
-                                            }} />
+                                                emptyMessage: translate(localeJson, "data_not_found"),
+                                            }}
+                                            />
                                             <ValidationError errorBlock={errors.category && touched.category && errors.category} />
                                         </div>
-                                        <div className="mt-5 ">
-                                            <InputFloatLabel inputFloatLabelProps={{
-                                                name: "product_name",
-                                                spanText: "*",
-                                                spanClass: "p-error",
-                                                value: values.product_name,
-                                                disabled: true,
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem create_input_stock",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
-                                            }} parentClass={`${errors.product_name && touched.product_name && 'p-invalid pb-1'}`} />
-                                            <ValidationError errorBlock={errors.product_name && touched.product_name && errors.product_name} />
-                                        </div>
-                                        <div className="mt-5">
-                                            <InputNumberFloatLabel
-                                                inputNumberFloatProps={{
-                                                    id: "shelf_life",
-                                                    name: "shelf_life",
+                                        <div className="modal-field-bottom-space">
+                                            <Input
+                                                inputProps={{
+                                                    inputParentClassName: `${errors.product_name && touched.product_name && 'p-invalid pb-1'}`,
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'stockpile_management_create_edit_field_product_name'),
+                                                        inputLabelClassName: "block",
+                                                        spanText: "*",
+                                                        inputLabelSpanClassName: "p-error"
+                                                    },
+                                                    inputClassName: "w-full create_input_stock",
+                                                    name: "product_name",
+                                                    value: values.product_name,
                                                     disabled: true,
-                                                    value: values.shelf_life ? values.shelf_life : null,
-                                                    text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
-                                                    inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
                                                 }}
                                             />
                                         </div>
-                                        <div className="mt-5">
-                                            <InputNumberFloatLabel
-                                                inputNumberFloatProps={{
-                                                    id: "quantity",
-                                                    spanText: "*",
-                                                    spanClass: "p-error",
-                                                    name: "after_count",
-                                                    value: values.after_count,
-                                                    onValueChange: handleChange,
-                                                    onBlur: handleBlur,
+                                        <div className="modal-field-bottom-space">
+                                            <InputNumber inputNumberProps={{
+                                                labelProps: {
+                                                    text: translate(localeJson, "stockpile_management_create_edit_field_shelf_life"),
+                                                    inputNumberLabelClassName: "block"
+                                                },
+                                                inputNumberClassName: "w-full",
+                                                id: "shelf_life",
+                                                name: "shelf_life",
+                                                disabled: true,
+                                                value: values.shelf_life ? values.shelf_life : null,
+                                            }} />
+                                        </div>
+                                        <div className="modal-field-bottom-space">
+                                            <Input inputProps={{
+                                                labelProps: {
                                                     text: translate(localeJson, "quantity"),
-                                                    inputNumberClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                }}
-                                            />
+                                                    inputLabelClassName: "block",
+                                                    spanText: "*",
+                                                    inputLabelSpanClassName: "p-error",
+                                                    labelMainClassName: "modal-label-field-space"
+                                                },
+                                                inputClassName: "w-full",
+                                                id: "quantity",
+                                                name: "after_count",
+                                                value: values.after_count,
+                                                onChange:(evt)=>
+                                                {
+                                                    if(evt.target.value =="")
+                                                    {
+                                                        setFieldValue("after_count",evt.target.value)
+                                                        return;
+                                                    }
+                                                    const re = /^[0-9-]+$/;
+                                                    if(re.test(convertToSingleByte(evt.target.value)))
+                                                    {
+                                                        setFieldValue("after_count",evt.target.value)
+                                                    }
+                                                },
+                                                onBlur: handleBlur,
+                                            }} />
                                             <ValidationError errorBlock={errors.after_count && touched.after_count && errors.after_count} />
                                         </div>
-                                        <div className="mt-5">
-                                            <DateCalendarFloatLabel
-                                                date={values.Inspection_date_time}
-                                                dateFloatLabelProps={{
-                                                    dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                    id: "inventoryDate",
-                                                    date: initialValues.Inspection_date_time,
-                                                    name: "Inspection_date_time",
+                                        <div className="modal-field-bottom-space">
+                                            <Calendar calendarProps={{
+                                                labelProps: {
+                                                    text: translate(localeJson, 'inventory_date'),
+                                                    calendarLabelClassName: "block",
                                                     spanText: "*",
-                                                    spanClass: "p-error",
-                                                    onChange: (evt) => {
-                                                        setFieldValue(
-                                                            "Inspection_date_time",
-                                                            evt.target.value
-                                                        );
-                                                    },
-                                                    onBlur: handleBlur,
-                                                    text: translate(localeJson, "inventory_date"),
-                                                }} />
+                                                    calendarLabelSpanClassName: "p-error",
+                                                    labelMainClassName: "modal-label-field-space"
+                                                },
+                                                calendarClassName: "w-full",
+                                                name: "Inspection_date_time",
+                                                id: "Inspection_date_time",
+                                                date: values.Inspection_date_time,
+                                                onChange: (evt) => {
+                                                    setFieldValue(
+                                                        "Inspection_date_time",
+                                                        evt.target.value
+                                                    );
+                                                },
+                                                onBlur: handleBlur,
+                                            }}
+                                            />
                                             <ValidationError errorBlock={errors.Inspection_date_time && touched.Inspection_date_time && errors.Inspection_date_time} />
                                         </div>
-                                        <div className="mt-5">
-                                            < InputFloatLabel inputFloatLabelProps={{
-                                                id: 'confirmer',
-                                                name: 'incharge',
-                                                value: values.incharge,
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'confirmer'),
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} />
-                                        </div>
-                                        <div className="mt-5">
-                                            <DateCalendarFloatLabel
-                                                date={values.expiry_date}
-                                                dateFloatLabelProps={{
-                                                    dateClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                    id: "expiryDate",
-                                                    spanText: "*",
-                                                    spanClass: "p-error",
-                                                    date: initialValues.expiry_date,
-                                                    name: "expiry_date",
-                                                    onChange: (evt) => {
-                                                        setFieldValue(
-                                                            "expiry_date",
-                                                            evt.target.value
-                                                        );
+                                        <div className="modal-field-bottom-space">
+                                            <Input
+                                                inputProps={{
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'confirmer'),
+                                                        inputLabelClassName: "block",
                                                     },
+                                                    inputClassName: "w-full",
+                                                    id: 'confirmer',
+                                                    name: 'incharge',
+                                                    value: values.incharge,
+                                                    onChange: handleChange,
                                                     onBlur: handleBlur,
-                                                    text: translate(localeJson, "expiry_date"),
-                                                }} />
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="modal-field-bottom-space">
+                                            <Calendar calendarProps={{
+                                                labelProps: {
+                                                    text: translate(localeJson, 'expiry_date'),
+                                                    calendarLabelClassName: "block",
+                                                    spanText: "*",
+                                                    calendarLabelSpanClassName: "p-error",
+                                                    labelMainClassName: "modal-label-field-space"
+                                                },
+                                                calendarClassName: "w-full",
+                                                name: "expiry_date",
+                                                id: "expiry_date",
+                                                date: values.expiry_date,
+                                                onChange: (evt) => {
+                                                    setFieldValue(
+                                                        "expiry_date",
+                                                        evt.target.value
+                                                    );
+                                                },
+                                                onBlur: handleBlur,
+                                            }}
+                                            />
                                             <ValidationError errorBlock={errors.expiry_date && touched.expiry_date && errors.expiry_date} />
                                         </div>
-                                        <div className="mt-5">
-                                            < InputFloatLabel inputFloatLabelProps={{
-                                                spanClass: "p-error",
-                                                value: values.remarks,
-                                                name: 'remarks',
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                text: translate(localeJson, 'remarks'),
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem "
-                                            }} />
+                                        <div className="modal-field-top-space modal-field-bottom-space">
+                                            <Input
+                                                inputProps={{
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'remarks'),
+                                                        inputLabelClassName: "block",
+                                                        labelMainClassName: "modal-label-field-space"
+                                                    },
+                                                    inputClassName: "w-full",
+                                                    value: values.remarks,
+                                                    name: 'remarks',
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="modal-button-footer-space">
+                                                <Button buttonProps={{
+                                                    buttonClass: "w-full update-button",
+                                                    type: "submit",
+                                                    text: buttonText,
+                                                    onClick: () => {
+                                                        handleSubmit();
+                                                    },
+                                                }} parentClass={"update-button"} />
+                                            </div>
+                                            <div>
+                                                <Button buttonProps={{
+                                                    buttonClass: "w-full back-button",
+                                                    text: translate(localeJson, 'cancel'),
+                                                    onClick: () => {
+                                                        resetForm();
+                                                        close();
+
+                                                    },
+                                                }} parentClass={"back-button"} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -2,16 +2,23 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 
-import { getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper';
+import {
+    getValueByKeyRecursively as translate,
+    getYYYYMMDDHHSSSSDateTimeFormat,
+} from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
-import { InputSelectFloatLabel } from '@/components/dropdown';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
-import EvacueeDetailModal from './evacueeDetailModal';
+import CustomHeader from '@/components/customHeader';
+import { InputDropdown } from '@/components/input';
+import { useAppDispatch } from '@/redux/hooks';
+import { setExternalFamily } from '@/redux/family';
 
-export default function ExteranalEvacuationPage() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+export default function ExternalEvacuationPage() {
+    const { locale, localeJson } = useContext(LayoutContext);
+    const dispatch = useAppDispatch();
     const router = useRouter();
+
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
@@ -25,9 +32,9 @@ export default function ExteranalEvacuationPage() {
         id: 2
     });
     const [externalEvacueesList, setExternalEvacueesList] = useState([]);
-    const [externalPersonCount, setExternalPersonCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
+    const [totalPersonCount, setTotalPersonCount] = useState(0);
     const [evacuationStatusOptions, setEvacuationStatusOptions] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -40,47 +47,26 @@ export default function ExteranalEvacuationPage() {
         evacuationCenter: "",
         place_category: ""
     });
-
-    const [evacuee, setEvacuee] = useState(null);
-    const [evacueeDetailsOpen, setEvacueeDetailsOpen] = useState(false);
-
     const evacuationFoodSupport = [
         { name: "--", id: 2 },
         { name: translate(localeJson, 'yes'), id: 1 },
         { name: translate(localeJson, 'no'), id: 0 },
     ];
-
     const evacuationSiteType = [
         { name: "--", id: 0 },
         { name: translate(localeJson, 'city_in'), id: 1 },
         { name: translate(localeJson, 'city_out'), id: 2 },
         { name: translate(localeJson, 'pref_out'), id: 3 },
     ];
-
     const externalEvacueesListColumns = [
-        { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", sortable: false, textAlign: "center" },
-        { field: "id", header: translate(localeJson, 'si_no'), minWidth: "7rem", sortable: false, display: 'none', className: "sno_class" },
-        { field: "evacuation_site_type", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
-        { field: "place", header: translate(localeJson, 'place_detail'), minWidth: "10rem",maxWidth:"10rem", sortable: false },
-        { field: "food_support", header: translate(localeJson, 'food_support'), minWidth: "10rem", sortable: false },
-        {
-            field: "people_count", header: translate(localeJson, 'people_count'),
-            minWidth: "5rem", sortable: false, textAlign: "right", alignHeader: "center",
-            body: (rowData) => (
-                rowData['people_count'] > 0 ?
-                    <p className='text-link-class clickable-row' onClick={() => {
-                        setEvacuee(rowData);
-                        setEvacueeDetailsOpen(true);
-                    }}>
-                        {rowData['people_count']}
-                    </p> : rowData['people_count']
-            ),
-        },
-        { field: "shelter_place", header: translate(localeJson, 'shelter_place'), minWidth: "10rem", sortable: false },
-        { field: "mail_address", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
-        { field: "post_code", header: translate(localeJson, 'postal_code'), minWidth: "8rem", sortable: false, textAlign: "right", alignHeader: "center" },
-        { field: "prefecture", header: translate(localeJson, 'prefecture_symbol'), minWidth: "5rem", sortable: false },
-        { field: "address", header: translate(localeJson, 'address'), minWidth: "12rem"}
+        { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", textAlign: "center", sortable: false },
+        { field: "place_category", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
+        { field: "external_person_count", header: translate(localeJson, 'people_count'), minWidth: "10rem", sortable: false },
+        { field: "place_detail", header: translate(localeJson, 'evacuation_site_type'), minWidth: "10rem", sortable: false },
+        { field: "hinan_id", header: translate(localeJson, 'receiving_shelter'), minWidth: "10rem", sortable: false },
+        { field: "food_required", header: translate(localeJson, 'need_food_support'), minWidth: "10rem", sortable: false },
+        { field: "email", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
+        { field: "address", header: translate(localeJson, 'address'), minWidth: "10rem", sortable: false },
     ];
 
     /* Services */
@@ -101,7 +87,20 @@ export default function ExteranalEvacuationPage() {
     };
 
     const onGetExternalEvacueesListOnMounting = () => {
-        getList(getListPayload, getExternalEvacueesList)
+        // Development
+        // let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit);
+        // let payload = {
+        //     filters: {
+        //         start: pageStart,
+        //         limit: getListPayload.filters.limit,
+        //         sort_by: getListPayload.filters.sort_by,
+        //         order_by: getListPayload.filters.order_by,
+        //     },
+        //     food_required: getListPayload.food_required,
+        //     evacuationCenter: getListPayload.evacuationCenter,
+        //     place_category: getListPayload.place_category
+        // };
+        getList(getListPayload, getExternalEvacueesList);
     }
 
     const onGetPlaceDropdownListOnMounting = () => {
@@ -117,7 +116,7 @@ export default function ExteranalEvacuationPage() {
             const data = response.data.model;
             data.map((item) => {
                 let option = {
-                    name: locale == 'ja' ? item.name : item.name,
+                    name: locale === "en" && !_.isNull(item.name_en) ? item.name_en : item.name,
                     id: item.id
                 };
                 placeDropdownList.push(option);
@@ -126,43 +125,29 @@ export default function ExteranalEvacuationPage() {
         }
     }
 
-    const getFormattedPostCode = (code) => {
-        let newValue = code.toString();
-        const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
-        return formattedValue;
-    }
-
     const getExternalEvacueesList = (response) => {
-        if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
+        var externalEvacueesList = [];
+        var listTotalCount = 0;
+        var listTotalPersonCount = 0;
+        if (response?.success && !_.isEmpty(response?.data) && response?.data?.model?.list.length > 0) {
             const data = response.data.model.list;
-            let externalEvacueesList = [];
             data.map((item, index) => {
                 let evacuees = {
-                    si_no: index + 1,
-                    id: item.id,
-                    evacuation_site_type: item.place_category,
-                    place: item.place_detail,
-                    food_support: item.food_required ? item.food_required : translate(localeJson, 'no'),
-                    people_count: item.external_person_count,
-                    shelter_place: item.hinan_id,
-                    mail_address: item.email,
-                    post_code: item.zipcode ? getFormattedPostCode(item.zipcode) : "",
-                    prefecture: item.prefecture_name,
-                    address: item.address
+                    ...item,
+                    si_no: index + parseInt(getListPayload.filters.start) + 1,
+                    address: translate(localeJson, 'post_letter') + (item.zipcode ? item.zipcode : "") + " " + (item.prefecture_name ? item.prefecture_name : "") + " " + (item.address ? item.address : ""),
+                    food_required: item.food_required ? item.food_required : translate(localeJson, 'no')
                 };
                 externalEvacueesList.push(evacuees);
             })
             setTableLoading(false);
-            setExternalEvacueesList(externalEvacueesList);
-            setTotalCount(response.data.model.total);
-            setExternalPersonCount(response.data.model.external_person_count)
+            listTotalCount = response.data.model.total;
+            listTotalPersonCount = response.data.model.external_person_count;
         }
-
-        else {
-            setExternalEvacueesList([]);
-            setTableLoading(false);
-            setTotalCount(0);
-        }
+        setTableLoading(false);
+        setExternalEvacueesList(externalEvacueesList);
+        setTotalCount(listTotalCount);
+        setTotalPersonCount(listTotalPersonCount);
     }
 
     const searchListWithCriteria = () => {
@@ -201,140 +186,151 @@ export default function ExteranalEvacuationPage() {
         }
     }
 
-    const onEvacueeDetailClose = () => {
-        setEvacuee(null);
-        setEvacueeDetailsOpen(false);
-    };
-
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetExternalEvacueesListOnMounting();
             await onGetPlaceDropdownListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
 
     return (
-        <>
-            {evacuee && <EvacueeDetailModal
-                open={evacueeDetailsOpen}
-                close={onEvacueeDetailClose}
-                evacuee={evacuee}
-            />}
-            <div className="grid">
-                <div className="col-12">
-                    <div className='card'>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                            <h5 className='page-header1'>{translate(localeJson, 'external_evacuee_details')}</h5>
-                            <span>{translate(localeJson, 'external_evacuees_count') + ": " + externalPersonCount + "人"}</span>
+        <div className="grid">
+            <div className="col-12">
+                <div className='card'>
+                    <div className="flex gap-2 align-items-center ">
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "external_evacuee_details")} />
+                        <div className='page-header1-sub mb-2'>{`(${totalPersonCount ?? "0"}${translate(localeJson, "people")})`}</div>
+                    </div>
+                    <div className='flex justify-content-end'>
+                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                export: true,
+                                buttonClass: "evacuation_button_height export-button",
+                                text: translate(localeJson, 'export'),
+                                onClick: () => downloadExternalEvacueesListCSV()
+                            }} parentClass={"mb-0 export-button"} />
                         </div>
-                        <hr />
-                        <div className='flex justify-content-end'>
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    buttonClass: "evacuation_button_height",
-                                    text: translate(localeJson, 'export'),
-                                    onClick: () => downloadExternalEvacueesListCSV()
-                                }} parentClass={"mb-3"} />
-                            </div>
-                        </div>
+                    </div>
+                    <div>
                         <div>
-                            <div>
-                                <form>
-                                    <div className='mt-2 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                        <InputSelectFloatLabel
-                                            dropdownFloatLabelProps={{
-                                                id: "evacueeSiteType",
-                                                value: selectedSiteType,
-                                                options: evacuationSiteType,
-                                                optionLabel: "name",
-                                                inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                onChange: (e) => setSelectedSiteType(e.value),
-                                                text: translate(localeJson, 'shelter_site_type')
-                                            }}
-                                            parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
-                                        />
-                                        <InputSelectFloatLabel
-                                            dropdownFloatLabelProps={{
-                                                id: "evacuationCity",
-                                                value: selectedOption,
-                                                options: evacuationStatusOptions,
-                                                optionLabel: "name",
-                                                inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                onChange: (e) => setSelectedOption(e.value),
-                                                text: translate(localeJson, 'shelter_place'),
-                                                disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3
-                                            }}
-                                            parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
-                                        />
-                                        <InputSelectFloatLabel
-                                            dropdownFloatLabelProps={{
-                                                id: "evacueeFoodSupport",
-                                                value: selectedFoodSupport,
-                                                options: evacuationFoodSupport,
-                                                optionLabel: "name",
-                                                inputSelectClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                                style: { height: "40px" },
-                                                onChange: (e) => setSelectedFoodSupport(e.value),
-                                                text: translate(localeJson, 'food_support'),
-                                                custom: "mobile-input",
-                                                disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3
-                                            }}
-                                            parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-10rem"
-                                        />
-                                        <div>
-                                            <Button buttonProps={{
-                                                buttonClass: "w-12 search-button mobile-input ",
-                                                text: translate(localeJson, "search_text"),
-                                                icon: "pi pi-search",
-                                                severity: "primary",
-                                                type: "button",
-                                                onClick: () => searchListWithCriteria()
-                                            }} />
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <NormalTable
-                            lazy
-                            id={"external-evacuation-list"}
-                            totalRecords={totalCount}
-                            loading={tableLoading}
-                            size={"small"}
-                            stripedRows={true}
-                            paginator={"true"}
-                            showGridlines={"true"}
-                            value={externalEvacueesList}
-                            columns={externalEvacueesListColumns}
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            first={getListPayload.filters.start}
-                            rows={getListPayload.filters.limit}
-                            paginatorLeft={true}
-                            onPageHandler={(e) => onPaginationChange(e)}
-                            parentClass={"external-family-table-border"}
-                        />
+                            <form>
+                                <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end align-items-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
+                                    <InputDropdown inputDropdownProps={{
+                                        inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        labelProps: {
+                                            text: translate(localeJson, 'evacuation_site_type'),
+                                            inputDropdownLabelClassName: "block"
+                                        },
+                                        inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        value: selectedSiteType,
+                                        options: evacuationSiteType,
+                                        optionLabel: "name",
+                                        onChange: (e) => {
+                                            setSelectedSiteType(e.value)
+                                            if (e.value.id == 2 || e.value.id == 3) {
+                                                setSelectedOption({
+                                                    name: '--',
+                                                    id: 0
+                                                })
+                                                setSelectedFoodSupport({
+                                                    name: '--',
+                                                    id: 2
+                                                })
+                                            }
+                                        },
+                                        emptyMessage: translate(localeJson, "data_not_found"),
+                                    }}
+                                    />
 
-                        <div className='mt-3 flex justify-content-center'>
-                            <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    buttonClass: "text-600 w-8rem",
-                                    bg: "bg-white",
-                                    hoverBg: "hover:surface-500 hover:text-white",
-                                    text: translate(localeJson, 'back'),
-                                    onClick: () => router.push('/admin/external/family'),
-                                }} parentClass={"mb-3"} />
-                            </div>
+                                    <InputDropdown inputDropdownProps={{
+                                        inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        labelProps: {
+                                            text: translate(localeJson, 'receiving_shelter'),
+                                            inputDropdownLabelClassName: "block"
+                                        },
+                                        inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        customPanelDropdownClassName: "w-10rem",
+                                        value: selectedOption,
+                                        options: evacuationStatusOptions,
+                                        optionLabel: "name",
+                                        onChange: (e) => setSelectedOption(e.value),
+                                        disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3,
+                                        emptyMessage: translate(localeJson, "data_not_found"),
+                                    }}
+                                    />
+                                    <InputDropdown inputDropdownProps={{
+                                        inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        labelProps: {
+                                            text: translate(localeJson, 'need_food_support'),
+                                            inputDropdownLabelClassName: "block",
+                                            parentStyle: { lineHeight: "20px" }
+                                        },
+                                        inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        value: selectedFoodSupport,
+                                        options: evacuationFoodSupport,
+                                        optionLabel: "name",
+                                        onChange: (e) => setSelectedFoodSupport(e.value),
+                                        disabled: selectedSiteType.id == 2 || selectedSiteType.id == 3,
+                                        emptyMessage: translate(localeJson, "data_not_found"),
+                                    }}
+                                    />
+                                    <div className='flex align-items-end'>
+                                        <Button buttonProps={{
+                                            buttonClass: "w-12 search-button",
+                                            text: translate(localeJson, "search_text"),
+                                            icon: "pi pi-search",
+                                            type: "button",
+                                            onClick: () => searchListWithCriteria()
+                                        }} parentClass={"search-button"} />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <NormalTable
+                        lazy
+                        id={"external-evacuation-list"}
+                        totalRecords={totalCount}
+                        loading={tableLoading}
+                        size={"small"}
+                        stripedRows={true}
+                        paginator={"true"}
+                        showGridlines={"true"}
+                        value={externalEvacueesList}
+                        columns={externalEvacueesListColumns}
+                        emptyMessage={translate(localeJson, "data_not_found")}
+                        first={getListPayload.filters.start}
+                        rows={getListPayload.filters.limit}
+                        paginatorLeft={true}
+                        onPageHandler={(e) => onPaginationChange(e)}
+                        selectionMode="single"
+                        onSelectionChange={
+                            (e) => {
+                                if (e.value.external_person_count != 0) {
+                                    dispatch(setExternalFamily({ evacuee_id: e.value.id }));
+                                    router.push({
+                                        pathname: '/admin/external/family/list/family-detail',
+                                    });
+                                }
+                            }
+                        }
+                    />
+
+                    <div className='mt-3 flex justify-content-center'>
+                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <Button buttonProps={{
+                                buttonClass: "w-8rem back-button",
+                                text: translate(localeJson, 'back'),
+                                onClick: () => router.push('/admin/external/family'),
+                            }} parentClass={"mb-3 back-button"} />
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

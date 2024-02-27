@@ -33,7 +33,8 @@ const Canvas = ({
   pointBorder,
   lineColor,
   maxWidth,
-  maxHeight
+  maxHeight,
+  rotateAngel
 }) => {
 
   var newCv = window.cv;
@@ -128,9 +129,25 @@ const Canvas = ({
       imageResizeRatio,
       newCv.INTER_AREA
     )
-    newCv.imshow(previewCanvasRef.current, dst)
-    src.delete()
-    dst.delete()
+    // newCv.imshow(previewCanvasRef.current, dst)
+    // src.delete()
+    // dst.delete()
+
+    // Rotate the image
+    const rotatedDst = new newCv.Mat();
+    const center = new newCv.Point(dst.cols / 2, dst.rows / 2);
+    const angle = rotateAngel; // Rotate by 45 degrees
+    const scale = 1.0;
+    const rotationMatrix = newCv.getRotationMatrix2D(center, angle, scale);
+    newCv.warpAffine(dst, rotatedDst, rotationMatrix, new newCv.Size(dst.cols, dst.rows));
+
+    // Display the rotated image on the preview canvas
+    newCv.imshow(previewCanvasRef.current, rotatedDst);
+
+    // Clean up
+    src.delete();
+    dst.delete();
+    rotatedDst.delete();
   }
 
   const detectContours = () => {
@@ -203,7 +220,7 @@ const Canvas = ({
     } else {
       setLoading(true)
     }
-  }, [image, previewCanvasRef.current, cvLoaded, mode])
+  }, [image, previewCanvasRef.current, cvLoaded, mode, rotateAngel])
 
   const onDrag = useCallback((position, area) => {
     const { x, y } = position

@@ -1,15 +1,13 @@
 import React from "react"
 import { Dialog } from 'primereact/dialog';
-import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useContext, useState } from 'react';
+
 import { ImageComponent } from "../image";
 
 export default function StockpileSummaryImageModal(props) {
-    const { localeJson } = useContext(LayoutContext);
     /**
      * Destructing
     */
-    const { open, close, imageUrl } = props;
+    const { open, close } = props;
     return (
         <div>
             <Dialog
@@ -19,13 +17,15 @@ export default function StockpileSummaryImageModal(props) {
                 blockScroll={true}
                 onHide={() => close()}
             >
-                <div class={`text-1rem`}>
+                <div className={`text-1rem`}>
                     <ImageComponent
                         imageProps={{
-                            width: "300",
-                            height: "200",
-                            src: props.image,
-                            alt: "scan-image"
+                            width: "700",
+                            height: "500",
+                            maxWidth: window.innerWidth - 50,
+                            src: props.imageUrl,
+                            alt: "scan-image",
+                            custom: true
                         }}
 
                     />

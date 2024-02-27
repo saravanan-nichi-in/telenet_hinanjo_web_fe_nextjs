@@ -1,18 +1,26 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import _ from 'lodash';
 
 import { RowExpansionTable, Button, InputSwitch } from '@/components';
-import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getGeneralDateTimeDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import {
+    getEnglishDateDisplayFormat,
+    getEnglishDateTimeDisplayActualFormat,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getYYYYMMDDHHSSSSDateTimeFormat,
+    hideOverFlow,
+    showOverFlow,
+    getValueByKeyRecursively as translate
+} from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { InputSelectFloatLabel } from '@/components/dropdown';
-import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal } from '@/components/modal';
+import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal, AdminManagementImportModal } from '@/components/modal';
 
 import { StockPileSummaryServices } from '@/services/stockpile_summary.services';
 import Link from 'next/link';
+import CustomHeader from '@/components/customHeader';
+import { InputDropdown } from '@/components/input';
 
 function AdminStockpileSummary() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
     const [emailModal, setEmailModal] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
@@ -22,6 +30,7 @@ function AdminStockpileSummary() {
     const [totalCount, setTotalCount] = useState(0);
     const [expandRows, setExpandRows] = useState();
     const [tableLoading, setTableLoading] = useState(false);
+    const [importModalOpen, setImportModalOpen] = useState(false);
     const [selectedPlaceName, setSelectedPlaceName] = useState({
         name: "--",
         id: 0
@@ -35,7 +44,7 @@ function AdminStockpileSummary() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 10,
+            limit: 100,
             order_by: "asc",
             sort_by: "created_at"
         },
@@ -44,39 +53,35 @@ function AdminStockpileSummary() {
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
-            field: 'shelter_place', header: translate(localeJson, 'evacuation_place'), minWidth: "10rem", maxWidth: '10rem', textAlign: "left",
+            field: 'shelter_place', header: translate(localeJson, 'evacuation_place'), headerStyle: { display: 'none' }, paddingLeft: 0, minWidth: "3rem", maxWidth: '10rem', textAlign: "left",
             body: (rowData) => (
                 <div className='text-link'>
-                    <a className='text-decoration' style={{ color: "grren" }} onClick={() => bindEmailDataConfig(rowData)}>
+                    <a className='font-bold text-black-alpha-10' onClick={() => bindEmailDataConfig(rowData)}>
                         {rowData['shelter_place']}
                     </a>
                 </div>
             )
         },
-        { field: "notification_email", header: translate(localeJson, 'notification_email'), minWidth: "10rem" },
     ]
     const stockPileRowExpansionColumn = [
-        { field: "type", header: translate(localeJson, 'product_type') ,minWidth:"7rem",maxWidth:"7rem"},
-        { field: "stock_pile_name", header: translate(localeJson, 'product_name'),minWidth:"10rem",maxWidth:"10rem" },
-        { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "right", alignHeader: "center" },
+        { field: "type", header: translate(localeJson, 'product_type'), minWidth: "7rem", maxWidth: "7rem" },
+        { field: "stock_pile_name", header: translate(localeJson, 'product_name'), minWidth: "10rem", maxWidth: "10rem" },
+        { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
-        { field: "expiration_date", header: translate(localeJson, 'expiration_date') },
-        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center",alignHeader:"center", minWidth: "5rem" }
+        { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
+        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" }
     ];
-
     const bindImageModalData = (image) => {
-        setImageUrl(imageBaseUrl + image);
+        setImageUrl(image);
         setImageModal(true);
+        hideOverFlow();
     }
 
-    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
-
     useEffect(() => {
+        setTableLoading(true);
         const fetchData = async () => {
-            setTableLoading(true);
             await onGetStockPileSummaryListOnMounting();
             await onGetPlaceDropdownListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
@@ -125,6 +130,7 @@ function AdminStockpileSummary() {
                     }
                     setEmailSettingValues(emailData);
                     setEmailModal(true);
+                    hideOverFlow();
                 }
                 else {
                     let emailData = {
@@ -134,6 +140,7 @@ function AdminStockpileSummary() {
                     };
                     setEmailSettingValues(emailData);
                     setEmailModal(true);
+                    hideOverFlow();
                 }
             });
         }
@@ -145,6 +152,7 @@ function AdminStockpileSummary() {
             };
             setEmailSettingValues(emailData);
             setEmailModal(true);
+            hideOverFlow();
         }
     };
 
@@ -154,12 +162,14 @@ function AdminStockpileSummary() {
    */
     const onImageModalClose = () => {
         setImageModal(!imageModal);
+        showOverFlow();
     };
     /**
     * Email setting modal close
    */
     const onEmailModalClose = () => {
         setEmailModal(!emailModal);
+        showOverFlow();
     };
     /**
      * 
@@ -167,9 +177,9 @@ function AdminStockpileSummary() {
      */
     const onRegister = (values) => {
         const emailList = values.email.split(",");
-        if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
+        if (Object.keys(values.errors).length == 0 && values.email) {
             let payload = {
-                email: emailList,
+                email: [values.email],
                 place_id: emailSettingValues.place_id
             }
             let emailData = {
@@ -182,6 +192,7 @@ function AdminStockpileSummary() {
                 setEmailSettingValues(emailData);
                 getSummaryList(getListPayload, onGetStockPileSummaryList);
                 setEmailModal(false);
+                showOverFlow();
             });
         }
     };
@@ -200,11 +211,13 @@ function AdminStockpileSummary() {
     }
 
     const onGetStockPileSummaryList = (response) => {
+        var stockPileList = [];
+        var _expandedRows = {};
+        var listTotalCount = 0;
         if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
             const data = response.data.model.list;
-            let stockPileList = [];
             let index = 1;
-            data.map((item) => {
+            data.map((item, increment) => {
                 let summaryList = {
                     id: index,
                     place_id: item.place_id,
@@ -214,9 +227,9 @@ function AdminStockpileSummary() {
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
-                        expiry_date: item.expiry_date ?locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
-                        expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
-                        stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
+                        expiry_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
+                        expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                        stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                     }],
                 }
                 let isAvailable = stockPileList.some(obj => obj.place_id == item.place_id);
@@ -232,27 +245,21 @@ function AdminStockpileSummary() {
                             stock_pile_name: item.product_name,
                             quantity: item.after_count,
                             expiry_date: item.expiry_date,
-                            expiration_date: item.expiry_date ?locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
-                            stock_pile_image: item.stockpile_image ? <AiFillEye style={{ fontSize: '20px' }} onClick={() => bindImageModalData(item.stockpile_image)} /> : <AiFillEyeInvisible style={{ fontSize: '20px' }} />
+                            expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                            stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                         }
                         stockPileList[index].orders.push(newOrder);
                     }
                 }
             });
-            let _expandedRows = {};
             stockPileList.forEach((p) => (_expandedRows[`${p.id}`] = true));
-            setStockpileSummaryList(stockPileList);
-            setFilteredStockpileSummaryList(stockPileList);
-            setTotalCount(response.data.model.total);
-            setTableLoading(false);
-            setExpandRows(_expandedRows);
+            listTotalCount = response.data.model.total
         }
-        else {
-            setTotalCount(0);
-            setTableLoading(false);
-            setStockpileSummaryList([]);
-            setFilteredStockpileSummaryList([]);
-        }
+        setTableLoading(false);
+        setStockpileSummaryList(stockPileList);
+        setFilteredStockpileSummaryList(stockPileList);
+        setExpandRows(_expandedRows);
+        setTotalCount(listTotalCount);
     }
 
     const downloadStockPileSummaryCSV = () => {
@@ -326,7 +333,30 @@ function AdminStockpileSummary() {
 
     /* Services */
     const { getSummaryList, exportStockPileSummaryCSVList, getPlaceDropdownList,
-        getStockPileEmailUpdate, getStockPileEmailData } = StockPileSummaryServices;
+        getStockPileEmailUpdate, getStockPileEmailData, exportData, importData } = StockPileSummaryServices;
+
+    const onImportModalClose = () => {
+        setImportModalOpen(false);
+        showOverFlow();
+    };
+
+    const callExport = () => {
+        exportData(() => { })
+    }
+
+    const importFileApi = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        importData(formData, (response) => {
+            if (response) {
+                setTableLoading(true);
+                onGetStockPileSummaryListOnMounting();
+                onGetPlaceDropdownListOnMounting();
+                setShowExpiringProducts(false);
+            }
+        });
+        onImportModalClose();
+    }
 
     return (
         <React.Fragment>
@@ -341,83 +371,124 @@ function AdminStockpileSummary() {
                 register={onRegister}
                 emailSettingValues={emailSettingValues}
             />
+            <AdminManagementImportModal
+                open={importModalOpen}
+                close={onImportModalClose}
+                importFile={importFileApi}
+                modalHeaderText={translate(localeJson, "hq_stockpile_summary_import")}
+                tag={'hq-stockpile'}
+                callExport={callExport}
+            />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>
-                            {translate(localeJson, 'stockpile_summary')}
-                        </h5>
-                        <hr />
-                        <div >
+                        <div className='flex justify-content-between align-items-center'>
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_summary")} />
+                        </div>
+                        <div>
                             <div class="mb-3" >
-                                <div class="summary_flex">
-                                    {translate(localeJson, 'show_expiring_products')}<InputSwitch inputSwitchProps={{
-                                        checked: showExpiringProducts,
-                                        onChange: () => showOnlyExpiringProducts()
-                                    }}
-                                        parentClass={"custom-switch"} />
-                                </div>
                                 <div>
+                                    <div className="flex w-full" style={{ justifyContent: "end" }}>
+                                        <Button buttonProps={{
+                                            type: 'button',
+                                            rounded: "true",
+                                            import: true,
+                                            onClick: () => {
+                                                setImportModalOpen(true);
+                                                hideOverFlow();
+                                            },
+                                            buttonClass: "evacuation_button_height import-button",
+                                            text: translate(localeJson, 'import'),
+                                        }} parentClass={"mr-1 mt-1 import-button"} />
+                                        <Button buttonProps={{
+                                            type: 'button',
+                                            rounded: "true",
+                                            export: true,
+                                            onClick: () => {
+                                                callExport();
+                                            },
+                                            buttonClass: "evacuation_button_height export-button",
+                                            text: translate(localeJson, 'hq_stockpile_detail_export'),
+                                        }} parentClass={"mr-1 mt-1 export-button"} />
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            export: true,
+                                            buttonClass: "export-button",
+                                            text: translate(localeJson, 'hq_stockpile_summary_export'),
+                                            severity: "primary",
+                                            onClick: () => downloadStockPileSummaryCSV()
+                                        }} parentClass={"mr-1 mt-1 export-button"} />
+                                    </div>
                                     <form>
-                                        <div class="summary_flex_search float-right mt-5" >
-                                            <div class="flex flex-row justify-content-end" >
-                                                <InputSelectFloatLabel dropdownFloatLabelProps={{
-                                                    text: translate(localeJson, 'evacuation_place'),
-                                                    inputId: "float label",
+                                        <div className='sm:flex md:flex lg:flex align-items-center justify-content-between mt-2'>
+                                            <div class="flex gap-2 sm:pt-5 md:pt-5 lg:pt-5 align-items-end">
+                                                <span className='text-sm pt-1'>{translate(localeJson, 'show_expiring_products')}</span><InputSwitch inputSwitchProps={{
+                                                    checked: showExpiringProducts,
+                                                    onChange: () => showOnlyExpiringProducts()
+                                                }}
+                                                    parentClass={"custom-switch"} />
+                                            </div>
+                                            <div className='modal-field-top-space modal-field-bottom-space flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input ' >
+                                                <InputDropdown inputDropdownProps={{
+                                                    inputDropdownParentClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'place_name'),
+                                                        inputDropdownLabelClassName: "block"
+                                                    },
+                                                    inputDropdownClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
+                                                    customPanelDropdownClassName: "w-10rem",
+                                                    id: "evacuationCity",
                                                     optionLabel: "name",
                                                     options: placeListOptions,
                                                     value: selectedPlaceName,
                                                     onChange: (e) => setSelectedPlaceName(e.value),
-                                                    inputSelectClass: "w-full lg:w-13rem md:w-20rem sm:w-14rem"
-                                                }} parentClass={"w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem"}
+                                                    emptyMessage: translate(localeJson, "data_not_found"),
+                                                }}
                                                 />
+                                                <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
+                                                    <Button buttonProps={{
+                                                        buttonClass: "w-12 search-button",
+                                                        text: translate(localeJson, "search_text"),
+                                                        icon: "pi pi-search",
+                                                        type: "button",
+                                                        onClick: () => searchListWithCriteria()
+                                                    }} parentClass={"search-button"} />
 
-                                            </div>
-                                            <div>
-                                                <Button buttonProps={{
-                                                    buttonClass: "w-12 search-button",
-                                                    text: translate(localeJson, "search_text"),
-                                                    icon: "pi pi-search",
-                                                    severity: "primary",
-                                                    type: "button",
-                                                    onClick: () => searchListWithCriteria()
-                                                }} />
-                                            </div>
-                                            <div class="flex justify-content-end">
-                                                <Button buttonProps={{
-                                                    type: "button",
-                                                    rounded: "true",
-                                                    buttonClass: "",
-                                                    text: translate(localeJson, 'export'),
-                                                    severity: "primary",
-                                                    onClick: () => downloadStockPileSummaryCSV()
-                                                }} parentClass={"mr-1 mt-2 mb-2"} />
+                                                </div>
                                             </div>
                                         </div>
+
                                     </form>
+                                    <div>
+                                        <RowExpansionTable
+                                            columnStyle={{ textAlign: 'left' }}
+                                            className='stockpile-summary'
+                                            paginator={false}
+                                            totalRecords={totalCount}
+                                            loading={tableLoading}
+                                            rowClassName="main-row-header"
+                                            customRowExpansionActionsField="actions"
+                                            value={filteredStockpileSummaryList}
+                                            innerColumn={stockPileRowExpansionColumn}
+                                            outerColumn={stockPilerMainRow}
+                                            rowExpansionField1="orders1"
+                                            rowExpansionField="orders"
+                                            emptyMessage={translate(localeJson, "data_not_found")}
+                                            rowExpansionEmptyMessage={translate(localeJson, "data_not_found")}
+                                            first={getListPayload.filters.start}
+                                            rows={getListPayload.filters.limit}
+                                            onRowExpand={expandRows}
+                                            paginatorLeft={false}
+                                            expandAllRows={true}
+                                            onPageHandler={(e) => onPaginationChange(e)}
+                                            iconStyle={{ marginTop: "-5px" }}
+                                            iconHeaderStyle={{ display: 'none' }}
+                                            innerTableSelectionMode="single"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            {!tableLoading && <RowExpansionTable
-                                columnStyle={{ textAlign: 'left' }}
-                                paginator="true"
-                                totalRecords={totalCount}
-                                loading={tableLoading}
-                                customRowExpansionActionsField="actions"
-                                value={filteredStockpileSummaryList}
-                                innerColumn={stockPileRowExpansionColumn}
-                                outerColumn={stockPilerMainRow}
-                                rowExpansionField1="orders1"
-                                rowExpansionField="orders"
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                first={getListPayload.filters.start}
-                                rows={getListPayload.filters.limit}
-                                onRowExpand={expandRows}
-                                paginatorLeft={true}
-                                onPageHandler={(e) => onPaginationChange(e)}
-                            />}
-
                         </div>
                     </div>
                 </div>

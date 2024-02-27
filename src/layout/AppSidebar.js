@@ -1,4 +1,4 @@
-import AppMenu from './AppMenu';
+import AppMenu from '@/layout/AppMenu';
 
 const AppSidebar = () => {
     return <AppMenu></AppMenu>;

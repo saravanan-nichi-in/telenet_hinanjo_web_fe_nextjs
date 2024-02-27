@@ -1,4 +1,4 @@
-import { downloadBase64File, timestampFile } from "@/helper";
+import { downloadBase64File, timestampFile, importErrorToastDisplay } from "@/helper";
 import axios from "@/utils/api";
 import { isObject } from "lodash";
 import toast from 'react-hot-toast';
@@ -10,7 +10,8 @@ export const StockpileStaffService = {
     getList: _getList,
     update: _update,
     create: _create,
-    dropdown: _dropdown
+    dropdown: _dropdown,
+    getPlaceNamesByCategory: _getPlaceNamesByCategory,
 };
 
 /**
@@ -24,24 +25,13 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                if (response?.data?.success) {
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
-                } else {
-                    callBackFun(false);
-                    toast.error(response?.data?.message, {
-                        position: "top-right",
-                    });
-                }
+                importErrorToastDisplay(response);
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            importErrorToastDisplay(error.response);
         });
 }
 
@@ -63,7 +53,6 @@ function _exportData(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -85,7 +74,6 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -107,7 +95,6 @@ function _getCategoryAndProductList(callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -204,13 +191,32 @@ function _update(payload, callBackFun) {
 
 
 /**
- * Get Category dropdown Data
+ * Get Category dropdown data
  * @param {*} payload 
  * @param {*} callBackFun 
  */
 function _dropdown(payload, callBackFun) {
     const queryParams = new URLSearchParams(payload).toString();
     axios.get(`/staff/stockpile/dropdown/category?${queryParams}`)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Get place names by category
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getPlaceNamesByCategory(payload, callBackFun) {
+    axios.post(`/staff/stockpile/dropdown/product`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

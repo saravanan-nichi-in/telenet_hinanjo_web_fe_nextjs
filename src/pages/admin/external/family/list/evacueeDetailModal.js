@@ -2,33 +2,34 @@ import React, { useEffect, useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
+import {
+    getEnglishDateDisplayFormat,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getValueByKeyRecursively as translate
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "@/components/datatable";
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
 import { Button } from "@/components";
 
 export default function EvacueeDetailModal(props) {
-    const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
     const { open, close } = props && props;
-
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
-        { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
-        { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
-        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", textAlign: "right", alignHeader: "center" },
-        { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }];
-
+        { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), minWidth: "8rem", maxWidth: "8rem" },
+        { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), minWidth: "8rem", maxWidth: "8rem" },
+        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), minWidth: "3rem", maxWidth: "3rem", textAlign: "center", alignHeader: "center" },
+        { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), minWidth: "3rem", maxWidth: "3rem" }
+    ];
     const { getExternalEvacueesDetail } = ExternalEvacuationServices;
-
     const [getListPayload, setGetListPayload] = useState({
         "filters": {
             "start": 0,
-            "limit": 5
+            // "limit": 10
         },
         "evacuee_id": props.evacuee.id,
     });
-
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -36,32 +37,29 @@ export default function EvacueeDetailModal(props) {
 
     const getEvacueesList = () => {
         getExternalEvacueesDetail(getListPayload, (response) => {
+            var additionalColumnsArrayWithOldData = [...columnsData];
+            var preparedList = [];
+            var listTotalCount = 0;
             if (response.success && !_.isEmpty(response.data) && response.data.model.list.length > 0) {
                 const data = response.data.model.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
-                let preparedList = [];
                 data.map((obj, i) => {
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
                         name_furigana: obj.name_furigana ? obj.name_furigana : "",
-                        dob: obj.dob? (locale === "ja"? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob): getEnglishDateDisplayFormat(obj.dob)): "",
+                        dob: obj.dob ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.dob) : getEnglishDateDisplayFormat(obj.dob)) : "",
                         age: obj.age ? obj.age : "",
                         gender: obj.gender ? obj.gender : "",
                         id: obj.id ? obj.id : "",
                     }
                     preparedList.push(preparedObj);
                 })
-                setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
-                setTotalCount(response.data.model.total);
-                setTableLoading(false);
-            } else {
-                setTableLoading(false);
-                setTotalCount(0);
-                setList([]);
+                listTotalCount = response.data.model.total;
             }
+            setTableLoading(false);
+            setColumns(additionalColumnsArrayWithOldData);
+            setList(preparedList);
+            setTotalCount(listTotalCount);
         });
-
     }
 
     /**
@@ -88,13 +86,12 @@ export default function EvacueeDetailModal(props) {
         setTableLoading(true);
         const fetchData = async () => {
             await getEvacueesList()
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload, props.evacuee]);
 
     const header = (
-        <div className="custom-modal">
+        <div className="new-custom-modal">
             {translate(localeJson, 'external_evecuee_details_popup_header')}
         </div>
     );
@@ -110,37 +107,37 @@ export default function EvacueeDetailModal(props) {
             document.body.style.overflow = 'auto';
         };
     }, [open]);
+
     return (
         <React.Fragment>
             <div>
                 <Dialog
-                    className="custom-modal"
+                    className="new-custom-modal"
                     header={header}
                     visible={open}
-                    style={{ minWidth: "20rem" }}
                     draggable={false}
                     blockScroll={true}
                     onHide={() => close()}
                     footer={
                         <div className="text-center">
                             <Button buttonProps={{
-                                buttonClass: "text-600 w-8rem",
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
+                                buttonClass: "w-8rem back-button",
                                 text: translate(localeJson, 'back'),
                                 onClick: () => close(),
-                            }} parentClass={"inline"} />
+                            }} parentClass={"inline back-button"} />
                         </div>
                     }
                 >
                     <div className={`modal-content`}>
                         <div>
-
-                            <div className="mt-5">
-
+                            <div className="modal-header">
+                                {translate(localeJson, 'external_evecuee_details_popup_header')}
+                            </div>
+                            <div className="">
                                 <div>
                                     <NormalTable
                                         lazy
+                                        tableStyle={{ maxWidth: "w-full" }}
                                         totalRecords={totalCount}
                                         loading={tableLoading}
                                         stripedRows={true}
@@ -150,12 +147,21 @@ export default function EvacueeDetailModal(props) {
                                         columns={columns}
                                         filterDisplay="menu"
                                         emptyMessage={translate(localeJson, "data_not_found")}
-                                        paginator={true}
                                         first={getListPayload.filters.start}
                                         rows={getListPayload.filters.limit}
-                                        paginatorLeft={true}
+                                        scrollable
+                                        scrollHeight="400px"
                                         onPageHandler={(e) => onPaginationChange(e)}
                                     />
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="modal-button-footer-space-back">
+                                    <Button buttonProps={{
+                                        buttonClass: "w-full back-button",
+                                        text: translate(localeJson, 'back'),
+                                        onClick: () => close(),
+                                    }} parentClass={"back-button"} />
                                 </div>
                             </div>
                         </div>

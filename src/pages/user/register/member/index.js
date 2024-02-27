@@ -1,14 +1,19 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
-import _ from 'lodash';
-import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import _ from "lodash";
+import {
+  convertToSingleByte,
+  getJapaneseDateTimeDisplayActualFormat,
+  getValueByKeyRecursively as translate,
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   Button,
+  ButtonRounded,
   InputSwitch,
-  InputFloatLabel,
-  InputNumberFloatLabel,
   ValidationError,
-  NormalTable, RowExpansionTable
+  NormalTable,
+  RowExpansionTable,
+  CommonDialog,
 } from "@/components";
 import Link from "next/link";
 import * as Yup from "yup";
@@ -16,9 +21,18 @@ import { useSelector } from "react-redux";
 import { Formik } from "formik";
 import { BsFillMicFill } from "react-icons/bs";
 import AudioRecorder from "@/components/audio";
-import { CommonServices, CheckInOutServices } from "@/services";
-import { prefectures } from '@/utils/constant';
+import { CommonServices, CheckInOutServices, TempRegisterServices } from "@/services";
+import { prefectures } from "@/utils/constant";
 import { useRouter } from "next/router";
+import CustomHeader from "@/components/customHeader";
+import CommonPage from "@/components/eventCheck.js";
+import { Input, InputNumber } from "@/components/input";
+import { useAppDispatch } from "@/redux/hooks";
+import { setCheckInData } from "@/redux/check_in";
+import BarcodeDialog from "@/components/modal/barcodeDialog";
+import { setSelfID } from "@/redux/self_id";
+import toast from "react-hot-toast";
+import { YappleModal } from "@/components/modal";
 export default function Admission() {
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
@@ -28,107 +42,52 @@ export default function Admission() {
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
   const formikRef = useRef();
   const [tableLoading, setTableLoading] = useState(false);
-  const [searchFlag, setSearchFlag] = useState(false);
-  const [familyCode, setFamilyCode] = useState(null);
-    const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
-    const [familyDetailData, setfamilyDetailData] = useState(null);
-    const [neighbourData, setNeighbourData] = useState(null);
-    const [townAssociationColumn, setTownAssociationColumn] = useState([]);
-    const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
+  const [searchResult, setSearchResult] = useState(false);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
+  const [basicDataInfo, setBasicDataInfo] = useState(null);
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   const schema = Yup.object().shape({
-    name: Yup.string().max(100,translate(localeJson,"family_name_max")).test({
-      test: function (value) {
-        const { familyCode } = this.parent;
-        return Boolean(familyCode) || Boolean(value);
-      },
-      message: translate(localeJson,"family_name_required"),
-    }),
-    password: Yup.number()
-      .required(translate(localeJson,"family_password_required"))
-      .test("is-four-digits", translate(localeJson,"family_password_min_max"), (value) => {
-        return value >= 0 && value <= 9999 && String(value).length === 4;
+    name: Yup.string()
+      .max(100, translate(localeJson, "family_name_max"))
+      .test({
+        test: function (value) {
+          const { familyCode } = this.parent;
+          return Boolean(familyCode) || Boolean(value);
+        },
+        message: translate(localeJson, "family_name_required"),
       }),
+    password: Yup.string()
+      .required(translate(localeJson, "family_password_required"))
+      .test(
+        "is-four-digits",
+        translate(localeJson, "family_password_min_max"),
+        (value) => {
+          return String(value).length === 4;
+        }
+      ),
     familyCode: Yup.string().test({
       test: function (value) {
         const { name } = this.parent;
         return Boolean(name) || Boolean(value);
       },
-      message: translate(localeJson,"family_code_required"),
+      message: translate(localeJson, "family_code_required"),
     }),
   });
 
   const { getText } = CommonServices;
-  const { getList , checkIn } = CheckInOutServices;
+  const { getList, checkIn, eventCheckIn } = CheckInOutServices;
+  const { getBasicDetailsInfo } = TempRegisterServices;
   const initialValues = { name: "", password: "", familyCode: "" };
+  const openYappleModal = () => {
+    setImportModalOpen(true)
+  };
 
-  const evacueeFamilyDetailColumns = [
-    { field: "id", header: translate(localeJson, 'c_s_no'), minWidth: "5rem", className: "sno_class" },
-    { field: "is_owner", header: translate(localeJson, 'c_representative'), minWidth: "10rem" },
-    { field: "refugee_name", header: translate(localeJson, 'c_refugee_name'), minWidth: "10rem" },
-    { field: "name", header: translate(localeJson, 'name_kanji'), minWidth: "10rem" },
-    { field: "dob", header: translate(localeJson, 'c_dob'), minWidth: "10rem" },
-    { field: "age", header: translate(localeJson, 'c_age'), minWidth: "4rem" },
-    { field: "age_month", header: translate(localeJson, 'c_age_month'), minWidth: "5rem" },
-    { field: "gender", header: translate(localeJson, 'c_gender'), minWidth: "8rem" },
-    { field: "created_date", header: translate(localeJson, 'c_created_date'), minWidth: "10rem" },
-];
-
-const familyDetailColumns = [
-    { field: 'evacuation_date_time', header: translate(localeJson, 'c_evacuation_date_time'), minWidth: "10rem", textAlign: 'left' },
-    { field: 'address', header: translate(localeJson, 'c_address'), minWidth: "10rem", textAlign: 'left' },
-    { field: 'representative_number', header: translate(localeJson, 'c_representative_number'), minWidth: "10rem", textAlign: 'left' },
-    { field: 'registered_lang_environment', header: translate(localeJson, 'c_registered_lang_environment'), minWidth: "10rem", textAlign: 'left' },
-];
-
-const evacueeFamilyDetailRowExpansionColumns = [
-    { field: "address", header: translate(localeJson, 'c_address'), minWidth: "10rem" },
-    { field: "special_care_name", header: translate(localeJson, 'c_special_care_name'), minWidth: "8rem" },
-    { field: "connecting_code", header: translate(localeJson, 'c_connecting_code'), minWidth: "7rem" },
-    { field: "remarks", header: translate(localeJson, 'c_remarks'), minWidth: "7rem" },
-];
-
-const getGenderValue = (gender) => {
-  if (gender == 1) {
-      return translate(localeJson, 'c_male');
-  } else if (gender == 2) {
-      return translate(localeJson, 'c_female');
-  } else {
-      return translate(localeJson, 'c_others_count');
-  }
-}
-
-const getRegisteredLanguage = (language) => {
-  if (language == "en") {
-      return translate(localeJson, 'english');
-  }
-  else {
-      return translate(localeJson, 'japanese');
-  }
-}
-
-const getSpecialCareName = (nameList) => {
-  let specialCareName = null;
-  nameList.map((item) => {
-      specialCareName = specialCareName ? (specialCareName + ", " + item) : item;
-  });
-  return specialCareName;
-}
-
-const getAnswerData = (answer) => {
-  let answerData = null;
-  answer.map((item) => {
-      answerData = answerData ? (answerData + ", " + item) : item
-  });
-  return answerData;
-}
-
-const getPrefectureName = (id) => {
-  if (id) {
-      let p_name = prefectures.find((item) => item.value === id);
-      return p_name.name;
-  }
-  return "";
-}
+  const [barcode, setBarcode] = useState(null);
+  const onImportModalClose = () => {
+    setImportModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,7 +116,6 @@ const getPrefectureName = (id) => {
     const re = /^[0-9-]+$/;
     if (familyCode && re.test(familyCode)) {
       let val = familyCode.replace(/-/g, ""); // Remove any existing hyphens
-      console.log(val);
       // Insert hyphen after the first three characters
       if (val.length > 3) {
         val = val.slice(0, 3) + "-" + val.slice(3);
@@ -203,496 +161,493 @@ const getPrefectureName = (id) => {
     }
   };
 
-  useEffect(()=>
-  {
-    scrollToCenter()
-  },[searchFlag])
-
-  const scrollToCenter = () => {
-    if(searchFlag)
-    {
-    const windowHeight = window.innerHeight;
-    const scrollPosition = (windowHeight *1.7)/2;
-
-    // Scroll to the center of the page
-    window.scrollTo({
-      top: scrollPosition,
-      behavior: 'smooth', // You can change this to 'auto' for instant scrolling
-    });
-  }
-  };
-
-
   const getSearchResult = (res) => {
     if (res?.success && !_.isEmpty(res?.data)) {
       const data = res.data.model;
-      let basicDetailList = [];
-      let basicData = {
-          evacuation_date_time: data.join_date,
-          address: translate(localeJson, 'post_letter') + data.zip_code + " " + getPrefectureName(data.prefecture_id) + " " + data.address,
-          representative_number: data.tel,
-          registered_lang_environment: getRegisteredLanguage(data.language_register)
-      };
-      basicDetailList.push(basicData);
-      setBasicFamilyDetail(basicDetailList);
-      setFamilyCode(data.family_code);
-      const personList = data.person;
-      const familyDataList = [];
-      let personInnerColumns = [...evacueeFamilyDetailRowExpansionColumns];
-      let individualQuestion = personList[0].individualQuestions;
-      if (individualQuestion.length > 0) {
-          individualQuestion.map((ques, index) => {
-              let column = {
-                  field: "question_" + index,
-                  header: (locale == "ja" ? ques.title : ques.title_en),
-                  minWidth: "10rem",
-                  required:ques.isRequired==1?true:false
-              };
-              personInnerColumns.push(column);
-          });
-      }
-      setEvacueePersonInnerColumns(personInnerColumns);
-
-      personList.map((person, index) => {
-          let familyData = {
-              id: index + 1,
-              is_owner: person.is_owner == 0 ? translate(localeJson, 'c_representative') : "",
-              refugee_name: person.refugee_name,
-              name: person.name,
-              dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob) : getEnglishDateDisplayFormat(person.dob),
-              age: person.age,
-              age_month: person.month,
-              gender: getGenderValue(person.gender),
-              created_date: person.createdDate,
-              updated_date: data.updated_at,
-              orders: [{
-                  address: person.address ? person.address : "",
-                  special_care_name: person.specialCareName ? getSpecialCareName(person.specialCareName) : "",
-                  connecting_code: person.connecting_code,
-                  remarks: person.note,
-              },
-              ]
-          };
-
-          let question = person.individualQuestions;
-          if (question.length > 0) {
-              question.map((ques, index) => {
-                  familyData.orders[0][`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
-              })
-          }
-          familyDataList.push(familyData);
-      })
-      setfamilyDetailData(familyDataList);
-
-
-      let neighbourDataList = [];
-
-      const questionnaire = data.question;
-      let townAssociateColumnSet = [];
-      questionnaire.map((ques, index) => {
-          let column = {
-              field: "question_" + index,
-              header: (locale == "ja" ? ques.title : ques.title_en),
-              minWidth: "10rem",
-              required:ques.isRequired==1?true:false
-          };
-          townAssociateColumnSet.push(column);
-      });
-      setTownAssociationColumn(townAssociateColumnSet);
-
-      let neighbourData = {};
-      questionnaire.map((ques, index) => {
-          neighbourData[`question_${index}`] = ques.answer ? getAnswerData(ques.answer.answer) : "";
-      });
-      neighbourDataList.push(neighbourData);
-      setNeighbourData(neighbourDataList);
-      setSearchFlag(true)
-      setTableLoading(false)
-      setLoader(false)
-      scrollToCenter()
-  }
-  else {
-      setSearchFlag(false)
+      setSearchResult(data);
+      dispatch(setCheckInData(data));
       setTableLoading(false);
-      setLoader(false)
-    
-  }
+      setLoader(false);
+      router.push("/user/register/member/details")
+    } else {
+      setSearchResult([]);
+      setTableLoading(false);
+      setLoader(false);
+    }
   };
 
-  const isCheckedIn = (res) => {
-    setLoader(false)
+  const handleFirstButtonClick = () => {
+    // Logic for the first button click
+    console.log("First button clicked!");
+  };
+
+  const validateAndMoveToForm = (id) => {
+    fetchBasicDetailsInfo(id);
+    dispatch(setSelfID({
+      id: id
+    }));
   }
+
+  const fetchBasicDetailsInfo = (id) => {
+    let payload = {
+      "yapple_id": id ? id : "00000018",
+      "ppid": ""
+    };
+
+    getBasicDetailsInfo(payload, (response) => {
+      if (response.success) {
+        const data = response.data;
+        setBasicDataInfo(data);
+        setOpenBarcodeDialog(false);
+        setOpenBasicDataInfoDialog(true);
+      }
+    })
+  }
+
+  const basicInfoContent = () => {
+    return <div>
+      <div className='mt-2'>
+        <div className='flex align-items-center'>
+          <div className='page-header3'>{translate(localeJson, "name_kanji")}:</div>
+          <div className='page-header3-sub ml-1'>{basicDataInfo?.name}</div>
+        </div>
+      </div>
+      <div className='mt-2'>
+        <div className='flex align-items-center'>
+          <div className='page-header3'>{translate(localeJson, "refugee_name")}:</div>
+          <div className='page-header3-sub ml-1'>{basicDataInfo?.refugee_name}</div>
+        </div>
+      </div>
+
+      <div className='mt-2'>
+        <div className='flex'>
+          <div className='page-header3' style={{ whiteSpace: 'nowrap' }}>{translate(localeJson, "address")}:</div>
+          <div className='page-header3-sub ml-1' style={{ whiteSpace: 'normal' }}>{basicDataInfo?.address}</div>
+        </div>
+      </div>
+      <div className='mt-2'>
+        <div className='flex align-items-center'>
+          <div className='page-header3'>{translate(localeJson, "tel")}:</div>
+          <div className='page-header3-sub ml-1'>{basicDataInfo?.tel}</div>
+        </div>
+      </div>
+      <div className='mt-2'>
+        <div className='flex align-items-center'>
+          <div className='page-header3'>{translate(localeJson, "evacuation_date_time")}:</div>
+          <div className='page-header3-sub ml-1'>{basicDataInfo?.join_date ? getJapaneseDateTimeDisplayActualFormat(basicDataInfo.join_date) : ""}</div>
+        </div>
+      </div>
+      <div className='mt-2'>
+        <div className='flex align-items-center'>
+          <div className='page-header3'>{translate(localeJson, "evacuation_place")}:</div>
+          <div className='page-header3-sub ml-1'>{layoutReducer?.user?.place.name}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  const confirmRegistrationBeforeCheckin = () => {
+    let eventID = layoutReducer?.user?.place?.type === "event" ? layoutReducer?.user?.place?.id : ""
+    eventCheckIn({
+      event_id: eventID,
+      yapple_id: basicDataInfo.yapple_id
+    }, (response) => {
+      if (response.success) {
+        setOpenBasicDataInfoDialog(false);
+      }
+    });
+  }
+
+  const handleSecondButtonClick = () => {
+    // Logic for the second button click
+    console.log("Second button clicked!");
+  };
+
+  const handleStaffButtonClick = () => {
+    // Logic for the staff button click
+    console.log("Staff button clicked!");
+  };
 
   return (
     <>
-      <Formik
-        innerRef={formikRef}
-        validationSchema={schema}
-        initialValues={initialValues}
-        enableReinitialize
-        onSubmit={(values) => {
-          let payload = {
-            family_code: values.familyCode,
-            refugee_name:values.name,
-            password:values.password,
-          };
-          setLoader(true)
-          getList(payload, getSearchResult);
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          setFieldValue,
-        }) => (
-          <div>
-            <div className="grid">
-              <div className="col-12">
-                <div className="card">
-                  <h5 className="page-header1">
-                    {translate(localeJson, "new_to_admission_procedures")}
-                  </h5>
-                  <hr />
-                  <div>
-                    <div className="mt-3">
-                      <div
-                        className="flex"
-                        style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
-                      >
-                        <Button
-                          buttonProps={{
-                            type: "button",
-                            rounded: "true",
-                            buttonClass: "text-600 ",
-                            text: translate(localeJson, "exit_procedure"),
-                            bg: "bg-white",
-                            hoverBg: "hover:surface-500 hover:text-white",
-                            onClick:()=> {
-                              router.push({
-                              pathname: '/user/checkout',
-                          })},
+      {layoutReducer?.user?.place?.type === "place" ? (
+        <Formik
+          innerRef={formikRef}
+          validationSchema={schema}
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(values) => {
+            let fam_val = values.familyCode ?convertToSingleByte(values.familyCode):"";
+            let fam_pass = values.password ?convertToSingleByte(values.password):"";
+            let payload = {
+              family_code: values.familyCode?fam_val.slice(0, 3) +
+              "-" +
+              fam_val.slice(3):"",
+              refugee_name: values.name,
+              password: fam_pass,
+              place_id: layoutReducer?.user?.place?.id,
+              ...(layoutReducer?.user?.place?.type === "place"
+                ? { place_id: layoutReducer?.user?.place?.id }
+                : layoutReducer?.user?.place?.type === "event"
+                  ? { event_id: layoutReducer?.user?.place?.id }
+                  : {}),
+            };
+            setLoader(true);
+            getList(payload, getSearchResult);
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+          }) => (
+            <div>
+              <div className="grid">
+                <div className="col-12">
+                  <div className="card">
+                    <CustomHeader
+                      headerClass={"page-header1"}
+                      header={translate(
+                        localeJson,
+                        "new_to_admission_procedures"
+                      )}
+                    />
+                    <div>
+                      <div className="mt-3">
+                        <div
+                          className="flex"
+                          style={{
+                            justifyContent: "flex-end",
+                            flexWrap: "wrap",
                           }}
-                          parentClass={"ml-3 mr-3 mt-1"}
-                        />
-                      </div>
-                    </div>
-                    <div className="grid">
-                      <div className="mt-3 col-12 lg:col-6">
-                        <form
-                          onSubmit={handleSubmit}
-                          className="custom-card m-2 shadow-4"
                         >
-                          <div className="page-header2"> {translate(localeJson, "shelter_search")}</div>
-                          <div className="mt-5">
-                            <div className="mb-5  w-12">
-                              <div className="flex align-items-center w-12">
-                                <div className="w-11">
-                                  <InputFloatLabel
-                                    inputFloatLabelProps={{
-                                      id: "name",
-                                      name: "name",
-                                      spanText: "*",
-                                      spanClass: "p-error",
-                                      value: values.name,
-                                      onChange: handleChange,
-                                      onBlur: handleBlur,
-                                      custom: "w-full custom_input",
-                                      isLoading: audioNameLoader,
-                                      disabled: audioNameLoader,
-                                      hasIcon: true,
-                                      text: translate(
-                                        localeJson,
-                                        "shelter_name"
-                                      ),
-                                      inputClass: "w-full",
-                                    }}
-                                    parentClass={`custom_input ${
-                                      errors.name &&
-                                      touched.name &&
-                                      "p-invalid pb-1"
-                                    }`}
-                                  />
-                                </div>
-
-                                <div className="w-1 flex justify-content-center">
-                                  <AudioRecorder
-                                    onAudioRecorded={handleNameAudioRecorded}
-                                    disabled={audioPasswordLoader|| audioFamilyCodeLoader}
-                                    onRecordingStateChange={
-                                      handleNameRecordingStateChange
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="w-11">
-                                <ValidationError
-                                  errorBlock={
-                                    errors.name && touched.name && errors.name
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="mb-5 w-full">
-                              <div className="flex align-items-center  w-12">
-                                <div className="w-11">
-                                  <InputNumberFloatLabel
-                                    inputNumberFloatProps={{
-                                      id: "password",
-                                      name: "password",
-                                      spanText: "*",
-                                      spanClass: "p-error",
-                                      value: values.password,
-                                      custom: "w-full custom_input",
-                                      isLoading: audioPasswordLoader,
-                                      disabled: audioPasswordLoader,
-                                      hasIcon: true,
-                                      onChange: (evt) => {
-                                        setFieldValue("password", evt.value);
-                                      },
-                                      onValueChange: (evt) => {
-                                        setFieldValue("password", evt.value);
-                                      },
-                                      onBlur: handleBlur,
-                                      text: translate(
-                                        localeJson,
-                                        "shelter_password"
-                                      ),
-                                      inputNumberClass: "w-full",
-                                    }}
-                                    parentClass={`custom_input ${
-                                      errors.password &&
-                                      touched.password &&
-                                      "p-invalid pb-1"
-                                    }`}
-                                  />
-                                </div>
-                                <div className="w-1 flex justify-content-center">
-                                  <AudioRecorder
-                                    onAudioRecorded={handleAudioRecorded}
-                                    disabled={audioNameLoader|| audioFamilyCodeLoader}
-                                    onRecordingStateChange={
-                                      handleRecordingStateChange
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="w-11">
-                                <ValidationError
-                                  errorBlock={
-                                    errors.password &&
-                                    touched.password &&
-                                    errors.password
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="mb-5  w-full">
-                              <div className="flex align-items-center  w-12">
-                                <div className="w-11">
-                                  <InputFloatLabel
-                                    inputFloatLabelProps={{
-                                      id: "familyCode",
-                                      name: "familyCode",
-                                      spanText: "*",
-                                      spanClass: "p-error",
-                                      value: values.familyCode,
-                                      custom: "w-full custom_input",
-                                      isLoading: audioFamilyCodeLoader,
-                                      disabled: audioFamilyCodeLoader,
-                                      hasIcon: true,
-                                      onChange: (evt) => {
-                                        const re = /^[0-9-]+$/;
-                                        if (
-                                          evt.target.value === "" ||
-                                          re.test(evt.target.value)
-                                        ) {
-                                          let val = evt.target.value.replace(
-                                            /-/g,
-                                            ""
-                                          ); // Remove any existing hyphens
-                                          if (val.length > 3) {
-                                            val =
-                                              val.slice(0, 3) +
-                                              "-" +
-                                              val.slice(3);
-                                          }
-                                          setFieldValue("familyCode", val);
-                                        }
-                                      },
-                                      onBlur: handleBlur,
-                                      text: translate(
-                                        localeJson,
-                                        "shelter_code"
-                                      ),
-                                      inputClass: "w-full",
-                                    }}
-                                    parentClass={`custom_input ${
-                                      errors.familyCode &&
-                                      touched.familyCode &&
-                                      "p-invalid pb-1"
-                                    }`}
-                                  />
-                                </div>
-                                <div className="w-1">
-                                  <AudioRecorder
-                                    onAudioRecorded={
-                                      handleFamilyCodeAudioRecorded
-                                    }
-                                    disabled={audioNameLoader||audioPasswordLoader}
-                                    onRecordingStateChange={
-                                      handleFamilyCodeRecordingStateChange
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="w-11">
-                                <ValidationError
-                                  errorBlock={
-                                    errors.familyCode &&
-                                    touched.familyCode &&
-                                    errors.familyCode
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-3">
-                            <div
-                              className="flex"
-                              style={{
-                                justifyContent: "flex-end",
-                                flexWrap: "wrap",
-                              }}
-                            >
-                              <Button
+                          <Button
+                            buttonProps={{
+                              type: "button",
+                              rounded: "true",
+                              buttonClass: "back-button",
+                              text: translate(localeJson, "exit_procedure"),
+                              onClick: () => {
+                                router.push({
+                                  pathname: "/user/checkout",
+                                });
+                              },
+                            }}
+                            parentClass={"ml-3 mr-3 mt-1 back-button"}
+                            parentStyle={{ display: "none" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid">
+                        <div className="mt-3 col-12  md:col-6 lg:col-6">
+                          <div className="flex flex-column justify-content-center align-items-center h-full">
+                            <h5 className="text-2xl font-bold" style={{ textAlign: "center", color: "#1F2620" }}>{translate(localeJson, "check_in_header")}</h5>
+                            <div className="flex col-12 lg:col-6  mt-2 w-full">
+                              <ButtonRounded
                                 buttonProps={{
+                                  custom: "userDashboard",
+                                  buttonClass:
+                                    "flex align-items-center justify-content-center  primary-button h-3rem md:h-10rem lg:h-10rem ",
                                   type: "submit",
                                   rounded: "true",
-                                  text: translate(localeJson, "mem_search"),
-                                  severity:"primary"
+                                  text: translate(localeJson, "signup"),
+                                  onClick: () => {
+                                    router.push({
+                                      pathname: "/user/person-count",
+                                    });
+                                  },
                                 }}
-                                parentClass={"ml-3 mr-3 mt-1"}
+                                parentClass={
+                                  "userParentDashboard primary-button w-full"
+                                }
                               />
                             </div>
                           </div>
-                        </form>
-                      </div>
-                      <div className="mt-3 col-12 lg:col-6">
-                        <div className="custom-card m-2 shadow-4">
-                        <div className="page-header2"> {translate(localeJson, "check_in_first")}</div>
-                          <div
-                            className="flex col-12 lg:col-6 mt-3"
-                            style={{
-                              justifyContent: "flex-end",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            <Button
-                              buttonProps={{
-                                type: "submit",
-                                rounded: "true",
-                                text: translate(localeJson, "signup"),
-                                severity:"success"
-                                
-                              }}
-                              parentClass={"ml-3 mr-3 mt-1"}
-                            />
-                          </div>
                         </div>
-                      </div>
-                      {searchFlag&&
-                      <div className="mt-3 col-12">
-                        <div className="custom-card shadow-4">
-                        <div>  
-                        <div className='mb-2'>
-                                <div className='flex page-header2'>
-                                    {translate(localeJson, 'c_confirm_register')} 
-                                </div>
-                                <hr/>
+                        <div className="flex md:hidden justify-content-center align-items-center text-gray w-full h-full mb-5 mt-5">
+                          {translate(localeJson, "or")}
+                        </div>
+                        <div className="mt-3 col-12 md:col-6 lg:col-6 difference-border">
+                          <form onSubmit={handleSubmit} className="lg:ml-2 md:ml-2">
+                            <div className="text-2xl font-bold text-center" style={{ color: "#1F2620" }}>
+                              {" "}
+                              {translate(localeJson, "shelter_search")}
                             </div>
-                            <div className='mb-2'>
-                                <div className='flex justify-content-end underline' style={{ fontWeight: "bold" }}>
-                                    {translate(localeJson, 'household_number')} {familyCode}
-                                </div>
-                            </div>
-                            <NormalTable
-                                id="evacuee-family-detail"
-                                size={"small"}
-                                tableLoading={tableLoading}
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                stripedRows={true}
-                                paginator={false}
-                                showGridlines={true}
-                                value={basicFamilyDetail}
-                                columns={familyDetailColumns}
-                                parentClass="mb-2"
-                            />
-                            <div className='mb-2 '>
-                                <h5 className='page-header2'>{translate(localeJson, 'household_list')}</h5>
-                            </div>
-                            <RowExpansionTable
-                                id={"evacuation-detail-list"}
-                                rows={10}
-                                paginatorLeft={true}
-                                tableLoading={tableLoading}
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                paginator="true"
-                                customRowExpansionActionsField="actions"
-                                value={familyDetailData}
-                                innerColumn={evacueePersonInnerColumns}
-                                outerColumn={evacueeFamilyDetailColumns}
-                                rowExpansionField="orders"
-                            />
-                            {townAssociationColumn.length > 0 &&
-                                <div className='mt-2'>
-                                    <NormalTable
-                                        id="evacuee-family-detail"
-                                        size={"small"}
-                                        tableLoading={tableLoading}
-                                        emptyMessage={translate(localeJson, "data_not_found")}
-                                        stripedRows={true}
-                                        paginator={false}
-                                        showGridlines={true}
-                                        value={neighbourData}
-                                        columns={townAssociationColumn}
+                            <div className="mt-3">
+                              <div className="mb-3 w-12">
+                                <div className="flex w-12">
+                                  <div className="w-12">
+                                    <Input
+                                      inputProps={{
+                                        inputParentClassName: `w-full custom_input ${errors.name &&
+                                          touched.name &&
+                                          "p-invalid"
+                                          }`,
+                                        labelProps: {
+                                          text: translate(
+                                            localeJson,
+                                            "shelter_name"
+                                          ),
+                                          inputLabelClassName: "block",
+                                          spanText: "*",
+                                          inputLabelSpanClassName: "p-error",
+                                          labelMainClassName: "pb-1"
+                                        },
+                                        inputClassName: "w-full",
+                                        id: "name",
+                                        name: "name",
+                                        value: values.name,
+                                        onChange: handleChange,
+                                        onBlur: handleBlur,
+                                        isLoading: audioNameLoader,
+                                        disabled: audioNameLoader,
+                                        placeholder: translate(
+                                          localeJson,
+                                          "placeholder_please_enter_name"
+                                        ),
+                                        hasIcon: true,
+                                      }}
                                     />
+                                  </div>
                                 </div>
-                            }
-                        </div>
-                        <div className="flex justify-content-end">
-                        <Button
-                              buttonProps={{
-                                type: "button",
-                                rounded: "true",
-                                severity:"primary",
-                                text: translate(localeJson, "reg_shelter"),
-                                onClick:()=>{
-                                  let payload = {
-                                      "family_id" : familyCode,
-                                      "place_id" : layoutReducer?.user?.place?.id
-                                  }
-                                  setLoader(true)
-                                  checkIn(payload,isCheckedIn)
-                                }
-                              }}
-                              parentClass={"mt-3"}
-                            />
-                        </div>
+                                <div className="w-11">
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.name && touched.name && errors.name
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="mb-3 w-full">
+                                <div className="flex w-12">
+                                  <div className="w-12">
+                                    <Input
+                                      inputProps={{
+                                        inputParentClassName: `custom_input w-full ${errors.password &&
+                                          touched.password &&
+                                          "p-invalid"
+                                          }`,
+                                        labelProps: {
+                                          text: translate(
+                                            localeJson,
+                                            "shelter_password"
+                                          ),
+                                          inputLabelClassName: "block",
+                                          spanText: "*",
+                                          inputLabelSpanClassName:
+                                            "p-error",
+                                          labelMainClassName: "pb-1"
+                                        },
+                                        inputClassName: "w-full",
+                                        id: "password",
+                                        name: "password",
+                                        value: values.password,
+                                        inputMode: "numeric",
+                                        isLoading: audioPasswordLoader,
+                                        disabled: audioPasswordLoader,
+                                        placeholder: translate(
+                                          localeJson,
+                                          "placeholder_please_enter_password"
+                                        ),
+                                        hasIcon: true,
+                                        onChange: (evt) => {
+                                          const re = /^[0-9-]+$/;
+                                          if(evt.target.value=="")
+                                          {
+                                            setFieldValue("password", evt.target.value);
+                                          }
+                                          if(re.test(convertToSingleByte(evt.target.value)))
+                                          {
+                                          setFieldValue("password", evt.target.value);
+                                          }
+                                        },
+                                        onValueChange: (evt) => {
+                                          const re = /^[0-9-]+$/;
+                                          if(evt.target.value=="")
+                                          {
+                                            setFieldValue("password", evt.target.value);
+                                          }
+                                          if(re.test(convertToSingleByte(evt.target.value)))
+                                          {
+                                          setFieldValue("password", evt.target.value);
+                                          }
+                                        },
+                                        onBlur: handleBlur,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="w-11">
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.password &&
+                                      touched.password &&
+                                      errors.password
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="mb-3  w-full">
+                                <div className="flex w-12">
+                                  <div className="w-12">
+                                    <Input
+                                      inputProps={{
+                                        inputParentClassName: `w-full custom_input ${errors.familyCode &&
+                                          touched.familyCode &&
+                                          "p-invalid"
+                                          }`,
+                                        labelProps: {
+                                          text: translate(
+                                            localeJson,
+                                            "shelter_code"
+                                          ),
+                                          inputLabelClassName: "block",
+                                          spanText: "*",
+                                          inputLabelSpanClassName: "p-error",
+                                          labelMainClassName: "pb-1"
+                                        },
+                                        inputClassName: "w-full",
+                                        id: "familyCode",
+                                        name: "familyCode",
+                                        placeholder: translate(
+                                          localeJson,
+                                          "placeholder_hyphen_not_required"
+                                        ),
+                                        value: values.familyCode,
+                                        isLoading: audioFamilyCodeLoader,
+                                        disabled: audioFamilyCodeLoader,
+                                        hasIcon: true,
+                                        inputMode: "numeric",
+                                        onChange: (evt) => {
+                                          const re = /^[0-9-]+$/;
+                                          if (
+                                            evt.target.value === "" ||
+                                            re.test(convertToSingleByte(evt.target.value))
+                                          ) {
+                                            let val = evt.target.value.replace(
+                                              /-/g,
+                                              ""
+                                            ); // Remove any existing hyphens
+                                            if (val.length > 3) {
+                                              val =
+                                                val.slice(0, 3) +
+                                                val.slice(3);
+                                            }
+                                            setFieldValue("familyCode", val);
+                                          }
+                                        },
+                                        onBlur: handleBlur,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="w-11">
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.familyCode &&
+                                      touched.familyCode &&
+                                      errors.familyCode
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="mt-3">
+                              <div
+                                className="flex"
+                                style={{
+                                  justifyContent: "flex-end",
+                                  flexWrap: "wrap",
+                                }}
+                              >
+                                <ButtonRounded
+                                  buttonProps={{
+                                    buttonClass: "w-12 h-3rem primary-button",
+                                    type: "submit",
+                                    rounded: "true",
+                                    text: translate(localeJson, "mem_search"),
+                                  }}
+                                  parentClass={"w-full primary-button"}
+                                />
+                              </div>
+                            </div>
+                          </form>
                         </div>
                       </div>
-                      }
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </Formik>
+          )}
+        </Formik>
+      ) : (
+        <div className="h-full flex flex-1 justify-content-center align-items-center">
+          <CommonDialog
+            open={openBasicDataInfoDialog}
+            dialogBodyClassName="p-0"
+            header={translate(localeJson, "checkin_info")}
+            content={basicInfoContent()}
+            position={"center"}
+            footerParentClassName={"mt-5 w-12"}
+            dialogClassName={"w-10 sm:w-8 md:w-4 lg:w-4"}
+            footerButtonsArray={[
+              {
+                buttonProps: {
+                  buttonClass: "w-12",
+                  text: translate(localeJson, "yapple_modal_success_div_green_btn"),
+                  onClick: () => {
+                    confirmRegistrationBeforeCheckin()
+                  },
+                },
+                parentClass: "mb-2",
+              },
+              {
+                buttonProps: {
+                  buttonClass: "w-12 back-button",
+                  text: translate(localeJson, "yapple_modal_success_div_white_btn"),
+                  onClick: () => {
+                    setOpenBasicDataInfoDialog(false);
+                    setOpenBarcodeDialog(false)
+                  },
+                },
+                parentClass: "back-button",
+              },
+            ]}
+            close={() => {
+              setOpenBasicDataInfoDialog(false);
+            }}
+          />
+          <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
+            visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}
+            title={translate(localeJson, 'barcode_mynumber_dialog_main_title')}
+            subTitle={translate(localeJson, 'barcode_mynumber_dialog_sub_title')}
+            validateAndMoveToTempReg={(data) => validateAndMoveToForm(data)}
+          ></BarcodeDialog>
+          <YappleModal
+            open={importModalOpen}
+            close={onImportModalClose}
+            barcode={barcode}
+            secondButtonClick={openYappleModal}
+            setBarcode={setBarcode}
+            isCheckIn={true}
+            successHeader={"checkin_info"}
+            isEvent={true}
+            type={layoutReducer?.user?.place?.type}
+          />
+          <CommonPage
+            firstButtonClick={handleFirstButtonClick}
+            secondButtonClick={openYappleModal}
+            staffButtonClick={handleStaffButtonClick}
+            isCheckIn={true}
+            tittle={translate(localeJson, "new_to_admission_procedures")}
+          />
+        </div>
+      )}
     </>
   );
 }

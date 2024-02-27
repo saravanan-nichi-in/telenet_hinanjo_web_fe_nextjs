@@ -6,6 +6,8 @@ const initialState = {
     place: {},
     other: ""
   },
+  places:{},
+  position:{},
 };
 
 export const layout = createSlice({
@@ -19,8 +21,14 @@ export const layout = createSlice({
     setUserDetails: (state, action) => {
       state.user = action.payload;
     },
+    setPlaceDetails: (state, action) => {
+      state.places = action.payload;
+    },
+    setPosition:(state, action) => {
+      state.position = action.payload;
+    },
   },
 });
 
-export const { reset, setLayout, setUserDetails } = layout.actions;
+export const { reset, setLayout, setUserDetails,setPlaceDetails,setPosition } = layout.actions;
 export default layout.reducer;

@@ -9,16 +9,54 @@ export const EventQuestionnaireServices = {
     getList: _getList,
     registerUpdateEvent: _registerUpdateEvent,
     getEventDetail: _getEventDetail,
-    deleteEvent: _deleteEvent
+    deleteEvent: _deleteEvent,
+    updateEventData: _updateEventData,
+    updateEventStatus: _updateEventStatus,
+    getSingleEvent: _getSingleEvent,
+    updateSingleEvent: _updateSingleEvent
 };
 
 /**
- * Get History list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getSingleEvent(payload, callBackFun) {
+    axios.post('/user/event/default')
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
+        });
+}
+
+
+/**
  * @param {*} payload 
  * @param {*} callBackFun 
  */
 function _getList(payload, callBackFun) {
-    axios.post('/admin/questionnaireTemplate/list', payload)
+    axios.post('/admin/events/list', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            callBackFun(false);
+        });
+}
+
+/**
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getEventDetail(payload, callBackFun) {
+    axios.get('/admin/events/show', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -32,16 +70,80 @@ function _getList(payload, callBackFun) {
 }
 
 /**
- * Get History list
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getEventDetail(payload, callBackFun) {
-    axios.get('/admin/individual/questionnaire', payload)
+function _updateEventData(payload, callBackFun) {
+    axios.put('/admin/events/update', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
             }
+        })
+        .catch((error) => {
+            if (error.response.status == 422) {
+                if (isObject(error.response.data.message)) {
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    callBackFun(false);
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
+                }
+            } else {
+                callBackFun(false);
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                });
+            }
+        });
+}
+
+/**
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _updateSingleEvent(payload, callBackFun) {
+    axios.put('/admin/events/update/default', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _updateEventStatus(payload, callBackFun) {
+    axios.put('/admin/events/status/update', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+
         })
         .catch((error) => {
             toast.error(error?.response?.data?.message, {
@@ -56,7 +158,7 @@ function _getEventDetail(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _registerUpdateEvent(payload, callBackFun) {
-    axios.post('/admin/questionnaireTemplate/store', payload)
+    axios.post('/admin/events/create', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -97,7 +199,7 @@ function _registerUpdateEvent(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _deleteEvent(payload, callBackFun) {
-    axios.delete('/admin/questionnaireTemplate/delete', { data: { "id": payload.id } })
+    axios.delete('/admin/events/delete', { data: { "id": payload.id } })
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

@@ -1,16 +1,17 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
+
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, GoogleMapComponent } from "@/components";
-import { AdminPlaceDetailService } from "@/helper/adminPlaceDetailService";
+import { Button, GoogleMapComponent, CardSpinner } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector } from "@/redux/hooks";
+import CustomHeader from "@/components/customHeader";
+import { IoIosArrowBack } from "react-icons/io";
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const [admin, setAdmins] = useState([]);
   const router = useRouter();
   const Place = useAppSelector((state) => state.placeReducer.place);
   const id = Place?.id;
@@ -20,13 +21,13 @@ export default function StaffManagementEditPage() {
   const [placeName, setPlaceName] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address2, setAddress] = useState("");
+  const [placeAddress, setPlaceAddress] = useState("");
   const [defaultZipCode, setDefaultZipCode] = useState("");
   const [addressDefault, setAddressDefault] = useState("");
   const [capacity, setCapacity] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coordinates, setCoordinates] = useState("");
   const [url, setUrl] = useState("");
-  const [registerUrl, setRegisterUrl] = useState("");
   const [altitude, setAltitude] = useState("-");
   const [status, setStatus] = useState("");
   const [longitude, setLangitude] = useState(0);
@@ -34,6 +35,7 @@ export default function StaffManagementEditPage() {
   const [totalPerson, setTotalPerson] = useState("");
   const [percent, setPercentage] = useState("");
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+  const [tableLoading, setTableLoading] = useState(false);
 
   /* Services */
   const { details } = PlaceServices;
@@ -42,7 +44,6 @@ export default function StaffManagementEditPage() {
   useEffect(() => {
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
-      setLoader(false);
     };
     fetchData();
   }, [locale]);
@@ -61,34 +62,29 @@ export default function StaffManagementEditPage() {
   };
 
   function fetchData(response) {
+    setTableLoading(true);
     setLoader(true);
     const model = response.data.model;
-
     setPlaceName(model.name);
     setZipCode(model.zip_code);
     setAddress(model.address);
-    setDefaultZipCode(model.zip_code_default);
+    setPlaceAddress(model.address_place);
+    setDefaultZipCode(model.zip_code_default)
     setAddressDefault(model.address_default);
     setCapacity(`${model.total_place}人`);
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
     setUrl(`${window?.location?.origin}/user/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
-    setRegisterUrl(`${window?.location?.origin}/user/temp_register_member?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
     model.altitude && setAltitude(`${model.altitude}m`);
-    setStatus(model.active_flg === 1 ? "有効" : "無効");
+    setStatus(model.active_flg == 1 ? "有効" : "無効");
     setTotalPerson(model.total_person);
     setPercentage(model.percent);
     setApiResponse(model);
     setLangitude(parseFloat(model.map.longitude));
     setLatitude(parseFloat(model.map.latitude));
+    setTableLoading(false);
     setLoader(false);
   }
-
-  useEffect(() => {
-    AdminPlaceDetailService.getAdminsPlaceDetailMedium().then((data) =>
-      setAdmins(data)
-    );
-  }, []);
 
   const popoverContent = (
     <div>
@@ -111,158 +107,119 @@ export default function StaffManagementEditPage() {
   return (
     <div className="grid">
       <div className="col-12">
-        <div className="card">
-          {/* Header */}
-          <h5 className="page-header1">
-            {translate(localeJson, "details_place")}
-          </h5>
-          <hr />
-          <div>
-            <div
-              className="col-12 lg:flex p-0"
-              style={{ justifyContent: "start", flexWrap: "wrap" }}
-            >
-              <div
-                className="col-12 lg:col-7 pb-20px  lg:p-0 pr-2"
-                style={{ overflowX: "auto" }}
-              >
-                <ul className="custom-list">
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "evacuation_location")}
-                    </div>
-                    <div className="value">{placeName}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "postal_code")}
-                    </div>
-                    <div className="value">{zipCode}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "address")}
-                    </div>
-                    <div className="value">{address2}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "default_postal_code")}
-                    </div>
-                    <div className="value">{defaultZipCode}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "default_address")}
-                    </div>
-                    <div className="value">{addressDefault}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "capacity")}
-                    </div>
-                    <div className="value">{capacity}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "phone_number")}
-                    </div>
-                    <div className="value">{phoneNumber}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "latitude_longitude")}
-                    </div>
-                    <div className="value">{coordinates}</div>
-                  </li>
-                  <li>
-                    <div className="label">{translate(localeJson, "url")}</div>
-                    <div className="value text-link-class cursor-pointer">
-                      <a
-                        className="text-link-class cursor-pointer"
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {url}
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "smartphone_registration_url")}
-                    </div>
-                    <div className="value text-link-class cursor-pointer">
-                      <a
-                        href={registerUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-link-class cursor-pointer"
-                      >
-                        {registerUrl}
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "altitude")}
-                    </div>
-                    <div className="value">{altitude}</div>
-                  </li>
-                  <li>
-                    <div className="label">
-                      {translate(localeJson, "status")}
-                    </div>
-                    <div className="value">{status}</div>
-                  </li>
-                </ul>
+        <Button buttonProps={{
+          buttonClass: "w-auto back-button-transparent mb-2 p-0",
+          text: translate(localeJson, "place_master_list_detail_back"),
+          icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
+          onClick: () => router.push("/admin/place"),
+        }} parentClass={"inline back-button-transparent"} />
+        <CustomHeader headerClass={"page-header1"} header={placeName} />
+      </div>
+      <div className="col-12">
+        {tableLoading ? (
+          <CardSpinner />
+        ) : (
+          <div className="custom-card-no-shadow ">
+            <div className="grid">
+              <div className="col-12 md:col-7">
+                <div className="font-bold mt-3">
+                  {translate(localeJson, "place_basic_information")}
+                </div>
+                <div className="mt-1"> {translate(localeJson, 'post_letter') + zipCode}</div>
+                <div className="">{placeAddress ? placeAddress.slice(8) : ""}</div>
+                <div className="">{phoneNumber}</div>
+                <div className="font-bold mt-3">
+                  {translate(localeJson, "place_initial_information")}
+                </div>
+                <div className="mt-1">{translate(localeJson, 'post_letter') + defaultZipCode}</div>
+                <div className="">{addressDefault}</div>
+                <div className="mt-3">
+                  <span className="font-bold">{translate(localeJson, "place_lat_long")}</span> : {coordinates}
+                </div>
               </div>
-
-              <div className="col-12 lg:col-5 lg:p-0 lg:pl-2 info-window">
+              <div className="col-12 md:col-5">
                 <GoogleMapComponent
                   initialPosition={{ lat: latitude, lng: longitude }}
-                  height={"455px"}
+                  height={"300px"}
                   popoverContent={popoverContent}
                   mapScale={settings_data?.map_scale}
                 />
               </div>
             </div>
-            <div
-              className="flex pt-3 pb-3 gap-2"
-              style={{ justifyContent: "start", flexWrap: "wrap" }}
-            >
-              <div>
-                <Button
-                  buttonProps={{
-                    buttonClass: "text-600 border-500 evacuation_button_height",
-                    bg: "bg-white",
-                    type: "button",
-                    hoverBg: "hover:surface-500 hover:text-white",
-                    text: translate(localeJson, "back"),
-                    rounded: "true",
-                    severity: "primary",
-                    onClick: () => router.push("/admin/place"),
-                  }}
-                  parentStyle={{ paddingTop: "10px" }}
-                />
-              </div>
-              <div className="">
-                <Button
-                  buttonProps={{
-                    buttonClass: "evacuation_button_height",
-                    type: "button",
-                    onClick: () =>
-                      router.push({
-                        pathname: `/admin/place/edit`,
-                      }),
-                    text: translate(localeJson, "edit"),
-                    rounded: "true",
-                    severity: "primary",
-                  }}
-                  parentStyle={{ paddingTop: "10px" }}
-                />
+          </div>
+        )}
+      </div>
+      <div className="col-12">
+        {tableLoading ? (
+          <CardSpinner />
+        ) : (
+          <div className="custom-card-no-shadow ">
+            <div className="grid">
+              <div className="col-12">
+                <div className="font-bold mt-2">
+                  {translate(localeJson, "place_center_information")}
+                </div>
+                <div className="mt-1">
+                  {translate(localeJson, "capacity")} : {capacity}
+                </div>
+                <div className="">
+                  {translate(localeJson, "altitude")} : {altitude}
+                </div>
+                <div className="">
+                  {translate(localeJson, "status")} : {status}
+                </div>
               </div>
             </div>
+          </div>
+        )}
+      </div>
+      <div className="col-12">
+        {tableLoading ? (
+          <CardSpinner />
+        ) : (
+          <div className="custom-card-no-shadow ">
+            <div className="grid">
+              <div className="col-12">
+                <div className="font-bold mt-2">
+                  {translate(localeJson, "place_url")}
+                </div>
+                <div className="mt-2">
+                  {translate(localeJson, "place_url_url")} :
+                  <a
+                    className="text-link-class cursor-pointer"
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {url}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="col-12">
+        <div
+          className="flex pt-3 pb-3 gap-2"
+          style={{ justifyContent: "center", flexWrap: "wrap" }}
+        >
+          <div className="">
+            <Button
+              buttonProps={{
+                buttonClass: "w-8rem update-button",
+                type: "button",
+                onClick: () =>
+                  router.push({
+                    pathname: `/admin/place/edit`,
+                  }),
+                text: translate(localeJson, "edit"),
+                rounded: "true",
+              }}
+              parentClass={"edit-button"}
+              parentStyle={{ marginTop: "10px" }}
+            />
           </div>
         </div>
       </div>

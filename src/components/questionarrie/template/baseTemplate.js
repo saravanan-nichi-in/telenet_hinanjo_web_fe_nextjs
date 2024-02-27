@@ -6,13 +6,14 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { NormalCheckBox } from '@/components/checkbox';
 import { InputSwitch } from '@/components/switch';
-import { Input } from '@/components/input';
+import { Input } from '@/components/input-backup';
 import { RadioBtn } from '@/components/radioButton';
+import { SelectButton } from 'primereact/selectbutton';
 
 const BaseTemplate = React.forwardRef((props, ref) => {
     const [item, setItem] = useState(props.item);
     const { removeQuestion, handleItemChange, triggerFinalSubmit, itemIndex } = props;
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
     const [jpTitleError, setJpTitleError] = useState('');
     const [choiceError, setChoiceError] = useState('');
 
@@ -86,6 +87,13 @@ const BaseTemplate = React.forwardRef((props, ref) => {
         }
         if (field == "selection_mode") {
             updatedData.selected_type = value;
+            if (value == 1 && updatedData.option.length == 0) {
+                updatedData.option.push("");
+                updatedData.option_en.push("");
+            }
+            if (value == 1) {
+                updatedData.is_voice_type = false;
+            }
         }
         if (field == "sub_selection") {
             updatedData.inner_question_type = value;
@@ -137,247 +145,96 @@ const BaseTemplate = React.forwardRef((props, ref) => {
             <div>
                 <form>
                     <div>
-                        <div className='mobile_questionaries mobile_accordion'>
-                            <Accordion>
-                                <AccordionTab header={`${translate(localeJson, 'item')} ${item.title}`}>
-                                    {/* Questionnaires header */}
-                                    <div className='mt-1' style={{
-                                        backgroundColor: "#afe1f9",
-
-                                    }}>
-                                        <div className="" style={{ flexWrap: "wrap" }}>
-                                            <div className=''>
-                                                <div className='flex align-items-center pl-2 pt-2 pb-2'>
-                                                    <NormalCheckBox checkBoxProps={{
-                                                        checked: item.is_required,
-                                                        labelClass: "pl-2",
-                                                        onChange: (e) => updateFormChangeData(e.checked, "required")
-                                                    }} />
-                                                    {translate(localeJson, 'required')}
-                                                </div>
-                                                <div className='flex align-items-center gap-2 pt-2 pl-2 switch-align' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
-                                                    <InputSwitch inputSwitchProps={{
-                                                        checked: item.is_visible,
-                                                        style: { paddingLeft: '10px' },
-                                                        onChange: (e) => updateFormChangeData(e.value, "visible")
-                                                    }} />
-                                                    {translate(localeJson, 'display_in_registration_screen')}
-                                                </div>
-                                            </div>
-                                            <div className='flex align-items-center pt-1 pb-2'>
-                                                <div className='align-items-center pl-2'>
-                                                    {selectionMode.map((type) => {
-                                                        return (
-                                                            <div key={type.key} style={{ fontSize: "14px", paddingTop: '10px' }} >
-                                                                <RadioBtn
-                                                                    radioBtnProps={{
-                                                                        checked: item.selected_type == type.key,
-                                                                        inputId: type.key,
-                                                                        name: type.name,
-                                                                        value: type,
-                                                                        labelClass: "pl-2 pr-2",
-                                                                        onChange: (e) => updateFormChangeData(e.value.key, "selection_mode")
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                                {item.selected_type == 1 && (
-                                                    <div className="align-items-center pl-2">
-                                                        {innerSelectionMode.map((type) => {
-                                                            return (
-                                                                <div key={type.key} style={{ fontSize: "14px", paddingTop: "10px" }} >
-                                                                    <RadioBtn
-                                                                        radioBtnProps={{
-                                                                            checked: item.inner_question_type == type.key,
-                                                                            inputId: type.key,
-                                                                            name: type.name,
-                                                                            value: type,
-                                                                            labelClass: "pl-2 pr-2",
-                                                                            onChange: (e) => updateFormChangeData(e.value.key, "sub_selection")
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className='pt-2 pb-2 pl-2 flex gap-2 align-items-center justify-content-start' style={{ justifyContent: "flex-start", flexWrap: "wrap" }}>
-                                                <InputSwitch inputSwitchProps={{
-                                                    checked: item.is_voice_type,
-                                                    onChange: (e) => updateFormChangeData(e.value, "voice"),
-                                                    disabled: item.selected_type == 1 ? true : false
-                                                }} />
-                                                {translate(localeJson, 'voice_input')}
-                                            </div>
+                        <div>
+                            {/* Questionnaires header */}
+                            <div className="flex align-items-center justify-content-between ">
+                                <div className="">
+                                    {translate(localeJson, 'item')} {item.title + (itemIndex + 1)}
+                                </div>
+                                <Button buttonProps={{
+                                    text: `${translate(localeJson, 'delete')}`,
+                                    buttonClass: "del_ok-button-questionnaire",
+                                    rounded: "true",
+                                    type: "button",
+                                    icon: "pi pi-trash pt-1",
+                                    onClick: () => removeQuestion()
+                                }} parentClass={"del_ok-button-questionnaire"} />
+                            </div>
+                            <div className="mt-3 col-12 sm:col-8 md:col-8 lg:col-8 pl-0">
+                                <div className='flex align-items-center justify-content-between'>
+                                    <div className='flex gap-2 text-sm'>
+                                        <NormalCheckBox checkBoxProps={{
+                                            checked: item.is_required,
+                                            onChange: (e) => updateFormChangeData(e.checked, "required")
+                                        }} />
+                                        <div className={`${locale == 'en' ? 'pt-1' : 'pt-0'}`}>
+                                            {translate(localeJson, 'required') + " " + translate(localeJson, 'item')}
                                         </div>
                                     </div>
-                                    {item.selected_type == 1 && (
-                                        Array.isArray(item.option) && item.option.map((option, i) => (
-                                            <div key={i} className="flex" style={{
-                                                borderRight: "1px solid #000",
-                                                borderBottom: "1px solid #000",
-                                                borderLeft: "1px solid #000",
-                                            }}>
-
-                                                <div className="col-fixed col-3 flex align-items-center justify-content-center">
-
-                                                    {translate(localeJson, 'choice')} {i + 1}<span style={{
-                                                        color: i < 1 ? "red" : "white"
-                                                    }} >*</span>
-
-                                                </div>
-                                                <div className="col-4" style={{
-                                                    borderLeft: "1px solid #000",
-                                                }}>
-                                                    <div className='gap-1 p-0 align-items-center'>
-                                                        <Input inputProps={{
-                                                            value: option,
-                                                            inputClass: "w-full",
-                                                            onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
-                                                        }} />
-                                                        <Input inputProps={{
-                                                            value: item.option_en[i],
-                                                            inputClass: "w-full",
-                                                            onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
-                                                        }} />
-                                                    </div>
-                                                    {choiceError && (i == 0) && <div className="error-message">{choiceError}</div>}
-                                                </div>
-                                                <div className='col-5 flex align-items-center justify-content-center' style={{
-                                                    borderLeft: "1px solid #000",
-                                                }}>
-                                                    {item.option.length == i + 1 ? (
-                                                        <Button buttonProps={{
-                                                            text: `＋ ${translate(localeJson, 'add_choice')}`,
-                                                            severity: "success",
-                                                            rounded: "true",
-                                                            type: "button",
-                                                            onClick: () => updateFormChangeData(i, "add")
-                                                        }}
-                                                        />
-                                                    ) : (
-                                                        <Button buttonProps={{
-                                                            text: `－  ${translate(localeJson, 'del_choice')}`,
-                                                            severity: "danger",
-                                                            rounded: "true",
-                                                            type: "button",
-                                                            onClick: () => updateFormChangeData(i, 'delete')
-                                                        }}
-                                                        />
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </AccordionTab>
-                            </Accordion>
-                        </div>
-
-
-                        <div className='hidden sm:block'>
-                            {/* Questionnaires header */}
-                            <div className="flex " style={{
-                                backgroundColor: "#afe1f9",
-                                border: "1px solid #000",
-                            }}>
-                                <div className="col-fixed col-2 flex align-items-center justify-content-center">
-                                    {translate(localeJson, 'item')} {item.title}
-                                </div>
-                                <div className="col" style={{
-                                    borderLeft: "1px solid #000"
-                                }}>
-                                    <div className='flex'>
-                                        <div className='col-8 flex gap-2 align-items-center justify-content-start'>
-                                            <NormalCheckBox checkBoxProps={{
-                                                checked: item.is_required,
-                                                onChange: (e) => updateFormChangeData(e.checked, "required")
-                                            }} />
-                                            {translate(localeJson, 'required')}
-                                        </div>
-                                        <div className='col-4 flex  gap-2 align-items-center justify-content-start ' style={{ fontSize: "14px" }}>
-                                            <InputSwitch inputSwitchProps={{
-                                                checked: item.is_visible,
-                                                onChange: (e) => updateFormChangeData(e.value, "visible")
-                                            }} />
+                                    <div className='flex gap-2 text-sm'>
+                                        <NormalCheckBox checkBoxProps={{
+                                            checked: item.is_visible,
+                                            onChange: (e) => updateFormChangeData(e.checked, "visible")
+                                        }} />
+                                        <div className={`${locale == 'en' ? 'pt-1' : 'pt-0'}`}>
                                             {translate(localeJson, 'display_in_registration_screen')}
                                         </div>
                                     </div>
-                                    <div className='flex align-items-center justify-content-between'>
-                                        <div className='col-8 gap-3'>
-                                            <div className="flex align-items-center">
-                                                {selectionMode.map((type) => {
-                                                    return (
-                                                        <div key={type.key} style={{ fontSize: "14px" }} >
-                                                            <RadioBtn
-                                                                radioBtnProps={{
-                                                                    checked: item.selected_type == type.key,
-                                                                    inputId: type.key,
-                                                                    name: type.name,
-                                                                    value: type,
-                                                                    labelClass: "pl-2 pr-2",
-                                                                    onChange: (e) => updateFormChangeData(e.value.key, "selection_mode")
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-
-                                            {item.selected_type == 1 && (
-                                                <div className="flex align-items-center pt-2">
-                                                    {innerSelectionMode.map((type) => {
-                                                        return (
-                                                            <div key={type.key} style={{ fontSize: "14px" }} >
-                                                                <RadioBtn
-                                                                    radioBtnProps={{
-                                                                        checked: item.inner_question_type == type.key,
-                                                                        inputId: type.key,
-                                                                        name: type.name,
-                                                                        value: type,
-                                                                        labelClass: "pl-2 pr-2",
-                                                                        onChange: (e) => updateFormChangeData(e.value.key, "sub_selection")
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        );
-                                                    })}
+                                </div>
+                                <div className='block align-items-center justify-content-between'>
+                                    <div className='mt-3 gap-3'>
+                                        <div>
+                                            <span className='font-bold'>{translate(localeJson, 'item_structure')}</span>
+                                        </div>
+                                        <div className="flex align-items-center">
+                                            <SelectButton
+                                                options={selectionMode}
+                                                value={selectionMode.find((obj) => item.selected_type == obj.key)}
+                                                optionLabel={'name'}
+                                                disabled={item.id ? true : false}
+                                                onChange={(e) => updateFormChangeData(e.value.key, "selection_mode")}
+                                            />
+                                        </div>
+                                        {item.selected_type == 1 && !item?.id && (
+                                            <div className='mt-3 gap-3'>
+                                                <div>
+                                                    <span className='font-bold'>{translate(localeJson, 'selection_method')}</span>
                                                 </div>
-                                            )}
-
-                                        </div>
-                                        <div style={{ paddingRight: "54px", fontSize: "14px" }} className='col-4 custom-switch flex gap-2 align-items-center justify-content-start'>
-                                            <InputSwitch inputSwitchProps={{
-                                                checked: item.is_voice_type,
-                                                onChange: (e) => updateFormChangeData(e.value, "voice"),
-                                                disabled: item.selected_type == 1 ? true : false
-                                            }} />
-                                            {translate(localeJson, 'voice_input')}
-                                        </div>
+                                                <div className="flex align-items-center">
+                                                    <SelectButton
+                                                        options={innerSelectionMode}
+                                                        value={innerSelectionMode.find((obj) => item.inner_question_type == obj.key)}
+                                                        optionLabel={'name'}
+                                                        onChange={(e) => updateFormChangeData(e.value.key, "sub_selection")}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className='mt-3 custom-switch flex gap-2 align-items-center justify-content-start' style={{ paddingRight: "54px", fontSize: "14px" }}>
+                                        <InputSwitch inputSwitchProps={{
+                                            checked: item.is_voice_type,
+                                            onChange: (e) => updateFormChangeData(e.value, "voice"),
+                                            disabled: item.selected_type == 1 ? true : false
+                                        }} />
+                                        {translate(localeJson, 'voice_input')}
                                     </div>
                                 </div>
                             </div>
                             {/* Questionnaires */}
-                            <div className="flex" style={{
-                                borderRight: "1px solid #000",
-                                borderBottom: "1px solid #000",
-                                borderLeft: "1px solid #000",
-                            }}>
-                                <div className="col-fixed col-2 flex align-items-center justify-content-center">
+                            <div className="mt-3" >
+                                <div className="flex font-bold align-items-center justify-content-start">
                                     {translate(localeJson, 'item_title')}<span style={{
                                         color: "red"
                                     }}>*</span>
                                 </div>
-                                <div className="col-7" style={{
-                                    borderLeft: "1px solid #000",
-                                }}>
-                                    <div className='pb-2'>
+                                <div className="mt-2">
+                                    <div className=''>
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle,
                                             maxLength: 255,
+                                            placeholder: translate(localeJson, 'jp_title_placeholder'),
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'jp_title')
                                             }
@@ -385,90 +242,69 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         }} />
                                         {jpTitleError && <div className="error-message">{jpTitleError}</div>}
                                     </div>
-                                    <div className='align-items-center'>
+                                    <div className='mt-2 align-items-center'>
                                         <Input inputProps={{
                                             inputClass: "w-full",
                                             value: item.questiontitle_en,
                                             maxLength: 255,
+                                            placeholder: translate(localeJson, 'en_title_placeholder'),
                                             onChange: (e) => {
                                                 updateFormChangeData(e.target.value, 'en_title')
                                             }
                                         }} />
                                     </div>
                                 </div>
-                                <div className='col-3 flex align-items-center justify-content-center' style={{
-                                    borderLeft: "1px solid #000",
-                                }}>
-                                    <Button buttonProps={{
-                                        text: `－ ${translate(localeJson, 'del_item')}`,
-                                        severity: "danger",
-                                        rounded: "true",
-                                        type: "button",
-                                        onClick: () => removeQuestion()
-                                    }} />
-                                </div>
                             </div>
                             {/* Questionnaires options */}
+                            {item.selected_type == 1 &&
+                                <div className="mt-3 font-bold flex align-items-center justify-content-start">
+                                    {translate(localeJson, 'choice')}
+                                </div>
+                            }
                             {item.selected_type == 1 && (
                                 Array.isArray(item.option) && item.option.map((option, i) => (
-                                    <div key={i} className="flex" style={{
-                                        borderRight: "1px solid #000",
-                                        borderBottom: "1px solid #000",
-                                        borderLeft: "1px solid #000",
-                                    }}>
-
-                                        <div className="col-fixed col-2 flex align-items-center justify-content-center">
-
-                                            {translate(localeJson, 'choice')} {i + 1}<span style={{
-                                                color: i < 1 ? "red" : "white"
-                                            }} >*</span>
-
-                                        </div>
-                                        <div className="col-7" style={{
-                                            borderLeft: "1px solid #000",
-                                        }}>
-                                            <div className='flex gap-1 p-0 align-items-center'>
+                                    <div key={i} className="mt-2">
+                                        <div className="mt-2" >
+                                            <div className='flex gap-1 align-items-center justify-content-between'>
                                                 <Input inputProps={{
                                                     value: option,
-                                                    inputClass: "w-full",
+                                                    inputClass: "w-12",
                                                     maxLength: 255,
+                                                    placeholder: translate(localeJson, 'jp_option_placeholder') + (i + 1),
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
-                                                }} />
-                                                <Input inputProps={{
-                                                    value: item.option_en[i],
-                                                    inputClass: "w-full",
-                                                    maxLength: 255,
-                                                    onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
-                                                }} />
+                                                }}
+                                                    parentClass={'w-12'}
+                                                />
+                                                <div className='w-12 flex align-items-center gap-2'>
+                                                    <Input inputProps={{
+                                                        value: item.option_en[i],
+                                                        inputClass: "w-12",
+                                                        maxLength: 255,
+                                                        placeholder: translate(localeJson, 'en_option_placeholder') + (i + 1),
+                                                        onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
+                                                    }}
+                                                        parentClass={'w-12'}
+                                                    />
+                                                    <button className="pi pi-trash text-red-600 border-none bg-transparent" type='button' disabled={i === 0} onClick={() => updateFormChangeData(i, 'delete')} />
+                                                </div>
                                             </div>
                                             {choiceError && (i == 0) && <div className="error-message">{choiceError}</div>}
-                                        </div>
-                                        <div className='col-3 flex align-items-center justify-content-center' style={{
-                                            borderLeft: "1px solid #000",
-                                        }}>
-                                            {item.option.length == i + 1 ? (
-                                                <Button buttonProps={{
-                                                    text: `＋ ${translate(localeJson, 'add_choice')}`,
-                                                    severity: "success",
-                                                    rounded: "true",
-                                                    type: "button",
-                                                    onClick: () => updateFormChangeData(i, "add")
-                                                }}
-                                                />
-                                            ) : (
-                                                <Button buttonProps={{
-                                                    text: `－  ${translate(localeJson, 'del_choice')}`,
-                                                    severity: "danger",
-                                                    rounded: "true",
-                                                    type: "button",
-                                                    onClick: () => updateFormChangeData(i, 'delete')
-                                                }}
-                                                />
-                                            )}
                                         </div>
                                     </div>
                                 ))
                             )}
+                            {item.selected_type == 1 &&
+                                <div className='mt-2 flex align-items-center justify-content-center'>
+                                    <Button buttonProps={{
+                                        text: `＋ ${translate(localeJson, 'add_choice')}`,
+                                        buttonClass: "create-button-questionnaire",
+                                        rounded: "true",
+                                        type: "button",
+                                        onClick: () => updateFormChangeData(1, "add")
+                                    }} parentClass={"create-button-questionnaire"}
+                                    />
+                                </div>
+                            }
                         </div>
                     </div>
                 </form>
@@ -479,7 +315,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
     return (
         <>
             <div className="grid custom_orderlist">
-                <div className="col-12 ">
+                <div className="col-12 question-block">
                     {itemTemplate(item)}
                 </div>
             </div>

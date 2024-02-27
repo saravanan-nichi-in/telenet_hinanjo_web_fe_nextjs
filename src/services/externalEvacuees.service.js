@@ -28,7 +28,6 @@ function _exportData(payload) {
                 }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -45,13 +44,12 @@ function _getList(payload, callBackFun) {
     axios
         .post("/staff/external/family/list", payload)
         .then((response) => {
-            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            // Handle errors here
+            
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -65,17 +63,15 @@ function _getList(payload, callBackFun) {
  * @param {*} callBackFun
  */
 function _getEvacueeList(payload, callBackFun) {
-    console.log(payload);
     axios
         .post("/staff/external/family/detail", payload)
         .then((response) => {
-            // console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            // Handle errors here
+            
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",

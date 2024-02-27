@@ -15,14 +15,14 @@ export const MapServices = {
  */
 function _getPlaceList(callBackFun) {
   axios
-    .post("/user/registration/place/list")
+    .post("/user/place/list")
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
       }
     })
     .catch((error) => {
-      // Handle errors here
+      
       toast.error(error?.response?.data?.message, {
         position: "top-right",
     });

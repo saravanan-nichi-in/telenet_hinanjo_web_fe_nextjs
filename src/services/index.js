@@ -16,3 +16,8 @@ export * from "./check_in_out.services";
 export * from "./external.services";
 export * from "./user_dashboard.services";
 export * from "./map.services";
+export * from "./temp_register.services";
+export * from "./user_event_list.services";
+export * from "./admin_evacuee_temp_reg.services";
+export * from "./admin_event_status.services";
+export * from "./public_evacuee.services";

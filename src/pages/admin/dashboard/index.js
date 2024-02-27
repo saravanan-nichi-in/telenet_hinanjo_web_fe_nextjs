@@ -2,31 +2,32 @@ import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
 import { NormalTable, DeleteModal } from '@/components';
-import { getValueByKeyRecursively as translate, getTotalCountFromArray, getAveragePercentage } from '@/helper'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DashboardServices } from '@/services';
+import CustomHeader from '@/components/customHeader';
 
 function AdminDashboard() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
     const columnsData = [
-        { field: 'number', header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center',alignHeader:"center" },
-        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem',maxWidth:"15rem", headerClassName: "custom-header" },
-        { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center"},
-        { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold" ,textAlign:"right" ,alignHeader:"center"},
-        { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center"},
-        { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center"},
-        { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header",textAlign:"right" ,alignHeader:"center" },
-        { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center',alignHeader:"center" },
+        { field: 'number', header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center', alignHeader: "center" },
+        { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header" },
+        { field: 'max_capacity', header: translate(localeJson, 'max_capacity'), minWidth: '10rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'number_of_evacuees', header: translate(localeJson, 'number_of_evacuees_admin_dashboard'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold", textAlign: "center", alignHeader: "center" },
+        { field: 'accommodation_rate', header: translate(localeJson, 'accommodation_rate'), minWidth: '7rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'household', header: translate(localeJson, 'household'), minWidth: '10rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'number_of_people_count_only', header: translate(localeJson, 'number_of_people_count_only'), minWidth: '15rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'male', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'female', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'others_count', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'remaining_number_people', header: translate(localeJson, 'remaining_number_people'), minWidth: "7rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', alignHeader: "center" },
     ]
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 5,
+            limit: 10,
             sort_by: "",
             order_by: "desc",
         },
@@ -65,16 +66,16 @@ function AdminDashboard() {
         var additionalColumnsKeys = [];
         var additionalColumnsArrayWithOldData = [...columnsData];
         var preparedList = [];
+        var frozenObj = [];
+        var listTotalCount = 0;
         var insertIndex = 10;
-        var trimPeopleLength = locale == "ja" ? 1 : 6;
-        var trimHouseholdLength = locale == "ja" ? 2 : 9;
-        if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
+        if (response?.success && !_.isEmpty(response.data) && response.data.total > 0) {
             const dataOfFirstObj = response.data.list[0].specialCare
             const data = response.data.list;
             // Prepare table dynamic columns
             if (dataOfFirstObj) {
                 dataOfFirstObj.map((obj, i) => {
-                    let preparedColumnObjToMerge = { field: obj.name_en, header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign:"right" ,alignHeader:"center" };
+                    let preparedColumnObjToMerge = { field: (locale == "ja" ? obj.name : obj.name_en), header: locale == "ja" ? obj.name : obj.name_en, minWidth: "7rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" };
                     additionalColumnsKeys.push(preparedColumnObjToMerge.field);
                     additionalColumnsArrayWithOldData.splice(insertIndex + i, 0, preparedColumnObjToMerge);
                 })
@@ -92,42 +93,44 @@ function AdminDashboard() {
                     male: `${obj.countMale}${translate(localeJson, 'people')}`,
                     female: `${obj.countFemale}${translate(localeJson, 'people')}`,
                     others_count: `${obj.countOthers}${translate(localeJson, 'people')}`,
-                    remaining_number_people: obj.full_status == 1 ? `0${translate(localeJson, 'people')}` : `${obj.rateSheltered}${translate(localeJson, 'people')}`,
+                    remaining_number_people: obj.full_status == 1 ? `0${translate(localeJson, 'people')}` : `${obj.restSheltered}${translate(localeJson, 'people')}`,
                     food_assistance: `${obj.foodRequiredCount}${translate(localeJson, 'people')}`,
                     switch_to_full: action(obj),
                 }
-                dataOfFirstObj.map((objSub, i) => {
-                    preparedObj[objSub.name_en] = `${obj.specialCare[i].count}${translate(localeJson, 'people')}`;
+                additionalColumnsKeys.map((value, i) => {
+                    preparedObj[value] = `${obj.specialCare[i].count}${translate(localeJson, 'people')}`;
                 })
                 preparedList.push(preparedObj);
             })
+            const totalCounts = response.data.totalCounts;
             // Update frozen data
-            var frozenObj = {
+            let preparedFrozenObj = {
                 number: "",
                 evacuation_place: translate(localeJson, 'total'),
-                max_capacity: `${getTotalCountFromArray(preparedList, "max_capacity", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                number_of_evacuees: `${getTotalCountFromArray(preparedList, "number_of_evacuees", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                accommodation_rate: getAveragePercentage(preparedList, "accommodation_rate"),
-                household: `${getTotalCountFromArray(preparedList, "household", trimHouseholdLength)}${translate(localeJson, 'household_title')}`,
-                number_of_people_count_only: `${getTotalCountFromArray(preparedList, "number_of_people_count_only", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                male: `${getTotalCountFromArray(preparedList, "male", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                female: `${getTotalCountFromArray(preparedList, "female", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                others_count: `${getTotalCountFromArray(preparedList, "others_count", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                remaining_number_people: `${getTotalCountFromArray(preparedList, "remaining_number_people", trimPeopleLength)}${translate(localeJson, 'people')}`,
-                food_assistance: `${getTotalCountFromArray(preparedList, "food_assistance", trimPeopleLength)}${translate(localeJson, 'people')}`,
+                max_capacity: `${totalCounts.totalMaxCapacity}${translate(localeJson, 'people')}`,
+                number_of_evacuees: `${totalCounts.totalEvacueeCount}${translate(localeJson, 'people')}`,
+                accommodation_rate: `${totalCounts.averageAccommodationRate}%`,
+                household: `${totalCounts.totalHousehold}${translate(localeJson, 'household_title')}`,
+                number_of_people_count_only: `${totalCounts.totalPeopleCount}${translate(localeJson, 'people')}`,
+                male: `${totalCounts.totalMale}${translate(localeJson, 'people')}`,
+                female: `${totalCounts.totalFemale}${translate(localeJson, 'people')}`,
+                others_count: `${totalCounts.totalOther}${translate(localeJson, 'people')}`,
+                remaining_number_people: `${totalCounts.totalRemainingPeople}${translate(localeJson, 'people')}`,
+                food_assistance: `${totalCounts.totalFoodRequiredCount}${translate(localeJson, 'people')}`,
                 switch_to_full: "",
             };
+            const specialCareCount = response.data.totalSpecialCaresCount;
             additionalColumnsKeys.map((obj, i) => {
-                frozenObj[obj] = `${getTotalCountFromArray(preparedList, obj, trimPeopleLength)}${translate(localeJson, 'people')}`
+                preparedFrozenObj[obj] = `${specialCareCount[obj]}${translate(localeJson, 'people')}`
             })
-            // Update prepared list to the state
-            setColumns(additionalColumnsArrayWithOldData);
-            setFrozenArray([frozenObj]);
-            setList([...preparedList]);
-            setTotalCount(response.data.total);
+            frozenObj = [preparedFrozenObj];
+            listTotalCount = response.data.total;
         }
         setTableLoading(false);
-        setLoader(false);
+        setColumns(additionalColumnsArrayWithOldData);
+        setList(preparedList);
+        setFrozenArray(frozenObj);
+        setTotalCount(listTotalCount);
     };
 
     /**
@@ -139,15 +142,15 @@ function AdminDashboard() {
         return (
             <div className='input-switch-parent'>
                 <DeleteModal
-                    header={translate(localeJson, 'confirmation_information')}
+                    header={translate(localeJson, 'confirmation')}
                     content={translate(localeJson, 'change_active_place')}
                     data={obj}
                     checked={obj.full_status == 1 ? true : false}
                     parentClass={"custom-switch"}
                     cancelButton={true}
                     updateButton={true}
-                    cancelButtonClass="text-600 w-8rem font-bold"
-                    updateButtonClass="w-8rem font-bold"
+                    cancelButtonClass="w-full font-bold back-button"
+                    updateButtonClass="w-full font-bold update-button"
                     updateCalBackFunction={(rowDataReceived) => getDataFromupdateButtonOnClick(rowDataReceived)}
                 />
             </div>
@@ -188,20 +191,24 @@ function AdminDashboard() {
         }
     }
 
+    const rowClassName = (rowData) => {
+        return (rowData.evacuation_place === '合計' || rowData.evacuation_place == 'Total') ? 'common_table_bg' : "";
+    }
+
     return (
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <h5 className='page-header1'>  {translate(localeJson, 'evacuation_status_list')}</h5>
-                    <hr />
+                    <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "evacuation_status_list")} />
                     <div>
-
                         <div className='mt-3'>
                             <NormalTable
                                 lazy
                                 totalRecords={totalCount}
+                                parentClass={"custom-table-dashboard"}
                                 loading={tableLoading}
                                 stripedRows={true}
+                                rowClassName={rowClassName}
                                 className={"custom-table-cell"}
                                 showGridlines={"true"}
                                 value={list}

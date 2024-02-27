@@ -1,32 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
-import { getValueByKeyRecursively as translate } from "@/helper";
-import { LayoutContext } from "@/layout/context/layoutcontext";
-import {
-  Button,
-  DividerComponent,
-  NormalTable,
-  Counter,
-  TextAreaFloatLabel,
-  ValidationError
-} from "@/components";
-import { StaffSuppliesServices } from "@/services/supplies.services";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
+import { getValueByKeyRecursively as translate } from "@/helper";
+import { LayoutContext } from "@/layout/context/layoutcontext";
+import { Button, NormalTable, ValidationError } from "@/components";
+import { StaffSuppliesServices } from "@/services/supplies.services";
+import CustomHeader from "@/components/customHeader";
+import { TextArea } from "@/components/input";
+import { CounterSupplies } from "@/components/incrementDecrement";
+
 export default function Supplies() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const schema = Yup.object().shape({
-    comment: Yup.string().max(
-      200,
-      translate(localeJson, "comment") + translate(localeJson, "max_length_200")
-    ),
-    remarks: Yup.string().max(
-      200,
-      translate(localeJson, "remarks") + translate(localeJson, "max_length_200")
-    ),
+    comment: Yup.string().notRequired(),
+    remarks: Yup.string().notRequired(),
   });
 
   const router = useRouter();
@@ -35,47 +26,80 @@ export default function Supplies() {
     comment: "",
     remarks: "",
   };
+
+
   const columnsData = [
     {
       field: "slno",
-      header: translate(localeJson, "supplies_slno"),
+      header: translate(localeJson, "staff_supply_table_heading_id"),
       className: "sno_class",
-      textAlign: "center",
-      alignHeader:"center"
+      minWidth: "8rem",
+      maxWidth: "8rem",
+      textAlign: "left",
+      alignHeader: "left",
     },
     {
       field: "name",
-      header: translate(localeJson, "supplies_name"),
-      minWidth: "15rem",
-      maxWidth: "15rem",
+      header: translate(localeJson, "staff_supply_table_heading_material_name"),
+      minWidth: "13rem",
+      maxWidth: "13rem",
+      textAlign: "left",
+      alignHeader: "left",
     },
     {
-      field: "unit",
-      header: translate(localeJson, "supplies_unit"),
+      field: "current_quantity",
+      header: translate(localeJson, "staff_supply_table_heading_current_quantity"),
       minWidth: "10rem",
       maxWidth: "10rem",
-      alignHeader:"center",
-      body: (rowData) => (
-        <div className="border-top-none">
-          <Counter
-            inputClass={"border-noround-bottom border-noround-top text-center"}
-            onValueChange={(value) => {
-              rowData.number = value + "";
+      textAlign: "left",
+      alignHeader: "left",
+    },
+    {
+      field: "adjuster",
+      header: translate(localeJson, "staff_supply_table_heading_counter"),
+      minWidth: "13rem",
+      maxWidth: "13rem",
+      alignHeader: "left",
+      body: (rowData, tableObj) => (
+        <div className="border-top-none checkIn-group-border">
+          <CounterSupplies
+            inputClass={"text-center"}
+            onValueChange={(value, flag) => {
+              let tempArray = list.filter((item, index) => {
+                if (index == tableObj.rowIndex) {
+                  if (flag == "increment") {
+                    item['number'] = parseInt(rowData.current_quantity) + parseInt(value);
+                  } else if (flag == "decrement") {
+                    let tempVal = parseInt(rowData.current_quantity) - parseInt(value);
+                    item['number'] = (tempVal < 0) ? 0 : tempVal;
+                  }
+                }
+                return { ...item }
+              })
+              setList([...tempArray])
             }}
-            value={rowData?.number + ""}
+            value={0} 
+            leftDisabled={rowData.current_quantity <= 0}
+            style={{ fontWeight: "bold", padding: "8px" }}
             min={0}
             max={999999999}
           />
         </div>
       ),
     },
+    {
+      field: "number",
+      header: translate(localeJson, "staff_supply_table_heading_quantity_after_change"),
+      minWidth: "10rem",
+      maxWidth: "10rem",
+      textAlign: "left",
+      alignHeader: "left",
+    },
   ];
 
   const [getListPayload, setGetListPayload] = useState({
     place_id: layoutReducer?.user?.place?.id,
   });
-
-  const [columns, setColumns] = useState([]);
   const [list, setList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [tableLoading, setTableLoading] = useState(false);
@@ -116,7 +140,9 @@ export default function Supplies() {
             id: obj.id ?? "",
             name: obj.name ?? "",
             unit: obj.unit ?? "",
-            number: obj.number ?? "",
+            adjuster: obj.number ?? "",
+            number: obj.number,
+            current_quantity: obj.number,
           };
           preparedList.push(preparedObj);
         });
@@ -141,7 +167,7 @@ export default function Supplies() {
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
-        onSubmit={(values) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
           setLoader(true)
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
@@ -155,6 +181,10 @@ export default function Supplies() {
             note: values.remarks,
           };
           create(payload, isCreated);
+          resetForm();
+          setList([]);
+          setTableLoading(true);
+          setSubmitting(false);
         }}
       >
         {({
@@ -168,13 +198,10 @@ export default function Supplies() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <h5 className="page-header1">
-                  {translate(localeJson, "staff_supplies")}
-                </h5>
-                <hr />
+                <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "staff_supplies")} />
                 <form onSubmit={handleSubmit}>
                   <div>
-                    <h5 className="sub-header">
+                    <h5 className="sub-header hidden">
                       {translate(localeJson, "supplies_registration")}
                     </h5>
                     <div className="mt-3">
@@ -191,68 +218,59 @@ export default function Supplies() {
                         emptyMessage={translate(localeJson, "data_not_found")}
                       />
                     </div>
-                    <div className="grid col-12 m-0 pl-0 pr-0">
-                      <div className="mt-3 col-6 pl-0">
-                        <TextAreaFloatLabel
-                          textAreaFloatLabelProps={{
-                            textAreaClass:
-                              "w-full lg:w-full md:w-23rem sm:w-21rem ",
-                            row: 5,
-                            cols: 30,
-                            name: "comment",
-                            placeholder: translate(
-                              localeJson,
-                              "comment_placeholder"
-                            ),
-                            text: translate(localeJson, "comment"),
-                            value: values.comment,
-                            onChange: handleChange,
-                            onBlur: handleBlur
-                          }}
-                          parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                    <div className="m-0 pl-0 pr-0">
+                      <div className="col-12 pl-0 ">
+                        <TextArea textAreaProps={{
+                          textAreaParentClassName: `${errors.comment && touched.comment && 'p-invalid w-full'}`,
+                          labelProps: {
+                            text: translate(localeJson, 'staff_supplies_comment'),
+                            textAreaLabelClassName: "block",
+                          },
+                          textAreaClass: "w-full",
+                          row: 5,
+                          cols: 30,
+                          name: "comment",
+                          value: values.comment,
+                          onChange: handleChange,
+                          onBlur: handleBlur
+                        }} />
                         <ValidationError errorBlock={errors.comment && touched.comment && errors.comment} />
                       </div>
-                      <div className="mt-3 col-6 pr-0">
-                        <TextAreaFloatLabel
-                          textAreaFloatLabelProps={{
-                            textAreaClass:
-                              "w-full lg:w-full md:w-23rem sm:w-21rem ",
-                            row: 5,
-                            cols: 50,
-                            name: "remarks",
-                            text: translate(localeJson, "remarks"),
-                            value: values.remarks,
-                            placeholder: translate(
-                              localeJson,
-                              "remark_placeholder"
-                            ),
-                            onChange: handleChange,
-                            onBlur: handleBlur
-                          }}
-                          parentClass={`${errors.comment && touched.comment && 'p-invalid w-full'}`} />
+                      <div className="col-12 pl-0">
+                        <TextArea textAreaProps={{
+                          textAreaParentClassName: `${errors.remarks && touched.remarks && 'p-invalid w-full'}`,
+                          labelProps: {
+                            text: translate(localeJson, 'staff_supplies_remarks'),
+                            textAreaLabelClassName: "block",
+                          },
+                          textAreaClass: "w-full",
+                          row: 5,
+                          cols: 50,
+                          name: "remarks",
+                          value: values.remarks,
+                          onChange: handleChange,
+                          onBlur: handleBlur
+                        }} />
                         <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />
                       </div>
                     </div>
-                    <div className="text-center mt-3">
+                    <div className="text-center">
                       <Button
                         buttonProps={{
                           type: "button",
-                          buttonClass: "w-8rem",
-                          severity: "primary",
+                          buttonClass: "w-8rem back-button hidden",
                           text: translate(localeJson, "back_to_top"),
                           onClick: () => router.push("/staff/dashboard"),
                         }}
-                        parentClass={"inline"}
+                        parentClass={"inline back-button"}
                       />
                       <Button
                         buttonProps={{
-                          buttonClass: "text-600 w-8rem",
+                          buttonClass: "update-button",
                           type: "submit",
-                          bg: "bg-white",
-                          hoverBg: "hover:surface-500 hover:text-white",
-                          text: translate(localeJson, "registration"),
+                          text: translate(localeJson, "staff_supplies_save_main"),
                         }}
-                        parentClass={"inline pl-2"}
+                        parentClass={"inline pl-2 update-button"}
                       />
                     </div>
                   </div>

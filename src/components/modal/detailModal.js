@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Dialog } from 'primereact/dialog';
 
-import { NormalLabel } from "../label";
-import { TextArea } from "../input";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
+import { TextArea } from '../input';
+import { Button } from '../button';
 
 const DetailModal = (props) => {
     const { localeJson } = useContext(LayoutContext);
@@ -28,44 +28,64 @@ const DetailModal = (props) => {
     /**
      * Header content 
      */
-    const header = (
-        headerContent
-    );
+    // const header = (
+    //     headerContent
+    // );
 
     return (
         <div className={`${parentMainClass}`}>
-            <Dialog className={`${modalClass} custom-modal`}
+            <Dialog className={`${modalClass} new-custom-modal`}
                 draggable={draggable}
                 position={position}
-                header={header}
+                header={headerContent}
                 visible={visible}
                 onHide={onHide}
                 style={style}
-                // blockScroll={visible}
+                blockScroll={true}
                 {...restProps}
             >
-                <div className="pt-2">
-                    <NormalLabel labelClass="w-full pt-0 mb-1"
-                        text={translate(localeJson, 'Other_shared_matters')}
-                        style={{
-                            marginBottom: "10px"
+                <div className={`modal-content`}>
+                    <div className="modal-header white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                        {headerContent}
+                    </div>
+                    <div className="modal-field-bottom-space">
+                        <TextArea textAreaProps={{
+                            labelProps: {
+                                text: translate(localeJson, 'Other_shared_matters'),
+                                textAreaLabelClassName: "block",
+                                labelMainClassName: "modal-label-field-space"
+                            },
+                            textAreaClass: "w-full bg-bluegray-50",
+                            row: 10,
+                            readOnly: "true",
+                            value: note
                         }} />
-                    <TextArea textAreaProps={{
-                        textAreaClass: "w-full bg-bluegray-50",
-                        rows: 5,
-                        readOnly: "true",
-                        value: note
-                    }} parentStyle={{ paddingTop: "0.2rem" }} />
-                </div>
-                <div className="mt-1">
-                    <NormalLabel labelClass="w-full pt-0"
-                        text={translate(localeJson, 'Other_shortage_items')} />
-                    <TextArea textAreaProps={{
-                        textAreaClass: "w-full bg-bluegray-50 pt-1",
-                        rows: 5,
-                        readOnly: "true",
-                        value: comment
-                    }} parentStyle={{ paddingTop: "0.2rem" }} />
+                    </div>
+                    <div className="">
+                        <TextArea textAreaProps={{
+                            textAreaParentClassName: "w-full",
+                            labelProps: {
+                                text: translate(localeJson, 'Other_shortage_items'),
+                                textAreaLabelClassName: "block w-full ",
+                                labelMainClassName: "modal-label-field-space"
+                            },
+                            textAreaClass: "w-full bg-bluegray-50",
+                            row: 10,
+                            cols: 5,
+                            readOnly: "true",
+                            value: comment
+                        }} />
+
+                    </div>
+                    <div className="text-center">
+                        <div className="modal-button-footer-space">
+                            <Button buttonProps={{
+                                buttonClass: "w-full back-button",
+                                text: translate(localeJson, 'cancel'),
+                                onClick: onHide
+                            }} parentClass={"back-button"} />
+                        </div>
+                    </div>
                 </div>
             </Dialog>
         </div>

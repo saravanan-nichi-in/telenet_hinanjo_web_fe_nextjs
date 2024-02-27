@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
-
+import { FaArrowRightToBracket, FaArrowRightFromBracket } from "react-icons/fa6";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button } from "@/components";
-import { AuthenticationAuthorizationService, UserDashboardServices, CommonServices } from '@/services';
+import { ButtonRounded } from "@/components";
+import { UserDashboardServices, CommonServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserDetails } from '@/redux/layout';
 
@@ -40,6 +40,7 @@ export default function PublicDashboard() {
             getListByID(payload, (response) => {
                 if (response && response.data) {
                     let obj = response.data.model;
+                    obj['type'] = 'place';
                     let payload = Object.assign({}, layoutReducer?.user);
                     payload['place'] = obj;
                     dispatch(setUserDetails(payload));
@@ -49,64 +50,68 @@ export default function PublicDashboard() {
     }
 
     return (
-        <div>
-            <div className="grid">
-                <div className="col-12">
-                    <div className="card">
-                        <h5 className="page-header1 white-space-nowrap overflow-hidden text-overflow-ellipsis">{locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}</h5>
-                        <hr />
-                        <div>
-                            <div className="mt-3">
-                                <div className='flex' style={{ justifyContent: "center", flexWrap: "wrap" }}>
-                                    <Button buttonProps={{
-                                        type: "button",
-                                        rounded: "true",
-                                        custom: "userDashboard",
-                                        buttonClass: "evacuation_button_height",
-                                        text: translate(localeJson, 'admission'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            router.push({
-                                                pathname: 'register/member',
-                                            })
-                                        },
-                                    }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard "} />
-                                    <Button buttonProps={{
-                                        type: 'button',
-                                        rounded: "true",
-                                        custom: "userDashboard",
-                                        buttonClass: "text-600",
-                                        text: translate(localeJson, 'exit'),
-                                        bg: "bg-white",
-                                        hoverBg: "hover:surface-500 hover:text-white",
-                                        onClick: () => {
-                                            router.push({
-                                                pathname: '/user/checkout',
-                                            })
-                                        },
-                                    }} parentClass={"ml-3 mr-3 mt-1 userParentDashboard"} />
+        <>
+            <div className="flex flex-1 w-full">
+                <div className="grid w-full">
+                    <div className="col-12 flex justify-content-center">
+                        <div className="card h-full  w-full lg:w-9 flex flex-column justify-content-center">
+                            <div className="flex flex-column justify-content-center align-item-center w-full" style={{ marginBottom: "40PX" }}>
+                                <h5 className="text-center  user-dashboard-header"> {translate(localeJson, "user_dashboard_1")}</h5>
+                                <div className="flex justify-content-center">
+                                    <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
+                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                                        {`${locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}`}
+                                    </h5>
+                                    <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
                                 </div>
-                                <p className="p-error mt-3 flex justify-content-center" style={{ fontWeight: "bold" }}>
-                                    {translate(localeJson, 'user_dashboard_note')}
-                                </p>
-                                <div className="mt-3 flex justify-content-end text-higlight clickable-row" onClick={() => {
-                                    if (_.isNull(AuthenticationAuthorizationService.staffValue)) {
-                                        router.push({
-                                            pathname: '/staff/login',
-                                        });
-                                    } else {
-                                        router.push({
-                                            pathname: '/staff/dashboard',
-                                        });
-                                    }
-                                }}>
-                                    {translate(localeJson, 'go_to_staff_screen')}
+                            </div>
+                            <div>
+                                <div>
+                                    <div className='flex' style={{ justifyContent: "center" }}>
+                                        <div className="grid w-full">
+                                            <div className="col-12 lg:col-6 md:col-6">
+                                                <ButtonRounded buttonProps={{
+                                                    type: "button",
+                                                    rounded: "true",
+                                                    custom: "user_Dashboard",
+                                                    buttonClass: "flex align-items-center justify-content-center evacuation_button_height primary-button user_Dashboard",
+                                                    text: layoutReducer?.user?.place?.type === "place"?translate(localeJson, 'admission_user_dashboard'):translate(localeJson,'admission_user_event_dashboard'),
+                                                    icon: <FaArrowRightToBracket className="icon-dashboard"/>,
+                                                    onClick: () => {
+                                                        router.push({
+                                                            pathname: 'register/member',
+                                                        })
+                                                    },
+                                                }} parentClass={"user_Parent_Dashboard primary-button"} />
+                                            </div>
+                                            <div className="flex flex-column col-12 lg:col-6 md:col-6">
+                                                <ButtonRounded buttonProps={{
+                                                    type: 'button',
+                                                    rounded: "true",
+                                                    custom: "user_Dashboard",
+                                                    buttonClass: "back-button flex align-items-center justify-content-center user_Dashboard",
+                                                    text: layoutReducer?.user?.place?.type === "place"? translate(localeJson, 'exit_user_dashboard') : translate(localeJson, 'exit_user_event_dashboard'),
+                                                    icon: <FaArrowRightFromBracket className="icon-dashboard"/>,
+                                                    onClick: () => {
+                                                        router.push({
+                                                            pathname: '/user/checkout',
+                                                        })
+                                                    },
+                                                }} parentClass={"flex align-items-center justify-content-center  user_Parent_Dashboard back-button"} />
+                                                <div className={`${layoutReducer?.user?.place?.type === "place" ? '':'hidden'}`}>
+                                                <p className={`mt-3 flex justify-content-center text-xs `}>
+                                                    {translate(localeJson, 'user_dashboard_note')}
+                                                </p>
+                                                </div>
+                                                </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div >
+            </div >
+        </>
     )
 }

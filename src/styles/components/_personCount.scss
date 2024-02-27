@@ -1,13 +1,33 @@
 .person-count-button.p-togglebutton.p-button {
-    background-color: #19c2fa;
+    background:#ffffff;
+    border-color:#a8a8a8;
+    color:#333333;
 }
 
 .person-count-button.p-togglebutton.p-button:not(.p-disabled):not(.p-highlight):hover{
-    background:#0285B1;
-    border-color:#0285B1;
-    color:white;
+    background:var(--back-hover-color);
+    border-color:var(--primary-color);
+    color:#333333;
 }
 .person-count-button.p-togglebutton.p-button.p-highlight{
-    background:#0285B1;
-    border-color:#0285B1;
+    background-color: #106540;
+    color:white;
+    padding:1rem;
+}
+
+.external-selector-button.p-togglebutton.p-button {
+    background:#ffffff;
+    border-color:#a8a8a8;
+    color:#333333;
+}
+
+.external-selector-button.p-togglebutton.p-button:not(.p-disabled):not(.p-highlight):hover{
+    border: 1px solid #106540;
+    background-color: #E0F2ED;
+    color: #168556;
+}
+
+.external-selector-button.p-togglebutton.p-button.p-highlight{
+    background-color: #106540;
+    color:white;
 }

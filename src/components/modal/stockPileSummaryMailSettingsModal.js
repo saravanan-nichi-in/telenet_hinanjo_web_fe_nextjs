@@ -2,19 +2,16 @@ import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useRouter } from 'next/router'
 
-import Button from "../button/button";
+import {Button} from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
 import { ValidationError } from "../error";
-import { InputFloatLabel, TextAreaFloatLabel } from "../input";
+import { Input, TextArea } from "../input";
 
 export default function StockPileSummaryMailSettingsModal(props) {
-
-    const { open, close, register, emailSettingValues } = props && props;
-    const router = useRouter();
+    const { open, close, register, emailSettingValues, showUpdate } = props && props;
     const { localeJson } = useContext(LayoutContext);
     const [initialValues, setInitialValues] = useState({
         email: emailSettingValues.email,
@@ -41,15 +38,8 @@ export default function StockPileSummaryMailSettingsModal(props) {
         return true; // Return true if all emails are valid
     };
 
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'mail_setting')}
-        </div>
-    );
-
     useEffect(() => {
         if (open) {
-            console.log(emailSettingValues);
             setInitialValues({
                 email: emailSettingValues.email,
                 place_name: emailSettingValues.place_name
@@ -79,7 +69,7 @@ export default function StockPileSummaryMailSettingsModal(props) {
                 }) => (
                     <div>
                         <Dialog
-                            className="custom-modal"
+                            className="new-custom-modal"
                             header={translate(localeJson, 'notification_settings')}
                             visible={open}
                             draggable={false}
@@ -91,69 +81,108 @@ export default function StockPileSummaryMailSettingsModal(props) {
                             footer={
                                 <div className="text-center">
                                     <Button buttonProps={{
-                                        buttonClass: "text-600 w-8rem",
-                                        bg: "bg-white",
-                                        hoverBg: "hover:surface-500 hover:text-white",
+                                        buttonClass: "w-8rem back-button",
                                         text: translate(localeJson, 'cancel'),
                                         onClick: () => {
                                             close();
                                             resetForm({ values: initialValues });
                                         }
-                                    }} parentClass={"inline"} />
-                                    <Button buttonProps={{
-                                        buttonClass: "w-8rem",
-                                        type: "submit",
-                                        text: translate(localeJson, 'update'),
-                                        severity: "primary",
-                                        onClick: () => {
-                                            register({
-                                                email: values.email,
-                                                errors: errors
-                                            });
-                                            handleSubmit();
-                                        },
-                                    }} parentClass={"inline"} />
+                                    }} parentClass={"inline back-button"} />
+                                    {showUpdate != false && (
+                                        <Button buttonProps={{
+                                            buttonClass: "w-8rem update-button",
+                                            type: "submit",
+                                            text: translate(localeJson, 'update'),
+                                            onClick: () => {
+                                                register({
+                                                    email: values.email,
+                                                    errors: errors
+                                                });
+                                                handleSubmit();
+                                            },
+                                        }} parentClass={"inline update-button"} />
+                                    )}
                                 </div>
                             }
                         >
                             <div className={`modal-content`}>
                                 <div>
+                                    <div className="modal-header">
+                                        {translate(localeJson, 'notification_settings')}
+                                    </div>
                                     <form onSubmit={handleSubmit}>
                                         <div >
-                                            <div className='mt-5 mb-5'>
-                                                <InputFloatLabel
-                                                    inputFloatLabelProps={{
-                                                        id: 'householdNumber',
-                                                        readOnly: "true",
+                                            <div className='modal-field-bottom-space'>
+                                                <Input
+                                                    inputProps={{
+                                                        labelProps: {
+                                                            text: translate(localeJson, 'evacuation_place'),
+                                                            inputLabelClassName: "block",
+                                                            spanText: "*",
+                                                            inputLabelSpanClassName: "p-error"
+                                                        },
+                                                        inputClassName: "w-full",
+                                                        name: "place_name",
                                                         value: values.place_name,
-                                                        spanClass: "p-error",
-                                                        spanText: "*",
                                                         disabled: "true",
-                                                        inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem",
-                                                        text: translate(localeJson, 'evacuation_place'),
+                                                        readOnly: "true",
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
                                                     }}
                                                 />
                                             </div>
-                                            <div className='mt-5'>
-                                                <TextAreaFloatLabel textAreaFloatLabelProps={{
-                                                    textAreaClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
+                                            <div className='modal-field-bottom-space'>
+                                                <TextArea textAreaProps={{
+                                                    textAreaParentClassName: `${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`,
+                                                    labelProps: {
+                                                        text: translate(localeJson, 'notification_email_id'),
+                                                        textAreaLabelSpanClassName: "p-error",
+                                                        spanText: "*",
+                                                        textAreaLabelClassName: "block",
+                                                    },
+                                                    textAreaClass: "w-full",
+                                                    onChange: handleChange,
+                                                    onBlur: handleBlur,
                                                     row: 5,
                                                     cols: 30,
                                                     name: 'email',
-                                                    text: translate(localeJson, 'notification_email_id'),
-                                                    spanClass: "p-error",
-                                                    spanText: "*",
                                                     value: values.email,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                }} parentClass={`${errors.email && touched.email && 'p-invalid w-full lg:w-25rem md:w-23rem sm:w-21rem '}`} />
+                                                }} />
                                                 <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                             </div>
-                                            <div className='mt-3 ml-1 w-full lg:w-25rem md:w-23rem sm:w-21rem '>
+                                            <div className='modal-field-top-space ml-1 w-full'>
                                                 <NormalLabel text={translate(localeJson, 'history_mail_message')} />
                                             </div>
                                         </div>
                                     </form>
+                                    <div className="text-center">
+                                    <div className="modal-button-footer-space">
+                                        {showUpdate != false && (
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full update-button",
+                                                type: "submit",
+                                                text: translate(localeJson, 'update'),
+                                                onClick: () => {
+                                                    register({
+                                                        email: values.email,
+                                                        errors: errors
+                                                    });
+                                                    handleSubmit();
+                                                },
+                                            }} parentClass={"update-button"} />
+                                        )}
+                                        </div>
+                                        <div>
+                                         <Button buttonProps={{
+                                            buttonClass: "w-full back-button",
+                                            text: translate(localeJson, 'cancel'),
+                                            onClick: () => {
+                                                close();
+                                                resetForm({ values: initialValues });
+                                            }
+                                        }} parentClass={"back-button"} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Dialog>

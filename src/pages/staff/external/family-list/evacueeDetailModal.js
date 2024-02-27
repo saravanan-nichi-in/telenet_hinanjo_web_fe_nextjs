@@ -18,7 +18,7 @@ export default function EvacueeDetailModal(props) {
         { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
         { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
         { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
-        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", alignHeader: "center", textAlign: "right" },
+        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", alignHeader: "center", textAlign: "center" },
         { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }];
 
     // Main Table listing starts
@@ -26,11 +26,11 @@ export default function EvacueeDetailModal(props) {
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
     const [getListPayload, setGetListPayload] = useState({
-        "filters": {
-            "start": 0,
-            "limit": 5
+        filters: {
+            start: 0,
+            limit: 10
         },
-        "evacuee_id": props.staff.id,
+        person_id: props.staff.external_person_id,
         place_id: layoutReducer?.user?.place?.id,
     });
 
@@ -40,14 +40,13 @@ export default function EvacueeDetailModal(props) {
     const [tableLoading, setTableLoading] = useState(false);
 
     const getStaffList = () => {
-        // Get dashboard list
         getEvacueeList(getListPayload, (response) => {
+            var preparedList = [];
+            var additionalColumnsArrayWithOldData = [...columnsData];
+            var listTotalCount = 0;
             if (response.success && !_.isEmpty(response.data)) {
-                if (response.data.externalEvacueeDetailList.total > 0) {
+                if (response.data.externalEvacueeDetailList.list) {
                     const data = response.data.externalEvacueeDetailList.list;
-                    var additionalColumnsArrayWithOldData = [...columnsData];
-                    let preparedList = [];
-                    // Update prepared list to the state
                     // Preparing row data for specific column to display
                     data.map((obj, i) => {
                         let preparedObj = {
@@ -60,20 +59,14 @@ export default function EvacueeDetailModal(props) {
                         }
                         preparedList.push(preparedObj);
                     })
-                    setList(preparedList);
-                    setColumns(additionalColumnsArrayWithOldData);
-                    setTotalCount(response.data.externalEvacueeDetailList.total);
-                    setTableLoading(false);
-                } else {
-                    setTableLoading(false);
-                    setList([]);
+                    listTotalCount = response.data.externalEvacueeDetailList.total
                 }
-            } else {
-                setTableLoading(false);
-                setList([]);
             }
+            setTableLoading(false);
+            setList(preparedList);
+            setColumns(additionalColumnsArrayWithOldData);
+            setTotalCount(listTotalCount);
         });
-
     }
 
     /**
@@ -120,16 +113,15 @@ export default function EvacueeDetailModal(props) {
                     visible={open}
                     style={{ minWidth: "20rem" }}
                     draggable={false}
+                    blockScroll={true}
                     onHide={() => close()}
                     footer={
                         <div className="text-center">
                             <Button buttonProps={{
-                                buttonClass: "text-600 w-8rem",
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
+                                buttonClass: "w-8rem back-button",
                                 text: translate(localeJson, 'back'),
                                 onClick: () => close(),
-                            }} parentClass={"inline"} />
+                            }} parentClass={"inline back-button"} />
                         </div>
                     }
                 >
@@ -145,6 +137,7 @@ export default function EvacueeDetailModal(props) {
                                         loading={tableLoading}
                                         stripedRows={true}
                                         className={"custom-table-cell"}
+                                        parentClass={"staff-external-table"}
                                         showGridlines={"true"}
                                         value={list}
                                         columns={columns}

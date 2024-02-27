@@ -3,7 +3,7 @@
     padding: 0;
     width: 100%;
     margin: 0 auto;
-    max-height: 320px;
+    max-height: 400px;
     overflow: auto;
   }
   
@@ -13,8 +13,8 @@
   
   .staff-list .label,
   .staff-list .value {
-    border: 1px solid #DEE2E6;
-    padding: 5px;
+    border-bottom: 1px solid #B4B6B4;
+    padding: 7px;
     box-sizing: border-box; /* Include padding in width calculation */
   }
   
@@ -25,7 +25,6 @@
     border-right: none; /* Remove right border for label */
     display: flex;
     align-items: center;
-    background-color: #F8F9FA;
   }
   
   .staff-list .value {
@@ -34,9 +33,15 @@
     align-items: center;
     word-break: break-all;
     overflow: auto;
+    justify-content: flex-end;
   }
 
   .staff-list li:not(:first-child) .label,
   .staff-list li:not(:first-child) .value {
     border-top: none; /* Remove top border for labels except the first one */
+  }
+
+  .staff-list li:last-child .label,
+  .staff-list li:last-child .value {
+    border-bottom: none; /* Remove top border for labels except the first one */
   }

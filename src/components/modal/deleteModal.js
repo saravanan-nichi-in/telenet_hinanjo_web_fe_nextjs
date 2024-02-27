@@ -2,8 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 
 import InputSwitch from "../switch/inputSwitch";
-import Button from "../button/button";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import {Button} from "../button";
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
 const DeleteModal = (props) => {
@@ -42,32 +42,35 @@ const DeleteModal = (props) => {
     if (cancelButton || updateButton) {
       return (
         <div className="text-center">
+          {/* update button */}
+          {updateButton && (
+            <div className="modal-button-footer-space">
+              <Button
+                buttonProps={{
+                  buttonClass: updateButtonClass ? updateButtonClass : buttonClass,
+                  type: "submit",
+                  text: translate(localeJson, "update"),
+                  onClick: () => onClickupdateButton(data),
+                }}
+                parentClass={"del_ok-button"}
+              />
+            </div>
+          )}
           {/* Delete button */}
           {cancelButton && (
             <Button
               buttonProps={{
                 buttonClass: cancelButtonClass ? cancelButtonClass : buttonClass,
-                bg: "bg-white",
-                hoverBg: "hover:surface-500 hover:text-white",
                 text: translate(localeJson, "cancel"),
-                onClick: () => setVisible(false),
+                onClick: () => {
+                  setVisible(false)
+                  showOverFlow();
+                }
               }}
-              parentClass={"inline"}
+              parentClass={"back-button"}
             />
           )}
-          {/* update button */}
-          {updateButton && (
-            <Button
-              buttonProps={{
-                buttonClass: updateButtonClass ? updateButtonClass : buttonClass,
-                type: "submit",
-                text: translate(localeJson, "update"),
-                severity: "danger",
-                onClick: () => onClickupdateButton(data),
-              }}
-              parentClass={"inline"}
-            />
-          )}
+
         </div>
       );
     }
@@ -85,6 +88,7 @@ const DeleteModal = (props) => {
   const onClickupdateButton = (rowData) => {
     updateCalBackFunction(rowData);
     setVisible(false);
+    showOverFlow();
   };
 
   return (
@@ -116,22 +120,33 @@ const DeleteModal = (props) => {
               onChange: (evt) => {
                 setVisible(true);
                 setCheckedValue && setCheckedValue(evt.target.value);
+                hideOverFlow();
               },
             }}
           />
         </>
       )}
       <Dialog
-        className="custom-modal"
+        className="new-custom-modal p-overflow-hidden"
         header={header}
         visible={visible}
         draggable={false}
-        onHide={() => setVisible(false)}
+        blockScroll={true}
+        onHide={() => {
+          setVisible(false)
+          showOverFlow();
+        }}
         footer={footer()}
       >
-        <div className={`text-center modal-content`}>
+        <div className={`modal-content`}>
+          <div className="modal-header">
+            {header}
+          </div>
           <div>
             <p>{content}</p>
+          </div>
+          <div>
+            {footer()}
           </div>
         </div>
       </Dialog>

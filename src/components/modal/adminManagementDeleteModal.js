@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import Button from "../button/button";
+import {Button} from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
@@ -13,38 +13,52 @@ export default function AdminManagementDeleteModal(props) {
     return (
         <div>
             <Dialog
-                className="custom-modal"
+                className="new-custom-modal"
                 header={
-                    <div className="custom-modal">
+                    <div className="new-custom-modal text-center">
                         {translate(localeJson, 'confirmation_information')}
                     </div>
                 }
+
                 visible={open}
                 draggable={false}
+                blockScroll={true}
                 onHide={() => close()}
-                footer={
-                    <div className="text-center">
-                        <Button buttonProps={{
-                            buttonClass: "text-600 w-8rem",
-                            bg: "bg-white",
-                            hoverBg: "hover:surface-500 hover:text-white",
-                            text: translate(localeJson, 'cancel'),
-                            onClick: () => close(),
-                        }} parentClass={"inline"} />
-                        <Button buttonProps={{
-                            buttonClass: "w-8rem ",
-                            type: "submit",
-                            text: translate(localeJson, 'ok'),
-                            severity: "danger",
-                            onClick: () => close("confirm"),
-                        }} parentClass={"inline"} />
-                    </div>
-                }
             >
-                <div className={`text-center modal-content`}>
-                    <div>
-                        <p>{translate(localeJson, 'once_deleted_cannot_restore')}</p>
-                        <p> {translate(localeJson, 'do_you_want_to_delete')}</p>
+                <div className={`modal-content`} style={{ padding: "0 0" }}>
+                    <div className="flex flex-column justify-center">
+                        <div className="modal-header">
+                            {translate(localeJson, 'confirmation_information')}
+                        </div>
+                        <div className="modal-field-bottom-space text-center">
+                            <p>{translate(localeJson, 'once_deleted_cannot_restore')}</p>
+                        </div>
+                        {
+                            props.deleteObj &&
+                            (<div className="flex justify-center px-4 mt-2">
+                                <div>
+                                    <div><span className="font-bold modal-label-field-space">{props.deleteObj.firstLabel} : </span>{props.deleteObj.firstValue}</div>
+                                    <div><span className="font-bold modal-label-field-space">{props.deleteObj.secondLabel} : </span>{props.deleteObj.secondValue}</div>
+                                </div>
+                            </div>)
+                        }
+                        <div className="text-center mt-4">
+                            <div className="modal-button-footer-space">
+                                <Button buttonProps={{
+                                    buttonClass: "w-full del_ok-button",
+                                    type: "submit",
+                                    text: translate(localeJson, 'delete_confirm'),
+                                    onClick: () => close("confirm"),
+                                }} parentClass={"del_ok-button"} />
+                            </div>
+                            <div >
+                                <Button buttonProps={{
+                                    buttonClass: "w-full back-button",
+                                    text: translate(localeJson, 'cancel'),
+                                    onClick: () => close(),
+                                }} parentClass={"back-button"} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Dialog>

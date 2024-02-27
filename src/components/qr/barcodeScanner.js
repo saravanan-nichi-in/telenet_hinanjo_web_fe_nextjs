@@ -8,7 +8,6 @@ const BarcodeScanner = (props) => {
     } = useZxing({
         onResult(result) {
             setResult(result.getText());
-            console.log(result);
         },
     });
 

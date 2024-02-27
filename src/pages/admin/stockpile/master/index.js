@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DividerComponent, NormalTable, SelectFloatLabel } from '@/components';
-
+import { Button, NormalTable } from '@/components';
 import { AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal } from '@/components/modal';
 import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
 import { StockpileService } from '@/services/stockpilemaster.service';
+import CustomHeader from '@/components/customHeader';
+import { InputDropdown } from '@/components/input';
 
 export default function AdminStockPileMaster() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson ,setLoader } = useContext(LayoutContext);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
-
     const [categories, setCategories] = useState([]);
     const [productNames, setProductNames] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -31,7 +30,6 @@ export default function AdminStockPileMaster() {
                 tempProducts.push(value.product_name);
                 tempCategories.add(value.category);
             })
-            console.log([...tempCategories], tempProducts);
             setCategories(["--", ...tempCategories]);
             setProductNames(tempProducts);
         });
@@ -41,21 +39,25 @@ export default function AdminStockPileMaster() {
         { field: 'id', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: 'center' },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), maxWidth: "10rem", minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), maxWidth: "10rem", minWidth: "5rem", sortable: true },
-        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem", textAlign: "right", alignHeader: "center" },
+        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem", textAlign: "center", alignHeader: "center" },
         {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
             minWidth: "5rem",
-            alignHeader:"center",
+            alignHeader: "center",
             body: (rowData) => (
                 <div style={{ textAlign: "center" }}>
                     {(rowData.stockpile_image && rowData.stockpile_image != "") ?
-                        <FaEye style={{ fontSize: '20px', textAlign: "center" }} onClick={() => {
-                            setSelectedImage(rowData.stockpile_image);
-                            setToggleImageModal(true);
-                            hideOverFlow();
-                        }} />
-                        : <FaEyeSlash style={{ fontSize: '20px' }} />}
+                        <img src={rowData.stockpile_image}
+                            width={'20px'}
+                            height={'20px'}
+                            alt={"img" + rowData.id}
+                            onClick={() => {
+                                setSelectedImage(rowData.stockpile_image);
+                                setToggleImageModal(true);
+                                hideOverFlow();
+                            }} /> : ""
+                    }
                 </div>
             ),
         },
@@ -63,7 +65,7 @@ export default function AdminStockPileMaster() {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
             textAlign: "center",
-            alignHeader:"center",
+            alignHeader: "center",
             minWidth: "5rem",
             className: "action_class",
             body: (rowData) => (
@@ -72,35 +74,38 @@ export default function AdminStockPileMaster() {
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'edit'),
-                            buttonClass: "text-primary ",
-                            bg: "bg-white",
-                            hoverBg: "hover:bg-primary hover:text-white",
+                            buttonClass: "edit-button",
                             onClick: () => {
                                 setRegisterModalAction("edit")
                                 setCurrentEditObj(rowData)
                                 setEmailSettingsOpen(true)
                                 hideOverFlow()
                             },
-                        }} />
+                        }} parentClass={"edit-button"} />
                     <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
                             buttonClass: "delete-button ml-2",
-                            onClick: () => openDeleteDialog(rowData.product_id)
+                            onClick: () => openDeleteDialog(rowData)
                         }} parentClass={"delete-button"} />
                 </>
             ),
         }
     ];
-
     const [registerModalAction, setRegisterModalAction] = useState('');
     const [currentEditObj, setCurrentEditObj] = useState('');
-
     const [deleteId, setDeleteId] = useState(null);
+    const [deleteObj, setDeleteObj] = useState(null);
 
-    const openDeleteDialog = (id) => {
-        setDeleteId(id);
+    const openDeleteDialog = (rowdata) => {
+        setDeleteId(rowdata.product_id);
+        setDeleteObj({
+            firstLabel: translate(localeJson, 'header_product_name'),
+            firstValue: rowdata.product_name,
+            secondLabel: translate(localeJson, 'header_category'),
+            secondValue: rowdata.category
+        });
         setDeleteOpen(true);
         hideOverFlow();
     }
@@ -115,6 +120,7 @@ export default function AdminStockPileMaster() {
 
     const onDeleteClose = (action = "close") => {
         if (action == "confirm") {
+            setTableLoading(true);
             StockpileService.delete(deleteId, (resData) => {
                 onGetMaterialListOnMounting()
             });
@@ -137,6 +143,9 @@ export default function AdminStockPileMaster() {
      */
     const onRegister = (values) => {
         setEmailSettingsOpen(false);
+        setTableLoading(true);
+        onGetMaterialListOnMounting();
+        values && callDropDownApi();
     };
 
     const [importPlaceOpen, setImportPlaceOpen] = useState(false);
@@ -146,19 +155,13 @@ export default function AdminStockPileMaster() {
         showOverFlow();
     };
 
-    const onRegisterImport = (values) => {
-        values.file && setImportPlaceOpen(false);
-    };
-
     const importFileApi = (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append('file', file);
         StockpileService.importData(formData, (file) => {
             if (file) {
-                console.log(file);
-                // setLoader(true);
-                onGetMaterialListOnMounting()
+                setTableLoading(true);
+                onGetMaterialListOnMounting();
             }
         });
         onStaffImportClose();
@@ -169,7 +172,7 @@ export default function AdminStockPileMaster() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 5,
+            limit: 10,
             order_by: "desc",
             sort_by: "category"
         },
@@ -177,20 +180,18 @@ export default function AdminStockPileMaster() {
         product_name: ""
     });
 
-    const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [tableLoading, setTableLoading] = useState(false);
 
 
     /* Services */
-    const { getList, exportData, getCategoryAndProductList } = StockpileService;
+    const { getList, exportData } = StockpileService;
 
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetMaterialListOnMounting()
-            setLoader(false);
         };
         fetchData();
         callDropDownApi();
@@ -202,10 +203,10 @@ export default function AdminStockPileMaster() {
     const onGetMaterialListOnMounting = () => {
         // Get dashboard list
         getList(getListPayload, (response) => {
+            var preparedList = [];
+            var listTotalCount = 0;
             if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
                 const data = response.data.model.list;
-                let preparedList = [];
-                // Update prepared list to the state
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
                     let preparedObj = {
@@ -215,18 +216,14 @@ export default function AdminStockPileMaster() {
                         category: obj.category ?? "",
                         shelf_life: obj.shelf_life ?? "",
                         stockpile_image: obj.stockpile_image ?? "",
-                        // actions: action(obj)
                     }
                     preparedList.push(preparedObj);
                 })
-
-                setList(preparedList);
-                setTotalCount(response.data.model.total);
-                setTableLoading(false);
-            } else {
-                setTableLoading(false);
-                setList([]);
+                listTotalCount = response.data.model.total;
             }
+            setTableLoading(false);
+            setList(preparedList);
+            setTotalCount(listTotalCount);
         });
 
     }
@@ -262,6 +259,7 @@ export default function AdminStockPileMaster() {
                 open={deleteOpen}
                 close={onDeleteClose}
                 refreshList={onGetMaterialListOnMounting}
+                deleteObj={deleteObj}
             />
             <StockpileSummaryImageModal
                 open={toggleImageModal}
@@ -288,37 +286,37 @@ export default function AdminStockPileMaster() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'stockpile_management_header')}</h5>
-                        <hr />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_management_header")} />
                         <div>
                             <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    import: true,
+                                    buttonClass: "evacuation_button_height import-button",
                                     text: translate(localeJson, 'import'),
-                                    severity: "primary",
                                     onClick: () => { setImportPlaceOpen(true); hideOverFlow(); },
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 import-button"} />
                                 <Button buttonProps={{
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button",
                                     text: translate(localeJson, 'export'),
-                                    severity: "primary",
                                     onClick: () => {
                                         exportData({
                                             "filters": {
                                                 "order_by": "desc",
-                                                "sort_by": "created_at" // default:created_at, category 
+                                                "sort_by": "updated_at" // default:created_at, category 
                                             },
                                             "category": selectedCategory,
                                             "product_name": selectedProductName
                                         })
                                     }
-                                }} parentClass={"mr-1 mt-1"} />
+                                }} parentClass={"mr-1 mt-1 export-button"} />
 
                                 <Button buttonProps={{
+                                    create: true,
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'stockpile_management_create_button'),
                                     onClick: () => {
                                         setRegisterModalAction("create");
@@ -326,54 +324,61 @@ export default function AdminStockPileMaster() {
                                         setEmailSettingsOpen(true);
                                         hideOverFlow();
                                     },
-                                    severity: "success"
-                                }} parentClass={"mt-1"} />
+                                }} parentClass={"mt-1 create-button"} />
                             </div>
                             <div>
                                 <form >
-                                    <div className='mt-5 mb-3 flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow align-items-center justify-content-end gap-2 mobile-input ' >
-                                        <div>
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "category_search",
-                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                                options: categories,
-                                                editable:true,
-                                                value: selectedCategory,
-                                                onChange: (e) => {
-                                                    if (e.value == "--") {
-                                                        setSelectedCategory("")
-                                                    } else {
-                                                        setSelectedCategory(e.value)
-                                                    }
-                                                },
-                                                text: translate(localeJson, "search_category"),
-                                                custom: "mobile-input custom-select"
-                                            }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div >
-                                            <SelectFloatLabel selectFloatLabelProps={{
-                                                inputId: "product_name_search",
-                                                selectClass: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
-                                                options: productNames,
-                                                value: selectedProductName,
-                                                onChange: (e) => {
-                                                    if (e.value == "--") {
-                                                        setSelectedProductName("")
-                                                    } else {
-                                                        setSelectedProductName(e.value)
-                                                    }
-                                                },
-                                                text: translate(localeJson, "search_product_name"),
-                                                custom: "mobile-input custom-select"
-                                            }} parentClass="w-20rem lg:w-13rem md:w-14rem sm:w-14rem" />
-                                        </div>
-                                        <div className='pb-1'>
+                                    <div className='modal-field-top-space modal-field-bottom-space flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input ' >
+                                        <InputDropdown inputDropdownProps={{
+                                            inputDropdownParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-14rem mobile-input",
+                                            labelProps: {
+                                                text: translate(localeJson, 'search_category'),
+                                                inputDropdownLabelClassName: "block"
+                                            },
+                                            inputDropdownClassName: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                            inputId: "category_search",
+                                            customPanelDropdownClassName: "w-10rem",
+                                            options: categories,
+                                            editable: true,
+                                            value: selectedCategory,
+                                            onChange: (e) => {
+                                                if (e.value == "--") {
+                                                    setSelectedCategory("")
+                                                } else {
+                                                    setSelectedCategory(e.value)
+                                                }
+                                            },
+                                            emptyMessage: translate(localeJson, "data_not_found"),
+                                        }}
+                                        />
+                                        <InputDropdown inputDropdownProps={{
+                                            inputDropdownParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-14rem mobile-input",
+                                            labelProps: {
+                                                text: translate(localeJson, 'search_product_name'),
+                                                inputDropdownLabelClassName: "block"
+                                            },
+                                            inputDropdownClassName: "w-full lg:w-13rem md:w-14rem sm:w-14rem",
+                                            inputId: "product_name_search",
+                                            customPanelDropdownClassName: "w-10rem",
+                                            options: productNames,
+                                            value: selectedProductName,
+                                            onChange: (e) => {
+                                                if (e.value == "--") {
+                                                    setSelectedProductName("")
+                                                } else {
+                                                    setSelectedProductName(e.value)
+                                                }
+                                            },
+                                            emptyMessage: translate(localeJson, "data_not_found"),
+                                        }}
+                                        />
+                                        <div className='flex align-items-end'>
                                             <Button buttonProps={{
-                                                buttonClass: "evacuation_button_height",
+                                                buttonClass: "w-12 search-button",
                                                 type: 'submit',
+                                                icon: "pi pi-search",
                                                 text: translate(localeJson, 'stockpile_search_button'),
                                                 rounded: "true",
-                                                severity: "primary",
                                                 onClick: (e) => {
                                                     e.preventDefault();
                                                     setGetListPayload({
@@ -381,8 +386,9 @@ export default function AdminStockPileMaster() {
                                                         category: selectedCategory, product_name: selectedProductName
                                                     })
                                                 }
-                                            }} parentStyle={{ paddingLeft: "10px" }} />
-
+                                            }}
+                                                parentClass={"search-button"}
+                                            />
                                         </div>
                                     </div>
                                 </form>

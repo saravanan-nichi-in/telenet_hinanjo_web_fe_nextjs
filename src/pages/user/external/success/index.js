@@ -18,11 +18,10 @@ const RefugeeRegistrationPage = () => {
                     <div>
                         <Button buttonProps={{
                             type: "button",
-                            buttonClass: "w-8rem",
-                            severity:"primary",
+                            buttonClass: "w-8rem back-button",
                             text: translate(localeJson, 'close'),
                             onClick: () => router.push('/user/external'),
-                        }}
+                        }} parentClass={"back-button"}
                         />
                     </div>
                 </div>

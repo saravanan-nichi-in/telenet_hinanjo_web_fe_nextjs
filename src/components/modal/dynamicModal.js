@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
 
 import InputSwitch from "../switch/inputSwitch";
-import Button from "../button/button";
+import {Button} from "../button";
 
 const DynamicModal = (props) => {
     const {
@@ -43,6 +43,7 @@ const DynamicModal = (props) => {
                 header={header}
                 footer={footer}
                 visible={visible}
+                blockScroll={true}
                 onHide={() => setVisible(false)}
                 {...restProps}
             >

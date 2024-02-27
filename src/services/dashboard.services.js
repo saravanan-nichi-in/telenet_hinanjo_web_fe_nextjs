@@ -22,6 +22,7 @@ function _getList(payload, callBackFun) {
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
+            callBackFun(false);
         });
 }
 

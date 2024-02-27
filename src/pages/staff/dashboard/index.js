@@ -2,14 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import Doughnut from "@/components/chart";
-import { getValueByKeyRecursively as translate, generateColors } from "@/helper";
+import {
+  getEnglishDateDisplayFormat,
+  getJapaneseDateDisplayYYYYMMDDFormat,
+  getValueByKeyRecursively as translate
+} from "@/helper";
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { useSelector } from "react-redux";
 import { staff_dashboard_status_jp, staff_dashboard_status_en } from '@/utils/constant'
 import _ from "lodash";
+import CustomHeader from "@/components/customHeader";
 
 function StaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  // Getting storage data with help of reducers
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+
   const [labelsSpecialCares, setLabelsSpecialCares] = useState(null);
   const [dataSpecialCares, setDataSpecialCares] = useState(null);
   const [labelsTotalCapacityBreakdown, setLabelsTotalCapacityBreakdown] =
@@ -20,12 +28,14 @@ function StaffDashboard() {
   const [dataOther, setDataOther] = useState(null);
   const [labelsDetailsOther, setLabelsDetailsOther] = useState(null);
   const [dataDetailsOther, setDataDetailsOther] = useState(null);
-  
-  const layoutReducer = useSelector((state) => state.layoutReducer);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const formattedDateTime = currentDateTime;
+
   useEffect(() => {
-      getListDataOnMount();
+    getListDataOnMount();
   }, [locale]);
 
+  /* Services */
   const { getList } = StaffDashBoardServices;
 
   const getListDataOnMount = async () => {
@@ -43,18 +53,16 @@ function StaffDashboard() {
         setDataTotalCapacityBreakdown(Object.values(personTotal2?.other_stats));
         let keysInDataOrder = locale == 'ja' ? staff_dashboard_status_jp : staff_dashboard_status_en;
         let keysInOrder = _.cloneDeep(keysInDataOrder);
-        console.log(keysInDataOrder)
         let accommodationStats = personTotal2?.accomidation_stats;
         let maxCapacity = accommodationStats[keysInOrder[0]];
         let totalFamily = accommodationStats[keysInOrder[1]];
-        if(totalFamily && maxCapacity)
-        {
-        if (maxCapacity < totalFamily) {
-          keysInOrder?.splice(1, 2); // Remove elements at index 1 and 2
-        } else {
-          keysInOrder?.splice(0, 1); // Remove element at index 0
+        if (totalFamily && maxCapacity) {
+          if (maxCapacity < totalFamily) {
+            keysInOrder?.splice(1, 2); // Remove elements at index 1 and 2
+          } else {
+            keysInOrder?.splice(0, 1); // Remove element at index 0
+          }
         }
-      }
         let valuesInOrder = keysInOrder.map(key => accommodationStats[key]);
         let valuesDataOrder = keysInDataOrder.map(key => accommodationStats[key]);
         setLabelsDetailsOther(keysInDataOrder);
@@ -69,90 +77,82 @@ function StaffDashboard() {
   };
   return (
     <>
+
       <div className="grid">
         <div className="col-12">
           <div className="card">
-            <h5 className="page-header1">
-              {translate(localeJson, "staff_page_dashboard")}
+            <h5 className="page-header1" style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+              <CustomHeader
+                headerClass={"page-header1 mr-2"}
+                header={translate(localeJson, "shelter_situation")}
+              />
+              <span className="flex  text-xs text-bluegray-400">
+                {locale === "ja"
+                  ? getJapaneseDateDisplayYYYYMMDDFormat(formattedDateTime)
+                  : getEnglishDateDisplayFormat(formattedDateTime)}
+              </span>
             </h5>
-            <hr />
-
             <div className="">
-              <h5 className="page-header1 mb-3 col-12 flex justify-content-center">
-                {translate(localeJson, "shelter_situation")}
-              </h5>
-              <h5 className="page-header1 mb-3 col-12">
-                {translate(localeJson, "accommodation_status")}
-              </h5>
-              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
-              <div className="col-12 lg:col-6">
-                {dataDetailsOther && dataDetailsOther[1] > 0 && (
-                <Doughnut
-                   labels={labelsOther} 
-                   data={dataOther}
-                  title="Other"
-                  bgClr={generateColors(labelsOther?.length)}
-                  hvrClr={generateColors(labelsOther?.length)}
-                />
-                )}
+              <div className="grid mb-3">
+                <div className="col-12 lg:col-6 pr-3">
+                  <div className="text-center p-5 border-round-sm bg-white font-bold" style={{ height: "190px" }}>
+                    <label className="page-header2 flex justify-content-center text-custom-color">
+                      {translate(localeJson, "staff_evacuee_count")}
+                    </label>
+                    <div>
+                      <label className="flex justify-content-center font-bold text-5xl pt-2">
+                        {dataDetailsOther && dataDetailsOther[1] ? dataDetailsOther[1] + translate(localeJson,"people") : 0 + translate(localeJson,"people")} <span className="font-bold text-6xl pl-1 pr-1"> / </span>{dataDetailsOther && dataDetailsOther[0] ? dataDetailsOther[0] + translate(localeJson,"people") : 0 + translate(localeJson,"people")}
+                      </label>
+                    </div>
+                    <div className="flex gap-2 text-xs font-normal justify-content-center pt-2">
+                      <label className="">
+                        {translate(localeJson, "c_male")}:{dataTotalCapacityBreakdown && dataTotalCapacityBreakdown[1] ? dataTotalCapacityBreakdown[1] : 0}
+                      </label>
+                      <label>{translate(localeJson, "c_female")}:{dataTotalCapacityBreakdown && dataTotalCapacityBreakdown[2] ? dataTotalCapacityBreakdown[2] : 0}</label>
+                      <label>{translate(localeJson, "c_others")}:{dataTotalCapacityBreakdown && dataTotalCapacityBreakdown[3] ? dataTotalCapacityBreakdown[3] : 0}</label>
+                      <label>{translate(localeJson, "c_count_only")}:{dataTotalCapacityBreakdown && dataTotalCapacityBreakdown[4] ? dataTotalCapacityBreakdown[4] : 0}</label>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-12 lg:col-6 pl-3">
+                  <div className="text-center p-5 border-round-sm bg-white font-bold" style={{ height: "190px" }}>
+                    <label className="page-header2 flex justify-content-center text-custom-color">
+                      {translate(localeJson, "house_hold_number")}
+                    </label>
+                    <div>
+                      <label className="flex justify-content-center font-bold text-5xl pt-2">
+                        {dataTotalCapacityBreakdown && dataTotalCapacityBreakdown[0] ? dataTotalCapacityBreakdown[0] : 0}{translate(localeJson, "house_hold")}
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="col-12 lg:col-6">
-                <ul className="staff-list">
-                  {labelsDetailsOther?.map((label, index) => (
-                    <li key={index}>
-                      <div className="label">{label}</div>
-                      <div className="value">{dataDetailsOther[index]}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              </div>
-              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
-              <div className="col-12 lg:col-6">
-                <Doughnut
-                  labels={labelsTotalCapacityBreakdown?.slice(1)}
-                  data={dataTotalCapacityBreakdown?.slice(1)}
-                  bgClr={generateColors(labelsTotalCapacityBreakdown?.length-1)}
-                  hvrClr={generateColors(labelsTotalCapacityBreakdown?.length-1)}
-                  title="Total Capacity Breakdown"
-                />
-              </div>
-              <div className="col-12 lg:col-6">
-                <ul className="staff-list">
-                  {labelsTotalCapacityBreakdown?.map((label, index) => (
-                    <li key={index}>
-                      <div className="label">{label}</div>
-                      <div className="value">
-                        {dataTotalCapacityBreakdown[index]}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              </div>
-              <h5 className="page-header1 mb-3 col-12">
-                {translate(localeJson, "person_consideration")}
-              </h5>
-              <div className="lg:flex lg:align-items-center col-12 custom-card shadow-4 mb-3">
-              <div className="col-12 lg:col-6">
-                <Doughnut
-                  labels={labelsSpecialCares}
-                  data={dataSpecialCares}
-                  bgClr={generateColors(labelsSpecialCares?.length)}
-                  hvrClr={generateColors(labelsSpecialCares?.length)}
-                  title="Special Cares"
-                />
-              </div>
-              <div className="col-12 lg:col-6">
-                <ul className="staff-list">
-                  {labelsSpecialCares?.map((label, index) => (
-                    <li key={index}>
-                      <div className="label">{label}</div>
-                      <div className="value">{dataSpecialCares[index]}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <div className="grid mt-3">
+                <div className="col-12 lg:col-6 pr-3">
+                  <div className="text-center p-5 border-round-sm bg-white font-bold" style={{ maxHeight: "500px", minHeight: "500px" }}>
+                    <label className="page-header2 flex justify-content-center mb-2 text-custom-color pb-2">
+                      {translate(localeJson, "person_consideration")}
+                    </label>
+                    <ul className="staff-list">
+                      {labelsSpecialCares && labelsSpecialCares?.map((label, index) => (
+                        <li key={index}>
+                          <div className="label">{label}</div>
+                          <div className="value">{dataSpecialCares[index]}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-12 lg:col-6 pl-3">
+                  <div className="text-center p-5 border-round-sm bg-white font-bold" style={{ maxHeight: "500px", minHeight: "500px" }}>
+                    <Doughnut
+                      type={"pie"}
+                      labels={labelsSpecialCares}
+                      data={dataSpecialCares}
+                      title="Special Cares"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

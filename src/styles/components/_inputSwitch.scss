@@ -4,6 +4,10 @@
         background: var(--primary-color);
     }
 
+    .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+        background: var(--primary-color);
+    }
+
     .p-inputswitch {
         height: 18px;
         width: 40px;

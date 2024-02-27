@@ -1,26 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { AiOutlineDrag } from "react-icons/ai";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import {
   Button,
   DND,
-  InputFloatLabel,
-  InputNumberFloatLabel,
   InputSwitch,
   NormalCheckBox,
   NormalLabel,
-  SelectFloatLabel,
   ValidationError,
 } from "@/components";
-import { InputFile } from '@/components/upload'
+import { InputFile } from "@/components/upload";
 import { mapScaleRateOptions } from "@/utils/constant";
-import { AiOutlineDrag } from "react-icons/ai";
 import { systemSettingServices } from "@/services";
 import { setLayout } from "@/redux/layout";
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch } from "@/redux/hooks";
+import CustomHeader from "@/components/customHeader";
+import { Input, InputDropdown, InputNumber } from "@/components/input";
 
 export default function Setting() {
   const { setLoader } = useContext(LayoutContext);
@@ -31,90 +30,95 @@ export default function Setting() {
 
   const public_display_order_data = [
     {
-      "is_visible": "0",
-      "column_id": "0",
-      "column_name": "refugee_name",
-      "display_order": 1
+      is_visible: "0",
+      column_id: "0",
+      column_name: "refugee_name",
+      display_order: 1,
     },
     {
-      "is_visible": "0",
-      "column_id": "1",
-      "column_name": "name",
-      "display_order": 2
+      is_visible: "0",
+      column_id: "1",
+      column_name: "name",
+      display_order: 2,
     },
     {
-      "is_visible": "0",
-      "column_id": "2",
-      "column_name": "age",
-      "display_order": 3
+      is_visible: "0",
+      column_id: "2",
+      column_name: "age",
+      display_order: 3,
     },
     {
-      "is_visible": "0",
-      "column_id": "3",
-      "column_name": "gender",
-      "display_order": 4
+      is_visible: "0",
+      column_id: "3",
+      column_name: "gender",
+      display_order: 4,
     },
     {
-      "is_visible": "0",
-      "column_id": "4",
-      "column_name": "address",
-      "display_order": 5
-    }
-  ]
+      is_visible: "0",
+      column_id: "4",
+      column_name: "address",
+      display_order: 5,
+    },
+  ];
 
   const schema = Yup.object().shape({
-    map_scale: Yup.string().required(translate(localeJson, "map_scale_required")),
-    footer: Yup.string().required(translate(localeJson, "footer_required")).max(
-      200,
-      translate(localeJson, "footer_display") +
-      translate(localeJson, "max_length_200")
+    map_scale: Yup.string().required(
+      translate(localeJson, "map_scale_required")
     ),
-    type_name_ja: Yup.string().required(
-      translate(localeJson, "type_name_jp_required")
-    ).max(
-      200,
-      translate(localeJson, "type_name") +
-      translate(localeJson, "max_length_200")
-    ),
-    system_name_ja: Yup.string().required(
-      translate(localeJson, "system_name_jp_required")
-    ).max(
-      200,
-      translate(localeJson, "system_name") +
-      translate(localeJson, "max_length_200")
-    ),
-    disclosure_info_ja: Yup.string().required(
-      translate(localeJson, "disclosure_info_jp_required")
-    ).max(
-      255,
-      translate(localeJson, "disclosure_information") +
-      translate(localeJson, "max_length_255")
-    ),
-    type_name_en: Yup.string().required(
-      translate(localeJson, "type_name_en_required")
-    ).max(
-      200,
-      translate(localeJson, "type_name") +
-      translate(localeJson, "max_length_200")
-    ),
-    system_name_en: Yup.string().required(
-      translate(localeJson, "system_name_en_required")
-    ).max(
-      200,
-      translate(localeJson, "system_name") +
-      translate(localeJson, "max_length_200")
-    ),
-    disclosure_info_en: Yup.string().required(
-      translate(localeJson, "disclosure_info_en_required")
-    ).max(
-      255,
-      translate(localeJson, "disclosure_information") +
-      translate(localeJson, "max_length_255")
-    ),
+    footer: Yup.string()
+      .required(translate(localeJson, "footer_required"))
+      .max(
+        200,
+        translate(localeJson, "footer_display") +
+        translate(localeJson, "max_length_200")
+      ),
+    type_name_ja: Yup.string()
+      .required(translate(localeJson, "type_name_jp_required"))
+      .max(
+        200,
+        translate(localeJson, "type_name") +
+        translate(localeJson, "max_length_200")
+      ),
+    system_name_ja: Yup.string()
+      .required(translate(localeJson, "system_name_jp_required"))
+      .max(
+        200,
+        translate(localeJson, "system_name") +
+        translate(localeJson, "max_length_200")
+      ),
+    disclosure_info_ja: Yup.string()
+      .required(translate(localeJson, "disclosure_info_jp_required"))
+      .max(
+        255,
+        translate(localeJson, "disclosure_information") +
+        translate(localeJson, "max_length_255")
+      ),
+    type_name_en: Yup.string()
+      .required(translate(localeJson, "type_name_en_required"))
+      .max(
+        200,
+        translate(localeJson, "type_name") +
+        translate(localeJson, "max_length_200")
+      ),
+    system_name_en: Yup.string()
+      .required(translate(localeJson, "system_name_en_required"))
+      .max(
+        200,
+        translate(localeJson, "system_name") +
+        translate(localeJson, "max_length_200")
+      ),
+    disclosure_info_en: Yup.string()
+      .required(translate(localeJson, "disclosure_info_en_required"))
+      .max(
+        255,
+        translate(localeJson, "disclosure_information") +
+        translate(localeJson, "max_length_255")
+      ),
     latitude: Yup.number().required(translate(localeJson, "latitude_required")),
-    default_shelf_life: Yup.number().required(
-      translate(localeJson, "default_shell_life_days_required")
-    ).min(1, translate(localeJson, "default_shelf_life_min_length")).max(999, translate(localeJson, "default_shelf_life_max_length")),
+    default_shelf_life: Yup.string()
+      .required(translate(localeJson, "default_shell_life_days_required"))
+      .min(1, translate(localeJson, "default_shelf_life_min_length"))
+      .max(3, translate(localeJson, "default_shelf_life_max_length")),
     longitude: Yup.number().required(
       translate(localeJson, "longitude_required")
     ),
@@ -157,7 +161,9 @@ export default function Setting() {
     initial_load_status: false,
     default_shelf_life: "",
     scheduler_option: false,
+    // evacuee_entry_status: false,
     logo: "",
+    logo_name: ""
   };
   const [data, setData] = useState([]);
   const dragProps = {
@@ -193,6 +199,16 @@ export default function Setting() {
     if (res) {
       setLoader(true);
       const data = res.data.model;
+      let url = data.image_logo_path;
+
+      // Check if URL exists
+      if (url) {
+        const parts = url.split("/");
+        const filename = parts[parts.length - 1]; // Extract filename from URL
+
+        // Set the filename to initialValues.logo
+        initialValues.logo_name = filename;
+      }
       dispatch(setLayout(data));
       initialValues.map_scale = data?.map_scale + "" || "";
       initialValues.footer = data?.footer || "";
@@ -206,10 +222,13 @@ export default function Setting() {
       initialValues.longitude = data?.longitude || "";
       initialValues.initial_load_status =
         data?.initial_load_status == "1" ? true : false || "";
-      initialValues.default_shelf_life = data?.default_shelf_life || "",
-        initialValues.scheduler_option = data?.scheduler_option == "1" ? true : false || "";
+      (initialValues.default_shelf_life = data?.default_shelf_life || ""),
+        (initialValues.scheduler_option =
+          data?.scheduler_option == "1" ? true : false || "");
+      // initialValues.evacuee_entry_status = data?.evacuee_entry_status == "1" ? true : false || "";
+
       setLoader(false);
-      let public_data = data?.public_display_order || public_display_order_data
+      let public_data = data?.public_display_order || public_display_order_data;
       const PublicData = public_data.map((item) => {
         let namePublic;
         if (item.column_name == "name") {
@@ -238,6 +257,7 @@ export default function Setting() {
 
     setData(newData); // Update state with the modified data
   };
+  
   const map = (
     <ol>
       {data?.map((item, index) => (
@@ -249,7 +269,7 @@ export default function Setting() {
             }}
           />
           <div className="ml-1 mr-1">{item?.title}</div>
-          <a href="#" className="ml-2">
+          <a href="#" className="ml-2 dragger-setting">
             <AiOutlineDrag />
           </a>
         </li>
@@ -259,10 +279,9 @@ export default function Setting() {
 
   const isUpdated = (res) => {
     if (res) {
-      onGetSystemListOnMounting()
+      onGetSystemListOnMounting();
     }
-    setLoader(false)
-
+    setLoader(false);
   };
 
   return (
@@ -271,20 +290,33 @@ export default function Setting() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, actions) => {
-          setLoader(true)
+          setLoader(true);
+          values.default_shelf_life= convertToSingleByte(values.default_shelf_life)
           const formData = new FormData();
           // Assuming values.initial_load_status and values.scheduler_option are boolean
-          formData.append('initial_load_status', values.initial_load_status ? '1' : '0');
-          formData.append('scheduler_option', values.scheduler_option ? '1' : '0');
+          formData.append(
+            "initial_load_status",
+            values.initial_load_status ? "1" : "0"
+          );
+          formData.append(
+            "scheduler_option",
+            values.scheduler_option ? "1" : "0"
+          );
 
           for (const key in values) {
-            if (values[key] && key !== 'initial_load_status' && key !== 'scheduler_option') {
+            if (
+              values[key] &&
+              key !== "initial_load_status" &&
+              key !== "scheduler_option" &&
+              key !== "scheduler_option" &&
+              key !== "logo_name"
+            ) {
               formData.append(key, values[key]);
             }
           }
           data.forEach((item, index) => {
             for (const key in item) {
-              item.is_visible = item.is_visible == true ? "1" : "0"
+              item.is_visible = item.is_visible == true ? "1" : "0";
               if (key !== "title") {
                 formData.append(
                   `public_display_order[${index}][${key}]`,
@@ -308,53 +340,71 @@ export default function Setting() {
           <div className="grid">
             <div className="col-12">
               <div className="card">
-                <h5 className="page-header1">
-                  {translate(localeJson, "setting_systems")}
-                </h5>
-                <hr />
+                <CustomHeader
+                  headerClass={"page-header1"}
+                  header={translate(localeJson, "setting_systems")}
+                />
                 <form onSubmit={handleSubmit}>
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center"></div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
+                  <div className="">
+                    <div className="pb-1 pt-2">
+                      <CustomHeader header={translate(localeJson, "general")} />
+                    </div>
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
-                        <SelectFloatLabel
-                          selectFloatLabelProps={{
+                        <InputDropdown
+                          inputDropdownProps={{
+                            inputDropdownParentClassName: `w-full ${errors.map_scale &&
+                              touched.map_scale &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(
+                                localeJson,
+                                "overall_map_size_setting"
+                              ),
+                              inputDropdownLabelClassName: "block",
+                            },
+                            inputDropdownClassName: "w-full",
                             id: "map_scale",
                             name: "map_scale",
                             optionLabel: "name",
-                            selectClass: "w-full",
                             options: mapScaleRateOptions,
                             value: values.map_scale,
                             onChange: (e) => {
-                              setFieldValue("map_scale", e.value || "")
+                              setFieldValue("map_scale", e.value || "");
                             },
                             onBlur: handleBlur,
-                            text: translate(
+                            emptyMessage: translate(
                               localeJson,
-                              "overall_map_size_setting"
+                              "data_not_found"
                             ),
                           }}
-                          parentClass={`w-full ${errors.map_scale && touched.map_scale && "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
-                            errors.map_scale && touched.map_scale && errors.map_scale
+                            errors.map_scale &&
+                            touched.map_scale &&
+                            errors.map_scale
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(localeJson, "footer_display"),
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.footer &&
+                              touched.footer &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "footer_display"),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             value: values.footer,
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "footer",
-                            inputClass: "w-full",
                           }}
-                          parentClass={`w-full ${errors.footer && touched.footer && "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -365,25 +415,30 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center">
-                      {translate(localeJson, "japanese_notation")}
+                  <div>
+                    <div className="pb-1">
+                      <CustomHeader
+                        header={translate(localeJson, "japanese_notation")}
+                      />
                     </div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
-                      <div>
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(localeJson, "type_name"),
-                            value: values.type_name_ja,
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
+                      <div className="">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.type_name_ja &&
+                              touched.type_name_ja &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "type_name"),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "type_name_ja",
-                            inputClass: "w-full",
+                            value: values.type_name_ja,
                           }}
-                          parentClass={`w-full ${errors.type_name_ja &&
-                            touched.type_name_ja &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -393,20 +448,23 @@ export default function Setting() {
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(localeJson, "system_name"),
-                            value: values.system_name_ja,
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.system_name_ja &&
+                              touched.system_name_ja &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "system_name"),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "system_name_ja",
-                            inputClass: "w-full",
+                            value: values.system_name_ja,
                           }}
-                          parentClass={`w-full ${errors.system_name_ja &&
-                            touched.system_name_ja &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -416,23 +474,26 @@ export default function Setting() {
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(
-                              localeJson,
-                              "disclosure_information"
-                            ),
-                            value: values.disclosure_info_ja,
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.disclosure_info_ja &&
+                              touched.disclosure_info_ja &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(
+                                localeJson,
+                                "disclosure_information"
+                              ),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "disclosure_info_ja",
-                            inputClass: "w-full",
+                            value: values.disclosure_info_ja,
                           }}
-                          parentClass={`${errors.disclosure_info_ja &&
-                            touched.disclosure_info_ja &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -445,25 +506,30 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center">
-                      {translate(localeJson, "english_notation")}
+                  <div className="">
+                    <div className="pb-1">
+                      <CustomHeader
+                        header={translate(localeJson, "english_notation")}
+                      />
                     </div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(localeJson, "type_name"),
-                            value: values.type_name_en,
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.type_name_en &&
+                              touched.type_name_en &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "type_name"),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "type_name_en",
-                            inputClass: "w-full",
+                            value: values.type_name_en,
                           }}
-                          parentClass={`w-full ${errors.type_name_en &&
-                            touched.type_name_en &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -473,20 +539,23 @@ export default function Setting() {
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(localeJson, "system_name"),
-                            value: values.system_name_en,
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.system_name_en &&
+                              touched.system_name_en &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "system_name"),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "system_name_en",
-                            inputClass: "w-full",
+                            value: values.system_name_en,
                           }}
-                          parentClass={`w-full ${errors.system_name_en &&
-                            touched.system_name_en &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -496,23 +565,26 @@ export default function Setting() {
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputFloatLabel
-                          inputFloatLabelProps={{
-                            text: translate(
-                              localeJson,
-                              "disclosure_information"
-                            ),
-                            value: values.disclosure_info_en,
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <Input
+                          inputProps={{
+                            inputParentClassName: `w-full ${errors.disclosure_info_en &&
+                              touched.disclosure_info_en &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(
+                                localeJson,
+                                "disclosure_information"
+                              ),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             onChange: handleChange,
                             onBlur: handleBlur,
                             name: "disclosure_info_en",
-                            inputClass: "w-full",
+                            value: values.disclosure_info_en,
                           }}
-                          parentClass={`${errors.disclosure_info_en &&
-                            touched.disclosure_info_en &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -525,14 +597,25 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center">
-                      {translate(localeJson, "map_center_coordinates")}
+                  <div className="">
+                    <div className="pb-1">
+                      <CustomHeader
+                        header={translate(localeJson, "map_center_coordinates")}
+                      />
                     </div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
-                        <InputNumberFloatLabel
-                          inputNumberFloatProps={{
+                        <InputNumber
+                          inputNumberProps={{
+                            inputNumberParentClassName: ` ${errors.latitude &&
+                              touched.latitude &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "latitude"),
+                              inputNumberLabelClassName: "block",
+                            },
+                            inputNumberClassName: "w-full",
                             id: "latitude",
                             name: "latitude",
                             mode: "decimal",
@@ -545,13 +628,7 @@ export default function Setting() {
                               evt.value && setFieldValue("latitude", evt.value);
                             },
                             onBlur: handleBlur,
-                            text: translate(localeJson, "latitude"),
-                            inputNumberClass: "w-full",
                           }}
-                          parentClass={` ${errors.latitude &&
-                            touched.latitude &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -561,9 +638,18 @@ export default function Setting() {
                           }
                         />
                       </div>
-                      <div className="pt-5">
-                        <InputNumberFloatLabel
-                          inputNumberFloatProps={{
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <InputNumber
+                          inputNumberProps={{
+                            inputNumberParentClassName: ` ${errors.longitude &&
+                              touched.longitude &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "longitude"),
+                              inputNumberLabelClassName: "block",
+                            },
+                            inputNumberClassName: "w-full",
                             id: "longitude",
                             name: "longitude",
                             mode: "decimal",
@@ -577,13 +663,7 @@ export default function Setting() {
                                 setFieldValue("longitude", evt.value);
                             },
                             onBlur: handleBlur,
-                            text: translate(localeJson, "longitude"),
-                            inputNumberClass: "w-full",
                           }}
-                          parentClass={`${errors.longitude &&
-                            touched.longitude &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -596,18 +676,23 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center">
-                      {translate(localeJson, "public_information_display_list")}
+                  <div className="">
+                    <div className="pb-3">
+                      <CustomHeader
+                        header={translate(
+                          localeJson,
+                          "public_information_display_list"
+                        )}
+                      />
                     </div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
+                    <div className="w-8 pl-5">
                       <div className="flex">
                         <div className="pr-2">
                           <NormalLabel
                             text={translate(localeJson, "display_by_default")}
                           />
                         </div>
-                        <div>
+                        <div className="mt-0">
                           <InputSwitch
                             inputSwitchProps={{
                               name: "initial_load_status",
@@ -619,8 +704,8 @@ export default function Setting() {
                           />
                         </div>
                       </div>
-                      <div className="pt-5">
-                        <div className="pb-2">
+                      <div className="modal-field-top-space modal-field-bottom-space">
+                        <div className="pb-1">
                           <NormalLabel
                             text={translate(
                               localeJson,
@@ -635,34 +720,54 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4  align-self-center">
-                      {translate(localeJson, "stockPile_management")}
+                  <div className="">
+                    <div className="pb-1">
+                      <CustomHeader
+                        header={translate(localeJson, "stockPile_management")}
+                      />
                     </div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8 justify-content-end">
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
-                        <InputNumberFloatLabel
-                          inputNumberFloatProps={{
+                        <Input
+                          inputProps={{
+                            inputParentClassName: ` ${errors.default_shelf_life &&
+                              touched.default_shelf_life &&
+                              "p-invalid pb-1"
+                              }`,
+                            labelProps: {
+                              text: translate(
+                                localeJson,
+                                "default_shelf_life_days"
+                              ),
+                              inputLabelClassName: "block",
+                            },
+                            inputClassName: "w-full",
                             id: "default_shelf_life",
                             name: "default_shelf_life",
-                            mode: "decimal",
                             maxFractionDigits: "1",
                             value: values.default_shelf_life,
                             onChange: (evt) => {
-                              setFieldValue("default_shelf_life", evt.value);
+                              if(evt.target.value=="")
+                              {
+                                setFieldValue("default_shelf_life","");
+                                return
+                              }
+                              const re = /^[0-9-]+$/;
+                              if(re.test(convertToSingleByte(evt.target.value)))
+                              setFieldValue("default_shelf_life", evt.target.value);
                             },
                             onValueChange: (evt) => {
-                              evt.value &&
-                                setFieldValue("default_shelf_life", evt.value);
+                              if(evt.target.value=="")
+                              {
+                                setFieldValue("default_shelf_life","");
+                                return
+                              }
+                              const re = /^[0-9-]+$/;
+                              if(re.test(convertToSingleByte(evt.target.value)))
+                              setFieldValue("default_shelf_life", evt.target.value);
                             },
                             onBlur: handleBlur,
-                            text: translate(localeJson, "default_shelf_life_days"),
-                            inputNumberClass: "w-full",
                           }}
-                          parentClass={`${errors.default_shelf_life &&
-                            touched.default_shelf_life &&
-                            "p-invalid pb-1"
-                            }`}
                         />
                         <ValidationError
                           errorBlock={
@@ -675,10 +780,12 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center"></div>
-                    <div className="flex-row col-8 lg:col-8 md:col-8">
-                      <div>
+                  <div className="">
+                    <div className="pb-1">
+                      <CustomHeader header={translate(localeJson, "logo")} />
+                    </div>
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
+                      <div className="pb-1">
                         <NormalLabel
                           text={translate(localeJson, "logo_image")}
                         />
@@ -687,11 +794,15 @@ export default function Setting() {
                         <InputFile
                           inputFileProps={{
                             onChange: (event) => {
-                              setFieldValue("logo", event.currentTarget.files[0]);
+                              setFieldValue(
+                                "logo",
+                                event.currentTarget.files[0]
+                              );
                             },
                             name: "logo",
                             accept: ".jpg,.png",
                             onBlur: handleBlur,
+                            placeholder: values.logo_name
                           }}
                           parentClass={`${errors.file && touched.file && "p-invalid pb-1"
                             }`}
@@ -705,11 +816,16 @@ export default function Setting() {
                     </div>
                   </div>
                   <hr />
-                  <div className="flex p-5 pl-0 pr-0">
-                    <div className="col-4 lg:col-4 md:col-4 align-self-center">
-                      {translate(localeJson, "evacuation_history_download")}
+                  <div className="">
+                    <div className="pb-2">
+                      <CustomHeader
+                        header={translate(
+                          localeJson,
+                          "evacuation_history_download"
+                        )}
+                      />
                     </div>
-                    <div className="flex-row flex-end col-8 lg:col-8 md:col-8">
+                    <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
                         <InputSwitch
                           inputSwitchProps={{
@@ -727,12 +843,11 @@ export default function Setting() {
                   <div className="text-center mt-2">
                     <Button
                       buttonProps={{
-                        buttonClass: "w-8rem",
-                        severity: "primary",
+                        buttonClass: "w-8rem update-button",
                         type: "submit",
                         text: translate(localeJson, "save"),
                       }}
-                      parentClass={"inline"}
+                      parentClass={"inline update-button"}
                     />
                   </div>
                 </form>

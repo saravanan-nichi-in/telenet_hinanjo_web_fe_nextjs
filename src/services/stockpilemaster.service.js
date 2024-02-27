@@ -1,4 +1,4 @@
-import { downloadBase64File, timestampFile } from "@/helper";
+import { downloadBase64File, timestampFile, importErrorToastDisplay } from "@/helper";
 import axios from "@/utils/api";
 import { isObject } from "lodash";
 import toast from 'react-hot-toast';
@@ -25,24 +25,13 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                if (response?.data?.success) {
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
-                } else {
-                    callBackFun(false);
-                    toast.error(response?.data?.message, {
-                        position: "top-right",
-                    });
-                }
+                importErrorToastDisplay(response);
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            importErrorToastDisplay(error.response);
         });
 }
 
@@ -64,7 +53,7 @@ function _exportData(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -86,11 +75,8 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
         });
 }
 
@@ -108,7 +94,7 @@ function _getCategoryAndProductList(callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
@@ -221,8 +207,8 @@ function _delete(id, callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
-            // Handle errors here
+            console.error(error);
+
             // console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",

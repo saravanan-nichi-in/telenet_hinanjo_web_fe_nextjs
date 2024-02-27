@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-
-import { getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CommonDialog, NormalTable } from '@/components';
-import { AdminSpecialCareService } from '@/helper/adminSpecialCareService';
-import { AdminManagementImportModal, SpecialCareEditModal } from '@/components/modal';
-import { SpecialCareServices } from "@/services";
 import _ from "lodash";
 
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Button, NormalTable } from '@/components';
+import { AdminManagementDeleteModal, AdminManagementImportModal, SpecialCareEditModal } from '@/components/modal';
+import { SpecialCareServices } from "@/services";
+import CustomHeader from '@/components/customHeader';
+
 export default function AdminSpecialCarePage() {
-    const { localeJson, setLoader, locale } = useContext(LayoutContext);
-    const [admins, setAdmins] = useState([]);
-    const router = useRouter();
-    const [specialCareCreateDialogVisible, setSpecialCareCreateDialogVisible] = useState(false);
+    const { localeJson, locale ,setLoader } = useContext(LayoutContext);
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteObj, setDeleteObj] = useState(null);
     const [specialCarCreateOpen, setSpecialCareCreateOpen] = useState(false);
     const [importSpecialCareOpen, setImportSpecialCareOpen] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
@@ -27,34 +26,28 @@ export default function AdminSpecialCarePage() {
     const [getPayload, setPayload] = useState({
         filters: {
             start: 0,
-            limit: 5,
+            limit: 10,
             sort_by: "updated_at",
-            order_by: "asc",
+            order_by: "desc",
         },
         search: "",
     });
-    const onClickCancelButton = () => {
-        setSpecialCareCreateDialogVisible(false);
-    };
-    const onClickOkButton = (res) => {
-        if (res) {
-            setSpecialCareCreateDialogVisible(false);
-            onGetSpecialCareListOnMounting()
-        }
-    };
+
     const onSpecialCareEditSuccess = (response) => {
         setSpecialCareEditOpen(false);
         setSpecialCareCreateOpen(false);
+        showOverFlow();
     };
     const onSpecialCareImportClose = () => {
         setImportSpecialCareOpen(!importSpecialCareOpen);
+        showOverFlow();
     };
     const onRegister = (values) => {
         setImportSpecialCareOpen(false);
     }
 
     const columnsData = [
-        { field: 'index', header: translate(localeJson, 's_no'), className: "sno_class" },
+        { field: 'index', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
         {
             field: 'name', header: translate(localeJson, 'special_care_name_jp'), minWidth: "12rem",
         },
@@ -70,9 +63,7 @@ export default function AdminSpecialCarePage() {
                     <div className='flex flex-wrap justify-content-center gap-2'>
                         <Button buttonProps={{
                             text: translate(localeJson, 'edit'),
-                            buttonClass: "text-primary ",
-                            bg: "bg-white",
-                            hoverBg: "hover:bg-primary hover:text-white",
+                            buttonClass: "edit-button",
                             onClick: () => {
                                 setRegisterModalAction("edit")
                                 setCurrentEditObj({
@@ -81,13 +72,13 @@ export default function AdminSpecialCarePage() {
                                     name_en: rowData.name_en
                                 })
                                 setSpecialCareEditOpen(true)
+                                hideOverFlow();
                             },
-                        }} />
+                        }} parentClass={"edit-button"} />
                         <Button buttonProps={{
                             text: translate(localeJson, 'delete'), buttonClass: "delete-button",
                             onClick: () => {
-                                setId(rowData.id)
-                                setSpecialCareCreateDialogVisible(true)
+                                openDeleteDialog(rowData)
                             }
                         }} parentClass={"delete-button"} />
                     </div>
@@ -103,7 +94,6 @@ export default function AdminSpecialCarePage() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetSpecialCareListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getPayload]);
@@ -117,12 +107,11 @@ export default function AdminSpecialCarePage() {
     };
 
     function fetchData(response) {
+        var additionalColumnsArrayWithOldData = [...columnsData];
+        let preparedList = [];
+        var listTotalCount = 0;
         if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-            setLoader(true)
             const data = response.data.model.list;
-            var additionalColumnsArrayWithOldData = [...columnsData];
-            let preparedList = [];
-            // Update prepared list to the state
             // Preparing row data for specific column to display
             data.map((obj, i) => {
                 let preparedObj = {
@@ -133,14 +122,12 @@ export default function AdminSpecialCarePage() {
                 }
                 preparedList.push(preparedObj);
             })
-
-            setList(preparedList);
-            setColumns(additionalColumnsArrayWithOldData);
-            setTotalCount(response.data.model.total);
-            setTableLoading(false);
-            setLoader(false)
+            listTotalCount = response.data.model.total;
         }
         setTableLoading(false);
+        setColumns(additionalColumnsArrayWithOldData);
+        setList(preparedList);
+        setTotalCount(listTotalCount);
     }
 
     /**
@@ -163,36 +150,27 @@ export default function AdminSpecialCarePage() {
         }
     }
 
-
-    // const importFileApi = (file) => {
-    //     const formData = new FormData()
-    //     formData.append('file', file)
-    //     importData(formData)
-    //     setImportSpecialCareOpen(false);
-    //     // window.location.reload(); 
-    //     onGetSpecialCareListOnMounting();
-    // };
-
     const importFileApi = (file) => {
         const formData = new FormData();
         formData.append('file', file);
         importData(formData, (file) => {
             if (file) {
-                console.log(file);
-                // setLoader(true);
-                onGetSpecialCareListOnMounting()
+                setTableLoading(true);
+                onGetSpecialCareListOnMounting();
             }
         });
         setImportSpecialCareOpen(false);
+        showOverFlow();
     }
 
     const submitForm = (res) => {
-        if (res.id) {
+        if (res.id) { 
             update(res, isUpdated)
-
+            setTableLoading(true);
         }
         else {
             create(res, isCreated)
+            setTableLoading(true);
         }
 
     }
@@ -211,54 +189,44 @@ export default function AdminSpecialCarePage() {
         }
     }
 
+    const openDeleteDialog = (rowdata) => {
+        setDeleteId(rowdata.id);
+        setDeleteObj({
+            firstLabel: translate(localeJson, 'special_care_name_jp'),
+            firstValue: rowdata.name,
+            secondLabel: translate(localeJson, 'special_care_name_en'),
+            secondValue: rowdata.name_en
+        });
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            setTableLoading(true);
+            deleteSpecialCare(deleteId, () => {
+                onGetSpecialCareListOnMounting();
+            });
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
     return (
         <>
-            <CommonDialog
-                open={specialCareCreateDialogVisible}
-                dialogBodyClassName="p-3 text-center"
-                header={translate(localeJson, 'confirmation_information')}
-                content={
-                    <div>
-                        <p>{translate(localeJson, 'once_deleted_cannot_restore')}</p>
-                        <p>{translate(localeJson, 'do_you_want_to_delete')}</p>
-                    </div>
-                }
-                position={"center"}
-                footerParentClassName={"text-center"}
-                footerButtonsArray={[
-                    {
-                        buttonProps: {
-                            buttonClass: "text-600 w-8rem",
-                            bg: "bg-white",
-                            hoverBg: "hover:surface-500 hover:text-white",
-                            text: translate(localeJson, 'cancel'),
-                            onClick: () => onClickCancelButton(),
-                        },
-                        parentClass: "inline"
-                    },
-                    {
-                        buttonProps: {
-                            buttonClass: "w-8rem",
-                            type: "submit",
-                            text: translate(localeJson, 'ok'),
-                            severity: "danger",
-                            onClick: () => {
-                                setLoader(true)
-                                deleteSpecialCare(id, onClickOkButton)
-                                setLoader(false)
-                            },
-                        },
-                        parentClass: "inline"
-                    }
-                ]}
-                close={() => {
-                    setSpecialCareCreateDialogVisible(false);
-                }}
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+                refreshList={onGetSpecialCareListOnMounting}
+                deleteObj={deleteObj}
             />
             <SpecialCareEditModal
                 open={specialCareEditOpen}
                 header={translate(localeJson, registerModalAction == "create" ? 'special_care_create' : 'special_care_edit')}
-                close={() => setSpecialCareEditOpen(false)}
+                close={() => {
+                    setSpecialCareEditOpen(false)
+                    showOverFlow();
+                }}
                 buttonText={translate(localeJson, registerModalAction == "create" ? 'submit' : 'update')}
                 submitForm={submitForm}
                 onSpecialCareEditSuccess={onSpecialCareEditSuccess}
@@ -275,44 +243,48 @@ export default function AdminSpecialCarePage() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'special_care_list')}</h5>
-                        <hr />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "special_care_list")} />
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
+                                import: true,
+                                buttonClass: "evacuation_button_height import-button",
                                 text: translate(localeJson, 'import'),
-                                onClick: () => setImportSpecialCareOpen(true),
-                                severity: "primary"
-                            }} parentClass={"mr-1 mt-1"} />
+                                onClick: () => {
+                                    setImportSpecialCareOpen(true)
+                                    hideOverFlow();
+                                }
+                            }} parentClass={"mr-1 mt-1 import-button"} />
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
+                                export: true,
+                                buttonClass: "evacuation_button_height export-button",
                                 text: translate(localeJson, 'export'),
-                                severity: "primary",
                                 onClick: () => exportData(getPayload),
-                            }} parentClass={"mr-1 mt-1"} />
+                            }} parentClass={"mr-1 mt-1 export-button"} />
 
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
+                                create: true,
+                                buttonClass: "evacuation_button_height create-button",
                                 text: translate(localeJson, 'create_special_care'),
                                 onClick: () => {
                                     setRegisterModalAction("create")
                                     setCurrentEditObj({ name: "", name_en: "" })
                                     setSpecialCareEditOpen(true)
+                                    hideOverFlow();
                                 },
-                                severity: "success"
-                            }} parentClass={"mr-1 mt-1"} />
+                            }} parentClass={"mr-1 mt-1 create-button"} />
                         </div>
                         <div className='mt-3'>
                             <NormalTable
                                 lazy
                                 totalRecords={totalCount}
                                 loading={tableLoading}
+                                stripedRows={true}
                                 showGridlines={"true"}
                                 paginator={"true"}
                                 columnStyle={{ textAlign: "center" }}

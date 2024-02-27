@@ -32,8 +32,56 @@ function MyApp({ Component, pageProps }) {
     };
 
     /**
+     * Function to delete the current theme link
+     */
+    const deleteCurrentTheme = () => {
+        const themeLink = document.getElementById('theme-css');
+        if (themeLink) {
+            themeLink.parentNode.removeChild(themeLink);
+        }
+    };
+
+    /**
+     * Function to load a new theme
+     */
+    const loadNewTheme = (url) => {
+        const path = url.split('?')[0];
+        const role = path.startsWith('/admin') ? 'admin' : path.startsWith('/staff') ? 'staff' : path.startsWith('/hq-staff') ? 'hq-staff' : 'default';
+        const themeLink = document.getElementById('theme-css');
+        const getThemeApplied = themeLink.href.split('/')[4];
+        const getURLPresent = url.split('/')[1];
+        if (getURLPresent != 'user' && getURLPresent != getThemeApplied) {
+            deleteCurrentTheme(); // Delete the current theme first
+            const link = document.createElement('link');
+            link.id = 'theme-css';
+            link.rel = 'stylesheet';
+            link.href = `/themes/${role}/theme.css`;
+            document.head.appendChild(link); // Append the new theme link to the head
+        } else if (getURLPresent == 'user') {
+            if (getThemeApplied != 'default') {
+                deleteCurrentTheme(); // Delete the current theme first
+                const link = document.createElement('link');
+                link.id = 'theme-css';
+                link.rel = 'stylesheet';
+                link.href = `/themes/${role}/theme.css`;
+                document.head.appendChild(link); // Append the new theme link to the head
+            }
+        }
+    };
+
+    /**
+     * Life cycle to load theme
+     */
+    useEffect(() => {
+        // loadNewTheme(router.asPath); // Load the initial theme on component mount
+        router.events.on('routeChangeComplete', (url) => {
+            loadNewTheme(url); // Load the initial theme on component mount
+        })
+    }, [])
+
+    /**
      * Check authorization & authentication
-    */
+     */
     useEffect(() => {
         authCheck(router.asPath);
         router.events.on('routeChangeComplete', () => {
@@ -41,8 +89,8 @@ function MyApp({ Component, pageProps }) {
         })
         const handleBackNavigation = () => {
             // This code will be executed when the user clicks the back button
-            console.log('Back button clicked');
-            authCheck(router.asPath);
+            // Not needed as of now as broswer is already managing the pop state properly
+            // authCheck(router.asPath);
             // You can put your code here to handle the back navigation
         };
         // Add an event listener for the popstate event
@@ -56,7 +104,7 @@ function MyApp({ Component, pageProps }) {
     /**
      * Function will help to redirect specific location
      * @param {*} url 
-    */
+     */
     function authCheck(url) {
         const adminPublicPaths = [
             '/admin/login',
@@ -80,6 +128,14 @@ function MyApp({ Component, pageProps }) {
             '/staff/reset-password',
             '/staff/reset-password/'
         ];
+        const hqStaffPublicPaths = [
+            '/hq-staff/login',
+            '/hq-staff/login/',
+            '/hq-staff/forgot-password',
+            '/hq-staff/forgot-password/',
+            '/hq-staff/reset-password',
+            '/hq-staff/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
@@ -98,7 +154,7 @@ function MyApp({ Component, pageProps }) {
             } else {
                 if (adminPublicPaths.includes(path)) {
                     router.push({
-                        pathname: '/admin/dashboard',
+                        pathname: '/admin/event-status-list',
                     });
                 } else {
                     router.push({
@@ -129,6 +185,30 @@ function MyApp({ Component, pageProps }) {
                     });
                 }
             }
+        } else if (path.startsWith('/hq-staff')) {
+            if (_.isNull(AuthenticationAuthorizationService.hqStaffValue)) {
+                if (!hqStaffPublicPaths.includes(path)) {
+                    router.push('/hq-staff/login');
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            } else {
+                if (hqStaffPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/hq-staff/dashboard',
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            }
+        } else if (path == '/user' || path == '/user/') {
+            router.push('/user/list');
         } else {
             setAuthorized(true);
         }
@@ -164,7 +244,8 @@ function MyApp({ Component, pageProps }) {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
+                                {/* <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" /> */}
+                                {"Loading..."}
                             </div>
                         )}
                     </LayoutProvider>

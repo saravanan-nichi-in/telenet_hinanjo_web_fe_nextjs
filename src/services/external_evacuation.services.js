@@ -69,6 +69,7 @@ function _getList(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }
 
@@ -88,6 +89,7 @@ function _getExternalEvacueesDetail(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }
 
@@ -107,5 +109,6 @@ function _getChartScreenData(payload, callBackFun) {
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }

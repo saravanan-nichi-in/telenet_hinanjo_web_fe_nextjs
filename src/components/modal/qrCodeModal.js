@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 
-import Button from "../button/button";
+import {Button} from "../button";
 import { BarcodeScanner } from "../qr";
 
 const QrCodeModal = (props) => {
@@ -17,7 +17,7 @@ const QrCodeModal = (props) => {
         footerButtonsArray,
         ...restProps
     } = props;
-    
+
     // Footer buttons
     const [cameraMode, setCameraMode] = useState("front"); // Initialize with "front" mode
 
@@ -58,7 +58,7 @@ const QrCodeModal = (props) => {
             >
                 <div className={dialogBodyClassName}>
                     <div>
-                        <BarcodeScanner width={"100%"} cameraMode={cameraMode}/>
+                        <BarcodeScanner width={"100%"} cameraMode={cameraMode} />
                     </div>
                 </div>
             </Dialog>

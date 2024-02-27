@@ -1,5 +1,7 @@
+/* eslint-disable no-irregular-whitespace */
 import _ from 'lodash';
 import toast from "react-hot-toast";
+import { isObject } from "lodash";
 
 /**
  * 
@@ -68,14 +70,12 @@ export const getAveragePercentage = (array, key) => {
  * @returns 
  */
 export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
-
     const options = {
         year: 'numeric',
         month: 'long',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        timeZone: 'Asia/Kolkata'
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
@@ -89,7 +89,6 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
  * @returns 
  */
 export const getJapaneseDateDisplayFormat = (dateTime) => {
-
     const options = {
         year: 'numeric',
         month: '2-digit', // Use '2-digit' to get leading zeros for months
@@ -105,13 +104,17 @@ export const getJapaneseDateDisplayFormat = (dateTime) => {
  * @param {*} dateTime 
  * @returns 
  */
-export const getJapaneseDateDisplayYYYYMMDDFormat = (dateTime) => {
-    const date = new Date(dateTime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}年${month}月${day}日`;
+export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
+    if (dateTime) {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString('ja-JP', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        return formattedDate.replace(/\//g, '年').replace('-', '月') + '日';
+    }
+    return "";
 }
 
 /**
@@ -120,13 +123,16 @@ export const getJapaneseDateDisplayYYYYMMDDFormat = (dateTime) => {
  * @returns 
  */
 export const getEnglishDateDisplayFormat = (dateTime) => {
-    const date = new Date(dateTime);
+    if (dateTime) {
+        const date = new Date(dateTime);
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
 
-    return `${year}-${month}-${day}`;
+        return `${year}-${month}-${day}`;
+    }
+    return "";
 }
 
 /**
@@ -176,6 +182,24 @@ export const getGeneralDateTimeSlashDisplayFormat = (dateTime) => {
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
+    };
+    let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+    return formattedJPDateTime.replaceAll("-", "/");
+}
+
+/**
+ * Get general display date & time && second slash display format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getGeneralDateTimeSecondSlashDisplayFormat = (dateTime) => {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
     };
     let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
     return formattedJPDateTime.replaceAll("-", "/");
@@ -292,6 +316,33 @@ export const importErrorToastDisplay = (response) => {
 }
 
 /**
+ * Function help to display 422 error messages on toast
+ * @param {*} error 
+ */
+export const common422ErrorToastDisplay = (error) => {
+    if (error.response.status == 422) {
+        if (isObject(error.response.data.message)) {
+            let errorMessages = Object.values(error.response.data.message);
+            let errorString = errorMessages.join('.')
+            let errorArray = errorString.split(".");
+            errorArray = errorArray.filter(message => message.trim() !== "");
+            let formattedErrorMessage = errorArray
+                .map((message, index) => {
+                    return `${message.trim()}`;
+                })
+                .join("\n");
+            toast.error(formattedErrorMessage, {
+                position: "top-right",
+            });
+        }
+    } else {
+        toast.error(error.response.data.message, {
+            position: "top-right",
+        });
+    }
+}
+
+/**
  * Generate colors
  * @param {*} length 
  * @returns 
@@ -352,15 +403,14 @@ export const getJapaneseDateTimeDisplayActualFormat = (dateTime) => {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
-        timeZone: 'Asia/Kolkata'
+        // second: '2-digit',
     };
     const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
 
-    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日, (\d+):(\d+):(\d+)/, '$1年$2月$3日 $4:$5:$6');
+    formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日, (\d+):(\d+):(\d+)/, '$1年$2月$3日 $4:$5');
     return formattedJPDateTime;
-
 };
+
 /**
  * Get english date & time format
  * @param {*} dateTime 
@@ -379,6 +429,187 @@ export const getEnglishDateTimeDisplayActualFormat = (dateTime) => {
     const minute = String(date.getMinutes()).padStart(2, '0');
     const second = String(date.getSeconds()).padStart(2, '0');
 
-    return `${year}-${month}-${day}  (${dayOfWeek}) ${hour}:${minute}:${second}`;
-
+    return `${year}-${month}-${day} (${dayOfWeek}) ${hour}:${minute}`;
 };
+
+/**
+ * Get Japanese date & time format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getJapaneseDateTimeDayDisplayActualFormat = (dateTime) => {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}年${month}月${day}日  (${dayOfWeek}) ${hour}:${minute}`;
+};
+
+/**
+ * Get english date & time format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateTimeDisplayFormat = (dateTime) => {
+    if (dateTime != "") {
+        const date = new Date(dateTime);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        const second = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+    }
+    return "";
+};
+
+/**
+ * Get english slash date format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateSlashDisplayFormat = (dateTime) => {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}/${month}/${day}`;
+};
+
+/**
+ * Get english slash date time format
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateTimeSlashDisplayFormat = (dateTime) => {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}/${month}/${day} ${hour}:${minute}`;
+};
+
+/**
+ * Get english slash date time format with seconds
+ * @param {*} dateTime 
+ * @returns 
+ */
+export const getEnglishDateTimeSlashDisplayFormatWithSeconds = (dateTime) => {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+};
+
+/**
+ * Function to convert double-byte number string to single-byte
+ * Function to convert full-width alphanumeric characters to single-byte
+ * @param {*} fullWidthString 
+ * @returns 
+ */
+export function convertToSingleByte(fullWidthString) {
+    var hasFullWidth = /[Ａ-Ｚａ-ｚ０-９]/.test(fullWidthString);
+    if (!hasFullWidth) {
+        return fullWidthString; // Return input string as it is if it doesn't contain full-width characters
+    }
+
+    var output = fullWidthString.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (match) {
+        return String.fromCharCode(match.charCodeAt(0) - 65248);
+    });
+    return output;
+}
+
+/**
+ * hiding the background scroll when modal is open
+ */
+export const hideOverFlow = () => {
+    document.body.style.overflow = 'hidden';
+}
+
+/**
+ * enabling the background scroll when modal is closed
+ */
+export const showOverFlow = () => {
+    document.body.style.overflow = 'auto';
+}
+
+/**
+ * Function to calculate Age with help of date of birth
+ * @param {*} year 
+ * @param {*} month 
+ * @param {*} date 
+ * @returns 
+ */
+export const calculateAge = (year, month, date) => {
+    console.log(year, month, date)
+    year = year || new Date().getFullYear();
+    month = month || 1;
+    date = date || 1;
+
+    const dobDate = new Date(year, month - 1, date);
+    const currentDate = new Date();
+
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
+    const dobMonth = dobDate.getMonth();
+    const currentMonth = currentDate.getMonth();
+
+    if (currentMonth < dobMonth || (currentMonth === dobMonth && currentDate.getDate() < dobDate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
+/**
+ * Function will help to split japanese address
+ * @param {*} address 
+ * @returns 
+ */
+export function splitJapaneseAddress(address) {
+    // Define regular expression to match the city part of the address until the first occurrence of "区"
+    const cityRegex = /^(.*?(市|区|町|村|郡|都|道|府|県))/;
+
+    // Match the city part of the address
+    const cityMatch = address.match(cityRegex);
+    let city = '';
+    let street = '';
+
+    if (cityMatch && cityMatch.length > 0) {
+        // Extract the city from the matched part of the address
+        city = cityMatch[0].trim();
+
+        // Extract the street from the remaining part of the address after the city
+        street = address.slice(city.length).trim();
+    } else {
+        // If no city suffix is found, consider the entire address as the street
+        street = address.trim();
+    }
+
+    return { city, street };
+}

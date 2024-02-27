@@ -2,32 +2,44 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { getValueByKeyRecursively as translate,getJapaneseDateDisplayYYYYMMDDFormat } from "@/helper";
+import {
+  getValueByKeyRecursively as translate,
+  getJapaneseDateDisplayYYYYMMDDFormat,
+  hideOverFlow,
+  showOverFlow,
+  convertToSingleByte,
+  splitJapaneseAddress
+} from "@/helper";
 import {
   Button,
   ToggleSwitch,
   NormalTable,
-  InputFloatLabel,
-  SelectFloatLabel,
   ValidationError
 } from "@/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import External from "@/components/modal/externalModal";
-import { prefectures, prefectures_en , gender_jp , gender_en } from "@/utils/constant";
-import { ExternalServices } from "@/services";
+import { prefectures, prefectures_en, gender_jp, gender_en } from "@/utils/constant";
+import { ExternalServices, CommonServices } from "@/services";
+import CustomHeader from "@/components/customHeader";
+import { Input, InputDropdown } from "@/components/input";
 
 export default function PublicExternal() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+
+  /* Services */
+  const { getActivePlaceList, getAddressByZipCode, create } = ExternalServices;
+  const { getAddress, getZipCode } = CommonServices;
+
   const [evacuee, setEvacuee] = useState([]);
+  const [sortable, setSortable] = useState(false);
   const [registerModalAction, setRegisterModalAction] = useState("create");
   const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
   const [evacueeValues, setEvacueeValues] = useState("");
   const [shelterData, setShelterData] = useState([]);
   const [toggleSwitchShelterComponents, setToggleSwitchShelterComponents] = useState([]);
   const [editObj, setEditObj] = useState({});
-  /* Services */
-  const { getActivePlaceList, getAddressByZipCode , create } = ExternalServices;
   const [columns, setColumns] = useState([]);
   const formikRef = useRef();
   const initialValues = {
@@ -72,57 +84,38 @@ export default function PublicExternal() {
           }
         }
       ),
-      postalCode: Yup.string().test(
-        "required-when-toggleSwitches-true",
-        translate(localeJson, "postal_code_required"),
-        (value, parent) => {
-          if (parent.parent.toggleSwitches[0] === true) {
-            return !!value;
-          } else {
-            return true;
+      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+        .test(
+          "required-when-toggleSwitches-true",
+          translate(localeJson, "zip_code_mis_match"),
+          (value) => {
+            if (value != undefined)
+              return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
+            else
+              return true
           }
-        }
-      ).min(8, translate(localeJson, "postal_code_length"))
-      .max(8, translate(localeJson, "postal_code_length")),
-      address: Yup.string().test(
-        "required-when-toggleSwitches-true",
-        translate(localeJson, "address_required"),
-        (value, parent) => {
-          if (parent.parent.toggleSwitches[0] === true) {
-            return !!value;
-          } else {
-            return true;
-          }
-        }
-      ).max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string().nullable().test(
-        "required-when-toggleSwitches-true",
-        translate(localeJson, "prefecture_required"),
-        (value, parent) => {
-          if (parent.parent.toggleSwitches[0] === true) {
-            return !!value;
-          } else {
-            return true;
-          }
-        }
-      ),
+        ).min(7, translate(localeJson, "postal_code_length"))
+        .max(7, translate(localeJson, "postal_code_length")),
+      address: Yup.string().required(translate(localeJson, "address_required"))
+        .max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string().required(translate(localeJson, "prefecture_required")),
       email: Yup.string()
-      .test(
-        "required-when-toggleSwitches-true",
-        translate(localeJson, "email_required"),
-        (value, parent) => {
-          if (parent.parent.toggleSwitches[0] === true) {
-            return !!value;
-          } else {
-            return true;
+        .test(
+          "required-when-toggleSwitches-true",
+          translate(localeJson, "email_required"),
+          (value, parent) => {
+            if (parent.parent.toggleSwitches[0] === true) {
+              return !!value;
+            } else {
+              return true;
+            }
           }
-        }
-      )
-      .email(translate(localeJson, "email_valid"))
-      .matches(
-        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-        translate(localeJson, "email_valid")
-      ),
+        )
+        .email(translate(localeJson, "email_valid"))
+        .matches(
+          /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+          translate(localeJson, "email_valid")
+        ),
       specific_location: Yup.string().nullable().test(
         "required-when-toggleSwitches-true",
         translate(localeJson, "c_required"),
@@ -133,7 +126,7 @@ export default function PublicExternal() {
             return true;
           }
         }
-      ) .max(255, translate(localeJson, "specified_loc_max_len")),
+      ).max(255, translate(localeJson, "specified_loc_max_len")),
       evacuee: Yup.array()
         .test(
           "evacuee-required-when-toggleSwitches-true",
@@ -158,17 +151,14 @@ export default function PublicExternal() {
           }
         ),
     });
-
-
-  const router = useRouter();
   // Getting storage data with help of reducers
   const [buttonStates, setButtonStates] = useState(Array(3).fill(false));
-
   const [foodButtonStates, setFoodButtonStates] = useState(
     Array(2).fill(false)
   );
-
   const [placeButtonStates, setPlaceButtonStates] = useState();
+  const [addressCount, setAddressCount] = useState(0);
+  const [fetchZipCode, setFetchedZipCode] = useState("");
 
   const handleFoodButtonClick = (index) => {
     const newButtonStates = [...foodButtonStates];
@@ -180,7 +170,7 @@ export default function PublicExternal() {
   };
 
   const handleButtonClick = (index) => {
-    formikRef.current.setTouched({});
+    // formikRef.current.setTouched({});
     const newButtonStates = [...buttonStates];
     newButtonStates.fill(false); // Uncheck all buttons
     newButtonStates[index] = true; // Check the clicked button
@@ -194,8 +184,8 @@ export default function PublicExternal() {
     newButtonStates[index] = true; // Check the clicked button
     formikRef.current.setFieldValue("togglePlaceSwitches", newButtonStates);
     setPlaceButtonStates(newButtonStates);
-
   }
+
   const toggleSwitchComponents = buttonStates.map((checked, index) => {
     const offLabel =
       index === 0
@@ -206,6 +196,7 @@ export default function PublicExternal() {
     return (
       <ToggleSwitch
         key={index}
+        className={"external-selector-button"}
         checked={checked}
         onLabel={offLabel}
         offLabel={offLabel}
@@ -223,8 +214,10 @@ export default function PublicExternal() {
     return (
       <ToggleSwitch
         key={index}
+        className={"external-selector-button"}
         checked={checked}
         onLabel={offLabel}
+        style={{ fontSize: "16px" }}
         offLabel={offLabel}
         parentClass={"w-15rem"}
         onChange={() => handleFoodButtonClick(index)}
@@ -234,48 +227,65 @@ export default function PublicExternal() {
 
   const cols = [
     {
-      field: "name",
-      header: translate(localeJson, "c_refugee_name"),
-      minWidth: "16rem",
-      maxWidth: "16rem",
+      field: "id",
+      header: translate(localeJson, "supplies_slno"),
       headerClassName: "custom-header",
+      className: "sno_class",
+    },
+    {
+      field: 'name', header: translate(localeJson, 'c_name'), sortable: true, alignHeader: "left",
+      body: (rowData) => {
+        return <div className="flex flex-column">
+          <div className={"text-highlighter-user-list"}>
+            {rowData.name_kanji}
+          </div>
+          <div className={"clickable-row"}>
+            {rowData.name}
+          </div>
+        </div>
+      },
+      minWidth: locale === "ja" ? "5rem" : "5rem",
+      width: "5rem",
     },
     {
       field: "dob",
       header: translate(localeJson, "c_dob"),
-      minWidth: "6rem",
-      maxWidth: "6rem",
       headerClassName: "custom-header",
       body: (rowData) => {
         const date = locale === 'ja' ? getJapaneseDateDisplayYYYYMMDDFormat(new Date(rowData.dob)) : rowData.dob;
-    
+
         return <span>{date}</span>;
       },
+      minWidth: "3rem",
+      maxWidth: "3rem",
+      width: "3rem",
     },
     {
       field: "age",
       header: translate(localeJson, "c_age"),
-      minWidth: "6rem",
-      maxWidth: "6rem",
       headerClassName: "custom-header",
-      textAlign:"right",
-      alignHeader:"center"
+      textAlign: "center",
+      alignHeader: "center",
+      minWidth: "3rem",
+      maxWidth: "3rem",
+      width: "3rem",
     },
     {
       field: "gender",
       header: translate(localeJson, "c_gender"),
-      minWidth: "6rem",
-      maxWidth: "6rem",
+      minWidth: "3rem",
+      maxWidth: "3rem",
+      width: "3rem",
       headerClassName: "custom-header",
       body: (rowData) => {
         const genderOptions = locale === 'ja' ? gender_jp : gender_en;
         const selectedGenderOption = genderOptions.find(option => option.value === rowData.gender);
         const displayedGenderName = selectedGenderOption ? selectedGenderOption.name : 'Unknown';
-    
+
         return <span>{displayedGenderName}</span>;
       },
     },
-    
+
     {
       field: "actions",
       header: translate(localeJson, "common_action"),
@@ -288,23 +298,23 @@ export default function PublicExternal() {
             buttonProps={{
               type: "button",
               text: translate(localeJson, "edit"),
-              buttonClass: "text-primary",
-              bg: "bg-white",
-              hoverBg: "hover:bg-primary hover:text-white",
+              buttonClass: "edit-button",
               onClick: () => {
                 setRegisterModalAction("edit");
                 setSpecialCareEditOpen(true);
+                hideOverFlow();
                 let dob = new Date(rowData.dob)
                 let currentData = {
                   id: rowData.id,
                   name: rowData.name,
+                  name_kanji: rowData.name_kanji,
                   dob: dob,
                   age: rowData.age,
                   gender: rowData.gender
                 }
                 setEditObj(currentData)
               },
-            }}
+            }} parentClass={"edit-button"}
           />
           <Button
             parentStyle={{ display: "inline" }}
@@ -358,21 +368,24 @@ export default function PublicExternal() {
   }
 
   const isActivePlaces = (res) => {
-    const data = res.data.model
+    const data = res.data.model.list
     formikRef.current.setFieldValue("togglePlaceSwitches", Array(data.length).fill(false));
+
     setShelterData(data)
     setPlaceButtonStates(Array(data.length).fill(false))
 
   }
   useEffect(() => {
     const newToggleSwitchComponents = shelterData.map((shelter, index) => {
-      const offLabel = shelter.name;
-
+      const onLabel = locale == 'ja' ? shelter.name : (shelter.name_en ?? shelter.name);
+      const sliceLimit = locale == 'ja' ? 10 : 30;
+      const offLabel = onLabel.length > sliceLimit ? (onLabel.slice(0, sliceLimit) + " ...") : onLabel;
       return (
         <ToggleSwitch
           key={shelter.id}
+          className={"external-selector-button"}
           checked={placeButtonStates[index]} // Assuming placeButtonStates is an array of booleans
-          onLabel={offLabel}
+          onLabel={onLabel}
           offLabel={offLabel}
           parentClass={"w-15rem white-space-nowrap overflow-hidden text-overflow-ellipsis eli_button"}
           onChange={() => handlePlaceButtonClick(index)} // Assuming handleFoodButtonClick is your click handler
@@ -384,11 +397,47 @@ export default function PublicExternal() {
   }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
   const isCreated = (res) => {
-    if(res) {
+    if (res) {
       router.push('/user/external/success');
     }
     setLoader(false)
   }
+
+  useEffect(() => {
+    let address = formikRef.current.values.address;
+    let stateId = formikRef.current.values.prefecture_id;
+    let { city, street } = splitJapaneseAddress(address);
+    let postalCode = formikRef.current.values.postalCode
+    let state = prefectures.find(x => x.value == stateId)?.name;
+    if (state && (city && street)) {
+      getZipCode(state, city, street, (res) => {
+        if (res) {
+          let zipCode = res.result.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""))
+          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+          formikRef.current.validateField("postalCode")
+          return
+        }
+        else {
+          setFetchedZipCode("")
+          return
+        }
+      })
+    }
+    if (postalCode) {
+      getAddress(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
+          setFetchedZipCode("")
+          formikRef.current.validateField("postalCode");
+        }
+      })
+    }
+  }, [addressCount])
+
+  useEffect(() => {
+    formikRef.current.validateField("postalCode");
+  }, [fetchZipCode])
 
   return (
     <div>
@@ -400,7 +449,10 @@ export default function PublicExternal() {
             ? "enter_evacuee_event_registration"
             : "enter_evacuee_event_info_edit"
         )}
-        close={() => setSpecialCareEditOpen(false)}
+        close={() => {
+          setSpecialCareEditOpen(false)
+          showOverFlow();
+        }}
         editObj={editObj}
         buttonText={translate(
           localeJson,
@@ -419,35 +471,47 @@ export default function PublicExternal() {
           let data = values
           let getTrueIndex = (toggleArray) => {
             for (let i = 0; i < toggleArray.length; i++) {
-                if (toggleArray[i]) {
-                    return i + 1;
-                }
+              if (toggleArray[i]) {
+                return i + 1;
+              }
             }
             return 0; // Default value if no true found
-        };
-        
-        let placeCategory = getTrueIndex(data.toggleSwitches);
-        let convertedPayload = placeCategory === 1 ? {
-          "place_category": placeCategory,
-          "food_required": getTrueIndex(data.toggleFoodSwitches),
-          "hinan_id": shelterData&&shelterData[getTrueIndex(data.togglePlaceSwitches)-1].id,
-          "postal_code": data.postalCode.replace(/-/g, ''),
-          "prefecture_id": data.prefecture_id,
-          "address": data.address,
-          "email": data.email,
-          "person": data.evacuee.map((evacuee) => ({
+          };
+
+          let placeCategory = getTrueIndex(data.toggleSwitches);
+          let hinan_obj = {};
+          if (getTrueIndex(data.toggleFoodSwitches) == 1) {
+            hinan_obj = { hinan_id: shelterData[getTrueIndex(data.togglePlaceSwitches) - 1].id };
+          }
+          let postal_code = data.postalCode ? convertToSingleByte(data.postalCode) : "";
+          let fullPayload = {
+            "place_category": placeCategory,
+            "postal_code": postal_code ? postal_code.replace(/-/g, '') : "",
+            "prefecture_id": data.prefecture_id,
+            "address": data.address,
+            "email": data.email,
+            "person": data.evacuee.map((evacuee) => ({
               "name": evacuee.name,
+              "name_kanji": evacuee.name_kanji,
               "dob": evacuee.dob.replace(/-/g, '/'),
               "age": evacuee.age,
               "gender": evacuee.gender
-          }))
-      } : 
-      {
-        "place_category": placeCategory,
-        "place_detail": data.specific_location,
-      };
-        setLoader(true)
-        create(convertedPayload,isCreated)
+            }))
+          }
+          let convertedPayload = placeCategory === 1 ? {
+            ...fullPayload,
+            //on backend they are accepting food_not_required 0 and food_required 1
+            "food_required": (getTrueIndex(data.toggleFoodSwitches) == 2) ? 0 : 1,
+            // "hinan_id": shelterData && shelterData[getTrueIndex(data.togglePlaceSwitches) - 1].id,
+            ...hinan_obj,
+
+          } :
+            {
+              ...fullPayload,
+              "place_detail": data.specific_location,
+            };
+          setLoader(true)
+          create(convertedPayload, isCreated)
         }}
       >
         {({
@@ -459,28 +523,23 @@ export default function PublicExternal() {
           handleSubmit,
           setFieldValue,
         }) => (
-          <div className="grid">
-            <div className="col-12">
+          <div className="grid justify-content-center">
+            <div className="col-12  sm:col-12 md:col-10 lg:col-10  mdScreenMaxWidth xlScreenMaxWidth mt-3">
               <div className="card">
-                <h5 className="page-header1 white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                <div style={{ fontSize: "21px", fontWeight: "bold" }}>
                   {translate(localeJson, "public_external")}
-                </h5>
-                <hr />
-                <div>
-                  <h5 className="page-header2 ">
-                    {translate(localeJson, "not_visiting_the_shelter")}
-                  </h5>
-
+                </div>
+                <div className="mt-4">
+                  <CustomHeader headerClass="font-bold" header={translate(localeJson, "not_visiting_the_shelter")} />
                   <form onSubmit={handleSubmit}>
-                    <div className="custom-card shadow-4 flex flex-column mt-3">
-                      <div className="mb-3">
-                        <p>
-                          {translate(
-                            localeJson,
-                            "which_place_Are_you_planning_to_evacuate"
-                          )}
-                          <span className="p-error">*</span>
-                        </p>
+                    <div className="mt-4">
+                      <div className="custom-label pb-1">
+                        <label className="font-bold">
+                          {translate(localeJson, "which_place_Are_you_planning_to_evacuate")}
+                          <span className="p-error">
+                            *
+                          </span>
+                        </label>
                       </div>
                       <div className=" flex flex-wrap justify-content-start gap-3">
                         {toggleSwitchComponents}
@@ -494,11 +553,15 @@ export default function PublicExternal() {
                       />
                     </div>
                     {values.toggleSwitches[0] == true && (
-                      <div className="custom-card shadow-4 flex flex-column mt-3">
-                        <p>
-                          {translate(localeJson, "assistance_respect_food")}
-                          <span className="p-error">*</span>
-                        </p>
+                      <div className="mt-4">
+                        <div className="custom-label pb-1">
+                          <label className="font-bold">
+                            {translate(localeJson, "assistance_respect_food")}
+                            <span className="p-error">
+                              *
+                            </span>
+                          </label>
+                        </div>
                         <div className=" flex flex-wrap justify-content-start gap-3 mb-3">
                           {toggleSwitchFoodComponents}
                         </div>
@@ -509,12 +572,9 @@ export default function PublicExternal() {
                             errors.toggleFoodSwitches
                           }
                         />
-                        {values.toggleFoodSwitches[0] == true && (
-                          <>
-                            <p>
-                              {translate(localeJson, "shelter_question")}
-                              <span className="p-error">*</span>
-                            </p>
+                        {values.toggleFoodSwitches[0] && (
+                          <div className="mt-4">
+                            <CustomHeader headerClass={"font-bold"} header={translate(localeJson, "shelter_question")} requiredSymbol={true} />
                             <div className=" flex flex-wrap justify-content-start gap-3">
                               {toggleSwitchShelterComponents}
                             </div>
@@ -525,239 +585,40 @@ export default function PublicExternal() {
                                 errors.togglePlaceSwitches
                               }
                             />
-                          </>
+                          </div>
                         )}
-                        <div
-                          className="flex pb-3 mt-3"
-                          style={{
-                            justifyContent: "flex-end",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          <Button
-                            buttonProps={{
-                              type: "button",
-                              rounded: "true",
-                              buttonClass: "",
-                              text: translate(
-                                localeJson,
-                                "c_enter_evacuee"
-                              ),
-                              onClick: () => {
-                                setRegisterModalAction("create");
-                                setSpecialCareEditOpen(true);
-                              },
-                              severity: "success",
-                            }}
-                            parentClass={"mr-1 mt-1"}
-                          />
-                        </div>
-                        <div className="mb-5">
-                          <NormalTable
-                            lazy
-                            totalRecords={5}
-                            stripedRows={true}
-                            className={"custom-table-cell"}
-                            showGridlines={"true"}
-                            value={evacuee}
-                            columns={cols}
-                            paginator={false}
-                            paginatorLeft={false}
-                            emptyMessage={translate(localeJson, "external_table_count_message")}
-                          />
-                          <ValidationError
-                            errorBlock={
-                              errors.evacuee &&
-                              touched.evacuee &&
-                              errors.evacuee
-                            }
-                          />
-                        </div>
-                        <p>
-                          {translate(localeJson, "enter_current_address")}
-                          <span className="p-error">*</span>
-                        </p>
-                        <div className="mt-3 mb-3 w-full flex gap-3">
-                          <div className="w-full">
-                            <InputFloatLabel
-                              inputFloatLabelProps={{
-                                id: "postalCode",
-                                name: "postalCode",
-                                spanText: "*",
-                                spanClass: "p-error",
-                                value: values.postalCode,
-                                custom: "w-full custom_input",
-                                hasIcon: true,
-                                onChange: (evt) => {
-                                  const re = /^[0-9-]+$/;
-                                  let val;
-                                  if (
-                                    evt.target.value === "" ||
-                                    re.test(evt.target.value)
-                                  ) {
-                                    val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
-                                    if (val.length > 3) {
-                                      val =
-                                        val.slice(0, 3) + "-" + val.slice(3);
-                                    }
-                                    setFieldValue("postalCode", val);
-                                  }
-                                  if (val.length >= 7) {
-                                    let payload = val;
-                                    getAddressByZipCode(payload, (response) => {
-                                      if (response) {
-                                        let address = response[0];
-                                        const selectedPrefecture =
-                                          prefectures.find(
-                                            (prefecture) =>
-                                              prefecture.value ==
-                                              address.prefcode
-                                          );
-                                        setFieldValue(
-                                          "prefecture_id",
-                                          selectedPrefecture?.value
-                                        );
-                                        setFieldValue(
-                                          "address",
-                                          address.address2 +
-                                          (address.address3 || "")
-                                        );
-                                      } else {
-                                        setFieldValue("prefecture_id", "");
-                                        setFieldValue("address", "");
-                                      }
-                                    });
-                                  }
-                                },
-                                onBlur: handleBlur,
-                                text: translate(localeJson, "c_postal_code"),
-                                inputClass: "w-full",
-                              }}
-                              parentClass={`custom_input ${errors.postalCode &&
-                                touched.postalCode &&
-                                "p-invalid pb-1"
-                                }`}
-                            />
-                            <ValidationError
-                              errorBlock={
-                                errors.postalCode &&
-                                touched.postalCode &&
-                                errors.postalCode
-                              }
-                            />
-                          </div>
-                          <div className="w-full">
-                            <SelectFloatLabel
-                              selectFloatLabelProps={{
-                                name: "prefecture_id",
-                                value: values.prefecture_id,
-                                options: locale == "ja" ? prefectures : prefectures_en,
-                                optionLabel: "name",
-                                selectClass: "w-full",
-                                spanText: "*",
-                                spanClass: "p-error",
-                                onChange: handleChange,
-                                onBlur: handleBlur,
-                                text: translate(
-                                  localeJson,
-                                  "prefecture_places"
-                                ),
-                              }}
-                              parentClass={`custom_input ${errors.prefecture_id &&
-                                touched.prefecture_id &&
-                                "p-invalid pb-1"
-                                }`}
-                            />
-                            <ValidationError
-                              errorBlock={
-                                errors.prefecture_id &&
-                                touched.prefecture_id &&
-                                errors.prefecture_id
-                              }
-                            />
-                          </div>
-
-                          <div className="w-full">
-                            <InputFloatLabel
-                              inputFloatLabelProps={{
-                                id: "address",
-                                name: "address",
-                                spanText: "*",
-                                spanClass: "p-error",
-                                value: values.address,
-                                onChange: handleChange,
-                                onBlur: handleBlur,
-                                text: translate(localeJson, "address"),
-                                inputClass: "w-full",
-                              }}
-                              parentClass={`custom_input ${errors.address &&
-                                touched.address &&
-                                "p-invalid pb-1"
-                                }`}
-                            />
-                            <ValidationError
-                              errorBlock={
-                                errors.address &&
-                                touched.address &&
-                                errors.address
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <div className="mt-5">
-                            <InputFloatLabel
-                              inputFloatLabelProps={{
-                                spanText: "*",
-                                name: "email",
-                                spanClass: "p-error",
-                                value: values.email,
-                                onChange: handleChange,
-                                onBlur: handleBlur,
-                                text: translate(
-                                  localeJson,
-                                  "mail_address_for_reference"
-                                ),
-                                inputClass:
-                                  "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                              }}
-                              parentClass={`${errors.email &&
-                                touched.email &&
-                                "p-invalid pb-1"
-                                }`}
-                            />
-                            <ValidationError
-                              errorBlock={
-                                errors.email && touched.email && errors.email
-                              }
-                            />
-                          </div>
-                        </div>
                       </div>
                     )}
                     {(values.toggleSwitches[1] == true ||
                       values.toggleSwitches[2] == true) && (
-                        <div className="custom-card shadow-4 flex flex-column mt-3">
-                          <p>
-                            {translate(localeJson, "out_side_city_question")}
-                            <span className="p-error">*</span>
-                          </p>
-                          <div>
+                        <div className="flex flex-column mt-3">
+                          <div className="mt-3">
+                            <div className="custom-label pb-1">
+                              <label className="font-bold">
+                                {translate(localeJson, "out_side_city_question")}
+                                <span className="p-error">
+                                  *
+                                </span>
+                              </label>
+                            </div>
                             <div className="">
-                              <InputFloatLabel
-                                inputFloatLabelProps={{
+                              <Input
+                                inputProps={{
+                                  inputParentClassName: `${errors.specific_location && touched.specific_location && 'p-invalid pb-1'}`,
+                                  labelProps: {
+                                    // text: translate(localeJson, 'out_side_city_question'),
+                                    inputLabelClassName: "block",
+                                    // spanText: "*",
+                                    inputLabelSpanClassName: "p-error"
+                                  },
+                                  inputClassName: "w-full",
+                                  id: "specific_location",
                                   name: "specific_location",
-                                  spanClass: "p-error",
                                   value: values.specific_location,
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-                                  inputClass:
-                                    "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
+
                                 }}
-                                parentClass={`${errors.specific_location &&
-                                  touched.specific_location &&
-                                  "p-invalid pb-1"
-                                  }`}
                               />
                               <ValidationError
                                 errorBlock={
@@ -770,13 +631,254 @@ export default function PublicExternal() {
                           </div>
                         </div>
                       )}
+
+                    {/* Common part start */}
+                    {
+                      (values.toggleSwitches[0] ||
+                        values.toggleSwitches[1] ||
+                        values.toggleSwitches[2]) && (
+                        <div>
+                          <div className="pb-3 mt-5">
+                            <NormalTable
+                              lazy
+                              onSort={(data) => {
+                                setSortable(!sortable);
+                                if (data.sortField == 'name') {
+                                  let ind = 1;
+                                  setEvacuee(evacuee.sort((a, b) => {
+                                    if (sortable) {
+                                      return a.name.localeCompare(b.name)
+                                    }
+                                    return b.name.localeCompare(a.name)
+                                  }).map((obj, index) => ({ ...obj, id: index + 1 })));
+                                }
+                              }}
+                              totalRecords={5}
+                              stripedRows={true}
+                              className={"custom-table-cell"}
+                              tableStyle={{ width: "100%" }}
+                              showGridlines={"true"}
+                              value={evacuee}
+                              columns={cols}
+                              paginator={false}
+                              paginatorLeft={false}
+                              emptyMessage={translate(localeJson, "external_table_count_message")}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.evacuee &&
+                                touched.evacuee &&
+                                errors.evacuee
+                              }
+                            />
+                          </div>
+                          <div
+                            className="mb-5"
+                          >
+                            <Button
+                              buttonProps={{
+                                type: "button",
+                                rounded: "true",
+                                buttonClass: "update-button-white w-full",
+                                text: translate(
+                                  localeJson,
+                                  "external_add_evacuee"
+                                ),
+                                icon: "pi pi-plus",
+                                onClick: () => {
+                                  setRegisterModalAction("create");
+                                  setSpecialCareEditOpen(true);
+                                  hideOverFlow();
+                                },
+                              }}
+                              parentClass={"mr-1 mt-1 update-button-white"}
+                            />
+                          </div>
+                          <div className="my-1">
+                            <div className="mb-3">
+                              <label className="font-bold">
+                                {translate(localeJson, "enter_current_address")}
+                              </label>
+                            </div>
+                          </div>
+                          <div className="mt-1 grid">
+                            <div className="col-12 md:col-4">
+                              <Input
+                                inputProps={{
+                                  inputParentClassName: `w-full custom_input ${errors.postalCode && touched.postalCode && 'p-invalid pb-1'}`,
+                                  labelProps: {
+                                    text: translate(localeJson, 'c_postal_code'),
+                                    inputLabelClassName: "block",
+                                    spanText: "*",
+                                    inputLabelSpanClassName: "p-error"
+                                  },
+                                  maxLength: 7,
+                                  inputClassName: "w-full",
+                                  id: "postalCode",
+                                  name: "postalCode",
+                                  inputMode: "numeric",
+                                  value: values.postalCode,
+                                  onChange: (evt) => {
+                                    const re = /^[0-9-]+$/;
+                                    let val;
+                                    if (
+                                      evt.target.value === "" ||
+                                      re.test(convertToSingleByte(evt.target.value))
+                                    ) {
+                                      val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
+                                      if (val.length > 3) {
+                                        val =
+                                          val.slice(0, 3) + val.slice(3);
+                                      }
+                                      setFieldValue("postalCode", val);
+                                      setFetchedZipCode(val)
+                                    }
+                                    if (val.length >= 7) {
+                                      let payload = convertToSingleByte(val.slice(0, 3) + val.slice(3));
+                                      getAddress(payload, (response) => {
+                                        if (response) {
+                                          let address = response;
+                                          const selectedPrefecture =
+                                            prefectures.find(
+                                              (prefecture) =>
+                                                prefecture.value ==
+                                                address.prefcode
+                                            );
+                                          setFieldValue(
+                                            "prefecture_id",
+                                            selectedPrefecture?.value
+                                          );
+                                          setFieldValue(
+                                            "address",
+                                            address.address2 +
+                                            (address.address3 || "")
+                                          );
+                                        } else {
+                                          setFieldValue("prefecture_id", "");
+                                          setFieldValue("address", "");
+                                        }
+                                      });
+                                    }
+                                  },
+                                  onBlur: handleBlur,
+
+                                }}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.postalCode &&
+                                  touched.postalCode &&
+                                  errors.postalCode
+                                }
+                              />
+                            </div>
+                            <div className="col-12 md:col-4">
+                              <InputDropdown inputDropdownProps={{
+                                inputDropdownParenClassName: `custom_input ${errors.prefecture_id && touched.prefecture_id && 'p-invalid pb-1'}`,
+                                labelProps: {
+                                  text: translate(localeJson, 'prefecture_places'),
+                                  inputDropdownLabelClassName: "block",
+                                  inputDropdownLabelSpanClassName: "p-error",
+                                  spanText: "*"
+                                },
+                                inputDropdownClassName: "w-full",
+                                className: "w-full",
+                                name: "prefecture_id",
+                                value: values.prefecture_id,
+                                options: locale == "ja" ? prefectures : prefectures_en,
+                                optionLabel: "name",
+                                onBlur: handleBlur,
+                                emptyMessage: translate(localeJson, "data_not_found"),
+                                onChange: (evt) => {
+                                  setFieldValue("prefecture_id", evt.target.value);
+                                  if (values.address) {
+                                    setAddressCount(addressCount + 1)
+                                  }
+                                },
+                              }}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.prefecture_id &&
+                                  touched.prefecture_id &&
+                                  errors.prefecture_id
+                                }
+                              />
+                            </div>
+
+                            <div className="col-12 md:col-4">
+                              <Input
+                                inputProps={{
+                                  inputParentClassName: `w-full custom_input ${errors.address && touched.address && 'p-invalid pb-1'}`,
+                                  labelProps: {
+                                    text: translate(localeJson, 'address'),
+                                    inputLabelClassName: "block",
+                                    spanText: "*",
+                                    inputLabelSpanClassName: "p-error"
+                                  },
+                                  inputClassName: "w-full",
+                                  id: "address",
+                                  name: "address",
+                                  value: values.address,
+                                  onBlur: handleBlur,
+                                  onChange: (evt) => {
+                                    setFieldValue("address", evt.target.value)
+                                  },
+                                  onMouseLeave: (evt) => {
+                                    setAddressCount(addressCount + 1)
+                                  },
+                                  onTouchEnd: (evt) => {
+                                    setAddressCount(addressCount + 1)
+                                  },
+                                }}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.address &&
+                                  touched.address &&
+                                  errors.address
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div className="mb-2 grid">
+                            <div className="col-12">
+                              <Input
+                                inputProps={{
+                                  inputParentClassName: `${errors.email && touched.email && 'p-invalid pb-1'}`,
+                                  labelProps: {
+                                    text: translate(localeJson, 'mail_address_for_reference'),
+                                    inputLabelClassName: "block",
+                                    spanText: "*",
+                                    inputLabelSpanClassName: "p-error"
+                                  },
+                                  inputClassName: "w-full ",
+                                  id: "email",
+                                  name: "email",
+                                  value: values.email,
+                                  onChange: handleChange,
+                                  onBlur: handleBlur,
+
+                                }}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.email && touched.email && errors.email
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                    {/* Common part end */}
                     <div className="mt-3">
                       <Button
                         buttonProps={{
                           type: "submit",
-                          buttonClass: "w-8rem",
+                          buttonClass: "primary-button w-full",
                           text: translate(localeJson, "continue"),
-                        }}
+                        }} parentClass={"primary-button"}
                       />
                     </div>
                   </form>

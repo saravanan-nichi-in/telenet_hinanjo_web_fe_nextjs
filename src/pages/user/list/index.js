@@ -1,202 +1,315 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import _ from 'lodash';
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import _ from "lodash";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button, NormalTable } from "@/components";
-import { UserPlaceListServices } from '@/services';
-import { useAppDispatch } from '@/redux/hooks';
-import { setUserDetails } from '@/redux/layout';
+import { NormalTable } from "@/components";
+import { UserPlaceListServices } from "@/services";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUserDetails } from "@/redux/layout";
+import CustomHeader from "@/components/customHeader";
 
 export default function PublicEvacuees() {
-    const { locale, localeJson } = useContext(LayoutContext);
-    const router = useRouter();
-    const dispatch = useAppDispatch();
-    // Getting storage data with help of reducers
-    const layoutReducer = useSelector((state) => state.layoutReducer);
-    const columnsData = [
-        { field: 'number', header: translate(localeJson, 's_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center' },
-        { field: 'name', header: translate(localeJson, 'place_name_list'), headerClassName: "custom-header", minWidth: "13rem", maxWidth: "13rem", textAlign: 'left' },
-        { field: 'address_place', header: translate(localeJson, 'address_public_evacuees'), headerClassName: "custom-header", minWidth: "10rem", textAlign: 'left' },
-        { field: 'total_capacity', header: translate(localeJson, 'place_capacity'), headerClassName: "custom-header", minWidth: "6rem" },
-        { field: 'percent', header: translate(localeJson, 'percent'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "right", alignHeader: "center" },
-        { field: 'status', header: translate(localeJson, 'status_public_evacuees'), headerClassName: "custom-header", textAlign: 'center',alignHeader:"center"}
-    ];
-    const [getListPayload, setGetListPayload] = useState({
+  const { locale, localeJson } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  // Getting storage data with help of reducers
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+  const columnsData = [
+    {
+      field: "number",
+      header: translate(localeJson, "s_no"),
+      headerClassName: "custom-header",
+      className: "sno_class",
+      textAlign: "center",
+    },
+    {
+      field: "refugee_name",
+      header: translate(localeJson, "place_name_list"),
+      body: (rowData) => {
+        return (
+          <div className="flex flex-column">
+            <div className="custom-header">{rowData.refugee_name}</div>
+            <div className="table-body-sub">{rowData.address_place}</div>
+          </div>
+        );
+      },
+    },
+    {
+      field: "total_person",
+      header: translate(localeJson, "place_capacity"),
+      headerClassName: "custom-header",
+      minWidth: "6rem",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+    {
+      field: "total_capacity",
+      header: translate(localeJson, "capacity_limit"),
+      headerClassName: "custom-header",
+      minWidth: "6rem",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+    {
+      field: "percent",
+      header: translate(localeJson, "accommodation_status_p"),
+      headerClassName: "custom-header",
+      minWidth: "6rem",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+    {
+      field: "status",
+      header: translate(localeJson, "status_public_evacuees"),
+      headerClassName: "custom-header",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+  ];
+  const [getListPayload, setGetListPayload] = useState({
+    filters: {
+      start: 0,
+      limit: 10,
+      sort_by: "updated_at",
+      order_by: "desc",
+    },
+    search: "",
+  });
+  const [tableLoading, setTableLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
+  /* Services */
+  const { getList,getActiveList } = UserPlaceListServices;
+
+  useEffect(() => {
+    setTableLoading(true);
+    const fetchData = async () => {
+      await getPublicEvacueesList();
+    };
+    fetchData();
+
+    // // Listening for messages from the popup
+    window.addEventListener("message", (event) => {
+      if (event.origin === window.origin) {
+        const receivedData = event.data;
+        console.log("Received from popup:", receivedData);
+      }
+    });
+  }, [locale, getListPayload]);
+
+  /**
+   * Get public evacuees list
+   */
+  const getPublicEvacueesList = () => {
+    let payload = {
+      filters: {
+        start: getListPayload.filters.start,
+        limit: getListPayload.filters.limit,
+        sort_by: "refugee_name",
+        order_by: "desc",
+      },
+      search: "",
+    };
+    getList(payload, onGetPublicEvacueesList);
+  };
+
+  /**
+   * Function will get data & update dashboard list
+   * @param {*} response
+   */
+  const onGetPublicEvacueesList = (response) => {
+    var additionalColumnsArrayWithOldData = [...columnsData];
+    var preparedList = [];
+    var preparedTotalCount = 0;
+    if (
+      response.success &&
+      !_.isEmpty(response.data) &&
+      response.data.model.total > 0
+    ) {
+      const data = response.data.model.list;
+      // Preparing row data for specific column to display
+      if (data.length > 0) {
+        data.map((obj, i) => {
+          let preparedObj = {
+            number: getListPayload.filters.start + i + 1,
+            refugee_name: (
+              <div
+                className={`${
+                  obj.active_flg
+                    ? "text-highlighter-user-list clickable-row"
+                    : "bg-gray"
+                }`}
+              >
+                {locale === "en" && !_.isNull(obj.name_en)
+                  ? obj.name_en
+                  : obj.name}
+              </div>
+            ),
+            address_place: obj.address_place,
+            total_person: obj.total_person,
+            total_capacity: obj.total_place,
+            percent:
+              obj.full_status == 1
+                ? "100%"
+                : obj.percent > 100
+                ? "100%"
+                : `${obj.percent}%`,
+            status: action(obj),
+            entire_data: obj,
+          };
+          preparedList.push(preparedObj);
+        });
+      }
+      preparedTotalCount = response.data.model.total;
+    }
+
+    setTableLoading(false);
+    setColumns(additionalColumnsArrayWithOldData);
+    setList(preparedList);
+    setTotalCount(preparedTotalCount);
+  };
+
+  /**
+   * Place name callback function
+   * @param {*} obj
+   * @returns
+   */
+  const onClickPlaceName = async (obj) => {
+    if (obj) {
+      let payload = Object.assign({}, layoutReducer?.user);
+      payload["place"] = obj;
+      await dispatch(setUserDetails(payload));
+      router.push("/user/dashboard");
+    }
+  };
+
+  /**
+   * Action column for dashboard list
+   * @param {*} obj
+   * @returns view
+   */
+  const action = (obj) => {
+    return (
+      <div className={`flex justify-content-center`}>
+        <div
+          className={`${
+            obj.active_flg
+              ? "border-circle userListActive mr-2"
+              : "border-circle userListNotActive mr-2"
+          }`}
+        ></div>
+        <div className="line-height-1">
+          {obj.active_flg
+            ? translate(localeJson, "active")
+            : translate(localeJson, "inactive")}
+        </div>
+      </div>
+    );
+  };
+
+  /**
+   * Pagination handler
+   * @param {*} e
+   */
+  const onPaginationChange = async (e) => {
+    setTableLoading(true);
+    if (!_.isEmpty(e)) {
+      const newStartValue = e.first; // Replace with your desired page value
+      const newLimitValue = e.rows; // Replace with your desired limit value
+      await setGetListPayload((prevState) => ({
+        ...prevState,
         filters: {
-            start: 0,
-            limit: 5,
-            sort_by: "",
-            order_by: "desc",
+          ...prevState.filters,
+          start: newStartValue,
+          limit: newLimitValue,
         },
         search: "",
-    });
-    const [tableLoading, setTableLoading] = useState(false);
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-
-    /* Services */
-    const { getList } = UserPlaceListServices;
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await getPublicEvacueesList();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
-
-    /**
-     * Get public evacuees list
-     */
-    const getPublicEvacueesList = () => {
-        let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit) + 1;
-        let payload = {
-            filters: {
-                start: pageStart,
-                limit: getListPayload.filters.limit,
-                sort_by: "",
-                order_by: "desc",
-            },
-            search: "",
-        }
-        getList(payload, onGetPublicEvacueesList);
+      }));
     }
+  };
 
-    /**
-     * Function will get data & update dashboard list
-     * @param {*} response 
-     */
-    const onGetPublicEvacueesList = (response) => {
-        var additionalColumnsKeys = [];
-        var additionalColumnsArrayWithOldData = [...columnsData];
-        var preparedList = [];
-        if (response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-            const data = response.data.model.list;
-            // Preparing row data for specific column to display
-            if (data.length > 0) {
-                data.map((obj, i) => {
-                    let preparedObj = {
-                        number: getListPayload.filters.start + i + 1,
-                        name: <div className={obj.active_flg === 1 ? "text-higlight clickable-row" : ""} onClick={() => obj.active_flg === 1 && onClickPlaceName(obj)}>{locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name}</div>,
-                        address_place: obj.address_place,
-                        total_capacity: getTotalCapacity(obj),
-                        percent: obj.full_status == 1 ? "100%" : obj.percent > 100 ? "100%" : `${obj.percent}%`,
-                        status: action(obj),
-                    }
-                    preparedList.push(preparedObj);
-                })
-            }
-            // Update prepared list to the state
-            setColumns(additionalColumnsArrayWithOldData);
-            setList(preparedList);
-            setTotalCount(response.data.model.total);
-        }
-        setTableLoading(false);
-    }
+  return (
+    <div>
+      <div className="grid">
+        <div className="col-12">
+          <div className="card">
+            <CustomHeader
+              headerClass={"page-header1"}
+              header={translate(
+                localeJson,
+                "evacuation_center_management_system_list"
+              )}
+            />
+            {/* Development */}
+            {/* <button className="p-5 mt-2" onClick={() => {
+                            const popupWidth = screen.width;
+                            const popupHeight = screen.height;
+                            const popup = window.open(`${window.origin}/user/event-list`, 'Popup', `width=${popupWidth},height=${popupHeight}`);
+                            console.log("Popup Loaded");
+                            popup.parent_information = {
+                                data: "Hello popup"
+                            }
+                        }}>
+                            Click
+                        </button> */}
+            {/* Development */}
+            <div className="mt-3">
+              <NormalTable
+                lazy
+                parentClass={""}
+                totalRecords={totalCount}
+                loading={tableLoading}
+                stripedRows={true}
+                className={"custom-table-cell"}
+                value={list}
+                columns={columns}
+                filterDisplay="menu"
+                showGridlines={true}
+                rowHover
+                emptyMessage={translate(localeJson, "data_not_found")}
+                paginator={true}
+                first={getListPayload.filters.start}
+                rows={getListPayload.filters.limit}
+                paginatorLeft={true}
+                tableStyle={{ minWidth: "70rem" }}
+                onPageHandler={(e) => onPaginationChange(e)}
+                selectionMode="single"
+                // Development
+                // Row Hover only for active flag
+                // rowClassName={(rowData) => {
+                //     return rowData.entire_data.active_flg ? "" : "bg:white hover:bg-white pointer-events-none";
+                // }}
+                onSelectionChange={async (e) => {
+                  if (e.value.entire_data) {
+                    console.log(e.value.entire_data)
+                    let payload ={id: e.value.entire_data.id}
+                    getActiveList(payload,async (res)=>
+                    {
+                      if(res?.data?.model?.active_flg=="1")
+                      {
+                          let payload = Object.assign({}, layoutReducer?.user);
+                          payload["place"] = e.value.entire_data;
+                          await dispatch(setUserDetails(payload));
+                          localStorage.setItem("redirect", "/user/list");
+                          router.push("/user/dashboard");
+                        }
+                        else {
+                          getPublicEvacueesList()
+                        }
+                    })
 
-    /**
-     * Place name callback function
-     * @param {*} obj 
-     * @returns 
-     */
-    const onClickPlaceName = async (obj) => {
-        if (obj) {
-            let payload = Object.assign({}, layoutReducer?.user);
-            payload['place'] = obj;
-            await dispatch(setUserDetails(payload));
-            router.push('/user/dashboard');
-        }
-    }
-
-    /**
-     * Get total capacity
-     * @param {*} obj 
-     * @returns value
-     */
-    const getTotalCapacity = (obj) => {
-        if (obj && obj.full_status == 1) {
-            return `${obj.total_place} / ${obj.total_place} ${translate(localeJson, 'people')}`;
-        } else {
-            if (obj.total_person > obj.total_place) {
-                return `${obj.total_place} / ${obj.total_place} ${translate(localeJson, 'people')}`
-            } else {
-                return `${obj.total_person} / ${obj.total_place} ${translate(localeJson, 'people')}`
-            }
-        }
-    }
-
-    /**
-     * Action column for dashboard list
-     * @param {*} obj 
-     * @returns view
-     */
-    const action = (obj) => {
-        return (
-            <div>
-                <Button buttonProps={{
-                    text: obj.active_flg === 1 ? translate(localeJson, 'active') : translate(localeJson, 'inactive'), buttonClass: "text-white w-9",
-                    bg: obj.active_flg === 1 ? "bg-red-500" : "bg-grey-500",
-                    style: { cursor: "not-allowed" },
-                }} />
+                  }
+                }}
+              />
             </div>
-        );
-    };
-
-    /**
-     * Pagination handler
-     * @param {*} e 
-     */
-    const onPaginationChange = async (e) => {
-        setTableLoading(true);
-        if (!_.isEmpty(e)) {
-            const newStartValue = e.first; // Replace with your desired page value
-            const newLimitValue = e.rows; // Replace with your desired limit value
-            await setGetListPayload(prevState => ({
-                ...prevState,
-                filters: {
-                    ...prevState.filters,
-                    start: newStartValue,
-                    limit: newLimitValue
-                },
-                search: ""
-            }));
-        }
-    }
-
-    return (
-        <div>
-            <div className="grid">
-                <div className="col-12">
-                    <div className="card">
-                        <h5 className="page-header1">{translate(localeJson, "evacuation_center_management_system_list")}</h5>
-                        <hr />
-                        <div className="mt-3">
-                            <NormalTable
-                                lazy
-                                totalRecords={totalCount}
-                                loading={tableLoading}
-                                stripedRows={true}
-                                className={"custom-table-cell"}
-                                showGridlines={"true"}
-                                value={list}
-                                columns={columns}
-                                filterDisplay="menu"
-                                emptyMessage={translate(localeJson, "data_not_found")}
-                                paginator={true}
-                                first={getListPayload.filters.start}
-                                rows={getListPayload.filters.limit}
-                                paginatorLeft={true}
-                                tableStyle={{ minWidth: "70rem" }}
-                                onPageHandler={(e) => onPaginationChange(e)}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }

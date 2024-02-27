@@ -7,7 +7,8 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
-
+import CustomHeader from '@/components/customHeader';
+import { NotFound } from "@/components";
 
 export default function ExternalEvacuees() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -20,6 +21,7 @@ export default function ExternalEvacuees() {
     const [pieChartFoodSupportOptions, setPieChartFoodSupportOptions] = useState({});
     const [foodSupportCount, setFoodSupportCount] = useState(0);
     const chartRef = useRef();
+    const [chartDataFound, setChartDataFound] = useState(0);
 
     /* Services */
     const { getChartScreenData } = ExternalEvacuationServices;
@@ -54,6 +56,9 @@ export default function ExternalEvacuees() {
                 gridLines: {
                     display: false
                 },
+                grid: {
+                    display: false,
+                },
                 offset: true
             },
             y: {
@@ -64,6 +69,9 @@ export default function ExternalEvacuees() {
                 },
                 ticks: {
                     beginAtZero: true
+                },
+                grid: {
+                    display: false,
                 },
                 gridLines: {
                     display: false
@@ -216,8 +224,7 @@ export default function ExternalEvacuees() {
     }
 
     const getChartScreenViewData = (response) => {
-        console.log(response.aggregations);
-        if (response.success && !_.isEmpty(response.aggregations)) {
+        if (response && response.success && !_.isEmpty(response.aggregations)) {
             let personCountByCenterKeys = response.aggregations.personCountByCenterKeys;
             let personCountByCenter = response.aggregations.personCountByCenter;
             let personCountByFoodRequire = response.aggregations.personCountByFoodRequire;
@@ -264,8 +271,6 @@ export default function ExternalEvacuees() {
                 }
             });
 
-            console.log(getData);
-
             let foodData = [];
             personCountFoodSupport.forEach(obj => {
                 for (const key in obj) {
@@ -291,12 +296,11 @@ export default function ExternalEvacuees() {
                     }
                 ]
             };
-            console.log(placeCategoryDataSet);
             setPieChartPlaceCategoryData(placeCategoryDataSet);
             setPieChartPlaceCategoryOptions(externalEvacueesPieChartOptions);
 
             let personFoodSupportDataSet = {
-                labels: [translate(localeJson, 'no'), translate(localeJson, 'yes')],
+                labels: [translate(localeJson, 'yes'), translate(localeJson, 'no')],
                 datasets: [
                     {
                         data: foodData,
@@ -315,13 +319,18 @@ export default function ExternalEvacuees() {
             };
             setPieChartFoodSupportData(personFoodSupportDataSet);
             setPieChartFoodSupportOptions(externalEvacueesPieChartQuestionOptions);
+            setLoader(false);
+            setChartDataFound(true);
+        } else {
+            setLoader(false);
+            setChartDataFound(false);
         }
     }
 
     useEffect(() => {
+        setLoader(true);
         const fetchData = async () => {
             await onGetExternalEvacueesChartScreenData();
-            setLoader(false);
         };
         fetchData();
     }, []);
@@ -329,28 +338,59 @@ export default function ExternalEvacuees() {
     return (
         <div className="grid">
             <div className="col-12">
-                <div className='card'>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                        <h5 className='page-header1'>{translate(localeJson, 'external_evacuees_tally')}</h5>
-                        <span>{translate(localeJson, 'external_evacuees_food_support') + ": " + foodSupportCount + translate(localeJson, 'people')}</span>
+                <div className="card">
+                    <div className="flex align-items-center justify-content-between pb-2">
+                        <div className='flex'>
+                            <CustomHeader
+                                headerClass={"page-header1"}
+                                customParentClassName={"mb-0"}
+                                header={translate(localeJson, "external_evacuees_tally")}
+                            />
+                            <div className={`flex gap-2 align-items-center mb-2 ml-2`}>
+                                <div className="hitachi_header_container">
+                                    <div className="hitachi_header_bg hidden"></div>
+                                    <div> {foodSupportCount ? "(" + foodSupportCount + translate(localeJson, "people") + ")" : ""}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='mb-2 flex align-items-center'>
+                            <Button
+                                buttonProps={{
+                                    text: translate(localeJson, "external_evacuee_details"),
+                                    onClick: () => router.push("/admin/external/family/list"),
+                                }}
+                            />
+                        </div>
                     </div>
-                    <hr />
-                    <div className='flex justify-content-end pt-2'>
-                        <Button buttonProps={{
-                            text: translate(localeJson, 'external_evacuee_details'),
-                            severity: "primary",
-                            onClick: () => router.push('/admin/external/family/list'),
-                        }} />
-                    </div>
-                    <div className='mb-2 mt-2'>
-                        <Chart type="bar" ref={chartRef} data={chartData} options={chartOptions} style={{ height: '400px' }} />
-                    </div>
-                    <div className='mt-4 mb-2 flex flex-column sm:flex-row md:flex-row justify-content-around'>
-                        <Chart type="pie" data={pieChartPlaceCategoryData} options={pieChartPlaceCategoryOptions} />
-                        <Chart type="pie" data={pieChartFoodSupportData} options={pieChartFoodSupportOptions} />
-                    </div>
+                    {chartDataFound ? (
+                        <div className="bg-white p-3">
+                            <div className="mb-2 mt-2">
+                                <Chart
+                                    type="bar"
+                                    ref={chartRef}
+                                    data={chartData}
+                                    options={chartOptions}
+                                    style={{ height: "400px" }}
+                                />
+                            </div>
+                            <div className="mt-4 mb-2 flex flex-column sm:flex-row md:flex-row justify-content-around">
+                                <Chart
+                                    type="pie"
+                                    data={pieChartPlaceCategoryData}
+                                    options={pieChartPlaceCategoryOptions}
+                                />
+                                <Chart
+                                    type="pie"
+                                    data={pieChartFoodSupportData}
+                                    options={pieChartFoodSupportOptions}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <NotFound message={translate(localeJson, "no_data_available")} />
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 }

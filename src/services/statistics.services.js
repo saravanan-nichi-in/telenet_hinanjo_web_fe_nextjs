@@ -19,8 +19,10 @@ function _getList(callBackFun) {
             }
         })
         .catch((error) => {
+            console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });
+            callBackFun(false);
         });
 }

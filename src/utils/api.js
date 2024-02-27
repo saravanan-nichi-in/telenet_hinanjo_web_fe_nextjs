@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -9,24 +10,50 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use((config) => {
-  // Retrieve the authentication token from wherever it's stored (e.g., localStorage, cookies, etc.)
-  const adminPath = window.location.pathname.startsWith('/admin');
-  const staffPath = window.location.pathname.startsWith('/staff');
   const admin = localStorage.getItem('admin');
   const staff = localStorage.getItem('staff');
-  const authToken = adminPath ? JSON.parse(admin) : staffPath ? JSON.parse(staff) : ""
+  const hqStaff = localStorage.getItem('hq-staff');
+  let authToken;
+  if (window.location.pathname.startsWith('/admin')) {
+    authToken = JSON.parse(admin)
+  } else if (window.location.pathname.startsWith('/hq-staff')) {
+    authToken = JSON.parse(hqStaff)
+  } else {
+    authToken = JSON.parse(staff)
+  }
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const locale = localStorage.getItem('locale');
+  const getCookieValueByKey = (key) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Check if the cookie starts with the specified key
+      if (cookie.startsWith(key + '=')) {
+        return cookie.substring(key.length + 1);
+      }
+    }
+    return '';
+  };
+  // Example: Get the value of a cookie named 'myCookie'
+  const myCookieValue = getCookieValueByKey('idToken');
+
+  console.log(myCookieValue);
 
   // Add the authentication token to the request headers
   config.headers['x-localization'] = locale;
+  config.headers['timezone'] = userTimeZone;
   if (authToken) {
     config.headers['Authorization'] = `Bearer ${authToken.token}`;
   }
+  if (myCookieValue) {
+    config.headers['idToken'] = myCookieValue;
+  } else {
+    config.headers['idToken'] = "";
+  }
   return config;
-
 }, (error) => {
   // Handle request error
-  console.log(error);
+  console.error(error);
   // eslint-disable-next-line no-undef
   return Promise.reject(error);
 });
@@ -36,18 +63,34 @@ api.interceptors.response.use((response) => {
   // Handle successful response
   return response;
 }, (error) => {
-  const adminPath = window.location.pathname.startsWith('/admin');
-  const staffPath = window.location.pathname.startsWith('/staff');
   // Handle error response
-  if (error.response.status === 401) {
+  if (error?.response?.status === 401 || error?.response?.status === 403) {
     // Handle unauthorized access (e.g., redirect to login page)
-    if (adminPath) {
+    if (window.location.pathname.startsWith('/admin')) {
       localStorage.removeItem('admin');
       window.location.href = '/admin/login';
+    } else if (window.location.pathname.startsWith('/hq-staff')) {
+      localStorage.removeItem('hq-staff');
+      window.location.href = '/hq-staff/login';
     } else {
-      localStorage.removeItem('staff');
-      window.location.href = '/staff/login';
+      let redirectPath = localStorage.getItem('redirect');
+      if (window.location.pathname.startsWith('/staff/event-staff/')) {
+        localStorage.removeItem('staff');
+        setTimeout(function () {
+          window.location.href = redirectPath;
+        }, 4000);
+      } else {
+        localStorage.removeItem('staff');
+        setTimeout(function () {
+          window.location.href = redirectPath;
+        }, 4000);
+      }
+      localStorage.removeItem('redirect');
     }
+    toast.error(error.response.data.message, {
+      position: "top-right",
+    });
+    return
   }
 
   // eslint-disable-next-line no-undef

@@ -1,14 +1,15 @@
 import React from "react"
 import { Dialog } from 'primereact/dialog';
-import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useContext, useState } from 'react';
-import {QrScanner} from '@yudiel/react-qr-scanner';
-import { useRouter } from "next/router";
+import { QrScanner } from '@yudiel/react-qr-scanner';
+
+import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from '@/helper'
+import { Button } from "@/components";
 
 export default function QrScannerModal(props) {
     const { localeJson } = useContext(LayoutContext);
-    const router = useRouter();
+    const [toggleCameraMode, setToggleCameraMode] = useState("environment");
     /**
      * Destructing
     */
@@ -21,21 +22,44 @@ export default function QrScannerModal(props) {
                 visible={open}
                 header={translate(localeJson, 'qr_scanner_popup_dialog')}
                 draggable={false}
-                style={{width:"400px"}}
+                blockScroll={true}
+                style={{ width: "400px" }}
                 onHide={() => close()}
             >
                 <div >
                     <QrScanner
                         onDecode={(result) => {
-                            // router.push({
-                            //     path : "/user/qr/app/register",
-                            //     // query: { data: result }
-                            // })
+                            if (result && result !== localStorage.getItem('user_qr')) {
                             localStorage.setItem('user_qr', result);
-                            router.push("/user/qr/app/register")
+                            props.callback(result);
+                            setTimeout(()=>{
+                                localStorage.removeItem('user_qr');
+                            },1000)
+                            }
                         }}
-                        onError={(error) => console.log(error?.message)}
+                        scanDelay={1000}
+                        constraints={{
+                            facingMode: toggleCameraMode
+                        }}
+                        onError={(error) => console.error(error?.message)}
                     />
+                </div>
+                <div>
+                    <Button buttonProps={
+                        {
+                            onClick: () => {
+                                if (toggleCameraMode == "user") {
+
+                                    setToggleCameraMode("environment");
+                                } else {
+                                    setToggleCameraMode("user");
+                                }
+                            },
+                            icon: "pi pi-camera",
+                            buttonClass: "mt-3 mb-2"
+                        }
+                    }></Button>
+
                 </div>
             </Dialog>
         </div>

@@ -1,19 +1,20 @@
-import React, { useContext } from "react"
+import React, { useContext, useRef } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import Button from "../button/button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { InputFile } from "../upload";
 
 export default function AdminManagementImportModal(props) {
-    const { localeJson,setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader } = useContext(LayoutContext);
     const { open, close, importFile, modalHeaderText, style } = props && props;
+    const fileInputRef = useRef(null);
     const header = (
-        <div className="custom-modal">
+        <div className="">
             {modalHeaderText}
         </div>
     );
@@ -43,22 +44,19 @@ export default function AdminManagementImportModal(props) {
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
-                onSubmit={(values, actions) => {
+                onSubmit={(values, { resetForm }) => {
                     importFile(values.file)
                     close();
-                    setLoader(true);
-                    setTimeout(() => {
-                    setLoader(false);
-                }, 1000);
-                    values.file = null;
-                    actions.resetForm({ values: initialValues });
+                    // Development
+                    // values.file = null;
+                    // actions.resetForm({ values: initialValues });
+                    resetAndCloseForm(resetForm);
                 }}
             >
                 {({
                     values,
                     errors,
                     touched,
-                    dirty,
                     setFieldValue,
                     handleSubmit,
                     resetForm
@@ -66,38 +64,81 @@ export default function AdminManagementImportModal(props) {
                     <div className="">
                         <form onSubmit={handleSubmit}>
                             <Dialog
-                                className={`importModal_width h-20rem lg:h-20rem md:h-20rem sm:h-20rem custom-modal modal-import`}
+                                className={`new-custom-modal`}
                                 header={header}
                                 visible={open}
                                 style={style}
                                 draggable={false}
+                                blockScroll={true}
                                 onHide={() => {
-                                        resetAndCloseForm(resetForm);
-                                        close();
+                                    resetAndCloseForm(resetForm);
+                                    close();
                                 }}
                                 footer={
                                     <div className="text-center">
                                         <Button buttonProps={{
                                             type: "submit",
-                                            buttonClass: "w-8rem",
+                                            buttonClass: "w-8rem update-button",
                                             text: translate(localeJson, 'import'),
                                             severity: "primary",
                                             onClick: () => {
                                                 handleSubmit();
                                             },
-                                        }} parentClass={"inline"} />
+                                        }} parentClass={"inline update-button"} />
                                     </div>
                                 }
                             >
-                                <div className="col-12 align-self-center">
-                                    <div className={`modal-content  `}>
-                                        <InputFile inputFileProps={{
-                                            onChange: (event) => {
-                                                setFieldValue("file", event.currentTarget.files[0]);
-                                            },
-                                        }} parentClass={`w-full ${errors.file && touched.file && 'p-invalid '}`} />
-                                        <div className='pt-1'>
-                                            <ValidationError errorBlock={errors.file && touched.file && errors.file} />
+                                <div className={`modal-content`}>
+                                    <div className="modal-header">
+                                        {header}
+                                    </div>
+                                    {props.tag && (<div className="mb-2">
+                                        <p>{translate(localeJson, 'hq_stockpile_export_title_modal')}</p>
+                                        {/* Development */}
+                                        {/* <div>
+                                        <Button buttonProps={{
+                                                type: 'button',
+                                                rounded: "true",
+                                                export: true,
+                                                onClick: () => {
+                                                    props.callExport();
+                                                },
+                                                buttonClass: "w-full text-center",
+                                                text: translate(localeJson, 'export_new'),
+                                            }} parentClass={"mt-2 mb-4 text-center"} />
+                                        </div> */}
+                                    </div>)}
+                                    <InputFile inputFileProps={{
+                                        onChange: (event) => {
+                                            setFieldValue("file", event.currentTarget.files[0]);
+                                        },
+                                        ref: fileInputRef,
+                                        placeholder: translate(localeJson, 'default_csv_file_placeholder')
+                                    }} parentClass={`bg-white w-full ${errors.file && touched.file && 'p-invalid '}`} />
+                                    <div className='pt-1'>
+                                        <ValidationError errorBlock={errors.file && touched.file && errors.file} />
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="modal-button-footer-space">
+                                            <Button buttonProps={{
+                                                type: "submit",
+                                                buttonClass: "w-full update-button",
+                                                text: translate(localeJson, 'import'),
+                                                severity: "primary",
+                                                onClick: () => {
+                                                    handleSubmit();
+                                                },
+                                            }} parentClass={"update-button"} />
+                                        </div>
+                                        <div>
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full back-button",
+                                                text: translate(localeJson, 'cancel'),
+                                                onClick: () => {
+                                                    resetAndCloseForm(resetForm);
+                                                    close();
+                                                },
+                                            }} parentClass={"back-button"} />
                                         </div>
                                     </div>
                                 </div>

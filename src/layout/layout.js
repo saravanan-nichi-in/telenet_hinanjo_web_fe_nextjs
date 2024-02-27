@@ -5,23 +5,25 @@ import { classNames, DomHandler } from 'primereact/utils';
 import PrimeReact from 'primereact/api';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-import AppFooter from './AppFooter';
-import AppSidebar from './AppSidebar';
-import AppTopbar from './AppTopbar';
-import { LayoutContext } from './context/layoutcontext';
+import AppFooter from '@/layout/AppFooter';
+import AppSidebar from '@/layout/AppSidebar';
+import AppTopbar from '@/layout/AppTopbar';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { urlRegister } from '@/utils/constant';
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState, loader } = useContext(LayoutContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
     const router = useRouter();
-    const url = window.location.pathname;
+    const windowURL = window.location.pathname;
+    const windowURLSplitted = windowURL.split('/');
+    const path = router.asPath.split('?')[0];
 
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',
         listener: (event) => {
             const isOutsideClicked = !(sidebarRef.current.isSameNode(event.target) || sidebarRef.current.contains(event.target) || topbarRef.current.menubutton.isSameNode(event.target) || topbarRef.current.menubutton.contains(event.target));
-
             if (isOutsideClicked) {
                 hideMenu();
             }
@@ -103,22 +105,48 @@ const Layout = (props) => {
         'p-ripple-disabled': !layoutConfig.ripple
     });
 
+    const URLS = [
+        '/admin/login',
+        '/admin/login/',
+        '/admin/forgot-password',
+        '/admin/forgot-password/',
+        '/admin/reset-password',
+        '/admin/reset-password/',
+        '/staff/login',
+        '/staff/login/',
+        '/staff/forgot-password',
+        '/staff/forgot-password/',
+        '/staff/reset-password',
+        '/staff/reset-password/',
+        '/hq-staff/login',
+        '/hq-staff/login/',
+        '/hq-staff/forgot-password',
+        '/hq-staff/forgot-password/',
+        '/hq-staff/reset-password',
+        '/hq-staff/reset-password/'
+    ]
+
     return (
         <React.Fragment>
             <div className={containerClass}>
                 <AppTopbar ref={topbarRef} />
-                <div className="layout-sidebar">
-                    <div ref={sidebarRef} className='layout_sidebar_scroll'>
-                        <AppSidebar />
+                {!URLS.includes(path) && (
+                    <div className="layout-sidebar">
+                        <div ref={sidebarRef} className='layout_sidebar_scroll' style={{
+                            height: windowURL.startsWith('/staff') && "calc(100vh - 7rem)",
+                        }}>
+                            <AppSidebar />
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className="layout-main-container">
                     <div className="layout-main">
                         {props.children}
                     </div>
-                    <AppFooter />
+                    {!URLS.includes(path) && (
+                        <AppFooter />
+                    )}
                 </div>
-                <div className="layout-mask"></div>
                 {loader && (
                     <div className="layout-mask-loader">
                         <ProgressSpinner className='progress-spinner' strokeWidth="8" fill="transparent" animationDuration=".5s" />

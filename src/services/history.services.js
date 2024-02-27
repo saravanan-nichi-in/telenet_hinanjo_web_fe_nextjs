@@ -26,8 +26,8 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
             console.error('Error fetching data:', error);
+            callBackFun(false);
         });
 }
 
@@ -88,7 +88,7 @@ function _getEmailConfiguration(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.log(error);
+            console.error(error);
         });
 }
 
@@ -105,7 +105,7 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+            
             console.error('Error fetching data:', error);
         });
 }
@@ -123,7 +123,7 @@ function _getPrefectureList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+            
             console.error('Error fetching data:', error);
         });
 }

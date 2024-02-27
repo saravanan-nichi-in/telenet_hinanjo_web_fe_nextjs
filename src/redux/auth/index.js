@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
     admin: {},
     staff: {},
+    headquaters: {}
 }
 
 export const auth = createSlice({
@@ -16,12 +17,16 @@ export const auth = createSlice({
         setStaffValue: (state, action) => {
             state.staff = action.payload.staff;
         },
+        setHeadquaterValue: (state, action) => {
+            state.headquaters = action.payload.headquaters;
+        },
     }
 })
 
 export const {
     setAdminValue,
     setStaffValue,
+    setHeadquaterValue,
     reset
 } = auth.actions
 

@@ -1,18 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router'
-import { useAppDispatch } from '@/redux/hooks';
 
-import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
-import { InputFloatLabel } from '@/components/input';
-import { InputSelectFloatLabel } from '@/components/dropdown';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { setFamily } from '@/redux/family';
+import CustomHeader from '@/components/customHeader';
+import { useAppDispatch } from '@/redux/hooks';
+import { Input, InputDropdown } from '@/components/input';
 
 export default function EvacuationPage() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
     const [familyCount, setFamilyCount] = useState(0);
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState({
@@ -40,35 +40,22 @@ export default function EvacuationPage() {
     const dispatch = useAppDispatch();
 
     const evacuationTableColumns = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', className: "sno_class" },
-        { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
-        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "right", alignHeader: "center", minWidth: "6rem" },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: false, textAlign: "right", alignHeader: "center" },
-        { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', minWidth: '5rem' },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
         {
-            field: 'refugee_name', header: translate(localeJson, 'refugee_name'), minWidth: "10rem",
-            sortable: false, textAlign: 'left',
-            body: (rowData) => (
-                <p className='text-link-class clickable-row' onClick={() => {
-                    dispatch(setFamily({ family_id: rowData.id }));
-                    router.push({
-                        pathname: '/admin/evacuation/family-detail',
-                    });
-                }}>
-                    {rowData['refugee_name']}
-                </p>
-            ),
+            field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: true, alignHeader: "left", maxWidth: '4rem',
+            body: (rowData) => {
+                return <div className="flex flex-column">
+                    <div className="custom-header">{rowData.person_name}</div>
+                    <div className="table-body-sub">{rowData.person_refugee_name}</div>
+                </div>
+            },
         },
-        { field: "name", header: translate(localeJson, 'name_kanji'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', minWidth: "8rem" },
-        { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'left', minWidth: "5rem", display: 'none' },
-        { field: "age_month", header: translate(localeJson, 'age_month'), sortable: false, textAlign: 'left', minWidth: "7rem", display: 'none' },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: false, textAlign: 'left', display: 'none' },
-        { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: false, textAlign: 'left', display: 'none' },
-        { field: "remarks", header: translate(localeJson, 'remarks'), sortable: false, textAlign: 'left', minWidth: "8rem", display: 'none' },
-        { field: "place", header: translate(localeJson, 'shelter_place'), sortable: false, textAlign: 'left', minWidth: "12rem", display: 'none' },
-        { field: "out_date", header: translate(localeJson, 'out_date'), sortable: false, textAlign: 'left', minWidth: "9rem", display: 'none' },
-        { field: "dob", header: translate(localeJson, 'dob'), minWidth: "8rem", sortable: false, textAlign: 'left' }
+        { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: true, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "person_dob", header: translate(localeJson, 'dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -89,7 +76,18 @@ export default function EvacuationPage() {
      * Get Evacuees list on mounting
      */
     const onGetEvacueesListOnMounting = () => {
-        getList(getListPayload, onGetEvacueesList);
+        let payload = {
+            filters: {
+                start: getListPayload.filters.start,
+                limit: getListPayload.filters.limit,
+                sort_by: getListPayload.filters.sort_by,
+                order_by: getListPayload.filters.order_by,
+                place_id: getListPayload.filters.place_id,
+                family_code: getListPayload.filters.family_code,
+                refugee_name: getListPayload.filters.refugee_name,
+            }
+        }
+        getList(payload, onGetEvacueesList);
     }
 
     const getGenderValue = (gender) => {
@@ -97,7 +95,7 @@ export default function EvacuationPage() {
             return translate(localeJson, 'male');
         } else if (gender == 2) {
             return translate(localeJson, 'female');
-        } else {
+        } else if (gender == 3) {
             return translate(localeJson, 'others_count');
         }
     }
@@ -110,21 +108,30 @@ export default function EvacuationPage() {
         return specialCareName;
     }
 
+    const getPlaceName = (id) => {
+        let data = evacuationPlaceList.find((obj) => obj.id == id);
+        if (data) {
+            return data.name
+        }
+        return ""
+    }
+
     const onGetEvacueesList = (response) => {
-        let evacuationColumns = [...evacuationTableColumns];
-        if (response.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
+        var evacuationColumns = [...evacuationTableColumns];
+        var evacueesList = [];
+        var placesList = [{
+            name: "--",
+            id: 0
+        }];
+        var totalFamilyCount = 0;
+        var listTotalCount = 0;
+        if (response?.success && !_.isEmpty(response.data) && response.data.list.length > 0) {
             const data = response.data.list;
-            const questionnaire = response.data.questionnaire;
+            const questionnaire = response.data?.person_questionnaire;
             const places = response.places;
-            let evacueesList = [];
-            let placesList = [{
-                name: "--",
-                id: 0
-            }];
-            let index;
             let previousItem = null;
             let siNo = getListPayload.filters.start + 1;
-            if (questionnaire.length > 0) {
+            if (questionnaire && questionnaire?.length > 0) {
                 questionnaire.map((ques, num) => {
                     let column = {
                         field: "question_" + ques.id,
@@ -135,45 +142,44 @@ export default function EvacuationPage() {
                     evacuationColumns.push(column);
                 });
             }
-            setEvacuationTableFields(evacuationColumns);
-            data.map((item, i) => {
-                if (previousItem && previousItem.id == item.family_id) {
-                    index = index + 1;
-                } else {
-                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0) {
-                        let evacueesData = evacueesDataList[evacueesDataList.length - 1];
-                        if (evacueesData.id == item.family_id) {
-                            index = evacueesData.family_count + 1;
-                        }
-                        else {
-                            index = 1;
-                        }
-                    }
-                    else {
-                        index = 1;
-                    }
+            evacuationColumns.push(
+                { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
+            )
+            let placeIdObj = {};
+            places.map((place) => {
+                let placeData = {
+                    name: locale == 'ja' ? place.name : (place.name_en ? place.name_en : place.name),
+                    id: place.id
                 }
-                let evacuees = {
-                    "si_no": siNo,
-                    "id": item.family_id,
-                    "family_count": index,
-                    "family_code": item.families.family_code,
-                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "refugee_name": item.refugee_name,
-                    "name": item.name,
-                    "gender": getGenderValue(item.gender),
-                    "dob":  locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),
-                    "age": item.age,
-                    "age_month": item.age_month,
-                    "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares) : "-",
-                    "remarks": item.note,
-                    "place": response.locale == 'ja' ? (item.families.place ? item.families.place.name : (item.families.place ? item.families.place.name_en : "")) : "",
-                    "connecting_code": item.connecting_code,
-                    "out_date": item.families.out_date ? getGeneralDateTimeSlashDisplayFormat(item.families.out_date) : "",
-                };
+                placeIdObj[place.id] = locale == 'ja' ? place.name : (place.name_en ? place.name_en : place.name),
+                    placesList.push(placeData);
+            });
+            setEvacuationPlaceList(placesList);
 
-                if (item.add_question.length > 0) {
-                    item.add_question.map((ques) => {
+            data.map((item, i) => {
+
+                let evacuees = {
+                    "si_no": i + parseInt(getListPayload.filters.start) + 1,
+                    "id": item.f_id,
+                    "place_name": placeIdObj[item.place_id] ?? "",
+                    "family_count": item.persons_count,
+                    "family_code": item.family_code,
+                    "person_is_owner": item.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    "person_refugee_name": <div className={"clickable-row"}>{item.person_refugee_name}</div>,
+                    "person_name": <div className={"text-highlighter-user-list clickable-row"}>{item.person_name}</div>,
+                    "person_gender": getGenderValue(item.person_gender),
+                    "person_dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.person_dob) : getEnglishDateDisplayFormat(item.person_dob),
+                    "person_age": item.person_age,
+                    "age_month": item.person_month,
+                    "special_care_name": item.person_special_cares ? getSpecialCareName(item.person_special_cares) : "-",
+                    "remarks": item.person_note,
+                    "place": item.place_id ? getPlaceName(item.place_id) : "",
+                    "connecting_code": item.person_connecting_code,
+                    "out_date": item.family_out_date ? getGeneralDateTimeSlashDisplayFormat(item.family_out_date) : "",
+                };
+                let personAnswers = item.person_answers ? item.person_answers : []
+                if (personAnswers.length > 0) {
+                    personAnswers.map((ques) => {
                         evacuees[`question_${ques.question_id}`] = (locale == 'ja' ? (ques.answer.length > 0 ? getAnswerData(ques.answer) : "") : (ques.answer_en.length > 0 ? getAnswerData(ques.answer_en) : ""));
                     })
                 }
@@ -181,27 +187,19 @@ export default function EvacuationPage() {
                 evacueesList.push(evacuees);
                 siNo = siNo + 1;
             });
-            places.map((place) => {
-                let placeData = {
-                    name: response.locale == 'ja' ? place.name : place.name,
-                    id: place.id
-                }
-                placesList.push(placeData);
-            });
-            setEvacuationTableFields(evacuationColumns);
-            setEvacueesDataList(evacueesList);
-            setFamilyCount(response.data.total_family);
-            setTableLoading(false);
-            setEvacuationPlaceList(placesList);
-            setTotalCount(response.data.count);
+            totalFamilyCount = response.data.total_family;
+            listTotalCount = response.data.total;
         }
         else {
-            setEvacueesDataList([]);
-            setEvacuationTableFields(evacuationColumns);
-            setTableLoading(false);
-            setTotalCount(0);
-            setFamilyCount(0);
+            evacuationColumns.push(
+                { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
+            )
         }
+        setTableLoading(false);
+        setEvacuationTableFields(evacuationColumns);
+        setEvacueesDataList(evacueesList);
+        setFamilyCount(totalFamilyCount);
+        setTotalCount(listTotalCount);
     }
 
     const getAnswerData = (answer) => {
@@ -239,7 +237,6 @@ export default function EvacuationPage() {
         setTableLoading(true);
         const fetchData = async () => {
             await onGetEvacueesListOnMounting();
-            setLoader(false);
         };
         fetchData();
     }, [locale, getListPayload]);
@@ -285,69 +282,80 @@ export default function EvacuationPage() {
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <h5 className='page-header1'>{translate(localeJson, 'list_of_evacuees')}</h5>
-                    <hr />
+                    <div className="flex gap-2 align-items-center">
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "list_of_evacuees")} />
+                        <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                    </div>
                     <div>
                         <div>
                             <form>
-                                <div className='mt-5 mb-3 flex flex-wrap align-items-center justify-content-end gap-2 mobile-input'>
-                                    <InputSelectFloatLabel
-                                        dropdownFloatLabelProps={{
-                                            id: "evacuationCity",
-                                            value: selectedOption,
-                                            options: evacuationPlaceList,
-                                            optionLabel: "name",
-                                            inputSelectClass: "w-20rem lg:w-14rem md:w-14rem sm:w-10rem",
-                                            onChange: (e) => setSelectedOption(e.value),
-                                            text: translate(localeJson, 'evacuation_site')
-                                        }}
-                                        parentClass="w-20rem lg:w-14rem md:w-14rem sm:w-10rem"
+                                <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
+                                    <InputDropdown inputDropdownProps={{
+                                        inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        labelProps: {
+                                            text: translate(localeJson, 'evacuation_site'),
+                                            inputDropdownLabelClassName: "block"
+                                        },
+                                        inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                        customPanelDropdownClassName: "w-10rem",
+                                        value: selectedOption,
+                                        options: evacuationPlaceList,
+                                        optionLabel: "name",
+                                        onChange: (e) => setSelectedOption(e.value),
+                                        emptyMessage: translate(localeJson, "data_not_found"),
+                                    }}
                                     />
-                                    <InputFloatLabel
-                                        inputFloatLabelProps={{
-                                            id: 'householdNumber',
-                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            text: translate(localeJson, 'household_number'),
+                                    <Input
+                                        inputProps={{
+                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            labelProps: {
+                                                text: translate(localeJson, 'household_number'),
+                                                inputLabelClassName: "block",
+                                            },
+                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
                                             value: familyCode,
                                             onChange: (e) => handleFamilyCode(e)
                                         }}
                                     />
-                                    <InputFloatLabel
-                                        inputFloatLabelProps={{
-                                            id: 'fullName',
-                                            inputClass: "w-20rem lg:w-13rem md:w-14rem sm:w-10rem",
-                                            text: translate(localeJson, 'name'),
-                                            custom: "mobile-input custom_input",
+                                    <Input
+                                        inputProps={{
+                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                            labelProps: {
+                                                text: translate(localeJson, 'name'),
+                                                inputLabelClassName: "block",
+                                            },
+                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
                                             value: refugeeName,
                                             onChange: (e) => setRefugeeName(e.target.value)
                                         }}
                                     />
-                                    <div className="">
+                                    <div className="flex align-items-end">
                                         <Button buttonProps={{
-                                            buttonClass: "w-12 search-button mobile-input ",
+                                            buttonClass: "w-12 search-button",
                                             text: translate(localeJson, "search_text"),
                                             icon: "pi pi-search",
-                                            severity: "primary",
                                             type: "button",
                                             onClick: () => searchListWithCriteria()
-                                        }} />
+                                        }} parentClass={"search-button"} />
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className='hidden' style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
                                 <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
                             </div>
-                            <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            {/* Development */}
+                            {/* <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "evacuation_button_height",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button",
                                     text: translate(localeJson, 'export'),
                                     onClick: () => downloadEvacueesListCSV()
-                                }} parentClass={"mb-3"} />
-                            </div>
+                                }} parentClass={"mb-3 export-button"} />
+                            </div> */}
                         </div>
                     </div>
                     <NormalTable
@@ -367,6 +375,26 @@ export default function EvacuationPage() {
                         rows={getListPayload.filters.limit}
                         paginatorLeft={true}
                         onPageHandler={(e) => onPaginationChange(e)}
+                        onSort={(data) => {
+                            setGetListPayload({
+                                ...getListPayload,
+                                filters: {
+                                    ...getListPayload.filters,
+                                    sort_by: data.sortField,
+                                    order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                }
+                            }
+                            )
+                        }}
+                        selectionMode="single"
+                        onSelectionChange={
+                            (e) => {
+                                dispatch(setFamily({ lgwan_family_id: e.value.id }));
+                                router.push({
+                                    pathname: '/admin/evacuation/family-detail',
+                                });
+                            }
+                        }
                     />
                 </div>
             </div>

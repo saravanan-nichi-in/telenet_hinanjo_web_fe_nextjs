@@ -18,10 +18,8 @@ function _register(payload, callBackFun) {
         .post("/user/registration/qr/app", payload)
         .then((response) => {
             if (response && response.data) {
-                console.log(response.data.data.data);
                 callBackFun(response.data.data.data);
-                
-                if(response?.data?.success) {
+                if (response?.data?.success) {
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
@@ -33,39 +31,36 @@ function _register(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            // Handle errors here
+            
             if (error.response && error.response.status == 422) {
-                console.log(error);
                 if (isObject(error.response.data.message)) {
-                  let errorMessages = Object.values(error.response.data.message);
-                  let errorString = errorMessages.join('.')
-                  let errorArray = errorString.split(".");
-                  errorArray = errorArray.filter(message => message.trim() !== "");
-                  // Join the error messages with line breaks
-                  // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                  let formattedErrorMessage = errorArray
-                    .map((message, index) => {
-                      return `${message.trim()}`;
-                    })
-                    .join("\n");
-                  toast.error(formattedErrorMessage, {
-                    position: "top-right",
-                  });
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    // Join the error messages with line breaks
+                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
                 } else {
                     toast.error(error.response.data.message, {
                         position: "top-right",
-                      });
+                    });
                 }
-              } else {
-                  console.error(error.response.data.message);
-                  toast.error(error.response.data.message, {
-                      position: "top-right",
-                  });
-              }
-              callBackFun(error);
+            } else {
+                console.error(error.response.data.message);
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                });
+            }
+            callBackFun(error);
         });
-        // console.log('here',temp.data.data);
-        // callBackFun(temp.data.data);
 }
 
 /**
@@ -79,8 +74,8 @@ function _create(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data.data);
-                
-                if(response?.data?.success) {
+
+                if (response?.data?.success) {
                     toast.success(response?.data?.message, {
                         position: "top-right",
                     });
@@ -94,27 +89,27 @@ function _create(payload, callBackFun) {
         .catch((error) => {
             if (error.response && error.response.status == 422) {
                 if (isObject(error.response.data.message)) {
-                  let errorMessages = Object.values(error.response.data.message);
-                  let errorString = errorMessages.join('.')
-                  let errorArray = errorString.split(".");
-                  errorArray = errorArray.filter(message => message.trim() !== "");
-                  // Join the error messages with line breaks
-                  // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                  let formattedErrorMessage = errorArray
-                    .map((message, index) => {
-                      return `${message.trim()}`;
-                    })
-                    .join("\n");
-                  toast.error(formattedErrorMessage, {
-                    position: "top-right",
-                  });
+                    let errorMessages = Object.values(error.response.data.message);
+                    let errorString = errorMessages.join('.')
+                    let errorArray = errorString.split(".");
+                    errorArray = errorArray.filter(message => message.trim() !== "");
+                    // Join the error messages with line breaks
+                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+                    let formattedErrorMessage = errorArray
+                        .map((message, index) => {
+                            return `${message.trim()}`;
+                        })
+                        .join("\n");
+                    toast.error(formattedErrorMessage, {
+                        position: "top-right",
+                    });
                 }
-              } else {
-                  callBackFun();
-                  console.error(error);
-                  toast.error(error.response.data.message, {
-                      position: "top-right",
-                  });
-              }
+            } else {
+                callBackFun();
+                console.error(error);
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                });
+            }
         });
 }

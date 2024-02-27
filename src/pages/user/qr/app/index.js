@@ -23,10 +23,9 @@ export default function App() {
                     rounded: "true",
                     size:"large",
                     text: " " + translate(localeJson, 'qr_scanner_popup_btn'),
-                    severity: "primary",
-                    className:"pi pi-qrcode",
+                    className:"pi pi-qrcode primary-button",
                     onClick: () => {setOpenQrPopup(true)},
-                }} parentClass={"flex"} ></Button>
+                }} parentClass={"flex primary-button"} ></Button>
                 </div>
                 </>);
 }

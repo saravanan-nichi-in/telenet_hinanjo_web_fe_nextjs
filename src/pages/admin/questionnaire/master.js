@@ -6,9 +6,10 @@ import _ from 'lodash';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { BaseTemplate } from '@/components/questionarrie';
-import { AiOutlineDrag } from 'react-icons/ai';
-import { Button, DND } from '@/components';
+import { Button } from '@/components';
 import { QuestionnaireServices } from '@/services/questionnaire.services';
+import CustomHeader from '@/components/customHeader';
+import { IoIosArrowBack } from 'react-icons/io';
 
 export default function IndividualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -17,7 +18,7 @@ export default function IndividualQuestionnaire() {
         filters: {
             start: 0,
             limit: 10,
-            order_by: "asc",
+            order_by: "desc",
             sort_by: "updated_at"
         },
         search: "",
@@ -28,22 +29,6 @@ export default function IndividualQuestionnaire() {
 
     const router = useRouter();
     const baseTemplateRefs = useRef([]);
-
-    const dragProps = {
-        onDragEnd(fromIndex, toIndex) {
-            const prepareData = [...questionnaires];
-            const item = prepareData.splice(fromIndex, 1)[0];
-            prepareData.splice(toIndex, 0, item);
-            setQuestionnaires([]);
-            setTimeout(() => {
-                setQuestionnaires(() => {
-                    return prepareData
-                });
-            }, 100);
-        },
-        nodeSelector: 'li',
-        handleSelector: 'a'
-    };
 
     const triggerSubmitCall = () => {
         let validationFlag = true;
@@ -112,10 +97,16 @@ export default function IndividualQuestionnaire() {
                     "is_required": item.isRequired == 1 ? true : false,
                     "is_visible": item.isVisible == 1 ? true : false,
                     "is_voice_type": item.isVoiceRequired == 1 ? true : false,
+                    "display_order": item.display_order,
                     "db_data": true
                 };
                 questionList.push(question);
             });
+            if (questionList.length > 1) {
+                questionList.sort((a, b) => {
+                    return a.display_order - b.display_order;
+                });
+            }
             setQuestionnaires([]);
             setTimeout(() => {
                 setQuestionnaires(questionList);
@@ -125,7 +116,6 @@ export default function IndividualQuestionnaire() {
         else {
             setQuestionnaires([
                 {
-                    "id": questionnaires.length + 1,
                     "title": "",
                     "questiontitle": "",
                     "questiontitle_en": "",
@@ -154,19 +144,28 @@ export default function IndividualQuestionnaire() {
         return (
             <ol>
                 {questionnaires.map((item, index) => (
-                    <li key={index}>
-                        <div className='ml-1 mr-1' style={{ width: "95%" }}>
-                            <BaseTemplate
-                                ref={(el) => baseTemplateRefs.current[index] = el}
-                                item={item}
-                                itemIndex={index}
-                                removeQuestion={() => removeQuestionData(item, index)}
-                                handleItemChange={handleItemChange}
-                            />
+                    <li key={index} style={{ display: 'block', flexDirection: 'column' }}>
+                        <div className='list-border'>
+                            <div className='ml-1 mr-1 p-3'>
+                                <BaseTemplate
+                                    ref={(el) => baseTemplateRefs.current[index] = el}
+                                    item={item}
+                                    itemIndex={index}
+                                    removeQuestion={() => removeQuestionData(item, index)}
+                                    handleItemChange={handleItemChange}
+                                />
+                            </div>
                         </div>
-                        <a className='ml-2'>
-                            <AiOutlineDrag />
-                        </a>
+                        {questionnaires.length - 1 != index &&
+                            <div className='flex align-items-center justify-content-center'>
+                                <a className='ml-2 pt-2 pb-2 flex align-items-center justify-content-center cursor-pointer' onClick={() => { handleClick(index) }}>
+                                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.5 13V5.825L5.925 8.4L4.5 7L9.5 2L14.5 7L13.075 8.4L10.5 5.825V13H8.5ZM15.5 22L10.5 17L11.925 15.6L14.5 18.175V11H16.5V18.175L19.075 15.6L20.5 17L15.5 22Z" fill="#D31720" />
+                                    </svg>
+                                    <span className=''>{translate(localeJson, 'swap_question')}</span>
+                                </a>
+                            </div>
+                        }
                     </li>
                 ))}
             </ol>
@@ -246,47 +245,53 @@ export default function IndividualQuestionnaire() {
         setQuestionnaires([...questionnaires, newItem]);
         // Clear the newItem state for the next addition
     };
+
+    const handleClick = (index) => {
+        let fromIndex = index;
+        let toIndex = index + 1;
+        const prepareData = [...questionnaires];
+        const item = prepareData.splice(fromIndex, 1)[0];
+        prepareData.splice(toIndex, 0, item);
+        setQuestionnaires([]);
+        setTimeout(() => {
+            setQuestionnaires(() => {
+                return prepareData
+            });
+        }, 100);
+    }
+
     return (
         <>
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <h5 className='page-header1'>{translate(localeJson, 'master_questionaries')}</h5>
-                        <hr />
-                        <div className='w-full'>
-                            <DND dragProps={dragProps}>
+                        <Button buttonProps={{
+                            buttonClass: "w-auto back-button-transparent mb-2 p-0",
+                            text: translate(localeJson, "return_to_questionnaire_master"),
+                            icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
+                            onClick: () => router.push("/admin/questionnaire"),
+                        }} parentClass={"inline back-button-transparent"} />
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "master_questionaries")} />
+                        <div className='w-full questionnaire'>
+                            <div>
                                 {bindQuestion()}
-                            </DND>
+                            </div>
                         </div>
-                        <div className='flex pt-3 pb-3' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                        <div className='questionnaire text-center pb-3'>
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                bg: "bg-white",
-                                hoverBg: "hover:surface-500 hover:text-white",
-                                onClick: () => {
-                                    router.push("/admin/questionnaire")
-                                },
-                                buttonClass: "text-600 evacuation_button_height",
-                                text: translate(localeJson, 'back'),
-                            }} parentClass={"mr-1 mt-1"} />
+                                buttonClass: "w-6 create-button-questionnaire",
+                                text: `＋ ${translate(localeJson, 'add_item')}`,
+                                onClick: handleAddNewItem
+                            }} parentClass={"mr-1 mt-1 create-button-questionnaire"} />
                             <Button buttonProps={{
                                 type: 'button',
                                 rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'submit'),
-                                severity: "primary",
+                                buttonClass: "w-6 update-button",
+                                text: translate(localeJson, 'save'),
                                 onClick: triggerSubmitCall
-                            }} parentClass={"mr-1 mt-1"} />
-
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                buttonClass: "evacuation_button_height",
-                                text: translate(localeJson, 'add_item'),
-                                severity: "success",
-                                onClick: handleAddNewItem
-                            }} parentClass={"mr-1 mt-1"} />
+                            }} parentClass={"mr-1 pt-3 update-button"} />
                         </div>
                     </div>
                 </div>

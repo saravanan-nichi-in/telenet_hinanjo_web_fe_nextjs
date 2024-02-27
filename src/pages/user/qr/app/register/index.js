@@ -5,6 +5,7 @@ import { Divider } from 'primereact/divider';
 import { Button, NormalTable } from '@/components';
 import { UserQrService } from '@/services/user_qr.service';
 import { useRouter } from 'next/router';
+import CustomHeader from '@/components/customHeader';
 
 export default function App() {
     const { localeJson } = useContext(LayoutContext);
@@ -19,11 +20,11 @@ export default function App() {
     { field: 'tel', header: translate(localeJson, 'qr_scanner_first_table_tel_representative'), minWidth: "15rem", maxWidth: "15rem" },
     { field: 'language_register', header: translate(localeJson, 'qr_scanner_first_table_tel_login_locale'), minWidth: "15rem", maxWidth: "15rem" }];
 
-    const columnsLast = [{ field: 'question_combined', header: translate(localeJson, 'qr_scanner_first_table_town_association_name')},
+    const columnsLast = [{ field: 'question_combined', header: translate(localeJson, 'qr_scanner_first_table_town_association_name') },
     { field: 'zip_code', header: translate(localeJson, 'qr_scanner_first_table_town_test_payload'), minWidth: "15rem", maxWidth: "15rem" }];
 
     const columns = [
-        { field: 'slno', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number')},
+        { field: 'slno', header: translate(localeJson, 'qr_scanner_second_table_second_column_serial_number') },
         { field: 'is_owner_temp', header: translate(localeJson, 'qr_scanner_second_table_second_column_representative'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'refugee_name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name'), minWidth: "15rem", maxWidth: "15rem" },
         { field: 'name', header: translate(localeJson, 'qr_scanner_second_table_second_column_family_name_chinese'), minWidth: "15rem", maxWidth: "15rem" },
@@ -40,12 +41,12 @@ export default function App() {
 
     const callApi = () => {
         let formData = new FormData();
-        formData.append("content",qr_details);
+        formData.append("content", qr_details);
         UserQrService.register(formData, (item) => {
             setOtherDetails(item);
             const tempArray = [];
             const tableArray = [];
-            const tableObject= {...item};
+            const tableObject = { ...item };
             tableObject.full_address = `${tableObject?.zip_code} ${tableObject?.perfecture_name} ${tableObject?.address}`;
             tableObject.question_combined = tableObject?.question?.map(question => question.title).join(', ');
 
@@ -53,11 +54,11 @@ export default function App() {
             setMainTableArray(tableArray);
 
             item?.person?.forEach((element, index) => {
-                const tempObj = {...element};
-                
-                tempObj.is_owner_temp = element.is_owner==0? translate(localeJson, 'qr_scanner_second_table_second_column_is_owner_mutated') : "-";
-                
-                tempObj.slno = index+1;
+                const tempObj = { ...element };
+
+                tempObj.is_owner_temp = element.is_owner == 0 ? translate(localeJson, 'qr_scanner_second_table_second_column_is_owner_mutated') : "-";
+
+                tempObj.slno = index + 1;
                 tempObj.address_full = `${element.zip_code} ${element.postal_code} ${element.prefecture_id} ${element.address} `;
                 tempObj.spacial_care_name_full = tempObj.specialCareName.join(', ');
                 tempObj.individual_questions_full = tempObj.individualQuestions.join(', ');
@@ -74,8 +75,7 @@ export default function App() {
     return (<div className="grid">
         <div className="col-12">
             <div className='card'>
-                <h5 className='page-header1'>{translate(localeJson, 'qr_scanner_main_heading')}</h5>
-                <hr />
+                <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "qr_scanner_main_heading")} />
                 <div className="grid">
                     <div className="col-12 underline text-right">{translate(localeJson, 'qr_scanner_zip_code')} {otherDetails?.family_code}</div>
                 </div>
@@ -94,8 +94,7 @@ export default function App() {
                 </div>
             </div>
             <div className="card">
-                <h5 className='page-header1 mt-2'>{translate(localeJson, 'qr_scanner_second_table_second_heading')}</h5>
-                <hr></hr>
+                <CustomHeader headerClass={"page-header2"} header={translate(localeJson, "qr_scanner_second_table_second_heading")} />
                 <div className='mt-3'>
                     <NormalTable
                         lazy
@@ -111,46 +110,48 @@ export default function App() {
                 </div>
             </div>
             <div className="card">
-                    <div className='mt-3'>
-                        <NormalTable
-                            lazy
-                            stripedRows={true}
-                            className={"custom-table-cell"}
-                            showGridlines={"true"}
-                            value={mainTableArray}
-                            columns={columnsLast}
-                            filterDisplay="menu"
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            paginator={false}
-                        />
-                   </div>
-                <div className="grid py-3" style={{justifyContent: 'flex-end', alignItems:"center"}}>
-                <Button buttonProps={{
+                <div className='mt-3'>
+                    <NormalTable
+                        lazy
+                        stripedRows={true}
+                        className={"custom-table-cell"}
+                        showGridlines={"true"}
+                        value={mainTableArray}
+                        columns={columnsLast}
+                        filterDisplay="menu"
+                        emptyMessage={translate(localeJson, "data_not_found")}
+                        paginator={false}
+                    />
+                </div>
+                <div className="grid py-3" style={{ justifyContent: 'flex-end', alignItems: "center" }}>
+                    <Button buttonProps={{
                         type: 'submit',
                         rounded: "true",
-                        size:"large",
+                        size: "large",
+                        buttonClass:"back-button",
                         text: translate(localeJson, 'qr_scanner_details_back'),
-                        severity: "primary",
-                        onClick: () => {localStorage.removeItem('user_qr');
-                        router.push("/user/qr/app")}
-                    }} parentClass={"mr-1"} />
+                        onClick: () => {
+                            localStorage.removeItem('user_qr');
+                            router.push("/user/qr/app")
+                        }
+                    }} parentClass={"mr-1 back-button"} />
 
                     <Button buttonProps={{
                         type: 'submit',
                         rounded: "true",
-                        size:"large",
+                        buttonClass:"create-button",
+                        size: "large",
                         text: translate(localeJson, 'qr_scanner_details_shelter'),
-                        severity: "success",
                         onClick: () => {
-                        UserQrService.create({
-                            "family_id": otherDetails.id,
-                            "place_id": otherDetails.place_id
-                        }, (response) => {
-                            localStorage.removeItem('user_qr');
-                            router.push("/user/qr/app")
-                        });    
+                            UserQrService.create({
+                                "family_id": otherDetails.id,
+                                "place_id": otherDetails.place_id
+                            }, (response) => {
+                                localStorage.removeItem('user_qr');
+                                router.push("/user/qr/app")
+                            });
                         }
-                    }} parentClass={"mr-1"} />
+                    }} parentClass={"mr-1 create-button"} />
                 </div>
             </div>
         </div>

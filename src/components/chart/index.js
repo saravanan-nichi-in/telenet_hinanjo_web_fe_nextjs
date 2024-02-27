@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Chart } from 'primereact/chart';
 
-const Doughnut = ({ labels, data, title, style,bgClr,hvrClr }) => {
-    
+import { LayoutContext } from "@/layout/context/layoutcontext";
+import {
+    getValueByKeyRecursively as translate
+} from "@/helper";
+
+const Doughnut = ({ labels, data, bgClr, hvrClr, type }) => {
+    const { localeJson } = useContext(LayoutContext);
     const chartData = {
         labels,
         datasets: [
@@ -12,15 +17,14 @@ const Doughnut = ({ labels, data, title, style,bgClr,hvrClr }) => {
                 hoverBackgroundColor: hvrClr
             }]
     };
-
     const options = {
         plugins: {
             tooltip: {
                 callbacks: {
                     title: () => null,
-                    label: function(context) {
+                    label: function (context) {
                         let val = context.raw || '';
-                        return context.label+" "+val;
+                        return context.label + " " + val;
                     }
                 }
             },
@@ -41,11 +45,16 @@ const Doughnut = ({ labels, data, title, style,bgClr,hvrClr }) => {
         animation: {
             animateRotate: false // Disable rotation animation
         }
-        
     };
 
     return (
-        <Chart type="doughnut" data={chartData} options={options} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '440px' }}>
+            {data && data.every(value => value === 0) ? (
+                <div>{translate(localeJson, "no_data_available")}</div>
+            ) : (
+                <Chart type={type || "doughnut"} data={chartData} options={options} style={{ minHeight: "440px" }} />
+            )}
+        </div>
     );
 }
 
