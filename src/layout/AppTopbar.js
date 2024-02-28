@@ -332,13 +332,10 @@ const AppTopbar = forwardRef((props, ref) => {
     const layoutUpdate = (responseUrl) => {
         const adminData = JSON.parse(localStorage.getItem("admin"));
         const staffData = JSON.parse(localStorage.getItem("staff"));
-        const hqStaffData = JSON.parse(localStorage.getItem("hq-staff"));
         if (responseUrl.startsWith("/admin")) {
             setUserName(adminData?.user?.name);
         } else if (responseUrl.startsWith("/staff")) {
             setUserName(staffData?.user?.name);
-        } else if (responseUrl.startsWith("/hq-staff")) {
-            setUserName(hqStaffData?.user?.name);
         } else {
             setUserName("");
         }
@@ -376,14 +373,7 @@ const AppTopbar = forwardRef((props, ref) => {
                     staff: {},
                 })
             );
-        } else if (key === "headquaters") {
-            await router.push("/hq-staff/login");
-            dispatch(
-                setHeadquaterValue({
-                    headquaters: {},
-                })
-            );
-        }
+        } 
     };
 
     const onGetTempRegisterDefaultEvent = () => {
