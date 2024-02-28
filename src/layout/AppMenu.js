@@ -27,25 +27,6 @@ const AppMenu = () => {
     // Admin side bar information
     const adminModel = [
         {
-            label: translate(localeJson, 'event_information_'),
-            icon: <MdSettings size={16} />,
-            class: "without-top-element",
-            items: [
-                {
-                    label: translate(localeJson, 'event_status_list'),
-                    icon: <BsHouseGearFill size={16} />,
-                    to: '/admin/event-status-list',
-                    active: router.pathname.startsWith('/admin/event-status-list')
-                },
-                {
-                    label: translate(localeJson, 'attendee_list'),
-                    icon: <BiSolidAddToQueue size={16} />,
-                    to: '/admin/event-attendees-list',
-                    active: router.pathname.startsWith('/admin/event-attendees-list')
-                },
-            ]
-        },
-        {
             label: translate(localeJson, 'vault_info'),
             icon: <RiHome5Fill size={16} />,
             items: [
@@ -127,12 +108,6 @@ const AppMenu = () => {
             label: translate(localeJson, 'setting'),
             icon: <MdSettings size={16} />,
             items: [
-                {
-                    label: translate(localeJson, 'events_management'),
-                    icon: <BiSolidAddToQueue size={16} />,
-                    to: '/admin/event',
-                    active: router.pathname.startsWith('/admin/event')
-                },
                 {
                     label: translate(localeJson, 'interview_management'),
                     icon: <FaBoxes size={16} />,
