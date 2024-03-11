@@ -49,12 +49,6 @@ const AppMenu = () => {
                     active: router.pathname.startsWith('/admin/evacuation')
                 },
                 {
-                    label: translate(localeJson, 'list_of_temp_registrants_title'),
-                    icon: <PiUserListFill size={16} />,
-                    to: '/admin/temp-registration',
-                    active: router.pathname.startsWith('/admin/temp-registration')
-                },
-                {
                     label: translate(localeJson, 'external_evacuees_tally'),
                     icon: <FaPeopleGroup size={16} />,
                     to: '/admin/external/family',
