@@ -146,7 +146,7 @@ function MyApp({ Component, pageProps }) {
             } else {
                 if (adminPublicPaths.includes(path)) {
                     router.push({
-                        pathname: '/admin/event-status-list',
+                        pathname: '/admin/dashboard',
                     });
                 } else {
                     router.push({

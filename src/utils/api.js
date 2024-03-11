@@ -79,6 +79,8 @@ api.interceptors.response.use((response) => {
         setTimeout(function () {
           window.location.href = redirectPath;
         }, 4000);
+      } else if(window.location.pathname.startsWith('/staff/login')) {
+        console.log('do nothing');
       } else {
         localStorage.removeItem('staff');
         setTimeout(function () {
