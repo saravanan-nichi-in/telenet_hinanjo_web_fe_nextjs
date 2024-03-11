@@ -398,7 +398,7 @@ export default function AdminPlacePage() {
                       hideOverFlow();
                     },
                   }}
-                  parentClass={"mr-1 mt-1"}
+                  parentClass={"mr-1 mt-1 hidden"}
                 />
                 <Button
                   buttonProps={{
