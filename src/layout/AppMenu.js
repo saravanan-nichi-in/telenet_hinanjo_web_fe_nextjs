@@ -103,12 +103,6 @@ const AppMenu = () => {
             icon: <MdSettings size={16} />,
             items: [
                 {
-                    label: translate(localeJson, 'interview_management'),
-                    icon: <FaBoxes size={16} />,
-                    to: '/admin/questionnaire',
-                    active: router.pathname.startsWith('/admin/questionnaire')
-                },
-                {
                     label: translate(localeJson, 'places'),
                     icon: <BsHouseGearFill size={16} />,
                     to: '/admin/place',
@@ -125,12 +119,20 @@ const AppMenu = () => {
                     icon: <FaBoxes size={16} />,
                     to: '/admin/stockpile/master',
                     active: router.pathname.startsWith('/admin/stockpile/master')
-                }, {
+                },
+                {
                     label: translate(localeJson, 'special_care_list'),
                     icon: <PiHandTapFill size={16} />,
                     to: '/admin/special/care',
                     active: router.pathname.startsWith('/admin/special/care')
-                }, {
+                }, 
+                {
+                    label: translate(localeJson, 'interview_management'),
+                    icon: <FaBoxes size={16} />,
+                    to: '/admin/questionnaire',
+                    active: router.pathname.startsWith('/admin/questionnaire')
+                },
+                 {
                     label: translate(localeJson, 'setting_systems'),
                     icon: <RiFileSettingsFill size={16} />,
                     to: '/admin/setting',
