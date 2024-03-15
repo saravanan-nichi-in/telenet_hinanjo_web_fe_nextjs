@@ -11,7 +11,7 @@ import { Menu } from "antd";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import { TbUserCog } from "react-icons/tb";
-import { MdTranslate } from "react-icons/md";
+import { MdOutlineResetTv, MdTranslate } from "react-icons/md";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -25,6 +25,8 @@ import { useAppDispatch } from "@/redux/hooks";
 import { setAdminValue, setStaffValue, setHeadquaterValue } from "@/redux/auth";
 import { urlRegister } from "@/utils/constant";
 import { setStaffEditedStockpile } from "@/redux/stockpile";
+import { ChangePasswordModal } from "@/components/modal";
+
 
 const AppTopbar = forwardRef((props, ref) => {
     const {
@@ -227,6 +229,11 @@ const AppTopbar = forwardRef((props, ref) => {
             {url.startsWith("/admin") && userName && (
                 <>
                     <Menu.Divider />
+                    <Menu.Item key="change-password" icon={<MdOutlineResetTv style={{ fontSize: "14px" }} />} onClick={() => setChangePasswordOpen(true)}>
+                        <>
+                            {translate(localeJson, 'change_password')}
+                        </>
+                    </Menu.Item>
                     <Menu.Item
                         key="logout"
                         icon={<LogoutOutlined />}
@@ -497,6 +504,11 @@ const AppTopbar = forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
+             <ChangePasswordModal
+                open={changePasswordOpen}
+                close={() => setChangePasswordOpen(false)}
+                onChangePasswordSuccess={onChangePasswordSuccess}
+            />
             <div className="layout-topbar">
                 {layoutConfig.menuMode === "static" &&
                     !windowURL.startsWith("/user/map") && (

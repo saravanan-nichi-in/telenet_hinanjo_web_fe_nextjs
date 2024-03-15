@@ -4,12 +4,12 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { LockFilled } from '@ant-design/icons';
 
-import Button from "../button/button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { InputLeftRightGroupFloat } from "../input";
+import Password, { InputLeftRightGroupFloat } from "../input";
 import { ValidationError } from "../error";
 import { AuthenticationAuthorizationService } from "@/services";
+import { Button } from "../button";
 
 export default function ChangePasswordModal(props) {
     const { localeJson } = useContext(LayoutContext);
@@ -69,9 +69,9 @@ export default function ChangePasswordModal(props) {
                     <div>
                         <form onSubmit={handleSubmit}>
                             <Dialog
-                                className="custom-modal"
+                                className="new-custom-modal"
                                 header={
-                                    <div className="custom-modal">
+                                    <div className="">
                                         {translate(localeJson, 'change_password')}
                                     </div>
                                 }
@@ -109,55 +109,93 @@ export default function ChangePasswordModal(props) {
                                 <div className={`modal-content`}>
                                     <div className="mt-5 mb-5">
                                         <div className="mb-5">
-                                            <InputLeftRightGroupFloat inputLrGroupFloatProps={{
-                                                name: 'password',
-                                                type: "password",
-                                                value: values.password,
-                                                id: "password",
-                                                text: translate(localeJson, 'current_password'),
-                                                spanClass: "p-error",
-                                                spanText: "*",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                required: true,
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                                                antdRightIcon: <LockFilled />,
-                                            }} parentClass={`w-full ${errors.password && touched.password && 'p-invalid'}`} />
+                                           <Password
+                                                        passwordProps={{
+                                                            passwordParentClassName: `w-full ${errors.password && touched.password && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'current_password'),
+                                                                spanText: "*",
+                                                                passwordLabelSpanClassName: "p-error",
+                                                                passwordLabelClassName: "block",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            name: 'password',
+                                                            value: values.password,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                            style: { width: "100%" },
+                                                            passwordClass: "w-full"
+                                                        }}
+
+                                                    />
                                             <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                         </div>
                                         <div className="mt-5 ">
-                                            <InputLeftRightGroupFloat inputLrGroupFloatProps={{
-                                                name: 'password_new',
-                                                type: "password",
-                                                value: values.password_new,
-                                                id: "new_password",
-                                                text: translate(localeJson, 'new_password'),
-                                                spanClass: "p-error",
-                                                spanText: "*",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                required: true,
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                                                antdRightIcon: <LockFilled />,
-                                            }} parentClass={`w-full ${errors.password_new && touched.password_new && 'p-invalid'}`} />
+                                        <Password
+                                                        passwordProps={{
+                                                            passwordParentClassName: `w-full ${errors.password_new && touched.password_new && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'new_password'),
+                                                                spanText: "*",
+                                                                passwordLabelSpanClassName: "p-error",
+                                                                passwordLabelClassName: "block",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            name: 'password_new',
+                                                            value: values.password_new,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                            style: { width: "100%" },
+                                                            passwordClass: "w-full"
+                                                        }}
+
+                                                    />
                                             <ValidationError errorBlock={errors.password_new && touched.password_new && errors.password_new} />
                                         </div>
                                         <div className="mt-5 ">
-                                            <InputLeftRightGroupFloat inputLrGroupFloatProps={{
-                                                name: 'password_confirm',
-                                                type: "password",
-                                                value: values.password_confirm,
-                                                id: "newConfirmation",
-                                                text: translate(localeJson, 'new_password_confirmation'),
-                                                spanClass: "p-error",
-                                                spanText: "*",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                required: true,
-                                                inputClass: "w-full lg:w-25rem md:w-23rem sm:w-21rem ",
-                                                antdRightIcon: <LockFilled />,
-                                            }} parentClass={`w-full ${errors.password_confirm && touched.password_confirm && 'p-invalid'}`} />
+                                             <Password
+                                                        passwordProps={{
+                                                            passwordParentClassName: `w-full ${errors.password_confirm && touched.password_confirm && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'new_password_confirmation'),
+                                                                spanText: "*",
+                                                                passwordLabelSpanClassName: "p-error",
+                                                                passwordLabelClassName: "block",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            name: 'password_confirm',
+                                                            value: values.password_confirm,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                            style: { width: "100%" },
+                                                            passwordClass: "w-full"
+                                                        }}
+
+                                                    />
+                                            
                                             <ValidationError errorBlock={errors.password_confirm && touched.password_confirm && errors.password_confirm} />
+                                        </div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="modal-button-footer-space">
+                                        <Button buttonProps={{
+                                             buttonClass: "w-full update-button",
+                                             type: "submit",
+                                            text: translate(localeJson, 'update'),
+                                            onClick: () => {
+                                                handleSubmit();
+                                            },
+                                        }} parentClass={"update-button"} />
+                                        </div>
+                                        <div>
+                                        <Button buttonProps={{
+                                           buttonClass: "w-full back-button",
+                                            text: translate(localeJson, 'cancel'),
+                                            onClick: () => {
+                                                close();
+                                                resetForm({ values: initialValues });
+                                            },
+                                        }} parentClass={"back-button"} />
                                         </div>
                                     </div>
                                 </div>

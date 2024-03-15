@@ -212,28 +212,6 @@ const AppMenu = () => {
             ]
         },
     ];
-    // Staff(Event) side bar information
-    const eventStaffModel = [
-        {
-            label: translate(localeJson, 'top_page'),
-            icon: <MdSpaceDashboard size={16} />,
-            to: '/staff/event-staff/dashboard',
-            top: true,
-            class: "top-element",
-            active: router.pathname.startsWith('/staff/event-staff/dashboard')
-        }, {
-            label: translate(localeJson, 'event_information_staff'),
-            icon: <HiInformationCircle size={16} />,
-            items: [
-                {
-                    label: translate(localeJson, 'event_list'),
-                    icon: <BsPeopleFill size={16} />,
-                    to: '/staff/event-staff/family',
-                    active: router.pathname.startsWith('/staff/event-staff/family')
-                }
-            ]
-        },
-    ]
     // Map side bar information
     const mapModel = [
         {
@@ -267,15 +245,9 @@ const AppMenu = () => {
                                 return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
                             })
                         ) : url.startsWith('/staff') ? (
-                            layoutReducer?.user?.place?.type === "place" ? (
                                 staffModel.map((item, i) => {
                                     return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
                                 })
-                            ) : (
-                                eventStaffModel.map((item, i) => {
-                                    return !item.seperator ? <AppMenuitem item={item} root={true} active={item.active} index={i} key={i} /> : <li className="menu-separator"></li>;
-                                })
-                            )
                         ) :
                             (
                                 <>
