@@ -2,18 +2,19 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import { setStaffEditedStockpile } from "@/redux/stockpile";
-import { useAppDispatch } from "@/redux/hooks";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, NormalTable } from '@/components';
-import { AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
+import { AdminManagementDeleteModal, AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components/modal';
 import { StockpileStaffService } from '@/services/stockpilestaff.service';
 import CustomHeader from '@/components/customHeader';
+import { setStaffEditedStockpile } from "@/redux/stockpile";
+import { useAppDispatch } from "@/redux/hooks";
 
 function StockpileDashboard() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
+    const storeData = useSelector((state) => state.stockpileReducer);
     const router = useRouter();
     const [staffStockpileCreateOpen, setStaffStockpileCreateOpen] = useState(false);
     const [staffStockpileEditOpen, setStaffStockpileEditOpen] = useState(false);
@@ -28,10 +29,13 @@ function StockpileDashboard() {
     const [productNameOptions, setProductNameOptions] = useState([]);
     const [disableRowSelection, setDisableRowSelection] = useState(false);
     const [editedStockPile, setEditedStockPile] = useState([]);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteObj, setDeleteObj] = useState(null);
     const dispatch = useAppDispatch();
 
     /* Services */
-    const { getList, exportData, getPlaceNamesByCategory } = StockpileStaffService;
+    const { getList, exportData, getPlaceNamesByCategory, deleteByID } = StockpileStaffService;
 
     const onStaffStockCreated = () => {
         staffStockpileCreateOpen(false);
@@ -108,23 +112,79 @@ function StockpileDashboard() {
             field: 'actions',
             header: translate(localeJson, 'action'),
             textAlign: "center",
-            minWidth: "7rem",
+            alignHeader: "center",
+            className: "action_class",
             body: (rowData) => (
                 <div>
-                    <Button buttonProps={{
-                        text: translate(localeJson, 'edit'),
-                        buttonClass: "edit-button",
-                        onClick: () => {
-                            setEditObject(rowData);
-                            setSelectedCategory(rowData.category)
-                            setStaffStockpileEditOpen(true);
-                            hideOverFlow();
-                        },
-                    }} parentClass={"edit-button"} />
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "edit-button",
+                            onClick: () => {
+                                setEditObject(rowData);
+                                setSelectedCategory(rowData.category)
+                                setStaffStockpileEditOpen(true);
+                                hideOverFlow();
+                            },
+                        }} parentClass={"edit-button"} />
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button-user ml-2",
+                            onClick: () => openDeleteDialog(rowData)
+                        }} parentClass={"delete-button-user"} />
                 </div>
             ),
         },
     ];
+
+    /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+    const openDeleteDialog = (rowdata) => {
+        setDeleteId(rowdata.product_id);
+        setDeleteObj({
+            firstLabel: translate(localeJson, 'product_name'),
+            firstValue: rowdata.product_name,
+            secondLabel: translate(localeJson, 'product_type'),
+            secondValue: rowdata.category
+        });
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    /**
+     * On confirmation delete api call and close modal functionality handler
+     * @param {*} status 
+     */
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            console.log(deleteId);
+            let payload = [
+                {
+                    place_id: layoutReducer?.user?.place?.id,
+                    product_ids: [deleteId]
+                },
+            ]
+            deleteByID(payload, (response) => {
+                if (response) {
+                    if (storeData?.staffEditedStockpile.length > 0) {
+                        const filteredArray = storeData?.staffEditedStockpile.filter(item => item.product_id !== deleteId);
+                        const filteredEditedStockPileArray = editedStockPile.filter(item => item.product_id !== deleteId);
+                        dispatch(setStaffEditedStockpile(filteredArray));
+                        setEditedStockPile(filteredEditedStockPileArray);
+                    }
+                    onGetMaterialListOnMounting();
+                }
+            })
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
 
     /**
      * Pagination handler
@@ -179,7 +239,8 @@ function StockpileDashboard() {
                         product_name: obj.product_name ?? "",
                         Inspection_date_time: obj.Inspection_date_time ? new Date(obj.Inspection_date_time) : "",
                         InspectionDateTime: obj.Inspection_date_time ? (locale === "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(obj.Inspection_date_time) : getEnglishDateDisplayFormat(obj.Inspection_date_time)) : "",
-                        save_flag: false
+                        save_flag: false,
+                        product_id: obj.product_id
                     }
                     let findEditedIndex = editedStockPile.findIndex((item) => item.summary_id == obj.id);
                     if (findEditedIndex !== -1) {
@@ -274,7 +335,6 @@ function StockpileDashboard() {
                 onGetMaterialListOnMounting();
             })
         }
-
     }
 
     const checkForEditedStockPile = (screenFlag) => {
@@ -388,6 +448,12 @@ function StockpileDashboard() {
                 importFile={importFileApi}
                 modalHeaderText={translate(localeJson, 'staff_management_inventory_import_processing')}
             />
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+                refreshList={onGetMaterialListOnMounting}
+                deleteObj={deleteObj}
+            />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -401,7 +467,7 @@ function StockpileDashboard() {
                                     onClick: () => checkForEditedStockPile("import"),
                                     buttonClass: "evacuation_button_height import-button-white-bg",
                                     text: translate(localeJson, 'import'),
-                                }} parentClass={"mr-1 mt-1 import-button-white-bg"} />
+                                }} parentClass={"mr-1 import-button-white-bg"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
@@ -411,7 +477,7 @@ function StockpileDashboard() {
                                     onClick: () => {
                                         exportData(getListPayload);
                                     },
-                                }} parentClass={"mr-1 mt-1 export-button-white-bg"} />
+                                }} parentClass={"mr-1  export-button-white-bg"} />
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
@@ -422,7 +488,7 @@ function StockpileDashboard() {
                                         setStaffStockpileCreateOpen(true)
                                         hideOverFlow();
                                     }
-                                }} parentClass={"mr-1 mt-1 primary-button"} />
+                                }} parentClass={"mr-1 primary-button"} />
                             </div>
                             <div className="mt-3">
                                 <NormalTable

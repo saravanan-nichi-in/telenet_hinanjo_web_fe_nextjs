@@ -37,6 +37,7 @@ import {
   ExternalServices,
   CommonServices,
   TempRegisterServices,
+  CheckInOutServices
 } from "@/services";
 import QuestionList from "@/components/masterQuestion";
 import CustomHeader from "@/components/customHeader";
@@ -46,6 +47,7 @@ import { Calendar } from "@/components/date&time";
 import { Input, InputDropdown, InputNumber } from "@/components/input";
 import { result } from "lodash";
 import { convertToSingleByte } from "@/helper"
+import YaburuModal from "@/components/modal/userYaburuCardModal";
 
 export default function Admission() {
   const router = useRouter();
@@ -82,12 +84,13 @@ export default function Admission() {
         : [...prevExpanded, personId]
     );
   };
+  const { basicInfo } = CheckInOutServices;
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
   };
   /* Services */
-  const { getText } = CommonServices;
+  const { getText,getAddress } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
@@ -481,8 +484,8 @@ export default function Admission() {
     });
   };
 
-  const Qr = {
-    url: "/layout/images/evacuee-qr.png",
+  const Scanner = {
+    url: "/layout/images/mapplescan.svg",
   };
   const Card = {
     url: "/layout/images/evacuee-card.png",
@@ -814,11 +817,14 @@ export default function Admission() {
   };
   const qrResult = (result) => {
     setLoader(true)
-    let formData = new FormData();
-    formData.append("content", result);
+    let payload = {
+      yapple_id: "",
+      ppid: "",
+      chiica_qr: result,
+    };
     setOpenQrPopup(false)
     showOverFlow();
-    qrScanRegistration(formData, (res) => {
+    basicInfo(payload, (res) => {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);
@@ -929,7 +935,7 @@ export default function Admission() {
           note: evacuee.remarks,
           specialCareName: evacuee.specialCareType ? getSpecialCareJPNames(evacuee.specialCareType) : "",
           specialCareName2: evacuee.specialCareType ? getSpecialCareENNames(evacuee.specialCareType) : "",
-          question: evacuee.individualQuestions.map((question) => {
+          question: evacuee.individualQuestions?.map((question) => {
             return {
               question_id: question.id.toString(),
               question_type: question.type.toString(),
@@ -994,36 +1000,39 @@ export default function Admission() {
       id: id,
       checked: checked,
       name: evacuees ? evacuees.name || "" : "",
-      name_furigana: evacuees ? evacuees.refugeeName || "" : "",
+      name_furigana: evacuees ? (evacuees.refugeeName||evacuees.refugee_name) || "" : "",
       dob: evacuees ? convertedObject || "" : "",
       age: evacuees ? age.years || "" : "",
-      age_m: evacuees ? age.months : "",
+      age_m: evacuees && evacuees.age && age.months !== undefined ? age.months : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
-      postalCode: evacuees ? evacuees.postal_code?.replace(/-/g, "") || "" : "",
+      postalCode: evacuees ? evacuees.postal_code || "" : "",
+      tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
       address: evacuees ? evacuees.address || "" : "",
       address2: evacuees ? evacuees.address2 || "" : "",
-      tel: evacuees ? evacuees.tel || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
       remarks: "",
       individualQuestions: null,
       telAsRep:false,
-      addressAsRep:false,
+      addressAsRep:false
     };
+    if(evacuees.postal_code)
+    {
     const re = /^[0-9-]+$/;
     let val;
     if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
       val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
       if (val.length > 3 && val.length <= 7) {
+        val = val.slice(0, 3) + val.slice(3);
         boundObject.postalCode = val;
       }
     }
     if (val.length >= 7) {
-      let payload = val.slice(0, 3) + "-" + val.slice(3);
-      getAddressByZipCode(payload, (response) => {
+      let payload = val;
+      getAddress(payload, (response) => {
         if (response) {
-          let address = response[0];
+          let address = response;
           const selectedPrefecture = prefectures.find(
             (prefecture) => prefecture.value == address.prefcode
           );
@@ -1032,6 +1041,7 @@ export default function Admission() {
         }
       });
     }
+  }
 
     return boundObject;
   }
@@ -1062,12 +1072,18 @@ export default function Admission() {
 
   return (
     <>
-      <QrScannerModal
+      {/* <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
-      ></QrScannerModal>
+      ></QrScannerModal> */}
+       <YaburuModal
+        open={openQrPopup}
+        close={closeQrPopup}
+        callBack={qrResult}
+        >
+      </YaburuModal>
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -1153,9 +1169,9 @@ export default function Admission() {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "c_card_reg"),
+                          text: translate(localeJson, "myNumberCardScan"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled:isHitachi,
+                          disabled:isHitachi||true,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                             hideOverFlow();
@@ -1173,8 +1189,8 @@ export default function Admission() {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "c_qr_reg"),
-                          icon: <img src={Qr.url} width={30} height={30} />,
+                          text: translate(localeJson, "yaburuCardScan"),
+                          icon: <img src={Scanner.url} width={40} height={40} />,
                           onClick: () => {
                             setOpenQrPopup(true);
                             hideOverFlow();
@@ -1843,8 +1859,7 @@ export default function Admission() {
                                   </div>
                                   <div className="body_table">{person.remarks||"-"}</div>
                                 </div>
-                                     
-                                    {person.individualQuestions.map((question,index)=>
+                                    {person.individualQuestions?.map((question,index)=>
                                     (
                                       <div key={index}>
                                         <div className=" mt-3">

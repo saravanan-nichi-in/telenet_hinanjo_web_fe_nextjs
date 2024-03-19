@@ -8,7 +8,8 @@ import {
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     getJapaneseDateTimeDisplayFormat,
-    getJapaneseDateTimeDayDisplayActualFormat
+    getJapaneseDateTimeDayDisplayActualFormat,
+    getSpecialCareName
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CardSpinner } from '@/components';
@@ -115,13 +116,14 @@ export default function TemporaryFamilyDetail() {
                     created_date: person.person_created_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_created_at) : "",
                     updated_date: person.person_updated_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_updated_at) : "",
                     address: (person.person_postal_code ? translate(localeJson, 'post_letter') + person.person_postal_code : "") + " " + person.person_address,
-                    special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares) : "",
+                    special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
                     connecting_code: person.person_connecting_code || "",
                     remarks: person.person_note || "",
                     evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date),
                     family_code: person.family_code,
                     tel: person.family_tel,
                     place_name: locale === "en" && !_.isNull(person.place_name_en) ? person.place_name_en : person.place_name,
+                    yapple_id: person.yapple_id,
                 };
                 let personAnswers = person.person_answers;
                 if (listOfIndividualQuestions.length > 0) {
@@ -183,14 +185,6 @@ export default function TemporaryFamilyDetail() {
         else {
             return translate(localeJson, 'japanese');
         }
-    }
-
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + (locale == 'ja' ? (item.name) : item.name_en)) : (locale == 'ja' ? (item.name) : item.name_en);
-        });
-        return specialCareName;
     }
 
     const getAnswerData = (answer) => {
@@ -286,12 +280,16 @@ export default function TemporaryFamilyDetail() {
                                     </div>
                                 </div>
                                 <div className='flex align-items-center'>
-                                    <div className='page-header3'>{translate(localeJson, "special_care_name")}:</div>
+                                    <div className='page-header3'>{translate(localeJson, "notes")}:</div>
+                                    <div className='page-header3-sub ml-1'>{val.remarks}</div>
+                                </div>
+                                <div className='flex align-items-center'>
+                                    <div className='page-header3'>{translate(localeJson, "c_special_care")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.special_care_name}</div>
                                 </div>
                                 <div className='flex align-items-center'>
-                                    <div className='page-header3'>{translate(localeJson, "notes")}:</div>
-                                    <div className='page-header3-sub ml-1'>{val.remarks}</div>
+                                    <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
+                                    <div className='page-header3-sub ml-1'>{val.yapple_id}</div>
                                 </div>
                             </div>
                         )
@@ -322,7 +320,7 @@ export default function TemporaryFamilyDetail() {
                         ) : basicFamilyDetail.length > 0 && (
                             <div className='custom-card-info my-3'>
                                 {basicFamilyDetail.map((ques) => (
-                                    ques['individualQuestionnaires'].map((val, i) => (
+                                    ques['individualQuestionnaires'] && ques['individualQuestionnaires'].map((val, i) => (
                                         <div className='flex align-items-center' key={i}>
                                             <div >
                                                 <span className='page-header3'>{val.question}</span>
