@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router'
 
-import { getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { convertToSingleByte, getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { EvacuationServices } from '@/services/evacuation.services';
@@ -10,6 +10,9 @@ import { setFamily } from '@/redux/family';
 import CustomHeader from '@/components/customHeader';
 import { useAppDispatch } from '@/redux/hooks';
 import { Input, InputDropdown } from '@/components/input';
+import {
+    getSpecialCareName
+} from "@/helper";
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -56,6 +59,8 @@ export default function EvacuationPage() {
         { field: "person_dob", header: translate(localeJson, 'dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -98,14 +103,6 @@ export default function EvacuationPage() {
         } else if (gender == 3) {
             return translate(localeJson, 'others_count');
         }
-    }
-
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
-        });
-        return specialCareName;
     }
 
     const getPlaceName = (id) => {
@@ -171,11 +168,12 @@ export default function EvacuationPage() {
                     "person_dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.person_dob) : getEnglishDateDisplayFormat(item.person_dob),
                     "person_age": item.person_age,
                     "age_month": item.person_month,
-                    "special_care_name": item.person_special_cares ? getSpecialCareName(item.person_special_cares) : "-",
+                    "special_care_name": item.person_special_cares ? getSpecialCareName(item.person_special_cares, locale) : "-",
                     "remarks": item.person_note,
                     "place": item.place_id ? getPlaceName(item.place_id) : "",
                     "connecting_code": item.person_connecting_code,
                     "out_date": item.family_out_date ? getGeneralDateTimeSlashDisplayFormat(item.family_out_date) : "",
+                    "yapple_id": item.yapple_id,
                 };
                 let personAnswers = item.person_answers ? item.person_answers : []
                 if (personAnswers.length > 0) {
@@ -249,7 +247,7 @@ export default function EvacuationPage() {
                 sort_by: "",
                 order_by: "desc",
                 place_id: selectedOption && selectedOption.id != 0 ? selectedOption.id : "",
-                family_code: familyCode,
+                family_code: convertToSingleByte(familyCode),
                 refugee_name: refugeeName
             }
         }
@@ -258,25 +256,36 @@ export default function EvacuationPage() {
     }
 
     const handleFamilyCode = (e) => {
+        const re = /^[0-9-]+$/;
+        if(e.target.value.length<=0)
+        {
+          setFamilyCode("");
+          return;
+        }
+        if(re.test(convertToSingleByte(e.target.value)))
+        {
         if ((e.target.value).length == 4) {
-            const newValue = e.target.value;
-            if (newValue.indexOf("-") !== -1) {
-                setFamilyCode(e.target.value);
-            }
-            else {
-                const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
-                setFamilyCode(formattedValue);
-            }
+          const newValue = e.target.value;
+          if (newValue.indexOf("-") !== -1) {
+            setFamilyCode(e.target.value);
+          }
+          else {
+            setFamilyCode(newValue);
+          }
         }
         else if ((e.target.value).length == 3) {
-            const newValue = e.target.value;
-            const formattedValue = newValue.substring(0, 3);
-            setFamilyCode(formattedValue);
+          const newValue = e.target.value;
+          const formattedValue = newValue.substring(0, 3);
+          setFamilyCode(formattedValue);
         }
         else {
-            setFamilyCode(e.target.value)
+          setFamilyCode(e.target.value)
         }
-    }
+      }
+      else {
+        setFamilyCode("")
+      }
+      }
 
     return (
         <div className="grid">

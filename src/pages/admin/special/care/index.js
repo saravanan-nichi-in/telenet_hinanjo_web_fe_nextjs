@@ -28,7 +28,7 @@ export default function AdminSpecialCarePage() {
             start: 0,
             limit: 10,
             sort_by: "updated_at",
-            order_by: "desc",
+            order_by: "asc",
         },
         search: "",
     });
@@ -166,26 +166,32 @@ export default function AdminSpecialCarePage() {
     const submitForm = (res) => {
         if (res.id) { 
             update(res, isUpdated)
-            setTableLoading(true);
         }
         else {
             create(res, isCreated)
-            setTableLoading(true);
         }
-
     }
     const isCreated = (res) => {
+        setTableLoading(true);
+
         if (res) {
             onSpecialCareEditSuccess()
             onGetSpecialCareListOnMounting();
         }
+        else {
+            setTableLoading(false)
+        }
     }
     const isUpdated = (res) => {
+        setTableLoading(true);
         if (res) {
             setCurrentEditObj({})
             setId(0)
             onSpecialCareEditSuccess()
             onGetSpecialCareListOnMounting();
+        }
+        else {
+            setTableLoading(false);
         }
     }
 

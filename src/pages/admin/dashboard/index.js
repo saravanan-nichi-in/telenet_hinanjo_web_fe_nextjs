@@ -6,6 +6,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DashboardServices } from '@/services';
 import CustomHeader from '@/components/customHeader';
+import { default_place_id } from '@/utils/constant';
 
 function AdminDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -28,8 +29,8 @@ function AdminDashboard() {
         filters: {
             start: 0,
             limit: 10,
-            sort_by: "",
-            order_by: "desc",
+            sort_by: "refugee_name",
+            order_by: "asc",
         },
         search: "",
     });
@@ -146,6 +147,7 @@ function AdminDashboard() {
                     content={translate(localeJson, 'change_active_place')}
                     data={obj}
                     checked={obj.full_status == 1 ? true : false}
+                    disabled = {obj.id == default_place_id ? true : false}
                     parentClass={"custom-switch"}
                     cancelButton={true}
                     updateButton={true}

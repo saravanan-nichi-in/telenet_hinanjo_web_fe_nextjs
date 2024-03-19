@@ -21,10 +21,12 @@ import { Input, InputDropdown, InputNumber } from "@/components/input";
 import { Calendar } from "@/components/date&time";
 
 export default function PlaceCreatePage() {
-  const { localeJson, setLoader } = useContext(LayoutContext);
+  const { localeJson, setLoader, locale } = useContext(LayoutContext);
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
+  const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(0);
+  const [postalCodeDefaultPrefectureId, setPostalCodeDefaultPrefectureId] = useState(0);
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const today = new Date();
   const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
@@ -63,7 +65,16 @@ export default function PlaceCreatePage() {
       .required(
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
-      ),
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_2?.length==4)
+        {
+        const { prefecture_id } = context.parent;
+        return postalCodePrefectureId == prefecture_id
+        }
+        else {
+          return true
+        }
+      }),
     postal_code_2: Yup.string()
       .test("checkDoubleByte", translate(localeJson, "postal_code_2_validation"),
         (value) => {
@@ -75,7 +86,15 @@ export default function PlaceCreatePage() {
       .required(
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
-      ),
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_1?.length==3) {
+        const { prefecture_id } = context.parent;
+        return postalCodePrefectureId == prefecture_id
+        }
+        else {
+          return true
+        }
+      }),
     prefecture_id: Yup.string().required(
       translate(localeJson, "prefecture_places") +
       translate(localeJson, "is_required")
@@ -105,7 +124,15 @@ export default function PlaceCreatePage() {
       .required(
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
-      ),
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_default_2?.length==4) {
+        const { prefecture_id_default } = context.parent;
+        return postalCodeDefaultPrefectureId == prefecture_id_default
+        }
+        else {
+          return true
+        }
+      }),
     postal_code_default_2: Yup.string()
       .test("checkDoubleByte", translate(localeJson, "postal_code_2_validation"),
         (value) => {
@@ -117,7 +144,15 @@ export default function PlaceCreatePage() {
       .required(
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
-      ),
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_default_1?.length==3) {
+        const { prefecture_id_default } = context.parent;
+        return postalCodeDefaultPrefectureId == prefecture_id_default
+        }
+        else {
+          return true
+        }
+      }),
     prefecture_id_default: Yup.string().required(
       translate(localeJson, "default_prefecture_place") +
       translate(localeJson, "is_required")
@@ -137,8 +172,7 @@ export default function PlaceCreatePage() {
       translate(localeJson, "default_address_en") +
       translate(localeJson, "max_length_255")
     ),
-    tel: Yup.string()
-      .required(translate(localeJson, "phone_no_required"))
+    tel: Yup.string().nullable()
       .test(
         "starts-with-zero",
         translate(localeJson, "phone_num_start"),
@@ -151,23 +185,14 @@ export default function PlaceCreatePage() {
         }
       )
       .test(
-        "is-not-empty",
-        translate(localeJson, "phone_no_required"),
-        (value) => {
-          if (value != undefined) {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-          }
-          else {
-            return true;
-          }
-        }
-      )
-      .test(
         "matches-pattern",
         translate(localeJson, "phone"),
         (value) => {
-          const singleByteValue = convertToSingleByte(value);
-          return /^[0-9]{10,11}$/.test(singleByteValue);
+          if (value) {
+            const singleByteValue = convertToSingleByte(value);
+            return /^[0-9]{10,11}$/.test(singleByteValue);
+          }
+          return true
         }
       ),
     latitude: Yup.number().required(
@@ -213,7 +238,7 @@ export default function PlaceCreatePage() {
 
   useEffect(() => {
     getLocation();
-  }, []);
+  }, [locale]);
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -351,6 +376,8 @@ export default function PlaceCreatePage() {
           handleBlur,
           handleSubmit,
           setFieldValue,
+          setErrors,
+          validateForm
         }) => (
           <div className="grid">
             <div className="col-12">
@@ -434,174 +461,184 @@ export default function PlaceCreatePage() {
                             }
                           />
                         </div>
-
-                        <div className="modal-field-top-space modal-field-bottom-space">
-                          <div className="lg:flex mt-2 mb-2 lg:mb-0 lg:mt-0">
-                            <div className="lg:col-6 flex  p-0">
-                              <div className="flex flex-column w-full">
-                                <Input
-                                  inputProps={{
-                                    inputParentClassName: `custom_input ${errors.postal_code_1 && touched.postal_code_1 && "p-invalid pb-1"}`,
-                                    labelProps: {
-                                      text: translate(localeJson, 'postal_code'),
-                                      inputLabelClassName: "block",
-                                      inputLabelSpanClassName: "p-error",
-                                      spanText: "*",
-                                    },
-                                    inputClassName: "w-full",
-                                    value: values.postal_code_1,
-                                    onChange: (evt) => {
-                                      const re = /^[0-9-]+$/;
-                                      if (re.test(convertToSingleByte(evt.target.value)) || evt.target.value == "") {
-                                        setFieldValue(
-                                          "postal_code_1",
-                                          evt.target.value
-                                        );
-                                      }
-                                      let val = evt.target.value;
-                                      let val2 = values.postal_code_2;
-
-                                      if (
-                                        val !== undefined &&
-                                        val !== null &&
-                                        val2 !== undefined &&
-                                        val2 !== null &&
-                                        re.test(convertToSingleByte(evt.target.value)) &&
-                                        re.test(convertToSingleByte(val2))
-                                      ) {
-                                        if (
-                                          val.length == 3 &&
-                                          val2.length == 4
-                                        ) {
-                                          let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(evt.target.value);
-                                          getAddress(
-                                            payload,
-                                            (response) => {
-                                              if (response) {
-                                                let address = response;
-                                                const selectedPrefecture =
-                                                  prefectures.find(
-                                                    (prefecture) =>
-                                                      prefecture.value ==
-                                                      address.prefcode
-                                                  );
-                                                setFieldValue(
-                                                  "prefecture_id",
-                                                  selectedPrefecture?.value
-                                                );
-                                                setFieldValue(
-                                                  "address",
-                                                  address.address2 + (address.address3 || "")
-                                                );
-                                              } else {
-                                                setFieldValue(
-                                                  "prefecture_id",
-                                                  ""
-                                                );
-                                                setFieldValue("address", "");
-                                              }
-                                            }
-                                          );
-                                        }
-                                      }
-                                    },
-                                    onBlur: handleBlur,
-                                    id: "postal_code_1",
-                                    name: "postal_code_1",
-                                  }}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.postal_code_1 &&
-                                    touched.postal_code_1 &&
-                                    errors.postal_code_1
+                        <div className="lg:flex modal-field-top-space modal-field-bottom-space">
+                          <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
+                            <Input
+                              inputProps={{
+                                inputParentClassName: `custom_input ${errors.postal_code_1 && touched.postal_code_1 && "p-invalid pb-1"}`,
+                                labelProps: {
+                                  text: translate(localeJson, 'postal_code'),
+                                  inputLabelClassName: "block",
+                                  inputLabelSpanClassName: "p-error",
+                                  spanText: "*",
+                                },
+                                inputClassName: "w-full",
+                                value: values.postal_code_1,
+                                onChange: (evt) => {
+                                  const re = /^[0-9-]+$/;
+                                  if (evt.target.value == "") {
+                                    setFieldValue(
+                                      "postal_code_1",
+                                      evt.target.value
+                                    );
+                                    return
                                   }
-                                />
-                              </div>
-                            </div>
-                            <div className="lg:col-1 flex align-items-center justify-content-center ">
-                              -
-                            </div>
-                            <div className="lg:col-5 p-0 mb-2 lg:mt-0 lg:mb-0">
-                              <Input
-                                inputProps={{
-                                  inputParentClassName: `custom_input ${errors.postal_code_2 && touched.postal_code_2 && "p-invalid pb-1"}`,
-                                  labelProps: {
-                                    text: translate(localeJson, 'postal_code'),
-                                    inputLabelClassName: "block",
-                                    inputLabelSpanClassName: "p-error",
-                                    spanText: "*",
-                                  },
-                                  inputClassName: "w-full",
-                                  value: values.postal_code_2,
-                                  onChange: (evt) => {
-                                    const re = /^[0-9-]+$/;
-                                    if (re.test(convertToSingleByte(evt.target.value)) || evt.target.value == "") {
-                                      setFieldValue(
-                                        "postal_code_2",
-                                        evt.target.value
-                                      );
+                                  if (re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length <= 3) {
+                                    setFieldValue(
+                                      "postal_code_1",
+                                      evt.target.value
+                                    );
+                                  }
+                                  let val = evt.target.value;
+                                  let val2 = values.postal_code_2;
 
-                                    }
-                                    let val = evt.target.value;
-                                    let val2 = values.postal_code_1;
+                                  if (
+                                    val !== undefined &&
+                                    val !== null &&
+                                    val2 !== undefined &&
+                                    val2 !== null &&
+                                    re.test(convertToSingleByte(evt.target.value)) &&
+                                    re.test(convertToSingleByte(val2))
+                                  ) {
                                     if (
-                                      val != undefined &&
-                                      val != null &&
-                                      val2 != undefined &&
-                                      val2 != null &&
-                                      re.test(convertToSingleByte(evt.target.value)) &&
-                                      re.test(convertToSingleByte(val2))
+                                      val.length == 3 &&
+                                      val2.length == 4
                                     ) {
-                                      if (val.length == 4 && val2.length == 3) {
-                                        let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(evt.target.value);
-                                        getAddress(
-                                          payload,
-                                          (response) => {
-                                            if (response) {
-                                              let address = response;
-                                              const selectedPrefecture =
-                                                prefectures.find(
-                                                  (prefecture) =>
-                                                    prefecture.value ==
-                                                    address.prefcode
-                                                );
-
-                                              setFieldValue(
-                                                "prefecture_id",
-                                                selectedPrefecture?.value
+                                      let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_2);
+                                      getAddress(
+                                        payload,
+                                        (response) => {
+                                          if (response) {
+                                            let address = response;
+                                            const selectedPrefecture =
+                                              prefectures.find(
+                                                (prefecture) =>
+                                                  prefecture.value ==
+                                                  address.prefcode
                                               );
-                                              setFieldValue(
-                                                "address",
-                                                address.address2 + (address.address3 || "")
-                                              );
-                                            } else {
-                                              setFieldValue(
-                                                "prefecture_id",
-                                                ""
-                                              );
-                                              setFieldValue("address", "");
-                                            }
+                                            setFieldValue(
+                                              "prefecture_id",
+                                              selectedPrefecture?.value
+                                            );
+                                            setFieldValue(
+                                              "address",
+                                              address.address2 + (address.address3 || "")
+                                            );
+                                            setPostalCodePrefectureId(selectedPrefecture?.value);
+                                            validateForm();
+                                          } else {
+                                            setFieldValue(
+                                              "prefecture_id",
+                                              ""
+                                            );
+                                            setFieldValue("address", "");
                                           }
-                                        );
-                                      }
+                                        }
+                                      );
                                     }
-                                  },
-                                  onBlur: handleBlur,
-                                  id: "postal_code_2",
-                                  name: "postal_code_2",
-                                }}
-                              />
-                              <ValidationError
-                                errorBlock={
-                                  errors.postal_code_2 &&
-                                  touched.postal_code_2 &&
-                                  errors.postal_code_2
-                                }
-                              />
-                            </div>
+                                  }
+                                },
+                                onBlur: handleBlur,
+                                id: "postal_code_1",
+                                name: "postal_code_1",
+                              }}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.postal_code_1 &&
+                                touched.postal_code_1 &&
+                                errors.postal_code_1
+                              }
+                            />
+                          </div>
+                          <div className="lg:col-6 pt-0 pb-0 lg:pr-0 mt-2 mb-2 lg:mt-0 lg:mb-0">
+                            <Input
+                              inputProps={{
+                                inputParentClassName: `custom_input ${errors.postal_code_2 && touched.postal_code_2 && "p-invalid pb-1"}`,
+                                labelProps: {
+                                  text: translate(localeJson, 'postal_code'),
+                                  inputLabelClassName: "block",
+                                  inputLabelSpanClassName: "p-error",
+                                  spanText: "*",
+                                },
+                                inputClassName: "w-full",
+                                value: values.postal_code_2,
+                                onChange: (evt) => {
+                                  const re = /^[0-9-]+$/;
+                                  if (evt.target.value == "") {
+                                    setFieldValue(
+                                      "postal_code_2",
+                                      evt.target.value
+                                    );
+                                    return;
+                                  }
+                                  if (re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length <= 4) {
+                                    setFieldValue(
+                                      "postal_code_2",
+                                      evt.target.value
+                                    );
+                                  }
+                                  let val = evt.target.value;
+                                  let val2 = values.postal_code_1;
+                                  if (
+                                    val != undefined &&
+                                    val != null &&
+                                    val2 != undefined &&
+                                    val2 != null &&
+                                    re.test(convertToSingleByte(evt.target.value)) &&
+                                    re.test(convertToSingleByte(val2))
+                                  ) {
+                                    if (val.length == 4 && val2.length == 3) {
+                                      let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(evt.target.value);
+                                      getAddress(
+                                        payload,
+                                        (response) => {
+                                          if (response) {
+                                            let address = response;
+                                            const selectedPrefecture =
+                                              prefectures.find(
+                                                (prefecture) =>
+                                                  prefecture.value ==
+                                                  address.prefcode
+                                              );
+
+                                            setFieldValue(
+                                              "prefecture_id",
+                                              selectedPrefecture?.value
+                                            );
+                                            setFieldValue(
+                                              "address",
+                                              address.address2 + (address.address3 || "")
+                                            );
+                                            setPostalCodePrefectureId(selectedPrefecture?.value);
+                                            validateForm();
+                                          } else {
+                                            setFieldValue(
+                                              "prefecture_id",
+                                              ""
+                                            );
+                                            setFieldValue("address", "");
+                                          }
+                                        }
+                                      );
+                                    }
+                                  }
+                                },
+                                onBlur: handleBlur,
+                                id: "postal_code_2",
+                                name: "postal_code_2",
+                              }}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.postal_code_2 &&
+                                touched.postal_code_2 &&
+                                errors.postal_code_2
+                              }
+                            />
                           </div>
                         </div>
+                        {/* </div> */}
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
                             <InputDropdown inputDropdownProps={{
@@ -617,8 +654,22 @@ export default function PlaceCreatePage() {
                               value: values.prefecture_id,
                               options: prefectures,
                               optionLabel: "name",
-                              onChange: handleChange,
-                              onBlur: handleBlur,
+                              onChange: (e) => {
+                                setFieldValue("prefecture_id", e.target.value);
+                                if (values.postal_code_1 && values.postal_code_2) {
+                                  let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(values.postal_code_2);
+
+                                  getAddress(
+                                    payload, (res) => {
+                                      if (res && res.prefcode != e.target.value) {
+                                        setPostalCodePrefectureId(res.prefcode);
+                                        setErrors({ ...errors, postal_code_1: translate(localeJson, "zip_code_mis_match"), postal_code_2: translate(localeJson, "zip_code_mis_match") });
+                                      }
+                                      validateForm();
+                                    })
+                                }
+                              },
+                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />
@@ -711,174 +762,186 @@ export default function PlaceCreatePage() {
                           </div>
                         </div>
 
-                        <div className="modal-field-top-space modal-field-bottom-space">
-                          <div className="lg:flex mt-2 mb-2 lg:mt-0 lg:mb-0 ">
-                            <div className="lg:col-6 flex  p-0">
-                              <div className="flex flex-column w-full">
-                                <Input
-                                  inputProps={{
-                                    inputParentClassName: `custom_input ${errors.postal_code_default_1 && touched.postal_code_default_1 && "p-invalid pb-1"}`,
-                                    labelProps: {
-                                      text: translate(localeJson, 'default_postal_code'),
-                                      inputLabelClassName: "block",
-                                      spanText: "*",
-                                      inputLabelSpanClassName: "p-error"
-                                    },
-                                    inputClassName: "w-full",
-                                    value: values.postal_code_default_1,
-                                    onChange: (evt) => {
-                                      const re = /^[0-9-]+$/;
-                                      if (re.test(convertToSingleByte(evt.target.value)) || evt.target.value == "") {
-                                        setFieldValue(
-                                          "postal_code_default_1",
-                                          evt.target.value
-                                        );
-                                      }
-                                      let val = evt.target.value;
-                                      let val2 = values.postal_code_default_2;
-                                      if (
-                                        val !== undefined &&
-                                        val !== null &&
-                                        val2 !== undefined &&
-                                        val2 !== null &&
-                                        re.test(convertToSingleByte(evt.target.value)) &&
-                                        re.test(convertToSingleByte(val2))
-                                      ) {
-                                        if (
-                                          val.length == 3 &&
-                                          val2.length == 4
-                                        ) {
-                                          let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_default_2);
-                                          getAddress(
-                                            payload,
-                                            (response) => {
-                                              if (response) {
-                                                let address = response;
-                                                const selectedPrefecture =
-                                                  prefectures.find(
-                                                    (prefecture) =>
-                                                      prefecture.value ==
-                                                      address.prefcode
-                                                  );
-                                                setFieldValue(
-                                                  "prefecture_id_default",
-                                                  selectedPrefecture?.value
-                                                );
-                                                setFieldValue(
-                                                  "address_default",
-                                                  address.address2 + (address.address3 || "")
-                                                );
-                                              } else {
-                                                setFieldValue(
-                                                  "prefecture_id_default",
-                                                  ""
-                                                );
-                                                setFieldValue(
-                                                  "address_default",
-                                                  ""
-                                                );
-                                              }
-                                            }
-                                          );
-                                        }
-                                      }
-                                    },
-                                    onBlur: handleBlur,
-                                    id: "postal_code_default_1",
-                                    name: "postal_code_default_1",
-                                  }}
-                                />
-                                <ValidationError
-                                  errorBlock={
-                                    errors.postal_code_default_1 &&
-                                    touched.postal_code_default_1 &&
-                                    errors.postal_code_default_1
+                        <div className="lg:flex modal-field-top-space modal-field-bottom-space">
+                          <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
+                            <Input
+                              inputProps={{
+                                inputParentClassName: `custom_input ${errors.postal_code_default_1 && touched.postal_code_default_1 && "p-invalid pb-1"}`,
+                                labelProps: {
+                                  text: translate(localeJson, 'default_postal_code'),
+                                  inputLabelClassName: "block",
+                                  spanText: "*",
+                                  inputLabelSpanClassName: "p-error"
+                                },
+                                inputClassName: "w-full",
+                                value: values.postal_code_default_1,
+                                onChange: (evt) => {
+                                  const re = /^[0-9-]+$/;
+                                  if (evt.target.value == "") {
+                                    setFieldValue(
+                                      "postal_code_default_1",
+                                      evt.target.value
+                                    );
+                                    return
                                   }
-                                />
-                              </div>
-                            </div>
-                            <div className="lg:col-1 flex align-items-center justify-content-center">
-                              -
-                            </div>
-                            <div className="lg:col-5 p-0 mt-2 mb-2 lg:mb-0 lg:mt-0">
-                              <Input
-                                inputProps={{
-                                  inputParentClassName: `custom_input ${errors.postal_code_default_2 && touched.postal_code_default_2 && "p-invalid pb-1"}`,
-                                  labelProps: {
-                                    text: translate(localeJson, 'default_postal_code'),
-                                    inputLabelClassName: "block",
-                                    spanText: "*",
-                                    inputLabelSpanClassName: "p-error"
-                                  },
-                                  inputClassName: "w-full",
-                                  value: values.postal_code_default_2,
-                                  onChange: (evt) => {
-                                    const re = /^[0-9-]+$/;
-                                    if (re.test(convertToSingleByte(evt.target.value)) || evt.target.value == "") {
-                                      setFieldValue(
-                                        "postal_code_default_2",
-                                        evt.target.value
+                                  if (re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length <= 3) {
+                                    setFieldValue(
+                                      "postal_code_default_1",
+                                      evt.target.value
+                                    );
+                                  }
+                                  let val = evt.target.value;
+                                  let val2 = values.postal_code_default_2;
+                                  if (
+                                    val !== undefined &&
+                                    val !== null &&
+                                    val2 !== undefined &&
+                                    val2 !== null &&
+                                    re.test(convertToSingleByte(evt.target.value)) &&
+                                    re.test(convertToSingleByte(val2))
+                                  ) {
+                                    if (
+                                      val.length == 3 &&
+                                      val2.length == 4
+                                    ) {
+                                      let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_default_2);
+                                      getAddress(
+                                        payload,
+                                        (response) => {
+                                          if (response) {
+                                            let address = response;
+                                            const selectedPrefecture =
+                                              prefectures.find(
+                                                (prefecture) =>
+                                                  prefecture.value ==
+                                                  address.prefcode
+                                              );
+                                            setFieldValue(
+                                              "prefecture_id_default",
+                                              selectedPrefecture?.value
+                                            );
+                                            setFieldValue(
+                                              "address_default",
+                                              address.address2 + (address.address3 || "")
+                                            );
+                                            setPostalCodeDefaultPrefectureId(selectedPrefecture?.value);
+                                            validateForm();
+                                          } else {
+                                            setFieldValue(
+                                              "prefecture_id_default",
+                                              ""
+                                            );
+                                            setFieldValue(
+                                              "address_default",
+                                              ""
+                                            );
+                                          }
+                                        }
                                       );
                                     }
-                                    let val2 = evt.target.value;
-                                    let val = values.postal_code_default_1;
-                                    if (
-                                      val !== undefined &&
-                                      val !== null &&
-                                      val2 !== undefined &&
-                                      val2 !== null &&
-                                      re.test(convertToSingleByte(evt.target.value)) &&
-                                      re.test(convertToSingleByte(val2))
-                                    ) {
-                                      if (val.length == 3 && val2.length == 4) {
-                                        let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(evt.target.value);
-                                        getAddress(
-                                          payload,
-                                          (response) => {
-                                            if (response) {
-                                              let address = response;
-                                              const selectedPrefecture =
-                                                prefectures.find(
-                                                  (prefecture) =>
-                                                    prefecture.value ==
-                                                    address.prefcode
-                                                );
-                                              setFieldValue(
-                                                "prefecture_id_default",
-                                                selectedPrefecture?.value
+                                  }
+                                },
+                                onBlur: handleBlur,
+                                id: "postal_code_default_1",
+                                name: "postal_code_default_1",
+                              }}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.postal_code_default_1 &&
+                                touched.postal_code_default_1 &&
+                                errors.postal_code_default_1
+                              }
+                            />
+                          </div>
+                          <div className="lg:col-6 pt-0 pb-0 lg:pr-0 mt-2 mb-2 lg:mt-0 lg:mb-0">
+                            <Input
+                              inputProps={{
+                                inputParentClassName: `custom_input ${errors.postal_code_default_2 && touched.postal_code_default_2 && "p-invalid pb-1"}`,
+                                labelProps: {
+                                  text: translate(localeJson, 'default_postal_code'),
+                                  inputLabelClassName: "block",
+                                  spanText: "*",
+                                  inputLabelSpanClassName: "p-error"
+                                },
+                                inputClassName: "w-full",
+                                value: values.postal_code_default_2,
+                                onChange: (evt) => {
+                                  const re = /^[0-9-]+$/;
+                                  if (evt.target.value == "") {
+                                    setFieldValue(
+                                      "postal_code_default_2",
+                                      evt.target.value
+                                    );
+                                      return;
+                                  }
+                                  if(re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length<=4)
+                                  {
+                                    setFieldValue(
+                                      "postal_code_default_2",
+                                      evt.target.value
+                                    );
+                                  }
+                                  let val2 = evt.target.value;
+                                  let val = values.postal_code_default_1;
+                                  if (
+                                    val !== undefined &&
+                                    val !== null &&
+                                    val2 !== undefined &&
+                                    val2 !== null &&
+                                    re.test(convertToSingleByte(evt.target.value)) &&
+                                    re.test(convertToSingleByte(val2))
+                                  ) {
+                                    if (val.length == 3 && val2.length == 4) {
+                                      let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(evt.target.value);
+                                      getAddress(
+                                        payload,
+                                        (response) => {
+                                          if (response) {
+                                            let address = response;
+                                            const selectedPrefecture =
+                                              prefectures.find(
+                                                (prefecture) =>
+                                                  prefecture.value ==
+                                                  address.prefcode
                                               );
-                                              setFieldValue(
-                                                "address_default",
-                                                address.address2 + (address.address3 || "")
-                                              );
-                                            } else {
-                                              setFieldValue(
-                                                "prefecture_id_default",
-                                                ""
-                                              );
-                                              setFieldValue(
-                                                "address_default",
-                                                ""
-                                              );
-                                            }
+                                            setFieldValue(
+                                              "prefecture_id_default",
+                                              selectedPrefecture?.value
+                                            );
+                                            setFieldValue(
+                                              "address_default",
+                                              address.address2 + (address.address3 || "")
+                                            );
+                                            setPostalCodeDefaultPrefectureId(selectedPrefecture?.value);
+                                            validateForm();
+                                          } else {
+                                            setFieldValue(
+                                              "prefecture_id_default",
+                                              ""
+                                            );
+                                            setFieldValue(
+                                              "address_default",
+                                              ""
+                                            );
                                           }
-                                        );
-                                      }
+                                        }
+                                      );
                                     }
-                                  },
-                                  onBlur: handleBlur,
-                                  id: "postal_code_default_2",
-                                  name: "postal_code_default_2",
-                                }}
-                              />
-                              <ValidationError
-                                errorBlock={
-                                  errors.postal_code_default_2 &&
-                                  touched.postal_code_default_2 &&
-                                  errors.postal_code_default_2
-                                }
-                              />
-                            </div>
+                                  }
+                                },
+                                onBlur: handleBlur,
+                                id: "postal_code_default_2",
+                                name: "postal_code_default_2",
+                              }}
+                            />
+                            <ValidationError
+                              errorBlock={
+                                errors.postal_code_default_2 &&
+                                touched.postal_code_default_2 &&
+                                errors.postal_code_default_2
+                              }
+                            />
                           </div>
                         </div>
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
@@ -896,8 +959,22 @@ export default function PlaceCreatePage() {
                               value: values.prefecture_id_default,
                               options: prefectures,
                               optionLabel: "name",
-                              onChange: handleChange,
-                              onBlur: handleBlur,
+                              onChange: (e) => {
+                                setFieldValue("prefecture_id_default", e.target.value);
+                                if (values.postal_code_default_1 && values.postal_code_default_2) {
+                                  let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(values.postal_code_default_2);
+
+                                  getAddress(
+                                    payload, (res) => {
+                                      if (res && res.prefcode != e.target.value) {
+                                        setPostalCodeDefaultPrefectureId(res.prefcode);
+                                        setErrors({ ...errors, postal_code_default_1: translate(localeJson, "zip_code_mis_match"), postal_code_default_2: translate(localeJson, "zip_code_mis_match") });
+                                      }
+                                      validateForm();
+                                    })
+                                }
+                              },
+                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />
@@ -1027,8 +1104,6 @@ export default function PlaceCreatePage() {
                               labelProps: {
                                 text: translate(localeJson, 'phone_number'),
                                 inputLabelClassName: "block",
-                                spanText: "*",
-                                inputLabelSpanClassName: "p-error"
                               },
                               inputClassName: "w-full",
                               value: values.tel,

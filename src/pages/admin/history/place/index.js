@@ -40,8 +40,8 @@ export default function AdminHistoryPlacePage() {
     filters: {
       start: 0,
       limit: 10,
-      sort_by: "",
-      order_by: "desc",
+      sort_by: "place_refugee_name",
+      order_by: "asc",
     },
     start_date: getGeneralDateTimeDisplayFormat(
       getDefaultTodayDateTimeFormat("00", "00")
@@ -180,8 +180,8 @@ export default function AdminHistoryPlacePage() {
       filters: {
         start: getListPayload.filters.start,
         limit: getListPayload.filters.limit,
-        sort_by: "",
-        order_by: "desc",
+        sort_by: "place_refugee_name",
+        order_by: "asc",
       },
       start_date: getListPayload.start_date,
       end_date: getListPayload.end_date,
@@ -206,8 +206,8 @@ export default function AdminHistoryPlacePage() {
       filters: {
         start: 0,
         limit: getListPayload.filters.limit,
-        sort_by: "",
-        order_by: "desc",
+        sort_by: "place_refugee_name",
+        order_by: "asc",
       },
       start_date: selectedDate
         ? getGeneralDateTimeDisplayFormat(selectedDate[0])
@@ -314,8 +314,8 @@ export default function AdminHistoryPlacePage() {
       filters: {
         start: getListPayload.filters.start,
         limit: getListPayload.filters.limit,
-        sort_by: "",
-        order_by: "desc",
+        sort_by: "place_refugee_name",
+        order_by: "asc",
       },
       start_date: selectedDate
         ? getGeneralDateTimeDisplayFormat(selectedDate[0])
