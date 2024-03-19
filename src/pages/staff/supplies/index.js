@@ -78,7 +78,7 @@ export default function Supplies() {
               })
               setList([...tempArray])
             }}
-            value={0} 
+            value={0}
             leftDisabled={rowData.current_quantity <= 0}
             style={{ fontWeight: "bold", padding: "8px" }}
             min={0}
@@ -141,8 +141,8 @@ export default function Supplies() {
             name: obj.name ?? "",
             unit: obj.unit ?? "",
             adjuster: obj.number ?? "",
-            number: obj.number,
-            current_quantity: obj.number,
+            number: obj.number ?? "",
+            current_quantity: (obj.number ?? "") + " " + (obj.unit ? obj.unit:""),
           };
           preparedList.push(preparedObj);
         });

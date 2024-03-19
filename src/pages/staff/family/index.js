@@ -12,7 +12,9 @@ import {
     getValueByKeyRecursively as translate,
     getNumberOfEvacuationDays,
     hideOverFlow,
-    showOverFlow
+    showOverFlow,
+    getSpecialCareName,
+    convertToSingleByte
 } from "@/helper";
 import { Button, NormalTable } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
@@ -48,25 +50,36 @@ function StaffFamily() {
     });
 
     const handleFamilyCode = (e) => {
+        const re = /^[0-9-]+$/;
+        if(e.target.value.length<=0)
+        {
+          setFamilyCode("");
+          return;
+        }
+        if(re.test(convertToSingleByte(e.target.value)))
+        {
         if ((e.target.value).length == 4) {
-            const newValue = e.target.value;
-            if (newValue.indexOf("-") !== -1) {
-                setFamilyCode(e.target.value);
-            }
-            else {
-                const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
-                setFamilyCode(formattedValue);
-            }
+          const newValue = e.target.value;
+          if (newValue.indexOf("-") !== -1) {
+            setFamilyCode(e.target.value);
+          }
+          else {
+            setFamilyCode(newValue);
+          }
         }
         else if ((e.target.value).length == 3) {
-            const newValue = e.target.value;
-            const formattedValue = newValue.substring(0, 3);
-            setFamilyCode(formattedValue);
+          const newValue = e.target.value;
+          const formattedValue = newValue.substring(0, 3);
+          setFamilyCode(formattedValue);
         }
         else {
-            setFamilyCode(e.target.value)
+          setFamilyCode(e.target.value)
         }
-    }
+      }
+      else {
+        setFamilyCode("")
+      }
+      }
 
     /**
      * Pagination handler
@@ -89,7 +102,7 @@ function StaffFamily() {
     }
 
     const columnNames = [
-        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: '1rem', maxWidth: '1rem', alignHeader: "left" },
+        { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: '1rem', maxWidth: '2rem', alignHeader: "left" },
         {
             field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: true, alignHeader: "left", maxWidth: "3rem",
             body: (rowData) => {
@@ -99,12 +112,14 @@ function StaffFamily() {
                 </div>
             },
         },
-        { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", sortable: true, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'family_count', header: translate(localeJson, 'family_count'), headerClassName: "custom-header", sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "person_dob", header: translate(localeJson, 'dob'), headerClassName: "custom-header", sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "person_age", header: translate(localeJson, 'age'), headerClassName: "custom-header", sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        // { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "left", alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), headerClassName: "custom-header", sortable: true, textAlign: "left", alignHeader: "left", minWidth: '3rem', maxWidth: '4rem' },
+        { field: 'family_count', header: translate(localeJson, 'family_count'), headerClassName: "custom-header", sortable: false, textAlign: "left", alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "person_dob", header: translate(localeJson, 'dob'), headerClassName: "custom-header", sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '2rem', maxWidth: '5rem' },
+        { field: "person_age", header: translate(localeJson, 'age'), headerClassName: "custom-header", sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '2rem', maxWidth: '3rem' },
         { field: "person_gender", header: translate(localeJson, 'gender'), headerClassName: "custom-header", sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' },
         { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
     ];
 
@@ -208,7 +223,8 @@ function StaffFamily() {
                         person_is_owner: person_is_owner,
                         family_join_date: admisssion_dt,
                         evacuation_days: evacuation_days,
-                    };
+                        special_care_name : getSpecialCareName(element.person_special_cares, locale)
+                    }; 
                     previousItem = tempObj;
                     tempList.push(tempObj);
                     siNo = siNo + 1;

@@ -62,17 +62,8 @@ export default function RegisterCheckIn() {
       header: translate(localeJson, "residence_with_out_information"),
       minWidth: "10rem",
       maxWidth: "10rem",
+      textAlign:"center",
       alignHeader: "center",
-      body: (rowData) => (
-        <div className="border-top-none">
-          <Input inputProps={{
-            inputClass: "col-12 p-inputtext-sm text-center",
-            value: rowData.specialCarePersonsCount,
-            style: { border: "none", background: "rgba(0,0,0,0)", fontSize: "16px" },
-            disabled: true
-          }} />
-        </div>
-      ),
     },
   ];
 
@@ -146,14 +137,9 @@ export default function RegisterCheckIn() {
               rightStyle={{ fontWeight: "bold", padding: "8px" }}
             />
             </div>;
-            preparedObj['specialCarePersonsCount'] = <div className="border-top-none checkIn">
-              <Input inputProps={{
-                inputClass: "col-12 p-inputtext-sm text-center",
-                value: obj.person_total || obj.specialCarePersonsCount,
-                style: { border: "none", background: "rgba(0,0,0,0)", fontSize: "16px" },
-                disabled: true
-              }} />
-            </div>
+            preparedObj['specialCarePersonsCount'] = <>
+            {obj.person_total || obj.specialCarePersonsCount}
+            </>
             frozenData.push(preparedObj)
           } else {
             preparedList.push(preparedObj);
