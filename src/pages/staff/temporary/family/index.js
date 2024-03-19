@@ -10,12 +10,14 @@ import {
     NormalTable
 } from '@/components';
 import {
+    convertToSingleByte,
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     getJapaneseDateTimeDisplayActualFormat,
     hideOverFlow,
     showOverFlow,
-    getValueByKeyRecursively as translate
+    getValueByKeyRecursively as translate,
+    getSpecialCareName
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 import CustomHeader from '@/components/customHeader';
@@ -48,7 +50,7 @@ function TemporaryRegistrants() {
     const [refugeeName, setRefugeeName] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
     const temporaryRegistrantsColumns = [
-        { field: 'number', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: "5rem", alignHeader: 'left', className: "sno_class" },
+        { field: 'number', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: "3rem", alignHeader: 'left', className: "sno_class" },
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "3rem", display: 'none' },
         {
             field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), minWidth: "7rem",
@@ -60,15 +62,18 @@ function TemporaryRegistrants() {
                 </div>
             },
         },
-        { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '7rem' },
-        { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "8rem" },
-        { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "5rem" },
+        // { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '7rem' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: true, textAlign: "left", alignHeader: "left" },
         { field: "person_dob", header: translate(localeJson, 'dob'), minWidth: "11rem", maxWidth: "11rem", sortable: true, textAlign: 'left', alignHeader: 'left' },
+        { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "5rem" },
+        { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "8rem" },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem", textAlign: 'left' },
+        
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: true, textAlign: "center", alignHeader: "left", minWidth: "6rem", display: 'none' },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: true, textAlign: "center", alignHeader: "left" },
-        { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
+        
+        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
+        // { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: true, textAlign: 'left', minWidth: "7rem", display: 'none' },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "10rem", sortable: true, textAlign: 'left', display: 'none' },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: true, textAlign: 'left', display: 'none' },
         { field: "remarks", header: translate(localeJson, 'remarks'), sortable: true, textAlign: 'left', minWidth: "8rem", display: 'none' },
         { field: "place", header: translate(localeJson, 'shelter_place'), sortable: true, textAlign: 'left', minWidth: "12rem", display: 'none' },
@@ -101,14 +106,40 @@ function TemporaryRegistrants() {
         },
         place_id: placeID,
     });
+    const [totalList, setTotalList] = useState([])
+    const [fullListPayload, setFullListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
+        },
+        place_id: placeID,
+    });
     const [importModalOpen, setImportModalOpen] = useState(false);
     const [barcode, setBarcode] = useState(null);
     const [eventDefaultDetails, setEventDefaultDetails] = useState(null);
     const param = router?.query;
+    const getCookieValueByKey = (key) => {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie starts with the specified key
+            if (cookie.startsWith(key + '=')) {
+                return cookie.substring(key.length + 1);
+            }
+        }
+        return '';
+    };
+    const myCookieValue = getCookieValueByKey('idToken');
+
+
 
     /* Services */
     const { getDefaultEventDetails, getList, updateCheckInDetail } = TemporaryStaffRegistrantServices;
-    const { getBasicDetailsInfoStaffTemp, getBasicDetailsUsingUUID,getPPID } = TempRegisterServices;
+    const { getBasicDetailsInfoStaffTemp, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -119,9 +150,9 @@ function TemporaryRegistrants() {
                 }
             });
             await getTemporaryRegistrantList();
-            console.log(param,"KKKKKKKKKKKKKKKK");
-            if (param?.uuid) {
-                validateAndMoveToForm(param.uuid)
+            console.log(param, "KKKKKKKKKKKKKKKK");
+            if (param?.UUID || param?.uuid) {
+                validateAndMoveToForm(param.UUID || param.uuid)
             }
         };
         fetchData();
@@ -130,15 +161,17 @@ function TemporaryRegistrants() {
     const validateAndMoveToForm = (id) => {
         let ppid;
         let payload = {
-            "uuid":id
+            "uuid": id
         }
-        getPPID(payload,(res)=>
-        {
-            console.log(res,"PPID")
-            if(res)
-            {
-            ppid= res?.result[0];
-            ppid && fetchBasicDetailsInfo(ppid);
+        getPPID(payload, (res) => {
+            console.log(res, "PPID")
+            if (res) {
+                // Parse the inner JSON stored as a string in the "result" field
+                const innerJson = JSON.parse(res.result);
+                // Extract the value associated with the key "ppid"
+                const ppidValue = innerJson.transfer_data.ppid;
+                ppid = ppidValue;
+                ppid && fetchBasicDetailsInfo(ppid);
             }
         })
     }
@@ -185,6 +218,7 @@ function TemporaryRegistrants() {
                 let evacuees = {
                     number: i + getListPayload.filters.start + 1,
                     id: item.f_id,
+                    yapple_id: item.yapple_id,
                     place_name: placeIdObj[item.place_id],
                     family_count: response.data.total_family,
                     family_code: item.family_code,
@@ -195,7 +229,7 @@ function TemporaryRegistrants() {
                     person_age: item.person_age,
                     age_month: item.person_month,
                     special_care_name: item.person_special_cares
-                        ? getSpecialCareName(item.person_special_cares)
+                        ? getSpecialCareName(item.person_special_cares, locale)
                         : "-", // Assuming you want to display a comma-separated list of special cares
                     connecting_code: item.person_connecting_code,
                     remarks: item.person_note,
@@ -212,6 +246,18 @@ function TemporaryRegistrants() {
             listTotalCount = response.data.total;
         }
         setTableLoading(false);
+        setFullListPayload((prev) => ({
+            ...prev,
+            filters: {
+                ...prev.filters,
+                limit: listTotalCount > 0 ? listTotalCount : 10
+            }
+        }))
+        TemporaryStaffRegistrantServices.getList(fullListPayload, (response) => {
+            if (response && response?.success) {
+                setTotalList(response.data.list)
+            }
+        })
         setEvacuationTableFields(evacuationColumns);
         setEvacueesDataList(evacueesList);
         setTotalCount(listTotalCount);
@@ -224,26 +270,37 @@ function TemporaryRegistrants() {
     };
 
     const handleFamilyCode = (e) => {
+        const re = /^[0-9-]+$/;
+        if(e.target.value.length<=0)
+        {
+          setFamilyCode("");
+          return;
+        }
+        if(re.test(convertToSingleByte(e.target.value)))
+        {
         if ((e.target.value).length == 4) {
-            const newValue = e.target.value;
-            if (newValue.indexOf("-") !== -1) {
-                setFamilyCode(e.target.value);
-            }
-            else {
-                const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
-                setFamilyCode(formattedValue);
-            }
+          const newValue = e.target.value;
+          if (newValue.indexOf("-") !== -1) {
+            setFamilyCode(e.target.value);
+          }
+          else {
+            setFamilyCode(newValue);
+          }
         }
         else if ((e.target.value).length == 3) {
-            const newValue = e.target.value;
-            const formattedValue = newValue.substring(0, 3);
-            setFamilyCode(formattedValue);
+          const newValue = e.target.value;
+          const formattedValue = newValue.substring(0, 3);
+          setFamilyCode(formattedValue);
         }
         else {
-            setFamilyCode(e.target.value)
+          setFamilyCode(e.target.value)
         }
-    }
-
+      }
+      else {
+        setFamilyCode("")
+      }
+      }
+      
     const updateCheckInStatus = (rowData) => {
         let param = {
             lgwan_family_id: rowData.id,
@@ -266,14 +323,6 @@ function TemporaryRegistrants() {
         }
     }
 
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
-        });
-        return specialCareName;
-    }
-
     const searchListWithCriteria = () => {
         let payload = {
             filters: {
@@ -281,7 +330,7 @@ function TemporaryRegistrants() {
                 limit: getListPayload.filters.limit,
                 sort_by: "",
                 order_by: "desc",
-                family_code: familyCode,
+                family_code: convertToSingleByte(familyCode),
                 refugee_name: refugeeName
             },
             place_id: getListPayload.place_id,
@@ -311,7 +360,19 @@ function TemporaryRegistrants() {
     }
 
     const yappleModalSuccessCallBack = (res) => {
-        getList(getListPayload, onGetTemporaryRegistrantListSuccess);
+        // getList(getListPayload, onGetTemporaryRegistrantListSuccess);
+        getList({
+            filters: {
+                start: 0,
+                limit: 10,
+                sort_by: "",
+                order_by: "desc",
+                family_code: "",
+                refugee_name: ""
+            },
+            place_id: placeID,
+          }, onGetTemporaryRegistrantListSuccess);
+        
     }
 
     const doCheckIn = (place_id) => {
@@ -443,9 +504,13 @@ function TemporaryRegistrants() {
                 isCheckIn={true}
                 successCallBack={yappleModalSuccessCallBack}
                 staffEventID={eventDefaultDetails?.id}
-                successHeader={"pre_registration_info"}
+                successHeader={"pre_registration_info_staff"}
                 isEvent={false}
                 type={layoutReducer?.user?.place?.type}
+                eventList={totalList}
+                setRefugeeName={setRefugeeName}
+                setGetListPayload={setGetListPayload}
+                setFamilyCode={setFamilyCode}
             />
             <div className="col-12">
                 <div className='card'>
@@ -457,13 +522,15 @@ function TemporaryRegistrants() {
                         <div>
                             <div className="flex justify-between">
                                 <Button buttonProps={{
+                                    title: `https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`,
                                     buttonClass: "w-full p-4",
                                     text: translate(localeJson, "staff_temp_register_big_btn_one"),
                                     type: "button",
                                     onClick: () => {
-                                        router.push("https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202")
+                                        console.log(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`);
+                                        router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`);
                                     },
-                                    icon: <img src="/layout/images/Scanner.png" width={'30px'} height={'30px'} alt="scanner" />,
+                                    icon: <img src="/layout/images/Card.png" width={'30px'} height={'30px'} alt="scanner" />,
                                 }} parentClass="flex-1 p-2" />
                                 <Button buttonProps={{
                                     buttonClass: "w-full p-4",
