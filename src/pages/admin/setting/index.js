@@ -87,7 +87,6 @@ export default function Setting() {
         translate(localeJson, "max_length_200")
       ),
     disclosure_info_ja: Yup.string()
-      .required(translate(localeJson, "disclosure_info_jp_required"))
       .max(
         255,
         translate(localeJson, "disclosure_information") +
@@ -108,7 +107,6 @@ export default function Setting() {
         translate(localeJson, "max_length_200")
       ),
     disclosure_info_en: Yup.string()
-      .required(translate(localeJson, "disclosure_info_en_required"))
       .max(
         255,
         translate(localeJson, "disclosure_information") +
@@ -257,7 +255,7 @@ export default function Setting() {
 
     setData(newData); // Update state with the modified data
   };
-  
+
   const map = (
     <ol>
       {data?.map((item, index) => (
@@ -290,8 +288,11 @@ export default function Setting() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, actions) => {
+          console.log(values);
           setLoader(true);
-          values.default_shelf_life= convertToSingleByte(values.default_shelf_life)
+          values.default_shelf_life = convertToSingleByte(values.default_shelf_life);
+          values.disclosure_info_ja = values.disclosure_info_ja ? values.disclosure_info_ja : null;
+          values.disclosure_info_en = values.disclosure_info_en ? values.disclosure_info_en : null;
           const formData = new FormData();
           // Assuming values.initial_load_status and values.scheduler_option are boolean
           formData.append(
@@ -302,10 +303,20 @@ export default function Setting() {
             "scheduler_option",
             values.scheduler_option ? "1" : "0"
           );
+          formData.append(
+            "disclosure_info_ja",
+            values.disclosure_info_ja ? values.disclosure_info_ja : ""
+          );
+          formData.append(
+            "disclosure_info_en",
+            values.disclosure_info_en ? values.disclosure_info_en : ""
+          );
 
           for (const key in values) {
             if (
               values[key] &&
+              key !== "disclosure_info_ja" &&
+              key !== "disclosure_info_en" &&
               key !== "initial_load_status" &&
               key !== "scheduler_option" &&
               key !== "scheduler_option" &&
@@ -325,6 +336,7 @@ export default function Setting() {
               }
             }
           });
+
           update(formData, isUpdated);
         }}
       >
@@ -747,24 +759,22 @@ export default function Setting() {
                             maxFractionDigits: "1",
                             value: values.default_shelf_life,
                             onChange: (evt) => {
-                              if(evt.target.value=="")
-                              {
-                                setFieldValue("default_shelf_life","");
+                              if (evt.target.value == "") {
+                                setFieldValue("default_shelf_life", "");
                                 return
                               }
                               const re = /^[0-9-]+$/;
-                              if(re.test(convertToSingleByte(evt.target.value)))
-                              setFieldValue("default_shelf_life", evt.target.value);
+                              if (re.test(convertToSingleByte(evt.target.value)))
+                                setFieldValue("default_shelf_life", evt.target.value);
                             },
                             onValueChange: (evt) => {
-                              if(evt.target.value=="")
-                              {
-                                setFieldValue("default_shelf_life","");
+                              if (evt.target.value == "") {
+                                setFieldValue("default_shelf_life", "");
                                 return
                               }
                               const re = /^[0-9-]+$/;
-                              if(re.test(convertToSingleByte(evt.target.value)))
-                              setFieldValue("default_shelf_life", evt.target.value);
+                              if (re.test(convertToSingleByte(evt.target.value)))
+                                setFieldValue("default_shelf_life", evt.target.value);
                             },
                             onBlur: handleBlur,
                           }}

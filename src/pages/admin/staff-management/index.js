@@ -164,7 +164,7 @@ export default function StaffManagementPage() {
         else {
             create(values, (res) => {
                 setTableLoading(true);
-                res && getStaffList()
+                res ? getStaffList() :setTableLoading(false);
             })
         }
         setImportStaffOpen(false);

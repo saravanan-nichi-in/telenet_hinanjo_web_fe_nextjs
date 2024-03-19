@@ -12,7 +12,7 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal, AdminManagementImportModal } from '@/components/modal';
+import { StockPileSummaryMailSettingsModal, StockpileSummaryImageModal, AdminManagementImportModal, AdminManagementDeleteModal } from '@/components/modal';
 
 import { StockPileSummaryServices } from '@/services/stockpile_summary.services';
 import Link from 'next/link';
@@ -31,6 +31,10 @@ function AdminStockpileSummary() {
     const [expandRows, setExpandRows] = useState();
     const [tableLoading, setTableLoading] = useState(false);
     const [importModalOpen, setImportModalOpen] = useState(false);
+    const [selectAll, setSelectAll] = useState(false);
+    const [selectedCustomers, setSelectedCustomers] = useState(null);
+    const [innerTableSelectAllStates, setInnerTableSelectAllStates] = useState([]);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [selectedPlaceName, setSelectedPlaceName] = useState({
         name: "--",
         id: 0
@@ -53,14 +57,14 @@ function AdminStockpileSummary() {
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
-            field: 'shelter_place', header: translate(localeJson, 'evacuation_place'), headerStyle: { display: 'none' }, paddingLeft: 0, minWidth: "3rem", maxWidth: '10rem', textAlign: "left",
+            field: 'shelter_place', header: translate(localeJson, 'evacuation_place'), headerStyle: { display: 'none' }, paddingLeft: 0, minWidth: "3rem", maxWidth: '10rem', textAlign: "left", expander: false,
             body: (rowData) => (
                 <div className='text-link'>
                     <a className='font-bold text-black-alpha-10' onClick={() => bindEmailDataConfig(rowData)}>
                         {rowData['shelter_place']}
                     </a>
                 </div>
-            )
+            ),
         },
     ]
     const stockPileRowExpansionColumn = [
@@ -69,7 +73,8 @@ function AdminStockpileSummary() {
         { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
-        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" }
+        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" },
+        { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },
     ];
     const bindImageModalData = (image) => {
         setImageUrl(image);
@@ -94,7 +99,7 @@ function AdminStockpileSummary() {
      * Get Place Dropdown list on mounting
      */
     const onGetPlaceDropdownListOnMounting = () => {
-        getPlaceDropdownList({}, onGetPlaceDropdownList);
+        getPlaceList(onGetPlaceDropdownList);
     }
 
     const onGetPlaceDropdownList = (response) => {
@@ -103,7 +108,7 @@ function AdminStockpileSummary() {
             id: 0
         }];
         if (response.success && !_.isEmpty(response.data)) {
-            const data = response.data.model;
+            const data = response.data.model.list;
             data.map((obj, i) => {
                 let placeDropdownList = {
                     name: response.locale == 'ja' ? obj.name : obj.name,
@@ -224,6 +229,8 @@ function AdminStockpileSummary() {
                     shelter_place: <Link href="">{item.name}</Link>,
                     notification_email: item.email,
                     orders: [{
+                        place_id: item.place_id,
+                        id: item.product_id,
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
@@ -241,6 +248,8 @@ function AdminStockpileSummary() {
                     const index = stockPileList.findIndex(obj => obj['place_id'] === item.place_id);
                     if (index !== -1) {
                         let newOrder = {
+                            place_id: item.place_id,
+                            id: item.product_id,
                             type: item.category,
                             stock_pile_name: item.product_name,
                             quantity: item.after_count,
@@ -333,7 +342,7 @@ function AdminStockpileSummary() {
 
     /* Services */
     const { getSummaryList, exportStockPileSummaryCSVList, getPlaceDropdownList,
-        getStockPileEmailUpdate, getStockPileEmailData, exportData, importData } = StockPileSummaryServices;
+        getStockPileEmailUpdate, getStockPileEmailData, exportData, importData, bulkDelete, getPlaceList } = StockPileSummaryServices;
 
     const onImportModalClose = () => {
         setImportModalOpen(false);
@@ -358,6 +367,82 @@ function AdminStockpileSummary() {
         onImportModalClose();
     }
 
+    /**
+     * Select rows for delete
+     * @param {*} event 
+     * @param {*} tableId 
+     * @param {*} i 
+     */
+    const onSelectionChange = (event, tableId, i) => {
+        const value = event.value;
+        if (event.type == "checkbox") {
+            value.forEach(obj => {
+                if ('tableIndex' in obj) {
+                    return obj;
+                } else {
+                    obj.tableIndex = i;
+                }
+            });
+            setSelectedCustomers(value);
+        } else if (event.type == "all") {
+            let filtered = selectedCustomers && selectedCustomers.filter((order, index) => order.tableIndex != i);
+            value.forEach(obj => {
+                if ('tableIndex' in obj) {
+                    return obj;
+                } else {
+                    obj.tableIndex = i;
+                }
+            });
+            setSelectedCustomers([...(filtered ? filtered : []), ...value]);
+        }
+    };
+
+    /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+    const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    /**
+     * On confirmation delete api call and close modal functionality handler
+     * @param {*} status 
+     */
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onClickDeleteProductsByPlaceIDS();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
+    /**
+     * Delete products by place ID's
+     */
+    const onClickDeleteProductsByPlaceIDS = () => {
+        const resultArray = [];
+        selectedCustomers.forEach(obj => {
+            const existingObject = resultArray.find(item => item.place_id === obj.place_id);
+            if (existingObject) {
+                existingObject.product_ids.push(obj.id);
+            } else {
+                const newObj = { place_id: obj.place_id, product_ids: [obj.id] };
+                resultArray.push(newObj);
+            }
+        });
+        console.log(selectedCustomers, resultArray);
+        bulkDelete(resultArray, (response) => {
+            if (response) {
+                setTableLoading(true);
+                onGetStockPileSummaryListOnMounting();
+                onGetPlaceDropdownListOnMounting();
+                setShowExpiringProducts(false);
+            }
+        });
+    }
+
     return (
         <React.Fragment>
             <StockpileSummaryImageModal
@@ -379,114 +464,129 @@ function AdminStockpileSummary() {
                 tag={'hq-stockpile'}
                 callExport={callExport}
             />
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <div className='flex justify-content-between align-items-center'>
+                        <div className='flex justify-content-between align-items-center sm:flex md:flex lg:flex'>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_summary")} />
+                            <div className="flex w-full flex-wrap flex-grow float-right lg:gap-2 md:gap-2 sm:gap-2" style={{ justifyContent: "end" }} >
+                                <Button buttonProps={{
+                                    type: 'button',
+                                    rounded: "true",
+                                    import: true,
+                                    onClick: () => {
+                                        setImportModalOpen(true);
+                                        hideOverFlow();
+                                    },
+                                    buttonClass: "evacuation_button_height import-button",
+                                    text: translate(localeJson, 'import'),
+                                }} parentClass={"import-button"} />
+                                <Button buttonProps={{
+                                    type: 'button',
+                                    rounded: "true",
+                                    export: true,
+                                    onClick: () => {
+                                        callExport();
+                                    },
+                                    buttonClass: "evacuation_button_height export-button",
+                                    text: translate(localeJson, 'hq_stockpile_detail_export'),
+                                }} parentClass={"export-button"} />
+                                <Button buttonProps={{
+                                    type: "button",
+                                    rounded: "true",
+                                    export: true,
+                                    buttonClass: "export-button",
+                                    text: translate(localeJson, 'hq_stockpile_summary_export'),
+                                    severity: "primary",
+                                    onClick: () => downloadStockPileSummaryCSV()
+                                }} parentClass={"export-button"} />
+                            </div>
                         </div>
                         <div>
                             <div class="mb-3" >
-                                <div>
-                                    <div className="flex w-full" style={{ justifyContent: "end" }}>
-                                        <Button buttonProps={{
-                                            type: 'button',
-                                            rounded: "true",
-                                            import: true,
-                                            onClick: () => {
-                                                setImportModalOpen(true);
-                                                hideOverFlow();
-                                            },
-                                            buttonClass: "evacuation_button_height import-button",
-                                            text: translate(localeJson, 'import'),
-                                        }} parentClass={"mr-1 mt-1 import-button"} />
-                                        <Button buttonProps={{
-                                            type: 'button',
-                                            rounded: "true",
-                                            export: true,
-                                            onClick: () => {
-                                                callExport();
-                                            },
-                                            buttonClass: "evacuation_button_height export-button",
-                                            text: translate(localeJson, 'hq_stockpile_detail_export'),
-                                        }} parentClass={"mr-1 mt-1 export-button"} />
+                                <form>
+                                    <div className='sm:flex md:flex lg:flex align-items-center justify-content-end mt-2'>
+                                        <div className='modal-field-top-space modal-field-bottom-space flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input ' >
+                                            <InputDropdown inputDropdownProps={{
+                                                inputDropdownParentClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
+                                                labelProps: {
+                                                    text: translate(localeJson, 'place_name'),
+                                                    inputDropdownLabelClassName: "block"
+                                                },
+                                                inputDropdownClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
+                                                customPanelDropdownClassName: "w-10rem",
+                                                id: "evacuationCity",
+                                                optionLabel: "name",
+                                                options: placeListOptions,
+                                                value: selectedPlaceName,
+                                                onChange: (e) => setSelectedPlaceName(e.value),
+                                                emptyMessage: translate(localeJson, "data_not_found"),
+                                            }}
+                                            />
+                                            <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
+                                                <Button buttonProps={{
+                                                    buttonClass: "w-12 search-button",
+                                                    text: translate(localeJson, "search_text"),
+                                                    icon: "pi pi-search",
+                                                    type: "button",
+                                                    onClick: () => searchListWithCriteria()
+                                                }} parentClass={"search-button"} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div className='sm:flex md:flex lg:flex align-items-center justify-content-between my-2'>
+                                    <div class="flex gap-2 sm:pt-5 md:pt-5 lg:pt-5 align-items-end">
+                                        <span className='text-sm pt-1'>{translate(localeJson, 'show_expiring_products')}</span><InputSwitch inputSwitchProps={{
+                                            checked: showExpiringProducts,
+                                            onChange: () => showOnlyExpiringProducts()
+                                        }}
+                                            parentClass={"custom-switch"} />
+                                    </div>
+                                    <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
                                         <Button buttonProps={{
                                             type: "button",
                                             rounded: "true",
-                                            export: true,
+                                            delete: true,
                                             buttonClass: "export-button",
-                                            text: translate(localeJson, 'hq_stockpile_summary_export'),
+                                            text: translate(localeJson, 'bulk_delete'),
                                             severity: "primary",
-                                            onClick: () => downloadStockPileSummaryCSV()
-                                        }} parentClass={"mr-1 mt-1 export-button"} />
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"mt-2 export-button"} />
                                     </div>
-                                    <form>
-                                        <div className='sm:flex md:flex lg:flex align-items-center justify-content-between mt-2'>
-                                            <div class="flex gap-2 sm:pt-5 md:pt-5 lg:pt-5 align-items-end">
-                                                <span className='text-sm pt-1'>{translate(localeJson, 'show_expiring_products')}</span><InputSwitch inputSwitchProps={{
-                                                    checked: showExpiringProducts,
-                                                    onChange: () => showOnlyExpiringProducts()
-                                                }}
-                                                    parentClass={"custom-switch"} />
-                                            </div>
-                                            <div className='modal-field-top-space modal-field-bottom-space flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input ' >
-                                                <InputDropdown inputDropdownProps={{
-                                                    inputDropdownParentClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'place_name'),
-                                                        inputDropdownLabelClassName: "block"
-                                                    },
-                                                    inputDropdownClassName: "w-full xl:20rem lg:w-13rem md:w-14rem sm:w-14rem",
-                                                    customPanelDropdownClassName: "w-10rem",
-                                                    id: "evacuationCity",
-                                                    optionLabel: "name",
-                                                    options: placeListOptions,
-                                                    value: selectedPlaceName,
-                                                    onChange: (e) => setSelectedPlaceName(e.value),
-                                                    emptyMessage: translate(localeJson, "data_not_found"),
-                                                }}
-                                                />
-                                                <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
-                                                    <Button buttonProps={{
-                                                        buttonClass: "w-12 search-button",
-                                                        text: translate(localeJson, "search_text"),
-                                                        icon: "pi pi-search",
-                                                        type: "button",
-                                                        onClick: () => searchListWithCriteria()
-                                                    }} parentClass={"search-button"} />
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </form>
-                                    <div>
-                                        <RowExpansionTable
-                                            columnStyle={{ textAlign: 'left' }}
-                                            className='stockpile-summary'
-                                            paginator={false}
-                                            totalRecords={totalCount}
-                                            loading={tableLoading}
-                                            rowClassName="main-row-header"
-                                            customRowExpansionActionsField="actions"
-                                            value={filteredStockpileSummaryList}
-                                            innerColumn={stockPileRowExpansionColumn}
-                                            outerColumn={stockPilerMainRow}
-                                            rowExpansionField1="orders1"
-                                            rowExpansionField="orders"
-                                            emptyMessage={translate(localeJson, "data_not_found")}
-                                            rowExpansionEmptyMessage={translate(localeJson, "data_not_found")}
-                                            first={getListPayload.filters.start}
-                                            rows={getListPayload.filters.limit}
-                                            onRowExpand={expandRows}
-                                            paginatorLeft={false}
-                                            expandAllRows={true}
-                                            onPageHandler={(e) => onPaginationChange(e)}
-                                            iconStyle={{ marginTop: "-5px" }}
-                                            iconHeaderStyle={{ display: 'none' }}
-                                            innerTableSelectionMode="single"
-                                        />
-                                    </div>
+                                </div>
+                                <div>
+                                    <RowExpansionTable
+                                        columnStyle={{ textAlign: 'left' }}
+                                        className='stockpile-summary'
+                                        paginator={false}
+                                        totalRecords={totalCount}
+                                        loading={tableLoading}
+                                        rowClassName="main-row-header"
+                                        customRowExpansionActionsField="actions"
+                                        value={filteredStockpileSummaryList}
+                                        innerColumn={stockPileRowExpansionColumn}
+                                        outerColumn={stockPilerMainRow}
+                                        rowExpansionField1="orders1"
+                                        rowExpansionField="orders"
+                                        emptyMessage={translate(localeJson, "data_not_found")}
+                                        rowExpansionEmptyMessage={translate(localeJson, "data_not_found")}
+                                        first={getListPayload.filters.start}
+                                        rows={getListPayload.filters.limit}
+                                        onRowExpand={expandRows}
+                                        paginatorLeft={false}
+                                        expandAllRows={true}
+                                        onPageHandler={(e) => onPaginationChange(e)}
+                                        iconStyle={{ marginTop: "-5px" }}
+                                        iconHeaderStyle={{ display: 'none' }}
+                                        innerTableSelectionMode="single"
+                                        innerTableSelection={selectedCustomers}
+                                        innerTableOnSelectionChange={onSelectionChange}
+                                    />
                                 </div>
                             </div>
                         </div>

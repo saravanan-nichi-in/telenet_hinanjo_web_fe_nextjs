@@ -29,7 +29,7 @@ function ShortageSupplies() {
       start: 0,
       limit: 10,
       sort_by: "",
-      order_by: "desc",
+      order_by: "",
     },
     search: "",
   });

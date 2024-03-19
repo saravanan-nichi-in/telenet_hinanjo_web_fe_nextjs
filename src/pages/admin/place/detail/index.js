@@ -9,6 +9,7 @@ import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector } from "@/redux/hooks";
 import CustomHeader from "@/components/customHeader";
 import { IoIosArrowBack } from "react-icons/io";
+import { prefecturesCombined,default_place_id } from "@/utils/constant";
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -36,7 +37,8 @@ export default function StaffManagementEditPage() {
   const [percent, setPercentage] = useState("");
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const [tableLoading, setTableLoading] = useState(false);
-
+  const [prefectureId, setPrefectureId] = useState("");
+  const [prefectureDefaultId, setPrefectureDefaultId] = useState("");
   /* Services */
   const { details } = PlaceServices;
   const { encrypt } = CommonServices;
@@ -82,6 +84,8 @@ export default function StaffManagementEditPage() {
     setApiResponse(model);
     setLangitude(parseFloat(model.map.longitude));
     setLatitude(parseFloat(model.map.latitude));
+    setPrefectureDefaultId(model.prefecture_id_default);
+    setPrefectureId(model.prefecture_id)
     setTableLoading(false);
     setLoader(false);
   }
@@ -126,13 +130,13 @@ export default function StaffManagementEditPage() {
                   {translate(localeJson, "place_basic_information")}
                 </div>
                 <div className="mt-1"> {translate(localeJson, 'post_letter') + zipCode}</div>
-                <div className="">{placeAddress ? placeAddress.slice(8) : ""}</div>
+                <div className="">{prefectureId && prefecturesCombined[prefectureId][locale]} {address2}</div>
                 <div className="">{phoneNumber}</div>
                 <div className="font-bold mt-3">
                   {translate(localeJson, "place_initial_information")}
                 </div>
                 <div className="mt-1">{translate(localeJson, 'post_letter') + defaultZipCode}</div>
-                <div className="">{addressDefault}</div>
+                <div className="">{prefectureDefaultId && prefecturesCombined[prefectureDefaultId][locale]} {addressDefault}</div>
                 <div className="mt-3">
                   <span className="font-bold">{translate(localeJson, "place_lat_long")}</span> : {coordinates}
                 </div>
@@ -173,6 +177,7 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
+      {Place?.id!=default_place_id &&(
       <div className="col-12">
         {tableLoading ? (
           <CardSpinner />
@@ -199,6 +204,7 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
+      )}
 
       <div className="col-12">
         <div

@@ -10,6 +10,7 @@ import {
     getEnglishDateDisplayFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
+    getSpecialCareName,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
@@ -40,9 +41,11 @@ export default function EvacueeFamilyDetail() {
                 </div>
             },
         },
-        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "dob", header: translate(localeJson, 'dob'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "c_special_care", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
     const familyAdmissionColumns = [
@@ -109,7 +112,7 @@ export default function EvacueeFamilyDetail() {
                         dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
                         age: person.person_age,
                         age_month: person.person_month,
-                        special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares) : "",
+                        c_special_care: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
                         connecting_code: person.person_connecting_code,
                         remarks: person.person_note,
                         family_count: 0,
@@ -118,10 +121,11 @@ export default function EvacueeFamilyDetail() {
                         name_phonetic: person.person_refugee_name,
                         name_kanji: person.person_name,
                         address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.person_prefecture_id].ja : prefecturesCombined[person.person_prefecture_id].en) + " " + person.person_address,
-                        tel: person.family_tel,
+                        tel: person.person_tel,
                         evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
                         place_id: person.place_id,
                         family_is_registered: person.family_is_registered,
+                        yapple_id: person.yapple_id,
                     };
                     let personAnswers = person.person_answers;
                     if (listOfIndividualQuestions.length > 0) {
@@ -195,14 +199,6 @@ export default function EvacueeFamilyDetail() {
         return answerData;
     }
 
-    const getSpecialCareName = (nameList) => {
-        let specialCareName = null;
-        nameList.map((item) => {
-            specialCareName = specialCareName ? (specialCareName + ", " + (locale == 'ja' ? (item.name) : item.name_en)) : (locale == 'ja' ? (item.name) : item.name_en);
-        });
-        return specialCareName;
-    }
-
     /**
      * Show individual questionnaires dialog
      * @param {*} index 
@@ -230,8 +226,9 @@ export default function EvacueeFamilyDetail() {
         "address",
         "family_code",
         "connecting_code",
-        "special_care_name",
-        "remarks"
+        "remarks",
+        "c_special_care",
+        "yapple_id",
     ];
 
     return (
@@ -305,7 +302,7 @@ export default function EvacueeFamilyDetail() {
                     },
                 ]}
                 content={
-                    familyDetailData && !_.isNull(individualQuestionnairesContentIDX) && familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires && (
+                    familyDetailData && !_.isNull(individualQuestionnairesContentIDX) && (
                         <div>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "house_hold_information")} />
                             <div className='custom-card-info-with-zIndex p-2 my-3'>
@@ -322,7 +319,7 @@ export default function EvacueeFamilyDetail() {
                             </div>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_individual")} />
                             <div className='custom-card-info-with-zIndex p-2 my-3 details-text-overflow'>
-                                {familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires.map((val, i) => (
+                                {familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires && familyDetailData[individualQuestionnairesContentIDX].individualQuestionnaires.map((val, i) => (
                                     <div className='flex align-items-center' key={i}>
                                         <div><span className='page-header3'>{val.question}<span className={val.is_required == 1 ? "p-error" : "hidden"}>*</span><span className='font-bold'>:</span></span> {val.answer}</div>
                                     </div>
@@ -394,7 +391,7 @@ export default function EvacueeFamilyDetail() {
                                         <div className='flex align-items-center' key={i}>
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{val.question}
-                                                <span className={val.is_required == 1 ? "p-error" : "hidden"}>*</span><span className='font-bold'>:</span>
+                                                    <span className={val.is_required == 1 ? "p-error" : "hidden"}>*</span><span className='font-bold'>:</span>
                                                 </span>
                                                 <span className='page-header3-sub ml-1'>{val.answer}</span>
                                             </div>

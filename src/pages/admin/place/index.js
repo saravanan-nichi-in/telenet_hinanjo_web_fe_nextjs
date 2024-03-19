@@ -19,6 +19,7 @@ import { PlaceServices } from "@/services";
 import { setPlace } from "@/redux/place";
 import { useAppDispatch } from "@/redux/hooks";
 import CustomHeader from "@/components/customHeader";
+import { default_place_id } from "@/utils/constant"; 
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -71,12 +72,17 @@ export default function AdminPlacePage() {
       sortable: true,
       body: (rowData) => {
         return (
-          <a
-            className="text-link-class cursor-pointer"
-            onClick={() => handleRowClick(rowData)}
-          >
-            {rowData.refugee_name}
-          </a>
+          <div className="flex flex-column">
+            <div>
+              <a
+                className="text-link-class cursor-pointer"
+                onClick={() => handleRowClick(rowData)}
+              >
+                {rowData.refugee_name}
+              </a>
+            </div>
+            <div className="table-body-sub">{rowData.furigana_name}</div>
+          </div>
         );
       },
     },
@@ -123,7 +129,7 @@ export default function AdminPlacePage() {
               buttonProps={{
                 text: translate(localeJson, "delete"),
                 buttonClass: "delete-button",
-                disabled: rowData.isActive,
+                disabled: (rowData.isActive||rowData.ID==default_place_id),
                 onClick: () => {
                   openDeleteDialog(rowData);
                 },
@@ -194,7 +200,8 @@ export default function AdminPlacePage() {
           tel: obj.tel,
           active_flg: obj.active_flg,
           isActive: obj.is_active,
-          status: obj.is_active ? "place-status-cell" : "",
+          furigana_name: obj.refugee_name,
+          status: (obj.is_active||obj.id==default_place_id) ? "place-status-cell" : "",
         };
         preparedList.push(preparedObj);
       });
@@ -290,9 +297,9 @@ export default function AdminPlacePage() {
     setDeleteId(rowdata.ID);
     setDeleteObj({
       firstLabel: translate(localeJson, "evacuation_place"),
-      firstValue: rowdata.evacuation_place,
+      firstValue: rowdata.refugee_name,
       secondLabel: translate(localeJson, "phone_number"),
-      secondValue: rowdata.phone_number,
+      secondValue: rowdata.tel,
     });
     setDeleteOpen(true);
     hideOverFlow();
@@ -314,6 +321,16 @@ export default function AdminPlacePage() {
       setPlaceEditDialogVisible(false);
       onGetPlaceListOnMounting();
     }
+  };
+  
+  /**Bulk checkout on submit table loading*/
+  const handleTableReload = () => {
+    setTableLoading(true);
+    setTimeout(() => {
+    onGetPlaceListOnMounting();
+    setTableLoading(false);
+
+    }, 1000);
   };
 
   return (
@@ -368,6 +385,7 @@ export default function AdminPlacePage() {
       <PlaceEventBulkCheckOut
         modalHeaderText={translate(localeJson, "place_name")}
         open={bulkCheckoutOpen}
+        onBulkCheckoutSuccess={handleTableReload}
         close={() => {
           setBulkCheckoutOpen(false);
           showOverFlow();
