@@ -1,6 +1,8 @@
 .page-header1 {
     font-size: $pageHeaderFontSize1 ;
     font-weight: $pageHeadersFontWeight;
+    width: -moz-max-content;
+    width: max-content;
 }
 
 .page-header1-sub {

@@ -12,6 +12,7 @@ export const StockpileStaffService = {
     create: _create,
     dropdown: _dropdown,
     getPlaceNamesByCategory: _getPlaceNamesByCategory,
+    deleteByID: _deleteByID
 };
 
 /**
@@ -223,6 +224,30 @@ function _getPlaceNamesByCategory(payload, callBackFun) {
             }
         })
         .catch((error) => {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
+        });
+}
+
+/**
+ * Delete product by ID
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _deleteByID(payload, callBackFun) {
+    axios
+        .post("/admin/stockpile/summary/inventory/delete", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });

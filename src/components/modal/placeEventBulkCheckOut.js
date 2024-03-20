@@ -47,8 +47,10 @@ export default function PlaceEventBulkCheckOut(props) {
     ]
 
     useEffect(() => {
-        listApiCall();
-    }, []);
+        if (open) {
+            listApiCall();
+          }
+    }, [open]); 
 
     const listApiCall = () => {
         setTableLoading(true);
@@ -81,11 +83,17 @@ export default function PlaceEventBulkCheckOut(props) {
                 BulkCheckoutService.checkoutBulkPlaces({ place_ids: tempIds }, () => {
                     close();
                     setSelectedProducts(null);
+                    if (props.onBulkCheckoutSuccess) {
+                        props.onBulkCheckoutSuccess();
+                      }
                 })
             } else if (props.type == "events") {
                 BulkCheckoutService.checkoutBulkEvents({ event_ids: tempIds }, () => {
                     close();
                     setSelectedProducts(null);
+                    if (props.onBulkCheckoutSuccess) {
+                        props.onBulkCheckoutSuccess();
+                      }
                 })
             }
 

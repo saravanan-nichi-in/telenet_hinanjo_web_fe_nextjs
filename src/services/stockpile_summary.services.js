@@ -12,7 +12,9 @@ export const StockPileSummaryServices = {
     getStockPileEmailData: _getStockPileEmailData,
     getStockPileEmailUpdate: _getStockPileEmailUpdate,
     importData: _importData,
-    exportData: _exportData
+    exportData: _exportData,
+    getPlaceList:_getPlaceList,
+    bulkDelete: _bulkDelete
 };
 
 /**
@@ -136,7 +138,6 @@ function _importData(payload, callBackFun) {
             console.error("Error fetching data:", error);
             callBackFun(false);
             importErrorToastDisplay(error.response);
-
         });
 }
 
@@ -156,5 +157,58 @@ function _exportData() {
         .catch((error) => {
             console.error("Error fetching data:", error);
             importErrorToastDisplay(error.response);
+        });
+}
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getPlaceList(callBackFun) {
+    const payload = {
+      "filters": {
+          "sort_by": "refugee_name",
+          "order_by": "asc"
+      },
+      "search": "",
+      "map":true
+  };
+    axios
+      .post("/user/place/list",payload)
+      .then((response) => {
+        if (response && response.data) {
+          callBackFun(response.data);
+        }
+      })
+      .catch((error) => {
+        
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+      });
+      });
+  }
+
+/**
+ * Bulk delete
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _bulkDelete(payload, callBackFun) {
+    axios
+        .post("/admin/stockpile/summary/inventory/delete", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toast.success(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }

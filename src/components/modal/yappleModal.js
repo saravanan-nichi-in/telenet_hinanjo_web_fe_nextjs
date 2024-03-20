@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useContext, useState } from "react";
@@ -13,7 +13,9 @@ import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_reg
 import { toast } from "react-hot-toast";
 
 export default function YappleModal(props) {
-  const { localeJson } = useContext(LayoutContext);
+  const { localeJson, setLoader } = useContext(LayoutContext);
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+  const { eventCheckIn, eventCheckOut } = CheckInOutServices;
   const [currentDiv, setCurrentDiv] = useState("start");
   const { basicInfo } = CheckInOutServices;
 
@@ -26,7 +28,7 @@ export default function YappleModal(props) {
   /**
    * Destructing
    */
-  const { open, close, setBarcode, successHeader, isCheckIn, successCallBack, staffEventID, isEvent } = props;
+  const { open, close, setBarcode, successHeader, isCheckIn, successCallBack, staffEventID, isEvent, dynamicButtonText, eventList = [], setRefugeeName, setGetListPayload, setFamilyCode } = props;
 
   let popupHeader = {
     start: "yapple_modal_start_icon_div",
@@ -48,6 +50,11 @@ export default function YappleModal(props) {
         staffEventID={staffEventID}
         isEvent={isEvent}
         lastSegment={lastSegment}
+        eventList={eventList}
+        dynamicButtonText={dynamicButtonText}
+        setRefugeeName={setRefugeeName}
+        setGetListPayload={setGetListPayload}
+        setFamilyCode={setFamilyCode}
         {...props}
       ></SuccessDiv>
     ),
@@ -73,10 +80,51 @@ export default function YappleModal(props) {
     if (res) {
       setRegData(res.data);
       setCurrentDiv("success");
+      if (layoutReducer?.user?.place?.auto_checkin_flag) {
+        myEventListener(res, true);
+      }
     } else {
       setCurrentDiv("failed");
     }
   };
+
+  function myEventListener(res, status) {
+    // Trigger some functionality after 3 seconds
+    var timeOutId = setTimeout(function () {
+      // Call your desired functionality here
+      let payload = {
+        event_id: staffEventID ? staffEventID : layoutReducer?.user?.place?.id,
+        yapple_id: res?.data?.yapple_id,
+        ppid: "",
+      };
+      if (status) {
+        if (isCheckIn) {
+          if (props.type == 'event') {
+            eventCheckIn(payload, (res) => {
+              setLoader(false);
+              setCurrentDiv("start");
+              if (res && successCallBack) {
+                successCallBack(res);
+              }
+            })
+          }
+        }
+        else {
+          if (props.type == 'event') {
+            eventCheckOut(payload, (res) => {
+              setLoader(false);
+              setCurrentDiv("start");
+              if (res && successCallBack) {
+                successCallBack(res);
+              }
+            })
+          }
+        }
+      } else {
+        clearTimeout(timeOutId);
+      }
+    }, 3000);
+  }
 
   return (
     <div>
@@ -87,6 +135,7 @@ export default function YappleModal(props) {
         draggable={false}
         blockScroll={true}
         onHide={() => {
+          myEventListener({}, false);
           close();
           setCurrentDiv("start");
         }}
@@ -147,8 +196,9 @@ function SuccessDiv(props) {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const { eventCheckIn, eventCheckOut } = CheckInOutServices;
   const { updateCheckInDetail } = TemporaryStaffRegistrantServices;
-  const { regData, close, setCurrentDiv, isCheckIn, successCallBack, staffEventID, isEvent } = props;
+  const { regData, close, setCurrentDiv, isCheckIn, successCallBack, staffEventID, isEvent, dynamicButtonText, eventList, setRefugeeName, setGetListPayload, setFamilyCode } = props;
   const layoutReducer = useSelector((state) => state.layoutReducer);
+  const [isEventDisabled, setEventDisabled] = useState(false);
   let payload = {
     event_id: staffEventID ? staffEventID : layoutReducer?.user?.place?.id,
     yapple_id: regData?.yapple_id,
@@ -179,8 +229,12 @@ function SuccessDiv(props) {
           }
         })
       }
+      else {
+        setLoader(false);
+      }
     }
     else {
+
       updateCheckInDetail({
         place_id: regData.place_id,
         lgwan_family_id: regData.lgwan_familiy_id
@@ -192,6 +246,39 @@ function SuccessDiv(props) {
       })
     }
   }
+
+  useEffect(() => {
+    if (layoutReducer?.user?.place?.type === "place" && isCheckIn) {
+      if (regData.is_registered == "1" || regData.is_registered == null) {
+        return setEventDisabled(true);
+      }
+    }
+    if (eventList.length > 0) {
+      eventList.forEach(element => {
+        if (element.yapple_id == regData?.yapple_id) {
+          if (setGetListPayload) {
+            setGetListPayload((prev) => ({
+              ...prev,
+              filters: {
+                ...prev.filters,
+                family_code: regData.family_code,
+              },
+            }));
+            setFamilyCode(regData.family_code)
+            // setRefugeeName(regData.refugee_name)
+          }
+          if (layoutReducer?.user?.place?.type === "place" && regData.is_registered != "1") {
+            return setEventDisabled(false);
+          }
+          return setEventDisabled(true);
+        }
+        //  else {
+        //    setEventDisabled(false);
+        //  }
+
+      });
+    }
+  }, [locale])
 
   return (
     <div>
@@ -222,16 +309,16 @@ function SuccessDiv(props) {
       </div>
       <div className='mt-2'>
         <div className='flex align-items-center'>
-          <div className='page-header3'>{translate(localeJson, "evacuation_date_time")}:</div>
+          <div className='page-header3'>{layoutReducer?.user?.place?.type === "place" ? translate(localeJson, "evacuation_date_time") : translate(localeJson, "event_admission_date_time")}:</div>
           <div className='page-header3-sub ml-1'>{regData.join_date ? (locale == 'ja' ? getJapaneseDateTimeDisplayFormat(regData.join_date) : getEnglishDateTimeDisplayFormat(regData.join_date)) : ""}</div>
         </div>
       </div>
       <div className='mt-2'>
         <div className='flex align-items-center'>
-          <div className='page-header3'>{translate(localeJson, "evacuation_place")}:</div>
+          <div className='page-header3'>{layoutReducer?.user?.place?.type === "place" ? translate(localeJson, "evacuation_place") : translate(localeJson, "event")}:</div>
           {
             (props.lastSegment == 'checkout') ?
-              <div className='page-header3-sub ml-1'>{regData.place_name}</div> :
+              <div className='page-header3-sub ml-1'>{layoutReducer?.user?.place?.type === "place" ? regData.place_id == layoutReducer?.user?.place.id ? layoutReducer?.user?.place.name : "" : layoutReducer?.user?.place.name}</div> :
               <div className='page-header3-sub ml-1'>{layoutReducer?.user?.place.name}</div>
           }
         </div>
@@ -244,15 +331,17 @@ function SuccessDiv(props) {
             custom: "",
             buttonClass:
               "mt-3 update-button border-round-3xl custom-icon-button flex justify-content-center",
-            text: isCheckIn ? translate(localeJson, "admission_button") : translate(localeJson, "register_checkout_btn"),
+            text: dynamicButtonText ? translate(localeJson, props.keyJson) : isCheckIn ? translate(localeJson, "admission_button_yapple") : translate(localeJson, "register_checkout_btn"),
             severity: "primary",
             style: { width: "100%" },
+            disabled: isEventDisabled,
             onClick: () => {
-              if (props.lastSegment == 'checkout' && regData.is_registered == null) {
-                displayToastAndClose('case_null_notcheck_in_shelter');
+              let checkIsFromPlace = layoutReducer?.user?.place?.type === "place" ? true : false;
+              if (props.lastSegment == 'checkout' && checkIsFromPlace && regData.is_registered == null) {
+                displayToastAndClose(layoutReducer?.user?.place?.type === "place" ? 'case_null_notcheck_in_shelter' : 'case_null_notcheck_in_shelter_evt');
                 return
               }
-              if (props.lastSegment == 'checkout' && regData.is_registered == "0") {
+              if (props.lastSegment == 'checkout' && checkIsFromPlace && regData.is_registered == "0") {
                 displayToastAndClose('case_zero_notcheck_in_shelter');
                 return
               }
@@ -278,19 +367,20 @@ function SuccessDiv(props) {
                     if (res && successCallBack) {
                       successCallBack(res);
                     }
-                  }) : CheckInOutServices.placeCheckout({
-                    // place_id: layoutReducer?.user?.place?.id,
-                    place_id: regData.place_id ?? 0,
-                    lgwan_family_id: regData.lgwan_familiy_id
-                  }, (res) => {
-                    setLoader(false);
-                    if (res && successCallBack) {
-                      successCallBack(res);
-                    }
-                  }))) : (
+                  }) :
+                    CheckInOutServices.placeCheckout({
+                      // place_id: layoutReducer?.user?.place?.id,
+                      place_id: regData.place_id ?? 0,
+                      lgwan_family_id: regData.lgwan_familiy_id
+                    }, (res) => {
+                      setLoader(false);
+                      if (res && successCallBack) {
+                        successCallBack(res);
+                      }
+                    })
+                  )) : (
                   confirmPlaceDataBeforeCheckIn()
                 );
-              close();
               setCurrentDiv("start");
             },
           }}

@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { SelectButton } from "primereact/selectbutton";
 import { LayoutContext } from "@/layout/context/layoutcontext";
+import { useSelector } from "react-redux";
 import {
   getValueByKeyRecursively as translate,
   getEnglishDateDisplayFormat,
@@ -12,25 +13,22 @@ import {
 } from "@/helper";
 import {
   Button,
-  ButtonRounded,
   ValidationError,
-  PerspectiveCropping,
-  NormalCheckBox,
 } from "@/components";
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
   CommonServices,
   TempRegisterServices,
 } from "@/services";
-import QuestionList from "@/components/masterQuestion";
 import { Input, InputDropdown, InputNumber } from "../input";
-import QrScannerModal from "@/components/modal/qrScannerModal";
 import CustomHeader from "../customHeader";
+import {
+  calculateAge
+} from "@/helper";
+import {UserEventListServices} from "@/services/user_event_list.services"
 
 export default function UserEventRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -49,23 +47,24 @@ export default function UserEventRegModal(props) {
       checked:Yup.boolean().nullable(),
       name_furigana: Yup.string()
         .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
+        .max(100, translate(localeJson, "name_max_phonetic"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      dob: Yup.object().shape({
-        year: Yup.string()
-          .required(
-            translate(localeJson, "c_year") +
+        dob: Yup.object().shape({
+          year: Yup.string()
+            .required(
+              translate(localeJson, "c_year") +
+                translate(localeJson, "is_required")
+            ).min(4,translate(localeJson, "c_year") +
+            translate(localeJson, "is_required")),
+          month: Yup.string().required(
+            translate(localeJson, "c_month") +
               translate(localeJson, "is_required")
-          ).min(4,translate(localeJson, "c_year") +
-          translate(localeJson, "is_required")),
-        month: Yup.string().required(
-          translate(localeJson, "c_month") +
-            translate(localeJson, "is_required")
-        ),
-        date: Yup.string().required(
-          translate(localeJson, "c_date") + translate(localeJson, "is_required")
-        ),
-      }),
+          ),
+          date: Yup.string().required(
+            translate(localeJson, "c_date") + translate(localeJson, "is_required")
+          ),
+        }),
+      name: Yup.string().nullable().max(100, translate(localeJson, "external_popup_name_kanji")),
       tel: Yup.string()
       .required(translate(localeJson, "phone_no_required"))
         .test(
@@ -110,7 +109,7 @@ export default function UserEventRegModal(props) {
       // Add other fields and validations as needed
       age: Yup.number()
         .required(translate(localeJson, "age_required")),
-      age_m: Yup.number().required(translate(localeJson, "age_required")),
+      age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
       .test("is-correct",
@@ -178,48 +177,48 @@ export default function UserEventRegModal(props) {
     setIsRecording(isRecord);
   };
 
-  const [initialQuestion, setInitialQues] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [specialCare, setSpecialCare] = useState([]);
-  useEffect(() => {
-    fetchMasterQuestion();
-    fetchSpecialCare();
-  }, [locale]);
+  // const [initialQuestion, setInitialQues] = useState([]);
+  // const [questions, setQuestions] = useState([]);
+  // const [specialCare, setSpecialCare] = useState([]);
+  // useEffect(() => {
+  //   fetchMasterQuestion();
+  //   fetchSpecialCare();
+  // }, [locale]);
 
-  const fetchSpecialCare = () => {
-    getSpecialCareDetails((res) => {
-      if (res) {
-        setSpecialCare(res.data.model.list);
-      }
-    });
-  };
-  const fetchMasterQuestion = () => {
-    let payload = {
-      filters: {
-        start: 0,
-        order_by: "asc",
-        sort_by: "display_order",
-      },
-      event_id: 1,
-    };
-    getIndividualQuestionnaireList(payload, (res) => {
-      if (res) {
-        let data = res.data.list;
-        let sortedData = data
-          ? data.sort((a, b) => {
-              return parseInt(a.display_order) - parseInt(b.display_order);
-            })
-          : [];
-        setQuestions(sortedData);
-        setInitialQues(sortedData);
-      }
-    });
-  };
+  // const fetchSpecialCare = () => {
+  //   getSpecialCareDetails((res) => {
+  //     if (res) {
+  //       setSpecialCare(res.data.model.list);
+  //     }
+  //   });
+  // };
+  // const fetchMasterQuestion = () => {
+  //   let payload = {
+  //     filters: {
+  //       start: 0,
+  //       order_by: "asc",
+  //       sort_by: "display_order",
+  //     },
+  //     event_id: 1,
+  //   };
+  //   getIndividualQuestionnaireList(payload, (res) => {
+  //     if (res) {
+  //       let data = res.data.list;
+  //       let sortedData = data
+  //         ? data.sort((a, b) => {
+  //             return parseInt(a.display_order) - parseInt(b.display_order);
+  //           })
+  //         : [];
+  //       setQuestions(sortedData);
+  //       setInitialQues(sortedData);
+  //     }
+  //   });
+  // };
 
-  const special_care_options = specialCare?.map((item) => ({
-    name: locale == "ja" ? item.name : item.name_en,
-    value: item.id.toString(), // Convert the ID to string if needed
-  }));
+  // const special_care_options = specialCare?.map((item) => ({
+  //   name: locale == "ja" ? item.name : item.name_en,
+  //   value: item.id.toString(), // Convert the ID to string if needed
+  // }));
   const formikRef = useRef();
   const initialValues =
     registerModalAction == "edit"
@@ -251,37 +250,57 @@ export default function UserEventRegModal(props) {
           addressAsRep:false,
         };
 
-  useEffect(() => {
-    if (registerModalAction === "edit" && editObj.individualQuestions) {
-      setQuestions(editObj.individualQuestions);
+  function calculateAge(birthdate) {
+    const birthdateObj = new Date(birthdate);
+    const currentDate = new Date();
+  
+    let years = currentDate.getFullYear() - birthdateObj.getFullYear();
+    let months = currentDate.getMonth() - birthdateObj.getMonth();
+  
+    if (currentDate.getDate() < birthdateObj.getDate()) {
+      // Adjust for cases where the birthdate has not occurred yet in the current month
+      months--;
     }
-  }, [editObj]);
-
-  useEffect(() => {
-    if (editObj) {
-      setTimeout(() => {
-        editObj.checked == true ? setIsRep(true) : setIsRep(false);
-        const topLevelKeysExist = Object.keys(editObj).length > 0;
-        const nestedKeysExist = Object.values(editObj).some(
-          (value) => typeof value === "object" && Object.keys(value)?.length > 0
-        );
-
-        if (topLevelKeysExist || nestedKeysExist) {
-          formikRef.current.validateForm().then(() => {
-            const touchedKeys = Object.keys(formikRef.current.initialValues);
-            const newTouched = touchedKeys.reduce(
-              (acc, key) => ({ ...acc, [key]: true }),
-              {}
-            );
-            formikRef.current.setTouched(newTouched);
-          });
-          setIsFormSubmitted(true);
-          setCounter(count + 1);
-        }
-      }, 1000);
-      setFetchedZipCode(editObj.postalCode)
+  
+    if (months < 0) {
+      // Adjust for cases where the birthdate month is ahead of the current month
+      years--;
+      months += 12;
     }
-  }, [editObj]);
+  
+    return { years, months };
+  }
+  // useEffect(() => {
+  //   if (registerModalAction === "edit" && editObj.individualQuestions) {
+  //     setQuestions(editObj.individualQuestions);
+  //   }
+  // }, [editObj]);
+
+  // useEffect(() => {
+  //   if (editObj) {
+  //     setTimeout(() => {
+  //       editObj.checked == true ? setIsRep(true) : setIsRep(false);
+  //       const topLevelKeysExist = Object.keys(editObj).length > 0;
+  //       const nestedKeysExist = Object.values(editObj).some(
+  //         (value) => typeof value === "object" && Object.keys(value)?.length > 0
+  //       );
+
+  //       if (topLevelKeysExist || nestedKeysExist) {
+  //         formikRef.current.validateForm().then(() => {
+  //           const touchedKeys = Object.keys(formikRef.current.initialValues);
+  //           const newTouched = touchedKeys.reduce(
+  //             (acc, key) => ({ ...acc, [key]: true }),
+  //             {}
+  //           );
+  //           formikRef.current.setTouched(newTouched);
+  //         });
+  //         setIsFormSubmitted(true);
+  //         setCounter(count + 1);
+  //       }
+  //     }, 1000);
+  //     setFetchedZipCode(editObj.postalCode)
+  //   }
+  // }, [editObj]);
 
 //   useEffect(() => {
 //     const filteredData = evacuee
@@ -298,186 +317,186 @@ export default function UserEventRegModal(props) {
 //     setRepAddress(filteredData);
 //   }, [evacuee]);
 
-  useEffect(() => {
-    // Scroll to the first error on form submission
-    if (
-      (Object.keys(formikRef.current.errors).length > 0 && open) ||
-      hasErrors
-    ) {
-      const modalContainer = document.querySelector(".p-dialog");
-      const firstErrorElement = modalContainer?.querySelector(".scroll-check");
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [count]);
+  // useEffect(() => {
+  //   // Scroll to the first error on form submission
+  //   if (
+  //     (Object.keys(formikRef.current.errors).length > 0 && open) ||
+  //     hasErrors
+  //   ) {
+  //     const modalContainer = document.querySelector(".p-dialog");
+  //     const firstErrorElement = modalContainer?.querySelector(".scroll-check");
+  //     if (firstErrorElement) {
+  //       firstErrorElement.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   }
+  // }, [count]);
 
-  const handleRepAddress = (evacuees, setFieldValue) => {
-    if (evacuees) {
-      evacuees?.prefecture_id &&
-        setFieldValue("prefecture_id", evacuees?.prefecture_id);
-      const re = /^[0-9-]+$/;
-      let val;
-      if (evacuees.postalCode === "" || re.test(evacuees.postalCode)) {
-        val = evacuees.postalCode.replace(/-/g, ""); // Remove any existing hyphens
-        if (val.length > 3) {
-          val = val.slice(0, 3) + val.slice(3);
-        }
-        setFieldValue("postalCode", val);
-        setFetchedZipCode(val.replace(/-/g, ""));
-      }
-      if (val?.length >= 7) {
-        getAddress(val, (response) => {
-          if (response) {
-            let address = response;
-            const selectedPrefecture = prefectures.find(
-              (prefecture) => prefecture.value == address.prefcode
-            );
-            setFieldValue("prefecture_id", selectedPrefecture?.value);
-            setFieldValue("address", address.address2 + address.address3 || "");
-          } else {
-            setFieldValue("prefecture_id", "");
-            setFieldValue("address", "");
-          }
-        });
-      }
-      setFieldValue("address", evacuees.address);
-      setFieldValue("address2", evacuees.address2);
-    }
-  };
+  // const handleRepAddress = (evacuees, setFieldValue) => {
+  //   if (evacuees) {
+  //     evacuees?.prefecture_id &&
+  //       setFieldValue("prefecture_id", evacuees?.prefecture_id);
+  //     const re = /^[0-9-]+$/;
+  //     let val;
+  //     if (evacuees.postalCode === "" || re.test(evacuees.postalCode)) {
+  //       val = evacuees.postalCode.replace(/-/g, ""); // Remove any existing hyphens
+  //       if (val.length > 3) {
+  //         val = val.slice(0, 3) + val.slice(3);
+  //       }
+  //       setFieldValue("postalCode", val);
+  //       setFetchedZipCode(val.replace(/-/g, ""));
+  //     }
+  //     if (val?.length >= 7) {
+  //       getAddress(val, (response) => {
+  //         if (response) {
+  //           let address = response;
+  //           const selectedPrefecture = prefectures.find(
+  //             (prefecture) => prefecture.value == address.prefcode
+  //           );
+  //           setFieldValue("prefecture_id", selectedPrefecture?.value);
+  //           setFieldValue("address", address.address2 + address.address3 || "");
+  //         } else {
+  //           setFieldValue("prefecture_id", "");
+  //           setFieldValue("address", "");
+  //         }
+  //       });
+  //     }
+  //     setFieldValue("address", evacuees.address);
+  //     setFieldValue("address2", evacuees.address2);
+  //   }
+  // };
 
-  const [openQrPopup, setOpenQrPopup] = useState(false);
-  const closeQrPopup = () => {
-    setOpenQrPopup(false);
-  };
-  const qrResult = (result) => {
-    setLoader(true);
-    let formData = new FormData();
-    formData.append("content", result);
-    setOpenQrPopup(false);
-    qrScanRegistration(formData, (res) => {
-      if (res) {
-        setOpenQrPopup(false);
-        const evacueeArray = res.data;
-        createEvacuee(evacueeArray, formikRef.current.setFieldValue);
-        setLoader(false);
-      } else {
-        setLoader(false);
-      }
-    });
-  };
+  // const [openQrPopup, setOpenQrPopup] = useState(false);
+  // const closeQrPopup = () => {
+  //   setOpenQrPopup(false);
+  // };
+  // const qrResult = (result) => {
+  //   setLoader(true);
+  //   let formData = new FormData();
+  //   formData.append("content", result);
+  //   setOpenQrPopup(false);
+  //   qrScanRegistration(formData, (res) => {
+  //     if (res) {
+  //       setOpenQrPopup(false);
+  //       const evacueeArray = res.data;
+  //       createEvacuee(evacueeArray, formikRef.current.setFieldValue);
+  //       setLoader(false);
+  //     } else {
+  //       setLoader(false);
+  //     }
+  //   });
+  // };
 
-  const ocrResult = (result) => {
-    setLoader(true);
-    let formData = new FormData();
-    formData.append("content", result);
-    setPerspectiveCroppingVisible(false);
-    ocrScanRegistration(formData, (res) => {
-      if (res) {
-        setPerspectiveCroppingVisible(false);
-        const evacueeArray = res.data;
-        createEvacuee(evacueeArray, formikRef.current.setFieldValue);
-        setLoader(false);
-      } else {
-        setLoader(false);
-      }
-    });
-  };
+  // const ocrResult = (result) => {
+  //   setLoader(true);
+  //   let formData = new FormData();
+  //   formData.append("content", result);
+  //   setPerspectiveCroppingVisible(false);
+  //   ocrScanRegistration(formData, (res) => {
+  //     if (res) {
+  //       setPerspectiveCroppingVisible(false);
+  //       const evacueeArray = res.data;
+  //       createEvacuee(evacueeArray, formikRef.current.setFieldValue);
+  //       setLoader(false);
+  //     } else {
+  //       setLoader(false);
+  //     }
+  //   });
+  // };
 
-  function createEvacuee(evacuees, setFieldValue) {
-    setFieldValue("name", evacuees.name || "");
-    setFieldValue("name_furigana", evacuees.refugeeName || "");
-    setFieldValue("age", evacuees.age || "");
-    setFieldValue("age_m", evacuees.month || "");
-    setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
-    setFieldValue("tel", evacuees.tel || "");
-    evacuees?.prefecture_id &&
-      setFieldValue("prefecture_id", evacuees?.prefecture_id);
-    const re = /^[0-9-]+$/;
-    let val;
-    if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
-      val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
-      if (val.length > 3) {
-        val = val.slice(0, 3) + val.slice(3);
-      }
-      setFieldValue("postalCode", val);
-      setFetchedZipCode(val.replace(/-/g, ""))
-    }
-    if (val.length >= 7) {
-      let payload = val.slice(0, 3) +"-"+val.slice(3);
-      getAddress(val, (response) => {
-        if (response) {
-          let address = response;
-          const selectedPrefecture = prefectures.find(
-            (prefecture) => prefecture.value == address.prefcode
-          );
-          setFieldValue("prefecture_id", selectedPrefecture?.value);
-          setFieldValue("address", address.address2 + address.address3 || "");
-        } else {
-          setFieldValue("prefecture_id", "");
-          setFieldValue("address", "");
-        }
-      });
-    }
-    if (evacuees.dob) {
-      const birthDate = new Date(evacuees.dob);
-      const convertedObject = {
-        year: parseInt(birthDate.getFullYear()),
-        month: parseInt((birthDate.getMonth() + 1).toString().padStart(2, "0")), // Adding 1 because months are zero-based
-        date: parseInt(birthDate.getDate().toString().padStart(2, "0")),
-      };
-      let age = calculateAge(birthDate);
-      setFieldValue("age", parseInt(age.years));
-      setFieldValue("age_m", parseInt(age.months));
-      setFieldValue("dob", convertedObject || "");
-    }
-    setFieldValue("address", evacuees.address);
-    setFieldValue("address2", evacuees.address2);
-    setFieldValue("connecting_code", evacuees.connecting_code);
-  }
-  function calculateAge(birthdate) {
-    const birthdateObj = new Date(birthdate);
-    const currentDate = new Date();
+  // function createEvacuee(evacuees, setFieldValue) {
+  //   setFieldValue("name", evacuees.name || "");
+  //   setFieldValue("name_furigana", evacuees.refugeeName || "");
+  //   setFieldValue("age", evacuees.age || "");
+  //   setFieldValue("age_m", evacuees.month || "");
+  //   setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
+  //   setFieldValue("tel", evacuees.tel || "");
+  //   evacuees?.prefecture_id &&
+  //     setFieldValue("prefecture_id", evacuees?.prefecture_id);
+  //   const re = /^[0-9-]+$/;
+  //   let val;
+  //   if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
+  //     val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
+  //     if (val.length > 3) {
+  //       val = val.slice(0, 3) + val.slice(3);
+  //     }
+  //     setFieldValue("postalCode", val);
+  //     setFetchedZipCode(val.replace(/-/g, ""))
+  //   }
+  //   if (val.length >= 7) {
+  //     let payload = val.slice(0, 3) +"-"+val.slice(3);
+  //     getAddress(val, (response) => {
+  //       if (response) {
+  //         let address = response;
+  //         const selectedPrefecture = prefectures.find(
+  //           (prefecture) => prefecture.value == address.prefcode
+  //         );
+  //         setFieldValue("prefecture_id", selectedPrefecture?.value);
+  //         setFieldValue("address", address.address2 + address.address3 || "");
+  //       } else {
+  //         setFieldValue("prefecture_id", "");
+  //         setFieldValue("address", "");
+  //       }
+  //     });
+  //   }
+  //   if (evacuees.dob) {
+  //     const birthDate = new Date(evacuees.dob);
+  //     const convertedObject = {
+  //       year: parseInt(birthDate.getFullYear()),
+  //       month: parseInt((birthDate.getMonth() + 1).toString().padStart(2, "0")), // Adding 1 because months are zero-based
+  //       date: parseInt(birthDate.getDate().toString().padStart(2, "0")),
+  //     };
+  //     let age = calculateAge(birthDate);
+  //     setFieldValue("age", parseInt(age.years));
+  //     setFieldValue("age_m", parseInt(age.months));
+  //     setFieldValue("dob", convertedObject || "");
+  //   }
+  //   setFieldValue("address", evacuees.address);
+  //   setFieldValue("address2", evacuees.address2);
+  //   setFieldValue("connecting_code", evacuees.connecting_code);
+  // }
+  // function calculateAge(birthdate) {
+  //   const birthdateObj = new Date(birthdate);
+  //   const currentDate = new Date();
 
-    let years = currentDate.getFullYear() - birthdateObj.getFullYear();
-    let months = currentDate.getMonth() - birthdateObj.getMonth();
+  //   let years = currentDate.getFullYear() - birthdateObj.getFullYear();
+  //   let months = currentDate.getMonth() - birthdateObj.getMonth();
 
-    if (currentDate.getDate() < birthdateObj.getDate()) {
-      // Adjust for cases where the birthdate has not occurred yet in the current month
-      months--;
-    }
+  //   if (currentDate.getDate() < birthdateObj.getDate()) {
+  //     // Adjust for cases where the birthdate has not occurred yet in the current month
+  //     months--;
+  //   }
 
-    if (months < 0) {
-      // Adjust for cases where the birthdate month is ahead of the current month
-      years--;
-      months += 12;
-    }
+  //   if (months < 0) {
+  //     // Adjust for cases where the birthdate month is ahead of the current month
+  //     years--;
+  //     months += 12;
+  //   }
 
-    return { years, months };
-  }
+  //   return { years, months };
+  // }
 
-  const Qr = {
-    url: "/layout/images/evacuee-qr.png",
-  };
-  const Card = {
-    url: "/layout/images/evacuee-card.png",
-  };
+  // const Qr = {
+  //   url: "/layout/images/evacuee-qr.png",
+  // };
+  // const Card = {
+  //   url: "/layout/images/evacuee-card.png",
+  // };
 
-  const handleConfirmation = () => {
-    const message = translate(localeJson, "person_count_error");
-    // Use the browser's built-in confirmation dialog
-    const isConfirmed = window.confirm(message);
-    if (isConfirmed) {
-      close();
-      setQuestions(initialQuestion);
-      setIsFormSubmitted(false);
-      setModalCountFlag(false);
-      setHaveRepAddress(false);
-      setHavetel(false);
-      setFetchedZipCode("")
-      formikRef.current.resetForm();
-    }
-  };
+  // const handleConfirmation = () => {
+  //   const message = translate(localeJson, "person_count_error");
+  //   // Use the browser's built-in confirmation dialog
+  //   const isConfirmed = window.confirm(message);
+  //   if (isConfirmed) {
+  //     close();
+  //     setQuestions(initialQuestion);
+  //     setIsFormSubmitted(false);
+  //     setModalCountFlag(false);
+  //     setHaveRepAddress(false);
+  //     setHavetel(false);
+  //     setFetchedZipCode("")
+  //     formikRef.current.resetForm();
+  //   }
+  // };
 
   useEffect(() => {
     let dob = formikRef?.current?.values?.dob;
@@ -493,37 +512,56 @@ export default function UserEventRegModal(props) {
     }
   }, [dobCounter]);
 
-  useEffect( ()=> {
-    let address = formikRef.current.values.address;
-    let stateId = formikRef.current.values.prefecture_id;
-    let {city,street} = splitJapaneseAddress(address);
-    let state = prefectures.find(x => x.value == stateId)?.name;
-    if(state && (city && street))
-    {
-    getZipCode(state,city,street,(res)=>{
-      if(res)
-      {
-        let zipCode = res.result.zipcode;
-        setFetchedZipCode(zipCode.replace(/-/g, ""))
-        zipCode && formikRef.current.setFieldValue("postalCode",zipCode.replace(/-/g, ""));  
-        formikRef.current.validateField("postalCode") 
-      }
-      else {
-        setFetchedZipCode("")
-        formikRef.current.validateField("postalCode") 
+  // useEffect( ()=> {
+  //   let address = formikRef.current.values.address;
+  //   let stateId = formikRef.current.values.prefecture_id;
+  //   let {city,street} = splitJapaneseAddress(address);
+  //   let state = prefectures.find(x => x.value == stateId)?.name;
+  //   if(state && (city && street))
+  //   {
+  //   getZipCode(state,city,street,(res)=>{
+  //     if(res)
+  //     {
+  //       let zipCode = res.result.zipcode;
+  //       setFetchedZipCode(zipCode.replace(/-/g, ""))
+  //       zipCode && formikRef.current.setFieldValue("postalCode",zipCode.replace(/-/g, ""));  
+  //       formikRef.current.validateField("postalCode") 
+  //     }
+  //     else {
+  //       setFetchedZipCode("")
+  //       formikRef.current.validateField("postalCode") 
         
-      }
-    })
-  }
-  },[addressCount])
+  //     }
+  //   })
+  // }
+  // },[addressCount])
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+  const mapObjects = (object1) => {
+    const object2 = [{
+        "event_id": layoutReducer?.user?.event?.id, // Fill this value accordingly
+        "zip_code": object1.postalCode,
+        "family_code": null, // Fill this value accordingly
+        "prefecture_id": object1.prefecture_id,
+        "address": object1.address + ' ' + object1.address2,
+        "address_default": null, // Fill this value accordingly
+        "tel": object1.tel,
+        "refugee_name": object1.name,
+        "name": null, // Fill this value accordingly
+        "dob": `${object1.dob.year}/${parseInt(object1.dob.month) < 10 ? '0' + object1.dob.month : object1.dob.month}/${object1.dob.date < 10 ? '0' + object1.dob.date : object1.dob.date}`,
+        "age": object1.age,
+        "month": object1.age_m,
+        "gender": object1.gender
+    }];
+    return object2;
+}
 
-  useEffect(()=> {
-    formikRef.current.validateField("postalCode") 
-  },[fetchZipCode])
+  // useEffect(()=> {
+  //   formikRef.current.validateField("postalCode") 
+  // },[fetchZipCode])
 
   return (
     <>
-      <PerspectiveCropping
+      {/* <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => setPerspectiveCroppingVisible(false)}
         callback={ocrResult}
@@ -532,7 +570,7 @@ export default function UserEventRegModal(props) {
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
-      ></QrScannerModal>
+      ></QrScannerModal> */}
       <Formik
         innerRef={formikRef}
         validationSchema={validationSchema}
@@ -540,20 +578,27 @@ export default function UserEventRegModal(props) {
         enableReinitialize
         onSubmit={(values, actions) => {
           if (!hasErrors) {
-            setIsFormSubmitted(false);
+            // setIsFormSubmitted(false);
             setIsRecording(false);
-            values.individualQuestions = questions;
-            values.tel = convertToSingleByte(values.tel);
-            values.postalCode = convertToSingleByte(values.postalCode);
-            setEvacueeValues(values);
-            setQuestions(initialQuestion);
-            setCounter(count + 1);
-            close();
-            actions.resetForm({ values: initialValues });
-            setHaveRepAddress(false);
-            setHavetel(false);
-            setIsRep(false);
-            setFetchedZipCode("")
+            // values.individualQuestions = questions;
+            // values.tel = convertToSingleByte(values.tel);
+            // values.postalCode = convertToSingleByte(values.postalCode);
+            // setEvacueeValues(values);
+            // setQuestions(initialQuestion);
+            // setCounter(count + 1);
+            
+            // setHaveRepAddress(false);
+            // setHavetel(false);
+            // setIsRep(false);
+            // setFetchedZipCode("")
+            // mapObjects(values);/
+            UserEventListServices.createUserEvent(mapObjects(values), (res)=> {
+              setFetchedZipCode("")
+              close();
+              actions.resetForm({ values: initialValues });
+            })
+            // close();
+            // actions.resetForm({ values: initialValues });
           }
         }}
       >
@@ -566,6 +611,7 @@ export default function UserEventRegModal(props) {
           handleSubmit,
           resetForm,
           setFieldValue,
+          setErrors
         }) => (
           <div id="permanentRegister">
             <form onSubmit={handleSubmit}>
@@ -745,32 +791,6 @@ export default function UserEventRegModal(props) {
                       </div>
                       <div className="mb-2  col-12 ">
                         <div className="w-12">
-                        {evacuee?.length > 0 && !values.checked && (
-                          <div className="w-full mb-1 mt-2">
-                            <NormalCheckBox
-                              checkBoxProps={{
-                                checked: values.telAsRep,
-                                value: translate(localeJson, "rep_address"),
-                                labelClass: `pl-2 ${
-                                  locale == "en" ? "pt-1" : ""
-                                }`,
-                                onChange: (e) => {
-                                  setFieldValue("telAsRep",e.checked)
-                                  setHavetel(e.checked);
-                                  if (e.checked == true) {
-                                    setFieldValue("tel",repAddress[0].tel)
-                                  }
-                                  else {
-                                    setFieldValue("tel",'');
-                                  }
-                                },
-                              }}
-                              parentClass={
-                                "flex approve-check align-items-center"
-                              }
-                            />
-                          </div>
-                        )}
                           <Input
                             inputProps={{
                               inputParentClassName: `w-full custom_input ${
@@ -841,38 +861,6 @@ export default function UserEventRegModal(props) {
                       </div>
 
                       <div className="mb-2  col-12 ">
-                      {evacuee?.length > 0 && !values.checked && (
-                          <div className="w-full mb-1 mt-2">
-                            <NormalCheckBox
-                              checkBoxProps={{
-                                checked: values.addressAsRep,
-                                value: translate(localeJson, "rep_address"),
-                                labelClass: `pl-2 ${
-                                  locale == "en" ? "pt-1" : ""
-                                }`,
-                                onChange: (e) => {
-                                  setFieldValue("addressAsRep",e.checked)
-                                  setHaveRepAddress(e.checked);
-                                  if (e.checked == true) {
-                                    handleRepAddress(
-                                      repAddress[0],
-                                      setFieldValue
-                                    );
-                                  }
-                                  else {
-                                    setFieldValue("postalCode",'');
-                                    setFieldValue("address",'');
-                                    setFieldValue("address2",'');
-                                    setFieldValue("prefecture_id",'');
-                                  }
-                                },
-                              }}
-                              parentClass={
-                                "flex approve-check align-items-center"
-                              }
-                            />
-                          </div>
-                        )}
                         <div className="outer-label pb-1 w-12">
                           <label>{translate(localeJson, "c_address")}</label>
                           <span className="p-error">*</span>
@@ -1011,14 +999,27 @@ export default function UserEventRegModal(props) {
                             options:
                               locale == "ja" ? prefectures : prefectures_en,
                             optionLabel: "name",
-                            onChange: (evt)=>{
-                              setFieldValue("prefecture_id",evt.target.value);
-                              if(values.address)
-                              {
-                                setAddressCount(addressCount+1)
+                            // onChange: (evt)=>{
+                            //   setFieldValue("prefecture_id",evt.target.value);
+                            //   if(values.address)
+                            //   {
+                            //     setAddressCount(addressCount+1)
+                            //   }
+                            // },
+                            // onBlur: handleBlur,
+                            onChange: (e) => {
+                              setFieldValue("prefecture_id", e.target.value);
+                              if(values.postalCode) {
+                              let payload = values.postalCode;
+                               getAddress(
+                                payload, (res) => {
+                                  if(res && res.prefcode != e.target.value) {
+                                    setErrors({ ...errors, postalCode : translate(localeJson,"zip_code_mis_match")});
+                                  }
+                                })
                               }
                             },
-                            onBlur: handleBlur,
+                            // onBlur: handleBlur,
                             emptyMessage: translate(
                               localeJson,
                               "data_not_found"
@@ -1153,6 +1154,9 @@ export default function UserEventRegModal(props) {
                           }
                         />
                       </div>
+                      
+                      {/* dob age and age_month start */}
+                      
                       <div className="mb-2 col-12">
                         <div className="outer-label pb-1 w-12">
                           <label>{translate(localeJson, "c_dob")}</label>
@@ -1213,7 +1217,7 @@ export default function UserEventRegModal(props) {
                                         }
                                       }
                                     },
-
+ 
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1375,7 +1379,7 @@ export default function UserEventRegModal(props) {
                                         }
                                       }
                                     },
-
+ 
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1415,70 +1419,73 @@ export default function UserEventRegModal(props) {
                           />
                         </div>
                       </div>
-                      <div className="mb-2 col-12 ">
-                        <InputNumber
-                          inputNumberProps={{
-                            inputNumberParentClassName: `${
-                              errors.age && touched.age && "p-invalid pb-0"
-                            }`,
-                            labelProps: {
-                              text: translate(localeJson, "c_age_y"),
-                              inputNumberLabelClassName: "block font-bold",
-                              spanText: "*",
-                              inputNumberLabelSpanClassName: "p-error",
-                              labelMainClassName: "pb-1",
-                            },
-                            inputNumberClassName: "w-full w-full",
-                            id: "age",
-                            name: "age",
-                            value: values.age,
-                            disabled: true,
-                            onChange: (evt) => {
-                              setFieldValue("age", evt.value);
-                            },
-                            onValueChange: (evt) => {
-                              setFieldValue("age", evt.value);
-                            },
-                            onBlur: handleBlur,
-                          }}
-                        />
-                        <ValidationError
-                          errorBlock={errors.age && touched.age && errors.age}
-                        />
-                      </div>
-                      <div className="mb-2 col-12 ">
-                        <InputNumber
-                          inputNumberProps={{
-                            inputNumberParentClassName: `${
-                              errors.age && touched.age && "p-invalid pb-0"
-                            }`,
-                            labelProps: {
-                              text: translate(localeJson, "c_age_m"),
-                              inputNumberLabelClassName: "block font-bold",
-                              spanText: "*",
-                              inputNumberLabelSpanClassName: "p-error",
-                              labelMainClassName: "pb-1",
-                            },
-                            inputNumberClassName: "w-full w-full",
-                            id: "age_m",
-                            name: "age_m",
-                            value: values.age_m,
-                            disabled: true,
-                            onChange: (evt) => {
-                              setFieldValue("age_m", evt.value);
-                            },
-                            onValueChange: (evt) => {
-                              setFieldValue("age_m", evt.value);
-                            },
-                            onBlur: handleBlur,
-                          }}
-                        />
-                        <ValidationError
-                          errorBlock={
-                            errors.age_m && touched.age_m && errors.age_m
-                          }
-                        />
-                      </div>
+
+<div className="mb-2 col-12 ">
+<InputNumber
+  inputNumberProps={{
+    inputNumberParentClassName: `${
+      errors.age && touched.age && "p-invalid pb-0"
+    }`,
+    labelProps: {
+      text: translate(localeJson, "c_age_y"),
+      inputNumberLabelClassName: "block font-bold",
+      spanText: "*",
+      inputNumberLabelSpanClassName: "p-error",
+      labelMainClassName: "pb-1",
+    },
+    inputNumberClassName: "w-full w-full",
+    id: "age",
+    name: "age",
+    value: values.age,
+    disabled: true,
+    onChange: (evt) => {
+      setFieldValue("age", evt.value);
+    },
+    onValueChange: (evt) => {
+      setFieldValue("age", evt.value);
+    },
+    onBlur: handleBlur,
+  }}
+/>
+<ValidationError
+  errorBlock={errors.age && touched.age && errors.age}
+/>
+</div>
+<div className="mb-2 col-12 ">
+<InputNumber
+  inputNumberProps={{
+    inputNumberParentClassName: `${
+      errors.age && touched.age && "p-invalid pb-0"
+    }`,
+    labelProps: {
+      text: translate(localeJson, "c_age_m"),
+      inputNumberLabelClassName: "block font-bold",
+      spanText: "*",
+      inputNumberLabelSpanClassName: "p-error",
+      labelMainClassName: "pb-1",
+    },
+    inputNumberClassName: "w-full w-full",
+    id: "age_m",
+    name: "age_m",
+    value: values.age_m,
+    disabled: true,
+    onChange: (evt) => {
+      setFieldValue("age_m", evt.value);
+    },
+    onValueChange: (evt) => {
+      setFieldValue("age_m", evt.value);
+    },
+    onBlur: handleBlur,
+  }}
+/>
+<ValidationError
+  errorBlock={
+    errors.age_m && touched.age_m && errors.age_m
+  }
+/>
+</div>
+                      {/* dob age and age_month end */}
+
                       <div className="mb-2 col-12">
                         <div className="outer-label w-12 pb-1">
                           <label>{translate(localeJson, "c_gender")}</label>

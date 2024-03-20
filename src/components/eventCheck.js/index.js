@@ -43,7 +43,7 @@ const CommonPage = ({
     <>
      <UserEventRegModal
         open={specialCareEditOpen}
-        header={"1"+ translate(localeJson, "per_info") +"（" + translate(localeJson, "c_representative") + "）"}
+        header={translate(localeJson, "per_info")}
         buttonText={translate(
           localeJson,"submit"
         )}
@@ -77,7 +77,7 @@ const CommonPage = ({
                           text: translate(localeJson, "scan_my_card_search"),
                           icon: (
                             <img
-                              src="/layout/images/Scanner.png"
+                              src="/layout/images/Card.png"
                               width={"30px"}
                               height={"30px"}
                               alt="scanner"
@@ -117,7 +117,7 @@ const CommonPage = ({
                     </div>
                   </div>
                 </div>
-                {window.location.origin != "https://shelter.biz.cityos-dev.hitachi.co.jp" && window.location.origin != "https://hitachi.nichi.in" && router.pathname.startsWith('/user/register/member') && (
+                {window.location.origin != "https://shelter.biz.cityos-dev.hitachi.co.jp" && router.pathname.startsWith('/user/register/member') && (
                   <div className="flex align-items-center justify-content-center">
                     <Button
                       buttonProps={{

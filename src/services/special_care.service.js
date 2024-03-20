@@ -176,5 +176,6 @@ function _deleteSpecialCare(id, callBackFun) {
           position: "top-right",
         });
       }
+      callBackFun(false);
     });
 }

@@ -12,6 +12,7 @@ export const StaffManagementService = {
     update: _update,
     delete: _delete,
     show: _show,
+    getActivePlaceList: _getActivePlaceList,
 };
 
 /**
@@ -210,3 +211,33 @@ function _delete(id, callBackFun) {
             });
         });
 }
+
+
+/**
+ * Get place list
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _getActivePlaceList(callBackFun) {
+    const payload = {
+      "filters": {
+          "sort_by": "refugee_name",
+          "order_by": "asc"
+      },
+      "search": "",
+      "map":true
+  };
+    axios
+      .post("/user/place/list",payload)
+      .then((response) => {
+        if (response && response.data) {
+          callBackFun(response.data);
+        }
+      })
+      .catch((error) => {
+        
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+      });
+      });
+  }

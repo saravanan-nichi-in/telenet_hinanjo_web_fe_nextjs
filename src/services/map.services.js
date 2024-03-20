@@ -13,9 +13,9 @@ export const MapServices = {
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _getPlaceList(callBackFun) {
+function _getPlaceList(callBackFun, payload={}) {
   axios
-    .post("/user/place/list")
+    .post("/user/place/list", payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

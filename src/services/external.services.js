@@ -15,8 +15,16 @@ export const ExternalServices = {
  * @param {*} callBackFun
  */
 function _getActivePlaceList(callBackFun) {
+  const payload = {
+    "filters": {
+        "sort_by": "refugee_name",
+        "order_by": "asc"
+    },
+    "search": "",
+    "map":true
+};
   axios
-    .get("/user/active/place")
+    .post("/user/place/list",payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

@@ -14,6 +14,7 @@ export const Button = (props) => {
     export: isExport,
     create: isCreate,
     import: isImport,
+    delete: isDelete,
     ...restProps
   } = buttonProps;
   let updatedIcon = icon;
@@ -23,14 +24,15 @@ export const Button = (props) => {
     updatedIcon = "pi pi-plus";
   } else if (isImport) {
     updatedIcon = "pi pi-upload";
+  } else if (isDelete) {
+    updatedIcon = "pi pi-trash";
   }
 
   return (
     <div className={`${parentClass}`} style={parentStyle}>
       <PrimeReactButton
-        className={`${bg} ${hoverBg} ${
-          custom || "custom-button"
-        }  ${buttonClass} font-medium`}
+        className={`${bg} ${hoverBg} ${custom || "custom-button"
+          }  ${buttonClass} font-medium`}
         label={text}
         rounded={"true"}
         icon={isLoading ? "pi pi-spin pi-spinner" : icon || updatedIcon}
@@ -49,9 +51,8 @@ export const ButtonRounded = (props) => {
   return (
     <div className={`${parentClass}`} style={parentStyle}>
       <PrimeReactButton
-        className={`${bg} ${hoverBg} ${icon && "custom-icon-button"} ${
-          custom || "custom-button"
-        } ${buttonClass} font-medium border-round-3xl`}
+        className={`${bg} ${hoverBg} ${icon && "custom-icon-button"} ${custom || "custom-button"
+          } ${buttonClass} font-medium border-round-3xl`}
         label={text}
         icon={icon}
         {...restProps}

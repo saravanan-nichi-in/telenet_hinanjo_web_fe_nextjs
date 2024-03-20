@@ -198,6 +198,10 @@ export const RowExpansionTable = (props) => {
     iconStyle,
     selectionMode,
     innerTableSelectionMode,
+    innerTableOnSelectionChange,
+    innerTableSelection,
+    innerTableSelectAll,
+    innerTableOnSelectAllChange,
     ...restProps
   } = props;
   const [expandedRows, setExpandedRows] = useState(onRowExpand);
@@ -235,7 +239,7 @@ export const RowExpansionTable = (props) => {
     );
   };
 
-  const rowExpansionTemplate = (data) => {
+  const rowExpansionTemplate = (data, val) => {
     return (
       <div className="rowExpansionTable">
         <TableData
@@ -249,6 +253,8 @@ export const RowExpansionTable = (props) => {
           emptyMessage={rowExpansionEmptyMessage}
           selectionMode={innerTableSelectionMode}
           tableStyle={rowExpansionTableStyle || { minWidth: "20rem" }}
+          selection={innerTableSelection}
+          onSelectionChange={(e) => innerTableOnSelectionChange(e, data, val.index)}
         >
           {innerColumn.map((column, index) => (
             <Column
@@ -264,6 +270,7 @@ export const RowExpansionTable = (props) => {
               className={column.className}
               alignHeader={column.alignHeader}
               headerClassName={column.headerClassName}
+              selectionMode={column.selectionMode}
               style={{
                 minWidth: column.minWidth && column.minWidth,
                 maxWidth: column.maxWidth && column.maxWidth,
@@ -293,6 +300,7 @@ export const RowExpansionTable = (props) => {
             emptyMessage={rowExpansionEmptyMessage}
             selectionMode={innerTableSelectionMode}
             tableStyle={rowExpansionTableStyle || { minWidth: "20rem" }}
+            onSelectionChange={innerTableOnSelectionChange}
           >
             {inner1Column.map((column1, index) => (
               <Column
@@ -308,6 +316,7 @@ export const RowExpansionTable = (props) => {
                 className={column1.className}
                 alignHeader={column1.alignHeader}
                 headerClassName={column1.headerClassName}
+                selectionMode={column1.selectionMode}
                 style={{
                   minWidth: column1.minWidth && column1.minWidth,
                   textAlign: column1.textAlign && column1.textAlign,

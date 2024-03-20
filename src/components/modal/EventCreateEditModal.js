@@ -3,12 +3,15 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate, getGeneralDateTimeDisplayFormat } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { Input, TextArea } from "../input";
 import { DateTime } from "../date&time";
+import {
+    NormalCheckBox,
+} from "@/components";
 
 export default function EventCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
@@ -24,6 +27,7 @@ export default function EventCreateEditModal(props) {
             .max(255, translate(localeJson, 'questionnaire_remarks_is_max_required')),
         closing_date: Yup.date().nullable()
             .min(Yup.ref('opening_date'), translate(localeJson, "event_closing_date_min")),
+        auto_checkin_flag: Yup.boolean().notRequired(),
     };
     if (props.modalAction == "create") {
         validation = {
@@ -74,8 +78,8 @@ export default function EventCreateEditModal(props) {
                     name_en: "",
                     remarks: "",
                     opening_date: "",
-                    closing_date: ""
-
+                    closing_date: "",
+                    auto_checkin_flag: 0,
                 });
             } else {
                 setInitialValues({
@@ -83,7 +87,8 @@ export default function EventCreateEditModal(props) {
                     name_en: editObject.name_en ?? "",
                     remarks: editObject.remarks ?? "",
                     opening_date: editObject.opening_date ?? "",
-                    closing_date: editObject.closing_date || ""
+                    closing_date: editObject.closing_date || "",
+                    auto_checkin_flag: editObject.auto_checkin_flag || 0,
                 });
                 setDisFlag(disFlagFunc())
             }
@@ -154,12 +159,10 @@ export default function EventCreateEditModal(props) {
                         }
                         values.closing_date_time = values.opening_date ? getGeneralDateTimeDisplayFormat(closingDate) : ""
                     }
-
                     props.showOverFlow()
                     close();
                     onRegister(values);
                     actions.resetForm({ values: initialValues });
-
                 }}
             >
                 {({
@@ -340,7 +343,7 @@ export default function EventCreateEditModal(props) {
                                                 }
                                             />
                                         </div>
-                                        <div className="">
+                                        <div className="modal-field-bottom-space">
                                             <TextArea textAreaProps={{
                                                 id: 'remarks',
                                                 name: 'remarks',
@@ -358,6 +361,20 @@ export default function EventCreateEditModal(props) {
                                                 value: values.remarks,
                                             }} />
                                             <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />
+                                        </div>
+                                        <div className="">
+                                            <NormalCheckBox
+                                                checkBoxProps={{
+                                                    name: 'auto_checkin_flag',
+                                                    checked: values.auto_checkin_flag == 1 ? true : false,
+                                                    labelClass: 'ml-2',
+                                                    value: translate(localeJson, 'automatic_entry_exit'),
+                                                    onChange: (e) => {
+                                                        setFieldValue('auto_checkin_flag', e.checked ? 1 : 0);
+                                                    }
+                                                }}
+                                            />
+                                            <ValidationError errorBlock={errors.auto_checkin_flag && touched.auto_checkin_flag && errors.auto_checkin_flag} />
                                         </div>
                                         <div className="text-center">
                                             <div className="modal-button-footer-space">

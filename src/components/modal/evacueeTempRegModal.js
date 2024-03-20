@@ -26,12 +26,14 @@ import {
 import {
   CommonServices,
   TempRegisterServices,
+  CheckInOutServices
 } from "@/services";
 import QuestionList from "@/components/masterQuestion";
 import { Input, InputDropdown, InputNumber } from "../input";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import CustomHeader from "../customHeader";
 import * as wanakana from 'wanakana';
+import YaburuModal from "./userYaburuCardModal";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -48,9 +50,12 @@ export default function EvacueeTempRegModal(props) {
   const validationSchema = () =>
     Yup.object().shape({
       checked:Yup.boolean().nullable(),
+      name: Yup.string()
+        .nullable()
+        .max(100, translate(localeJson, "external_popup_name_kanji")),
       name_furigana: Yup.string()
         .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
+        .max(100, translate(localeJson, "name_max_phonetic"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       dob: Yup.object().shape({
         year: Yup.string()
@@ -111,7 +116,7 @@ export default function EvacueeTempRegModal(props) {
       // Add other fields and validations as needed
       age: Yup.number()
         .required(translate(localeJson, "age_required")),
-      age_m: Yup.number().required(translate(localeJson, "age_required")),
+      age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
       .test("is-correct",
@@ -170,6 +175,7 @@ export default function EvacueeTempRegModal(props) {
   const [dobCounter, setDobCounter] = useState(0);
   const [addressCount,setAddressCount] = useState(0);
   const [fetchZipCode,setFetchedZipCode] = useState("");
+  const { basicInfo } = CheckInOutServices;
 
   useEffect(() => {
     setMIsRecording(isRecording);
@@ -218,10 +224,12 @@ export default function EvacueeTempRegModal(props) {
     });
   };
 
-  const special_care_options = specialCare?.map((item) => ({
+  const special_care_options = (specialCare?.map((item) => ({
     name: locale == "ja" ? item.name : item.name_en,
     value: item.id.toString(), // Convert the ID to string if needed
-  }));
+    sortOrder: item.sort_order.toString()
+  })) || [])
+  special_care_options.sort((a, b) => a.sortOrder - b.sortOrder);
   const formikRef = useRef();
   const initialValues =
     registerModalAction == "edit"
@@ -354,10 +362,13 @@ export default function EvacueeTempRegModal(props) {
   };
   const qrResult = (result) => {
     setLoader(true);
-    let formData = new FormData();
-    formData.append("content", result);
+    let payload = {
+      yapple_id: "",
+      ppid: "",
+      chiica_qr: result,
+    };
     setOpenQrPopup(false);
-    qrScanRegistration(formData, (res) => {
+    basicInfo(payload, (res) => {
       if (res) {
         setOpenQrPopup(false);
         const evacueeArray = res.data;
@@ -388,7 +399,7 @@ export default function EvacueeTempRegModal(props) {
 
   function createEvacuee(evacuees, setFieldValue) {
     setFieldValue("name", evacuees.name || "");
-    setFieldValue("name_furigana", evacuees.refugeeName || "");
+    setFieldValue("name_furigana", (evacuees.refugeeName||evacuees.refugee_name) || "");
     setFieldValue("age", evacuees.age || "");
     setFieldValue("age_m", evacuees.month || "");
     setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
@@ -397,6 +408,8 @@ export default function EvacueeTempRegModal(props) {
       setFieldValue("prefecture_id", evacuees?.prefecture_id);
     const re = /^[0-9-]+$/;
     let val;
+    if(evacuees.postal_code)
+    {
     if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
       val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
       if (val.length > 3) {
@@ -421,6 +434,7 @@ export default function EvacueeTempRegModal(props) {
         }
       });
     }
+  }
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
@@ -458,8 +472,8 @@ export default function EvacueeTempRegModal(props) {
     return { years, months };
   }
 
-  const Qr = {
-    url: "/layout/images/evacuee-qr.png",
+  const Scanner = {
+    url: "/layout/images/mapplescan.svg",
   };
   const Card = {
     url: "/layout/images/evacuee-card.png",
@@ -527,6 +541,12 @@ export default function EvacueeTempRegModal(props) {
           setFetchedZipCode("")
         formikRef.current.validateField("postalCode");
         }
+        else {
+          formikRef.current.validateField("address",_address.address2+_address.address3);
+          formikRef.current.validateField("prefecture_id",_address.prefcode);
+          setFetchedZipCode(postalCode)
+          formikRef.current.validateField("postalCode",postalCode);
+        }
       })
     }
   },[addressCount])
@@ -542,11 +562,16 @@ export default function EvacueeTempRegModal(props) {
         hide={() => setPerspectiveCroppingVisible(false)}
         callback={ocrResult}
       />
-      <QrScannerModal
+      <YaburuModal
+       open={openQrPopup}
+       close={closeQrPopup}
+       callBack={qrResult}
+       />
+      {/* <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
-      ></QrScannerModal>
+      ></QrScannerModal> */}
       <Formik
         innerRef={formikRef}
         validationSchema={validationSchema}
@@ -556,6 +581,22 @@ export default function EvacueeTempRegModal(props) {
           if (!hasErrors) {
             setIsFormSubmitted(false);
             setIsRecording(false);
+            if(values.specialCareType)
+            {
+              const specialCareObjects = values.specialCareType.flatMap(id => {
+                const foundItems = specialCare.filter(item =>
+                  { 
+                    return item.id == id;
+                  })
+                
+                return foundItems.length > 0 ? foundItems : [];
+            });
+            // Sort specialCareObjects based on sort_order
+            specialCareObjects.sort((a, b) => a.sort_order - b.sort_order);
+            // Step 3: Map the sorted specialCare objects back to IDs
+            const sortedSpecialCareIds = specialCareObjects.map(item => item.id.toString());
+            values.specialCareType =sortedSpecialCareIds
+            }
             values.individualQuestions = questions;
             values.tel = convertToSingleByte(values.tel);
             values.postalCode = convertToSingleByte(values.postalCode);
@@ -684,10 +725,10 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
-                          text: translate(localeJson, "c_card_reg"),
+                          text: translate(localeJson, "myNumberCardScan"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled:
-                            values?.family_register_from == "0" ? true : false,
+                          disabled:true,
+                            // values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                           },
@@ -703,13 +744,14 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "c_qr_reg"),
-                          icon: <img src={Qr.url} width={30} height={30} />,
+                          text: translate(localeJson, "yaburuCardScan"),
+                          icon: <img src={Scanner.url} width={40} height={40} />,
                           disabled:
                             values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setOpenQrPopup(true);
                           },
+                          
                         }}
                         parentClass={"back-button w-full"}
                       />
@@ -744,7 +786,7 @@ export default function EvacueeTempRegModal(props) {
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: true,
+                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -802,7 +844,7 @@ export default function EvacueeTempRegModal(props) {
                               inputRightIconProps: {
                                 display: true,
                                 audio: {
-                                  display: true,
+                                  display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                                 },
                                 icon: "",
                                 isRecording: isMRecording,
@@ -914,7 +956,7 @@ export default function EvacueeTempRegModal(props) {
                               inputRightIconProps: {
                                 display: true,
                                 audio: {
-                                  display: true,
+                                  display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                                 },
                                 icon: "",
                                 isRecording: isMRecording,
@@ -1054,7 +1096,7 @@ export default function EvacueeTempRegModal(props) {
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: true,
+                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -1168,7 +1210,7 @@ export default function EvacueeTempRegModal(props) {
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: true,
+                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -1226,7 +1268,7 @@ export default function EvacueeTempRegModal(props) {
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: true,
+                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,

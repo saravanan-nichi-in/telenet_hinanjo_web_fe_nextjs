@@ -34,7 +34,7 @@ export const GoogleMapComponent = ({
   const mapOptions = {
     minZoom: 0, // Set your desired min zoom level
     maxZoom: 25,
-    zoom: mapScale || 4,
+    zoom: mapScale || 10, 
   };
 
   const customIcon = {
@@ -133,7 +133,7 @@ export const GoogleMapMultiMarkerComponent = ({
 
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [isMarker, setIsMarker] = useState(false);
-  const [onMouseHoverValue,setOnMouseHoverValue] = useState(false);
+  const [onMouseHoverValue, setOnMouseHoverValue] = useState(false);
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
 
   const onMarkerClick = (marker) => {
@@ -144,7 +144,7 @@ export const GoogleMapMultiMarkerComponent = ({
   const [mapOptions, setMapOptions] = useState({
     minZoom: 2,
     maxZoom: 25,
-    zoom: 6, // Initial zoom level
+    zoom: 10, // Initial zoom level
     gestureHandling: "greedy",
   });
 
@@ -168,7 +168,7 @@ export const GoogleMapMultiMarkerComponent = ({
   }, [searchResult]);
 
   useEffect(() => {
-    mapOptions.zoom = 4;
+    mapOptions.zoom = 10;
   }, []);
 
   const containerStyle = {
@@ -195,30 +195,30 @@ export const GoogleMapMultiMarkerComponent = ({
               <div class="legend_main_view">
                 <img class="legend_first_view" src=${GreenIcon.url} />
                 <div class="legend_second_view">${translate(
-                  localeJson,
-                  "empty"
-                )}</div>
+            localeJson,
+            "empty"
+          )}</div>
               </div>
               <div class="legend_main_view">
                 <img class="legend_first_view" src=${RedIcon.url} />
                 <div class="legend_second_view">${translate(
-                  localeJson,
-                  "beginningToCrowd"
-                )}</div>
+            localeJson,
+            "beginningToCrowd"
+          )}</div>
               </div>
               <div class="legend_main_view">
                 <img class="legend_first_view" src=${BlueIcon.url} />
                 <div class="legend_second_view">${translate(
-                  localeJson,
-                  "crowded"
-                )}</div>
+            localeJson,
+            "crowded"
+          )}</div>
               </div>
               <div class="legend_main_view">
                 <img class="legend_first_view"src=${GrayIcon.url} />
                 <div class="legend_second_view">${translate(
-                  localeJson,
-                  "closed"
-                )}</div>
+            localeJson,
+            "closed"
+          )}</div>
               </div>
             </div>
           `;
@@ -287,15 +287,15 @@ export const GoogleMapMultiMarkerComponent = ({
                       ? marker.center >= 100
                         ? BlueIcon
                         : marker.center > 50 && marker.center <= 80
-                        ? RedIcon
-                        : marker.center >= 0
-                        ? GreenIcon
-                        : GrayIcon
+                          ? RedIcon
+                          : marker.center >= 0
+                            ? GreenIcon
+                            : GrayIcon
                       : GrayIcon
                   }
                 >
                   <div title={marker.content}>
-                      <OverlayViewF
+                    <OverlayViewF
                       position={marker.position}
                       mapPaneName={OverlayView.MARKER_LAYER}
                     >
@@ -303,7 +303,7 @@ export const GoogleMapMultiMarkerComponent = ({
                         style={{
                           position: "relative",
                           display: hoveredMarkerIndex === index && onMouseHoverValue ? "inline-block" : "none",
-                          zIndex:"99999"
+                          zIndex: "99999"
                         }}
                       >
                         <div
@@ -366,10 +366,10 @@ export const GoogleMapMultiMarkerComponent = ({
                                     ? "purple"
                                     : selectedMarker.center > 50 &&
                                       selectedMarker.center <= 80
-                                    ? "red"
-                                    : selectedMarker.center >= 0
-                                    ? "green"
-                                    : "gray"
+                                      ? "red"
+                                      : selectedMarker.center >= 0
+                                        ? "green"
+                                        : "gray"
                                   : "gray",
                             }}
                           >
@@ -378,10 +378,10 @@ export const GoogleMapMultiMarkerComponent = ({
                                 ? translate(localeJson, "crowded")
                                 : selectedMarker.center > 50 &&
                                   selectedMarker.center <= 80
-                                ? translate(localeJson, "beginningToCrowd")
-                                : selectedMarker.center >= 0
-                                ? translate(localeJson, "empty")
-                                : translate(localeJson, "closed")
+                                  ? translate(localeJson, "beginningToCrowd")
+                                  : selectedMarker.center >= 0
+                                    ? translate(localeJson, "empty")
+                                    : translate(localeJson, "closed")
                               : translate(localeJson, "closed")}
                           </h1>
                           <div

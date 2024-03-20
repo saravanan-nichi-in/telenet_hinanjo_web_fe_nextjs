@@ -10,6 +10,7 @@ import { ValidationError } from "../error";
 import { TabView, TabPanel } from 'primereact/tabview';
 import { NormalTable } from "../datatable";
 import { CommonServices } from "@/services";
+import { StaffManagementService } from '@/services/staffmanagement.service';
 import Password, { Input } from "../input";
 
 export default function StaffManagementEditModal(props) {
@@ -30,6 +31,7 @@ export default function StaffManagementEditModal(props) {
         search: "",
     });
     const { getStaffEventList, getPlaceList } = CommonServices
+    const { getActivePlaceList } = StaffManagementService
 
     const isEmail = (value) => {
         // Check if the value includes '@' and matches the email pattern
@@ -146,12 +148,13 @@ export default function StaffManagementEditModal(props) {
             }
         })
 
-        getPlaceList((response) => {
+        getActivePlaceList((response) => {
             if (response?.success && !_.isEmpty(response.data)) {
                 const data = response.data.model.list;
+                const filteredData = data.filter(item => item.active_flg == 1);
                 var additionalColumnsArrayWithOldData = [...columnsData2];
                 let preparedList = [];
-                data.map((obj, i) => {
+                filteredData.map((obj, i) => {
                     let preparedObj = {
                         index: getPayload.filters.start + i,
                         id: obj.id,
