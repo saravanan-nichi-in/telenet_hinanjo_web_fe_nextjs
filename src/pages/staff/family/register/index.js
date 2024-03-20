@@ -339,13 +339,28 @@ export default function Admission() {
         formikRef.current.setFieldValue("name_kanji", data.name);
       }
       setEvacuee((prevEvacuee) => {
-        const evacueeIndex = prevEvacuee.findIndex(
+        const updatedEvacuees = prevEvacuee.map((evacuee) => {
+          if (evacuee.addressAsRep || evacuee.telAsRep) {
+            // Update existing evacuee if conditions are met
+            return {
+              ...evacuee,
+              postalCode:evacuee.addressAsRep? evacueeValues.postalCode:evacuee.postalCode,
+              prefecture_id: evacuee.addressAsRep? evacueeValues.prefecture_id:evacuee.prefecture_id,
+              address:evacuee.addressAsRep? evacueeValues.address:evacuee.address,
+              tel: evacuee.telAsRep? evacueeValues.tel:evacuee.tel
+            };
+          } else {
+            return evacuee;
+          }
+        });
+
+        const evacueeIndex = updatedEvacuees.findIndex(
           (evacuee) => evacuee.id === evacueeValues.id
         );
 
         if (evacueeIndex !== -1) {
           // Update existing evacuee
-          const updatedEvacuee = [...prevEvacuee];
+          const updatedEvacuee = [...updatedEvacuees];
           updatedEvacuee[evacueeIndex] = evacueeValues;
           formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
           return updatedEvacuee;
