@@ -11,7 +11,7 @@ import {
 import * as Yup from "yup";
 import { Formik } from "formik";
 import AudioRecorder from "@/components/audio";
-import { CommonServices, CheckInOutServices, TempRegisterServices } from "@/services";
+import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
 import { prefectures } from '@/utils/constant';
 import { useRouter } from "next/router";
 import CustomHeader from "@/components/customHeader";
@@ -39,6 +39,7 @@ export default function Admission() {
   const [searchFlag, setSearchFlag] = useState(false);
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
+  const [isSearch,setSearch] = useState(false);
   const schema = Yup.object().shape({
     name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
       test: function (value) {
@@ -65,12 +66,15 @@ export default function Admission() {
   const { getList, checkOut, eventCheckOut, placeCheckout } = CheckInOutServices;
   const { getBasicDetailsInfo, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
   const initialValues = { name: "", password: "", familyCode: "" };
+  const {getActiveList} = UserPlaceListServices;
 
+  /* Services */
+  const { getEventListByID } = UserDashboardServices;
   useEffect(() => {
     const fetchData = async () => {
       setLoader(false);
       const urlParams = new URLSearchParams(window.location.search);
-      const uuid = urlParams.get('uuid');
+      const uuid = urlParams.get('UUID')|| urlParams.get('uuid');
       if (uuid) {
         validateAndMoveToForm(uuid)
       }
@@ -99,9 +103,6 @@ export default function Admission() {
     if (familyCode && re.test(familyCode)) {
       let val = familyCode.replace(/-/g, ""); // Remove any existing hyphens
       // Insert hyphen after the first three characters
-      if (val.length > 3) {
-        val = val.slice(0, 3) + "-" + val.slice(3);
-      }
       formikRef.current.setFieldValue("familyCode", val);
     }
     setAudioFamilyCodeLoader(false);
@@ -163,6 +164,18 @@ export default function Admission() {
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
   const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
   const [importModalOpen, setImportModalOpen] = useState(false);
+  const getCookieValueByKey = (key) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Check if the cookie starts with the specified key
+      if (cookie.startsWith(key + '=')) {
+        return cookie.substring(key.length + 1);
+      }
+    }
+    return '';
+  };
+const myCookieValue = getCookieValueByKey('idToken');
 
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const param = router?.query;
@@ -174,7 +187,28 @@ export default function Admission() {
   }
 
   const openMyNumberDialog = () => {
-    router.push("https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100")
+    let payload = { id: layoutReducer?.user?.place?.id}
+    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+      if (response && response.data) {
+      let obj = response.data.model;
+      if(obj.is_q_active=="1")
+      {
+        router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
+    }
+    else {
+        router.push({pathname:'/user/event-list'})
+    }
+}}):
+    getActiveList(payload, async (res) => {
+      if (res?.data?.model?.active_flg == "1") {
+        router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
+}
+else {
+    router.push({pathname:'/user/list'})
+}
+})
+   
   };
 
   const validateAndMoveToForm = (id) => {
@@ -186,7 +220,11 @@ export default function Admission() {
     {
       if(res)
       {
-      ppid= res?.result[0];
+     // Parse the inner JSON stored as a string in the "result" field
+      const innerJson = JSON.parse(res.result);
+     // Extract the value associated with the key "ppid"
+      const ppidValue = innerJson.transfer_data.ppid;
+      ppid= ppidValue;
       ppid && fetchBasicDetailsInfo(ppid);
       }
     })
@@ -286,9 +324,29 @@ export default function Admission() {
   }
 
   const openYappleModal = () => {
-    // Logic for the second button click
-    setImportModalOpen(true)
-  };
+    let payload = { id: layoutReducer?.user?.place?.id}
+    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+      if (response && response.data) {
+      let obj = response.data.model;
+      if(obj.is_q_active=="1")
+      {
+        setImportModalOpen(true)
+    }
+    else {
+        router.push({pathname:'/user/event-list'})
+    }
+}}):
+    getActiveList(payload, async (res) => {
+      if (res?.data?.model?.active_flg == "1") {
+        setImportModalOpen(true)
+}
+else {
+    router.push({pathname:'/user/list'})
+}
+})
+
+};
 
   const handleStaffButtonClick = () => {
     // Logic for the staff button click
@@ -308,9 +366,11 @@ export default function Admission() {
         secondButtonClick={openYappleModal}
         setBarcode={setBarcode}
         isCheckIn={false}
-        successHeader={"checkout_info"}
+        successHeader={layoutReducer?.user?.place?.type === "place"?"checkout_info_place":"checkout_info_event"}
         isEvent={true}
         callable={confirmRegistrationBeforeCheckin}
+        dynamicButtonText={true}
+        keyJson={layoutReducer?.user?.place?.type === "place" ?"de_register":"de_register_event"}
         type={layoutReducer?.user?.place?.type}
       />
       <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
@@ -367,9 +427,7 @@ export default function Admission() {
               let fam_val = values.familyCode ? convertToSingleByte(values.familyCode) : "";
               let fam_pass = values.password ? convertToSingleByte(values.password) : "";
               let payload = {
-                family_code: values.familyCode ? fam_val.slice(0, 3) +
-                  "-" +
-                  fam_val.slice(3) : "",
+                family_code: values.familyCode ? fam_val: "",
                 refugee_name: values.name,
                 password: fam_pass,
                 place_id: layoutReducer?.user?.place?.id,
@@ -379,8 +437,11 @@ export default function Admission() {
                     ? { event_id: layoutReducer?.user?.place?.id }
                     : {}),
               };
-              setLoader(true)
-              getList(payload, getSearchResult);
+              if(isSearch)
+              { 
+                setLoader(true);
+                getList(payload, getSearchResult);
+              }
             }}
           >
             {({
@@ -433,10 +494,12 @@ export default function Admission() {
                                 <ButtonRounded
                                   buttonProps={{
                                     custom: "userDashboard",
+                                    title:`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`,
                                     buttonClass:
                                       "flex align-items-center justify-content-center  primary-button h-3rem md:h-8rem lg:h-8rem ",
                                     type: "submit",
                                     rounded: "true",
+                                    icon: <img src="/layout/images/evacuee-card.png" width={'30px'} height={'30px'} alt="scanner" />,
                                     text: translate(localeJson, "staff_temp_register_big_btn_one"),
                                     onClick: () => {
                                       openMyNumberDialog()
@@ -454,6 +517,7 @@ export default function Admission() {
                                     buttonClass:
                                       "flex align-items-center justify-content-center  primary-button h-3rem md:h-8rem lg:h-8rem ",
                                     type: "submit",
+                                    icon: <img src="/layout/images/mapplescan.svg" width={'40px'} height={'40px'} alt="scanner" />,
                                     rounded: "true",
                                     text: translate(localeJson, "staff_temp_register_big_btn_two"),
                                     onClick: () => {
@@ -472,8 +536,7 @@ export default function Admission() {
                           </div>
                           <div className="mt-3 col-12 md:col-6 lg:col-6">
 
-                            <form
-                              onSubmit={handleSubmit}
+                            <div
                               className=" lg:ml-8 md:ml-5"
                             >
                               <div className="w-full">
@@ -652,15 +715,46 @@ export default function Admission() {
                                   <ButtonRounded
                                     buttonProps={{
                                       buttonClass: "w-12 h-3rem primary-button",
-                                      type: "submit",
                                       rounded: "true",
                                       text: translate(localeJson, "mem_search"),
+                                      onClick:()=>
+                                      {
+                                        let payload = { id: layoutReducer?.user?.place?.id}
+                                        let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+                                        layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                          if (response && response.data) {
+                                          let obj = response.data.model;
+                                          if(obj.is_q_active=="1")
+                                          {
+                                            setSearch(true);
+                                            setTimeout(()=>{
+                                              handleSubmit()
+                                            },1000)
+                                        }
+                                        else {
+                                          setSearch(false)
+                                            router.push({pathname:'/user/event-list'})
+                                        }
+                                    }}):
+                                        getActiveList(payload, async (res) => {
+                                          if (res?.data?.model?.active_flg == "1") {
+                                            setSearch(true)
+                                            setTimeout(()=>{
+                                              handleSubmit()
+                                            },1000)
+                                    }
+                                    else {
+                                      setSearch(false)
+                                        router.push({pathname:'/user/list'})
+                                    }
+                                    })
+                                      }
                                     }}
                                     parentClass={"w-full primary-button"}
                                   />
                                 </div>
                               </div>
-                            </form>
+                            </div>
                           </div>
                           {/* </div> */}
                         </div>
@@ -680,7 +774,7 @@ export default function Admission() {
               secondButtonClick={openYappleModal}
               staffButtonClick={handleStaffButtonClick}
               isChecKIn={false}
-              tittle={translate(localeJson, "c_checkout_title")}
+              tittle={translate(localeJson, "c_checkout_title_event")}
             />
           </div>
         )}

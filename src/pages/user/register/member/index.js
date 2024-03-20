@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { Formik } from "formik";
 import { BsFillMicFill } from "react-icons/bs";
 import AudioRecorder from "@/components/audio";
-import { CommonServices, CheckInOutServices, TempRegisterServices } from "@/services";
+import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
 import { prefectures } from "@/utils/constant";
 import { useRouter } from "next/router";
 import CustomHeader from "@/components/customHeader";
@@ -47,6 +47,11 @@ export default function Admission() {
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
+  const [isSearch,setSearch] = useState(false);
+  const {getActiveList} = UserPlaceListServices;
+
+  /* Services */
+  const { getEventListByID } = UserDashboardServices;
   const dispatch = useAppDispatch();
   const schema = Yup.object().shape({
     name: Yup.string()
@@ -81,7 +86,28 @@ export default function Admission() {
   const { getBasicDetailsInfo } = TempRegisterServices;
   const initialValues = { name: "", password: "", familyCode: "" };
   const openYappleModal = () => {
-    setImportModalOpen(true)
+      let payload = { id: layoutReducer?.user?.place?.id}
+      let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+      layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+        if (response && response.data) {
+        let obj = response.data.model;
+        if(obj.is_q_active=="1")
+        {
+          setImportModalOpen(true)
+      }
+      else {
+          router.push({pathname:'/user/event-list'})
+      }
+  }}):
+      getActiveList(payload, async (res) => {
+        if (res?.data?.model?.active_flg == "1") {
+          setImportModalOpen(true)
+  }
+  else {
+      router.push({pathname:'/user/list'})
+  }
+})
+
   };
 
   const [barcode, setBarcode] = useState(null);
@@ -117,9 +143,6 @@ export default function Admission() {
     if (familyCode && re.test(familyCode)) {
       let val = familyCode.replace(/-/g, ""); // Remove any existing hyphens
       // Insert hyphen after the first three characters
-      if (val.length > 3) {
-        val = val.slice(0, 3) + "-" + val.slice(3);
-      }
       formikRef.current.setFieldValue("familyCode", val);
     }
     setAudioFamilyCodeLoader(false);
@@ -177,8 +200,6 @@ export default function Admission() {
   };
 
   const handleFirstButtonClick = () => {
-    // Logic for the first button click
-    console.log("First button clicked!");
   };
 
   const validateAndMoveToForm = (id) => {
@@ -259,13 +280,9 @@ export default function Admission() {
   }
 
   const handleSecondButtonClick = () => {
-    // Logic for the second button click
-    console.log("Second button clicked!");
   };
 
   const handleStaffButtonClick = () => {
-    // Logic for the staff button click
-    console.log("Staff button clicked!");
   };
 
   return (
@@ -280,9 +297,7 @@ export default function Admission() {
             let fam_val = values.familyCode ?convertToSingleByte(values.familyCode):"";
             let fam_pass = values.password ?convertToSingleByte(values.password):"";
             let payload = {
-              family_code: values.familyCode?fam_val.slice(0, 3) +
-              "-" +
-              fam_val.slice(3):"",
+              family_code: values.familyCode?fam_val :"",
               refugee_name: values.name,
               password: fam_pass,
               place_id: layoutReducer?.user?.place?.id,
@@ -292,8 +307,12 @@ export default function Admission() {
                   ? { event_id: layoutReducer?.user?.place?.id }
                   : {}),
             };
-            setLoader(true);
-            getList(payload, getSearchResult);
+            if(isSearch)
+            { 
+              setLoader(true);
+              getList(payload, getSearchResult);
+            }
+            
           }}
         >
           {({
@@ -356,9 +375,33 @@ export default function Admission() {
                                   rounded: "true",
                                   text: translate(localeJson, "signup"),
                                   onClick: () => {
-                                    router.push({
-                                      pathname: "/user/person-count",
-                                    });
+                                    let payload = { id: layoutReducer?.user?.place?.id}
+                                    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+                                    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                      if (response && response.data) {
+                                      let obj = response.data.model;
+                                      if(obj.is_q_active=="1")
+                                      {
+                                        router.push({
+                                          pathname: "/user/person-count",
+                                        });
+                                    }
+                                    else {
+                                        router.push({pathname:'/user/event-list'})
+                                    }
+                                }}):
+                                    getActiveList(payload, async (res) => {
+                                      if (res?.data?.model?.active_flg == "1") {
+                                        router.push({
+                                          pathname: "/user/person-count",
+                                        });
+                                }
+                                else {
+                                    router.push({pathname:'/user/list'})
+                                }
+                              })
+                              
+                                    
                                   },
                                 }}
                                 parentClass={
@@ -372,7 +415,7 @@ export default function Admission() {
                           {translate(localeJson, "or")}
                         </div>
                         <div className="mt-3 col-12 md:col-6 lg:col-6 difference-border">
-                          <form onSubmit={handleSubmit} className="lg:ml-2 md:ml-2">
+                          <div className="lg:ml-2 md:ml-2">
                             <div className="text-2xl font-bold text-center" style={{ color: "#1F2620" }}>
                               {" "}
                               {translate(localeJson, "shelter_search")}
@@ -567,15 +610,47 @@ export default function Admission() {
                                 <ButtonRounded
                                   buttonProps={{
                                     buttonClass: "w-12 h-3rem primary-button",
-                                    type: "submit",
                                     rounded: "true",
                                     text: translate(localeJson, "mem_search"),
+                                    onClick:()=>
+                                    {
+                                      let payload = { id: layoutReducer?.user?.place?.id}
+                                      let evt_payload = { event_id: layoutReducer?.user?.place?.id}
+                                      layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                        if (response && response.data) {
+                                        let obj = response.data.model;
+                                        if(obj.is_q_active=="1")
+                                        {
+                                          setSearch(true);
+                                          setTimeout(()=>{
+                                            handleSubmit()
+                                          },1000)
+                                         
+                                      }
+                                      else {
+                                        setSearch(false)
+                                          router.push({pathname:'/user/event-list'})
+                                      }
+                                  }}):
+                                      getActiveList(payload, async (res) => {
+                                        if (res?.data?.model?.active_flg == "1") {
+                                          setSearch(true)
+                                          setTimeout(()=>{
+                                            handleSubmit()
+                                          },1000)
+                                  }
+                                  else {
+                                    setSearch(false)
+                                      router.push({pathname:'/user/list'})
+                                  }
+                                  })
+                                    }
                                   }}
                                   parentClass={"w-full primary-button"}
                                 />
                               </div>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -599,7 +674,7 @@ export default function Admission() {
               {
                 buttonProps: {
                   buttonClass: "w-12",
-                  text: translate(localeJson, "yapple_modal_success_div_green_btn"),
+                  text: translate(localeJson, "register_event_qr"),
                   onClick: () => {
                     confirmRegistrationBeforeCheckin()
                   },
@@ -635,8 +710,10 @@ export default function Admission() {
             secondButtonClick={openYappleModal}
             setBarcode={setBarcode}
             isCheckIn={true}
-            successHeader={"checkin_info"}
+            successHeader={"checkin_info_event"}
             isEvent={true}
+            dynamicButtonText={true}
+            keyJson={ "register_event_qr"}
             type={layoutReducer?.user?.place?.type}
           />
           <CommonPage
@@ -644,7 +721,7 @@ export default function Admission() {
             secondButtonClick={openYappleModal}
             staffButtonClick={handleStaffButtonClick}
             isCheckIn={true}
-            tittle={translate(localeJson, "new_to_admission_procedures")}
+            tittle={translate(localeJson, "new_to_admission_procedures_event")}
           />
         </div>
       )}

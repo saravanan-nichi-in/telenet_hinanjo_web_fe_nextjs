@@ -48,7 +48,6 @@ export default function PublicExternal() {
     prefecture_id: null,
     address: "",
     email: "",
-    specific_location: "",
     toggleSwitches: Array(3).fill(false),
     toggleFoodSwitches: Array(2).fill(false),
     togglePlaceSwitches: "",
@@ -116,17 +115,6 @@ export default function PublicExternal() {
           /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
           translate(localeJson, "email_valid")
         ),
-      specific_location: Yup.string().nullable().test(
-        "required-when-toggleSwitches-true",
-        translate(localeJson, "c_required"),
-        (value, parent) => {
-          if (parent.parent.toggleSwitches[1] === true || parent.parent.toggleSwitches[2] === true) {
-            return !!value;
-          } else {
-            return true;
-          }
-        }
-      ).max(255, translate(localeJson, "specified_loc_max_len")),
       evacuee: Yup.array()
         .test(
           "evacuee-required-when-toggleSwitches-true",
@@ -369,10 +357,11 @@ export default function PublicExternal() {
 
   const isActivePlaces = (res) => {
     const data = res.data.model.list
-    formikRef.current.setFieldValue("togglePlaceSwitches", Array(data.length).fill(false));
+    const filteredData = data.filter(item => item.active_flg == 1);
+    formikRef.current.setFieldValue("togglePlaceSwitches", Array(filteredData.length).fill(false));
 
-    setShelterData(data)
-    setPlaceButtonStates(Array(data.length).fill(false))
+    setShelterData(filteredData)
+    setPlaceButtonStates(Array(filteredData.length).fill(false))
 
   }
   useEffect(() => {
@@ -508,7 +497,6 @@ export default function PublicExternal() {
           } :
             {
               ...fullPayload,
-              "place_detail": data.specific_location,
             };
           setLoader(true)
           create(convertedPayload, isCreated)
@@ -589,49 +577,6 @@ export default function PublicExternal() {
                         )}
                       </div>
                     )}
-                    {(values.toggleSwitches[1] == true ||
-                      values.toggleSwitches[2] == true) && (
-                        <div className="flex flex-column mt-3">
-                          <div className="mt-3">
-                            <div className="custom-label pb-1">
-                              <label className="font-bold">
-                                {translate(localeJson, "out_side_city_question")}
-                                <span className="p-error">
-                                  *
-                                </span>
-                              </label>
-                            </div>
-                            <div className="">
-                              <Input
-                                inputProps={{
-                                  inputParentClassName: `${errors.specific_location && touched.specific_location && 'p-invalid pb-1'}`,
-                                  labelProps: {
-                                    // text: translate(localeJson, 'out_side_city_question'),
-                                    inputLabelClassName: "block",
-                                    // spanText: "*",
-                                    inputLabelSpanClassName: "p-error"
-                                  },
-                                  inputClassName: "w-full",
-                                  id: "specific_location",
-                                  name: "specific_location",
-                                  value: values.specific_location,
-                                  onChange: handleChange,
-                                  onBlur: handleBlur,
-
-                                }}
-                              />
-                              <ValidationError
-                                errorBlock={
-                                  errors.specific_location &&
-                                  touched.specific_location &&
-                                  errors.specific_location
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
                     {/* Common part start */}
                     {
                       (values.toggleSwitches[0] ||
