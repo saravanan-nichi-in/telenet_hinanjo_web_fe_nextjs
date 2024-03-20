@@ -49,7 +49,7 @@ const CheckOutDetails = () => {
       <div className="m-2 w-12 xlScreenMaxWidth mdScreenMaxWidth">
         {data?.length > 0 && (
           <>
-            <FamilyListComponent data={data} />
+            <FamilyListComponent data={data} header={translate(localeJson,"checkout_confirm")} />
             <div className="flex flex-column justify-content-center align-items-center">
               <div className="w-12 lg:w-6">
                 <ButtonRounded

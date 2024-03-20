@@ -27,7 +27,7 @@ const SearchDetails = () => {
       <div className="m-2 w-full xlScreenMaxWidth mdScreenMaxWidth">
         {data?.length>0 &&(
             <>
-        <FamilyListComponent data={data} />
+        <FamilyListComponent data={data} header={translate(localeJson,"reg_confirm")} />
         <div className="flex flex-column justify-content-center align-items-center">
           <div className="w-12 lg:w-6">
             <ButtonRounded

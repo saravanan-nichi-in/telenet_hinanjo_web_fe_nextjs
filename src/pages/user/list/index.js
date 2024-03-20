@@ -28,6 +28,8 @@ export default function PublicEvacuees() {
     {
       field: "refugee_name",
       header: translate(localeJson, "place_name_list"),
+      sortable: true,
+      alignHeader: "left",
       body: (rowData) => {
         return (
           <div className="flex flex-column">
@@ -42,14 +44,16 @@ export default function PublicEvacuees() {
       header: translate(localeJson, "place_capacity"),
       headerClassName: "custom-header",
       minWidth: "6rem",
+      sortable: false,
       textAlign: "center",
       alignHeader: "center",
     },
     {
-      field: "total_capacity",
+      field: "total_place",
       header: translate(localeJson, "capacity_limit"),
       headerClassName: "custom-header",
       minWidth: "6rem",
+      sortable: false,
       textAlign: "center",
       alignHeader: "center",
     },
@@ -58,14 +62,16 @@ export default function PublicEvacuees() {
       header: translate(localeJson, "accommodation_status_p"),
       headerClassName: "custom-header",
       minWidth: "6rem",
+      sortable: false,
       textAlign: "center",
       alignHeader: "center",
     },
     {
-      field: "status",
+      field: "active_flg",
       header: translate(localeJson, "status_public_evacuees"),
       headerClassName: "custom-header",
       textAlign: "center",
+      sortable: false,
       alignHeader: "center",
     },
   ];
@@ -73,8 +79,8 @@ export default function PublicEvacuees() {
     filters: {
       start: 0,
       limit: 10,
-      sort_by: "updated_at",
-      order_by: "desc",
+      sort_by: "refugee_name",
+      order_by: "asc",
     },
     search: "",
   });
@@ -84,7 +90,7 @@ export default function PublicEvacuees() {
   const [totalCount, setTotalCount] = useState(0);
 
   /* Services */
-  const { getList,getActiveList } = UserPlaceListServices;
+  const { getList, getActiveList } = UserPlaceListServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -93,13 +99,14 @@ export default function PublicEvacuees() {
     };
     fetchData();
 
-    // // Listening for messages from the popup
-    window.addEventListener("message", (event) => {
-      if (event.origin === window.origin) {
-        const receivedData = event.data;
-        console.log("Received from popup:", receivedData);
-      }
-    });
+    // Development
+    // Listening for messages from the popup
+    // window.addEventListener("message", (event) => {
+    //   if (event.origin === window.origin) {
+    //     const receivedData = event.data;
+    // console.warn("Received from popup:", receivedData);
+    //   }
+    // });
   }, [locale, getListPayload]);
 
   /**
@@ -110,8 +117,8 @@ export default function PublicEvacuees() {
       filters: {
         start: getListPayload.filters.start,
         limit: getListPayload.filters.limit,
-        sort_by: "refugee_name",
-        order_by: "desc",
+        sort_by: getListPayload.filters.sort_by,
+        order_by: getListPayload.filters.order_by,
       },
       search: "",
     };
@@ -139,11 +146,10 @@ export default function PublicEvacuees() {
             number: getListPayload.filters.start + i + 1,
             refugee_name: (
               <div
-                className={`${
-                  obj.active_flg
-                    ? "text-highlighter-user-list clickable-row"
-                    : "bg-gray"
-                }`}
+                className={`${obj.active_flg
+                  ? "text-highlighter-user-list clickable-row"
+                  : "bg-gray"
+                  }`}
               >
                 {locale === "en" && !_.isNull(obj.name_en)
                   ? obj.name_en
@@ -152,14 +158,14 @@ export default function PublicEvacuees() {
             ),
             address_place: obj.address_place,
             total_person: obj.total_person,
-            total_capacity: obj.total_place,
+            total_place: obj.total_place,
             percent:
               obj.full_status == 1
                 ? "100%"
                 : obj.percent > 100
-                ? "100%"
-                : `${obj.percent}%`,
-            status: action(obj),
+                  ? "100%"
+                  : `${obj.percent}%`,
+            active_flg: action(obj),
             entire_data: obj,
           };
           preparedList.push(preparedObj);
@@ -197,11 +203,10 @@ export default function PublicEvacuees() {
     return (
       <div className={`flex justify-content-center`}>
         <div
-          className={`${
-            obj.active_flg
-              ? "border-circle userListActive mr-2"
-              : "border-circle userListNotActive mr-2"
-          }`}
+          className={`${obj.active_flg
+            ? "border-circle userListActive mr-2"
+            : "border-circle userListNotActive mr-2"
+            }`}
         ></div>
         <div className="line-height-1">
           {obj.active_flg
@@ -250,7 +255,7 @@ export default function PublicEvacuees() {
                             const popupWidth = screen.width;
                             const popupHeight = screen.height;
                             const popup = window.open(`${window.origin}/user/event-list`, 'Popup', `width=${popupWidth},height=${popupHeight}`);
-                            console.log("Popup Loaded");
+                            console.warn("Popup Loaded");
                             popup.parent_information = {
                                 data: "Hello popup"
                             }
@@ -286,24 +291,32 @@ export default function PublicEvacuees() {
                 // }}
                 onSelectionChange={async (e) => {
                   if (e.value.entire_data) {
-                    console.log(e.value.entire_data)
-                    let payload ={id: e.value.entire_data.id}
-                    getActiveList(payload,async (res)=>
-                    {
-                      if(res?.data?.model?.active_flg=="1")
-                      {
-                          let payload = Object.assign({}, layoutReducer?.user);
-                          payload["place"] = e.value.entire_data;
-                          await dispatch(setUserDetails(payload));
-                          localStorage.setItem("redirect", "/user/list");
-                          router.push("/user/dashboard");
-                        }
-                        else {
-                          getPublicEvacueesList()
-                        }
+                    let payload = { id: e.value.entire_data.id }
+                    getActiveList(payload, async (res) => {
+                      if (res?.data?.model?.active_flg == "1") {
+                        let payload = Object.assign({}, layoutReducer?.user);
+                        payload["place"] = e.value.entire_data;
+                        await dispatch(setUserDetails(payload));
+                        localStorage.setItem("redirect", "/user/list");
+                        router.push("/user/dashboard");
+                      }
+                      else {
+                        getPublicEvacueesList()
+                      }
                     })
 
                   }
+                }}
+                onSort={(data) => {
+                  setGetListPayload({
+                    ...getListPayload,
+                    filters: {
+                      ...getListPayload.filters,
+                      sort_by: data.sortField,
+                      order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                    }
+                  }
+                  )
                 }}
               />
             </div>

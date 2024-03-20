@@ -18,9 +18,18 @@ const Map = () => {
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const dispatch = useAppDispatch();
 
+  const payload = {
+      "filters": {
+          "sort_by": "refugee_name",
+          "order_by": "asc"
+      },
+      "search": "",
+      "map":true
+  };
+
   useEffect(() => {
     getLocation();
-    getPlaceList(fetchMapData);
+    getPlaceList(fetchMapData, payload);
     // Listen for window resize events and update windowHeight
     const handleResize = () => {
       setWindowHeight(window.innerHeight);
