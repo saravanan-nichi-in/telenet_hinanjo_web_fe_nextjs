@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
@@ -28,12 +28,12 @@ export default function StaffStockpileCreateModal(props) {
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'material_page_create_update_name_max')),
-            shelf_life: Yup.string().test("check_int",translate(localeJson,'number_field'),
-            (value)=>{
-                const re = /^[0-9-]+$/;
-                return re.test(convertToSingleByte(value))
-            })
-                .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
+        // shelf_life: Yup.string().test("check_int", translate(localeJson, 'number_field'),
+        //     (value) => {
+        //         const re = /^[0-9-]+$/;
+        //         return re.test(convertToSingleByte(value))
+        //     })
+        //     .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
         image_logo: Yup.mixed()
             .notRequired() // Allow it to be nullable
             .test('fileSize', translate(localeJson, 'image_size_validation'), (value) => {

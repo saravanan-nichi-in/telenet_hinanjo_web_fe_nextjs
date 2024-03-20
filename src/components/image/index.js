@@ -15,17 +15,19 @@ export const ImageComponent = (props) => {
         style,
         custom,
         maxWidth,
+        text,
         ...restProps
     } = imageProps;
     const [imageError, setImageError] = useState(false);
     const [dimensions, setDimensions] = useState({ width: width, height: width });
 
     const imageLoader = ({ src }) => {
+        const japaneseText = text ? encodeURIComponent(text):"";
         if (imageError || !src) {
-            return `https://placehold.co/${width}x${height}`;
+          return text?`https://dummyimage.com/${width}x${height}?text=${japaneseText}`:`https://dummyimage.com/${width}x${height}`;
         }
         return src;
-    }
+      };
 
     const handleImageError = () => {
         setImageError(true);

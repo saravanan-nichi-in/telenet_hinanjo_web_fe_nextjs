@@ -39,8 +39,8 @@ export default function QrScannerModal(props) {
                         }}
                         scanDelay={1000}
                         constraints={{
-                            facingMode: toggleCameraMode
-                        }}
+                                facingMode: toggleCameraMode
+                            }}
                         onError={(error) => console.error(error?.message)}
                     />
                 </div>

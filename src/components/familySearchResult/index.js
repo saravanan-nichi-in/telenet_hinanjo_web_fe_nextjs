@@ -9,7 +9,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useSelector } from "react-redux";
 import CustomHeader from "../customHeader";
 import { prefectures, prefectures_en } from "@/utils/constant";
-const FamilyListComponent = ({ data }) => {
+const FamilyListComponent = ({ data,header }) => {
   const [expandedFamilies, setExpandedFamilies] = useState([]);
   const layoutReducer = useSelector((state) => state.layoutReducer);
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -59,7 +59,7 @@ const FamilyListComponent = ({ data }) => {
   return (
     <div>
       <div className="flex justify-content-start font-bold text-5xl mb-3 mt-3">
-        {translate(localeJson, "reg_confirm")}
+        {header}
       </div>
       {data?.map((family, index) => (
         <div key={index}>

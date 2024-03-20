@@ -156,7 +156,7 @@ function _update(id, payload, callBackFun) {
         .post(`/admin/stockpile/update`, payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun();
+                callBackFun(response.data);
                 toast.success(response?.data?.message, {
                     position: "top-right",
                 });
@@ -201,14 +201,14 @@ function _delete(id, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
             }
+            toast.success(response?.data?.message, {
+                position: "top-right",
+            });
         })
         .catch((error) => {
             console.error(error);
-
+            callBackFun(false);
             // console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",

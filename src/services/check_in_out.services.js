@@ -147,6 +147,7 @@ function _event_checkIn(payload, callBackFun) {
       }
     })
     .catch((error) => {
+      callBackFun();
       if (error.response && error.response.status == 422) {
         if (isObject(error.response.data.message)) {
           let errorMessages = Object.values(error.response.data.message);
@@ -240,6 +241,7 @@ function _event_checkOut(payload, callBackFun) {
       }
     })
     .catch((error) => {
+      callBackFun();
       if (error.response && error.response.status == 422) {
         if (isObject(error.response.data.message)) {
           let errorMessages = Object.values(error.response.data.message);
@@ -287,6 +289,7 @@ function _placeCheckout(payload, callBackFun) {
       callBackFun(response.data);
     })
     .catch((error) => {
+      callBackFun();
       if (error.response && error.response.status == 422) {
         if (isObject(error.response.data.message)) {
           let errorMessages = Object.values(error.response.data.message);

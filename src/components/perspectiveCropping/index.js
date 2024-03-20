@@ -36,46 +36,6 @@ export const PerspectiveCropping = (props) => {
     const [videoWidth, setVideoWidth] = useState(0);
     const [videoHeight, setVideoHeight] = useState(0);
 
-    useEffect(() => {
-        setLoader(true);
-        setSelectUtil('camera');
-        setCompleted(false);
-        setImg(undefined);
-        setCropState();
-        setResult("")
-        getCameraDimensions();
-    }, [])
-
-    const getCameraDimensions = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const videoTrack = stream.getVideoTracks()[0];
-            const settings = videoTrack.getSettings();
-            let tempHeight = settings.height * 0.7;
-            let tempWidth = settings.width * 0.7;
-            //   setVideoWidth(parseInt(tempWidth-(tempWidth*0.4)));
-            //   setVideoHeight(parseInt(tempHeight-(tempHeight*0.4)));
-            setVideoWidth(tempWidth)
-            setVideoHeight(tempHeight)
-            setVideoStream(stream);
-        } catch (error) {
-            console.error('Error accessing camera:', error);
-        }
-    }
-
-
-    useEffect(() => {
-        const startWebcam = async () => {
-            try {
-                await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                setLoader(false);
-            } catch (err) {
-                console.error('Error accessing the camera:', err);
-            }
-        };
-        startWebcam();
-    }, [selectUtil]);
-
     const dialogFuncMap = {
         'displayPosition': setDisplayPosition,
     }

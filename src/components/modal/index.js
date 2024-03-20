@@ -19,5 +19,4 @@ export { default as QuestionnairesCreateEditModal } from './questionariesCreateE
 export { default as HqEditModal } from './headquartersManagementEditModal';
 export { default as HqManagementDetailModal } from './hqManagementDetailModal';
 export { default as PlaceEventBulkCheckOut } from './placeEventBulkCheckOut';
-export { default as YappleModal } from './yappleModal';
-export {default as ChangePasswordModal} from './changePasswordModal';
+export { default as YappleModal } from './yappleModal'

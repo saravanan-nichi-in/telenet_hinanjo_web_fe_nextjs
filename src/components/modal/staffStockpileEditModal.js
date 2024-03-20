@@ -19,10 +19,10 @@ export default function StaffStockpileEdit(props) {
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'material_page_create_update_name_max')),
-        shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
-            .positive(translate(localeJson, 'number_field'))
-            .integer(translate(localeJson, 'number_field'))
-            .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
+        // shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
+        //     .positive(translate(localeJson, 'number_field'))
+        //     .integer(translate(localeJson, 'number_field'))
+        //     .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.string()
             .min(0, translate(localeJson, 'number_field'))
             .max(5, translate(localeJson, 'quantity_max'))

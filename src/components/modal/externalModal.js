@@ -41,9 +41,10 @@ export default function External(props) {
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(translate(localeJson, "name_required"))
-      .max(200, translate(localeJson, "name_max"))
+      .max(100, translate(localeJson, "name_max_phonetic"))
       .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-    name_kanji: Yup.string().nullable().max(200, translate(localeJson, "external_popup_name_kanji")),
+    name_kanji: Yup.string().nullable()
+      .max(100, translate(localeJson, "external_popup_name_kanji")),
     year: Yup.string().required(
       translate(localeJson, "dob_required")
     ).min(4,
@@ -89,7 +90,6 @@ export default function External(props) {
           values.month = convertToSingleByte(values.month);
           values.date = convertToSingleByte(values.date);
           values.dob = new Date(convertToSingleByte(values.year), convertToSingleByte(values.month) - 1, convertToSingleByte(values.date));
-          console.log(values);
           values.dob = getEnglishDateDisplayFormat(values.dob);
           setEvacueeValues(values);
           close();

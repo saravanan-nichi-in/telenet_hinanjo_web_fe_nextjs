@@ -105,6 +105,7 @@ function _updateCheckInDetail(payload, callBackFun) {
             });
         })
         .catch((error) => {
+            callBackFun();
             common422ErrorToastDisplay(error);
         });
 }
