@@ -68,7 +68,7 @@ function _exportData(payload) {
  */
 function _getList(payload, callBackFun) {
     axios
-        .post("/admin/staff/management/list", payload)
+        .post("/admin/staff_management/list", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
