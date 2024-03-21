@@ -90,12 +90,12 @@ const AppMenu = () => {
                 //     to: '/admin/staff-management',
                 //     active: router.pathname.startsWith('/admin/staff-management')
                 // },
-                // {
-                //     label: translate(localeJson, 'admin_management'),
-                //     icon: <FaUserTie size={16} />,
-                //     to: '/admin/admin-management',
-                //     active: router.pathname.startsWith('/admin/admin-management')
-                // },
+                {
+                    label: translate(localeJson, 'admin_management'),
+                    icon: <FaUserTie size={16} />,
+                    to: '/admin/admin-management',
+                    active: router.pathname.startsWith('/admin/admin-management')
+                },
             ]
         },
         {
