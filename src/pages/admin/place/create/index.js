@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -25,7 +25,8 @@ export default function PlaceCreatePage() {
   const router = useRouter();
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
-  const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(0);
+  const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(null);
+  const [prefCount,setPrefCount]=useState(1)
   const [postalCodeDefaultPrefectureId, setPostalCodeDefaultPrefectureId] = useState(0);
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const today = new Date();
@@ -69,7 +70,11 @@ export default function PlaceCreatePage() {
         if(context.parent.postal_code_2?.length==4)
         {
         const { prefecture_id } = context.parent;
+        if(postalCodePrefectureId != null && prefecture_id !=null)
+        {
         return postalCodePrefectureId == prefecture_id
+        }
+        else return true
         }
         else {
           return true
@@ -89,7 +94,11 @@ export default function PlaceCreatePage() {
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
         if(context.parent.postal_code_1?.length==3) {
         const { prefecture_id } = context.parent;
+        if(postalCodePrefectureId != null && prefecture_id !=null)
+        {
         return postalCodePrefectureId == prefecture_id
+        }
+        else return true
         }
         else {
           return true
@@ -315,10 +324,15 @@ export default function PlaceCreatePage() {
       router.push("/admin/place");
     }
   };
+const formikRef = useRef();
+  useEffect(()=> {
+    formikRef.current.validateForm()
+  },[prefCount])
 
   return (
     <>
       <Formik
+        innerRef={formikRef}
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
@@ -525,6 +539,7 @@ export default function PlaceCreatePage() {
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
+                                            setPrefCount(prefCount+1)
                                             validateForm();
                                           } else {
                                             setFieldValue(
@@ -611,6 +626,7 @@ export default function PlaceCreatePage() {
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
+                                            setPrefCount(prefCount+1)
                                             validateForm();
                                           } else {
                                             setFieldValue(
@@ -663,6 +679,7 @@ export default function PlaceCreatePage() {
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
                                         setPostalCodePrefectureId(res.prefcode);
+                                        setPrefCount(prefCount+1)
                                         setErrors({ ...errors, postal_code_1: translate(localeJson, "zip_code_mis_match"), postal_code_2: translate(localeJson, "zip_code_mis_match") });
                                       }
                                       validateForm();
@@ -1253,7 +1270,7 @@ export default function PlaceCreatePage() {
                           </div>
                           <div className="lg:col-5 mt-2 mb-2 lg:mt-0 lg:mb-0 pt-0 pb-0 lg:pr-0 flex align-items-end">
                             <Calendar calendarProps={{
-                              calendarParentClassName: `${errors.opening_time &&
+                              calendarParentClassName: `lg:w-full ${errors.opening_time &&
                                 touched.opening_time &&
                                 "p-invalid"
                                 }`,
@@ -1320,7 +1337,7 @@ export default function PlaceCreatePage() {
                           </div>
                           <div className="lg:col-5 mt-1 mb-2 lg:mt-0 lg:mb-0 pt-0 pb-0 lg:pr-0 flex align-items-end">
                             <Calendar calendarProps={{
-                              calendarParentClassName: `${errors.closing_time &&
+                              calendarParentClassName: `lg:w-full ${errors.closing_time &&
                                 touched.closing_time &&
                                 "p-invalid"
                                 }`,
@@ -1335,7 +1352,6 @@ export default function PlaceCreatePage() {
                               hourFormat: "24"
                             }}
                             />
-
                           </div>
                         </div>
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
