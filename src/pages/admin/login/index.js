@@ -73,6 +73,7 @@ const LoginPage = () => {
                 onSubmit={(values) => {
                     let preparedPayload = values;
                     preparedPayload['username'] = preparedPayload.username.trim();
+                    preparedPayload['email'] = preparedPayload.username.trim();
                     login('admin', preparedPayload, onLoginSuccess);
                 }}
             >

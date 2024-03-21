@@ -7,13 +7,11 @@ import { common422ErrorToastDisplay } from '@/helper';
 
 const admin = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('admin')));
 const staff = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('staff')));
-const hqStaff = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('hq-staff')));
 
 /* Identity and Access management (IAM) */
 export const AuthenticationAuthorizationService = {
     get adminValue() { return admin.value },
     get staffValue() { return staff.value },
-    get hqStaffValue() { return hqStaff.value },
     login: _login,
     logout: _logout,
     forgot: _forgot,
@@ -31,8 +29,7 @@ export const AuthenticationAuthorizationService = {
 function _login(key, values, callBackFun, prepareKey) {
     let loginUrl = {
         'admin': '/auth/admin/login',
-        'headquaters': '/auth/hq/login',
-        'staff': prepareKey === "place_id" ? '/auth/staff/login/place' : '/auth/staff/login/event'
+        'staff': '/auth/staff/login'
     }[key]
 
     if (values && callBackFun) {
@@ -42,8 +39,6 @@ function _login(key, values, callBackFun, prepareKey) {
                     let subject;
                     if (key == 'admin') {
                         subject = admin
-                    } else if (key == 'headquaters') {
-                        subject = hqStaff
                     } else if (key == 'staff') {
                         subject = staff
                     }
@@ -68,9 +63,8 @@ function _login(key, values, callBackFun, prepareKey) {
  */
 function _logout(key, values, callBackFun, prepareKey) {
     let logoutUrl = {
-        'admin': '/auth/admin/logout',
-        'headquaters': '/auth/hq/logout',
-        'staff': prepareKey === "place_id" ? '/auth/staff/place/logout' : '/auth/staff/event/logout'
+        'admin': '/auth/admin/login',
+        'staff': '/auth/staff/login'
     }[key]
 
     if (values && callBackFun) {
@@ -80,8 +74,6 @@ function _logout(key, values, callBackFun, prepareKey) {
                     let subject;
                     if (key == 'admin') {
                         subject = admin
-                    } else if (key == 'headquaters') {
-                        subject = hqStaff
                     } else if (key == 'staff') {
                         subject = staff
                     }
