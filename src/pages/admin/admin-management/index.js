@@ -63,15 +63,7 @@ export default function AdminManagementPage() {
                 </p>
             )
         },
-        { field: 'username', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
-        {
-            field: 'password',
-            header: translate(localeJson, 'password'),
-            body: (rowData) => {
-                return <PasswordColumn rowData={rowData} />
-            },
-            minWidth: "5rem", maxWidth: "5rem"
-        },
+        { field: 'email', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -149,9 +141,7 @@ export default function AdminManagementPage() {
             if (response && response?.success && !_.isEmpty(response?.data) && response?.data?.model?.total > 0) {
                 let actualList = response.data.model.list;
                 actualList.forEach((element, index) => {
-                    let key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
-                    let decryptedData = decryptPassword(element.passwordfe, key);
-                    let tempObj = { ...element, password: decryptedData, slno: index + parseInt(listPayload.filters.start) + 1 };
+                    let tempObj = { ...element, slno: index + parseInt(listPayload.filters.start) + 1 };
                     tempList.push(tempObj);
                 });
                 listTotalCount = response.data.model.total;
