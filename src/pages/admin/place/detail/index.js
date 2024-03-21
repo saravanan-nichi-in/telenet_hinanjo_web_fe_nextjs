@@ -9,7 +9,7 @@ import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector } from "@/redux/hooks";
 import CustomHeader from "@/components/customHeader";
 import { IoIosArrowBack } from "react-icons/io";
-import { prefecturesCombined,default_place_id } from "@/utils/constant";
+import { prefecturesCombined } from "@/utils/constant";
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -177,7 +177,6 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-      {Place?.id!=default_place_id &&(
       <div className="col-12">
         {tableLoading ? (
           <CardSpinner />
@@ -204,7 +203,6 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-      )}
 
       <div className="col-12">
         <div

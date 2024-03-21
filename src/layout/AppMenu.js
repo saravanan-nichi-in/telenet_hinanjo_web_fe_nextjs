@@ -102,12 +102,12 @@ const AppMenu = () => {
             label: translate(localeJson, 'setting'),
             icon: <MdSettings size={16} />,
             items: [
-                // {
-                //     label: translate(localeJson, 'places'),
-                //     icon: <BsHouseGearFill size={16} />,
-                //     to: '/admin/place',
-                //     active: router.pathname.startsWith('/admin/place'),
-                // },
+                {
+                    label: translate(localeJson, 'places'),
+                    icon: <BsHouseGearFill size={16} />,
+                    to: '/admin/place',
+                    active: router.pathname.startsWith('/admin/place'),
+                },
                 // {
                 //     label: translate(localeJson, 'material'),
                 //     icon: <FaLuggageCart size={16} />,
