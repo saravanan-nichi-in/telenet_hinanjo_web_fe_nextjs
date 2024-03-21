@@ -66,12 +66,12 @@ const AppMenu = () => {
                 //     to: '/admin/stockpile/summary',
                 //     active: router.pathname.startsWith('/admin/stockpile/summary')
                 // },
-                // {
-                //     label: translate(localeJson, 'statistics'),
-                //     icon: <FaChartPie size={16} />,
-                //     to: '/admin/statistics',
-                //     active: router.pathname.startsWith('/admin/statistics')
-                // }
+                {
+                    label: translate(localeJson, 'statistics'),
+                    icon: <FaChartPie size={16} />,
+                    to: '/admin/statistics',
+                    active: router.pathname.startsWith('/admin/statistics')
+                }
             ]
         },
         {
