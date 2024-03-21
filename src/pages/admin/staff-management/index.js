@@ -216,7 +216,7 @@ export default function StaffManagementPage() {
                     }
                     preparedList.push(preparedObj);
                 })
-                listTotalCount = response.data.total;
+                listTotalCount = response.data.model.total;
             }
             setTableLoading(false);
             setList(preparedList);
