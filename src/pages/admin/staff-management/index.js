@@ -156,7 +156,7 @@ export default function StaffManagementPage() {
         else {
             create(values, (res) => {
                 setTableLoading(true);
-                res ? getStaffList() :setTableLoading(false);
+                res ? getStaffList() : setTableLoading(false);
             })
         }
         setImportStaffOpen(false);
@@ -183,12 +183,15 @@ export default function StaffManagementPage() {
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
+            console.log("2");
             await getStaffList()
         };
         fetchData();
     }, [locale, getListPayload]);
 
     const getStaffList = () => {
+        console.log("1");
+
         getList(getListPayload, (response) => {
             var preparedList = [];
             var listTotalCount = 0;
@@ -213,7 +216,7 @@ export default function StaffManagementPage() {
                     }
                     preparedList.push(preparedObj);
                 })
-                listTotalCount = response.data.model.total;
+                listTotalCount = response.data.total;
             }
             setTableLoading(false);
             setList(preparedList);
@@ -256,31 +259,39 @@ export default function StaffManagementPage() {
 
     return (
         <React.Fragment>
-            <AdminManagementImportModal
-                open={importStaffOpen}
-                close={onStaffImportClose}
-                importFile={importFileApi}
-                modalHeaderText={translate(localeJson, "staff_management_import")}
-            />
-            {staff && <StaffManagementDetailModal
-                open={staffDetailsOpen}
-                close={onStaffDetailClose}
-                staff={staff}
-            />}
-            <AdminManagementDeleteModal
-                open={deleteOpen}
-                close={onDeleteClose}
-                refreshList={getStaffList}
-                deleteObj={deleteObj}
-            />
-            <StaffManagementEditModal
-                open={editStaffOpen}
-                close={onStaffEditClose}
-                register={onRegister}
-                currentEditObj={{ ...currentEditObj }}
-                refreshList={getStaffList}
-                registerModalAction={registerModalAction}
-            />
+            {importStaffOpen &&
+                <AdminManagementImportModal
+                    open={importStaffOpen}
+                    close={onStaffImportClose}
+                    importFile={importFileApi}
+                    modalHeaderText={translate(localeJson, "staff_management_import")}
+                />
+            }
+            {staff &&
+                <StaffManagementDetailModal
+                    open={staffDetailsOpen}
+                    close={onStaffDetailClose}
+                    staff={staff}
+                />
+            }
+            {deleteOpen &&
+                <AdminManagementDeleteModal
+                    open={deleteOpen}
+                    close={onDeleteClose}
+                    refreshList={getStaffList}
+                    deleteObj={deleteObj}
+                />
+            }
+            {editStaffOpen &&
+                <StaffManagementEditModal
+                    open={editStaffOpen}
+                    close={onStaffEditClose}
+                    register={onRegister}
+                    currentEditObj={{ ...currentEditObj }}
+                    refreshList={getStaffList}
+                    registerModalAction={registerModalAction}
+                />
+            }
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -368,7 +379,7 @@ export default function StaffManagementPage() {
                                     first={getListPayload.filters.start}
                                     rows={getListPayload.filters.limit}
                                     paginatorLeft={true}
-                                    onPageHandler={(e) => onPaginationChange(e)}
+                                    onPageHandler={(e) => { onPaginationChange(e) }}
                                 />
                             </div>
                         </div>
