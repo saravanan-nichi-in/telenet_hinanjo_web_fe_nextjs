@@ -84,12 +84,12 @@ const AppMenu = () => {
                 //     to: '/admin/qrcode/csv/import',
                 //     active: router.pathname.startsWith('/admin/qrcode/csv/import')
                 // },
-                // {
-                //     label: translate(localeJson, 'staff_management'),
-                //     icon: <FaUsersGear size={16} />,
-                //     to: '/admin/staff-management',
-                //     active: router.pathname.startsWith('/admin/staff-management')
-                // },
+                {
+                    label: translate(localeJson, 'staff_management'),
+                    icon: <FaUsersGear size={16} />,
+                    to: '/admin/staff-management',
+                    active: router.pathname.startsWith('/admin/staff-management')
+                },
                 {
                     label: translate(localeJson, 'admin_management'),
                     icon: <FaUserTie size={16} />,

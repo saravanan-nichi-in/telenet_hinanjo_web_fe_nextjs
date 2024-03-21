@@ -83,15 +83,7 @@ export default function StaffManagementPage() {
                 </p>
             )
         },
-        { field: 'username', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
-        {
-            field: 'password',
-            header: translate(localeJson, 'password'),
-            body: (rowData) => {
-                return <PasswordColumn rowData={rowData} />
-            },
-            minWidth: "5rem", maxWidth: "5rem"
-        },
+        { field: 'email', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -200,20 +192,15 @@ export default function StaffManagementPage() {
         getList(getListPayload, (response) => {
             var preparedList = [];
             var listTotalCount = 0;
-            if (response && response.success && !_.isEmpty(response.data) && response.data.total > 0) {
-                const data = response.data.model;
+            if (response && response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
+                const data = response.data.model.list;
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
-                    let key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
-                    let decryptedData = obj.passwordfe ? decryptPassword(obj.passwordfe, key) : ""
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
                         id: obj.id,
                         name: obj.name ?? "",
-                        username: obj.username ?? "",
-                        password: decryptedData,
-                        event_id: obj.events,
-                        place_id: obj.places,
+                        email: obj.email ?? "",
                         image: obj.image ?? "",
                         tel: obj.tel ?? "",
                         birthday: obj.birthday ?? "",
@@ -221,10 +208,12 @@ export default function StaffManagementPage() {
                         prefecture_id: obj.prefecture_id ?? "",
                         address: obj.address ?? "",
                         first_login: obj.first_login ?? "",
+                        updated_at:obj.updated_at??"",
+                        deleted_at:obj.deleted_at??""
                     }
                     preparedList.push(preparedObj);
                 })
-                listTotalCount = response.data.total;
+                listTotalCount = response.data.model.total;
             }
             setTableLoading(false);
             setList(preparedList);
