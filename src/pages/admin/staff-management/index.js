@@ -12,7 +12,7 @@ import { Input } from '@/components/input';
 
 export default function StaffManagementPage() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
-    let blankStaffObj = { username: "", tel: "", name: "", password: "", event_id: "", place_id: "" };
+    let blankStaffObj = { email: "", tel: "", name: "", password: "" };
     const [staff, setStaff] = useState(null);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
@@ -40,7 +40,7 @@ export default function StaffManagementPage() {
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
             secondLabel: translate(localeJson, 'userId'),
-            secondValue: rowdata.username
+            secondValue: rowdata.email
         });
         setDeleteOpen(true);
         hideOverFlow();
@@ -75,7 +75,8 @@ export default function StaffManagementPage() {
             field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem", maxWidth: "5rem",
             body: (rowData) => (
                 <p className='text-link-class clickable-row' onClick={() => {
-                    setStaff(rowData.id);
+                    setStaff(rowData.id,"Sandeep");
+                    console.log(setStaff);
                     setStaffDetailsOpen(true);
                     hideOverFlow();
                 }}>
@@ -100,7 +101,7 @@ export default function StaffManagementPage() {
                             onClick: () => {
                                 setRegisterModalAction("edit")
                                 // Keys to extract
-                                const keysToExtract = ["id", "username", "tel", "name", "password", "event_id", "place_id"];
+                                const keysToExtract = ["id", "email", "tel", "name"];
 
                                 // Creating a new object with only the desired keys
                                 const extractedData = keysToExtract.reduce((acc, key) => {
