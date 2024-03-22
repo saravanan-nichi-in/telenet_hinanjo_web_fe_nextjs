@@ -12,66 +12,32 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const admin = localStorage.getItem('admin');
   const staff = localStorage.getItem('staff');
-  const hqStaff = localStorage.getItem('hq-staff');
   let authToken;
   if (window.location.pathname.startsWith('/admin')) {
     authToken = JSON.parse(admin)
-  } else if (window.location.pathname.startsWith('/hq-staff')) {
-    authToken = JSON.parse(hqStaff)
   } else {
     authToken = JSON.parse(staff)
   }
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const locale = localStorage.getItem('locale');
-  const getCookieValueByKey = (key) => {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Check if the cookie starts with the specified key
-      if (cookie.startsWith(key + '=')) {
-        return cookie.substring(key.length + 1);
-      }
-    }
-    return '';
-  };
-  // Example: Get the value of a cookie named 'myCookie'
-  const myCookieValue = getCookieValueByKey('idToken');
-
-  console.log(myCookieValue);
-
-  // Add the authentication token to the request headers
   config.headers['x-localization'] = locale;
   config.headers['timezone'] = userTimeZone;
   if (authToken) {
     config.headers['Authorization'] = `Bearer ${authToken.token}`;
   }
-  if (myCookieValue) {
-    config.headers['idToken'] = myCookieValue;
-  } else {
-    config.headers['idToken'] = "";
-  }
   return config;
 }, (error) => {
-  // Handle request error
   console.error(error);
-  // eslint-disable-next-line no-undef
   return Promise.reject(error);
 });
 
-// Response interceptor
 api.interceptors.response.use((response) => {
-  // Handle successful response
   return response;
 }, (error) => {
-  // Handle error response
   if (error?.response?.status === 401 || error?.response?.status === 403) {
-    // Handle unauthorized access (e.g., redirect to login page)
     if (window.location.pathname.startsWith('/admin')) {
       localStorage.removeItem('admin');
       window.location.href = '/admin/login';
-    } else if (window.location.pathname.startsWith('/hq-staff')) {
-      localStorage.removeItem('hq-staff');
-      window.location.href = '/hq-staff/login';
     } else {
       let redirectPath = localStorage.getItem('redirect');
       if (window.location.pathname.startsWith('/staff/event-staff/')) {
@@ -79,7 +45,7 @@ api.interceptors.response.use((response) => {
         setTimeout(function () {
           window.location.href = redirectPath;
         }, 4000);
-      } else if(window.location.pathname.startsWith('/staff/login')) {
+      } else if (window.location.pathname.startsWith('/staff/login')) {
         console.log('do nothing');
       } else {
         localStorage.removeItem('staff');
@@ -94,7 +60,6 @@ api.interceptors.response.use((response) => {
     });
     return
   }
-
   // eslint-disable-next-line no-undef
   return Promise.reject(error);
 });

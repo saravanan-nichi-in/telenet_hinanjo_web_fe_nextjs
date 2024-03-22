@@ -132,12 +132,12 @@ const AppMenu = () => {
                 //     to: '/admin/questionnaire',
                 //     active: router.pathname.startsWith('/admin/questionnaire')
                 // },
-                //  {
-                //     label: translate(localeJson, 'setting_systems'),
-                //     icon: <RiFileSettingsFill size={16} />,
-                //     to: '/admin/setting',
-                //     active: router.pathname.startsWith('/admin/setting')
-                // },
+                 {
+                    label: translate(localeJson, 'setting_systems'),
+                    icon: <RiFileSettingsFill size={16} />,
+                    to: '/admin/setting',
+                    active: router.pathname.startsWith('/admin/setting')
+                },
             ]
         },
     ];

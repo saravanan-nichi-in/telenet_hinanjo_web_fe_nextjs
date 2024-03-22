@@ -194,6 +194,7 @@ export default function Setting() {
   };
 
   function fetchData(res) {
+    console.log(response, "Setting");
     if (res) {
       setLoader(true);
       const data = res.data.model;

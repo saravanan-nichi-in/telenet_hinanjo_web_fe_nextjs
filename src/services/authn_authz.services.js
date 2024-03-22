@@ -62,30 +62,40 @@ function _login(key, values, callBackFun, prepareKey) {
  * @param {*} prepareKey 
  */
 function _logout(key, values, callBackFun, prepareKey) {
-    let logoutUrl = {
-        'admin': '/auth/admin/login',
-        'staff': '/auth/staff/login'
-    }[key]
+    // let logoutUrl = {
+    //     'admin': '/auth/admin/login',
+    //     'staff': '/auth/staff/login'
+    // }[key]
 
-    if (values && callBackFun) {
-        axios.post(logoutUrl, { ...values })
-            .then((response) => {
-                if (response && response.data) {
-                    let subject;
-                    if (key == 'admin') {
-                        subject = admin
-                    } else if (key == 'staff') {
-                        subject = staff
-                    }
-                    localStorage.removeItem(key);
-                    subject.next(null);
-                    callBackFun(key);
-                }
-            })
-            .catch((error) => {
-                common422ErrorToastDisplay(error);
-            });
+    // if (values && callBackFun) {
+    //     axios.post(logoutUrl, { ...values })
+    //         .then((response) => {
+    //             if (response && response.data) {
+    //                 let subject;
+    //                 if (key == 'admin') {
+    //                     subject = admin
+    //                 } else if (key == 'staff') {
+    //                     subject = staff
+    //                 }
+    //                 localStorage.removeItem(key);
+    //                 subject.next(null);
+    //                 callBackFun(key);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             common422ErrorToastDisplay(error);
+    //         });
+    // }
+
+    let subject;
+    if (key == 'admin') {
+        subject = admin
+    } else if (key == 'staff') {
+        subject = staff
     }
+    localStorage.removeItem(key);
+    subject.next(null);
+    callBackFun(key);
 }
 
 /**
