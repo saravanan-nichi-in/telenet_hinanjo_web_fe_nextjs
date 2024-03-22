@@ -285,7 +285,7 @@ export default function Setting() {
 
   return (
     <>
-      {/* <Formik
+      <Formik
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, actions) => {
@@ -866,7 +866,7 @@ export default function Setting() {
             </div>
           </div>
         )}
-      </Formik> */}
+      </Formik>
     </>
   );
 }
