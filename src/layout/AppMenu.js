@@ -120,12 +120,12 @@ const AppMenu = () => {
                 //     to: '/admin/stockpile/master',
                 //     active: router.pathname.startsWith('/admin/stockpile/master')
                 // },
-                // {
-                //     label: translate(localeJson, 'special_care_list'),
-                //     icon: <PiHandTapFill size={16} />,
-                //     to: '/admin/special/care',
-                //     active: router.pathname.startsWith('/admin/special/care')
-                // }, 
+                {
+                    label: translate(localeJson, 'special_care_list'),
+                    icon: <PiHandTapFill size={16} />,
+                    to: '/admin/special/care',
+                    active: router.pathname.startsWith('/admin/special/care')
+                }, 
                 // {
                 //     label: translate(localeJson, 'interview_management'),
                 //     icon: <FaBoxes size={16} />,
