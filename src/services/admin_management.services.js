@@ -93,7 +93,6 @@ function _show(id, callBackFun) {
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
-            // callBackFun(false);
         });
 }
 
