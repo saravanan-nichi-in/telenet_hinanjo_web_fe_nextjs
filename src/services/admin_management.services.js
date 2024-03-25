@@ -83,9 +83,9 @@ function _getList(payload, callBackFun) {
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _show(payload, callBackFun) {
+function _show(id, callBackFun) {
     axios
-        .post("/admin/management/detail", payload)
+    .get("/admin/management/detail", { params: { id: id } })
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -93,7 +93,7 @@ function _show(payload, callBackFun) {
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
-            callBackFun(false);
+            // callBackFun(false);
         });
 }
 

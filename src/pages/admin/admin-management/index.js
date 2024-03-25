@@ -10,6 +10,7 @@ import { AdminManagementServices } from '@/services'
 import AdminManagementCreateEditModal from '@/components/modal/adminManagementCreateEditModal';
 import { CommonServices } from '@/services';
 import { Input } from '@/components/input';
+import { gender_en, gender_jp } from '@/utils/constant';
 
 export default function AdminManagementPage() {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -64,6 +65,7 @@ export default function AdminManagementPage() {
             )
         },
         { field: 'email', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        { field: 'gender', header: translate(localeJson, 'gender'), minWidth: "5rem", maxWidth: "5rem",className:"hidden"},
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -78,6 +80,7 @@ export default function AdminManagementPage() {
                             text: translate(localeJson, 'edit'),
                             buttonClass: "edit-button",
                             onClick: () => {
+                                console.log(rowData)
                                 setCurrentObj(rowData);
                                 setRegisterModalAction("edit")
                                 setEditStaffOpen(true);
@@ -141,16 +144,29 @@ export default function AdminManagementPage() {
             if (response && response?.success && !_.isEmpty(response?.data) && response?.data?.model?.total > 0) {
                 let actualList = response.data.model.list;
                 actualList.forEach((element, index) => {
-                    let tempObj = { ...element, slno: index + parseInt(listPayload.filters.start) + 1 };
+                    let tempObj = { ...element,gender:getGenderId(element.gender) ,slno: index + parseInt(listPayload.filters.start) + 1 };
                     tempList.push(tempObj);
                 });
                 listTotalCount = response.data.model.total;
             }
+            console.log(tempList)
             setLoader(false);
             setTableLoading(false);
             setColumnValues(tempList);
             setTotalCount(listTotalCount);
         });
+    }
+    const getGenderId=(name)=>{
+        let options=locale=="en"?gender_en:gender_jp
+        let id=options.find((res)=>{
+            let genderName = name+""
+           if((res.name).toLocaleLowerCase()== genderName.toLocaleLowerCase()){
+            return res
+           } else{
+            return ""
+           }
+        })
+        return id?id.value:""
     }
 
     /**
@@ -179,7 +195,7 @@ export default function AdminManagementPage() {
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
             secondLabel: translate(localeJson, 'userId'),
-            secondValue: rowdata.username
+            secondValue: rowdata.email
         });
         setDeleteOpen(true);
         hideOverFlow();
@@ -261,7 +277,7 @@ export default function AdminManagementPage() {
                                     buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'create_admin'),
                                     onClick: () => {
-                                        setCurrentObj({ username: "", name: "", password: "", tel: "" });
+                                        setCurrentObj({ name: "", email: "", password: "", tel: "",gender:"" });
                                         setRegisterModalAction("create")
                                         setEditStaffOpen(true);
                                         hideOverFlow();

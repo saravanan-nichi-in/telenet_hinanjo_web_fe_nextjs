@@ -3,23 +3,24 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { AdminManagementServices } from "@/services";
-import Password, { Input } from "../input";
+import Password, { Input, InputDropdown } from "../input";
+import { gender_en, gender_jp } from "@/utils/constant";
 
 export default function AdminManagementCreateEditModal(props) {
-    const { localeJson} = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
 
     const isEmail = (value) => {
         // Check if the value includes '@' and matches the email pattern
         return !value.includes('@') || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
     };
 
-    const schema = Yup.object().shape({
-        username: Yup.string()
+    const schema1 = Yup.object().shape({
+        email: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
             .max(200, translate(localeJson, 'user_id_max'))
             .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
@@ -32,23 +33,55 @@ export default function AdminManagementCreateEditModal(props) {
                 "starts-with-zero",
                 translate(localeJson, "phone_num_start"),
                 (value) => {
-                  if (value) {
-                    value = convertToSingleByte(value);
-                    return value.charAt(0) === "0";
-                  }
-                  return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+                    if (value) {
+                        value = convertToSingleByte(value);
+                        return value.charAt(0) === "0";
+                    }
+                    return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
                 }
-              )
-              .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-                if(value)
-                {
-                const singleByteValue = convertToSingleByte(value);
-                return /^[0-9]{10,11}$/.test(singleByteValue);
+            )
+            .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+                if (value) {
+                    const singleByteValue = convertToSingleByte(value);
+                    return /^[0-9]{10,11}$/.test(singleByteValue);
                 }
                 else {
-                  return true;
+                    return true;
                 }
-              }),
+            }),
+        gender: Yup.string().required(translate(localeJson, "gender_required")),
+    });
+
+    const schema2 = Yup.object().shape({
+        email: Yup.string()
+            .required(translate(localeJson, 'user_id_required'))
+            .max(200, translate(localeJson, 'user_id_max'))
+            .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
+        name: Yup.string()
+            .required(translate(localeJson, 'admin_name_required'))
+            .max(200, translate(localeJson, 'staff_name_max_required')),
+        tel: Yup.string()
+            .nullable()
+            .test(
+                "starts-with-zero",
+                translate(localeJson, "phone_num_start"),
+                (value) => {
+                    if (value) {
+                        value = convertToSingleByte(value);
+                        return value.charAt(0) === "0";
+                    }
+                    return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+                }
+            )
+            .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+                if (value) {
+                    const singleByteValue = convertToSingleByte(value);
+                    return /^[0-9]{10,11}$/.test(singleByteValue);
+                }
+                else {
+                    return true;
+                }
+            }),
         password: Yup.string()
             .required(translate(localeJson, "new_password_required"))
             .min(8, translate(localeJson, "new_password_min_length"))
@@ -57,6 +90,7 @@ export default function AdminManagementCreateEditModal(props) {
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/,
                 translate(localeJson, "new_password_format")
             ),
+        gender: Yup.string().required(translate(localeJson, "gender_required")),
     });
 
     const { open, close } = props && props;
@@ -71,16 +105,14 @@ export default function AdminManagementCreateEditModal(props) {
         <>
             <Formik
                 initialValues={props.currentObj}
-                validationSchema={schema}
+                validationSchema={props.registerModalAction == "create" ? schema2 : schema1}
                 enableReinitialize={true}
                 onSubmit={(values, { resetForm }) => {
                     if (props.registerModalAction == "create") {
-                        values.tel = convertToSingleByte(values.tel);
                         AdminManagementServices.create(values, (result) => {
                             resetAndCloseForm(resetForm)
                         })
                     } else if (props.registerModalAction == "edit") {
-                        values.tel = convertToSingleByte(values.tel);
                         AdminManagementServices.update(props.currentObj.id, { id: props.currentObj.id, ...values },
                             () => {
                                 resetAndCloseForm(resetForm)
@@ -161,7 +193,7 @@ export default function AdminManagementCreateEditModal(props) {
                                         <div className="modal-field-bottom-space">
                                             <Input
                                                 inputProps={{
-                                                    inputParentClassName: `${errors.username && touched.username && 'p-invalid pb-1'}`,
+                                                    inputParentClassName: `${errors.email && touched.email && 'p-invalid pb-1'}`,
                                                     labelProps: {
                                                         text: translate(localeJson, 'userId'),
                                                         inputLabelClassName: "block",
@@ -170,35 +202,65 @@ export default function AdminManagementCreateEditModal(props) {
                                                         labelMainClassName: "modal-label-field-space"
                                                     },
                                                     inputClassName: "w-full",
-                                                    name: "username",
-                                                    value: values && values.username,
+                                                    name: "email",
+                                                    value: values && values.email,
                                                     onChange: handleChange,
                                                     onBlur: handleBlur,
                                                 }}
                                             />
-                                            <ValidationError errorBlock={errors.username && touched.username && errors.username} />
+                                            <ValidationError errorBlock={errors.email && touched.email && errors.email} />
                                         </div>
+                                        {/* {JSON.stringify(values)} */}
                                         <div className="modal-field-bottom-space w-full">
-                                            <Password
-                                                passwordProps={{
-                                                    passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid pb-1'}`,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'password'),
-                                                        spanText: "*",
-                                                        passwordLabelSpanClassName: "p-error",
-                                                        passwordLabelClassName: "block",
-                                                        labelMainClassName: "modal-label-field-space"
-                                                    },
-                                                    name: 'password',
-                                                    value: values.password,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                    passwordClass: "w-full"
-                                                }}
-
+                                            <InputDropdown inputDropdownProps={{
+                                                inputDropdownParenClassName: `custom_input ${errors.gender && touched.gender && "p-invalid pb-1"
+                                                    }`,
+                                                labelProps: {
+                                                    text: translate(localeJson, 'gender_external_modal'),
+                                                    inputDropdownLabelClassName: "block",
+                                                    inputDropdownLabelSpanClassName: "p-error",
+                                                    spanText: "*"
+                                                },
+                                                inputDropdownClassName: "w-full ",
+                                                name: "gender",
+                                                value: values && values.gender,
+                                                options: locale == "ja" ? gender_jp : gender_en,
+                                                optionLabel: "name",
+                                                onChange: handleChange,
+                                                onBlur: handleBlur,
+                                                emptyMessage: translate(localeJson, "data_not_found"),
+                                            }}
                                             />
-                                            <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+                                            <ValidationError
+                                                errorBlock={
+                                                    errors.gender && touched.gender && errors.gender
+                                                }
+                                            />
                                         </div>
+                                        {props.registerModalAction == "create" && (
+                                            <div className="modal-field-bottom-space w-full">
+                                                <Password
+                                                    passwordProps={{
+                                                        passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid pb-1'}`,
+                                                        labelProps: {
+                                                            text: translate(localeJson, 'password'),
+                                                            spanText: "*",
+                                                            passwordLabelSpanClassName: "p-error",
+                                                            passwordLabelClassName: "block",
+                                                            labelMainClassName: "modal-label-field-space"
+                                                        },
+                                                        name: 'password',
+                                                        value: values.password,
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        passwordClass: "w-full"
+                                                    }}
+
+                                                />
+                                                <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+                                            </div>
+                                        )}
+                                        {/* {props.registerModalAction == "create" && props.registerModalAction == "edit" && (
                                         <div className="modal-field-bottom-space">
                                             <Input
                                                 inputProps={{
@@ -217,6 +279,7 @@ export default function AdminManagementCreateEditModal(props) {
                                             />
                                             <ValidationError errorBlock={errors.tel && touched.tel && errors.tel} />
                                         </div>
+                                          )} */}
                                         <div className="text-center">
                                             <div className="modal-button-footer-space">
                                                 <Button buttonProps={{
