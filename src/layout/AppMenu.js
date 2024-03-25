@@ -108,18 +108,18 @@ const AppMenu = () => {
                     to: '/admin/place',
                     active: router.pathname.startsWith('/admin/place'),
                 },
-                // {
-                //     label: translate(localeJson, 'material'),
-                //     icon: <FaLuggageCart size={16} />,
-                //     to: '/admin/material',
-                //     active: router.pathname.startsWith('/admin/material')
-                // },
-                // {
-                //     label: translate(localeJson, 'stockpile_master_management'),
-                //     icon: <FaBoxes size={16} />,
-                //     to: '/admin/stockpile/master',
-                //     active: router.pathname.startsWith('/admin/stockpile/master')
-                // },
+                {
+                    label: translate(localeJson, 'material'),
+                    icon: <FaLuggageCart size={16} />,
+                    to: '/admin/material',
+                    active: router.pathname.startsWith('/admin/material')
+                },
+                {
+                    label: translate(localeJson, 'stockpile_master_management'),
+                    icon: <FaBoxes size={16} />,
+                    to: '/admin/stockpile/master',
+                    active: router.pathname.startsWith('/admin/stockpile/master')
+                },
                 {
                     label: translate(localeJson, 'special_care_list'),
                     icon: <PiHandTapFill size={16} />,
