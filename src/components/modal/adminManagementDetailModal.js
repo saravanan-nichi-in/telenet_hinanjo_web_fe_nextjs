@@ -12,17 +12,17 @@ import { AdminManagementServices } from "@/services";
 
 export default function AdminManagementDetailModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
-    const columnNames = [
-        { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
-        { field: 'f_login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), minWidth: "6rem", maxWidth: "6rem" },
-        { field: 'f_logout_datetime', header: translate(localeJson, 'logout_dateTime'), maxWidth: "6rem" },
+    // const columnNames = [
+    //     { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
+    //     { field: 'f_login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), minWidth: "6rem", maxWidth: "6rem" },
+    //     { field: 'f_logout_datetime', header: translate(localeJson, 'logout_dateTime'), maxWidth: "6rem" },
 
-    ];
+    // ];
     const [columnValues, setColumnValues] = useState([]);
     const columns = [
         { field: 'name', header: translate(localeJson, 'name'), minWidth: "8rem" },
         {
-            field: 'tel', header: translate(localeJson, 'tel'), minWidth: "10rem", maxWidth: "10rem", textAlign: "center",
+            field: 'email', header: translate(localeJson, 'userId'), minWidth: "10rem", maxWidth: "10rem", textAlign: "center",
             alignHeader: "center",
         },
     ];
@@ -47,26 +47,26 @@ export default function AdminManagementDetailModal(props) {
     }, [locale, props.detailId, listPayload]);
 
     const callDetailsApi = () => {
-        AdminManagementServices.show(listPayload, (response) => {
+        AdminManagementServices.show(props.detailId, (response) => {
             var tempLoginHistory = [];
             var listTotalCount = 0;
-            if (response && response.success && !_.isEmpty(response.data)) {
+            if (response && response.success && !_.isEmpty(response.data.model)) {
                 setValues([
                     {
                         name: response.data.model.name,
-                        password: response.data.model.tel
+                        email: response.data.model.email
                     }
                 ])
-                if (response.data.login_history.total > 0) {
-                    let loginHistoryResponse = response.data.login_history;
-                    loginHistoryResponse.list.forEach((element, index) => {
-                        let f_login_datetime = element.login_datetime ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.login_datetime) : getEnglishDateTimeDisplayActualFormat(element.login_datetime)) : "";
-                        let f_logout_datetime = element.logout_datetime ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.logout_datetime) : getEnglishDateTimeDisplayActualFormat(element.logout_datetime)) : "";
-                        let tempObj = { ...element, f_login_datetime: f_login_datetime, f_logout_datetime: f_logout_datetime, slno: index + parseInt(listPayload.filters.start) + 1 }
-                        tempLoginHistory.push(tempObj);
-                    });
-                    listTotalCount = loginHistoryResponse.total;
-                }
+                // if (response.data.login_history.total > 0) {
+                //     let loginHistoryResponse = response.data.login_history;
+                //     loginHistoryResponse.list.forEach((element, index) => {
+                //         let f_login_datetime = element.login_datetime ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.login_datetime) : getEnglishDateTimeDisplayActualFormat(element.login_datetime)) : "";
+                //         let f_logout_datetime = element.logout_datetime ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.logout_datetime) : getEnglishDateTimeDisplayActualFormat(element.logout_datetime)) : "";
+                //         let tempObj = { ...element, f_login_datetime: f_login_datetime, f_logout_datetime: f_logout_datetime, slno: index + parseInt(listPayload.filters.start) + 1 }
+                //         tempLoginHistory.push(tempObj);
+                //     });
+                //     listTotalCount = loginHistoryResponse.total;
+                // }
             }
             setTableLoading(false);
             setColumnValues(tempLoginHistory);
@@ -137,7 +137,7 @@ export default function AdminManagementDetailModal(props) {
                                 />
                             </div>
                             <div >
-                                <div>
+                                {/* <div>
                                     <NormalTable
                                         stripedRows={true}
                                         tableStyle={{ maxWidth: "w-full" }}
@@ -158,7 +158,7 @@ export default function AdminManagementDetailModal(props) {
                                         rows={listPayload.filters.limit}
                                         onPageHandler={(e) => onPaginationChange(e)}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             <div className="text-center">
                                 <div className="modal-button-footer-space-back">
