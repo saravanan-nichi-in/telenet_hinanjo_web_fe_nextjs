@@ -36,36 +36,36 @@ const AppMenu = () => {
                     to: '/admin/dashboard',
                     active: router.pathname.startsWith('/admin/dashboard')
                 },
-                // {
-                //     label: translate(localeJson, 'history_place'),
-                //     icon: <RiFileHistoryFill size={16} />,
-                //     to: '/admin/history/place',
-                //     active: router.pathname.startsWith('/admin/history/place'),
-                // },
-                // {
-                //     label: translate(localeJson, 'list_of_evacuees_menu'),
-                //     icon: <PiUserListFill size={16} />,
-                //     to: '/admin/evacuation',
-                //     active: router.pathname.startsWith('/admin/evacuation')
-                // },
-                // {
-                //     label: translate(localeJson, 'external_evacuees_tally'),
-                //     icon: <FaPeopleGroup size={16} />,
-                //     to: '/admin/external/family',
-                //     active: router.pathname.startsWith('/admin/external/family')
-                // },
-                // {
-                //     label: translate(localeJson, 'shortage_supplies_list'),
-                //     icon: <HiArchiveBoxXMark size={16} />,
-                //     to: '/admin/shortage-supplies',
-                //     active: router.pathname.startsWith('/admin/shortage-supplies')
-                // },
-                // {
-                //     label: translate(localeJson, 'stockpile_summary'),
-                //     icon: <FaBoxes size={16} />,
-                //     to: '/admin/stockpile/summary',
-                //     active: router.pathname.startsWith('/admin/stockpile/summary')
-                // },
+                {
+                    label: translate(localeJson, 'history_place'),
+                    icon: <RiFileHistoryFill size={16} />,
+                    to: '/admin/history/place',
+                    active: router.pathname.startsWith('/admin/history/place'),
+                },
+                {
+                    label: translate(localeJson, 'list_of_evacuees_menu'),
+                    icon: <PiUserListFill size={16} />,
+                    to: '/admin/evacuation',
+                    active: router.pathname.startsWith('/admin/evacuation')
+                },
+                {
+                    label: translate(localeJson, 'external_evacuees_tally'),
+                    icon: <FaPeopleGroup size={16} />,
+                    to: '/admin/external/family',
+                    active: router.pathname.startsWith('/admin/external/family')
+                },
+                {
+                    label: translate(localeJson, 'shortage_supplies_list'),
+                    icon: <HiArchiveBoxXMark size={16} />,
+                    to: '/admin/shortage-supplies',
+                    active: router.pathname.startsWith('/admin/shortage-supplies')
+                },
+                {
+                    label: translate(localeJson, 'stockpile_summary'),
+                    icon: <FaBoxes size={16} />,
+                    to: '/admin/stockpile/summary',
+                    active: router.pathname.startsWith('/admin/stockpile/summary')
+                },
                 {
                     label: translate(localeJson, 'statistics'),
                     icon: <FaChartPie size={16} />,
@@ -78,12 +78,12 @@ const AppMenu = () => {
             label: translate(localeJson, 'operation_management'),
             icon: <MdManageAccounts size={16} />,
             items: [
-                // {
-                //     label: translate(localeJson, 'qr_code_create'),
-                //     icon: <BiQrScan size={16} />,
-                //     to: '/admin/qrcode/csv/import',
-                //     active: router.pathname.startsWith('/admin/qrcode/csv/import')
-                // },
+                {
+                    label: translate(localeJson, 'qr_code_create'),
+                    icon: <BiQrScan size={16} />,
+                    to: '/admin/qrcode/csv/import',
+                    active: router.pathname.startsWith('/admin/qrcode/csv/import')
+                },
                 {
                     label: translate(localeJson, 'staff_management'),
                     icon: <FaUsersGear size={16} />,
@@ -125,14 +125,14 @@ const AppMenu = () => {
                     icon: <PiHandTapFill size={16} />,
                     to: '/admin/special/care',
                     active: router.pathname.startsWith('/admin/special/care')
-                }, 
-                // {
-                //     label: translate(localeJson, 'interview_management'),
-                //     icon: <FaBoxes size={16} />,
-                //     to: '/admin/questionnaire',
-                //     active: router.pathname.startsWith('/admin/questionnaire')
-                // },
-                 {
+                },
+                {
+                    label: translate(localeJson, 'interview_management'),
+                    icon: <FaBoxes size={16} />,
+                    to: '/admin/questionnaire',
+                    active: router.pathname.startsWith('/admin/questionnaire')
+                },
+                {
                     label: translate(localeJson, 'setting_systems'),
                     icon: <RiFileSettingsFill size={16} />,
                     to: '/admin/setting',
