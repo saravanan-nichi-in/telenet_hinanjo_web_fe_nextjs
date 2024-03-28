@@ -13,6 +13,7 @@ import { Input, InputDropdown } from '@/components/input';
 import {
     getSpecialCareName
 } from "@/helper";
+import { TRUE } from 'sass';
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -45,22 +46,21 @@ export default function EvacuationPage() {
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
         {
-            field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: true, alignHeader: "left", maxWidth: '4rem',
+            field: 'refugee_name', header: translate(localeJson, 'name_public_evacuee'),sortable:true,alignHeader: "left", maxWidth: '4rem',
             body: (rowData) => {
                 return <div className="flex flex-column">
-                    <div className="custom-header">{rowData.person_name}</div>
-                    <div className="table-body-sub">{rowData.person_refugee_name}</div>
+                    <div className="custom-header">{rowData.name}</div>
+                    <div className="table-body-sub">{rowData.refugee_name}</div>
                 </div>
             },
         },
         { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: true, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: TRUE, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "person_dob", header: translate(localeJson, 'dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "dob", header: translate(localeJson, 'dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: "gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -140,9 +140,10 @@ export default function EvacuationPage() {
                 });
             }
             evacuationColumns.push(
-                { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
+                { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
             )
             let placeIdObj = {};
+            let index;
             places.map((place) => {
                 let placeData = {
                     name: locale == 'ja' ? place.name : (place.name_en ? place.name_en : place.name),
@@ -154,19 +155,36 @@ export default function EvacuationPage() {
             setEvacuationPlaceList(placesList);
 
             data.map((item, i) => {
-
+                if (previousItem && previousItem.id == item.family_id) {
+                    index = index + 1;
+                } else {
+                    if (evacueesDataList.length > 0 && data.indexOf(item) === 0) {
+                        let evacueesData = evacueesDataList[evacueesDataList.length - 1];
+                        if (evacueesData.id == item.family_id) {
+                            index = evacueesData.family_count + 1;
+                        }
+                        else {
+                            index = 1;
+                        }
+                    }
+                    else {
+                        index = 1;
+                    }
+                }
                 let evacuees = {
                     "si_no": i + parseInt(getListPayload.filters.start) + 1,
                     "id": item.f_id,
-                    "place_name": placeIdObj[item.place_id] ?? "",
-                    "family_count": item.persons_count,
-                    "family_code": item.family_code,
-                    "person_is_owner": item.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "person_refugee_name": <div className={"clickable-row"}>{item.person_refugee_name}</div>,
+                    "name":item.name ?? "",
+                    // "place_name": placeIdObj[item.place_id] ?? "",
+                    "place_name":locale=="ja"? item.families.place.name : (item.families.place.name_en ? item.families.place.name_en : item.families.place.name),
+                    "family_count": index,
+                    "family_code": item.families.family_code,
+                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    "refugee_name": <div className={"clickable-row"}>{item.refugee_name}</div>,
                     "person_name": <div className={"text-highlighter-user-list clickable-row"}>{item.person_name}</div>,
-                    "person_gender": getGenderValue(item.person_gender),
-                    "person_dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.person_dob) : getEnglishDateDisplayFormat(item.person_dob),
-                    "person_age": item.person_age,
+                    "gender": getGenderValue(item.gender),
+                    "dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),
+                    "age": item.age,
                     "age_month": item.person_month,
                     "special_care_name": item.person_special_cares ? getSpecialCareName(item.person_special_cares, locale) : "-",
                     "remarks": item.person_note,
@@ -186,11 +204,11 @@ export default function EvacuationPage() {
                 siNo = siNo + 1;
             });
             totalFamilyCount = response.data.total_family;
-            listTotalCount = response.data.total;
+            listTotalCount = response.data.count;
         }
         else {
             evacuationColumns.push(
-                { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
+                { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' }
             )
         }
         setTableLoading(false);
@@ -365,9 +383,10 @@ export default function EvacuationPage() {
                                     onClick: () => downloadEvacueesListCSV()
                                 }} parentClass={"mb-3 export-button"} />
                             </div> */}
+                           
                         </div>
                     </div>
-                    <NormalTable
+                       <NormalTable
                         lazy
                         id={"evacuation-list"}
                         className="evacuation-list"
