@@ -136,7 +136,11 @@ export default function PlaceCreatePage() {
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
         if(context.parent.postal_code_default_2?.length==4) {
         const { prefecture_id_default } = context.parent;
-        return postalCodeDefaultPrefectureId == prefecture_id_default
+        if(postalCodePrefectureId != null && prefecture_id_default !=null)
+        {
+        return postalCodePrefectureId == prefecture_id_default
+        }
+        else return true
         }
         else {
           return true
@@ -156,7 +160,11 @@ export default function PlaceCreatePage() {
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
         if(context.parent.postal_code_default_1?.length==3) {
         const { prefecture_id_default } = context.parent;
-        return postalCodeDefaultPrefectureId == prefecture_id_default
+        if(postalCodePrefectureId != null && prefecture_id_default !=null)
+        {
+        return postalCodePrefectureId == prefecture_id_default
+        }
+        else return true
         }
         else {
           return true
