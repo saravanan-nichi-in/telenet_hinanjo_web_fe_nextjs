@@ -22,7 +22,7 @@ export default function AdminManagementDetailModal(props) {
     const columns = [
         { field: 'name', header: translate(localeJson, 'name'), minWidth: "8rem" },
         {
-            field: 'email', header: translate(localeJson, 'userId'), minWidth: "10rem", maxWidth: "10rem", textAlign: "center",
+            field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "10rem", maxWidth: "10rem", textAlign: "center",
             alignHeader: "center",
         },
     ];

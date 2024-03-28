@@ -190,7 +190,7 @@ export default function StaffManagementEditModal(props) {
                                                 inputProps={{
                                                     inputParentClassName: `${errors.email && touched.email && 'p-invalid pb-1'}`,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'userId'),
+                                                        text: translate(localeJson, 'external_evecuee_list_table_email_address'),
                                                         inputLabelClassName: "block",
                                                         spanText: "*",
                                                         inputLabelSpanClassName: "p-error",

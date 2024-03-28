@@ -49,7 +49,6 @@ export default function AdminManagementCreateEditModal(props) {
                     return true;
                 }
             }),
-        gender: Yup.string().required(translate(localeJson, "gender_required")),
     });
 
     const schema2 = Yup.object().shape({
@@ -90,7 +89,6 @@ export default function AdminManagementCreateEditModal(props) {
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/,
                 translate(localeJson, "new_password_format")
             ),
-        gender: Yup.string().required(translate(localeJson, "gender_required")),
     });
 
     const { open, close } = props && props;
@@ -195,7 +193,7 @@ export default function AdminManagementCreateEditModal(props) {
                                                 inputProps={{
                                                     inputParentClassName: `${errors.email && touched.email && 'p-invalid pb-1'}`,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'userId'),
+                                                        text: translate(localeJson, 'external_evecuee_list_table_email_address'),
                                                         inputLabelClassName: "block",
                                                         spanText: "*",
                                                         inputLabelSpanClassName: "p-error",
@@ -209,33 +207,6 @@ export default function AdminManagementCreateEditModal(props) {
                                                 }}
                                             />
                                             <ValidationError errorBlock={errors.email && touched.email && errors.email} />
-                                        </div>
-                                        {/* {JSON.stringify(values)} */}
-                                        <div className="modal-field-bottom-space w-full">
-                                            <InputDropdown inputDropdownProps={{
-                                                inputDropdownParenClassName: `custom_input ${errors.gender && touched.gender && "p-invalid pb-1"
-                                                    }`,
-                                                labelProps: {
-                                                    text: translate(localeJson, 'gender_external_modal'),
-                                                    inputDropdownLabelClassName: "block",
-                                                    inputDropdownLabelSpanClassName: "p-error",
-                                                    spanText: "*"
-                                                },
-                                                inputDropdownClassName: "w-full ",
-                                                name: "gender",
-                                                value: values && values.gender,
-                                                options: locale == "ja" ? gender_jp : gender_en,
-                                                optionLabel: "name",
-                                                onChange: handleChange,
-                                                onBlur: handleBlur,
-                                                emptyMessage: translate(localeJson, "data_not_found"),
-                                            }}
-                                            />
-                                            <ValidationError
-                                                errorBlock={
-                                                    errors.gender && touched.gender && errors.gender
-                                                }
-                                            />
                                         </div>
                                         {props.registerModalAction == "create" && (
                                             <div className="modal-field-bottom-space w-full">
