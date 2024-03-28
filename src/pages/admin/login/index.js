@@ -11,7 +11,7 @@ import { setAdminValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button, ValidationError } from '@/components';
-import { InputGroup } from '@/components/input';
+import Password, { InputGroup } from '@/components/input';
 import CustomHeader from '@/components/customHeader';
 import { setForgetPassword } from '@/redux/fwd_password';
 
@@ -53,9 +53,9 @@ const LoginPage = () => {
             router.push('/admin/forgot-password')
         } else {
             toast.error(translate(localeJson, 'contact_admin'),
-            {
-                position: "top-right",
-            });
+                {
+                    position: "top-right",
+                });
         }
     }
 
@@ -111,20 +111,22 @@ const LoginPage = () => {
                                                 <ValidationError errorBlock={errors.username && touched.username && errors.username} />
                                             </div>
                                             <div className="field custom_inputText">
-                                                <InputGroup inpuGroupProps={{
-                                                    inputGroupParentClassName: `w-full ${errors.password && touched.password && 'p-invalid'}`,
-                                                    name: 'password',
-                                                    type: "password",
-                                                    value: values.password,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'password'),
-                                                        spanText: "*",
-                                                        inputGroupLabelClassName: "mb-2",
-                                                        inputGroupLabelSpanClassName: "p-error"
-                                                    },
-                                                }} />
+                                                <Password
+                                                    passwordProps={{
+                                                        passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
+                                                        labelProps: {
+                                                            text: translate(localeJson, 'password'),
+                                                            spanText: "*",
+                                                            passwordLabelSpanClassName: "p-error",
+                                                            passwordLabelClassName: "block",
+                                                        },
+                                                        name: 'password',
+                                                        value: values.password,
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        passwordClass: "w-full"
+                                                    }}
+                                                />
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>

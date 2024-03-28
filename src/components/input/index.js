@@ -66,11 +66,9 @@ export const Input = (props) => {
         </>
       )}
       <div
-        className={`custom_input ${inputParentClassName} ${
-          inputRightIconProps?.audio?.display ? "p-input-icon-right" : ""
-        } ${hasIcon ? "p-input-icon-right" : ""} ${
-          float ? "p-float-label " : ""
-        }`}
+        className={`custom_input ${inputParentClassName} ${inputRightIconProps?.audio?.display ? "p-input-icon-right" : ""
+          } ${hasIcon ? "p-input-icon-right" : ""} ${float ? "p-float-label " : ""
+          }`}
         style={inputParentStyle}
       >
         {labelProps?.text && !inputRightIconProps?.display && (
@@ -86,12 +84,12 @@ export const Input = (props) => {
         )}
         {localIsRecording && (
           <i className="flex justify-content-center w-full">
-          <i className="pi pi-spin pi-spinner  pl-0 " />
+            <i className="pi pi-spin pi-spinner  pl-0 " />
           </i>
         )}
         {isLoading && (
-           <i className="flex justify-content-center w-full">
-          <i className="flex justify-content center align-items-end pt-2 pb-2 pi pi-spin pi-spinner" />
+          <i className="flex justify-content-center w-full">
+            <i className="flex justify-content center align-items-end pt-2 pb-2 pi pi-spin pi-spinner" />
           </i>
         )}
         {/* Development */}
@@ -122,18 +120,22 @@ export const Input = (props) => {
         {inputRightIconProps?.display && (
           <>
             {inputRightIconProps?.audio?.display ? (
-              <AudioRecorder
-                onAudioRecorded={handleAudioRecorded}
-                onRecordingStateChange={handleRecordingStateChangeLocal}
-                disabled={
-                  inputRightIconProps.disabled ||
-                  (inputRightIconProps.isRecording && !localIsRecording)
-                }
-                isRecording={localIsRecording}
-                customParentClassName={`${inputRightIconProps.audioCustomParentClass}`}
-                customClass={inputRightIconProps.audioCustomClass}
-                customStyle={inputRightIconProps.audioCustomStyle}
-              />
+              <i className="flex">
+                {inputRightIconProps?.password?.display && (<i className={inputRightIconProps?.password?.className} onClick={() => { inputRightIconProps?.password?.onClick() }}></i>)}
+                <AudioRecorder
+                  onAudioRecorded={handleAudioRecorded}
+                  onRecordingStateChange={handleRecordingStateChangeLocal}
+                  disabled={
+                    inputRightIconProps.disabled ||
+                    (inputRightIconProps.isRecording && !localIsRecording)
+                  }
+                  isRecording={localIsRecording}
+                  customParentClassName={`${inputRightIconProps.audioCustomParentClass}`}
+                  customClass={inputRightIconProps.audioCustomClass}
+                  customStyle={inputRightIconProps.audioCustomStyle}
+                />
+
+              </i>
             ) : (
               <span className={inputRightIconProps.inputRightIconClassName}>
                 {inputRightIconProps.icon}
@@ -271,11 +273,9 @@ export const InputNumber = (props) => {
         </>
       )}
       <div
-        className={`${inputNumberParentClassName} ${
-          inputRightIconProps?.audio?.display ? "p-input-icon-right" : ""
-        } ${hasIcon ? "p-input-icon-right" : ""}  ${
-          float ? "p-float-label" : ""
-        }`}
+        className={`${inputNumberParentClassName} ${inputRightIconProps?.audio?.display ? "p-input-icon-right" : ""
+          } ${hasIcon ? "p-input-icon-right" : ""}  ${float ? "p-float-label" : ""
+          }`}
         style={inputNumberParentStyle}
       >
         {labelProps?.text && !inputRightIconProps?.display && (
@@ -291,12 +291,12 @@ export const InputNumber = (props) => {
         )}
         {localIsRecording && (
           <i className="flex justify-content-center w-full">
-          <i className="pi pi-spin pi-spinner  pl-0 " />
+            <i className="pi pi-spin pi-spinner  pl-0 " />
           </i>
         )}
         {isLoading && (
-           <i className="flex justify-content-center w-full">
-          <i className="flex justify-content center align-items-end pt-2 pb-2 pi pi-spin pi-spinner" />
+          <i className="flex justify-content-center w-full">
+            <i className="flex justify-content center align-items-end pt-2 pb-2 pi pi-spin pi-spinner" />
           </i>
         )}
         {inputLeftIconProps?.display && (
@@ -387,9 +387,8 @@ export default function Password(props) {
 
   return (
     <div
-      className={`custom_input_password ${passwordParentClassName}  ${
-        float ? "p-float-label" : ""
-      }`}
+      className={`custom_input_password ${passwordParentClassName}  ${float ? "p-float-label" : ""
+        }`}
     >
       {labelProps?.text && (
         <div className={`${labelProps.labelMainClassName || "pb-1"}`}>
@@ -455,9 +454,8 @@ export const InputGroup = (props) => {
         </div>
       )}
       <div
-        className={`p-inputgroup ${inputGroupParentClassName}  ${
-          float ? "p-float-label" : ""
-        }`}
+        className={`p-inputgroup ${inputGroupParentClassName}  ${float ? "p-float-label" : ""
+          }`}
         style={inputGroupParentStyle}
       >
         {leftIcon && (
@@ -516,9 +514,8 @@ export const InputDropdown = (props) => {
 
   return (
     <div
-      className={`custom-select ${inputDropdownParentClassName} ${
-        float ? "p-float-label" : ""
-      }`}
+      className={`custom-select ${inputDropdownParentClassName} ${float ? "p-float-label" : ""
+        }`}
       style={inputDropdownParentStyle}
     >
       {labelProps?.text && (
@@ -570,9 +567,8 @@ export const MultiSelect = (props) => {
 
   return (
     <div
-      className={`custom-select ${multiSelectParentClassName} ${
-        float ? "p-float-label" : ""
-      }`}
+      className={`custom-select ${multiSelectParentClassName} ${float ? "p-float-label" : ""
+        }`}
       style={multiSelectParentStyle}
     >
       {labelProps?.text && (
@@ -660,9 +656,8 @@ export const InputGroups = (props) => {
 
   return (
     <div
-      className={`p-inputgroup flex-1${
-        custom || "custom_input"
-      } ${parentClass} `}
+      className={`p-inputgroup flex-1${custom || "custom_input"
+        } ${parentClass} `}
       style={parentStyle}
     >
       <Button

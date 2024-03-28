@@ -108,9 +108,9 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
     if (dateTime) {
         const date = new Date(dateTime);
         const formattedDate = date.toLocaleDateString('ja-JP', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
         });
         return formattedDate.replace(/\//g, '年').replace('-', '月') + '日';
     }
@@ -339,6 +339,82 @@ export const common422ErrorToastDisplay = (error) => {
         toast.error(error.response.data.message, {
             position: "top-right",
         });
+    }
+}
+
+/**
+ * Function help to display error messages on toast
+ * @param {*} error 
+ * @param {*} key 
+ * @param {*} position 
+ */
+export const toastDisplay = (response, key, position = "top-right", rawMsgType) => {
+    console.log(response, "Toast response");
+    if (response && response?.data && response?.status) {
+        const { status, data } = response;
+        if (status != 511 && status != 401 && status != 403) {
+            if (data.success) {
+                if (key == 'import' && status == 206) {
+                    toast.success(() => (
+                        <div>
+                            <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                                {response?.data?.message}
+                            </a>
+                        </div>
+                    ), {
+                        position: position,
+                    });
+                } else {
+                    toast.success(data?.message, {
+                        position: position,
+                    });
+                }
+            } else {
+                if (key == 'import' && status == 422) {
+                    toast.error(() => (
+                        <div>
+                            <a href={data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                                {data?.message}
+                            </a>
+                        </div>
+                    ), {
+                        position: position,
+                    });
+
+                } else if (status == 422) {
+                    if (isObject(data?.message)) {
+                        let errorMessages = Object.values(data?.message);
+                        let errorString = errorMessages.join('.')
+                        let errorArray = errorString.split(".");
+                        errorArray = errorArray.filter(message => message.trim() !== "");
+                        let formattedErrorMessage = errorArray
+                            .map((message, index) => {
+                                return `${message.trim()}`;
+                            })
+                            .join("\n");
+                        toast.error(formattedErrorMessage, {
+                            position: position,
+                        });
+                    }
+                } else {
+                    if (!isArray(data?.message)) {
+                        toast.error(data?.message, {
+                            position: "top-right",
+                        });
+                    }
+                }
+            }
+        }
+    } else {
+        if (rawMsgType == 'success') {
+            toast.success(response, {
+                position: "top-right",
+            });
+        } else {
+            toast.error(response, {
+                position: "top-right",
+            });
+        }
     }
 }
 

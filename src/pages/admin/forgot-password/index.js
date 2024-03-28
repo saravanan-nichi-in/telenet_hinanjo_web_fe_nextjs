@@ -44,6 +44,7 @@ const ForgotPasswordPage = () => {
                 onSubmit={(values) => {
                     let preparedPayload = values;
                     preparedPayload['username'] = preparedPayload.email.trim();
+                    preparedPayload['email'] = preparedPayload.email.trim();
                     forgot('admin', preparedPayload, onForgotSuccess);
                 }}
             >
