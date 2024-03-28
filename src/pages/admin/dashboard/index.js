@@ -105,26 +105,26 @@ function AdminDashboard() {
             })
             const totalCounts = response.data.totalCounts;
             // Update frozen data
-            // let preparedFrozenObj = {
-            //     number: "",
-            //     evacuation_place: translate(localeJson, 'total'),
-            //     max_capacity: `${totalCounts.totalMaxCapacity}${translate(localeJson, 'people')}`,
-            //     number_of_evacuees: `${totalCounts.totalEvacueeCount}${translate(localeJson, 'people')}`,
-            //     accommodation_rate: `${totalCounts.averageAccommodationRate}%`,
-            //     household: `${totalCounts.totalHousehold}${translate(localeJson, 'household_title')}`,
-            //     number_of_people_count_only: `${totalCounts.totalPeopleCount}${translate(localeJson, 'people')}`,
-            //     male: `${totalCounts.totalMale}${translate(localeJson, 'people')}`,
-            //     female: `${totalCounts.totalFemale}${translate(localeJson, 'people')}`,
-            //     others_count: `${totalCounts.totalOther}${translate(localeJson, 'people')}`,
-            //     remaining_number_people: `${totalCounts.totalRemainingPeople}${translate(localeJson, 'people')}`,
-            //     food_assistance: `${totalCounts.totalFoodRequiredCount}${translate(localeJson, 'people')}`,
-            //     switch_to_full: "",
-            // };
-            // const specialCareCount = response.data.totalSpecialCaresCount;
-            // additionalColumnsKeys.map((obj, i) => {
-            //     preparedFrozenObj[obj] = `${specialCareCount[obj]}${translate(localeJson, 'people')}`
-            // })
-            // frozenObj = [preparedFrozenObj];
+            let preparedFrozenObj = {
+                number: "",
+                evacuation_place: translate(localeJson, 'total'),
+                max_capacity: `${totalCounts.totalMaxCapacity}${translate(localeJson, 'people')}`,
+                number_of_evacuees: `${totalCounts.totalEvacueeCount}${translate(localeJson, 'people')}`,
+                accommodation_rate: `${totalCounts.averageAccommodationRate}%`,
+                household: `${totalCounts.totalHousehold}${translate(localeJson, 'household_title')}`,
+                number_of_people_count_only: `${totalCounts.totalPeopleCount}${translate(localeJson, 'people')}`,
+                male: `${totalCounts.totalMale}${translate(localeJson, 'people')}`,
+                female: `${totalCounts.totalFemale}${translate(localeJson, 'people')}`,
+                others_count: `${totalCounts.totalOther}${translate(localeJson, 'people')}`,
+                remaining_number_people: `${totalCounts.totalRemainingPeople}${translate(localeJson, 'people')}`,
+                food_assistance: `${totalCounts.totalFoodRequiredCount}${translate(localeJson, 'people')}`,
+                switch_to_full: "",
+            };
+            const specialCareCount = response.data.totalSpecialCaresCount;
+            additionalColumnsKeys.map((obj, i) => {
+                preparedFrozenObj[obj] = `${specialCareCount[obj]}${translate(localeJson, 'people')}`
+            })
+            frozenObj = [preparedFrozenObj];
             listTotalCount = response.data.total;
         }
         setTableLoading(false);
@@ -214,7 +214,7 @@ function AdminDashboard() {
                                 className={"custom-table-cell"}
                                 showGridlines={"true"}
                                 value={list}
-                                // frozenValue={_.size(list) > 0 && frozenArray}
+                                frozenValue={_.size(list) > 0 && frozenArray}
                                 columns={columns}
                                 filterDisplay="menu"
                                 emptyMessage={translate(localeJson, "data_not_found")}
