@@ -39,7 +39,7 @@ export default function StaffManagementPage() {
         setDeleteObj({
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
-            secondLabel: translate(localeJson, 'userId'),
+            secondLabel: translate(localeJson, 'external_evecuee_list_table_email_address'),
             secondValue: rowdata.email
         });
         setDeleteOpen(true);
@@ -84,7 +84,8 @@ export default function StaffManagementPage() {
                 </p>
             )
         },
-        { field: 'email', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "5rem", maxWidth: "5rem" },
+        {field:'tel',header:translate(localeJson,'tel'),minWidth: "5rem", maxWidth: "5rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
