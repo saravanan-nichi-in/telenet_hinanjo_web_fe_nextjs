@@ -1,9 +1,8 @@
 import { BehaviorSubject } from 'rxjs';
 import toast from 'react-hot-toast';
-import { isObject } from "lodash";
 
 import axios from '@/utils/api';
-import { common422ErrorToastDisplay } from '@/helper';
+import { common422ErrorToastDisplay, toastDisplay } from '@/helper';
 
 const admin = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('admin')));
 const staff = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('staff')));
@@ -24,9 +23,8 @@ export const AuthenticationAuthorizationService = {
  * @param {*} key 
  * @param {*} values 
  * @param {*} callBackFun 
- * @param {*} prepareKey 
  */
-function _login(key, values, callBackFun, prepareKey) {
+function _login(key, values, callBackFun) {
     let loginUrl = {
         'admin': '/auth/admin/login',
         'staff': '/auth/staff/login'
@@ -44,13 +42,12 @@ function _login(key, values, callBackFun, prepareKey) {
                     }
                     subject.next(response.data);
                     callBackFun(response.data);
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
+                    toastDisplay(response);
                 }
             })
             .catch((error) => {
-                common422ErrorToastDisplay(error);
+                callBackFun(false);
+                toastDisplay(error?.response);
             });
     }
 }
@@ -58,44 +55,33 @@ function _login(key, values, callBackFun, prepareKey) {
 /**
  * Logout functionality
  * @param {*} key 
+ * @param {*} values 
  * @param {*} callBackFun 
- * @param {*} prepareKey 
  */
-function _logout(key, values, callBackFun, prepareKey) {
-    // let logoutUrl = {
-    //     'admin': '/auth/admin/login',
-    //     'staff': '/auth/staff/login'
-    // }[key]
+function _logout(key, values, callBackFun) {
+    let logoutUrl = '/auth/logout';
 
-    // if (values && callBackFun) {
-    //     axios.post(logoutUrl, { ...values })
-    //         .then((response) => {
-    //             if (response && response.data) {
-    //                 let subject;
-    //                 if (key == 'admin') {
-    //                     subject = admin
-    //                 } else if (key == 'staff') {
-    //                     subject = staff
-    //                 }
-    //                 localStorage.removeItem(key);
-    //                 subject.next(null);
-    //                 callBackFun(key);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             common422ErrorToastDisplay(error);
-    //         });
-    // }
-
-    let subject;
-    if (key == 'admin') {
-        subject = admin
-    } else if (key == 'staff') {
-        subject = staff
+    if (values && callBackFun) {
+        axios.post(logoutUrl, { ...values })
+            .then((response) => {
+                if (response && response.data) {
+                    let subject;
+                    if (key == 'admin') {
+                        subject = admin
+                    } else if (key == 'staff') {
+                        subject = staff
+                    }
+                    localStorage.removeItem(key);
+                    subject.next(null);
+                    callBackFun(key);
+                    toastDisplay(response);
+                }
+            })
+            .catch((error) => {
+                callBackFun(false);
+                toastDisplay(error?.response);
+            });
     }
-    localStorage.removeItem(key);
-    subject.next(null);
-    callBackFun(key);
 }
 
 /**
@@ -107,15 +93,14 @@ function _logout(key, values, callBackFun, prepareKey) {
 function _forgot(key, values, callBackFun) {
     axios.post('/auth/forgot/password', { ...values, type: key })
         .then((response) => {
-            if (response) {
+            if (response && response.data) {
                 callBackFun(response);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            common422ErrorToastDisplay(error);
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -135,13 +120,12 @@ function _reset(key, values, callBackFun) {
         .then((response) => {
             if (response) {
                 callBackFun();
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            common422ErrorToastDisplay(error);
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 

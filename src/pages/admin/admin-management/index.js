@@ -64,7 +64,7 @@ export default function AdminManagementPage() {
                 </p>
             )
         },
-        { field: 'email', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "5rem", maxWidth: "5rem" },
         { field: 'gender', header: translate(localeJson, 'gender'), minWidth: "5rem", maxWidth: "5rem",className:"hidden"},
         {
             field: 'actions',
@@ -194,7 +194,7 @@ export default function AdminManagementPage() {
         setDeleteObj({
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
-            secondLabel: translate(localeJson, 'userId'),
+            secondLabel: translate(localeJson, 'external_evecuee_list_table_email_address'),
             secondValue: rowdata.email
         });
         setDeleteOpen(true);
