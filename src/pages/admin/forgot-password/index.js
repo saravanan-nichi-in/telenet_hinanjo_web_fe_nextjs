@@ -73,7 +73,7 @@ const ForgotPasswordPage = () => {
                                                     onBlur: handleBlur,
                                                     value: values.email,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'userId'),
+                                                        text: translate(localeJson, 'mail_address'),
                                                         spanText: "*",
                                                         inputGroupLabelClassName: "mb-2",
                                                         inputGroupLabelSpanClassName: "p-error"

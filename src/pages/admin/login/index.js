@@ -102,7 +102,7 @@ const LoginPage = () => {
                                                     onBlur: handleBlur,
                                                     value: values.username,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'userId'),
+                                                        text: translate(localeJson, 'mail_address'),
                                                         spanText: "*",
                                                         inputGroupLabelClassName: "mb-2",
                                                         inputGroupLabelSpanClassName: "p-error"
