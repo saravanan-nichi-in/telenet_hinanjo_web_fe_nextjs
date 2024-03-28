@@ -54,12 +54,22 @@ export default function AdminManagementPage() {
         {
             field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem", maxWidth: "5rem",
             body: (rowData) => (
-                <p className='text-link-class clickable-row' onClick={(e) => {
-                    e.preventDefault();
-                    setDetailId(rowData['id']);
-                    setDetailOpen(true);
+                <p className='text-link-class clickable-row' 
+                //Development
+                // onClick={(e) => {
+                //     e.preventDefault();
+                //     setDetailId(rowData['id']);
+                //     setDetailOpen(true);
+                //     hideOverFlow();
+                // }}
+                onClick= {() => {
+                    console.log(rowData)
+                    setCurrentObj(rowData);
+                    setRegisterModalAction("edit")
+                    setEditStaffOpen(true);
                     hideOverFlow();
-                }}>
+                }}
+                >
                     {rowData['name']}
                 </p>
             )
@@ -74,7 +84,7 @@ export default function AdminManagementPage() {
             className: "action_class",
             body: (rowData) => (
                 <div>
-                    <Button
+                    {/* <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'edit'),
@@ -86,7 +96,7 @@ export default function AdminManagementPage() {
                                 setEditStaffOpen(true);
                                 hideOverFlow();
                             }
-                        }} parentClass={"edit-button"} />
+                        }} parentClass={"edit-button"} /> */}
                     <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{

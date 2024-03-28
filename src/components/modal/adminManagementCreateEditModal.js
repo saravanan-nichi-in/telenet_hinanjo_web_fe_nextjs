@@ -13,17 +13,16 @@ import { gender_en, gender_jp } from "@/utils/constant";
 
 export default function AdminManagementCreateEditModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
-
-    const isEmail = (value) => {
-        // Check if the value includes '@' and matches the email pattern
-        return !value.includes('@') || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
-    };
-
+    
     const schema1 = Yup.object().shape({
         email: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
             .max(200, translate(localeJson, 'user_id_max'))
-            .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
+            .test('trim-and-validate', translate(localeJson, 'user_id_email'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
         name: Yup.string()
             .required(translate(localeJson, 'admin_name_required'))
             .max(200, translate(localeJson, 'staff_name_max_required')),
@@ -55,7 +54,11 @@ export default function AdminManagementCreateEditModal(props) {
         email: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
             .max(200, translate(localeJson, 'user_id_max'))
-            .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
+            .test('trim-and-validate', translate(localeJson, 'user_id_email'), (value) => {
+                // Trim the email and check its validity
+                const trimmedEmail = value.trim();
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
+            }),
         name: Yup.string()
             .required(translate(localeJson, 'admin_name_required'))
             .max(200, translate(localeJson, 'staff_name_max_required')),
