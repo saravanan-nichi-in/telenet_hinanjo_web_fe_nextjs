@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -46,6 +46,7 @@ export default function PlaceUpdatePage() {
   const [currentLongitude, setCurrentlongitude] = useState(0);
   const [activeFlagValue, setActiveFlagValue] = useState(false);
   const [publicAvailabilityFlagValue, setPublicAvailabilityFlagValue] = useState(false);
+  const [prefCount,setPrefCount]=useState(1)
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(
@@ -79,8 +80,18 @@ export default function PlaceUpdatePage() {
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_2?.length==4)
+        {
         const { prefecture_id } = context.parent;
+        if(postalCodePrefectureId != null && prefecture_id !=null)
+        {
         return postalCodePrefectureId == prefecture_id
+        }
+        else return true
+        }
+        else {
+          return true
+        }
       }),
     postal_code_2: Yup.string()
       .test("checkDoubleByte", translate(localeJson, "postal_code_2_validation"),
@@ -94,10 +105,18 @@ export default function PlaceUpdatePage() {
       .required(
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
-      )
-      .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_1?.length==3) {
         const { prefecture_id } = context.parent;
+        if(postalCodePrefectureId != null && prefecture_id !=null)
+        {
         return postalCodePrefectureId == prefecture_id
+        }
+        else return true
+        }
+        else {
+          return true
+        }
       }),
     prefecture_id: Yup.string().required(
       translate(localeJson, "prefecture_place") +
@@ -128,10 +147,18 @@ export default function PlaceUpdatePage() {
       .required(
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
-      )
-      .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+      ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_default_2?.length==4) {
         const { prefecture_id_default } = context.parent;
+        if(postalCodeDefaultPrefectureId != null && prefecture_id_default !=null)
+        {
         return postalCodeDefaultPrefectureId == prefecture_id_default
+        }
+        else return true
+        }
+        else {
+          return true
+        }
       }),
     postal_code_default_2: Yup.string()
       .test("checkDoubleByte", translate(localeJson, "postal_code_2_validation"),
@@ -145,8 +172,17 @@ export default function PlaceUpdatePage() {
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
+        if(context.parent.postal_code_default_1?.length==3) {
         const { prefecture_id_default } = context.parent;
+        if(postalCodeDefaultPrefectureId != null && prefecture_id_default !=null)
+        {
         return postalCodeDefaultPrefectureId == prefecture_id_default
+        }
+        else return true
+        }
+        else {
+          return true
+        }
       }),
     prefecture_id_default: Yup.string().required(
       translate(localeJson, "default_prefecture_place") +
@@ -234,6 +270,11 @@ export default function PlaceUpdatePage() {
     };
     fetchData();
   }, [locale]);
+
+  const formikRef = useRef();
+  useEffect(()=> {
+    formikRef.current.validateForm()
+  },[prefCount])
 
   /**
    * Get place list on mounting
@@ -371,6 +412,7 @@ export default function PlaceUpdatePage() {
   return (
     <>
       <Formik
+       innerRef={formikRef}
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, error) => {
@@ -564,7 +606,7 @@ export default function PlaceUpdatePage() {
                                       val.length == 3 &&
                                       val2.length == 4
                                     ) {
-                                      let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(evt.target.value);
+                                      let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_2);
                                       getAddress(
                                         payload,
                                         (response) => {
@@ -585,7 +627,7 @@ export default function PlaceUpdatePage() {
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
-                                            validateForm();
+                                            setPrefCount(prefCount+1)
                                           } else {
                                             setFieldValue(
                                               "prefecture_id",
@@ -671,7 +713,7 @@ export default function PlaceUpdatePage() {
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
-                                            validateForm();
+                                            setPrefCount(prefCount+1)
                                           } else {
                                             setFieldValue(
                                               "prefecture_id",
@@ -720,10 +762,9 @@ export default function PlaceUpdatePage() {
 
                                 getAddress(
                                   payload, (res) => {
-                                    console.log(res);
                                     if (res && res.prefcode) {
                                       setPostalCodePrefectureId(res.prefcode);
-                                      setErrors({ ...errors, postal_code_1: translate(localeJson, "zip_code_mis_match"), postal_code_2: translate(localeJson, "zip_code_mis_match") });
+                                      setPrefCount(prefCount+1)
                                     }
                                     validateForm();
                                   })
@@ -885,7 +926,7 @@ export default function PlaceUpdatePage() {
                                                 address.address2 + (address.address3 || "")
                                               );
                                               setPostalCodeDefaultPrefectureId(selectedPrefecture?.value);
-                                              validateForm();
+                                              setPrefCount(prefCount+1)
                                             } else {
                                               setFieldValue(
                                                 "prefecture_id_default",
@@ -974,7 +1015,7 @@ export default function PlaceUpdatePage() {
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodeDefaultPrefectureId(selectedPrefecture?.value);
-                                            validateForm();
+                                            setPrefCount(prefCount+1)
                                           } else {
                                             setFieldValue(
                                               "prefecture_id_default",
@@ -1026,10 +1067,9 @@ export default function PlaceUpdatePage() {
 
                                 getAddress(
                                   payload, (res) => {
-                                    console.log(res);
                                     if (res && res.prefcode != e.target.value) {
                                       setPostalCodeDefaultPrefectureId(res.prefcode);
-                                      setErrors({ ...errors, postal_code_default_1: translate(localeJson, "zip_code_mis_match"), postal_code_default_2: translate(localeJson, "zip_code_mis_match") });
+                                      setPrefCount(prefCount+1)
                                     }
                                     validateForm();
                                   })
@@ -1323,7 +1363,7 @@ export default function PlaceUpdatePage() {
                         </div>
                         <div className="lg:col-5 mt-1 mb-2 lg:mt-0 lg:mb-0 pt-0 pb-0 lg:pr-0 flex align-items-end">
                           <Calendar calendarProps={{
-                            calendarParentClassName: `${errors.opening_time &&
+                            calendarParentClassName: `lg:w-full ${errors.opening_time &&
                               touched.opening_time &&
                               "p-invalid"
                               }`,
@@ -1399,7 +1439,7 @@ export default function PlaceUpdatePage() {
                         </div>
                         <div className="lg:col-5 mt-1 mb-2 lg:mt-0 lg:mb-0 pt-0 pb-0 lg:pr-0 flex align-items-end">
                           <Calendar calendarProps={{
-                            calendarParentClassName: `${errors.closing_time &&
+                            calendarParentClassName: `lg:w-full ${errors.closing_time &&
                               touched.closing_time &&
                               "p-invalid"
                               }`,
