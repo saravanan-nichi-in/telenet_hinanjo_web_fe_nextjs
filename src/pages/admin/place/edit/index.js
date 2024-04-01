@@ -203,7 +203,8 @@ export default function PlaceUpdatePage() {
       translate(localeJson, "default_address_en") +
       translate(localeJson, "max_length_255")
     ),
-    tel: Yup.string().nullable()
+    tel: Yup.string()
+    .required(translate(localeJson, "phone_no_required"))
       .test(
         "starts-with-zero",
         translate(localeJson, "phone_num_start"),
@@ -216,16 +217,23 @@ export default function PlaceUpdatePage() {
         }
       )
       .test(
-        "matches-pattern",
-        translate(localeJson, "phone"),
+        "is-not-empty",
+        translate(localeJson, "phone_no_required"),
         (value) => {
-          if (value) {
-            const singleByteValue = convertToSingleByte(value);
-            return /^[0-9]{10,11}$/.test(singleByteValue);
-          }
-          return true
+          return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
         }
-      ),
+      )
+      .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+        if(value)
+        {
+        const singleByteValue = convertToSingleByte(value);
+        return /^[0-9]{10,11}$/.test(singleByteValue);
+        }
+        else {
+          return true;
+        }
+      }),
+
     latitude: Yup.number().required(
       translate(localeJson, "latitude") + translate(localeJson, "is_required")
     ),
@@ -1199,22 +1207,44 @@ export default function PlaceUpdatePage() {
                       </div>
 
                       <div className="modal-field-top-space modal-field-bottom-space">
-                        <Input
-                          inputProps={{
-                            inputParentClassName: `custom_input ${errors.tel && touched.tel && "p-invalid pb-1"}`,
-                            labelProps: {
-                              text: translate(localeJson, 'phone_number'),
-                              inputLabelClassName: "block",
-                            },
-                            inputClassName: "w-full",
-                            value: values.tel,
-                            onChange: handleChange,
-                            onBlur: handleBlur,
-                            id: "tel",
-                            name: "tel",
-                            inputMode: "numeric",
-                          }}
-                        />
+                      <Input
+                            inputProps={{
+                              inputParentClassName: `w-full custom_input ${
+                                errors.tel && touched.tel && "p-invalid"
+                              }`,
+                              labelProps: {
+                                text: translate(localeJson, "phone_number"),
+                                spanText: "*",
+                                inputLabelClassName: "block font-bold",
+                                inputLabelSpanClassName: "p-error",
+                                labelMainClassName: "pb-1",
+                              },
+                              inputClassName: "w-full",
+                              id: "tel",
+                              name: "tel",
+                              value: values.tel,
+                              inputMode: "numeric",
+                              onChange: (evt) => {
+                                const re = /^[0-9-]+$/;
+                                let val;
+                                if (
+                                  evt.target.value === "" ||
+                                  re.test(convertToSingleByte(evt.target.value))
+                                ) {
+                                  val = evt.target.value.replace(/-/g, "");
+                                  setFieldValue("tel", val);
+                                }
+                              },
+                              onBlur: handleBlur,
+                              inputRightIconProps: {
+                                display: false,
+                                audio: {
+                                  display: false,
+                                },
+                                icon: "",
+                              },
+                            }}
+                          />
                         <ValidationError
                           errorBlock={errors.tel && touched.tel && errors.tel}
                         />
