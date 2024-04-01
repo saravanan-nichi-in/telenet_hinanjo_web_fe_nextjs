@@ -1,7 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
-import _ from 'lodash';
 import toast from "react-hot-toast";
-import { isObject, isArray } from "lodash";
+import _, { isObject, isArray } from "lodash";
 
 /**
  * 
@@ -112,7 +111,8 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
             month: '2-digit',
             day: '2-digit',
         });
-        return formattedDate.replace(/\//g, '年').replace('-', '月') + '日';
+        const [year, month, day] = formattedDate.split('/');
+        return `${year}年${parseInt(month)}月${parseInt(day)}日`;
     }
     return "";
 }
@@ -320,8 +320,8 @@ export const importErrorToastDisplay = (response) => {
  * @param {*} error 
  */
 export const common422ErrorToastDisplay = (error) => {
-    if (error.response.status == 422) {
-        if (isObject(error.response.data.message)) {
+    if (error?.response?.status == 422) {
+        if (isObject(error?.response?.data?.message)) {
             let errorMessages = Object.values(error.response.data.message);
             let errorString = errorMessages.join('.')
             let errorArray = errorString.split(".");
@@ -334,9 +334,13 @@ export const common422ErrorToastDisplay = (error) => {
             toast.error(formattedErrorMessage, {
                 position: "top-right",
             });
+        } else {
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         }
     } else {
-        toast.error(error.response.data.message, {
+        toast.error(error?.response?.data?.message, {
             position: "top-right",
         });
     }
@@ -643,7 +647,6 @@ export const showOverFlow = () => {
  * @returns 
  */
 export const calculateAge = (year, month, date) => {
-    console.log(year, month, date)
     year = year || new Date().getFullYear();
     month = month || 1;
     date = date || 1;
@@ -688,4 +691,26 @@ export function splitJapaneseAddress(address) {
     }
 
     return { city, street };
+}
+
+/**
+ * Function will help to combine special care name based on locale
+ * @param {*} nameList 
+ * @param {*} locale 
+ * @returns 
+ */
+export const getSpecialCareName = (nameList, locale = 'ja') => {
+    let specialCareName = '';
+    if (nameList.length > 0) {
+        if (locale == 'ja') {
+            nameList.map((item) => {
+                specialCareName = specialCareName ? (specialCareName + ", " + item.name) : item.name;
+            });
+            return specialCareName;
+        }
+        nameList.map((item) => {
+            specialCareName = specialCareName ? (specialCareName + ", " + item.name_en) : item.name_en;
+        });
+    }
+    return specialCareName;
 }
