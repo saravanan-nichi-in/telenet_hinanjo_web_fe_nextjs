@@ -108,9 +108,7 @@ function AdminStockpileSummary() {
             name: "--",
             id: 0
         }];
-        console.log(response)
         if (response.success && !_.isEmpty(response)) {
-            console.log(response)
             const data = response.data.model;
 
             data.map((obj, i) => {
@@ -436,7 +434,6 @@ function AdminStockpileSummary() {
                 resultArray.push(newObj);
             }
         });
-        console.log(selectedCustomers, resultArray);
         bulkDelete(resultArray, (response) => {
             if (response) {
                 setTableLoading(true);
