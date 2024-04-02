@@ -73,8 +73,9 @@ function AdminStockpileSummary() {
         { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
-        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" },
-        { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },
+        { field: "stock_pile_image", header: translate(localeJson, 'header_stockpile_image'), textAlign: "center", alignHeader: "center", minWidth: "5rem" },
+        //hitachi improvement
+        // { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },  
     ];
     const bindImageModalData = (image) => {
         setImageUrl(image);
@@ -99,7 +100,7 @@ function AdminStockpileSummary() {
      * Get Place Dropdown list on mounting
      */
     const onGetPlaceDropdownListOnMounting = () => {
-        getPlaceList(onGetPlaceDropdownList);
+        getPlaceDropdownList(onGetPlaceDropdownList);
     }
 
     const onGetPlaceDropdownList = (response) => {
@@ -107,8 +108,11 @@ function AdminStockpileSummary() {
             name: "--",
             id: 0
         }];
-        if (response.success && !_.isEmpty(response.data)) {
-            const data = response.data.model.list;
+        console.log(response)
+        if (response.success && !_.isEmpty(response)) {
+            console.log(response)
+            const data = response.data.model;
+
             data.map((obj, i) => {
                 let placeDropdownList = {
                     name: response.locale == 'ja' ? obj.name : obj.name,
@@ -474,7 +478,7 @@ function AdminStockpileSummary() {
                         <div className='flex justify-content-between align-items-center sm:flex md:flex lg:flex'>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_summary")} />
                             <div className="flex w-full flex-wrap flex-grow float-right lg:gap-2 md:gap-2 sm:gap-2" style={{ justifyContent: "end" }} >
-                                <Button buttonProps={{
+                                {/* <Button buttonProps={{
                                     type: 'button',
                                     rounded: "true",
                                     import: true,
@@ -484,8 +488,8 @@ function AdminStockpileSummary() {
                                     },
                                     buttonClass: "evacuation_button_height import-button",
                                     text: translate(localeJson, 'import'),
-                                }} parentClass={"import-button"} />
-                                <Button buttonProps={{
+                                }} parentClass={"import-button"} /> */}
+                                {/* <Button buttonProps={{
                                     type: 'button',
                                     rounded: "true",
                                     export: true,
@@ -494,13 +498,13 @@ function AdminStockpileSummary() {
                                     },
                                     buttonClass: "evacuation_button_height export-button",
                                     text: translate(localeJson, 'hq_stockpile_detail_export'),
-                                }} parentClass={"export-button"} />
+                                }} parentClass={"export-button"} /> */}
                                 <Button buttonProps={{
                                     type: "button",
                                     rounded: "true",
                                     export: true,
                                     buttonClass: "export-button",
-                                    text: translate(localeJson, 'hq_stockpile_summary_export'),
+                                    text: translate(localeJson, 'export'),
                                     severity: "primary",
                                     onClick: () => downloadStockPileSummaryCSV()
                                 }} parentClass={"export-button"} />
@@ -547,6 +551,8 @@ function AdminStockpileSummary() {
                                         }}
                                             parentClass={"custom-switch"} />
                                     </div>
+                                    {/* 
+                                    // hitachi bulk delete
                                     <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
                                         <Button buttonProps={{
                                             type: "button",
@@ -557,7 +563,7 @@ function AdminStockpileSummary() {
                                             severity: "primary",
                                             onClick: () => openDeleteDialog()
                                         }} parentClass={"mt-2 export-button"} />
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div>
                                     <RowExpansionTable

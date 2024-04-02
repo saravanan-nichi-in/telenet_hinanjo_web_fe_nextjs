@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { downloadBase64File, importErrorToastDisplay, timestampFile } from '@/helper';
+import { downloadBase64File, importErrorToastDisplay, timestampFile, toastDisplay } from '@/helper';
 
 
 /* Identity and Access management (IAM) */
@@ -30,10 +30,8 @@ function _getSummaryList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
             callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -53,9 +51,8 @@ function _exportStockPileSummaryCSVList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -64,17 +61,16 @@ function _exportStockPileSummaryCSVList(payload, callBackFun) {
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getPlaceDropdownList(payload, callBackFun) {
-    axios.get('/admin/place/history/dropdown/list', payload)
+function _getPlaceDropdownList(callBackFun) {
+    axios.get('/user/active/place')
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -92,9 +88,8 @@ function _getStockPileEmailData(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -114,9 +109,8 @@ function _getStockPileEmailUpdate(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -175,7 +169,7 @@ function _getPlaceList(callBackFun) {
       "map":true
   };
     axios
-      .post("/user/place/list",payload)
+      .post("/user/registration/place/list",payload)
       .then((response) => {
         if (response && response.data) {
           callBackFun(response.data);
