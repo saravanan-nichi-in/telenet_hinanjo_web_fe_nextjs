@@ -281,18 +281,24 @@ export const zipDownloadWithURL = (zipURL) => {
  */
 export const importErrorToastDisplay = (response) => {
     if (response && response.data) {
-        if (!response.data.success && response.data.code == "422") {
-            toast.error(() => (
-                <div>
-                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                        {response?.data?.message}
-                    </a>
-                </div>
-            ), {
-                position: "top-right",
-            });
-        } else if (response.data.success) {
-            if (response.data.code == "206") {
+        if (!response?.data.success) {
+            if (response.data.code == "422" && response?.data?.error_path) {
+                toast.error(() => (
+                    <div>
+                        <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                            {response?.data?.message}
+                        </a>
+                    </div>
+                ), {
+                    position: "top-right",
+                });
+            } else {
+                toast.error(response?.data?.message, {
+                    position: "top-right",
+                });
+            }
+        } else {
+            if (response.data.code == "206" && response?.data?.error_path) {
                 toast.success(() => (
                     <div>
                         <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -307,10 +313,6 @@ export const importErrorToastDisplay = (response) => {
                     position: "top-right",
                 });
             }
-        } else {
-            toast.error(response?.data?.message, {
-                position: "top-right",
-            });
         }
     }
 }
@@ -358,7 +360,7 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
         const { status, data } = response;
         if (status != 511 && status != 401 && status != 403) {
             if (data.success) {
-                if (key == 'import' && status == 206) {
+                if (key == 'import' && status == 206 && data?.error_path) {
                     toast.success(() => (
                         <div>
                             <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -374,7 +376,7 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
                     });
                 }
             } else {
-                if (key == 'import' && status == 422) {
+                if (key == 'import' && status == 422 && data?.error_path) {
                     toast.error(() => (
                         <div>
                             <a href={data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
