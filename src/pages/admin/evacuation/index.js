@@ -2,7 +2,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router'
 
-import { convertToSingleByte, getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import {
+    convertToSingleByte,
+    getEnglishDateDisplayFormat,
+    getGeneralDateTimeSlashDisplayFormat,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getYYYYMMDDHHSSSSDateTimeFormat,
+    getValueByKeyRecursively as translate
+} from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable } from '@/components';
 import { EvacuationServices } from '@/services/evacuation.services';
@@ -11,14 +18,18 @@ import CustomHeader from '@/components/customHeader';
 import { useAppDispatch } from '@/redux/hooks';
 import { Input, InputDropdown } from '@/components/input';
 import {
-    getSpecialCareName
+    getSpecialCareName,
+    getGenderValue
 } from "@/helper";
-import { TRUE } from 'sass';
 
 export default function EvacuationPage() {
+    // Global Variants
     const { locale, localeJson } = useContext(LayoutContext);
-    const [familyCount, setFamilyCount] = useState(0);
     const router = useRouter();
+    const dispatch = useAppDispatch();
+
+    // Local variants
+    const [familyCount, setFamilyCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
@@ -41,12 +52,10 @@ export default function EvacuationPage() {
             refugee_name: ""
         }
     });
-    const dispatch = useAppDispatch();
-
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
         {
-            field: 'refugee_name', header: translate(localeJson, 'name_public_evacuee'),sortable:true,alignHeader: "left", maxWidth: '4rem',
+            field: 'refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: true, alignHeader: "left", maxWidth: '4rem',
             body: (rowData) => {
                 return <div className="flex flex-column">
                     <div className="custom-header">{rowData.name}</div>
@@ -55,7 +64,7 @@ export default function EvacuationPage() {
             },
         },
         { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: TRUE, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: true, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "dob", header: translate(localeJson, 'dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
@@ -63,19 +72,16 @@ export default function EvacuationPage() {
         { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
 
-    const downloadEvacueesListCSV = () => {
-        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
-    }
+    /* Services */
+    const { getList, exportEvacueesCSVList } = EvacuationServices;
 
-    const exportEvacueesCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName = "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    }
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesListOnMounting();
+        };
+        fetchData();
+    }, [locale, getListPayload]);
 
     /**
      * Get Evacuees list on mounting
@@ -93,24 +99,6 @@ export default function EvacuationPage() {
             }
         }
         getList(payload, onGetEvacueesList);
-    }
-
-    const getGenderValue = (gender) => {
-        if (gender == 1) {
-            return translate(localeJson, 'male');
-        } else if (gender == 2) {
-            return translate(localeJson, 'female');
-        } else if (gender == 3) {
-            return translate(localeJson, 'others_count');
-        }
-    }
-
-    const getPlaceName = (id) => {
-        let data = evacuationPlaceList.find((obj) => obj.id == id);
-        if (data) {
-            return data.name
-        }
-        return ""
     }
 
     const onGetEvacueesList = (response) => {
@@ -153,7 +141,6 @@ export default function EvacuationPage() {
                     placesList.push(placeData);
             });
             setEvacuationPlaceList(placesList);
-
             data.map((item, i) => {
                 if (previousItem && previousItem.id == item.family_id) {
                     index = index + 1;
@@ -172,26 +159,20 @@ export default function EvacuationPage() {
                     }
                 }
                 let evacuees = {
+                    ...item,
                     "si_no": i + parseInt(getListPayload.filters.start) + 1,
-                    "id": item.f_id,
-                    "name":item.name ?? "",
-                    // "place_name": placeIdObj[item.place_id] ?? "",
-                    "place_name":locale=="ja"? item.families.place.name : (item.families.place.name_en ? item.families.place.name_en : item.families.place.name),
-                    "family_count": index,
+                    "place_name": locale == "ja" ? item.families.place.name : (item.families.place.name_en ? item.families.place.name_en : item.families.place.name),
                     "family_code": item.families.family_code,
-                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
-                    "refugee_name": <div className={"clickable-row"}>{item.refugee_name}</div>,
-                    "person_name": <div className={"text-highlighter-user-list clickable-row"}>{item.person_name}</div>,
-                    "gender": getGenderValue(item.gender),
+                    "family_count": index,
                     "dob": locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.dob) : getEnglishDateDisplayFormat(item.dob),
                     "age": item.age,
+                    "gender": getGenderValue(item.gender),
+                    "special_care_name": item.special_cares ? getSpecialCareName(item.special_cares, locale) : "-",
+                    "is_owner": item.is_owner == 0 ? translate(localeJson, 'representative') : "",
+                    "person_name": <div className={"text-highlighter-user-list clickable-row"}>{item.person_name}</div>,
                     "age_month": item.person_month,
-                    "special_care_name": item.person_special_cares ? getSpecialCareName(item.person_special_cares, locale) : "-",
                     "remarks": item.person_note,
                     "place": item.place_id ? getPlaceName(item.place_id) : "",
-                    "connecting_code": item.person_connecting_code,
-                    "out_date": item.family_out_date ? getGeneralDateTimeSlashDisplayFormat(item.family_out_date) : "",
-                    "yapple_id": item.yapple_id,
                 };
                 let personAnswers = item.person_answers ? item.person_answers : []
                 if (personAnswers.length > 0) {
@@ -218,17 +199,6 @@ export default function EvacuationPage() {
         setTotalCount(listTotalCount);
     }
 
-    const getAnswerData = (answer) => {
-        let answerData = null;
-        answer.map((item) => {
-            answerData = answerData ? (answerData + ", " + item) : item
-        });
-        return answerData;
-    }
-
-    /* Services */
-    const { getList, exportEvacueesCSVList } = EvacuationServices;
-
     /**
      * Pagination handler
      * @param {*} e 
@@ -249,14 +219,6 @@ export default function EvacuationPage() {
         }
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesListOnMounting();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
-
     const searchListWithCriteria = () => {
         let payload = {
             filters: {
@@ -273,37 +235,75 @@ export default function EvacuationPage() {
         setGetListPayload(payload);
     }
 
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else if (gender == 3) {
+            return translate(localeJson, 'others_count');
+        }
+    }
+
+    const downloadEvacueesListCSV = () => {
+        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
+    }
+
+    const exportEvacueesCSV = (response) => {
+        if (response.success) {
+            const downloadLink = document.createElement("a");
+            const fileName = "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+            downloadLink.href = response.result.filePath;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        }
+    }
+
+    const getAnswerData = (answer) => {
+        let answerData = null;
+        answer.map((item) => {
+            answerData = answerData ? (answerData + ", " + item) : item
+        });
+        return answerData;
+    }
+
+    const getPlaceName = (id) => {
+        let data = evacuationPlaceList.find((obj) => obj.id == id);
+        if (data) {
+            return data.name
+        }
+        return ""
+    }
+
     const handleFamilyCode = (e) => {
         const re = /^[0-9-]+$/;
-        if(e.target.value.length<=0)
-        {
-          setFamilyCode("");
-          return;
+        if (e.target.value.length <= 0) {
+            setFamilyCode("");
+            return;
         }
-        if(re.test(convertToSingleByte(e.target.value)))
-        {
-        if ((e.target.value).length == 4) {
-          const newValue = e.target.value;
-          if (newValue.indexOf("-") !== -1) {
-            setFamilyCode(e.target.value);
-          }
-          else {
-            setFamilyCode(newValue);
-          }
-        }
-        else if ((e.target.value).length == 3) {
-          const newValue = e.target.value;
-          const formattedValue = newValue.substring(0, 3);
-          setFamilyCode(formattedValue);
+        if (re.test(convertToSingleByte(e.target.value))) {
+            if ((e.target.value).length == 4) {
+                const newValue = e.target.value;
+                if (newValue.indexOf("-") !== -1) {
+                    setFamilyCode(e.target.value);
+                }
+                else {
+                    setFamilyCode(newValue);
+                }
+            }
+            else if ((e.target.value).length == 3) {
+                const newValue = e.target.value;
+                const formattedValue = newValue.substring(0, 3);
+                setFamilyCode(formattedValue);
+            }
+            else {
+                setFamilyCode(e.target.value)
+            }
         }
         else {
-          setFamilyCode(e.target.value)
+            setFamilyCode("")
         }
-      }
-      else {
-        setFamilyCode("")
-      }
-      }
+    }
 
     return (
         <div className="grid">
@@ -368,12 +368,11 @@ export default function EvacuationPage() {
                                 </div>
                             </form>
                         </div>
-                        <div className='hidden' style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
                                 <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
                             </div>
-                            {/* Development */}
-                            {/* <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
@@ -382,11 +381,10 @@ export default function EvacuationPage() {
                                     text: translate(localeJson, 'export'),
                                     onClick: () => downloadEvacueesListCSV()
                                 }} parentClass={"mb-3 export-button"} />
-                            </div> */}
-                           
+                            </div>
                         </div>
                     </div>
-                       <NormalTable
+                    <NormalTable
                         lazy
                         id={"evacuation-list"}
                         className="evacuation-list"
@@ -417,7 +415,7 @@ export default function EvacuationPage() {
                         selectionMode="single"
                         onSelectionChange={
                             (e) => {
-                                dispatch(setFamily({ lgwan_family_id: e.value.id }));
+                                dispatch(setFamily({ family_id: e.value.family_id }));
                                 router.push({
                                     pathname: '/admin/evacuation/family-detail',
                                 });
