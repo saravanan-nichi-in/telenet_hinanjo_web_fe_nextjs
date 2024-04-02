@@ -84,19 +84,18 @@ export default function AdminManagementPage() {
             className: "action_class",
             body: (rowData) => (
                 <div>
-                    {/* <Button
+                    <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{
                             text: translate(localeJson, 'edit'),
                             buttonClass: "edit-button",
                             onClick: () => {
-                                console.log(rowData)
                                 setCurrentObj(rowData);
                                 setRegisterModalAction("edit")
                                 setEditStaffOpen(true);
                                 hideOverFlow();
                             }
-                        }} parentClass={"edit-button"} /> */}
+                        }} parentClass={"edit-button"} />
                     <Button
                         parentStyle={{ display: "inline" }}
                         buttonProps={{

@@ -29,6 +29,7 @@ export default function StaffManagementEditPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coordinates, setCoordinates] = useState("");
   const [url, setUrl] = useState("");
+  const [tempUrl,setTempUrl] = useState("")
   const [altitude, setAltitude] = useState("-");
   const [status, setStatus] = useState("");
   const [longitude, setLangitude] = useState(0);
@@ -77,6 +78,7 @@ export default function StaffManagementEditPage() {
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
     setUrl(`${window?.location?.origin}/user/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
+    setTempUrl(`${window?.location?.origin}/user/temp-register?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
     model.altitude && setAltitude(`${model.altitude}m`);
     setStatus(model.active_flg == 1 ? "有効" : "無効");
     setTotalPerson(model.total_person);
@@ -196,6 +198,17 @@ export default function StaffManagementEditPage() {
                     rel="noopener noreferrer"
                   >
                     {url}
+                  </a>
+                </div>
+                <div className="mt-2">
+                  {translate(localeJson, "smart_phone_register_url")} :
+                  <a
+                    className="text-link-class cursor-pointer"
+                    href={tempUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tempUrl}
                   </a>
                 </div>
               </div>

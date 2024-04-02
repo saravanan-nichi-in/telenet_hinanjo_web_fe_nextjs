@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat } from '@/helper';
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const ShortageSuppliesServices = {
@@ -26,9 +26,7 @@ function _calExport() {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -45,9 +43,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
             callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
