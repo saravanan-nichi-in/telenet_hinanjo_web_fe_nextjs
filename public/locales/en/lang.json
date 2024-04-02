@@ -588,7 +588,7 @@
     "name_phonetic": "Name (phonetic)",
     "person_refugee_name": "Person Refugee Name",
     "name_kanji": "Name (kanji)",
-    "default_shelf_life_days": "Default Shelf Life (Days)",
+    "default_shelf_life_days": "Expire Notification",
     "inventory_date": "Inventory Date",
     "product_type": "Product Type",
     "product_name": "Product Name",
