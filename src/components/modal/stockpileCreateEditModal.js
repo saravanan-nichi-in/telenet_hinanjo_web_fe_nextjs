@@ -19,10 +19,10 @@ export default function StockpileCreateEditModal(props) {
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_category_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
         shelf_life: Yup.string()
         .nullable()
         .test("check_int",translate(localeJson,'number_field'),
@@ -217,7 +217,20 @@ export default function StockpileCreateEditModal(props) {
                                                     inputClassName: "w-full",
                                                     name: "shelf_life",
                                                     value: values.shelf_life,
-                                                    onChange: handleChange,
+                                                    onChange: (evt) => {
+                                                        const re = /^[0-9-]+$/;
+                                                        let val;
+                                                        if (
+                                                          evt.target.value === "" ||
+                                                          re.test(convertToSingleByte(evt.target.value))
+                                                        ) {
+                                                          val = evt.target.value.replace(/-/g, "");
+                                                          if (evt.target.value?.length <= 3) {
+                                                            setFieldValue("shelf_life", evt.target.value);
+                                                          }
+                      
+                                                        }
+                                                      },
                                                     onBlur: handleBlur,
                                                 }}
                                             />

@@ -24,16 +24,16 @@ export default function StaffStockpileCreateModal(props) {
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_category_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
-        // shelf_life: Yup.string().test("check_int", translate(localeJson, 'number_field'),
-        //     (value) => {
-        //         const re = /^[0-9-]+$/;
-        //         return re.test(convertToSingleByte(value))
-        //     })
-        //     .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
+        shelf_life: Yup.string().test("check_int", translate(localeJson, 'number_field'),
+            (value) => {
+                const re = /^[0-9-]+$/;
+                return re.test(convertToSingleByte(value))
+            })
+            .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
         image_logo: Yup.mixed()
             .notRequired() // Allow it to be nullable
             .test('fileSize', translate(localeJson, 'image_size_validation'), (value) => {
@@ -214,7 +214,20 @@ export default function StaffStockpileCreateModal(props) {
                                                     inputClassName: "w-full create_input_stock",
                                                     name: "shelf_life",
                                                     value: values.shelf_life,
-                                                    onChange: handleChange,
+                                                    onChange: (evt) => {
+                                                        const re = /^[0-9-]+$/;
+                                                        let val;
+                                                        if (
+                                                          evt.target.value === "" ||
+                                                          re.test(convertToSingleByte(evt.target.value))
+                                                        ) {
+                                                          val = evt.target.value.replace(/-/g, "");
+                                                          if (evt.target.value?.length <= 3) {
+                                                            setFieldValue("shelf_life", evt.target.value);
+                                                          }
+                      
+                                                        }
+                                                      },
                                                     onBlur: handleBlur,
                                                 }}
                                             />

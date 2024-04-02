@@ -15,10 +15,10 @@ export default function StaffStockpileEdit(props) {
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
-            .max(100, translate(localeJson, 'number_fieldmaterial_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_category_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
         // shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
         //     .positive(translate(localeJson, 'number_field'))
         //     .integer(translate(localeJson, 'number_field'))
