@@ -4,9 +4,8 @@ import * as Yup from 'yup';
 
 import { getValueByKeyRecursively as translate, zipDownloadWithURL } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, InputFile, ValidationError, CommonDialog } from '@/components';
+import { Button, InputFile, ValidationError, CommonDialog, CustomHeader } from '@/components';
 import { QRCodeCreateServices } from '@/services';
-import CustomHeader from '@/components/customHeader';
 import { AdminManagementDeleteModal } from '@/components/modal';
 
 export default function AdminQrCodeCreatePage() {

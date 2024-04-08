@@ -3,11 +3,10 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable } from '@/components';
 import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
 import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
 import { MaterialService } from '@/services/material.service';
-import CustomHeader from '@/components/customHeader';
 
 export default function AdminMaterialPage() {
     const { locale, localeJson , setLoader} = useContext(LayoutContext);

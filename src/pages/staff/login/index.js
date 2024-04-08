@@ -4,16 +4,15 @@ import * as Yup from "yup";
 import { classNames } from 'primereact/utils';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
-import { Button, ValidationError } from '@/components';
+import { Button, CustomHeader, ValidationError } from '@/components';
 import Password, { InputGroup } from '@/components/input';
-import CustomHeader from '@/components/customHeader';
-import toast from 'react-hot-toast';
 import { setForgetPassword } from '@/redux/fwd_password';
 
 const LoginPage = () => {

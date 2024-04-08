@@ -3,9 +3,8 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable } from '@/components';
 import { AdminManagementDeleteModal, AdminManagementImportModal, HqEditModal, HqManagementDetailModal } from '@/components/modal';
-import CustomHeader from '@/components/customHeader';
 import { HeadQuarterManagement } from '@/services/hqManagement.service';
 import { CommonServices } from '@/services';
 import { Input } from '@/components/input';

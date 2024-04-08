@@ -3,14 +3,15 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import _ from 'lodash';
+import { MdFlipCameraIos } from 'react-icons/md';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     Button,
+    CustomHeader,
     NormalTable
 } from '@/components';
 import { QrCodeModal, YappleModal } from '@/components/modal';
-import { MdFlipCameraIos } from 'react-icons/md';
 import {
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
@@ -19,7 +20,6 @@ import {
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
-import CustomHeader from '@/components/customHeader';
 import { Input } from '@/components/input';
 
 function EventStaffTemporaryRegistrants() {

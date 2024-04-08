@@ -6,9 +6,10 @@ import { Dropdown } from "primereact/dropdown";
 import { Dropdown as Drp } from "antd";
 import { MultiSelect as MulSel } from "primereact/multiselect";
 import { Button } from "primereact/button";
+import { InputTextarea } from "primereact/inputtextarea";
+
 import { NormalLabel } from "../label";
 import {AudioRecorder} from "@/components";
-import { InputTextarea } from "primereact/inputtextarea";
 
 export const Input = (props) => {
   const {

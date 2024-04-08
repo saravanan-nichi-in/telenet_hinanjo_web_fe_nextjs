@@ -5,11 +5,10 @@ import _ from 'lodash';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button, ButtonRounded } from "@/components";
+import { Button, ButtonRounded, CustomHeader } from "@/components";
 import { AuthenticationAuthorizationService, UserDashboardServices, CommonServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserDetails } from '@/redux/layout';
-import CustomHeader from "@/components/customHeader";
 
 export default function PublicDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);

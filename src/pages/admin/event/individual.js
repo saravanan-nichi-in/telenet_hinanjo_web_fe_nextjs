@@ -5,11 +5,10 @@ import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { BaseTemplate } from '@/components';
+import { BaseTemplate, CustomHeader } from '@/components';
 import { AiOutlineDrag } from 'react-icons/ai';
 import { Button, DND } from '@/components';
 import { QuestionnaireServices } from '@/services/questionnaire.services';
-import CustomHeader from '@/components/customHeader';
 
 export default function IndividualQuestionnaire() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);

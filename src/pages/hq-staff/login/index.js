@@ -2,17 +2,16 @@ import React, { useContext, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { useAppDispatch } from '@/redux/hooks';
 import { setHeadquaterValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { Button, ValidationError } from '@/components';
+import { Button, CustomHeader, ValidationError } from '@/components';
 import Password, { InputGroup } from '@/components/input';
-import CustomHeader from '@/components/customHeader';
-import toast from 'react-hot-toast';
 import { setForgetPassword } from '@/redux/fwd_password';
 
 const LoginPage = () => {

@@ -29,6 +29,8 @@ import QuestionList from "./masterQuestion";
 import { MultiStepForm } from "./multiForm";
 import PersonCountButton from "./personCountButtons";
 import { BaseTemplate } from "./questionarrie";
+import Doughnut from "./chart";
+import CustomHeader from "./customHeader";
 
 export {
   NormalTable,
@@ -72,5 +74,7 @@ export {
   QuestionList,
   MultiStepForm,
   PersonCountButton,
-  BaseTemplate
+  BaseTemplate,
+  Doughnut,
+  CustomHeader
 }

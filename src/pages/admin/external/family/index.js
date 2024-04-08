@@ -5,9 +5,8 @@ import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { Button } from '@/components';
+import { Button, CustomHeader } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
-import CustomHeader from '@/components/customHeader';
 import { NotFound } from "@/components";
 
 export default function ExternalEvacuees() {

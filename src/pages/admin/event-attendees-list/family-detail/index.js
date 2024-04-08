@@ -17,8 +17,7 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
-import { Button, CommonDialog, NormalTable, CardSpinner } from '@/components';
-import CustomHeader from '@/components/customHeader';
+import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
 import { FaArrowRightFromBracket } from 'react-icons/fa6';
 import { prefecturesCombined } from '@/utils/constant';
 

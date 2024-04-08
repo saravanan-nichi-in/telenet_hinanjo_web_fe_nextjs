@@ -10,8 +10,7 @@ import {
     getEnglishDateDisplayFormat
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable } from '@/components';
-import CustomHeader from '@/components/customHeader';
+import { Button, CustomHeader, NormalTable } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
 
 export default function EventFamilyDetail() {

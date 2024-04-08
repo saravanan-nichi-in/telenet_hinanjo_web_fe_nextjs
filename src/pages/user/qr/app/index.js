@@ -1,11 +1,12 @@
+import { useContext, useState } from "react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+
 import { Button } from "@/components";
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { useContext, useState } from "react";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import {UserQrService} from "@/services"
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import {setCheckInData} from "@/redux/qr_app"
 import { family_dummy_data } from "@/utils/constant";
 

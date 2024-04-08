@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { NormalTable, Button } from '@/components';
+import { NormalTable, Button, CustomHeader } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { AdminEventStatusServices, CommonServices } from '@/services';
-import CustomHeader from '@/components/customHeader';
 import { InputDropdown } from '@/components/input';
 
 function EventStatusList() {

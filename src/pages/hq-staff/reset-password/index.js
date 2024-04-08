@@ -4,12 +4,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from 'next/router';
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ValidationError, Button } from '@/components';
+import { ValidationError, Button, CustomHeader } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
 import Password from '@/components/input';
-import CustomHeader from '@/components/customHeader';
 
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);

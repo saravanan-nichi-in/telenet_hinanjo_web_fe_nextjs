@@ -11,9 +11,8 @@ import {
   removeDuplicatesByKey,
   getYYYYMMDDHHSSSSDateTimeFormat,
 } from "@/helper";
-import { Button, NormalTable } from "@/components";
+import { Button, CustomHeader, NormalTable } from "@/components";
 import { StockpileHistoryServices } from "@/services";
-import CustomHeader from "@/components/customHeader";
 import { Calendar } from "@/components/date&time";
 import { Input, InputDropdown } from "@/components/input";
 

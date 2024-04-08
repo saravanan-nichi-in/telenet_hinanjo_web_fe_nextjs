@@ -1,6 +1,11 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
+import { result } from "lodash";
+import toast from "react-hot-toast";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset,setPlaceId } from "@/redux/tempRegister";
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -14,7 +19,6 @@ import {
   showOverFlow,
   hideOverFlow,
 } from "@/helper";
-import toast from "react-hot-toast";
 import {
   Button,
   ButtonRounded,
@@ -26,9 +30,8 @@ import {
   NormalCheckBox,
   Input,
   InputDropdown,
+  CustomHeader,
 } from "@/components";
-import { Formik } from "formik";
-import * as Yup from "yup";
 import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
 import {
   prefectures,
@@ -43,11 +46,9 @@ import {
   CheckInOutServices,
 } from "@/services";
 import QuestionList from "@/components/masterQuestion";
-import CustomHeader from "@/components/customHeader";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
 import { Calendar } from "@/components/date&time";
-import { result } from "lodash";
 import YaburuModal from "@/components/modal/userYaburuCardModal";
 
 export default function Admission() {

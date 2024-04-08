@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
+import _ from "lodash";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/services";
-import { Button, NormalTable } from "@/components";
-import _ from "lodash";
-import CustomHeader from "@/components/customHeader";
+import { Button, CustomHeader, NormalTable } from "@/components";
 import { Input } from "@/components/input";
 import { prefectures } from "@/utils/constant";
 
