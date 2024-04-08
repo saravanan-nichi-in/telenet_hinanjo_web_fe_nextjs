@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { SelectButton } from 'primereact/selectbutton';
+import toast from 'react-hot-toast';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 import {
     getValueByKeyRecursively as translate,
@@ -10,17 +13,10 @@ import {
     convertToSingleByte,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { MultiStepForm } from '@/components';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import { Button, ValidationError, NormalCheckBox, NormalLabel } from '@/components';
-import QuestionList from '@/components';
-import CustomHeader from '@/components/customHeader';
+import { Button, ValidationError, NormalCheckBox, NormalLabel, QuestionList, MultiStepForm, CustomHeader, Input, InputDropdown } from '@/components';
 import { prefectures, prefectures_en } from '@/utils/constant';
 import { TempRegisterServices } from '@/services';
-import { Input, InputDropdown } from '@/components/input';
 import { useAppSelector } from "@/redux/hooks";
-import toast from 'react-hot-toast';
 
 export default function TempRegister() {
     const [activeIndex, setActiveIndex] = useState(0);

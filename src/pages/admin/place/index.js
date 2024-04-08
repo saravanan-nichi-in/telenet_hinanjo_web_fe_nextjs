@@ -14,11 +14,10 @@ import {
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, DeleteModal, NormalTable, CommonDialog } from "@/components";
+import { Button, DeleteModal, NormalTable, CommonDialog, CustomHeader } from "@/components";
 import { PlaceServices } from "@/services";
 import { setPlace } from "@/redux/place";
 import { useAppDispatch } from "@/redux/hooks";
-import CustomHeader from "@/components/customHeader";
 // import { default_place_id } from "@/utils/constant"; 
 
 export default function AdminPlacePage() {

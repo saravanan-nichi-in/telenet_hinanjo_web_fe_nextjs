@@ -4,9 +4,8 @@ import _ from 'lodash';
 
 import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalTable } from "@/components/datatable";
 import { ExternalEvacueesService } from "@/services/externalEvacuees.service";
-import { Button } from "@/components";
+import { Button, NormalTable } from "@/components";
 import { useSelector } from "react-redux";
 
 export default function EvacueeDetailModal(props) {

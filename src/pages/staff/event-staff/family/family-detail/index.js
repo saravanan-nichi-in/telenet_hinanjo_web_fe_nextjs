@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
+import { IoIosArrowBack } from 'react-icons/io';
 
 import {
     getEnglishDateDisplayFormat,
@@ -13,11 +14,9 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable, CardSpinner } from '@/components';
+import { Button, NormalTable, CardSpinner, CustomHeader } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefecturesCombined } from '@/utils/constant';
-import CustomHeader from '@/components/customHeader';
-import { IoIosArrowBack } from 'react-icons/io';
 
 export default function EventStaffFamilyDetail() {
     const router = useRouter();

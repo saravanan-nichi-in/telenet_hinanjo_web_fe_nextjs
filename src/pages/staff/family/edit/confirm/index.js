@@ -10,10 +10,9 @@ import {
 } from "@/helper";
 import { TempRegisterServices } from "@/services";
 import {
-  Button,
+  Button, CustomHeader,
 } from "@/components";
 import { prefectures } from "@/utils/constant";
-import CustomHeader from "@/components/customHeader";
 import { useRouter } from "next/router";
 import { reset } from "@/redux/staff_register";
 

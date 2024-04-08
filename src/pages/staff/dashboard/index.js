@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import Doughnut from "@/components/chart";
 import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
@@ -11,7 +10,7 @@ import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { useSelector } from "react-redux";
 import { staff_dashboard_status_jp, staff_dashboard_status_en } from '@/utils/constant'
 import _ from "lodash";
-import CustomHeader from "@/components/customHeader";
+import { CustomHeader, Doughnut } from "@/components";
 
 function StaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

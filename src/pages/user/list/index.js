@@ -5,11 +5,10 @@ import _ from "lodash";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { NormalTable } from "@/components";
+import { CustomHeader, NormalTable } from "@/components";
 import { UserPlaceListServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUserDetails } from "@/redux/layout";
-import CustomHeader from "@/components/customHeader";
 
 export default function PublicEvacuees() {
   const { locale, localeJson } = useContext(LayoutContext);

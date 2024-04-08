@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { useAppDispatch } from '@/redux/hooks';
+import toast from 'react-hot-toast';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     Button,
     CommonDialog,
-    NormalTable
+    CustomHeader,
+    NormalTable,
+    Input
 } from '@/components';
 import {
     convertToSingleByte,
@@ -20,15 +23,12 @@ import {
     getSpecialCareName
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
-import CustomHeader from '@/components/customHeader';
-import { Input } from '@/components/input';
 import YappleModal from '@/components/modal/yappleModal';
 import { setStaffTempFamily } from '@/redux/family';
 import { useAppSelector } from "@/redux/hooks";
 import { setSelfID } from '@/redux/self_id';
 import { CommonServices, TempRegisterServices } from '@/services';
 import BarcodeDialog from '@/components/modal/barcodeDialog';
-import toast from 'react-hot-toast';
 
 function TemporaryRegistrants() {
     const { locale, localeJson } = useContext(LayoutContext);

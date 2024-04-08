@@ -6,10 +6,9 @@ import {
     getValueByKeyRecursively as translate,
     getEnglishDateTimeDisplayFormat,
 } from '@/helper';
-import { Button, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable } from '@/components';
 import { AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut } from '@/components/modal';
 import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
-import CustomHeader from '@/components/customHeader';
 import { useAppDispatch } from '@/redux/hooks';
 import EventCreateEditModal from '@/components/modal/EventCreateEditModal';
 

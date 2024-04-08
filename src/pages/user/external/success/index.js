@@ -1,11 +1,12 @@
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { useRouter } from "next/router";
 
 import {
     Button,
 } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import React, { useContext, useEffect, useState, useRef } from "react";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { useRouter } from "next/router";
+
 const RefugeeRegistrationPage = () => {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter()

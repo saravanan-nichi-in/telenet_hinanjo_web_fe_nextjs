@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { NormalTable, DeleteModal } from '@/components';
+import { NormalTable, DeleteModal, CustomHeader } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DashboardServices } from '@/services';
-import CustomHeader from '@/components/customHeader';
 import { default_place_id } from '@/utils/constant';
 
 function HQDashboard() {

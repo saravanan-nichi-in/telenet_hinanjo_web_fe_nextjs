@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { usePathname } from 'next/navigation'
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button, ToggleSwitch } from "@/components";
-import PersonCountButton from "@/components/personCountButtons";
-import CustomHeader from "@/components/customHeader";
-import { useRouter } from "next/router";
-import { usePathname } from 'next/navigation'
+import { Button, CustomHeader, PersonCountButton, ToggleSwitch } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
 

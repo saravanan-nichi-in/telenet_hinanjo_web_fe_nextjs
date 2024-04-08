@@ -14,8 +14,7 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { AdminEvacueeTempServices } from '@/services';
-import { Button, CardSpinner } from '@/components';
-import CustomHeader from '@/components/customHeader';
+import { Button, CardSpinner, CustomHeader } from '@/components';
 import { CommonServices } from '@/services';
 
 export default function EvacueeTempFamilyDetail() {
