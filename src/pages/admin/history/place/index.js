@@ -13,7 +13,7 @@ import {
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, CustomHeader, DateTime, NormalTable,InputGroup } from "@/components";
+import { Button, CustomHeader, DateTime, NormalTable,InputGroup, InputDropdown } from "@/components";
 import { EmailSettings } from "@/components/modal";
 import { HistoryServices } from "@/services/history.services";
 import { MailSettingsOption1 } from "@/utils/constant";
