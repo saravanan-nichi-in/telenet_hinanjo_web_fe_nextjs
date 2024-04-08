@@ -4,8 +4,7 @@ import { usePathname } from 'next/navigation'
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button, CustomHeader, ToggleSwitch } from "@/components";
-import PersonCountButton from "@/components/personCountButtons";
+import { Button, CustomHeader, PersonCountButton, ToggleSwitch } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
 

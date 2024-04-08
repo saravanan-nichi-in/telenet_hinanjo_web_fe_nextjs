@@ -9,7 +9,8 @@ import {
     Button,
     CommonDialog,
     CustomHeader,
-    NormalTable
+    NormalTable,
+    Input
 } from '@/components';
 import {
     convertToSingleByte,
@@ -22,7 +23,6 @@ import {
     getSpecialCareName
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
-import { Input } from '@/components/input';
 import YappleModal from '@/components/modal/yappleModal';
 import { setStaffTempFamily } from '@/redux/family';
 import { useAppSelector } from "@/redux/hooks";

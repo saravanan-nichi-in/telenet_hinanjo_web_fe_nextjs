@@ -4,8 +4,7 @@ import _ from "lodash";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/services";
-import { Button, CustomHeader, NormalTable } from "@/components";
-import { Input } from "@/components/input";
+import { Button, CustomHeader, NormalTable, Input } from "@/components";
 import { prefectures } from "@/utils/constant";
 
 export default function PublicEvacuee() {

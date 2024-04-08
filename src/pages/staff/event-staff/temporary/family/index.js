@@ -9,7 +9,8 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     Button,
     CustomHeader,
-    NormalTable
+    NormalTable,
+    Input
 } from '@/components';
 import { QrCodeModal, YappleModal } from '@/components/modal';
 import {
@@ -20,7 +21,6 @@ import {
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
-import { Input } from '@/components/input';
 
 function EventStaffTemporaryRegistrants() {
     const router = useRouter();

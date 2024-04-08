@@ -11,10 +11,8 @@ import {
   removeDuplicatesByKey,
   getYYYYMMDDHHSSSSDateTimeFormat,
 } from "@/helper";
-import { Button, CustomHeader, NormalTable } from "@/components";
+import { Button, Calendar, CustomHeader, NormalTable, Input, InputDropdown } from "@/components";
 import { StockpileHistoryServices } from "@/services";
-import { Calendar } from "@/components/date&time";
-import { Input, InputDropdown } from "@/components/input";
 
 function StockpileHistory() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

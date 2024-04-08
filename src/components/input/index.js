@@ -353,7 +353,7 @@ export const InputNumber = (props) => {
   );
 };
 
-export default function Password(props) {
+export const Password=(props)=> {
   const {
     passwordParentClassName,
     passwordParentStyle,

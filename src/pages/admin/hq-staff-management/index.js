@@ -3,11 +3,10 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable, Input } from '@/components';
 import { AdminManagementDeleteModal, AdminManagementImportModal, HqEditModal, HqManagementDetailModal } from '@/components/modal';
 import { HeadQuarterManagement } from '@/services/hqManagement.service';
 import { CommonServices } from '@/services';
-import { Input } from '@/components/input';
 
 export default function HeadQuartersPage() {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);

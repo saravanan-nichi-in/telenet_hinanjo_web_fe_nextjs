@@ -5,8 +5,7 @@ import _ from "lodash";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { StatisticsServices } from "@/services";
-import { InputDropdown } from "@/components/input";
-import { CustomHeader, NotFound } from "@/components";
+import { CustomHeader, NotFound, InputDropdown } from "@/components";
 
 export default function EvacueesStatistics() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

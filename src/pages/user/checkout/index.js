@@ -14,8 +14,7 @@ import { setCheckOutData } from "@/redux/checkout";
 import { CommonDialog, YappleModal } from "@/components/modal";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
 import QrScannerModal from "@/components/modal/qrScannerModal";
-import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError } from "@/components";
-import Password from "@/components/input";
+import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password } from "@/components";
 
 export default function Admission() {
   const router = useRouter();

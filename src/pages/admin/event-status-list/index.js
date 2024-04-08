@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { NormalTable, Button, CustomHeader } from '@/components';
+import { NormalTable, Button, CustomHeader,InputDropdown } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { AdminEventStatusServices, CommonServices } from '@/services';
-import { InputDropdown } from '@/components/input';
 
 function EventStatusList() {
     const { locale, localeJson } = useContext(LayoutContext);

@@ -48,7 +48,6 @@ import {
 import QuestionList from "@/components/masterQuestion";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
-import { Calendar } from "@/components/date&time";
 import YaburuModal from "@/components/modal/userYaburuCardModal";
 
 export default function Admission() {

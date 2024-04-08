@@ -14,11 +14,11 @@ import {
   GoogleMapComponent,
   InputSwitch,
   CustomHeader,
+  Calendar,
+  Input, InputDropdown, InputNumber
 } from "@/components";
 import { useAppSelector } from "@/redux/hooks";
 import { PlaceServices, CommonServices } from "@/services";
-import { Input, InputDropdown, InputNumber } from "@/components/input";
-import { Calendar } from "@/components/date&time";
 
 export default function PlaceCreatePage() {
   const { localeJson, setLoader, locale } = useContext(LayoutContext);

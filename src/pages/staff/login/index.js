@@ -11,8 +11,7 @@ import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
-import { Button, CustomHeader, ValidationError } from '@/components';
-import Password, { InputGroup } from '@/components/input';
+import { Button, CustomHeader, ValidationError, Password, InputGroup } from '@/components';
 import { setForgetPassword } from '@/redux/fwd_password';
 
 const LoginPage = () => {

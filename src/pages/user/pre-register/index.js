@@ -13,10 +13,9 @@ import {
     convertToSingleByte,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, ValidationError, NormalCheckBox, NormalLabel, QuestionList, MultiStepForm, CustomHeader } from '@/components';
+import { Button, ValidationError, NormalCheckBox, NormalLabel, QuestionList, MultiStepForm, CustomHeader, Input, InputDropdown } from '@/components';
 import { prefectures, prefectures_en } from '@/utils/constant';
 import { TempRegisterServices } from '@/services';
-import { Input, InputDropdown } from '@/components/input';
 import { useAppSelector } from "@/redux/hooks";
 
 export default function TempRegister() {

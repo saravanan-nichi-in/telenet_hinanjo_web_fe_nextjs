@@ -14,12 +14,14 @@ import {
   NormalCheckBox,
   NormalLabel,
   ValidationError,
+  Input, 
+  InputDropdown, 
+  InputNumber 
 } from "@/components";
 import { mapScaleRateOptions } from "@/utils/constant";
 import { systemSettingServices } from "@/services";
 import { setLayout } from "@/redux/layout";
 import { useAppDispatch } from "@/redux/hooks";
-import { Input, InputDropdown, InputNumber } from "@/components/input";
 
 export default function Setting() {
   const { setLoader } = useContext(LayoutContext);

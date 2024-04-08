@@ -6,9 +6,8 @@ import { useRouter } from 'next/router';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ValidationError, Button, CustomHeader } from '@/components';
+import { ValidationError, Button, CustomHeader, Password } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
-import Password from '@/components/input';
 
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);

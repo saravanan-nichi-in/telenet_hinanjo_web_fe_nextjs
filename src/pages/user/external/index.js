@@ -17,12 +17,13 @@ import {
   ToggleSwitch,
   NormalTable,
   ValidationError,
-  CustomHeader
+  CustomHeader,
+  Input,
+  InputDropdown
 } from "@/components";
 import External from "@/components/modal/externalModal";
 import { prefectures, prefectures_en, gender_jp, gender_en } from "@/utils/constant";
 import { ExternalServices, CommonServices } from "@/services";
-import { Input, InputDropdown } from "@/components/input";
 
 export default function PublicExternal() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

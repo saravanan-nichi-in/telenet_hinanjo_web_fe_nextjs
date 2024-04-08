@@ -15,8 +15,7 @@ import { useRouter } from "next/router";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckInData } from "@/redux/check_in";
 import { setSelfID } from "@/redux/self_id";
-import { Button, ButtonRounded, CommonDialog, CommonPage, CustomHeader, Input, ValidationError } from "@/components";
-import Password from "@/components/input";
+import { Button, ButtonRounded, CommonDialog, CommonPage, CustomHeader, Input, ValidationError, Password } from "@/components";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
 import { YappleModal } from "@/components/modal";
 

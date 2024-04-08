@@ -3,12 +3,11 @@ import _ from 'lodash';
 
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable } from '@/components';
+import { Button, CustomHeader, Input, NormalTable } from '@/components';
 import { AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementImportModal } from '@/components/modal';
 import { AdminManagementServices } from '@/services'
 import AdminManagementCreateEditModal from '@/components/modal/adminManagementCreateEditModal';
 import { CommonServices } from '@/services';
-import { Input } from '@/components/input';
 import { useAppSelector } from "@/redux/hooks";
 
 export default function AdminManagementPage() {

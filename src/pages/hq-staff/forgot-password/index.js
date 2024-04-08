@@ -7,9 +7,8 @@ import { useSelector } from "react-redux";
 
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ValidationError, Button, CustomHeader } from '@/components';
+import { ValidationError, Button, CustomHeader, InputGroup } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
-import { InputGroup } from '@/components/input';
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);

@@ -18,11 +18,13 @@ import {
   ValidationError,
   GoogleMapComponent,
   InputSwitch,
+  Calendar,
+  Input,
+  InputDropdown,
+  InputNumber
 } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
 import CustomHeader from "@/components/customHeader";
-import { Input, InputDropdown, InputNumber } from "@/components/input";
-import { Calendar } from "@/components/date&time";
 
 export default function PlaceUpdatePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
