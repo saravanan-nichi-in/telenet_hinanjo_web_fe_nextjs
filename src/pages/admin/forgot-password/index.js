@@ -44,7 +44,6 @@ const ForgotPasswordPage = () => {
                 onSubmit={(values) => {
                     let preparedPayload = values;
                     preparedPayload['username'] = preparedPayload.email.trim();
-                    preparedPayload['email'] = preparedPayload.email.trim();
                     forgot('admin', preparedPayload, onForgotSuccess);
                 }}
             >
@@ -73,7 +72,7 @@ const ForgotPasswordPage = () => {
                                                     onBlur: handleBlur,
                                                     value: values.email,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'mail_address'),
+                                                        text: translate(localeJson, 'userId'),
                                                         spanText: "*",
                                                         inputGroupLabelClassName: "mb-2",
                                                         inputGroupLabelSpanClassName: "p-error"

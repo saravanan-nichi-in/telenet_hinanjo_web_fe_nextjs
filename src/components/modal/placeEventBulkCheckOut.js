@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "../datatable";
@@ -9,22 +9,12 @@ import { BulkCheckoutService } from "@/services/bulkCheckout.service";
 
 export default function PlaceEventBulkCheckOut(props) {
     const { localeJson } = useContext(LayoutContext);
-
-    const [columnValues, setColumnValues] = useState([]);
-
-    const [tableLoading, setTableLoading] = useState(false);
-
     const { open, close, modalHeaderText } = props && props;
 
-    const header = (
-        <div className="new-custom-modal">
-            {modalHeaderText}
-        </div>
-    );
-
+    const [columnValues, setColumnValues] = useState([]);
+    const [tableLoading, setTableLoading] = useState(false);
     const [rowClick, setRowClick] = useState(true);
     const [selectedProducts, setSelectedProducts] = useState(null);
-
     const [listPayload, setListPayload] = useState({
         "filters": {
             "start": "",
@@ -33,7 +23,6 @@ export default function PlaceEventBulkCheckOut(props) {
             "order_by": "asc"
         }
     });
-
     const columnNames = [
         {
             selectionMode: "multiple",
@@ -49,8 +38,8 @@ export default function PlaceEventBulkCheckOut(props) {
     useEffect(() => {
         if (open) {
             listApiCall();
-          }
-    }, [open]); 
+        }
+    }, [open]);
 
     const listApiCall = () => {
         setTableLoading(true);
@@ -76,7 +65,7 @@ export default function PlaceEventBulkCheckOut(props) {
     const bulkCheckout = () => {
         if (selectedProducts.length > 0) {
             let tempIds = [];
-            selectedProducts.forEach((item, index) => {
+            selectedProducts.forEach((item) => {
                 tempIds.push(item.id);
             });
             if (props.type == "places") {
@@ -85,7 +74,7 @@ export default function PlaceEventBulkCheckOut(props) {
                     setSelectedProducts(null);
                     if (props.onBulkCheckoutSuccess) {
                         props.onBulkCheckoutSuccess();
-                      }
+                    }
                 })
             } else if (props.type == "events") {
                 BulkCheckoutService.checkoutBulkEvents({ event_ids: tempIds }, () => {
@@ -93,7 +82,7 @@ export default function PlaceEventBulkCheckOut(props) {
                     setSelectedProducts(null);
                     if (props.onBulkCheckoutSuccess) {
                         props.onBulkCheckoutSuccess();
-                      }
+                    }
                 })
             }
 

@@ -162,7 +162,6 @@ function StockpileDashboard() {
      */
     const onDeleteClose = (status = '') => {
         if (status == 'confirm') {
-            console.log(deleteId);
             let payload = [
                 {
                     place_id: layoutReducer?.user?.place?.id,

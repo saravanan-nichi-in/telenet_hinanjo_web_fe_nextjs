@@ -67,7 +67,7 @@ $commonPadding: 0.5rem;
 
 /*color*/
 $customWhiteRegHoverBgColor: #E0F2ED;
-$customWhiteHoverBgColor:#106540;
+$customWhiteHoverBgColor: #106540;
 
 /*color*/
 $customRegHoverBgColor: #0d4d33;
@@ -91,8 +91,8 @@ $exportButtonTextColor: #ffffff;
 $exportButtonHoverTextColor: #ffffff;
 
 /*Search button*/
-$searchButtonBgColor:var(--search-color);
-$searchButtonHoverBgColor:var(--search-hover-color);
+$searchButtonBgColor: var(--search-color);
+$searchButtonHoverBgColor: var(--search-hover-color);
 $searchButtonTextColor: var(--search-text-color);
 $searchButtonHoverTextColor: var(--search-hover-text);
 
@@ -105,7 +105,7 @@ $backButtonHoverTextColor: var(--back-hover-text);
 $updateButtonBgColor: var(--update-color);
 $updateButtonHoverBgColor: var(--update-hover-color);
 $updateButtonTextColor: var(--update-text-color);
-$updateButtonHoverTextColor:var(--update-hover-text);
+$updateButtonHoverTextColor: var(--update-hover-text);
 // $updateButtonHoverBgColor: #FFEAED;
 
 /*Edit action button*/
@@ -115,10 +115,10 @@ $editButtonTextColor: var(--edit-text);
 $editButtonHoverTextColor: var(--edit-hover-text);
 
 /*Delete action button*/
-$deleteButtonBgColor: var( --delete-color);
-$deleteButtonHoverBgColor:var(--delete-hover-color);
+$deleteButtonBgColor: var(--delete-color);
+$deleteButtonHoverBgColor: var(--delete-hover-color);
 $deleteButtonTextColor: var(--delete-text);
-$deleteButtonHoverTextColor: var( --delete-hover-text);
+$deleteButtonHoverTextColor: var(--delete-hover-text);
 
 // $deleteButtonBgColor: #ffff;
 // $deleteButtonHoverBgColor: #DC2626;
@@ -127,14 +127,14 @@ $deleteButtonHoverTextColor: var( --delete-hover-text);
 
 /*Delete action user button*/
 $deleteButtonBgColorUser: #ffff;
-$deleteButtonHoverBgColorUser: #FF8299;;
+$deleteButtonHoverBgColorUser: #FFEAED;
 $deleteButtonTextColorUser: #C70A18;
 $deleteButtonHoverTextColorUser: #C70A18;
 
 /*Delete -Ok button*/
 $delOkButtonBgColor: #D31720;
 $delOkButtonHoverBgColor: #e72932;
-$delOkButtonTextColor:#fff;
+$delOkButtonTextColor: #fff;
 $delOkButtonHoverTextColor: #fff;
 
 /* Staff back to top or previous screen button*/

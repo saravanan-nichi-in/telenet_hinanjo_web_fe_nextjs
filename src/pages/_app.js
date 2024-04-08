@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }) {
      */
     const loadNewTheme = (url) => {
         const path = url.split('?')[0];
-        const role = path.startsWith('/admin') ? 'admin' : path.startsWith('/staff') ? 'staff' : 'default';
+        const role = path.startsWith('/admin') ? 'admin' : path.startsWith('/staff') ? 'staff' : path.startsWith('/hq-staff') ? 'hq-staff' : 'default';
         const themeLink = document.getElementById('theme-css');
         const getThemeApplied = themeLink.href.split('/')[4];
         const getURLPresent = url.split('/')[1];
@@ -116,6 +116,14 @@ function MyApp({ Component, pageProps }) {
             '/staff/reset-password',
             '/staff/reset-password/'
         ];
+        const hqStaffPublicPaths = [
+            '/hq-staff/login',
+            '/hq-staff/login/',
+            '/hq-staff/forgot-password',
+            '/hq-staff/forgot-password/',
+            '/hq-staff/reset-password',
+            '/hq-staff/reset-password/'
+        ];
         const path = url.split('?')[0];
         const queryString = url.split('?')[1];
         if (path.startsWith('/admin')) {
@@ -134,7 +142,7 @@ function MyApp({ Component, pageProps }) {
             } else {
                 if (adminPublicPaths.includes(path)) {
                     router.push({
-                        pathname: '/admin/dashboard',
+                        pathname: '/admin/event-status-list',
                     });
                 } else {
                     router.push({
@@ -157,6 +165,28 @@ function MyApp({ Component, pageProps }) {
                 if (staffPublicPathsWithLogin.includes(path)) {
                     router.push({
                         pathname: '/user/list',
+                    });
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            }
+        } else if (path.startsWith('/hq-staff')) {
+            if (_.isNull(AuthenticationAuthorizationService.hqStaffValue)) {
+                if (!hqStaffPublicPaths.includes(path)) {
+                    router.push('/hq-staff/login');
+                } else {
+                    router.push({
+                        pathname: path,
+                        query: queryString
+                    });
+                }
+            } else {
+                if (hqStaffPublicPaths.includes(path)) {
+                    router.push({
+                        pathname: '/hq-staff/dashboard',
                     });
                 } else {
                     router.push({
@@ -202,6 +232,7 @@ function MyApp({ Component, pageProps }) {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
+                                {/* Development */}
                                 {/* <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" /> */}
                                 {"Loading..."}
                             </div>

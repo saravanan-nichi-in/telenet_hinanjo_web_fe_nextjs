@@ -119,8 +119,6 @@ export default function RegisterCheckIn() {
             <Counter
               inputClass={"text-center"}
               onValueChange={(value) => {
-                console.log("1", frozenArray);
-
                 if (frozenArray && frozenArray.length > 0) {
                   let updateFrozenArray = frozenArray;
                   updateFrozenArray[0]['frozenCount'] = value;

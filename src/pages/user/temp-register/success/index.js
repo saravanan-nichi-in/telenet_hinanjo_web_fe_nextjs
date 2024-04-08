@@ -6,13 +6,14 @@ import {
   import { getValueByKeyRecursively as translate } from "@/helper";
   import { useRouter } from "next/router";
   import { useAppSelector,useAppDispatch } from "@/redux/hooks";
-  import { reset } from "@/redux/register";
+  import { reset } from "@/redux/tempRegister";
   
   const RegisterSuccess = () => {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter()
-    const regReducer = useAppSelector((state) => state.registerReducer);
+    const regReducer = useAppSelector((state) => state.tempRegisterReducer);
     const family_code = regReducer.successData?.data?.familyCode  
+    const url = regReducer.successData?.data?.url 
     const dispatch = useAppDispatch()
     return (
       <div className='grid flex-1'>
@@ -30,6 +31,9 @@ import {
             </div>
             <div className="mb-3 text-center">
               <p className="text-5xl font-bold">{family_code}</p>
+            </div>
+            <div className="mb-3 text-center">
+              <img src={url} width={300} height={300} />
             </div>
   
             <div className="mb-3 text-center block grid col-12 successButtonText">

@@ -3,8 +3,11 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
-import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
+import { Button } from "../button";
+import {
+    convertToSingleByte,
+    getValueByKeyRecursively as translate
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { Input, InputDropdown, InputNumber } from "../input";
@@ -12,6 +15,8 @@ import { Calendar } from "../date&time";
 
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);
+    const { open, close, header, buttonText, onUpdate } = props && props;
+
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
@@ -19,10 +24,6 @@ export default function StaffStockpileEdit(props) {
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
-        // shelf_life: Yup.number().typeError(translate(localeJson, 'number_field'))
-        //     .positive(translate(localeJson, 'number_field'))
-        //     .integer(translate(localeJson, 'number_field'))
-        //     .max(999, translate(localeJson, 'stockpile_shelf_life_max')),
         after_count: Yup.string()
             .min(0, translate(localeJson, 'number_field'))
             .max(5, translate(localeJson, 'quantity_max'))
@@ -38,21 +39,6 @@ export default function StaffStockpileEdit(props) {
                 return inputDate >= today;
             }),
     });
-    const { open, close, header, buttonText, onUpdate } = props && props;
-    const initialValues = {
-        "id": "",
-        "hinan_id": 1,
-        "before_count": 0,
-        "after_count": 0,
-        "incharge": "",
-        "remarks": "",
-        "expiry_date": "",
-        "history_flag": 0,
-        "Inspection_date_time": "",
-        "category": "",
-        "shelf_life": 0,
-        "product_name": "",
-    };
 
     return (
         <>
@@ -63,7 +49,6 @@ export default function StaffStockpileEdit(props) {
                 onSubmit={(values, actions) => {
                     values.after_count = convertToSingleByte(values.after_count)
                     onUpdate({ ...props.editObject, ...values }, props.editObject.summary_id)
-                    // StockpileStaffService.update([{ ...props.editObject, ...values }], () => {// })
                     actions.resetForm()
                 }}
             >
@@ -189,17 +174,14 @@ export default function StaffStockpileEdit(props) {
                                                 id: "quantity",
                                                 name: "after_count",
                                                 value: values.after_count,
-                                                onChange:(evt)=>
-                                                {
-                                                    if(evt.target.value =="")
-                                                    {
-                                                        setFieldValue("after_count",evt.target.value)
+                                                onChange: (evt) => {
+                                                    if (evt.target.value == "") {
+                                                        setFieldValue("after_count", evt.target.value)
                                                         return;
                                                     }
                                                     const re = /^[0-9-]+$/;
-                                                    if(re.test(convertToSingleByte(evt.target.value)))
-                                                    {
-                                                        setFieldValue("after_count",evt.target.value)
+                                                    if (re.test(convertToSingleByte(evt.target.value))) {
+                                                        setFieldValue("after_count", evt.target.value)
                                                     }
                                                 },
                                                 onBlur: handleBlur,
@@ -304,7 +286,6 @@ export default function StaffStockpileEdit(props) {
                                                     onClick: () => {
                                                         resetForm();
                                                         close();
-
                                                     },
                                                 }} parentClass={"back-button"} />
                                             </div>

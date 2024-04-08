@@ -13,7 +13,7 @@ import {
   NormalLabel,
   ValidationError,
 } from "@/components";
-import { InputFile } from "@/components/upload";
+import { InputFile } from "@/components";
 import { mapScaleRateOptions } from "@/utils/constant";
 import { systemSettingServices } from "@/services";
 import { setLayout } from "@/redux/layout";
@@ -194,7 +194,6 @@ export default function Setting() {
   };
 
   function fetchData(res) {
-    console.log(response, "Setting");
     if (res) {
       setLoader(true);
       const data = res.data.model;
@@ -289,7 +288,6 @@ export default function Setting() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={(values, actions) => {
-          console.log(values);
           setLoader(true);
           values.default_shelf_life = convertToSingleByte(values.default_shelf_life);
           values.disclosure_info_ja = values.disclosure_info_ja ? values.disclosure_info_ja : null;
@@ -741,45 +739,56 @@ export default function Setting() {
                     </div>
                     <div className="w-8 modal-field-top-space modal-field-bottom-space pl-5">
                       <div>
-                        <Input
-                          inputProps={{
-                            inputParentClassName: ` ${errors.default_shelf_life &&
-                              touched.default_shelf_life &&
-                              "p-invalid pb-1"
-                              }`,
-                            labelProps: {
-                              text: translate(
-                                localeJson,
-                                "default_shelf_life_days"
-                              ),
-                              inputLabelClassName: "block",
-                            },
-                            inputClassName: "w-full",
-                            id: "default_shelf_life",
-                            name: "default_shelf_life",
-                            maxFractionDigits: "1",
-                            value: values.default_shelf_life,
-                            onChange: (evt) => {
-                              if (evt.target.value == "") {
-                                setFieldValue("default_shelf_life", "");
-                                return
-                              }
-                              const re = /^[0-9-]+$/;
-                              if (re.test(convertToSingleByte(evt.target.value)))
-                                setFieldValue("default_shelf_life", evt.target.value);
-                            },
-                            onValueChange: (evt) => {
-                              if (evt.target.value == "") {
-                                setFieldValue("default_shelf_life", "");
-                                return
-                              }
-                              const re = /^[0-9-]+$/;
-                              if (re.test(convertToSingleByte(evt.target.value)))
-                                setFieldValue("default_shelf_life", evt.target.value);
-                            },
-                            onBlur: handleBlur,
-                          }}
-                        />
+                        <div className="flex align-items-center">
+                          <div style={{
+                            flex: "1 1 50%"
+                          }}>
+                            <Input
+                              inputProps={{
+                                inputParentClassName: ` ${errors.default_shelf_life &&
+                                  touched.default_shelf_life &&
+                                  "p-invalid pb-1"
+                                  }`,
+                                labelProps: {
+                                  text: translate(
+                                    localeJson,
+                                    "default_shelf_life_days"
+                                  ),
+                                  inputLabelClassName: "block",
+                                },
+                                inputClassName: "w-full",
+                                id: "default_shelf_life",
+                                name: "default_shelf_life",
+                                maxFractionDigits: "1",
+                                value: values.default_shelf_life,
+                                onChange: (evt) => {
+                                  if (evt.target.value == "") {
+                                    setFieldValue("default_shelf_life", "");
+                                    return
+                                  }
+                                  const re = /^[0-9-]+$/;
+                                  if (re.test(convertToSingleByte(evt.target.value)))
+                                    setFieldValue("default_shelf_life", evt.target.value);
+                                },
+                                onValueChange: (evt) => {
+                                  if (evt.target.value == "") {
+                                    setFieldValue("default_shelf_life", "");
+                                    return
+                                  }
+                                  const re = /^[0-9-]+$/;
+                                  if (re.test(convertToSingleByte(evt.target.value)))
+                                    setFieldValue("default_shelf_life", evt.target.value);
+                                },
+                                onBlur: handleBlur,
+                              }}
+                            />
+                          </div>
+                          <div className="ml-2 mt-3" style={{
+                            flex: "1 1 50%"
+                          }}>
+                            {translate(localeJson, "days_before")}
+                          </div>
+                        </div>
                         <ValidationError
                           errorBlock={
                             errors.default_shelf_life &&

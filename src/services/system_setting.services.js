@@ -8,11 +8,12 @@ export const systemSettingServices = {
   update: _updateSystemSetting,
 };
 
+
+
 function _getSystemSettingList(callBackFun) {
   axios
-    .get('/admin/systemSetting')
+    .get("/admin/systemSetting")
     .then((response) => {
-      console.log(response);
       if (response && response.data) {
         callBackFun(response.data);
       }

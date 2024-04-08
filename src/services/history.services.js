@@ -1,7 +1,6 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { toastDisplay } from '@/helper';
 
 
 /* Identity and Access management (IAM) */
@@ -27,7 +26,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toastDisplay(error?.response)
+            console.error('Error fetching data:', error);
             callBackFun(false);
         });
 }
@@ -70,8 +69,9 @@ function _registerEmailConfiguration(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toastDisplay(error?.response)
-            callBackFun(false);
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+            });
         });
 }
 
@@ -88,8 +88,7 @@ function _getEmailConfiguration(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toastDisplay(error?.response)
-            callBackFun(false);
+            console.error(error);
         });
 }
 
@@ -105,9 +104,9 @@ function _getPlaceDropdownList(payload, callBackFun) {
                 callBackFun(response.data);
             }
         })
-        .catch((error) => { 
-            toastDisplay(error?.response)
-            callBackFun(false);
+        .catch((error) => {
+            
+            console.error('Error fetching data:', error);
         });
 }
 

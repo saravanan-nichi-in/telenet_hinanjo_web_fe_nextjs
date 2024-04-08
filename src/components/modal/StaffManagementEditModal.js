@@ -2,14 +2,53 @@ import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import _ from "lodash";
+import { TabView, TabPanel } from 'primereact/tabview';
+
 import { Button } from "../button";
-import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
+import {
+    convertToSingleByte,
+    getValueByKeyRecursively as translate
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
+import { NormalTable } from "../datatable";
+import { CommonServices } from "@/services";
+import { StaffManagementService } from '@/services/staffmanagement.service';
 import Password, { Input } from "../input";
 
 export default function StaffManagementEditModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
+    const { open, close, currentEditObj } = props && props;
+
+    const columnsData = [
+        {
+            selectionMode: "multiple",
+            textAlign: "center",
+            alignHeader: "center",
+            minWidth: "4rem",
+            maxWidth: "4rem",
+            className: "action_class",
+        },
+        { field: 'name', header: translate(localeJson, 'questionnaire_name'), headerClassName: "custom-header", minWidth: "12rem", maxWidth: "12rem" },
+    ]
+    const columnsData2 = [
+        {
+            selectionMode: "multiple",
+            textAlign: "center",
+            alignHeader: "center",
+            minWidth: "4rem",
+            maxWidth: "4rem",
+            className: "action_class",
+        },
+        { field: 'name', header: translate(localeJson, 'place_name'), headerClassName: "custom-header", minWidth: "12rem", maxWidth: "12rem" },
+    ]
+    const [tableLoading, setTableLoading] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
+    const [columns, setColumns] = useState([]);
+    const [columns1, setColumns1] = useState([]);
+    const [eventList, setEventList] = useState([]);
+    const [placeList, setPlaceList] = useState([]);
     const [getPayload, setPayload] = useState({
         filters: {
             start: 0,
@@ -19,58 +58,23 @@ export default function StaffManagementEditModal(props) {
         },
         search: "",
     });
-
-
-    const schema1 = Yup.object().shape({
-        email: Yup.string()
+    const [rowClick, setRowClick] = useState(true);
+    const [selectedEvents, setSelectedEvents] = useState(null);
+    const [selectedPlaces, setSelectedPlaces] = useState(null);
+    const isEmail = (value) => {
+        // Check if the value includes '@' and matches the email pattern
+        return !value.includes('@') || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
+    };
+    const schema = Yup.object().shape({
+        username: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
             .max(200, translate(localeJson, 'user_id_max'))
-            .test('trim-and-validate', translate(localeJson, 'user_id_email'), (value) => {
-                // Trim the email and check its validity
-                const trimmedEmail = value.trim();
-                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
-            }),
+            .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
         name: Yup.string()
             .required(translate(localeJson, 'staff_name_required'))
             .max(200, translate(localeJson, 'staff_name_max_required')),
         tel: Yup.string()
-            .required(translate(localeJson, 'phone_no_required'))
-            .test(
-                "starts-with-zero",
-                translate(localeJson, "phone_num_start"),
-                (value) => {
-                    if (value) {
-                        value = convertToSingleByte(value);
-                        return value.charAt(0) === "0";
-                    }
-                    return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-                }
-            )
-            .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-                if (value) {
-                    const singleByteValue = convertToSingleByte(value);
-                    return /^[0-9]{10,11}$/.test(singleByteValue);
-                }
-                else {
-                    return true;
-                }
-            }),
-    });
-
-    const schema2 = Yup.object().shape({
-        email: Yup.string()
-            .required(translate(localeJson, 'user_id_required'))
-            .max(200, translate(localeJson, 'user_id_max'))
-            .test('trim-and-validate', translate(localeJson, 'user_id_email'), (value) => {
-                // Trim the email and check its validity
-                const trimmedEmail = value.trim();
-                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(trimmedEmail);
-            }),
-        name: Yup.string()
-            .required(translate(localeJson, 'staff_name_required'))
-            .max(200, translate(localeJson, 'staff_name_max_required')),
-        tel: Yup.string()
-            .required(translate(localeJson, 'phone_no_required'))
+            .nullable()
             .test(
                 "starts-with-zero",
                 translate(localeJson, "phone_num_start"),
@@ -101,24 +105,115 @@ export default function StaffManagementEditModal(props) {
             ),
     });
 
-    const { open, close, currentEditObj } = props && props;
+    /** Services */
+    const { getStaffEventList } = CommonServices
+    const { getActivePlaceList } = StaffManagementService
 
+    useEffect(() => {
+        setSelectedEvents(currentEditObj?.event_id)
+        setSelectedPlaces(currentEditObj?.place_id)
+    }, [locale, props])
+
+    useEffect(() => {
+        fetchData()
+    }, [locale, props]);
+
+    useEffect(() => {
+        if (props.currentEditObj?.event_id) {
+            let eventIds = props.currentEditObj?.event_id;
+            let selectedEventValues = eventIds?.map(id => findEventById(id));
+            setSelectedEvents(selectedEventValues)
+        }
+        if (props.currentEditObj?.place_id) {
+            let placeIds = props.currentEditObj?.place_id;
+            let selectedPlaceValues = placeIds?.map(id => findPlaceById(id));
+            setSelectedPlaces(selectedPlaceValues)
+        }
+        else {
+            setSelectedEvents([]);
+            setSelectedPlaces([]);
+        }
+    }, [eventList, placeList, props])
     const resetAndCloseForm = (callback) => {
         close();
         callback();
         props.refreshList();
     }
 
+    const fetchData = () => {
+        getStaffEventList({}, (response) => {
+            if (response?.success && !_.isEmpty(response.data)) {
+                const data = response.data.model;
+                var additionalColumnsArrayWithOldData = [...columnsData];
+                let preparedList = [];
+                data.map((obj, i) => {
+                    let preparedObj = {
+                        index: getPayload.filters.start + i,
+                        id: obj.id,
+                        name: obj.name,
+                    };
+                    preparedList.push(preparedObj);
+                });
+                setEventList(preparedList);
+                setColumns(additionalColumnsArrayWithOldData);
+                setTotalCount(response.data.model.total);
+                setTableLoading(false);
+            }
+            else {
+                setEventList([]);
+                setTotalCount(0);
+                setTableLoading(false);
+            }
+        })
+
+        getActivePlaceList((response) => {
+            if (response?.success && !_.isEmpty(response.data)) {
+                const data = response.data.model.list;
+                const filteredData = data.filter(item => item.active_flg == 1);
+                var additionalColumnsArrayWithOldData = [...columnsData2];
+                let preparedList = [];
+                filteredData.map((obj, i) => {
+                    let preparedObj = {
+                        index: getPayload.filters.start + i,
+                        id: obj.id,
+                        name: obj.name,
+                    };
+                    preparedList.push(preparedObj);
+                });
+                setPlaceList(preparedList);
+                setColumns1(additionalColumnsArrayWithOldData);
+                setTableLoading(false);
+            }
+            else {
+                setPlaceList([]);
+
+                setTableLoading(false);
+            }
+        })
+    }
+
+    const findPlaceById = (id) => {
+        return placeList.find(place => place.id === id);
+    };
+
+    const findEventById = (id) => {
+        return eventList.find(place => place.id === id);
+    };
+
     return (
         <>
             <Formik
                 initialValues={props.currentEditObj}
-                validationSchema={props.registerModalAction == 'create' ? schema2 : schema1}
+                validationSchema={schema}
                 enableReinitialize={true}
                 onSubmit={(values, { resetForm }) => {
+                    values.event_id = selectedEvents.length > 0 ? selectedEvents.filter(item => item && item.id).map(item => item.id) : [];
+                    values.place_id = selectedPlaces.length > 0 ? selectedPlaces.filter(item => item && item.id).map(item => item.id) : [];
                     values.tel = convertToSingleByte(values.tel);
                     props.register(values)
                     resetAndCloseForm(resetForm);
+                    setSelectedEvents([]);
+                    setSelectedPlaces([]);
                     return false;
                 }}
             >
@@ -134,7 +229,7 @@ export default function StaffManagementEditModal(props) {
                     <div>
                         <form onSubmit={handleSubmit}>
                             <Dialog
-                                className={`new-custom-modal`}
+                                className={`new-custom-modal h-full`}
                                 header={props.registerModalAction == 'create' ? translate(localeJson, 'add_staff_management') : translate(localeJson, 'edit_staff_management')}
                                 visible={open}
                                 draggable={false}
@@ -142,6 +237,8 @@ export default function StaffManagementEditModal(props) {
                                 onHide={() => {
                                     resetForm();
                                     close();
+                                    setSelectedEvents([]);
+                                    setSelectedPlaces([]);
                                 }}
                                 footer={
                                     <div className="text-center">
@@ -151,6 +248,8 @@ export default function StaffManagementEditModal(props) {
                                             onClick: () => {
                                                 resetForm();
                                                 close();
+                                                setSelectedEvents([]);
+                                                setSelectedPlaces([]);
                                             },
                                         }} parentClass={"inline back-button"} />
                                         <Button buttonProps={{
@@ -168,92 +267,125 @@ export default function StaffManagementEditModal(props) {
                                     <div className="modal-header">
                                         {props.registerModalAction == 'create' ? translate(localeJson, 'add_staff_management') : translate(localeJson, 'edit_staff_management')}
                                     </div>
-                                    <div className="">
-                                        <div className="modal-field-bottom-space">
-                                            <Input
-                                                inputProps={{
-                                                    inputParentClassName: `${errors.name && touched.name && 'p-invalid pb-1'}`,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'name'),
-                                                        inputLabelClassName: "block",
-                                                        spanText: "*",
-                                                        inputLabelSpanClassName: "p-error",
-                                                        labelMainClassName: "modal-label-field-space"
-                                                    },
-                                                    inputClassName: "w-full",
-                                                    name: "name",
-                                                    value: values && values.name,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                }}
-                                            />
-                                            <ValidationError errorBlock={errors.name && touched.name && errors.name} />
-                                        </div>
-                                        <div className="modal-field-bottom-space">
-                                            <Input
-                                                inputProps={{
-                                                    inputParentClassName: `${errors.email && touched.email && 'p-invalid pb-1'}`,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'external_evecuee_list_table_email_address'),
-                                                        inputLabelClassName: "block",
-                                                        spanText: "*",
-                                                        inputLabelSpanClassName: "p-error",
-                                                        labelMainClassName: "modal-label-field-space"
-                                                    },
-                                                    inputClassName: "w-full",
-                                                    name: "email",
-                                                    value: values && values.email,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                }}
-                                            />
-                                            <ValidationError errorBlock={errors.email && touched.email && errors.email} />
-                                        </div>
-                                        {props.registerModalAction == 'create' && (
-                                            <div className="modal-field-bottom-space">
-                                                <Password
-                                                    passwordProps={{
-                                                        passwordParentClassName: `w-full ${errors.password && touched.password && 'p-invalid pb-1'}`,
-                                                        labelProps: {
-                                                            text: translate(localeJson, 'password'),
-                                                            spanText: "*",
-                                                            passwordLabelSpanClassName: "p-error",
-                                                            passwordLabelClassName: "block",
-                                                            labelMainClassName: "modal-label-field-space"
-                                                        },
-                                                        name: 'password',
-                                                        value: values.password,
-                                                        onChange: handleChange,
-                                                        onBlur: handleBlur,
-                                                        style: { width: "100%" },
-                                                        passwordClass: "w-full"
-                                                    }}
-
-                                                />
-                                                <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+                                    <TabView scrollable>
+                                        <TabPanel header={translate(localeJson, 'staff_information')}>
+                                            <div className="">
+                                                <div className="modal-field-bottom-space">
+                                                    <Input
+                                                        inputProps={{
+                                                            inputParentClassName: `${errors.name && touched.name && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'name'),
+                                                                inputLabelClassName: "block",
+                                                                spanText: "*",
+                                                                inputLabelSpanClassName: "p-error",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            inputClassName: "w-full",
+                                                            name: "name",
+                                                            value: values && values.name,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                        }}
+                                                    />
+                                                    <ValidationError errorBlock={errors.name && touched.name && errors.name} />
+                                                </div>
+                                                <div className="modal-field-bottom-space">
+                                                    <Input
+                                                        inputProps={{
+                                                            inputParentClassName: `${errors.username && touched.username && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'userId'),
+                                                                inputLabelClassName: "block",
+                                                                spanText: "*",
+                                                                inputLabelSpanClassName: "p-error",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            inputClassName: "w-full",
+                                                            name: "username",
+                                                            value: values && values.username,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                        }}
+                                                    />
+                                                    <ValidationError errorBlock={errors.username && touched.username && errors.username} />
+                                                </div>
+                                                <div className="modal-field-bottom-space">
+                                                    <Password
+                                                        passwordProps={{
+                                                            passwordParentClassName: `w-full ${errors.password && touched.password && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'password'),
+                                                                spanText: "*",
+                                                                passwordLabelSpanClassName: "p-error",
+                                                                passwordLabelClassName: "block",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            name: 'password',
+                                                            value: values.password,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                            style: { width: "100%" },
+                                                            passwordClass: "w-full"
+                                                        }}
+                                                    />
+                                                    <ValidationError errorBlock={errors.password && touched.password && errors.password} />
+                                                </div>
+                                                <div className="modal-field-bottom-space">
+                                                    <Input
+                                                        inputProps={{
+                                                            inputParentClassName: `${errors.tel && touched.tel && 'p-invalid pb-1'}`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, 'tel'),
+                                                                inputLabelClassName: "block",
+                                                                labelMainClassName: "modal-label-field-space"
+                                                            },
+                                                            inputClassName: "w-full",
+                                                            name: 'tel',
+                                                            value: values && values.tel,
+                                                            onChange: handleChange,
+                                                            onBlur: handleBlur,
+                                                        }}
+                                                    />
+                                                    <ValidationError errorBlock={errors.tel && touched.tel && errors.tel} />
+                                                </div>
                                             </div>
-                                        )}
-                                        <div className="modal-field-bottom-space">
-                                            <Input
-                                                inputProps={{
-                                                    inputParentClassName: `${errors.tel && touched.tel && 'p-invalid pb-1'}`,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'tel'),
-                                                        inputLabelClassName: "block",
-                                                        spanText: "*",
-                                                        inputLabelSpanClassName: "p-error",
-                                                        labelMainClassName: "modal-label-field-space"
-                                                    },
-                                                    inputClassName: "w-full",
-                                                    name: 'tel',
-                                                    value: values && values.tel,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                }}
-                                            />
-                                            <ValidationError errorBlock={errors.tel && touched.tel && errors.tel} />
-                                        </div>
-                                    </div>
+                                        </TabPanel>
+                                        <TabPanel header={translate(localeJson, 'event_information')}>
+                                            <div className="">
+                                                <div className="">
+                                                    <NormalTable
+                                                        className={"custom-table-cell"}
+                                                        selection={selectedEvents}
+                                                        onSelectionChange={(e) => setSelectedEvents(e.value)}
+                                                        selectionMode={rowClick ? null : "checkbox"}
+                                                        tableStyle={{ maxWidth: "100%" }}
+                                                        showGridlines={"true"}
+                                                        value={eventList}
+                                                        columns={columnsData}
+                                                        filterDisplay="menu"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </TabPanel>
+                                        <TabPanel header={translate(localeJson, 'place_information')}>
+                                            <div className="">
+                                                <div className="">
+                                                    <NormalTable
+                                                        className={"custom-table-cell"}
+                                                        selection={selectedPlaces}
+                                                        onSelectionChange={(e) => setSelectedPlaces(e.value)}
+                                                        selectionMode={rowClick ? null : "checkbox"}
+                                                        tableStyle={{ maxWidth: "100%" }}
+                                                        showGridlines={"true"}
+                                                        value={placeList}
+                                                        columns={columnsData2}
+                                                        filterDisplay="menu"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </TabPanel>
+                                    </TabView>
                                     <div className="text-center">
                                         <div className="modal-button-footer-space">
                                             <Button buttonProps={{
@@ -272,6 +404,8 @@ export default function StaffManagementEditModal(props) {
                                                 onClick: () => {
                                                     resetForm();
                                                     close();
+                                                    setSelectedEvents([]);
+                                                    setSelectedPlaces([]);
                                                 },
                                             }} parentClass={"back-button"} />
                                         </div>

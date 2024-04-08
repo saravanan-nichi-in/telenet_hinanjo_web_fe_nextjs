@@ -3,21 +3,24 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
-import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
+import { Button } from "../button";
+import {
+    convertToSingleByte,
+    getValueByKeyRecursively as translate
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { HeadQuarterManagement } from "@/services/hqManagement.service";
 import Password, { Input } from "../input";
 
 export default function HqEditModal(props) {
-    const { localeJson} = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
+    const { open, close } = props && props;
 
     const isEmail = (value) => {
         // Check if the value includes '@' and matches the email pattern
         return !value.includes('@') || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
     };
-
     const schema = Yup.object().shape({
         username: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
@@ -32,23 +35,22 @@ export default function HqEditModal(props) {
                 "starts-with-zero",
                 translate(localeJson, "phone_num_start"),
                 (value) => {
-                  if (value) {
-                    value = convertToSingleByte(value);
-                    return value.charAt(0) === "0";
-                  }
-                  return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+                    if (value) {
+                        value = convertToSingleByte(value);
+                        return value.charAt(0) === "0";
+                    }
+                    return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
                 }
-              )
-              .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-                if(value)
-                {
-                const singleByteValue = convertToSingleByte(value);
-                return /^[0-9]{10,11}$/.test(singleByteValue);
+            )
+            .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+                if (value) {
+                    const singleByteValue = convertToSingleByte(value);
+                    return /^[0-9]{10,11}$/.test(singleByteValue);
                 }
                 else {
-                  return true;
+                    return true;
                 }
-              }),
+            }),
         password: Yup.string()
             .required(translate(localeJson, "new_password_required"))
             .min(8, translate(localeJson, "new_password_min_length"))
@@ -58,8 +60,6 @@ export default function HqEditModal(props) {
                 translate(localeJson, "new_password_format")
             ),
     });
-
-    const { open, close } = props && props;
 
     const resetAndCloseForm = (callback) => {
         callback();

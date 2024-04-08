@@ -36,7 +36,7 @@ export const LayoutProvider = (props) => {
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
-        menuMode: window.location.pathname.startsWith('/user') || URLS.includes(window.location.pathname) ? window.location.pathname.startsWith('/user/map') ? 'static' : 'overlay' : 'static',
+        menuMode: window.location.pathname.startsWith('/user') || window.location.pathname.startsWith('/privacy') || URLS.includes(window.location.pathname) ? window.location.pathname.startsWith('/user/map') ? 'static' : 'overlay' : 'static',
         colorScheme: 'light',
         theme: 'default',
         scale: 14

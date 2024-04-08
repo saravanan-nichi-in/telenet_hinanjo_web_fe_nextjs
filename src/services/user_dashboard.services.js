@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
+import { common422ErrorToastDisplay } from '@/helper';
 
 export const UserDashboardServices = {
     getListByID: _getListByID,
@@ -14,17 +15,14 @@ export const UserDashboardServices = {
  */
 function _getListByID(payload, callBackFun) {
     const queryParams = new URLSearchParams(payload).toString();
-    axios.get(`/place/detail?${queryParams}`)
+    axios.post(`/place/detail`,payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            console.error(error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            common422ErrorToastDisplay(error);
         });
 }
 
@@ -34,17 +32,13 @@ function _getListByID(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _getEventListByID(payload, callBackFun) {
-    const queryParams = new URLSearchParams(payload).toString();
-    axios.get(`/user/event/dashboard?${queryParams}`)
+    axios.post(`/user/event/dashboard`,payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            console.error(error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            common422ErrorToastDisplay(error);
         });
 }

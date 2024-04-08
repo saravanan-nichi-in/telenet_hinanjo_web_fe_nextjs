@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -8,6 +7,8 @@ import {
   OverlayView,
   OverlayViewF,
 } from "@react-google-maps/api";
+
+import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 
 export const GoogleMapComponent = ({
@@ -21,29 +22,16 @@ export const GoogleMapComponent = ({
     width: "100%",
     height: height || "100vh",
   };
-
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [center, setCenter] = useState(initialPosition);
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, setLoader } = useContext(LayoutContext);
   const [selectedMarker, setSelectedMarker] = useState(null);
-
-  const onMarkerClick = (marker) => {
-    setSelectedMarker(marker);
-  };
-
-  const mapOptions = {
-    minZoom: 0, // Set your desired min zoom level
-    maxZoom: 25,
-    zoom: mapScale || 10, 
-  };
-
-  const customIcon = {
-    url: "/layout/images/map/map_active.png", // Replace with the URL of your custom marker image
-  };
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setCenter(initialPosition);
   }, [initialPosition]);
+
   useEffect(() => {
     setCenter(searchResult);
   }, [searchResult]);
@@ -53,8 +41,6 @@ export const GoogleMapComponent = ({
       setCenter(searchResult);
     }
   }, [searchResult]);
-
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setLoader(true);
@@ -68,6 +54,20 @@ export const GoogleMapComponent = ({
       document.head.removeChild(googleMapScript);
     };
   }, [locale]);
+
+  const onMarkerClick = (marker) => {
+    setSelectedMarker(marker);
+  };
+
+  const mapOptions = {
+    minZoom: 0, // Set your desired min zoom level
+    maxZoom: 25,
+    zoom: mapScale || 10,
+  };
+
+  const customIcon = {
+    url: "/layout/images/map/map_active.png", // Replace with the URL of your custom marker image
+  };
 
   const onLoad = React.useCallback(
     async function callback(map) {
@@ -130,23 +130,10 @@ export const GoogleMapMultiMarkerComponent = ({
     googleMapsApiKey: GOOGLE_API_KEY,
     language: locale,
   });
-
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [isMarker, setIsMarker] = useState(false);
   const [onMouseHoverValue, setOnMouseHoverValue] = useState(false);
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
-
-  const onMarkerClick = (marker) => {
-    setIsMarker(true);
-    setSelectedMarker(marker);
-  };
-
-  const [mapOptions, setMapOptions] = useState({
-    minZoom: 2,
-    maxZoom: 25,
-    zoom: 10, // Initial zoom level
-    gestureHandling: "greedy",
-  });
 
   useEffect(() => {
     setMapOptions((prevOptions) => ({
@@ -171,6 +158,18 @@ export const GoogleMapMultiMarkerComponent = ({
     mapOptions.zoom = 10;
   }, []);
 
+  const onMarkerClick = (marker) => {
+    setIsMarker(true);
+    setSelectedMarker(marker);
+  };
+
+  const [mapOptions, setMapOptions] = useState({
+    minZoom: 2,
+    maxZoom: 25,
+    zoom: 10, // Initial zoom level
+    gestureHandling: "greedy",
+  });
+
   const containerStyle = {
     width: "100%",
     height: windowHeight,
@@ -186,7 +185,6 @@ export const GoogleMapMultiMarkerComponent = ({
           bounds.extend(marker.position);
         });
         map.fitBounds(bounds);
-
         // Check if the custom control has already been added
         if (!map.customControlAdded) {
           const customControlDiv = document.createElement("div");

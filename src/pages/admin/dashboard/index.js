@@ -147,7 +147,7 @@ function AdminDashboard() {
                     content={translate(localeJson, 'change_active_place')}
                     data={obj}
                     checked={obj.full_status == 1 ? true : false}
-                    disabled = {obj.id == default_place_id ? true : false}
+                    disabled = { default_place_id.includes(obj.id) || false}
                     parentClass={"custom-switch"}
                     cancelButton={true}
                     updateButton={true}

@@ -9,11 +9,9 @@ import { Button } from "@/components";
 
 export default function QrScannerModal(props) {
     const { localeJson } = useContext(LayoutContext);
-    const [toggleCameraMode, setToggleCameraMode] = useState("environment");
-    /**
-     * Destructing
-    */
     const { open, close } = props;
+
+    const [toggleCameraMode, setToggleCameraMode] = useState("environment");
 
     return (
         <div>
@@ -30,17 +28,17 @@ export default function QrScannerModal(props) {
                     <QrScanner
                         onDecode={(result) => {
                             if (result && result !== localStorage.getItem('user_qr')) {
-                            localStorage.setItem('user_qr', result);
-                            props.callback(result);
-                            setTimeout(()=>{
-                                localStorage.removeItem('user_qr');
-                            },1000)
+                                localStorage.setItem('user_qr', result);
+                                props.callback(result);
+                                setTimeout(() => {
+                                    localStorage.removeItem('user_qr');
+                                }, 1000)
                             }
                         }}
                         scanDelay={1000}
                         constraints={{
-                                facingMode: toggleCameraMode
-                            }}
+                            facingMode: toggleCameraMode
+                        }}
                         onError={(error) => console.error(error?.message)}
                     />
                 </div>

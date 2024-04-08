@@ -7,6 +7,7 @@ import { Button } from "@/components";
 
 const PreRegisterConfirmDialog = (props) => {
     const { localeJson } = useContext(LayoutContext);
+
     return (
         <Dialog
             className="custom-modal w-10 sm:w-8 md:w-5 lg:w-4"
@@ -16,7 +17,6 @@ const PreRegisterConfirmDialog = (props) => {
             blockScroll={true}
             onHide={() => props.setVisible(false)}
             style={{ width: '400px' }}
-        // footer={footer()}
         >
             <div className="text-center mt-4">
                 <div>

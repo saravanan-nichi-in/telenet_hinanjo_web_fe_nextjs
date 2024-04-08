@@ -1,13 +1,14 @@
 # 避難所管理システム
 
-It's Web Application which is developed using Next.js. (https://nextjs.org/), to handle evacuation centers through different roles ( Admin, Staff & User ) & responsibilities
+It's a web application developed using Next.js (version 13.4.3) to manage evacuation centers, featuring various roles such as Admin, Staff, User, and HQ-Staff, along with other associated responsibilities.
 
 # ReactJS
 
-React is an open-source JavaScript library used for building user interfaces and UI components
+React is an open-source JavaScript library used for building user interfaces and UI components. You can find its documentation at https://reactjs.org/.
+
 # NextJS
 
-Next.js is a popular open-source framework/extension built on top of React that is used for building server-rendered React applications and static websites
+Next.js is a popular open-source framework/extension built on top of React. It is used for building server-rendered React applications and static websites. For more information, you can refer to its documentation at https://nextjs.org/docs.
 
 # Project Structure
     .
@@ -59,7 +60,7 @@ Next.js is a popular open-source framework/extension built on top of React that 
 1. Clone the repository from git using the below command
 
 ```bash
-git clone https://github.com/saravanan-nichi-in/telenet_hinanjo_web_fe_nextjs.git
+git clone https://github.com/Nichi-In-Dev-Dept-1/hitachi_fe.git
 ```
 
 2. Copy .env.local.example -> .env.local & Update environments variables
@@ -83,7 +84,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with the browser to see the result.
-If there is any obstruction in starting the node server, please check for Node version which supports Next.js.
+If there is any obstruction in starting the node server, please check for Node version which supports Next.js or port which application is  running.
 
 ## Production Mode
 

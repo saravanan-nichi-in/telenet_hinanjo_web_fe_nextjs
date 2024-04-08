@@ -13,8 +13,8 @@ import { StockpileService } from "@/services/stockpilemaster.service";
 import { Input, InputDropdown } from "../input";
 
 export default function StockpileCreateEditModal(props) {
-
     const { localeJson } = useContext(LayoutContext);
+    const { open, close } = props;
 
     const schema = Yup.object().shape({
         category: Yup.string()
@@ -24,15 +24,15 @@ export default function StockpileCreateEditModal(props) {
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
         shelf_life: Yup.string()
-        .nullable()
-        .test("check_int",translate(localeJson,'number_field'),
-        (value)=>{
-            if (value === null || value === undefined || value === "") {
-                return true; // Skip validation for null, undefined, or empty string values
-            }
-            const re = /^[0-9-]+$/;
-            return re.test(convertToSingleByte(value))
-        })
+            .nullable()
+            .test("check_int", translate(localeJson, 'number_field'),
+                (value) => {
+                    if (value === null || value === undefined || value === "") {
+                        return true; // Skip validation for null, undefined, or empty string values
+                    }
+                    const re = /^[0-9-]+$/;
+                    return re.test(convertToSingleByte(value))
+                })
             .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
         image_logo: Yup.mixed()
             .notRequired() // Allow it to be nullable
@@ -50,17 +50,6 @@ export default function StockpileCreateEditModal(props) {
             }),
     });
 
-    /**
-     * Destructing
-    */
-    const { open, close } = props;
-
-    const header = (
-        <div className="new-custom-modal">
-            {props.registerModalAction == "create" && translate(localeJson, 'stockpile_management_create_modal_header')}
-            {props.registerModalAction == "edit" && translate(localeJson, 'stockpile_management_edit_modal_header')}
-        </div>
-    );
     const getImageFileName = () => {
         if (props.currentEditObj.stockpile_image) {
             const parts = props.currentEditObj.stockpile_image.split("/");
@@ -81,7 +70,6 @@ export default function StockpileCreateEditModal(props) {
             <Formik
                 validationSchema={schema}
                 enableReinitialize={true}
-                // initialValues={{ category: "", product_name: "", shelf_life: "" }}
                 initialValues={props.currentEditObj}
                 onSubmit={(values, { resetForm }) => {
                     let formData = new FormData();
@@ -91,10 +79,9 @@ export default function StockpileCreateEditModal(props) {
                     if (values.image_logo instanceof File) {
                         formData.append('image_logo', values.image_logo);
                     }
-
                     if (props.registerModalAction == "create") {
                         StockpileService.create(formData, (res) => {
-                            
+
                             resetAndCloseForm(resetForm);
                             res && props.register(res);
                         })
@@ -123,7 +110,12 @@ export default function StockpileCreateEditModal(props) {
                     <div>
                         <Dialog
                             className="new-custom-modal"
-                            header={header}
+                            header={
+                                <div className="new-custom-modal">
+                                    {props.registerModalAction == "create" && translate(localeJson, 'stockpile_management_create_modal_header')}
+                                    {props.registerModalAction == "edit" && translate(localeJson, 'stockpile_management_edit_modal_header')}
+                                </div>
+                            }
                             visible={open}
                             draggable={false}
                             blockScroll={true}
@@ -221,16 +213,15 @@ export default function StockpileCreateEditModal(props) {
                                                         const re = /^[0-9-]+$/;
                                                         let val;
                                                         if (
-                                                          evt.target.value === "" ||
-                                                          re.test(convertToSingleByte(evt.target.value))
+                                                            evt.target.value === "" ||
+                                                            re.test(convertToSingleByte(evt.target.value))
                                                         ) {
-                                                          val = evt.target.value.replace(/-/g, "");
-                                                          if (evt.target.value?.length <= 3) {
-                                                            setFieldValue("shelf_life", evt.target.value);
-                                                          }
-                      
+                                                            val = evt.target.value.replace(/-/g, "");
+                                                            if (evt.target.value?.length <= 3) {
+                                                                setFieldValue("shelf_life", evt.target.value);
+                                                            }
                                                         }
-                                                      },
+                                                    },
                                                     onBlur: handleBlur,
                                                 }}
                                             />

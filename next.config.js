@@ -4,19 +4,8 @@ const nextConfig = {
     reactStrictMode: true,
     trailingSlash: true,
     skipTrailingSlashRedirect: true,
-    output: 'export', // To enable a static export, change the output mode !!
-    env: {
-        customKey: process.env.NODE_ENV === 'development' ? 'my-value-dev' : 'my-value-prod',
-    },
+    output: 'export',
     swcMinify: true,
-    serverRuntimeConfig: {
-        secret: 'THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING'
-    },
-    publicRuntimeConfig: {
-        apiUrl: process.env.NODE_ENV === 'development'
-            ? '' // Development api
-            : '' // Production api
-    },
     images: {
         unoptimized: true,
     },

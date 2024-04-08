@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import FamilyListComponent from "@/components/familySearchResult";
+import FamilyListComponent from "@/components";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useSelector } from "react-redux";
@@ -49,7 +49,7 @@ const CheckOutDetails = () => {
       <div className="m-2 w-12 xlScreenMaxWidth mdScreenMaxWidth">
         {data?.length > 0 && (
           <>
-            <FamilyListComponent data={data} header={translate(localeJson,"checkout_confirm")} />
+            <FamilyListComponent data={data} header={translate(localeJson, "checkout_confirm")} />
             <div className="flex flex-column justify-content-center align-items-center">
               <div className="w-12 lg:w-6">
                 <ButtonRounded

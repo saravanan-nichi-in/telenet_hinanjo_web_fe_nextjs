@@ -16,6 +16,7 @@ import {
   ValidationError,
   PerspectiveCropping,
   NormalCheckBox,
+  Input, InputDropdown, InputNumber,QuestionList
 } from "@/components";
 import {
   prefectures,
@@ -28,11 +29,8 @@ import {
   TempRegisterServices,
   CheckInOutServices
 } from "@/services";
-import QuestionList from "@/components/masterQuestion";
-import { Input, InputDropdown, InputNumber } from "../input";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import CustomHeader from "../customHeader";
-import * as wanakana from 'wanakana';
 import YaburuModal from "./userYaburuCardModal";
 
 export default function EvacueeTempRegModal(props) {

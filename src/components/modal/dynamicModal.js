@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import InputSwitch from "../switch/inputSwitch";
-import {Button} from "../button";
+import { InputSwitch } from "../switch";
+import { Button } from "../button";
 
 const DynamicModal = (props) => {
     const {

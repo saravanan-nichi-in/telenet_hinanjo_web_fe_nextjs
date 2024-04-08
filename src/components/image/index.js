@@ -21,17 +21,6 @@ export const ImageComponent = (props) => {
     const [imageError, setImageError] = useState(false);
     const [dimensions, setDimensions] = useState({ width: width, height: width });
 
-    const imageLoader = ({ src }) => {
-        const japaneseText = text ? encodeURIComponent(text):"";
-        if (imageError || !src) {
-          return text?`https://dummyimage.com/${width}x${height}?text=${japaneseText}`:`https://dummyimage.com/${width}x${height}`;
-        }
-        return src;
-      };
-
-    const handleImageError = () => {
-        setImageError(true);
-    }
     useEffect(() => {
         const img = new Image();
         img.src = src;
@@ -39,6 +28,18 @@ export const ImageComponent = (props) => {
             setDimensions({ width: img.naturalWidth, height: img.naturalHeight });
         };
     }, [src]);
+
+    const imageLoader = ({ src }) => {
+        const japaneseText = text ? encodeURIComponent(text) : "";
+        if (imageError || !src) {
+            return text ? `https://dummyimage.com/${width}x${height}?text=${japaneseText}` : `https://dummyimage.com/${width}x${height}`;
+        }
+        return src;
+    };
+
+    const handleImageError = () => {
+        setImageError(true);
+    }
 
     return (
         <div className={`${parentClass}`} style={parentStyle}>

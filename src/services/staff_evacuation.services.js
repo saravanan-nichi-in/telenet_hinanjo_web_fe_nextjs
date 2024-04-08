@@ -89,6 +89,7 @@ function _getStaffFamilyEvacueesDetail(payload, callBackFun) {
             }
         })
         .catch((error) => {
+            callBackFun(false);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",
             });

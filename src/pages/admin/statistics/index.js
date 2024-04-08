@@ -193,13 +193,12 @@ export default function EvacueesStatistics() {
             },
             ticks: {
               autoSkip: false, // Enable label auto-skipping
-              maxTicksLimit: 5, // Limit the number of displayed labels to 5
               callback: function (value, index) {
-                if (labels[index].length > 10) {
-                  return labels[index].substring(0, 10) + "..."; // Truncate labels longer than 10 characters
+                  if (labels[index].length > 10) {
+                  return labels[index]; // Truncate labels longer than 10 characters
                 }
                 return labels[index];
-              },
+            },
             },
           },
         },
@@ -248,10 +247,9 @@ export default function EvacueesStatistics() {
             },
             ticks: {
               autoSkip: false, // Enable label auto-skipping
-              maxTicksLimit: 5, // Limit the number of displayed labels to 5
               callback: function (value, index) {
                 if (labels[index].length > 10) {
-                  return labels[index].substring(0, 10) + "..."; // Truncate labels longer than 10 characters
+                  return labels[index]; // Truncate labels longer than 10 characters
                 }
                 return labels[index];
               },
@@ -305,10 +303,9 @@ export default function EvacueesStatistics() {
             },
             ticks: {
               autoSkip: false, // Enable label auto-skipping
-              maxTicksLimit: 5, // Limit the number of displayed labels to 5
               callback: function (value, index) {
                 if (labels[index].length > 10) {
-                  return labels[index].substring(0, 10) + "..."; // Truncate labels longer than 10 characters
+                  return labels[index]; // Truncate labels longer than 10 characters
                 }
                 return labels[index];
               },

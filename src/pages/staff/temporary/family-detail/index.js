@@ -115,7 +115,7 @@ export default function TemporaryFamilyDetail() {
                     gender: getGenderValue(person.person_gender),
                     created_date: person.person_created_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_created_at) : "",
                     updated_date: person.person_updated_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_updated_at) : "",
-                    address: (person.person_postal_code ? translate(localeJson, 'post_letter') + person.person_postal_code : "") + " " + person.person_address,
+                    address: (person.person_postal_code ? translate(localeJson, 'post_letter') + person.person_postal_code : "") + " " +person.prefecture_name +" "+person.person_address,
                     special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
                     connecting_code: person.person_connecting_code || "",
                     remarks: person.person_note || "",

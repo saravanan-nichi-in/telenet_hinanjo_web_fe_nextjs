@@ -1,18 +1,17 @@
 import React, { useState, useContext } from "react";
+
 import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
-  getJapaneseDateTimeDisplayFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useSelector } from "react-redux";
 import CustomHeader from "../customHeader";
-import { prefectures, prefectures_en } from "@/utils/constant";
-const FamilyListComponent = ({ data,header }) => {
+
+const FamilyListComponent = ({ data, header }) => {
+  const { locale, localeJson } = useContext(LayoutContext);
+
   const [expandedFamilies, setExpandedFamilies] = useState([]);
-  const layoutReducer = useSelector((state) => state.layoutReducer);
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
 
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
@@ -32,22 +31,6 @@ const FamilyListComponent = ({ data,header }) => {
     }
   };
 
-  const getSpecialCareName = (nameList) => {
-    let specialCareName = null;
-    nameList.map((item) => {
-      specialCareName = specialCareName ? specialCareName + ", " + item : item;
-    });
-    return specialCareName;
-  };
-
-  const getPrefectureName = (id) => {
-    if (id) {
-      let p_name = prefectures.find((item) => item.value === id);
-      return p_name.name;
-    }
-    return "";
-  };
-
   const getRegisteredLanguage = (language) => {
     if (language == "en") {
       return translate(localeJson, "english");
@@ -65,7 +48,6 @@ const FamilyListComponent = ({ data,header }) => {
         <div key={index}>
           {family.person_is_owner == 0 && (
             <div>
-
               <CustomHeader
                 headerClass={"page-header1"}
                 header={translate(localeJson, "house_hold_information")}
@@ -77,7 +59,7 @@ const FamilyListComponent = ({ data,header }) => {
                   </label>
                 </div>
                 <div className=" mt-1 body_table" id="address">
-                  {family.person_name||"-"}
+                  {family.person_name || "-"}
                 </div>
               </div>
               <div className=" mb-2">
@@ -159,7 +141,7 @@ const FamilyListComponent = ({ data,header }) => {
                           {translate(localeJson, "name_kanji")}
                         </label>
                       </div>
-                      <div className="body_table">{family.person_name||"-"}</div>
+                      <div className="body_table">{family.person_name || "-"}</div>
                     </div>
                     <div className="mb-2">
                       <div className=" flex_row_space_between">
@@ -312,8 +294,8 @@ const FamilyListComponent = ({ data,header }) => {
                       >
                         <i
                           className={`pi mr-2 font-bold ${expandedFamilies.includes(family.person_id)
-                              ? "pi-chevron-up"
-                              : "pi-chevron-down"
+                            ? "pi-chevron-up"
+                            : "pi-chevron-down"
                             }`}
                         ></i>
                         {expandedFamilies.includes(family.person_id)

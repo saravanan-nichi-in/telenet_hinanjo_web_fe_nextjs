@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
@@ -11,8 +11,9 @@ import { MaterialService } from "@/services/material.service";
 import { Input } from "../input";
 
 export default function MaterialCreateEditModal(props) {
-
     const { localeJson } = useContext(LayoutContext);
+    const { open, close } = props && props;
+
     const schema = Yup.object().shape({
         name: Yup.string()
             .required(translate(localeJson, 'supplies_necessary'))
@@ -21,19 +22,6 @@ export default function MaterialCreateEditModal(props) {
             .max(100, translate(localeJson, 'material_page_create_update_unit_max'))
             .nullable()
     });
-    /**
-     * Destructing
-    */
-    const { open, close, register } = props && props;
-
-
-
-    const header = (
-        <div className="new-custom-modal">
-            {props.registerModalAction == "create" ?
-                translate(localeJson, 'material_information_registration_c') : translate(localeJson, 'edit_material_information')}
-        </div>
-    );
 
     const resetAndCloseForm = (callback) => {
         close();
@@ -73,7 +61,12 @@ export default function MaterialCreateEditModal(props) {
                     <div>
                         <Dialog
                             className="new-custom-modal"
-                            header={header}
+                            header={
+                                <div className="new-custom-modal">
+                                    {props.registerModalAction == "create" ?
+                                        translate(localeJson, 'material_information_registration_c') : translate(localeJson, 'edit_material_information')}
+                                </div>
+                            }
                             visible={open}
                             draggable={false}
                             blockScroll={true}

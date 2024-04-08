@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
@@ -11,8 +11,9 @@ import { ValidationError } from "../error";
 import { Input, TextArea } from "../input";
 
 export default function StockPileSummaryMailSettingsModal(props) {
-    const { open, close, register, emailSettingValues, showUpdate } = props && props;
     const { localeJson } = useContext(LayoutContext);
+    const { open, close, register, emailSettingValues, showUpdate } = props && props;
+
     const [initialValues, setInitialValues] = useState({
         email: emailSettingValues.email,
         place_name: emailSettingValues.place_name
@@ -26,17 +27,6 @@ export default function StockPileSummaryMailSettingsModal(props) {
                 return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-    const validateMultipleEmails = (value, localeJson) => {
-        const emails = value.split(',').map(email => email.trim());
-
-        for (const email of emails) {
-            if (!email.match(regexExp)) {
-                return false;
-            }
-        }
-
-        return true; // Return true if all emails are valid
-    };
 
     useEffect(() => {
         if (open) {
@@ -47,13 +37,23 @@ export default function StockPileSummaryMailSettingsModal(props) {
         }
     }, [open]);
 
+    const validateMultipleEmails = (value, localeJson) => {
+        const emails = value.split(',').map(email => email.trim());
+        for (const email of emails) {
+            if (!email.match(regexExp)) {
+                return false;
+            }
+        }
+        return true; // Return true if all emails are valid
+    };
+
     return (
         <>
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
                 enableReinitialize
-                onSubmit={(values, { resetForm }) => {
+                onSubmit={({ resetForm }) => {
                     close();
                     resetForm({ values: initialValues });
                 }}
@@ -156,31 +156,31 @@ export default function StockPileSummaryMailSettingsModal(props) {
                                         </div>
                                     </form>
                                     <div className="text-center">
-                                    <div className="modal-button-footer-space">
-                                        {showUpdate != false && (
-                                            <Button buttonProps={{
-                                                buttonClass: "w-full update-button",
-                                                type: "submit",
-                                                text: translate(localeJson, 'update'),
-                                                onClick: () => {
-                                                    register({
-                                                        email: values.email,
-                                                        errors: errors
-                                                    });
-                                                    handleSubmit();
-                                                },
-                                            }} parentClass={"update-button"} />
-                                        )}
+                                        <div className="modal-button-footer-space">
+                                            {showUpdate != false && (
+                                                <Button buttonProps={{
+                                                    buttonClass: "w-full update-button",
+                                                    type: "submit",
+                                                    text: translate(localeJson, 'update'),
+                                                    onClick: () => {
+                                                        register({
+                                                            email: values.email,
+                                                            errors: errors
+                                                        });
+                                                        handleSubmit();
+                                                    },
+                                                }} parentClass={"update-button"} />
+                                            )}
                                         </div>
                                         <div>
-                                         <Button buttonProps={{
-                                            buttonClass: "w-full back-button",
-                                            text: translate(localeJson, 'cancel'),
-                                            onClick: () => {
-                                                close();
-                                                resetForm({ values: initialValues });
-                                            }
-                                        }} parentClass={"back-button"} />
+                                            <Button buttonProps={{
+                                                buttonClass: "w-full back-button",
+                                                text: translate(localeJson, 'cancel'),
+                                                onClick: () => {
+                                                    close();
+                                                    resetForm({ values: initialValues });
+                                                }
+                                            }} parentClass={"back-button"} />
                                         </div>
                                     </div>
                                 </div>

@@ -34,7 +34,7 @@ function _getList(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _getActiveList(payload, callBackFun) {
-    axios.get('/user/place/detail', {params:payload})
+    axios.post('/user/place/detail', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

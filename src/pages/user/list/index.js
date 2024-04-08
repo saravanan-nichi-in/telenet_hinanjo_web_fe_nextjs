@@ -79,7 +79,7 @@ export default function PublicEvacuees() {
     filters: {
       start: 0,
       limit: 10,
-      sort_by: "",
+      sort_by: "refugee_name",
       order_by: "asc",
     },
     search: "",

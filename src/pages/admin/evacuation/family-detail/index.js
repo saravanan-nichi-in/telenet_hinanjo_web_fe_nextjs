@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 import { IoIosArrowBack } from "react-icons/io";
-import { FaArrowRightFromBracket } from 'react-icons/fa6';
 
 import {
     getValueByKeyRecursively as translate,
@@ -12,22 +11,18 @@ import {
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
     getSpecialCareName,
-    hideOverFlow,
-    showOverFlow
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, CommonDialog, CardSpinner } from '@/components';
 import CustomHeader from '@/components/customHeader';
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
 import { prefecturesCombined } from '@/utils/constant';
 
 export default function EvacueeFamilyDetail() {
-    // Global variants
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
-
-    // Local variants
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [checkoutVisible, setCheckoutVisible] = useState(false);
@@ -50,6 +45,7 @@ export default function EvacueeFamilyDetail() {
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "c_special_care", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
+        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
     const familyAdmissionColumns = [
@@ -81,99 +77,98 @@ export default function EvacueeFamilyDetail() {
         var admittedHistory = [];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
-            console.log(data, "data");
-            // const individualQuestionArray = response.data.individualQuestions;
-            // const overallQuestionArray = response.data.overallQuestions;
+            const individualQuestionArray = response.data.individualQuestions;
+            const overallQuestionArray = response.data.overallQuestions;
             const historyData = response.data.history.list;
-            // if (individualQuestionArray.length > 0) {
-            //     individualQuestionArray.map((ques) => {
-            //         let data = {
-            //             id: ques.id,
-            //             question: (locale == "ja" ? ques.title : ques.title_en),
-            //             is_required: ques.isRequired,
-            //             display_order: ques.display_order
-            //         };
-            //         listOfIndividualQuestions.push(data);
-            //     });
-            //     if (listOfIndividualQuestions.length > 1) {
-            //         listOfIndividualQuestions.sort((a, b) => {
-            //             return a.display_order - b.display_order;
-            //         });
-            //     }
-            // }
-            if (data?.person.length > 0) {
-                data?.person.map((person, index) => {
+            if (individualQuestionArray.length > 0) {
+                individualQuestionArray.map((ques) => {
+                    let data = {
+                        id: ques.id,
+                        question: (locale == "ja" ? ques.title : ques.title_en),
+                        is_required: ques.isRequired,
+                        display_order: ques.display_order
+                    };
+                    listOfIndividualQuestions.push(data);
+                });
+                if (listOfIndividualQuestions.length > 1) {
+                    listOfIndividualQuestions.sort((a, b) => {
+                        return a.display_order - b.display_order;
+                    });
+                }
+            }
+            if (data.length > 0) {
+                data.map((person, index) => {
                     let familyData = {
-                        ...person,
                         id: index + 1,
-                        is_owner: person.is_owner == 0 ? translate(localeJson, 'representative') : "",
                         name: <div className={"text-highlighter-user-list clickable-row"} onClick={() => {
                             displayIndividualQuestionnaires(index);
                             hideOverFlow();
-                        }}>{person.name}</div>,
-                        name_kanji: person.name,
+                        }}>{person.person_name}</div>,
                         refugee_name: <div className={"clickable-row"} onClick={() => {
                             displayIndividualQuestionnaires(index);
                             hideOverFlow();
-                        }}>{person.refugee_name}</div>,
-                        name_phonetic: person.refugee_name,
-                        dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob) : getEnglishDateDisplayFormat(person.dob),
-                        age_month: person.month,
-                        tel: person.tel,
-                        address: translate(localeJson, 'post_letter') + person.postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.prefecture_id].ja : prefecturesCombined[person.prefecture_id].en) + " " + person.address,
-                        family_code: person.family_code,
-                        connecting_code: person.connecting_code,
+                        }}>{person.person_refugee_name}</div>,
                         gender: getGenderValue(person.person_gender),
-                        // c_special_care: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
-                        // remarks: person.person_note,
-                        // family_count: 0,
-                        // evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
-                        // place_id: person.place_id,
-                        // family_is_registered: person.family_is_registered,
+                        dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
+                        age: person.person_age,
+                        age_month: person.person_month,
+                        c_special_care: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
+                        connecting_code: person.person_connecting_code,
+                        remarks: person.person_note,
+                        family_count: 0,
+                        is_owner: person.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
+                        family_code: person.family_code,
+                        name_phonetic: person.person_refugee_name,
+                        name_kanji: person.person_name,
+                        address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.person_prefecture_id].ja : prefecturesCombined[person.person_prefecture_id].en) + " " + person.person_address,
+                        tel: person.person_tel,
+                        evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
+                        place_id: person.place_id,
+                        family_is_registered: person.family_is_registered,
+                        yapple_id: person.yapple_id,
                     };
-                    // let personAnswers = person.person_answers;
-                    // if (listOfIndividualQuestions.length > 0) {
-                    //     let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
-                    //     preparedListOfIndividualQuestions.map((question) => {
-                    //         let indexOfMatchingAnswer = personAnswers.length > 0 && personAnswers.find(answer => answer.question_id == question.id);
-                    //         question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
-                    //     })
-                    //     familyData['individualQuestionnaires'] = preparedListOfIndividualQuestions;
-                    // }
+                    let personAnswers = person.person_answers;
+                    if (listOfIndividualQuestions.length > 0) {
+                        let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
+                        preparedListOfIndividualQuestions.map((question) => {
+                            let indexOfMatchingAnswer = personAnswers.length > 0 && personAnswers.find(answer => answer.question_id == question.id);
+                            question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
+                        })
+                        familyData['individualQuestionnaires'] = preparedListOfIndividualQuestions;
+                    }
                     familyDataList.push(familyData);
                 })
             }
-            // if (overallQuestionArray.length > 0) {
-            //     overallQuestionArray.map((ques) => {
-            //         let data = {
-            //             id: ques.id,
-            //             question: (locale == "ja" ? ques.title : ques.title_en),
-            //             is_required: ques.isRequired,
-            //             display_order: ques.display_order
-            //         };
-            //         listOfOverallQuestions.push(data);
-            //     });
-            //     if (listOfOverallQuestions.length > 1) {
-            //         listOfOverallQuestions.sort((a, b) => {
-            //             return a.display_order - b.display_order;
-            //         });
-            //     }
-            //     if (data.length > 0 && data[0].family_answers.length > 0) {
-            //         let familyAnswers = data[0].family_answers;
-            //         listOfOverallQuestions.map((question, i) => {
-            //             let indexOfMatchingAnswer = familyAnswers.find(answer => answer.question_id == question.id);
-            //             question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
-            //         })
-            //     }
-            // }
+            if (overallQuestionArray.length > 0) {
+                overallQuestionArray.map((ques) => {
+                    let data = {
+                        id: ques.id,
+                        question: (locale == "ja" ? ques.title : ques.title_en),
+                        is_required: ques.isRequired,
+                        display_order: ques.display_order
+                    };
+                    listOfOverallQuestions.push(data);
+                });
+                if (listOfOverallQuestions.length > 1) {
+                    listOfOverallQuestions.sort((a, b) => {
+                        return a.display_order - b.display_order;
+                    });
+                }
+                if (data.length > 0 && data[0].family_answers.length > 0) {
+                    let familyAnswers = data[0].family_answers;
+                    listOfOverallQuestions.map((question, i) => {
+                        let indexOfMatchingAnswer = familyAnswers.find(answer => answer.question_id == question.id);
+                        question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
+                    })
+                }
+            }
             if (historyData.length > 0) {
                 historyData.map((item) => {
-                    console.log(item);
                     let historyItem = {
                         place_id: item.place_id,
-                        shelter_place: locale === "en" && !_.isNull(item.placeNameEn) ? item.placeNameEn : item.placeName,
-                        // admission_date_time: item.checkin && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkin) : getEnglishDateTimeDisplayActualFormat(item.checkin)),
-                        // discharge_date_time: item.checkout && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkout) : getEnglishDateTimeDisplayActualFormat(item.checkout)),
+                        shelter_place: item.place_name,
+                        admission_date_time: item.checkin && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkin) : getEnglishDateTimeDisplayActualFormat(item.checkin)),
+                        discharge_date_time: item.checkout && (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkout) : getEnglishDateTimeDisplayActualFormat(item.checkout)),
                     };
                     admittedHistory.push(historyItem);
                 });
@@ -181,7 +176,7 @@ export default function EvacueeFamilyDetail() {
         }
         setTableLoading(false);
         setFamilyDetailData(familyDataList);
-        // setOverallQuestionnaires(listOfOverallQuestions);
+        setOverallQuestionnaires(listOfOverallQuestions);
         setFamilyAdmittedData(admittedHistory);
     }
 
@@ -212,6 +207,14 @@ export default function EvacueeFamilyDetail() {
         setIndividualQuestionnairesVisible(true);
     }
 
+    const hideOverFlow = () => {
+        document.body.style.overflow = 'hidden';
+    }
+
+    const showOverFlow = () => {
+        document.body.style.overflow = 'auto';
+    }
+
     const translationAndObjectKeys = [
         "name_kanji",
         "name_phonetic",
@@ -224,6 +227,7 @@ export default function EvacueeFamilyDetail() {
         "connecting_code",
         "remarks",
         "c_special_care",
+        "yapple_id",
     ];
 
     return (
@@ -243,7 +247,7 @@ export default function EvacueeFamilyDetail() {
                     {
                         buttonProps: {
                             buttonClass: "w-full del_ok-button",
-                            text: translate(localeJson, 'submit'),
+                            text: translate(localeJson, 'de_register'),
                             onClick: () => {
                                 let preparedParam = { ...param, place_id: familyDetailData.length > 0 && familyDetailData[0].place_id };
                                 EvacuationServices.evacuationCheckout(preparedParam, (response) => {
@@ -268,7 +272,6 @@ export default function EvacueeFamilyDetail() {
                         },
                         parentClass: "back-button",
                     },
-
                 ]}
                 close={() => {
                     setCheckoutVisible(false);

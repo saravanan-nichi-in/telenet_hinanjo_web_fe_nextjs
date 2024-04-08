@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button, ToggleSwitch } from "@/components";
-import PersonCountButton from "@/components/personCountButtons";
+import { Button, ToggleSwitch,PersonCountButton } from "@/components";
 import CustomHeader from "@/components/customHeader";
 import { useRouter } from "next/router";
 import { usePathname } from 'next/navigation'
@@ -34,9 +33,9 @@ const PersonCountScreen = () => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(reset());
-    },[])
+    }, [])
 
     return (
         <div className='grid flex-1'>

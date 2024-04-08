@@ -10,7 +10,7 @@ export const StaffRegisterServices = {
 
 function _getRegisterCheckInList(payload, callBackFun) {
   axios
-    .get(`/staff/register/checkin`,{params:payload})
+    .post(`/staff/register/checkin/list`,payload)
     .then((response) => {
       if (response) {
         callBackFun(response.data);

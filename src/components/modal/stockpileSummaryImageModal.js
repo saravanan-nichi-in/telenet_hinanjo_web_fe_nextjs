@@ -1,13 +1,11 @@
 import React from "react"
 import { Dialog } from 'primereact/dialog';
 
-import { ImageComponent } from "../image";
+import { ImageComponent } from "@/components";
 
 export default function StockpileSummaryImageModal(props) {
-    /**
-     * Destructing
-    */
     const { open, close } = props;
+
     return (
         <div>
             <Dialog

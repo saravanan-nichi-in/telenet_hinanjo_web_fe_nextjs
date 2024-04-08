@@ -1,18 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
+
 import ButtonGroup from "./multiSelect.js";
 import SingleSelectButtonGroup from "./singleSelect.js";
 import { CommonServices } from "@/services";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Input, InputDropdown } from "../input/index.js";
-
-const questionTypeMap = {
-  1: "multiple-selection",
-  2: "single-selection",
-  3: "free-text",
-  4: "number",
-  5: "dropdown",
-};
 
 const QuestionList = ({
   questions,
@@ -25,10 +18,29 @@ const QuestionList = ({
   setHasErrors = false,
   count = 0,
 }) => {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson } = useContext(LayoutContext);
   const { getText } = CommonServices;
   const [isFormSubmit, setIsFormSubmit] = useState(false);
-  const [isMRecording, setMIsRecording] = useState(false);
+  const [isQRecording, setQIsRecording] = useState(isRecording);
+
+  useEffect(() => {
+    setQIsRecording(isRecording);
+  }, [isRecording]);
+
+  const handleRecordingStateChange = (isRecord) => {
+    setIsRecording(isRecord);
+    setQIsRecording(isRecord);
+  };
+
+  useEffect(() => {
+    const hasError = questions.some(
+      (question) => question.isRequired === 1 && (question?.answer ? question.answer.length == 0 : true)
+    );
+    let val = hasError;
+    // Set hasErrors based on the result
+    setHasErrors(val);
+    setIsFormSubmit(isFormSubmitted);
+  }, [locale, count, questions]);
 
   const handleSelectionChange = (selectedNames, id) => {
     // Assuming you want to update both question.answer and question.answer_en for multiple-selection (type 1)
@@ -101,8 +113,6 @@ const QuestionList = ({
     });
   };
 
-
-
   const handleNumberTypeQuestion = (value, id) => {
     // Assuming you want to update question.answer for number type (type 3 and type 4)
     setQuestions((prevQuestions) => {
@@ -110,13 +120,12 @@ const QuestionList = ({
         if (question.id === id) {
           // Update question.answer with the number value
           const re = /^[0-9-]+$/;
-          if((re.test(convertToSingleByte(value)))|| value=="")
-          {
-          let ogValue = value;
-          let newValue = convertToSingleByte(value);
-          const updatedAnswer = newValue !== "" ? [newValue] : []; // Handle empty value
-          const updatedOgAnswer = ogValue !== "" ? [ogValue] : []; 
-          return { ...question, answer: updatedAnswer, answer_en: updatedAnswer,ogAnswer:updatedOgAnswer };
+          if ((re.test(convertToSingleByte(value))) || value == "") {
+            let ogValue = value;
+            let newValue = convertToSingleByte(value);
+            const updatedAnswer = newValue !== "" ? [newValue] : []; // Handle empty value
+            const updatedOgAnswer = ogValue !== "" ? [ogValue] : [];
+            return { ...question, answer: updatedAnswer, answer_en: updatedAnswer, ogAnswer: updatedOgAnswer };
           }
         }
         return question;
@@ -139,7 +148,6 @@ const QuestionList = ({
       return updatedQuestions;
     });
   };
-
 
   const handleSelectTypeQuestion = (value, id) => {
     // Assuming you want to update question.answer for dropdown type (type 5)
@@ -164,28 +172,6 @@ const QuestionList = ({
       return updatedQuestions;
     });
   };
-
-  const [isQRecording, setQIsRecording] = useState(isRecording);
-
-  useEffect(() => {
-    setQIsRecording(isRecording);
-  }, [isRecording]);
-
-  const handleRecordingStateChange = (isRecord) => {
-    setIsRecording(isRecord);
-    setQIsRecording(isRecord);
-  };
-
-  useEffect(() => {
-    const hasError = questions.some(
-      (question) => question.isRequired === 1 && (question?.answer ? question.answer.length == 0 : true)
-    );
-    let val = hasError;
-    // Set hasErrors based on the result
-    setHasErrors(val);
-    setIsFormSubmit(isFormSubmitted);
-  }, [locale, count, questions]);
-
 
   function convertOptions(options) {
     return options.map((option) => {
@@ -222,19 +208,10 @@ const QuestionList = ({
                   onSelectionChange={handleSelectionChange}
                   isModal={isModal}
                 />}
-                {/* <ButtonGroup
-                  id={question.id}
-                  names={locale == 'ja' ? question.options : question.options_en}
-                  SNames={
-                    isEdit ? (locale == "ja" ? (question.answer ? question.answer : []) : (question.answer_en ? question.answer_en : [])) : []
-                  }
-                  onSelectionChange={handleSelectionChange}
-                  isModal={isModal}
-                /> */}
                 {question.isRequired === 1 &&
-                  (!question?.answer || question?.answer.length <= 0) &&
+                  (!question.answer || question.answer?.length == 0 || question.answer[0] == "") &&
                   isFormSubmit && (
-                    <div style={{fontSize:'13px'}} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
+                    <div style={{ fontSize: '13px' }} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
                   )}
               </div>
             </div>
@@ -259,19 +236,12 @@ const QuestionList = ({
                 onSelectionChange={handleSingleSelectionChange}
                 isModal={isModal}
               />}
-              {/* <SingleSelectButtonGroup
-                id={question.id}
-                names={locale == 'ja' ? question.options : question.options_en}
-                SNames={
-                  isEdit ? locale == "ja" ? (question.answer ? question.answer[0] : "") : (question.answer_en ? question.answer_en[0] : "") : ""
-                }
-                onSelectionChange={handleSingleSelectionChange}
-                isModal={isModal}
-              /> */}
               {question.isRequired === 1 &&
-                (!question.answer && !question.answer_en) &&
+                (!question.answer || question.answer?.length == 0 || question.answer[0] == "") &&
                 isFormSubmit && (
-                  <div style={{fontSize:'13px'}} className="p-error scroll-check">{translate(localeJson, "c_required")} </div>
+                  <>
+                    <div style={{ fontSize: '13px' }} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
+                  </>
                 )}
             </div>
           )}
@@ -318,7 +288,7 @@ const QuestionList = ({
               {question.isRequired === 1 &&
                 (!question.answer || question.answer?.length == 0 || question.answer[0] == "") &&
                 isFormSubmit && (
-                  <div style={{fontSize:'13px'}} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
+                  <div style={{ fontSize: '13px' }} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
                 )}
             </div>
           )}
@@ -335,7 +305,7 @@ const QuestionList = ({
                   inputClassName: "w-full",
                   id: "text",
                   name: "text",
-                  value: question?.answer && question.answer[0] !== "" ? question?.ogAnswer?question?.ogAnswer[0]:question?.answer[0] : "",
+                  value: question?.answer && question.answer[0] !== "" ? question?.ogAnswer ? question?.ogAnswer[0] : question?.answer[0] : "",
                   disabled: isQRecording ? true : false,
                   keyfilter: "int",
                   inputMode: "numeric",
@@ -368,7 +338,7 @@ const QuestionList = ({
               {question.isRequired === 1 &&
                 (!question.answer || question.answer?.length == 0 || question.answer[0] == "") &&
                 isFormSubmit && (
-                  <div style={{fontSize:'13px'}} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
+                  <div style={{ fontSize: '13px' }} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
                 )}
             </div>
           )}
@@ -389,9 +359,9 @@ const QuestionList = ({
               }}
               />
               {question.isRequired === 1 &&
-                !question.answer &&
+                (!question.answer || question.answer?.length == 0 || question.answer[0] == "") &&
                 isFormSubmit && (
-                  <div style={{fontSize:'13px'}} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
+                  <div style={{ fontSize: '13px' }} className="p-error scroll-check">{translate(localeJson, "c_required")}</div>
                 )}
             </div>
           )}

@@ -6,16 +6,10 @@ import { Dropdown } from "primereact/dropdown";
 import { Dropdown as Drp } from "antd";
 import { MultiSelect as MulSel } from "primereact/multiselect";
 import { Button } from "primereact/button";
-
 import { NormalLabel } from "../label";
-import AudioRecorder from "../inputAudio";
+import {AudioRecorder} from "@/components";
 import { InputTextarea } from "primereact/inputtextarea";
 
-/**
- *
- * @param {*}  props
- * @returns Input component
- */
 export const Input = (props) => {
   const {
     inputParentClassName,
@@ -92,7 +86,6 @@ export const Input = (props) => {
             <i className="flex justify-content center align-items-end pt-2 pb-2 pi pi-spin pi-spinner" />
           </i>
         )}
-        {/* Development */}
         {inputLeftIconProps?.display && (
           <>
             {inputLeftIconProps?.audio?.display ? (
@@ -167,11 +160,6 @@ export const Input = (props) => {
   );
 };
 
-/**
- *
- * @param {*} props
- * @returns TextArea component
- */
 export const TextArea = (props) => {
   const {
     textAreaParentClassName,
@@ -219,11 +207,6 @@ export const TextArea = (props) => {
   );
 };
 
-/**
- *
- * @param {*} props
- * @returns InputNumber component
- */
 export const InputNumber = (props) => {
   const {
     inputNumberParentClassName,
@@ -369,11 +352,6 @@ export const InputNumber = (props) => {
   );
 };
 
-/**
- *
- * @param {*} props
- * @returns Password component
- */
 export default function Password(props) {
   const {
     passwordParentClassName,
@@ -422,11 +400,6 @@ export default function Password(props) {
   );
 }
 
-/**
- *
- * @param {*} props
- * @returns Input Group component
- */
 export const InputGroup = (props) => {
   const {
     inputGroupParentClassName,
@@ -494,11 +467,6 @@ export const InputGroup = (props) => {
   );
 };
 
-/**
- *
- * @param {*} props
- * @returns Input Dropdown component
- */
 export const InputDropdown = (props) => {
   const {
     inputDropdownParentClassName,
@@ -549,11 +517,6 @@ export const InputDropdown = (props) => {
   );
 };
 
-/**
- *
- * @param {*} props
- * @returns Multi select dropdown component
- */
 export const MultiSelect = (props) => {
   const {
     multiSelectParentClassName,

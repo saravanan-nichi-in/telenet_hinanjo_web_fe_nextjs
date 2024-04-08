@@ -9,7 +9,7 @@ import { getValueByKeyRecursively as translate } from '@/helper'
 import { ValidationError, Button } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
 import { useAppSelector } from "@/redux/hooks";
-import { InputGroup } from '@/components/input';
+import Password from '@/components/input';
 import CustomHeader from '@/components/customHeader';
 
 const ResetPasswordPage = () => {
@@ -69,37 +69,41 @@ const ResetPasswordPage = () => {
                                         </div>
                                         <div>
                                             <div className="field custom_inputText">
-                                                <InputGroup inpuGroupProps={{
-                                                    inputGroupParentClassName: `w-full ${errors.password && touched.password && 'p-invalid'}`,
-                                                    name: 'password',
-                                                    type: "password",
-                                                    value: values.password,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'new_password'),
-                                                        spanText: "*",
-                                                        inputGroupLabelClassName: "mb-2",
-                                                        inputGroupLabelSpanClassName: "p-error"
-                                                    },
-                                                }} />
+                                                <Password
+                                                    passwordProps={{
+                                                        passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
+                                                        labelProps: {
+                                                            text: translate(localeJson, 'new_password'),
+                                                            spanText: "*",
+                                                            passwordLabelSpanClassName: "p-error",
+                                                            passwordLabelClassName: "block",
+                                                        },
+                                                        name: 'password',
+                                                        value: values.password,
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        passwordClass: "w-full"
+                                                    }}
+                                                />
                                                 <ValidationError errorBlock={errors.password && touched.password && errors.password} />
                                             </div>
                                             <div className="field custom_inputText">
-                                                <InputGroup inpuGroupProps={{
-                                                    inputGroupParentClassName: `w-full ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`,
-                                                    name: 'confirmPassword',
-                                                    type: "password",
-                                                    value: values.confirmPassword,
-                                                    onChange: handleChange,
-                                                    onBlur: handleBlur,
-                                                    labelProps: {
-                                                        text: translate(localeJson, 'new_password_confirm'),
-                                                        spanText: "*",
-                                                        inputGroupLabelClassName: "mb-2",
-                                                        inputGroupLabelSpanClassName: "p-error"
-                                                    },
-                                                }} />
+                                                <Password
+                                                    passwordProps={{
+                                                        passwordParentClassName: `w-full password-form-field ${errors.confirmPassword && touched.confirmPassword && 'p-invalid'}`,
+                                                        labelProps: {
+                                                            text: translate(localeJson, 'new_password_confirm'),
+                                                            spanText: "*",
+                                                            passwordLabelSpanClassName: "p-error",
+                                                            passwordLabelClassName: "block",
+                                                        },
+                                                        name: 'confirmPassword',
+                                                        value: values.confirmPassword,
+                                                        onChange: handleChange,
+                                                        onBlur: handleBlur,
+                                                        passwordClass: "w-full"
+                                                    }}
+                                                />
                                                 <ValidationError errorBlock={errors.confirmPassword && touched.confirmPassword && errors.confirmPassword} />
                                             </div>
                                             <div className='flex justify-content-center mt-5'>

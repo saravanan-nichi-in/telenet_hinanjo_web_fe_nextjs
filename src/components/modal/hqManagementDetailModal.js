@@ -2,13 +2,16 @@ import React, { useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import {Button} from "../button";
-import { getValueByKeyRecursively as translate, getJapaneseDateDisplayYYYYMMDDFormat, getEnglishDateDisplayFormat, getJapaneseDateTimeDisplayActualFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateTimeDayDisplayActualFormat } from "@/helper";
+import { Button } from "../button";
+import {
+    getValueByKeyRecursively as translate,
+    getEnglishDateTimeDisplayActualFormat,
+    getJapaneseDateTimeDayDisplayActualFormat
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useContext, useState } from 'react';
 import { NormalTable } from "../datatable";
 import { HeadQuarterManagement } from "@/services/hqManagement.service";
-
 
 export default function HqManagementDetailModal(props) {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -16,7 +19,6 @@ export default function HqManagementDetailModal(props) {
         { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
         { field: 'f_login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" },
         { field: 'f_logout_datetime', header: translate(localeJson, 'logout_dateTime'), maxWidth: "2rem" },
-
     ];
     const [columnValues, setColumnValues] = useState([]);
     const columns = [
@@ -28,7 +30,6 @@ export default function HqManagementDetailModal(props) {
     const [listPayload, setListPayload] = useState({
         "filters": {
             "start": 0,
-            // "limit": 10
         },
         "id": props.detailId
     });
@@ -71,12 +72,6 @@ export default function HqManagementDetailModal(props) {
         });
     }
 
-    const header = (
-        <>
-            {translate(localeJson, 'history_login_staff_management')}
-        </>
-    );
-
     /**
      * Pagination handler
      * @param {*} e 
@@ -102,7 +97,7 @@ export default function HqManagementDetailModal(props) {
             <div>
                 <Dialog
                     className="new-custom-modal lg:w-6 md:w-9 sm:w-10"
-                    header={header}
+                    header={translate(localeJson, 'history_login_staff_management')}
                     visible={open}
                     draggable={false}
                     blockScroll={true}
@@ -145,8 +140,6 @@ export default function HqManagementDetailModal(props) {
                                         value={columnValues}
                                         filterDisplay="menu"
                                         emptyMessage={translate(localeJson, "data_not_found")}
-                                        // paginator={true}
-                                        // paginatorLeft={true}
                                         scrollable
                                         scrollHeight="400px"
                                         lazy

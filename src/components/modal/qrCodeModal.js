@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { BarcodeScanner } from "../qr";
 
 const QrCodeModal = (props) => {
-    // Destructuring
     const {
         open,
         close,
@@ -24,6 +23,7 @@ const QrCodeModal = (props) => {
     const toggleCameraMode = () => {
         setCameraMode(cameraMode === "front" ? "back" : "front");
     };
+
     const footer = () => {
         if (footerButtonsArray.length > 0) {
             return (

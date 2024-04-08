@@ -5,7 +5,7 @@ export default function Admin() {
     const router = useRouter();
 
     useEffect(() => {
-        router.push('/admin/dashboard');
+        router.push('/admin/event-status-list');
     }, []);
 
     return (

@@ -1,10 +1,9 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 
-import {Button} from "../button";
+import { Button } from "../button";
 
 const CommonDialog = (props) => {
-  // Destructuring
   const {
     open,
     close,
@@ -20,6 +19,7 @@ const CommonDialog = (props) => {
     dialogClassName,
     ...restProps
   } = props;
+
   // Footer buttons
   const footer = () => {
     if (footerButtonsArray.length > 0) {

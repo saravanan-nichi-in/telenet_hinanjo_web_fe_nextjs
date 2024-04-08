@@ -434,7 +434,8 @@ export {
 
 export const urlRegister = [
     'pre-register',
-    'pre-register-list'
+    'pre-register-list',
+    'privacy'
 ]
 
 export const prefectures = [
@@ -571,6 +572,7 @@ export const gender_en = [
 ];
 
 export const prefecturesCombined = {
+    0: { en: '', ja: '' }, 
     1: { en: 'Hokkaido', ja: '北海道' },
     2: { en: 'Aomori', ja: '青森県' },
     3: { en: 'Iwate', ja: '岩手県' },
@@ -620,3 +622,336 @@ export const prefecturesCombined = {
     47: { en: 'Okinawa', ja: '沖縄県' },
 };
 
+export const default_place_id = [1,2,3,4];
+
+export const family_dummy_data = [
+    {
+        "f_id": 331,
+        "family_code": "042331",
+        "place_id": 42,
+        "yapple_id": null,
+        "ppid": null,
+        "event_id": 1,
+        "family_address": "千代田区皇居外苑",
+        "family_address_default": "",
+        "family_zip_code": "100-0002",
+        "family_prefecture_id": 13,
+        "family_language_register": "ja",
+        "family_tel": "03883838333",
+        "family_password": "$2y$10$H.Ng6KoDqF2rwSG5HZTb1.U7LpplT6W9Wyzov7Ag1Z1hwqIv6NFfa",
+        "family_join_date": "2024-04-01T17:50:38",
+        "family_out_date": null,
+        "family_is_public": 0,
+        "family_is_registered": 1,
+        "family_public_info": 0,
+        "family_answers": [
+            {
+                "id": 9,
+                "event_id": 1,
+                "type": 2,
+                "title": "応急仮設住宅",
+                "title_en": "Emergency temporary housing",
+                "options": [
+                    "入居を希望する",
+                    "入居を希望しない"
+                ],
+                "options_en": [
+                    "I would like to move in",
+                    "I dont want to move in"
+                ],
+                "display_order": 7,
+                "isRequired": 1,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:03:23.000000Z",
+                "updated_at": "2024-04-01T12:20:39.000000Z",
+                "deleted_at": null,
+                "question_id": 9,
+                "answer": [
+                    "入居を希望する"
+                ],
+                "answer_en": [
+                    "I would like to move in"
+                ]
+            },
+            {
+                "id": 10,
+                "event_id": 1,
+                "type": 2,
+                "title": "家屋の状況",
+                "title_en": "House situation",
+                "options": [
+                    "被害なし",
+                    "全壊",
+                    "半壊",
+                    "一部損壊",
+                    "床上浸水",
+                    "床下浸水",
+                    "断水",
+                    "停電",
+                    "ガス停止"
+                ],
+                "options_en": [
+                    "No damage",
+                    "Completely destroyed",
+                    "Half destroyed",
+                    "Partially damaged",
+                    "Flooding above the floor",
+                    "Underfloor flooding",
+                    "water outage",
+                    "power outage",
+                    "gas outage"
+                ],
+                "display_order": 1,
+                "isRequired": 1,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:06:35.000000Z",
+                "updated_at": "2024-04-01T12:20:39.000000Z",
+                "deleted_at": null,
+                "question_id": 10,
+                "answer": [
+                    "被害なし"
+                ],
+                "answer_en": [
+                    "No damage"
+                ]
+            },
+            {
+                "id": 11,
+                "event_id": 1,
+                "type": 2,
+                "title": "自宅の種類",
+                "title_en": "type of home",
+                "options": [
+                    "持ち家",
+                    "集合住宅",
+                    "賃貸アパート",
+                    "その他"
+                ],
+                "options_en": [
+                    "owning a house",
+                    "housing complex",
+                    "rental apartment",
+                    "others"
+                ],
+                "display_order": 2,
+                "isRequired": 1,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:09:10.000000Z",
+                "updated_at": "2024-04-01T12:27:32.000000Z",
+                "deleted_at": null,
+                "question_id": 11,
+                "answer": [
+                    "持ち家"
+                ],
+                "answer_en": [
+                    "owning a house"
+                ]
+            },
+            {
+                "id": 12,
+                "event_id": 1,
+                "type": 3,
+                "title": "自宅の種類でその他を選択された場合は、その他の情報をご記入ください。",
+                "title_en": "If you selected Other for home type, please fill in the other information.",
+                "options": [],
+                "options_en": [],
+                "display_order": 3,
+                "isRequired": 0,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:10:25.000000Z",
+                "updated_at": "2024-03-17T09:10:43.000000Z",
+                "deleted_at": null,
+                "question_id": 12,
+                "answer": [],
+                "answer_en": []
+            },
+            {
+                "id": 13,
+                "event_id": 1,
+                "type": 2,
+                "title": "車で避難されますか",
+                "title_en": "Will you be evacuating by car?",
+                "options": [
+                    "車で避難をする",
+                    "車で避難をしない",
+                    "入居を希望しない"
+                ],
+                "options_en": [
+                    "evacuate by car",
+                    "Do not evacuate by car",
+                    "I dont want to move in"
+                ],
+                "display_order": 4,
+                "isRequired": 0,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:11:30.000000Z",
+                "updated_at": "2024-04-01T09:55:34.000000Z",
+                "deleted_at": null,
+                "question_id": 13,
+                "answer": [],
+                "answer_en": []
+            },
+            {
+                "id": 14,
+                "event_id": 1,
+                "type": 3,
+                "title": "車で避難される場合は、車種・ナンバーを記入してください。",
+                "title_en": "If you are evacuating by car, please write the model and number of your car.",
+                "options": [],
+                "options_en": [],
+                "display_order": 5,
+                "isRequired": 0,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:12:34.000000Z",
+                "updated_at": "2024-03-17T09:13:01.000000Z",
+                "deleted_at": null,
+                "question_id": 14,
+                "answer": [],
+                "answer_en": []
+            }
+        ],
+        "family_register_from": 1,
+        "person_id": 290,
+        "family_id": 331,
+        "person_refugee_name": "バンゴウ ハナコ",
+        "person_name": "test_time",
+        "person_postal_code": "100-0002",
+        "person_prefecture_id": 13,
+        "person_address": "千代田区皇居外苑",
+        "person_tel": "03883838333",
+        "person_dob": "1998-01-08T00:00:00",
+        "person_address_default": null,
+        "person_age": 26,
+        "person_month": 2,
+        "person_gender": 1,
+        "person_special_cares": [
+            {
+                "name": "ペット",
+                "name_en": "pet"
+            }
+        ],
+        "person_note": null,
+        "person_is_owner": 0,
+        "person_connecting_code": null,
+        "person_answers": [
+            {
+                "id": 3,
+                "event_id": 1,
+                "type": 2,
+                "title": "食事",
+                "title_en": "meal",
+                "options": [
+                    "普通食",
+                    "お粥",
+                    "離乳食",
+                    "ミルク",
+                    "その他"
+                ],
+                "options_en": [
+                    "normal food",
+                    "Porridge",
+                    "Baby Food",
+                    "milk",
+                    "others"
+                ],
+                "display_order": 1,
+                "isRequired": 1,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:15:12.000000Z",
+                "updated_at": "2024-03-17T09:15:12.000000Z",
+                "deleted_at": null,
+                "question_id": 3,
+                "answer": [
+                    "普通食"
+                ],
+                "answer_en": [
+                    "normal food"
+                ]
+            },
+            {
+                "id": 4,
+                "event_id": 1,
+                "type": 3,
+                "title": "食事でその他を選択した場合、詳細を記入してください",
+                "title_en": "If you selected other for your meal, please fill in the details.",
+                "options": [],
+                "options_en": [],
+                "display_order": 2,
+                "isRequired": 0,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:16:37.000000Z",
+                "updated_at": "2024-03-17T09:16:47.000000Z",
+                "deleted_at": null,
+                "question_id": 4,
+                "answer": [],
+                "answer_en": []
+            },
+            {
+                "id": 5,
+                "event_id": 1,
+                "type": 2,
+                "title": "発熱や具合が悪いなどはありますか？",
+                "title_en": "Do you have a fever or feel unwell?",
+                "options": [
+                    "ない",
+                    "発熱がある",
+                    "具合が悪い"
+                ],
+                "options_en": [
+                    "no problem",
+                    "I have a fever",
+                    "Bad condition"
+                ],
+                "display_order": 3,
+                "isRequired": 1,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:17:50.000000Z",
+                "updated_at": "2024-03-17T09:18:12.000000Z",
+                "deleted_at": null,
+                "question_id": 5,
+                "answer": [
+                    "ない"
+                ],
+                "answer_en": [
+                    "no problem"
+                ]
+            },
+            {
+                "id": 6,
+                "event_id": 1,
+                "type": 3,
+                "title": "上記で発熱・具合が悪いと回答した場合、詳細を記入してください。",
+                "title_en": "If you answered above that you have a fever or feel unwell, please fill in the details.",
+                "options": [],
+                "options_en": [],
+                "display_order": 4,
+                "isRequired": 0,
+                "isVoiceRequired": 0,
+                "isVisible": 1,
+                "created_at": "2024-03-17T09:18:34.000000Z",
+                "updated_at": "2024-03-17T09:18:34.000000Z",
+                "deleted_at": null,
+                "question_id": 6,
+                "answer": [],
+                "answer_en": []
+            }
+        ],
+        "person_created_at": "2024-04-01T21:20:42",
+        "person_updated_at": "2024-04-01T22:20:19",
+        "person_deleted_at": null,
+        "family_created_at": "2024-04-01T21:20:41",
+        "family_updated_at": "2024-04-01T22:20:18",
+        "family_deleted_at": null,
+        "createdDate": "2024-04-01 (Mon) 21:20",
+        "prefecture_name": "東京都"
+    }
+]
