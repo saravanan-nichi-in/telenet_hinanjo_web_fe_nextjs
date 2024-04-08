@@ -1,22 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { Accordion, AccordionTab } from 'primereact/accordion';
 
 import { Button } from '@/components/button';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { NormalCheckBox } from '@/components/checkbox';
-import { InputSwitch } from '@/components/switch';
+import { InputSwitch } from '@/components';
 import { Input } from '@/components/input-backup';
-import { RadioBtn } from '@/components/radioButton';
 import { SelectButton } from 'primereact/selectbutton';
 
 const BaseTemplate = React.forwardRef((props, ref) => {
-    const [item, setItem] = useState(props.item);
-    const { removeQuestion, handleItemChange, triggerFinalSubmit, itemIndex } = props;
     const { localeJson, locale } = useContext(LayoutContext);
+    const { removeQuestion, handleItemChange, itemIndex } = props;
+
+    const [item, setItem] = useState(props.item);
     const [jpTitleError, setJpTitleError] = useState('');
     const [choiceError, setChoiceError] = useState('');
-
     const selectionMode = [
         {
             "key": 1,
@@ -31,7 +29,6 @@ const BaseTemplate = React.forwardRef((props, ref) => {
             "name": translate(localeJson, 'numeric')
         }
     ];
-
     const innerSelectionMode = [
         {
             "key": 1,
@@ -322,5 +319,6 @@ const BaseTemplate = React.forwardRef((props, ref) => {
         </>
     )
 });
+
 BaseTemplate.displayName = 'BaseTemplate';
 export default BaseTemplate;

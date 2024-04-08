@@ -73,9 +73,8 @@ function AdminStockpileSummary() {
         { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
         { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
-        { field: "stock_pile_image", header: translate(localeJson, 'header_stockpile_image'), textAlign: "center", alignHeader: "center", minWidth: "5rem" },
-        //hitachi improvement
-        // { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },  
+        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" },
+        { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },
     ];
     const bindImageModalData = (image) => {
         setImageUrl(image);
@@ -100,7 +99,7 @@ function AdminStockpileSummary() {
      * Get Place Dropdown list on mounting
      */
     const onGetPlaceDropdownListOnMounting = () => {
-        getPlaceDropdownList(onGetPlaceDropdownList);
+        getPlaceList(onGetPlaceDropdownList);
     }
 
     const onGetPlaceDropdownList = (response) => {
@@ -108,9 +107,8 @@ function AdminStockpileSummary() {
             name: "--",
             id: 0
         }];
-        if (response.success && !_.isEmpty(response)) {
-            const data = response.data.model;
-
+        if (response.success && !_.isEmpty(response.data)) {
+            const data = response.data.model.list;
             data.map((obj, i) => {
                 let placeDropdownList = {
                     name: response.locale == 'ja' ? obj.name : obj.name,
@@ -236,8 +234,9 @@ function AdminStockpileSummary() {
                         type: item.category,
                         stock_pile_name: item.product_name,
                         quantity: item.after_count,
-                        expiry_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateTimeDisplayActualFormat(item.expiry_date) : "",
+                        expiry_date: item.expiry_date,
                         expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                        shelf_life_date:item.shelf_life_date,
                         stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                     }],
                 }
@@ -257,6 +256,7 @@ function AdminStockpileSummary() {
                             quantity: item.after_count,
                             expiry_date: item.expiry_date,
                             expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
+                            shelf_life_date:item.shelf_life_date,
                             stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                         }
                         stockPileList[index].orders.push(newOrder);
@@ -287,29 +287,34 @@ function AdminStockpileSummary() {
     }
 
     const showOnlyExpiringProducts = () => {
-        setShowExpiringProducts(!showExpiringProducts);
-        if (!showExpiringProducts) {
-            let dataManipulate = stockpileSummaryList.map(item => ({ ...item }));
-            dataManipulate.map((item, index) => {
-                let data = item.orders;
-                let filteredDates = data.filter(obj => new Date(obj.expiry_date) > new Date());
-                if (filteredDates.length > 0) {
-                    let minDateAfterToday = filteredDates.reduce((min, current) =>
-                        current.expiry_date < min.expiry_date ? current : min
-                    );
-                    let filteredProducts = data.filter(obj => obj.expiry_date == minDateAfterToday.expiry_date);
-                    dataManipulate[index].orders = filteredProducts;
-                }
-                else {
-                    dataManipulate[index].orders = [];
-                }
+      setShowExpiringProducts(!showExpiringProducts);
+      if (!showExpiringProducts) {
+        let dataManipulate = stockpileSummaryList.map((item) => ({ ...item }));
+        dataManipulate.map((item, index) => {
+          let data = item.orders;
+          let filteredDates = data.filter(
+            (obj) => new Date(obj.expiry_date) >= new Date()
+          );
+          if (filteredDates.length > 0) {
+            const currentDate = new Date(); // Get the current date
+
+            const filteredData = data.filter((item) => {
+              const expiryDate = new Date(item.expiry_date); // Parse expiry date
+              const shelfLifeDate = new Date(item.shelf_life_date); // Parse shelf life date
+
+              // Check if current date is between expiry date and shelf life date
+              return currentDate >= shelfLifeDate && currentDate <= expiryDate;
             });
-            setFilteredStockpileSummaryList(dataManipulate);
-        }
-        else {
-            setFilteredStockpileSummaryList([...stockpileSummaryList]);
-        }
-    }
+            dataManipulate[index].orders = filteredData;
+          } else {
+            dataManipulate[index].orders = [];
+          }
+        });
+        setFilteredStockpileSummaryList(dataManipulate);
+      } else {
+        setFilteredStockpileSummaryList([...stockpileSummaryList]);
+      }
+    };
 
     const exportStockPileSummary = (response) => {
         if (response.success) {
@@ -475,7 +480,7 @@ function AdminStockpileSummary() {
                         <div className='flex justify-content-between align-items-center sm:flex md:flex lg:flex'>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_summary")} />
                             <div className="flex w-full flex-wrap flex-grow float-right lg:gap-2 md:gap-2 sm:gap-2" style={{ justifyContent: "end" }} >
-                                {/* <Button buttonProps={{
+                                <Button buttonProps={{
                                     type: 'button',
                                     rounded: "true",
                                     import: true,
@@ -485,8 +490,8 @@ function AdminStockpileSummary() {
                                     },
                                     buttonClass: "evacuation_button_height import-button",
                                     text: translate(localeJson, 'import'),
-                                }} parentClass={"import-button"} /> */}
-                                {/* <Button buttonProps={{
+                                }} parentClass={"import-button"} />
+                                <Button buttonProps={{
                                     type: 'button',
                                     rounded: "true",
                                     export: true,
@@ -495,13 +500,13 @@ function AdminStockpileSummary() {
                                     },
                                     buttonClass: "evacuation_button_height export-button",
                                     text: translate(localeJson, 'hq_stockpile_detail_export'),
-                                }} parentClass={"export-button"} /> */}
+                                }} parentClass={"export-button"} />
                                 <Button buttonProps={{
                                     type: "button",
                                     rounded: "true",
                                     export: true,
                                     buttonClass: "export-button",
-                                    text: translate(localeJson, 'export'),
+                                    text: translate(localeJson, 'hq_stockpile_summary_export'),
                                     severity: "primary",
                                     onClick: () => downloadStockPileSummaryCSV()
                                 }} parentClass={"export-button"} />
@@ -548,8 +553,6 @@ function AdminStockpileSummary() {
                                         }}
                                             parentClass={"custom-switch"} />
                                     </div>
-                                    {/* 
-                                    // hitachi bulk delete
                                     <div className='flex flex-wrap justify-content-end align-items-end gap-2'>
                                         <Button buttonProps={{
                                             type: "button",
@@ -560,7 +563,7 @@ function AdminStockpileSummary() {
                                             severity: "primary",
                                             onClick: () => openDeleteDialog()
                                         }} parentClass={"mt-2 export-button"} />
-                                    </div> */}
+                                    </div>
                                 </div>
                                 <div>
                                     <RowExpansionTable

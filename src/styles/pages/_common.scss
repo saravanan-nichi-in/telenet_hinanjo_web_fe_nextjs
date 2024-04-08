@@ -1,7 +1,6 @@
 .page-header1 {
     font-size: $pageHeaderFontSize1 ;
     font-weight: $pageHeadersFontWeight;
-    width: -moz-max-content;
     width: max-content;
 }
 
@@ -254,4 +253,11 @@
 
 .details-text-overflow {
     word-break: break-word;
+}
+.privacy-page-header1{
+    font-size: $pageHeaderFontSize1 ;
+    font-weight: $pageHeadersFontWeight;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+    // overflow: hidden;
 }

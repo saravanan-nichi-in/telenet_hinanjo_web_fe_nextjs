@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Dialog } from "primereact/dialog";
+
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import Image from "next/image";
 import BarcodeReader from "react-barcode-reader";
 
 export default function YaburuModal(props) {
-  const { localeJson, setLoader } = useContext(LayoutContext);
-
-  const { open, close,callBack } = props;
+  const { localeJson } = useContext(LayoutContext);
+  const { open, close, callBack } = props;
 
   const handleBarcode = (data) => {
     callBack(data)
   };
-
-
 
   return (
     <div>

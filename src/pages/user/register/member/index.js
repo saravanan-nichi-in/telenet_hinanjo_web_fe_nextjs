@@ -1,38 +1,26 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import _ from "lodash";
+import * as Yup from "yup";
+import { useSelector } from "react-redux";
+import { Formik } from "formik";
+
 import {
   convertToSingleByte,
   getJapaneseDateTimeDisplayActualFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import {
-  Button,
-  ButtonRounded,
-  InputSwitch,
-  ValidationError,
-  NormalTable,
-  RowExpansionTable,
-  CommonDialog,
-} from "@/components";
-import Link from "next/link";
-import * as Yup from "yup";
-import { useSelector } from "react-redux";
-import { Formik } from "formik";
-import { BsFillMicFill } from "react-icons/bs";
-import AudioRecorder from "@/components/audio";
 import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
-import { prefectures } from "@/utils/constant";
 import { useRouter } from "next/router";
-import CustomHeader from "@/components/customHeader";
-import CommonPage from "@/components/eventCheck.js";
-import { Input, InputNumber } from "@/components/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckInData } from "@/redux/check_in";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
 import { setSelfID } from "@/redux/self_id";
-import toast from "react-hot-toast";
+import CustomHeader from "@/components/customHeader";
+import { Button, ButtonRounded, CommonDialog, CommonPage, Input, ValidationError } from "@/components";
+import Password from "@/components/input";
+import BarcodeDialog from "@/components/modal/barcodeDialog";
 import { YappleModal } from "@/components/modal";
+
 export default function Admission() {
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
@@ -47,8 +35,8 @@ export default function Admission() {
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
-  const [isSearch,setSearch] = useState(false);
-  const {getActiveList} = UserPlaceListServices;
+  const [isSearch, setSearch] = useState(false);
+  const { getActiveList } = UserPlaceListServices;
 
   /* Services */
   const { getEventListByID } = UserDashboardServices;
@@ -86,27 +74,27 @@ export default function Admission() {
   const { getBasicDetailsInfo } = TempRegisterServices;
   const initialValues = { name: "", password: "", familyCode: "" };
   const openYappleModal = () => {
-      let payload = { id: layoutReducer?.user?.place?.id}
-      let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-      layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
-        if (response && response.data) {
+    let payload = { id: layoutReducer?.user?.place?.id }
+    let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+    layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+      if (response && response.data) {
         let obj = response.data.model;
-        if(obj.is_q_active=="1")
-        {
+        if (obj.is_q_active == "1") {
           setImportModalOpen(true)
+        }
+        else {
+          router.push({ pathname: '/user/event-list' })
+        }
       }
-      else {
-          router.push({pathname:'/user/event-list'})
-      }
-  }}):
+    }) :
       getActiveList(payload, async (res) => {
         if (res?.data?.model?.active_flg == "1") {
           setImportModalOpen(true)
-  }
-  else {
-      router.push({pathname:'/user/list'})
-  }
-})
+        }
+        else {
+          router.push({ pathname: '/user/list' })
+        }
+      })
 
   };
 
@@ -294,10 +282,10 @@ export default function Admission() {
           initialValues={initialValues}
           enableReinitialize
           onSubmit={(values) => {
-            let fam_val = values.familyCode ?convertToSingleByte(values.familyCode):"";
-            let fam_pass = values.password ?convertToSingleByte(values.password):"";
+            let fam_val = values.familyCode ? convertToSingleByte(values.familyCode) : "";
+            let fam_pass = values.password ? convertToSingleByte(values.password) : "";
             let payload = {
-              family_code: values.familyCode?fam_val :"",
+              family_code: values.familyCode ? fam_val : "",
               refugee_name: values.name,
               password: fam_pass,
               place_id: layoutReducer?.user?.place?.id,
@@ -307,12 +295,11 @@ export default function Admission() {
                   ? { event_id: layoutReducer?.user?.place?.id }
                   : {}),
             };
-            if(isSearch)
-            { 
+            if (isSearch) {
               setLoader(true);
               getList(payload, getSearchResult);
             }
-            
+
           }}
         >
           {({
@@ -375,33 +362,33 @@ export default function Admission() {
                                   rounded: "true",
                                   text: translate(localeJson, "signup"),
                                   onClick: () => {
-                                    let payload = { id: layoutReducer?.user?.place?.id}
-                                    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-                                    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                    let payload = { id: layoutReducer?.user?.place?.id }
+                                    let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                    layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
                                       if (response && response.data) {
-                                      let obj = response.data.model;
-                                      if(obj.is_q_active=="1")
-                                      {
-                                        router.push({
-                                          pathname: "/user/person-count",
-                                        });
-                                    }
-                                    else {
-                                        router.push({pathname:'/user/event-list'})
-                                    }
-                                }}):
-                                    getActiveList(payload, async (res) => {
-                                      if (res?.data?.model?.active_flg == "1") {
-                                        router.push({
-                                          pathname: "/user/person-count",
-                                        });
-                                }
-                                else {
-                                    router.push({pathname:'/user/list'})
-                                }
-                              })
-                              
-                                    
+                                        let obj = response.data.model;
+                                        if (obj.is_q_active == "1") {
+                                          router.push({
+                                            pathname: "/user/person-count",
+                                          });
+                                        }
+                                        else {
+                                          router.push({ pathname: '/user/event-list' })
+                                        }
+                                      }
+                                    }) :
+                                      getActiveList(payload, async (res) => {
+                                        if (res?.data?.model?.active_flg == "1") {
+                                          router.push({
+                                            pathname: "/user/person-count",
+                                          });
+                                        }
+                                        else {
+                                          router.push({ pathname: '/user/list' })
+                                        }
+                                      })
+
+
                                   },
                                 }}
                                 parentClass={
@@ -468,58 +455,34 @@ export default function Admission() {
                               <div className="mb-3 w-full">
                                 <div className="flex w-12">
                                   <div className="w-12">
-                                    <Input
-                                      inputProps={{
-                                        inputParentClassName: `custom_input w-full ${errors.password &&
-                                          touched.password &&
-                                          "p-invalid"
-                                          }`,
+                                    <Password
+                                      passwordProps={{
+                                        passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
                                         labelProps: {
-                                          text: translate(
-                                            localeJson,
-                                            "shelter_password"
-                                          ),
-                                          inputLabelClassName: "block",
+                                          text: translate(localeJson, 'shelter_password'),
                                           spanText: "*",
-                                          inputLabelSpanClassName:
-                                            "p-error",
-                                          labelMainClassName: "pb-1"
+                                          passwordLabelSpanClassName: "p-error",
+                                          passwordLabelClassName: "block",
                                         },
-                                        inputClassName: "w-full",
-                                        id: "password",
-                                        name: "password",
-                                        value: values.password,
+                                        name: 'password',
                                         inputMode: "numeric",
-                                        isLoading: audioPasswordLoader,
-                                        disabled: audioPasswordLoader,
+                                        keyfilter: "int",
                                         placeholder: translate(
                                           localeJson,
                                           "placeholder_please_enter_password"
                                         ),
-                                        hasIcon: true,
+                                        value: values.password,
                                         onChange: (evt) => {
                                           const re = /^[0-9-]+$/;
-                                          if(evt.target.value=="")
-                                          {
+                                          if (evt.target.value == "") {
                                             setFieldValue("password", evt.target.value);
                                           }
-                                          if(re.test(convertToSingleByte(evt.target.value)))
-                                          {
-                                          setFieldValue("password", evt.target.value);
-                                          }
-                                        },
-                                        onValueChange: (evt) => {
-                                          const re = /^[0-9-]+$/;
-                                          if(evt.target.value=="")
-                                          {
+                                          if (re.test(convertToSingleByte(evt.target.value))) {
                                             setFieldValue("password", evt.target.value);
-                                          }
-                                          if(re.test(convertToSingleByte(evt.target.value)))
-                                          {
-                                          setFieldValue("password", evt.target.value);
                                           }
                                         },
                                         onBlur: handleBlur,
+                                        passwordClass: "w-full"
                                       }}
                                     />
                                   </div>
@@ -612,38 +575,37 @@ export default function Admission() {
                                     buttonClass: "w-12 h-3rem primary-button",
                                     rounded: "true",
                                     text: translate(localeJson, "mem_search"),
-                                    onClick:()=>
-                                    {
-                                      let payload = { id: layoutReducer?.user?.place?.id}
-                                      let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-                                      layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                    onClick: () => {
+                                      let payload = { id: layoutReducer?.user?.place?.id }
+                                      let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                      layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
                                         if (response && response.data) {
-                                        let obj = response.data.model;
-                                        if(obj.is_q_active=="1")
-                                        {
-                                          setSearch(true);
-                                          setTimeout(()=>{
-                                            handleSubmit()
-                                          },1000)
-                                         
-                                      }
-                                      else {
-                                        setSearch(false)
-                                          router.push({pathname:'/user/event-list'})
-                                      }
-                                  }}):
-                                      getActiveList(payload, async (res) => {
-                                        if (res?.data?.model?.active_flg == "1") {
-                                          setSearch(true)
-                                          setTimeout(()=>{
-                                            handleSubmit()
-                                          },1000)
-                                  }
-                                  else {
-                                    setSearch(false)
-                                      router.push({pathname:'/user/list'})
-                                  }
-                                  })
+                                          let obj = response.data.model;
+                                          if (obj.is_q_active == "1") {
+                                            setSearch(true);
+                                            setTimeout(() => {
+                                              handleSubmit()
+                                            }, 1000)
+
+                                          }
+                                          else {
+                                            setSearch(false)
+                                            router.push({ pathname: '/user/event-list' })
+                                          }
+                                        }
+                                      }) :
+                                        getActiveList(payload, async (res) => {
+                                          if (res?.data?.model?.active_flg == "1") {
+                                            setSearch(true)
+                                            setTimeout(() => {
+                                              handleSubmit()
+                                            }, 1000)
+                                          }
+                                          else {
+                                            setSearch(false)
+                                            router.push({ pathname: '/user/list' })
+                                          }
+                                        })
                                     }
                                   }}
                                   parentClass={"w-full primary-button"}
@@ -713,7 +675,7 @@ export default function Admission() {
             successHeader={"checkin_info_event"}
             isEvent={true}
             dynamicButtonText={true}
-            keyJson={ "register_event_qr"}
+            keyJson={"register_event_qr"}
             type={layoutReducer?.user?.place?.type}
           />
           <CommonPage

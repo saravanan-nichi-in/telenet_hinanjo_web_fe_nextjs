@@ -1,6 +1,6 @@
 import { NormalTable, RowExpansionTable } from "./datatable";
 import { ValidationError } from "./error";
-import { Counter } from "./incrementDecrement";
+import { Counter, CounterSupplies } from "./incrementDecrement";
 import { NormalLabel } from "./label";
 import {
   DeleteModal,
@@ -22,12 +22,20 @@ import { PerspectiveCropping } from "./perspectiveCropping";
 import { CardSpinner } from "./spinner";
 import { Input, TextArea, InputNumber, Password, InputGroup, InputDropdown, MultiSelect, DropdownSelect, InputGroups } from "./input";
 import { NotFound } from "./dataNotFound";
+import AudioRecorder from "./audio";
+import CommonPage from "./eventCheck";
+import FamilyListComponent from "./familySearchResult";
+import QuestionList from "./masterQuestion";
+import { MultiStepForm } from "./multiForm";
+import PersonCountButton from "./personCountButtons";
+import { BaseTemplate } from "./questionarrie";
 
 export {
   NormalTable,
   RowExpansionTable,
   ValidationError,
   Counter,
+  CounterSupplies,
   NormalLabel,
   DeleteModal,
   DynamicModal,
@@ -57,5 +65,12 @@ export {
   MultiSelect,
   DropdownSelect,
   InputGroups,
-  NotFound
+  NotFound,
+  AudioRecorder,
+  CommonPage,
+  FamilyListComponent,
+  QuestionList,
+  MultiStepForm,
+  PersonCountButton,
+  BaseTemplate
 }

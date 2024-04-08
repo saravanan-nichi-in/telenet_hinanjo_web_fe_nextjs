@@ -3,12 +3,12 @@ import { Dialog } from "primereact/dialog";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ButtonRounded } from "../button";
-import { Input } from "../input";
+import {Input,ButtonRounded} from "@/components"
 
 const BarcodeDialog = (props) => {
     const { localeJson } = useContext(LayoutContext);
     const { validateAndMoveToTempReg } = props;
+
     const [selfID, setSelfID] = useState(null);
 
     return (
@@ -19,11 +19,11 @@ const BarcodeDialog = (props) => {
             draggable={false}
             blockScroll={true}
             onHide={() => props.setVisible(false)}
-        ><div className="modal-header">
+        >
+            <div className="modal-header">
                 {props.header}
             </div>
             <div className="barcode-reader-image-div">
-
                 <div className="barcode-reader-div">
                     <div className="text-center mt-3">
                         <div>
@@ -53,21 +53,7 @@ const BarcodeDialog = (props) => {
                                 }
                             }}
                         />
-                        {/*Development
-                         <InputFloatLabel
-                            inputFloatLabelProps={{
-                                id: "barcode_value",
-                                name: "barcode_value",
-                                spanText: "*",
-                                custom: "custom_input w-full",
-                                spanClass: "p-error",
-                                text: translate(localeJson, "barcode_dialog_sub_inputfield_label"),
-                                inputClass: "w-full",
-                                style: { width: "200px" },
-                            }}
-                        /> */}
                     </div>
-
                     <div className="col ">
                         <ButtonRounded
                             buttonProps={{

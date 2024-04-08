@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { BaseTemplate } from '@/components/questionarrie';
+import { BaseTemplate } from '@/components';
 import { Button } from '@/components';
 import { QuestionnaireServices } from '@/services/questionnaire.services';
 import CustomHeader from '@/components/customHeader';

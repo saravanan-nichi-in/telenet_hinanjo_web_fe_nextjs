@@ -27,7 +27,7 @@ export default function AdminSpecialCarePage() {
         filters: {
             start: 0,
             limit: 10,
-            sort_by: "updated_at",
+            sort_by: "sort_order",
             order_by: "asc",
         },
         search: "",

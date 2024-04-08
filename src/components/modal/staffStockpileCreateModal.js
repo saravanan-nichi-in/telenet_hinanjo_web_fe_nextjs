@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
 
 import { Button } from "../button";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
@@ -10,17 +11,18 @@ import { NormalLabel } from "../label";
 import { ValidationError } from "../error";
 import { InputFile } from '@/components/upload';
 import { StockpileStaffService } from "@/services/stockpilestaff.service";
-import { useSelector } from "react-redux";
 import { Input, InputDropdown } from "../input";
 
 export default function StaffStockpileCreateModal(props) {
     const { localeJson } = useContext(LayoutContext);
+    const layoutReducer = useSelector((state) => state.layoutReducer);
+    const { open, close, createdStock, header, onCategoryChange } = props;
+
     const [initialValues, setInitialValues] = useState({
         category: "",
         product_name: "",
         shelf_life: ""
     });
-
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
@@ -28,12 +30,6 @@ export default function StaffStockpileCreateModal(props) {
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
             .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
-        shelf_life: Yup.string().test("check_int", translate(localeJson, 'number_field'),
-            (value) => {
-                const re = /^[0-9-]+$/;
-                return re.test(convertToSingleByte(value))
-            })
-            .max(3, translate(localeJson, 'stockpile_shelf_life_max')),
         image_logo: Yup.mixed()
             .notRequired() // Allow it to be nullable
             .test('fileSize', translate(localeJson, 'image_size_validation'), (value) => {
@@ -50,19 +46,6 @@ export default function StaffStockpileCreateModal(props) {
             }),
     });
 
-    const layoutReducer = useSelector((state) => state.layoutReducer);
-    /**
-     * Destructing
-    */
-    const { open, close, createdStock, header, onCategoryChange } = props;
-
-    const resetAndCloseForm = (callback) => {
-        close();
-        callback();
-        props.refreshList();
-        createdStock
-    }
-
     useEffect(() => {
         if (open) {
             setInitialValues({
@@ -72,6 +55,13 @@ export default function StaffStockpileCreateModal(props) {
             });
         }
     }, [open]);
+
+    const resetAndCloseForm = (callback) => {
+        close();
+        callback();
+        props.refreshList();
+        createdStock
+    }
 
     return (
         <>
@@ -86,11 +76,9 @@ export default function StaffStockpileCreateModal(props) {
                     formData.append('product_name', product ? product.product_name : values.product_name);
                     formData.append('shelf_life', values.shelf_life ? convertToSingleByte(values.shelf_life) : "");
                     formData.append('place_id', layoutReducer?.user?.place?.id);
-
                     if (values.image_logo) {
                         formData.append('image_logo', values.image_logo);
                     }
-
                     StockpileStaffService.create(formData, () => {
                         resetAndCloseForm(resetForm);
                     })
@@ -194,7 +182,8 @@ export default function StaffStockpileCreateModal(props) {
                                                 onChange: (e) => {
                                                     values.product_name = e.value;
                                                     let selectedPlaceName = props.productNameOptions.find((item) => item.product_id == e.value);
-                                                    values.shelf_life = selectedPlaceName ? selectedPlaceName.shelf_life : null;
+                                                    console.log(selectedPlaceName.shelf_life);
+                                                    setFieldValue('shelf_life', selectedPlaceName?.shelf_life ?? '');
                                                 },
                                                 onBlur: handleBlur,
                                                 emptyMessage: translate(localeJson, "data_not_found"),
@@ -218,16 +207,15 @@ export default function StaffStockpileCreateModal(props) {
                                                         const re = /^[0-9-]+$/;
                                                         let val;
                                                         if (
-                                                          evt.target.value === "" ||
-                                                          re.test(convertToSingleByte(evt.target.value))
+                                                            evt.target.value === "" ||
+                                                            re.test(convertToSingleByte(evt.target.value))
                                                         ) {
-                                                          val = evt.target.value.replace(/-/g, "");
-                                                          if (evt.target.value?.length <= 3) {
-                                                            setFieldValue("shelf_life", evt.target.value);
-                                                          }
-                      
+                                                            val = evt.target.value.replace(/-/g, "");
+                                                            if (evt.target.value?.length <= 3) {
+                                                                setFieldValue("shelf_life", evt.target.value);
+                                                            }
                                                         }
-                                                      },
+                                                    },
                                                     onBlur: handleBlur,
                                                 }}
                                             />

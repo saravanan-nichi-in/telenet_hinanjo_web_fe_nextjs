@@ -10,14 +10,10 @@ import { ValidationError } from "../error";
 import { InputFile } from "../upload";
 
 export default function AdminManagementImportModal(props) {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const { open, close, importFile, modalHeaderText, style } = props && props;
+
     const fileInputRef = useRef(null);
-    const header = (
-        <div className="">
-            {modalHeaderText}
-        </div>
-    );
     const initialValues = { file: null };
 
     const schema = Yup.object().shape({
@@ -47,14 +43,10 @@ export default function AdminManagementImportModal(props) {
                 onSubmit={(values, { resetForm }) => {
                     importFile(values.file)
                     close();
-                    // Development
-                    // values.file = null;
-                    // actions.resetForm({ values: initialValues });
                     resetAndCloseForm(resetForm);
                 }}
             >
                 {({
-                    values,
                     errors,
                     touched,
                     setFieldValue,
@@ -65,7 +57,11 @@ export default function AdminManagementImportModal(props) {
                         <form onSubmit={handleSubmit}>
                             <Dialog
                                 className={`new-custom-modal`}
-                                header={header}
+                                header={
+                                    <div>
+                                        {modalHeaderText}
+                                    </div>
+                                }
                                 visible={open}
                                 style={style}
                                 draggable={false}
@@ -90,23 +86,12 @@ export default function AdminManagementImportModal(props) {
                             >
                                 <div className={`modal-content`}>
                                     <div className="modal-header">
-                                        {header}
+                                        <div>
+                                            {modalHeaderText}
+                                        </div>
                                     </div>
                                     {props.tag && (<div className="mb-2">
                                         <p>{translate(localeJson, 'hq_stockpile_export_title_modal')}</p>
-                                        {/* Development */}
-                                        {/* <div>
-                                        <Button buttonProps={{
-                                                type: 'button',
-                                                rounded: "true",
-                                                export: true,
-                                                onClick: () => {
-                                                    props.callExport();
-                                                },
-                                                buttonClass: "w-full text-center",
-                                                text: translate(localeJson, 'export_new'),
-                                            }} parentClass={"mt-2 mb-4 text-center"} />
-                                        </div> */}
                                     </div>)}
                                     <InputFile inputFileProps={{
                                         onChange: (event) => {

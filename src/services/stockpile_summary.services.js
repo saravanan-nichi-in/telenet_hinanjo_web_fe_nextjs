@@ -1,7 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
-import { downloadBase64File, importErrorToastDisplay, timestampFile, toastDisplay } from '@/helper';
+import { downloadBase64File, timestampFile, toastDisplay } from '@/helper';
 
 
 /* Identity and Access management (IAM) */
@@ -13,7 +11,7 @@ export const StockPileSummaryServices = {
     getStockPileEmailUpdate: _getStockPileEmailUpdate,
     importData: _importData,
     exportData: _exportData,
-    getPlaceList:_getPlaceList,
+    getPlaceList: _getPlaceList,
     bulkDelete: _bulkDelete
 };
 
@@ -45,9 +43,7 @@ function _exportStockPileSummaryCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
@@ -61,8 +57,8 @@ function _exportStockPileSummaryCSVList(payload, callBackFun) {
  * @param {*} payload 
  * @param {*} callBackFun 
  */
-function _getPlaceDropdownList(callBackFun) {
-    axios.get('/user/active/place')
+function _getPlaceDropdownList(payload, callBackFun) {
+    axios.get('/admin/place/history/dropdown/list', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -103,9 +99,7 @@ function _getStockPileEmailUpdate(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
@@ -125,13 +119,12 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                importErrorToastDisplay(response);
+                toastDisplay(response, 'import');
             }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
             callBackFun(false);
-            importErrorToastDisplay(error.response);
+            toastDisplay(error?.response, 'import');
         });
 }
 
@@ -149,8 +142,7 @@ function _exportData() {
             }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
-            importErrorToastDisplay(error.response);
+            toastDisplay(error?.response);
         });
 }
 
@@ -161,27 +153,25 @@ function _exportData() {
  */
 function _getPlaceList(callBackFun) {
     const payload = {
-      "filters": {
-          "sort_by": "refugee_name",
-          "order_by": "asc"
-      },
-      "search": "",
-      "map":true
-  };
+        "filters": {
+            "sort_by": "refugee_name",
+            "order_by": "asc"
+        },
+        "search": "",
+        "map": true
+    };
     axios
-      .post("/user/registration/place/list",payload)
-      .then((response) => {
-        if (response && response.data) {
-          callBackFun(response.data);
-        }
-      })
-      .catch((error) => {
-        
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-      });
-      });
-  }
+        .post("/user/place/list", payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toastDisplay(error?.response);
+        });
+}
 
 /**
  * Bulk delete
@@ -194,15 +184,11 @@ function _bulkDelete(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
             callBackFun(false);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

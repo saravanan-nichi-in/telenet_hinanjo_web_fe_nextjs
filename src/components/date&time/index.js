@@ -7,7 +7,6 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { NormalLabel } from '../label';
 
 export const DateTime = (props) => {
-    const {callOnActionFlag=false}=props
     const {
         dateTimeParentClassName,
         dateTimeParentStyle,
@@ -19,11 +18,9 @@ export const DateTime = (props) => {
         floatLabelProps,
         ...restProps
     } = props && props.dateTimeProps;
-
     const [date, setDate] = useState(props.dateTimeProps.date);
-
     const { localeJson } = useContext(LayoutContext);
-
+    const calendarRef = useRef(null);
     addLocale('en', {
         firstDayOfWeek: 0,
         dayNames: [translate(localeJson, 'sunday'), translate(localeJson, 'monday'), translate(localeJson, 'tuesday'), translate(localeJson, 'wednesday'), translate(localeJson, 'thursday'), translate(localeJson, 'friday'), translate(localeJson, 'saturday')],
@@ -35,40 +32,38 @@ export const DateTime = (props) => {
         clear: translate(localeJson, 'clear')
     });
 
-    const calendarRef = useRef(null);
-
     return (
-            <div className={`custom_input ${dateTimeParentClassName} ${float ? 'p-float-label' : ''}`} style={dateTimeParentStyle}>
-                {labelProps?.text && (
-                    <div className={`${labelProps.labelMainClassName || 'pb-1'}`}>
-                        <NormalLabel
-                            labelClass={labelProps.inputLabelClassName}
-                            text={labelProps.text}
-                            spanText={labelProps.spanText}
-                            spanClass={labelProps.inputLabelSpanClassName}
-                            htmlFor={labelProps.htmlFor}
-                        />
-                    </div>
-                )}
-                <Cal className={`${dateTimeClass}`}
-                    showTime
-                    ref={calendarRef}
-                    value={date || value}
-                    onChange={(e) => {
-                        setDate(e.value);
-                        if (onChange) {
-                            onChange(e);
-                        }
+        <div className={`custom_input ${dateTimeParentClassName} ${float ? 'p-float-label' : ''}`} style={dateTimeParentStyle}>
+            {labelProps?.text && (
+                <div className={`${labelProps.labelMainClassName || 'pb-1'}`}>
+                    <NormalLabel
+                        labelClass={labelProps.inputLabelClassName}
+                        text={labelProps.text}
+                        spanText={labelProps.spanText}
+                        spanClass={labelProps.inputLabelSpanClassName}
+                        htmlFor={labelProps.htmlFor}
+                    />
+                </div>
+            )}
+            <Cal className={`${dateTimeClass}`}
+                showTime
+                ref={calendarRef}
+                value={date || value}
+                onChange={(e) => {
+                    setDate(e.value);
+                    if (onChange) {
+                        onChange(e);
                     }
-                    }
-                    dateFormat={translate(localeJson, 'dateFormat')}
-                    panelClassName="custom-panel"
-                    {...restProps}
-                />
-                {floatLabelProps?.text && (
-                    <label className={`custom-label ${floatLabelProps.inputLabelClassName}`} htmlFor={floatLabelProps.id}>{floatLabelProps.text}<span className={floatLabelProps.inputLabelSpanClassName}>{floatLabelProps.spanText}</span></label>
-                )}
-            </div>
+                }
+                }
+                dateFormat={translate(localeJson, 'dateFormat')}
+                panelClassName="custom-panel"
+                {...restProps}
+            />
+            {floatLabelProps?.text && (
+                <label className={`custom-label ${floatLabelProps.inputLabelClassName}`} htmlFor={floatLabelProps.id}>{floatLabelProps.text}<span className={floatLabelProps.inputLabelSpanClassName}>{floatLabelProps.spanText}</span></label>
+            )}
+        </div>
     );
 }
 
@@ -106,34 +101,34 @@ export const Calendar = (props) => {
     });
 
     return (
-            <div className={`custom_input ${calendarParentClassName} ${float ? 'p-float-label' : ''}`} style={calendarParentStyle}>
-                {labelProps?.text && (
-                    <div className={`${labelProps.labelMainClassName || 'pb-1'}`}>
-                        <NormalLabel
-                            labelClass={labelProps.calendarLabelClassName}
-                            text={labelProps.text}
-                            spanText={labelProps.spanText}
-                            spanClass={labelProps.calendarLabelSpanClassName}
-                            htmlFor={labelProps.htmlFor}
-                        />
-                    </div>
-                )}
-                <Cal className={`${calendarClassName}`}
-                    value={date || value}
-                    
-                    onChange={(e) => {
-                        setDate(e.value);
-                        if (onChange) {
-                            onChange(e);
-                        }
-                    }}
-                    dateFormat={translate(localeJson, 'dateFormat')}
-                    panelClassName="custom-panel"
-                    {...restProps}
-                />
-                {floatLabelProps?.text && (
-                    <label className={`custom-label ${floatLabelProps.calendarLabelClassName}`} htmlFor={floatLabelProps.id}>{floatLabelProps.text}<span className={floatLabelProps.calendarLabelSpanClassName}>{floatLabelProps.spanText}</span></label>
-                )}
-            </div>
+        <div className={`custom_input ${calendarParentClassName} ${float ? 'p-float-label' : ''}`} style={calendarParentStyle}>
+            {labelProps?.text && (
+                <div className={`${labelProps.labelMainClassName || 'pb-1'}`}>
+                    <NormalLabel
+                        labelClass={labelProps.calendarLabelClassName}
+                        text={labelProps.text}
+                        spanText={labelProps.spanText}
+                        spanClass={labelProps.calendarLabelSpanClassName}
+                        htmlFor={labelProps.htmlFor}
+                    />
+                </div>
+            )}
+            <Cal className={`${calendarClassName}`}
+                value={date || value}
+
+                onChange={(e) => {
+                    setDate(e.value);
+                    if (onChange) {
+                        onChange(e);
+                    }
+                }}
+                dateFormat={translate(localeJson, 'dateFormat')}
+                panelClassName="custom-panel"
+                {...restProps}
+            />
+            {floatLabelProps?.text && (
+                <label className={`custom-label ${floatLabelProps.calendarLabelClassName}`} htmlFor={floatLabelProps.id}>{floatLabelProps.text}<span className={floatLabelProps.calendarLabelSpanClassName}>{floatLabelProps.spanText}</span></label>
+            )}
+        </div>
     );
 }

@@ -40,7 +40,7 @@ const LoginPage = () => {
             dispatch(setAdminValue({
                 admin: values.data
             }));
-            router.push("/admin/dashboard");
+            router.push("/admin/event-status-list");
         }
     };
 
@@ -73,7 +73,6 @@ const LoginPage = () => {
                 onSubmit={(values) => {
                     let preparedPayload = values;
                     preparedPayload['username'] = preparedPayload.username.trim();
-                    preparedPayload['email'] = preparedPayload.username.trim();
                     login('admin', preparedPayload, onLoginSuccess);
                 }}
             >
@@ -102,7 +101,7 @@ const LoginPage = () => {
                                                     onBlur: handleBlur,
                                                     value: values.username,
                                                     labelProps: {
-                                                        text: translate(localeJson, 'mail_address'),
+                                                        text: translate(localeJson, 'userId'),
                                                         spanText: "*",
                                                         inputGroupLabelClassName: "mb-2",
                                                         inputGroupLabelSpanClassName: "p-error"

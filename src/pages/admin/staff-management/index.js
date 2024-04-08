@@ -12,7 +12,7 @@ import { Input } from '@/components/input';
 
 export default function StaffManagementPage() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
-    let blankStaffObj = { email: "", tel: "", name: "", password: "" };
+    let blankStaffObj = { username: "", tel: "", name: "", password: "", event_id: "", place_id: "" };
     const [staff, setStaff] = useState(null);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
@@ -39,8 +39,8 @@ export default function StaffManagementPage() {
         setDeleteObj({
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
-            secondLabel: translate(localeJson, 'external_evecuee_list_table_email_address'),
-            secondValue: rowdata.email
+            secondLabel: translate(localeJson, 'userId'),
+            secondValue: rowdata.username
         });
         setDeleteOpen(true);
         hideOverFlow();
@@ -75,8 +75,7 @@ export default function StaffManagementPage() {
             field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem", maxWidth: "5rem",
             body: (rowData) => (
                 <p className='text-link-class clickable-row' onClick={() => {
-                    setStaff(rowData.id,"Sandeep");
-                    console.log(setStaff);
+                    setStaff(rowData.id);
                     setStaffDetailsOpen(true);
                     hideOverFlow();
                 }}>
@@ -84,8 +83,15 @@ export default function StaffManagementPage() {
                 </p>
             )
         },
-        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "5rem", maxWidth: "5rem" },
-        {field:'tel',header:translate(localeJson,'tel'),minWidth: "5rem", maxWidth: "5rem" },
+        { field: 'username', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        {
+            field: 'password',
+            header: translate(localeJson, 'password'),
+            body: (rowData) => {
+                return <PasswordColumn rowData={rowData} />
+            },
+            minWidth: "5rem", maxWidth: "5rem"
+        },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -102,7 +108,7 @@ export default function StaffManagementPage() {
                             onClick: () => {
                                 setRegisterModalAction("edit")
                                 // Keys to extract
-                                const keysToExtract = ["id", "email", "tel", "name"];
+                                const keysToExtract = ["id", "username", "tel", "name", "password", "event_id", "place_id"];
 
                                 // Creating a new object with only the desired keys
                                 const extractedData = keysToExtract.reduce((acc, key) => {
@@ -185,27 +191,29 @@ export default function StaffManagementPage() {
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
-            console.log("2");
             await getStaffList()
         };
         fetchData();
     }, [locale, getListPayload]);
 
     const getStaffList = () => {
-        console.log("1");
-
         getList(getListPayload, (response) => {
             var preparedList = [];
             var listTotalCount = 0;
-            if (response && response.success && !_.isEmpty(response.data) && response.data.model.total > 0) {
-                const data = response.data.model.list;
+            if (response && response.success && !_.isEmpty(response.data) && response.data.total > 0) {
+                const data = response.data.model;
                 // Preparing row data for specific column to display
                 data.map((obj, i) => {
+                    let key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
+                    let decryptedData = obj.passwordfe ? decryptPassword(obj.passwordfe, key) : ""
                     let preparedObj = {
                         slno: i + getListPayload.filters.start + 1,
                         id: obj.id,
                         name: obj.name ?? "",
-                        email: obj.email ?? "",
+                        username: obj.username ?? "",
+                        password: decryptedData,
+                        event_id: obj.events,
+                        place_id: obj.places,
                         image: obj.image ?? "",
                         tel: obj.tel ?? "",
                         birthday: obj.birthday ?? "",
@@ -213,12 +221,10 @@ export default function StaffManagementPage() {
                         prefecture_id: obj.prefecture_id ?? "",
                         address: obj.address ?? "",
                         first_login: obj.first_login ?? "",
-                        updated_at:obj.updated_at??"",
-                        deleted_at:obj.deleted_at??""
                     }
                     preparedList.push(preparedObj);
                 })
-                listTotalCount = response.data.model.total;
+                listTotalCount = response.data.total;
             }
             setTableLoading(false);
             setList(preparedList);

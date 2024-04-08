@@ -3,21 +3,20 @@ import { Dialog } from "primereact/dialog";
 import _ from "lodash";
 import { TabView, TabPanel } from "primereact/tabview";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import {
   getEnglishDateTimeDisplayActualFormat,
   getJapaneseDateTimeDayDisplayActualFormat,
-  getJapaneseDateTimeDisplayActualFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalTable } from "../datatable";
 import { StaffManagementService } from "@/services/staffmanagement.service";
-import { Button as Btn } from "primereact/button";
 
 export default function StaffManagementDetailModal(props) {
   const { localeJson, locale } = useContext(LayoutContext);
   const { open, close } = props && props;
+
   const [staffDetail, setStaffDetail] = useState([]);
   const staffDetailData = [
     { field: "name", header: translate(localeJson, "name") },
@@ -29,13 +28,73 @@ export default function StaffManagementDetailModal(props) {
     },
   ];
   const columnsData = [
-    { field: 'slno', header: translate(localeJson, 'staff_management_detail_login_history_slno'), className: "sno_class", textAlign: "center",alignHeader:"center" },
-    { field: 'name', header: translate(localeJson, 'staff_management_detail_login_history_name'), maxWidth: "2rem" },
-    { field: 'login_datetime', header: translate(localeJson, 'staff_management_detail_login_history_login_datetime'), maxWidth: "2rem" }];
+    {
+      field: "slno",
+      header: translate(
+        localeJson,
+        "staff_management_detail_login_history_slno"
+      ),
+      className: "sno_class",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+    {
+      field: "name",
+      header: translate(
+        localeJson,
+        "staff_management_detail_login_history_name"
+      ),
+      maxWidth: "2rem",
+    },
+    {
+      field: "login_datetime",
+      header: translate(
+        localeJson,
+        "staff_management_detail_login_history_login_datetime"
+      ),
+      maxWidth: "2rem",
+    },
+    {
+      field: "logout_datetime",
+      header: translate(localeJson, "logout_dateTime"),
+      maxWidth: "2rem",
+    },
+  ];
+  const columnsPlaceData = [
+    {
+      field: "slno",
+      header: translate(
+        localeJson,
+        "staff_management_detail_login_history_slno"
+      ),
+      className: "sno_class",
+      textAlign: "center",
+      alignHeader: "center",
+    },
+    {
+      field: "name",
+      header: translate(
+        localeJson,
+        "staff_management_place_detail_login_history_name"
+      ),
+      minWidth: "4rem",
+      maxWidth: "4rem",
+    },
+    {
+      field: "login_datetime",
+      header: translate(
+        localeJson,
+        "staff_management_detail_login_history_login_datetime"
+      ),
+    },
+    {
+      field: "logout_datetime",
+      header: translate(localeJson, "logout_dateTime"),
+    },
+  ];
   const [getListPayload, setGetListPayload] = useState({
     filters: {
       start: 0,
-      // limit: 10,
     },
     id: props.staff,
   });
@@ -43,45 +102,103 @@ export default function StaffManagementDetailModal(props) {
   const [list, setList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [tableLoading, setTableLoading] = useState(false);
-
+  const [placeColumns, setPlaceColumns] = useState([]);
+  const [placeList, setPlaceList] = useState([]);
+  const [placeTotalCount, setPlaceTotalCount] = useState(0);
+  const [placeTableLoading, setPlaceTableLoading] = useState(false);
   // Main Table listing starts
   const { show } = StaffManagementService;
+
+  useEffect(() => {
+    setTableLoading(true);
+    const fetchData = async () => {
+      await getStaffList();
+    };
+    fetchData();
+  }, [locale, getListPayload, props.staff]);
+
   const getStaffList = () => {
     // Get dashboard list
     show(getListPayload, (response) => {
-        if (response.success && !_.isEmpty(response.data)) {
-            if (response.data.login_history.total > 0) {
-                const data = response.data.login_history.list;
-                var additionalColumnsArrayWithOldData = [...columnsData];
-                let preparedList = [];
-                // Update prepared list to the state
-                // Preparing row data for specific column to display
-                data.map((obj, i) => {
-                    let preparedObj = {
-                        slno: i + getListPayload.filters.start + 1,
-                        name: obj.name ?? "",
-                        login_datetime: obj.login_datetime ? locale == "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.login_datetime) : getEnglishDateTimeDisplayActualFormat(obj.login_datetime) : ""
-                    }
-                    preparedList.push(preparedObj);
-                })
-                setList(preparedList);
-                setColumns(additionalColumnsArrayWithOldData);
-                setTotalCount(response.data.login_history.total);
-                setTableLoading(false);
-            } else {
-                setTableLoading(false);
-                setList([]);
-            }
-            if (response.data.model) {
-                setStaffDetail([{ name: response.data.model.name, tel: response.data.model.tel }]);
-            }
+      if (response?.success && !_.isEmpty(response.data)) {
+        var additionalColumnsArrayWithOldData = [...columnsData];
+        var additionalColumnsArrayWithPlaceOldData = [...columnsPlaceData];
+        if (response.data.event_login_history.total > 0) {
+          const data = response.data.event_login_history.list;
+          let preparedList = [];
+          // Preparing row data for specific column to display
+          data.map((obj, i) => {
+            let preparedObj = {
+              slno: i + getListPayload.filters.start + 1,
+              name: obj.name ?? "",
+              login_datetime: obj.login_datetime
+                ? locale == "ja"
+                  ? getJapaneseDateTimeDayDisplayActualFormat(obj.login_datetime)
+                  : getEnglishDateTimeDisplayActualFormat(obj.login_datetime)
+                : "",
+              logout_datetime: obj.logout_datetime
+                ? locale == "ja"
+                  ? getJapaneseDateTimeDayDisplayActualFormat(obj.logout_datetime)
+                  : getEnglishDateTimeDisplayActualFormat(obj.logout_datetime)
+                : "",
+            };
+            preparedList.push(preparedObj);
+          });
+          setTableLoading(false);
+          setColumns(additionalColumnsArrayWithOldData);
+          setList(preparedList);
+          setTotalCount(response.data.event_login_history.total);
         } else {
-            setTableLoading(false);
-            setList([]);
+          setTableLoading(false);
+          setColumns(additionalColumnsArrayWithOldData);
+          setList([]);
+          setTotalCount(0);
         }
+        if (response.data.place_login_history.total > 0) {
+          const data = response.data.place_login_history.list;
+          let preparedList = [];
+          // Preparing row data for specific column to display
+          data.map((obj, i) => {
+            let preparedObj = {
+              slno: i + getListPayload.filters.start + 1,
+              name: obj.name ?? "",
+              login_datetime: obj.login_datetime
+                ? locale == "ja"
+                  ? getJapaneseDateTimeDayDisplayActualFormat(obj.login_datetime)
+                  : getEnglishDateTimeDisplayActualFormat(obj.login_datetime)
+                : "",
+              logout_datetime: obj.logout_datetime
+                ? locale == "ja"
+                  ? getJapaneseDateTimeDayDisplayActualFormat(obj.logout_datetime)
+                  : getEnglishDateTimeDisplayActualFormat(obj.logout_datetime)
+                : "",
+            };
+            preparedList.push(preparedObj);
+          });
+          setPlaceColumns(additionalColumnsArrayWithPlaceOldData);
+          setPlaceList(preparedList);
+          setPlaceTotalCount(response.data.place_login_history.total);
+          setPlaceTableLoading(false);
+        } else {
+          setPlaceTableLoading(false);
+          setPlaceColumns(additionalColumnsArrayWithPlaceOldData);
+          setPlaceList([]);
+          setPlaceTotalCount(0);
+        }
+        if (response.data.model) {
+          setStaffDetail([
+            { name: response.data.model.name, tel: response.data.model.tel },
+          ]);
+        }
+      } else {
+        setTableLoading(false);
+        setList([]);
+        setTotalCount(0);
+        setPlaceList([]);
+        setPlaceTotalCount(0);
+      }
     });
-
-}
+  };
 
   /**
    * Pagination handler
@@ -103,26 +220,12 @@ export default function StaffManagementDetailModal(props) {
     }
   };
 
-  useEffect(() => {
-    setTableLoading(true);
-    const fetchData = async () => {
-      await getStaffList();
-    };
-    fetchData();
-  }, [locale, getListPayload, props.staff]);
-
-  const header = (
-    <>
-      {translate(localeJson, "history_login_staff_management")}
-    </>
-  );
-
   return (
     <React.Fragment>
       <div>
         <Dialog
           className="new-custom-modal lg:w-6 md:w-9 sm:w-10"
-          header={header}
+          header={translate(localeJson, "history_login_staff_management")}
           visible={open}
           draggable={false}
           blockScroll={true}
@@ -158,7 +261,12 @@ export default function StaffManagementDetailModal(props) {
                 />
               </div>
               <div>
-              <NormalTable
+                <div>
+                  <TabView>
+                    <TabPanel
+                      header={translate(localeJson, "event_information")}
+                    >
+                      <NormalTable
                         lazy
                         totalRecords={totalCount}
                         loading={tableLoading}
@@ -167,17 +275,40 @@ export default function StaffManagementDetailModal(props) {
                         className={"custom-table-cell"}
                         showGridlines={"true"}
                         value={list}
-                        columns={columns}
+                        columns={columnsData}
                         filterDisplay="menu"
                         emptyMessage={translate(localeJson, "data_not_found")}
-                        // paginator={true}
                         first={getListPayload.filters.start}
                         rows={getListPayload.filters.limit}
-                        // paginatorLeft={true}
                         scrollable
                         scrollHeight="400px"
                         onPageHandler={(e) => onPaginationChange(e)}
                       />
+                    </TabPanel>
+                    <TabPanel
+                      header={translate(localeJson, "place_information")}
+                    >
+                      <NormalTable
+                        lazy
+                        totalRecords={placeTotalCount}
+                        loading={placeTableLoading}
+                        stripedRows={true}
+                        tableStyle={{ maxWidth: "w-full" }}
+                        className={"custom-table-cell"}
+                        showGridlines={"true"}
+                        value={placeList}
+                        columns={columnsPlaceData}
+                        filterDisplay="menu"
+                        emptyMessage={translate(localeJson, "data_not_found")}
+                        first={getListPayload.filters.start}
+                        rows={getListPayload.filters.limit}
+                        scrollable
+                        scrollHeight="400px"
+                        onPageHandler={(e) => onPaginationChange(e)}
+                      />
+                    </TabPanel>
+                  </TabView>
+                </div>
               </div>
               <div className="text-center">
                 <div className="modal-button-footer-space-back">

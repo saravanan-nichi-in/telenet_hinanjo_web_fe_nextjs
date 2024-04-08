@@ -1,6 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
+import _ from 'lodash';
 import toast from "react-hot-toast";
-import _, { isObject, isArray } from "lodash";
+import { isObject, isArray } from "lodash";
 
 /**
  * 
@@ -281,24 +282,18 @@ export const zipDownloadWithURL = (zipURL) => {
  */
 export const importErrorToastDisplay = (response) => {
     if (response && response.data) {
-        if (!response?.data.success) {
-            if (response.data.code == "422" && response?.data?.error_path) {
-                toast.error(() => (
-                    <div>
-                        <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                            {response?.data?.message}
-                        </a>
-                    </div>
-                ), {
-                    position: "top-right",
-                });
-            } else {
-                toast.error(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
-        } else {
-            if (response.data.code == "206" && response?.data?.error_path) {
+        if (!response.data.success && response.data.code == "422") {
+            toast.error(() => (
+                <div>
+                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                        {response?.data?.message}
+                    </a>
+                </div>
+            ), {
+                position: "top-right",
+            });
+        } else if (response.data.success) {
+            if (response.data.code == "206") {
                 toast.success(() => (
                     <div>
                         <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -313,6 +308,10 @@ export const importErrorToastDisplay = (response) => {
                     position: "top-right",
                 });
             }
+        } else {
+            toast.error(response?.data?.message, {
+                position: "top-right",
+            });
         }
     }
 }
@@ -355,12 +354,11 @@ export const common422ErrorToastDisplay = (error) => {
  * @param {*} position 
  */
 export const toastDisplay = (response, key, position = "top-right", rawMsgType) => {
-    console.log(response, "Toast response");
     if (response && response?.data && response?.status) {
         const { status, data } = response;
         if (status != 511 && status != 401 && status != 403) {
             if (data.success) {
-                if (key == 'import' && status == 206 && data?.error_path) {
+                if (key == 'import' && status == 206) {
                     toast.success(() => (
                         <div>
                             <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -376,7 +374,7 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
                     });
                 }
             } else {
-                if (key == 'import' && status == 422 && data?.error_path) {
+                if (key == 'import' && status == 422) {
                     toast.error(() => (
                         <div>
                             <a href={data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -697,9 +695,6 @@ export function splitJapaneseAddress(address) {
 
 /**
  * Function will help to combine special care name based on locale
- * @param {*} nameList 
- * @param {*} locale 
- * @returns 
  */
 export const getSpecialCareName = (nameList, locale = 'ja') => {
     let specialCareName = '';

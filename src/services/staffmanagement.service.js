@@ -22,7 +22,7 @@ export const StaffManagementService = {
  */
 function _importData(payload, callBackFun) {
     axios
-        .post("/admin/staff_management/import", payload)
+        .post("/admin/staff/management/import", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -43,7 +43,7 @@ function _importData(payload, callBackFun) {
  */
 function _exportData(payload) {
     axios
-        .post("/admin/staff_management/export", payload)
+        .post("/admin/staff/management/export", payload)
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
                 downloadBase64File(response.data.result.filePath, timestampFile("StaffManagement"));
@@ -68,7 +68,7 @@ function _exportData(payload) {
  */
 function _getList(payload, callBackFun) {
     axios
-        .post("/admin/staff_management/list", payload)
+        .post("/admin/staff/management/list", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -87,7 +87,7 @@ function _getList(payload, callBackFun) {
  */
 function _show(payload, callBackFun) {
     axios
-        .post("admin/staff_management/detail", payload)
+        .post("/admin/staff/management/detail", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -106,7 +106,7 @@ function _show(payload, callBackFun) {
  */
 function _create(payload, callBackFun) {
     axios
-        .post("/admin/staff_management/store", payload)
+        .post("/admin/staff/management/store", payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -150,7 +150,7 @@ function _create(payload, callBackFun) {
  */
 function _update(payload, callBackFun) {
     axios
-        .post(`/admin/staff_management/update`, payload)
+        .post(`/admin/staff/management/update`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -195,7 +195,7 @@ function _update(payload, callBackFun) {
  */
 function _delete(id, callBackFun) {
     axios
-        .delete(`/admin/staff_management/delete`, { data: { "id": id } })
+        .delete(`/admin/staff/management/delete`, { data: { "id": id } })
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

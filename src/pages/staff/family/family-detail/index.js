@@ -401,13 +401,13 @@ export default function StaffFamilyDetail() {
                         buttonProps: {
                             buttonClass: "w-full del_ok-button",
                             type: "submit",
-                            text: translate(localeJson, 'submit'),
+                            text: translate(localeJson, 'de_register'),
                             onClick: () => {
                                 onClickOkButton();
                                 showOverFlow();
                             },
                         },
-                        parentClass: "del_ok-button modal-button-footer-space mb-4"
+                        parentClass: "del_ok-button modal-button-footer-space"
                     },
                     {
                         buttonProps: {
@@ -744,8 +744,6 @@ export default function StaffFamilyDetail() {
                                     icon: <FaArrowRightFromBracket className='mr-1' />,
                                     onClick: () => setStaffFamilyDialogVisible(true)
                                 }} parentClass={"mt-3 exit-procedure-button"} />
-
-
                             </div>
                         </div>
                     </div>

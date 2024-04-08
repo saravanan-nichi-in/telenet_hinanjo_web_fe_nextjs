@@ -1,30 +1,23 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import _ from 'lodash';
-import { convertToSingleByte, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from '@/helper'
-import { LayoutContext } from "@/layout/context/layoutcontext";
-import {
-  Button,
-  ButtonRounded,
-  ValidationError,
-  NormalTable, RowExpansionTable, CommonDialog
-} from "@/components";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import AudioRecorder from "@/components/audio";
+
+import { convertToSingleByte, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
-import { prefectures } from '@/utils/constant';
-import { useRouter } from "next/router";
-import CustomHeader from "@/components/customHeader";
-import QrScannerModal from "@/components/modal/qrScannerModal";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
-import { useSelector } from "react-redux";
-import CommonPage from "@/components/eventCheck.js";
-import { Input, InputNumber } from "@/components/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
-import toast from "react-hot-toast";
-import { setSelfID } from "@/redux/self_id";
-import { YappleModal } from "@/components/modal";
+import { CommonDialog, YappleModal } from "@/components/modal";
+import BarcodeDialog from "@/components/modal/barcodeDialog";
+import QrScannerModal from "@/components/modal/qrScannerModal";
+import CustomHeader from "@/components/customHeader";
+import { Button, ButtonRounded, CommonPage, Input, ValidationError } from "@/components";
+import Password from "@/components/input";
+
 export default function Admission() {
   const router = useRouter();
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -39,7 +32,7 @@ export default function Admission() {
   const [searchFlag, setSearchFlag] = useState(false);
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
-  const [isSearch,setSearch] = useState(false);
+  const [isSearch, setSearch] = useState(false);
   const schema = Yup.object().shape({
     name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
       test: function (value) {
@@ -66,7 +59,7 @@ export default function Admission() {
   const { getList, checkOut, eventCheckOut, placeCheckout } = CheckInOutServices;
   const { getBasicDetailsInfo, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
   const initialValues = { name: "", password: "", familyCode: "" };
-  const {getActiveList} = UserPlaceListServices;
+  const { getActiveList } = UserPlaceListServices;
 
   /* Services */
   const { getEventListByID } = UserDashboardServices;
@@ -74,7 +67,7 @@ export default function Admission() {
     const fetchData = async () => {
       setLoader(false);
       const urlParams = new URLSearchParams(window.location.search);
-      const uuid = urlParams.get('UUID')|| urlParams.get('uuid');
+      const uuid = urlParams.get('UUID') || urlParams.get('uuid');
       if (uuid) {
         validateAndMoveToForm(uuid)
       }
@@ -175,7 +168,7 @@ export default function Admission() {
     }
     return '';
   };
-const myCookieValue = getCookieValueByKey('idToken');
+  const myCookieValue = getCookieValueByKey('idToken');
 
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const param = router?.query;
@@ -187,45 +180,43 @@ const myCookieValue = getCookieValueByKey('idToken');
   }
 
   const openMyNumberDialog = () => {
-    let payload = { id: layoutReducer?.user?.place?.id}
-    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+    let payload = { id: layoutReducer?.user?.place?.id }
+    let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+    layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
       if (response && response.data) {
-      let obj = response.data.model;
-      if(obj.is_q_active=="1")
-      {
-        router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
-    }
-    else {
-        router.push({pathname:'/user/event-list'})
-    }
-}}):
-    getActiveList(payload, async (res) => {
-      if (res?.data?.model?.active_flg == "1") {
-        router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
-}
-else {
-    router.push({pathname:'/user/list'})
-}
-})
-   
+        let obj = response.data.model;
+        if (obj.is_q_active == "1") {
+          router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
+        }
+        else {
+          router.push({ pathname: '/user/event-list' })
+        }
+      }
+    }) :
+      getActiveList(payload, async (res) => {
+        if (res?.data?.model?.active_flg == "1") {
+          router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`)
+        }
+        else {
+          router.push({ pathname: '/user/list' })
+        }
+      })
+
   };
 
   const validateAndMoveToForm = (id) => {
     let ppid;
     let payload = {
-        "uuid":id
+      "uuid": id
     }
-    getPPID(payload,(res)=>
-    {
-      if(res)
-      {
-     // Parse the inner JSON stored as a string in the "result" field
-      const innerJson = JSON.parse(res.result);
-     // Extract the value associated with the key "ppid"
-      const ppidValue = innerJson.transfer_data.ppid;
-      ppid= ppidValue;
-      ppid && fetchBasicDetailsInfo(ppid);
+    getPPID(payload, (res) => {
+      if (res) {
+        // Parse the inner JSON stored as a string in the "result" field
+        const innerJson = JSON.parse(res.result);
+        // Extract the value associated with the key "ppid"
+        const ppidValue = innerJson.transfer_data.ppid;
+        ppid = ppidValue;
+        ppid && fetchBasicDetailsInfo(ppid);
       }
     })
   }
@@ -324,29 +315,29 @@ else {
   }
 
   const openYappleModal = () => {
-    let payload = { id: layoutReducer?.user?.place?.id}
-    let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-    layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+    let payload = { id: layoutReducer?.user?.place?.id }
+    let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+    layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
       if (response && response.data) {
-      let obj = response.data.model;
-      if(obj.is_q_active=="1")
-      {
-        setImportModalOpen(true)
-    }
-    else {
-        router.push({pathname:'/user/event-list'})
-    }
-}}):
-    getActiveList(payload, async (res) => {
-      if (res?.data?.model?.active_flg == "1") {
-        setImportModalOpen(true)
-}
-else {
-    router.push({pathname:'/user/list'})
-}
-})
+        let obj = response.data.model;
+        if (obj.is_q_active == "1") {
+          setImportModalOpen(true)
+        }
+        else {
+          router.push({ pathname: '/user/event-list' })
+        }
+      }
+    }) :
+      getActiveList(payload, async (res) => {
+        if (res?.data?.model?.active_flg == "1") {
+          setImportModalOpen(true)
+        }
+        else {
+          router.push({ pathname: '/user/list' })
+        }
+      })
 
-};
+  };
 
   const handleStaffButtonClick = () => {
     // Logic for the staff button click
@@ -366,11 +357,11 @@ else {
         secondButtonClick={openYappleModal}
         setBarcode={setBarcode}
         isCheckIn={false}
-        successHeader={layoutReducer?.user?.place?.type === "place"?"checkout_info_place":"checkout_info_event"}
+        successHeader={layoutReducer?.user?.place?.type === "place" ? "checkout_info_place" : "checkout_info_event"}
         isEvent={true}
         callable={confirmRegistrationBeforeCheckin}
         dynamicButtonText={true}
-        keyJson={layoutReducer?.user?.place?.type === "place" ?"de_register":"de_register_event"}
+        keyJson={layoutReducer?.user?.place?.type === "place" ? "de_register" : "de_register_event"}
         type={layoutReducer?.user?.place?.type}
       />
       <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
@@ -427,7 +418,7 @@ else {
               let fam_val = values.familyCode ? convertToSingleByte(values.familyCode) : "";
               let fam_pass = values.password ? convertToSingleByte(values.password) : "";
               let payload = {
-                family_code: values.familyCode ? fam_val: "",
+                family_code: values.familyCode ? fam_val : "",
                 refugee_name: values.name,
                 password: fam_pass,
                 place_id: layoutReducer?.user?.place?.id,
@@ -437,8 +428,7 @@ else {
                     ? { event_id: layoutReducer?.user?.place?.id }
                     : {}),
               };
-              if(isSearch)
-              { 
+              if (isSearch) {
                 setLoader(true);
                 getList(payload, getSearchResult);
               }
@@ -494,7 +484,7 @@ else {
                                 <ButtonRounded
                                   buttonProps={{
                                     custom: "userDashboard",
-                                    title:`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`,
+                                    title: `https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-100&idToken=${myCookieValue}`,
                                     buttonClass:
                                       "flex align-items-center justify-content-center  primary-button h-3rem md:h-8rem lg:h-8rem ",
                                     type: "submit",
@@ -584,52 +574,36 @@ else {
                                 <div className="mb-3 w-full">
                                   <div className="flex w-12">
                                     <div className="w-12">
-                                      <Input inputProps={{
-                                        inputParentClassName: `custom_input w-full ${errors.password &&
-                                          touched.password &&
-                                          "p-invalid"
-                                          }`,
-                                        labelProps: {
-                                          text: translate(localeJson, "shelter_password"),
-                                          inputLabelClassName: "block",
-                                          spanText: "*",
-                                          inputLabelSpanClassName: "p-error",
-                                          labelMainClassName: "pb-1"
-                                        },
-                                        inputClassName: "w-full",
-                                        useGrouping: false,
-                                        id: "password",
-                                        name: "password",
-                                        inputMode: "numeric",
-                                        keyfilter: "int",
-                                        placeholder: translate(
-                                          localeJson,
-                                          "placeholder_please_enter_password"
-                                        ),
-                                        value: values.password,
-                                        isLoading: audioPasswordLoader,
-                                        disabled: audioPasswordLoader,
-                                        hasIcon: true,
-                                        onChange: (evt) => {
-                                          const re = /^[0-9-]+$/;
-                                          if (evt.target.value == "") {
-                                            setFieldValue("password", evt.target.value);
-                                          }
-                                          if (re.test(convertToSingleByte(evt.target.value))) {
-                                            setFieldValue("password", evt.target.value);
-                                          }
-                                        },
-                                        onValueChange: (evt) => {
-                                          const re = /^[0-9-]+$/;
-                                          if (evt.target.value == "") {
-                                            setFieldValue("password", evt.target.value);
-                                          }
-                                          if (re.test(convertToSingleByte(evt.target.value))) {
-                                            setFieldValue("password", evt.target.value);
-                                          }
-                                        },
-                                        onBlur: handleBlur,
-                                      }} />
+                                      <Password
+                                        passwordProps={{
+                                          passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
+                                          labelProps: {
+                                            text: translate(localeJson, 'shelter_password'),
+                                            spanText: "*",
+                                            passwordLabelSpanClassName: "p-error",
+                                            passwordLabelClassName: "block",
+                                          },
+                                          name: 'password',
+                                          inputMode: "numeric",
+                                          keyfilter: "int",
+                                          placeholder: translate(
+                                            localeJson,
+                                            "placeholder_please_enter_password"
+                                          ),
+                                          value: values.password,
+                                          onChange: (evt) => {
+                                            const re = /^[0-9-]+$/;
+                                            if (evt.target.value == "") {
+                                              setFieldValue("password", evt.target.value);
+                                            }
+                                            if (re.test(convertToSingleByte(evt.target.value))) {
+                                              setFieldValue("password", evt.target.value);
+                                            }
+                                          },
+                                          onBlur: handleBlur,
+                                          passwordClass: "w-full"
+                                        }}
+                                      />
                                     </div>
                                   </div>
                                   <div className="w-11">
@@ -717,37 +691,36 @@ else {
                                       buttonClass: "w-12 h-3rem primary-button",
                                       rounded: "true",
                                       text: translate(localeJson, "mem_search"),
-                                      onClick:()=>
-                                      {
-                                        let payload = { id: layoutReducer?.user?.place?.id}
-                                        let evt_payload = { event_id: layoutReducer?.user?.place?.id}
-                                        layoutReducer?.user?.place?.type === "event"? getEventListByID(evt_payload, (response) => {
+                                      onClick: () => {
+                                        let payload = { id: layoutReducer?.user?.place?.id }
+                                        let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                        layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
                                           if (response && response.data) {
-                                          let obj = response.data.model;
-                                          if(obj.is_q_active=="1")
-                                          {
-                                            setSearch(true);
-                                            setTimeout(()=>{
-                                              handleSubmit()
-                                            },1000)
-                                        }
-                                        else {
-                                          setSearch(false)
-                                            router.push({pathname:'/user/event-list'})
-                                        }
-                                    }}):
-                                        getActiveList(payload, async (res) => {
-                                          if (res?.data?.model?.active_flg == "1") {
-                                            setSearch(true)
-                                            setTimeout(()=>{
-                                              handleSubmit()
-                                            },1000)
-                                    }
-                                    else {
-                                      setSearch(false)
-                                        router.push({pathname:'/user/list'})
-                                    }
-                                    })
+                                            let obj = response.data.model;
+                                            if (obj.is_q_active == "1") {
+                                              setSearch(true);
+                                              setTimeout(() => {
+                                                handleSubmit()
+                                              }, 1000)
+                                            }
+                                            else {
+                                              setSearch(false)
+                                              router.push({ pathname: '/user/event-list' })
+                                            }
+                                          }
+                                        }) :
+                                          getActiveList(payload, async (res) => {
+                                            if (res?.data?.model?.active_flg == "1") {
+                                              setSearch(true)
+                                              setTimeout(() => {
+                                                handleSubmit()
+                                              }, 1000)
+                                            }
+                                            else {
+                                              setSearch(false)
+                                              router.push({ pathname: '/user/list' })
+                                            }
+                                          })
                                       }
                                     }}
                                     parentClass={"w-full primary-button"}

@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
@@ -11,6 +11,13 @@ import { Input, TextArea } from "../input";
 
 export default function QuestionnairesCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
+    const { open, close, onRegister, buttonText, modalAction, editObject } = props && props;
+
+    const [initialValues, setInitialValues] = useState({
+        name: "",
+        name_en: "",
+        remarks: ""
+    })
     const schema = Yup.object().shape({
         name: Yup.string()
             .required(translate(localeJson, 'questionnaire_master_name_is_required'))
@@ -21,13 +28,6 @@ export default function QuestionnairesCreateEditModal(props) {
             .required(translate(localeJson, 'questionnaire_remarks_is_required'))
             .max(255, translate(localeJson, 'questionnaire_remarks_is_max_required')),
     });
-
-    const { open, close, onRegister, buttonText, modalAction, editObject } = props && props;
-    const [initialValues, setInitialValues] = useState({
-        name: "",
-        name_en: "",
-        remarks: ""
-    })
 
     useEffect(() => {
         if (open) {
@@ -44,9 +44,7 @@ export default function QuestionnairesCreateEditModal(props) {
                     remarks: editObject.remarks,
                 });
             }
-
         }
-
     }, [open]);
 
     return (

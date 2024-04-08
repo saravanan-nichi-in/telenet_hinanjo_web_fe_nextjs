@@ -16,7 +16,6 @@ export const DashboardServices = {
 function _getList(payload, callBackFun) {
     axios.post('/admin/dashboard', payload)
         .then((response) => {
-            console.log(response);
             if (response && response.data) {
                 callBackFun(response.data);
             }

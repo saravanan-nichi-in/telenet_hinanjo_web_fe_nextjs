@@ -150,7 +150,6 @@ function TemporaryRegistrants() {
                 }
             });
             await getTemporaryRegistrantList();
-            console.log(param, "KKKKKKKKKKKKKKKK");
             if (param?.UUID || param?.uuid) {
                 validateAndMoveToForm(param.UUID || param.uuid)
             }
@@ -164,7 +163,6 @@ function TemporaryRegistrants() {
             "uuid": id
         }
         getPPID(payload, (res) => {
-            console.log(res, "PPID")
             if (res) {
                 // Parse the inner JSON stored as a string in the "result" field
                 const innerJson = JSON.parse(res.result);
@@ -527,7 +525,6 @@ function TemporaryRegistrants() {
                                     text: translate(localeJson, "staff_temp_register_big_btn_one"),
                                     type: "button",
                                     onClick: () => {
-                                        console.log(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`);
                                         router.push(`https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`);
                                     },
                                     icon: <img src="/layout/images/Card.png" width={'30px'} height={'30px'} alt="scanner" />,

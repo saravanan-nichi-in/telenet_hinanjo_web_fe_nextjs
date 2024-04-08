@@ -1,13 +1,12 @@
 import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
 export default function AdminManagementDeleteModal(props) {
     const { localeJson } = useContext(LayoutContext);
-    // Destructuring
     const { open, close } = props && props;
 
     return (
@@ -19,7 +18,6 @@ export default function AdminManagementDeleteModal(props) {
                         {translate(localeJson, 'confirmation_information')}
                     </div>
                 }
-
                 visible={open}
                 draggable={false}
                 blockScroll={true}

@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { importErrorToastDisplay } from '@/helper';
+import { common422ErrorToastDisplay } from '@/helper';
 
 export const UserEventListServices = {
     getEventsList: _getEventsList,
@@ -44,8 +44,7 @@ function _createUserEvent(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
-            callBackFun();
-            importErrorToastDisplay(error?.response?.data?.message);
+            callBackFun(false);
+            common422ErrorToastDisplay(error);
         });
 }

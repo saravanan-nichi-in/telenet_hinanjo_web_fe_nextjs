@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { Dialog } from "primereact/dialog";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
 import { gender_en, gender_jp } from "@/utils/constant";
-import {Button} from "../button";
+import { Button } from "../button";
 import {
   getValueByKeyRecursively as translate,
   getEnglishDateDisplayFormat,
@@ -13,15 +14,12 @@ import {
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { Input, InputDropdown, InputNumber } from "../input";
-import { Calendar } from "../date&time";
 
 export default function External(props) {
   const { localeJson, locale } = useContext(LayoutContext);
-
   const {
     open,
     close,
-    onSpecialCareEditSuccess,
     header,
     buttonText,
     setEvacueeValues,
@@ -32,12 +30,27 @@ export default function External(props) {
 
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const currentDate = new Date();
   const minDOBDate = new Date();
   const tempDate = new Date(editObj.dob ?? "");
-  const currentYear = minDOBDate.getFullYear();
-  
   minDOBDate.setFullYear(minDOBDate.getFullYear() - 125); // Set the maximum allowed birth date to 125 years ago
+  const initialValues =
+    registerModalAction == "edit"
+      ? {
+        ...editObj,
+        year: tempDate.getFullYear(),
+        month: tempDate.getMonth() + 1,
+        date: tempDate.getDate()
+      }
+      : {
+        id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
+        name: "",
+        name_kanji: "",
+        dob: "",
+        year: "",
+        month: "",
+        date: "",
+        gender: null,
+      };
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(translate(localeJson, "name_required"))
@@ -61,24 +74,6 @@ export default function External(props) {
     gender: Yup.string().required(translate(localeJson, "gender_required"))
   });
 
-  const initialValues =
-    registerModalAction == "edit"
-      ? {
-        ...editObj,
-        year: tempDate.getFullYear(),
-        month: tempDate.getMonth() + 1,
-        date: tempDate.getDate()
-      }
-      : {
-        id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
-        name: "",
-        name_kanji: "",
-        dob: "",
-        year: "",
-        month: "",
-        date: "",
-        gender: null,
-      };
   return (
     <>
       <Formik
@@ -122,7 +117,7 @@ export default function External(props) {
               >
                 <div className={`modal-content`}>
                   <div className="mt-3 mb-5 pl-5 pr-5">
-                  <div className="">
+                    <div className="">
                       <Input
                         inputProps={{
                           inputParentClassName: `custom_input ${errors.name_kanji && touched.name_kanji && 'p-invalid pb-1'}`,
@@ -162,7 +157,6 @@ export default function External(props) {
                         errorBlock={errors.name && touched.name && errors.name}
                       />
                     </div>
-                    
                     <div className="mt-4 ">
                       <div className="grid">
                         <div className="col-12" style={{ padding: "0 0.5rem" }}>
@@ -190,7 +184,7 @@ export default function External(props) {
                                   name: "year",
                                   value: values.year,
                                   inputMode: "numeric",
-                                  type:"text",
+                                  type: "text",
                                   onChange: (evt) => {
                                     const re = /^[0-9-]+$/;
                                     if (evt.target.value == "") {
@@ -205,17 +199,17 @@ export default function External(props) {
                                       new Date().getFullYear();
                                     if (evt.target.value.length <= 3 && re.test(convertToSingleByte(evt.target.value))) {
                                       setFieldValue(
-                                        "year",evt.target.value
+                                        "year", evt.target.value
                                       );
                                     }
-                                    let minYear =1899;
+                                    let minYear = 1899;
                                     if (evt.target.value?.length <= 4 && re.test(convertToSingleByte(evt.target.value))) {
                                       if (
                                         evt.target.value.length == 4 &&
-                                        enteredYear > minYear&&
+                                        enteredYear > minYear &&
                                         enteredYear <= currentYear
                                       ) {
-                                        setFieldValue("year",evt.target.value);
+                                        setFieldValue("year", evt.target.value);
                                       }
                                     }
                                   },
@@ -261,7 +255,7 @@ export default function External(props) {
                                       return;
                                     }
                                     let Month = (
-                                     convertToSingleByte(evt.target.value)
+                                      convertToSingleByte(evt.target.value)
                                     );
                                     const enteredMonth = parseInt(Month)
                                     const currentMonth =
@@ -316,7 +310,7 @@ export default function External(props) {
                                   id: "date",
                                   name: "date",
                                   value: values.date,
-                                  inputMode:"numeric",
+                                  inputMode: "numeric",
                                   onChange: (evt) => {
                                     const { value, name } = evt.target;
                                     const month = convertToSingleByte(values.month);
@@ -353,8 +347,8 @@ export default function External(props) {
                                         // February
                                         maxDays =
                                           year % 4 === 0 &&
-                                          (year % 100 !== 0 ||
-                                            year % 400 === 0)
+                                            (year % 100 !== 0 ||
+                                              year % 400 === 0)
                                             ? 29
                                             : 28;
                                       } else if (

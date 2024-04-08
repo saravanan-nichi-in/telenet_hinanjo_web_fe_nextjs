@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import {Button} from "../button";
+import { Button } from "../button";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { NormalLabel } from "../label";
@@ -11,11 +11,9 @@ import { ValidationError } from "../error";
 import { InputDropdown, TextArea } from "../input";
 
 export default function EmailSettings(props) {
-    /**
-     * Destructing
-    */
-    const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
     const { localeJson } = useContext(LayoutContext);
+    const { open, close, register, intervalFrequency, prefectureList, emailSettingValues } = props && props;
+
     const [transmissionInterval, setTransmissionInterval] = useState(0);
     const [outputTargetArea, setOutputTargetArea] = useState(0);
     const [initialValues, setInitialValues] = useState({
@@ -30,23 +28,6 @@ export default function EmailSettings(props) {
                 return value.match(regexExp) || validateMultipleEmails(value, localeJson);
             }),
     });
-    const validateMultipleEmails = (value, localeJson) => {
-        const emails = value.split(',').map(email => email.trim());
-
-        for (const email of emails) {
-            if (!email.match(regexExp)) {
-                return false;
-            }
-        }
-
-         return emails.join(','); // Return true if all emails are valid
-    };
-
-    const header = (
-        <div className="new-custom-modal">
-            {translate(localeJson, 'mail_setting')}
-        </div>
-    );
 
     useEffect(() => {
         if (open) {
@@ -58,13 +39,25 @@ export default function EmailSettings(props) {
         }
     }, [open]);
 
+    const validateMultipleEmails = (value, localeJson) => {
+        const emails = value.split(',').map(email => email.trim());
+
+        for (const email of emails) {
+            if (!email.match(regexExp)) {
+                return false;
+            }
+        }
+
+        return emails.join(','); // Return true if all emails are valid
+    };
+
     return (
         <>
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
                 enableReinitialize
-                onSubmit={(values, actions) => {
+                onSubmit={(actions) => {
                     close();
                     actions.resetForm({ values: initialValues });
                 }}
@@ -81,7 +74,11 @@ export default function EmailSettings(props) {
                     <div>
                         <Dialog
                             className="new-custom-modal"
-                            header={header}
+                            header={
+                                <div className="new-custom-modal">
+                                    {translate(localeJson, 'mail_setting')}
+                                </div>
+                            }
                             visible={open}
                             draggable={false}
                             blockScroll={true}

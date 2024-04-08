@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 
-import InputSwitch from "../switch/inputSwitch";
-import {Button} from "../button";
+import { InputSwitch } from "../switch";
+import { Button } from "../button";
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
@@ -42,7 +42,7 @@ const DeleteModal = (props) => {
     if (cancelButton || updateButton) {
       return (
         <div className="text-center">
-          {/* update button */}
+          {/* Update button */}
           {updateButton && (
             <div className="modal-button-footer-space">
               <Button

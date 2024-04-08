@@ -554,3 +554,8 @@
         border: 2px solid #d31720;
     }
 }
+@media screen and (max-width: 769px) {
+    .footerButtonText .p-button-label {
+        font-size: 16px !important;
+    }
+}

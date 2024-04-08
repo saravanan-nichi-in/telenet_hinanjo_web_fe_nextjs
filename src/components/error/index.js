@@ -11,10 +11,11 @@ export const ValidationError = (props) => {
 
     return (
         <>
-        {errorBlock && 
-        <small className={`scroll-check p-error block ${parentClass}`} style={parentStyle} {...restProps}>
-            {errorBlock}
-        </small>}
+            {errorBlock &&
+                <small className={`scroll-check p-error block ${parentClass}`} style={parentStyle} {...restProps}>
+                    {errorBlock}
+                </small>
+            }
         </>
     );
 }

@@ -35,10 +35,7 @@ function _getProductTypes(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _getProductNames(payload, callBackFun) {
-    const params = {
-        params: payload
-    };
-    axios.get('/staff/stockpile/history/dropdown/category', params)
+    axios.post('/staff/stockpile/history/dropdown/category', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

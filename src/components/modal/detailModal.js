@@ -25,13 +25,6 @@ const DetailModal = (props) => {
         ...restProps
     } = detailModalProps;
 
-    /**
-     * Header content 
-     */
-    // const header = (
-    //     headerContent
-    // );
-
     return (
         <div className={`${parentMainClass}`}>
             <Dialog className={`${modalClass} new-custom-modal`}

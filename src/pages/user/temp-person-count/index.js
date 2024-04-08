@@ -8,7 +8,7 @@ import CustomHeader from "@/components/customHeader";
 import { useRouter } from "next/router";
 import { usePathname } from 'next/navigation'
 import { useAppDispatch } from "@/redux/hooks";
-import { reset } from "@/redux/register";
+import { clearExceptPlaceId } from "@/redux/tempRegister";
 
 const PersonCountScreen = () => {
     const router = useRouter()
@@ -27,7 +27,7 @@ const PersonCountScreen = () => {
             // Person count not selected, show alert
             window.alert(translate(localeJson, 'please_select_person_count'));
         } else {
-            dispatch(reset());
+            dispatch(clearExceptPlaceId());
             // Person count selected, proceed with navigation
             localStorage.setItem("personCount", personCount);
             router.push('/user/temp-register');
@@ -35,7 +35,7 @@ const PersonCountScreen = () => {
     };
 
     useEffect(()=>{
-        dispatch(reset());
+        dispatch(clearExceptPlaceId());
     },[])
 
     return (

@@ -11,7 +11,7 @@ import { Button, NormalTable, ValidationError } from "@/components";
 import { StaffSuppliesServices } from "@/services/supplies.services";
 import CustomHeader from "@/components/customHeader";
 import { TextArea } from "@/components/input";
-import { CounterSupplies } from "@/components/incrementDecrement";
+import { CounterSupplies } from "@/components";
 
 export default function Supplies() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -142,7 +142,7 @@ export default function Supplies() {
             unit: obj.unit ?? "",
             adjuster: obj.number ?? "",
             number: obj.number ?? "",
-            current_quantity: (obj.number ?? "") + " " + (obj.unit ? obj.unit:""),
+            current_quantity: (obj.number ?? "") + " " + (obj.unit ? obj.unit : ""),
           };
           preparedList.push(preparedObj);
         });

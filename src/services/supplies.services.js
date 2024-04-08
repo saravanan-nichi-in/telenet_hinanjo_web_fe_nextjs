@@ -9,7 +9,7 @@ export const StaffSuppliesServices = {
 
 function _getStaffSuppliesList(payload, callBackFun) {
   axios
-    .get(`/staff/supplies`,{params:payload})
+    .post(`/staff/supplies`,payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

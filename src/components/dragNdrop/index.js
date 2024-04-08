@@ -16,7 +16,6 @@ export const DND = (props) => {
                             {child}
                         </div>
                     ))}
-
                 </ReactDragListView>
             </div>
         </div>

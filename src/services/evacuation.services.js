@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
+import { common422ErrorToastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const EvacuationServices = {
@@ -138,7 +139,7 @@ function _evacuationCheckout(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _eventAttendeesCheckout(payload, callBackFun) {
-    axios.post('/admin/attendees/checkout', payload)
+    axios.post('/user/event/manual/checkout', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
@@ -148,10 +149,8 @@ function _eventAttendeesCheckout(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            callBackFun(error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            common422ErrorToastDisplay(error);
         });
 }
 

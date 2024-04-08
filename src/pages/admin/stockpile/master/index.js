@@ -11,7 +11,7 @@ import CustomHeader from '@/components/customHeader';
 import { InputDropdown } from '@/components/input';
 
 export default function AdminStockPileMaster() {
-    const { locale, localeJson ,setLoader } = useContext(LayoutContext);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
@@ -39,7 +39,14 @@ export default function AdminStockPileMaster() {
         { field: 'id', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: 'center' },
         { field: 'product_name', header: translate(localeJson, 'header_product_name'), maxWidth: "10rem", minWidth: "5rem" },
         { field: 'category', header: translate(localeJson, 'header_category'), maxWidth: "10rem", minWidth: "5rem", sortable: true },
-        { field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem", textAlign: "center", alignHeader: "center" },
+        {
+            field: 'shelf_life', header: translate(localeJson, 'header_shelf_life'), minWidth: "5rem", textAlign: "center", alignHeader: "center",
+            body: (rowData) => (
+                <div style={{ textAlign: "center" }}>
+                    {rowData.shelf_life ? rowData.shelf_life + " " + translate(localeJson, 'days_before') : ""}
+                </div>
+            )
+        },
         {
             field: 'stockpile_image',
             header: translate(localeJson, 'header_stockpile_image'),
@@ -214,6 +221,7 @@ export default function AdminStockPileMaster() {
                         product_id: obj.product_id ?? "",
                         product_name: obj.product_name ?? "",
                         category: obj.category ?? "",
+                        // shelf_life: obj.shelf_life ? obj.shelf_life + " " + translate(localeJson, 'days_before') : "",
                         shelf_life: obj.shelf_life ?? "",
                         stockpile_image: obj.stockpile_image ?? "",
                     }

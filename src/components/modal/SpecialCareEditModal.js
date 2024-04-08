@@ -11,6 +11,8 @@ import { Input } from "../input";
 
 export default function SpecialCareEditModal(props) {
   const { localeJson } = useContext(LayoutContext);
+  const { open, close, header, buttonText } = props && props;
+
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(translate(localeJson, "special_care_name_jp_required"))
@@ -19,8 +21,8 @@ export default function SpecialCareEditModal(props) {
       .required(translate(localeJson, "special_care_name_en_required"))
       .max(255, translate(localeJson, "special_care_name_en_max_required")),
   });
-  const { open, close, header, buttonText } = props && props;
   const initialValues = props.currentEditObj;
+  
   return (
     <>
       <Formik

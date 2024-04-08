@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay, toastDisplay } from "@/helper";
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from "@/helper";
 import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
@@ -53,7 +53,9 @@ function _exportData(payload, callBackFun) {
       }
     })
     .catch((error) => {
-      toastDisplay(error?.response);
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+      });
     });
 }
 
@@ -94,7 +96,30 @@ function _create(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      toastDisplay(error?.response);
+      if (error.response && error.response.status == 422) {
+        if (isObject(error.response.data.message)) {
+          let errorMessages = Object.values(error.response.data.message);
+          let errorString = errorMessages.join('.')
+          let errorArray = errorString.split(".");
+          errorArray = errorArray.filter(message => message.trim() !== "");
+          // Join the error messages with line breaks
+          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+          let formattedErrorMessage = errorArray
+            .map((message, index) => {
+              return `${message.trim()}`;
+            })
+            .join("\n");
+          toast.error(formattedErrorMessage, {
+            position: "top-right",
+          });
+        } else {
+          toast.error(error.response.data.message, {
+            position: "top-right",
+          });
+        }
+      } else {
+        console.error(error);
+      }
     });
 }
 
@@ -116,7 +141,30 @@ function _update(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      toastDisplay(error?.response);
+      if (error.response && error.response.status == 422) {
+        if (isObject(error.response.data.message)) {
+          let errorMessages = Object.values(error.response.data.message);
+          let errorString = errorMessages.join('.')
+          let errorArray = errorString.split(".");
+          errorArray = errorArray.filter(message => message.trim() !== "");
+          // Join the error messages with line breaks
+          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
+          let formattedErrorMessage = errorArray
+            .map((message, index) => {
+              return `${message.trim()}`;
+            })
+            .join("\n");
+          toast.error(formattedErrorMessage, {
+            position: "top-right",
+          });
+        } else {
+          toast.error(error.response.data.message, {
+            position: "top-right",
+          });
+        }
+      } else {
+        console.error(error);
+      }
     });
 }
 
@@ -198,6 +246,10 @@ function _deletePlace(id, callBackFun) {
       }
     })
     .catch((error) => {
-      toastDisplay(error?.response);
+      if (!isArray(error.response.data.message)) {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+        });
+      }
     });
 }

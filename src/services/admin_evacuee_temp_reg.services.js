@@ -1,6 +1,5 @@
 import { downloadBase64File, timestampFile } from "@/helper";
 import axios from "@/utils/api";
-import { isObject } from "lodash";
 import toast from 'react-hot-toast';
 
 export const AdminEvacueeTempServices = {
@@ -27,7 +26,6 @@ function _exportData(payload) {
             }
         })
         .catch((error) => {
-
             console.error("Error fetching data:", error);
             toast.error(error?.response?.data?.message, {
                 position: "top-right",

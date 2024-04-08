@@ -1,20 +1,19 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Webcam from "react-webcam";
 import { Dialog } from 'primereact/dialog';
 import { Spin, Upload } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { FaFileUpload } from 'react-icons/fa';
-import { IoMdReverseCamera, IoIosArrowBack } from 'react-icons/io';
+import { IoMdReverseCamera } from 'react-icons/io';
 import { AiOutlineCamera, AiOutlineRotateRight } from 'react-icons/ai';
 import { MdSettingsBackupRestore } from 'react-icons/md';
+
 import {
     Button,
 } from "@/components";
-
 import Cropper from './cropper'
-import './crop.module.css'
 
 const { Dragger } = Upload
 
@@ -31,22 +30,6 @@ export const PerspectiveCropping = (props) => {
     const [completed, setCompleted] = useState(false);
     const [toggleCameraMode, setToggleCameraMode] = useState("environment");
     const [rotateAngel, setRotateAngel] = useState(0);
-
-    const [videoStream, setVideoStream] = useState(null);
-    const [videoWidth, setVideoWidth] = useState(0);
-    const [videoHeight, setVideoHeight] = useState(0);
-
-    const dialogFuncMap = {
-        'displayPosition': setDisplayPosition,
-    }
-
-    const onClickOpenModal = (name, position) => {
-        dialogFuncMap[`${name}`](true);
-
-        if (position) {
-            setPosition(position);
-        }
-    }
 
     const onCameraBtnClick = (name) => {
         setLoader(true);
@@ -137,8 +120,6 @@ export const PerspectiveCropping = (props) => {
                             iconPos: 'left',
                             buttonClass: "px-3",
                             onClick: () => {
-                                // cropperRef.current.backToCrop();
-                                // setCompleted(false);
                                 setSelectUtil('camera');
                                 setCompleted(false);
                                 setImg(undefined);
@@ -333,9 +314,6 @@ export const PerspectiveCropping = (props) => {
                 }}
                 footer={renderFooter('displayPosition')}
                 className="custom-modal ocr-modal m-0 sm:m-2 lg:m-2 md:m-2"
-
-                // style={{ width: '40vw' }} // Adjust the width based on responsiveness
-                // breakpoints={{ '960px': '52vw', '640px': '100vw', '370px': '100vw' }}
                 modal
                 contentStyle={{ overflow: 'hidden' }}
             >

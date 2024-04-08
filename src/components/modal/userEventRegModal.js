@@ -28,7 +28,7 @@ import CustomHeader from "../customHeader";
 import {
   calculateAge
 } from "@/helper";
-import {UserEventListServices} from "@/services/user_event_list.services"
+import { UserEventListServices } from "@/services/user_event_list.services"
 
 export default function UserEventRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -44,29 +44,29 @@ export default function UserEventRegModal(props) {
   const minYear = parseInt(minDOBDate.getFullYear() - 120);
   const validationSchema = () =>
     Yup.object().shape({
-      checked:Yup.boolean().nullable(),
+      checked: Yup.boolean().nullable(),
       name_furigana: Yup.string()
         .required(translate(localeJson, "c_name_phonetic_is_required"))
         .max(100, translate(localeJson, "name_max_phonetic"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-        dob: Yup.object().shape({
-          year: Yup.string()
-            .required(
-              translate(localeJson, "c_year") +
-                translate(localeJson, "is_required")
-            ).min(4,translate(localeJson, "c_year") +
+      dob: Yup.object().shape({
+        year: Yup.string()
+          .required(
+            translate(localeJson, "c_year") +
+            translate(localeJson, "is_required")
+          ).min(4, translate(localeJson, "c_year") +
             translate(localeJson, "is_required")),
-          month: Yup.string().required(
-            translate(localeJson, "c_month") +
-              translate(localeJson, "is_required")
-          ),
-          date: Yup.string().required(
-            translate(localeJson, "c_date") + translate(localeJson, "is_required")
-          ),
-        }),
+        month: Yup.string().required(
+          translate(localeJson, "c_month") +
+          translate(localeJson, "is_required")
+        ),
+        date: Yup.string().required(
+          translate(localeJson, "c_date") + translate(localeJson, "is_required")
+        ),
+      }),
       name: Yup.string().nullable().max(100, translate(localeJson, "external_popup_name_kanji")),
       tel: Yup.string()
-      .required(translate(localeJson, "phone_no_required"))
+        .required(translate(localeJson, "phone_no_required"))
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -86,10 +86,9 @@ export default function UserEventRegModal(props) {
           }
         )
         .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-          if(value)
-          {
-          const singleByteValue = convertToSingleByte(value);
-          return /^[0-9]{10,11}$/.test(singleByteValue);
+          if (value) {
+            const singleByteValue = convertToSingleByte(value);
+            return /^[0-9]{10,11}$/.test(singleByteValue);
           }
           else {
             return true;
@@ -99,33 +98,33 @@ export default function UserEventRegModal(props) {
           "at-least-one-checked",
           translate(localeJson, "phone_no_required"),
           (value, parent) => {
-            if (parent.parent.checked === true){
-              return value?true:false;
+            if (parent.parent.checked === true) {
+              return value ? true : false;
             } else {
               return true;
             }
           }
         ),
       // Add other fields and validations as needed
-      age: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      age_m: Yup.number().required(translate(localeJson, "age_month_required")),
+      // age: Yup.number()
+      //   .required(translate(localeJson, "age_required")),
+      // age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
-      .test("is-correct",
-        translate(localeJson,"zip_code_mis_match"),
-        (value)=>{
-          if(value != undefined)
-          return convertToSingleByte(value)==convertToSingleByte(fetchZipCode);
-          else
-          return true
-        })
+        .test("is-correct",
+          translate(localeJson, "zip_code_mis_match"),
+          (value) => {
+            if (value != undefined)
+              return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
+            else
+              return true
+          })
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
         .required(translate(localeJson, "c_address_is_required"))
         .max(190, translate(localeJson, "address_max_length")),
-        address2: Yup.string()
+      address2: Yup.string()
         .nullable()
         .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
@@ -146,7 +145,7 @@ export default function UserEventRegModal(props) {
     isFrom = "user",
   } = props && props;
 
-  const { getText,getZipCode,getAddress } = CommonServices;
+  const { getText, getZipCode, getAddress } = CommonServices;
   const {
     getIndividualQuestionnaireList,
     getSpecialCareDetails,
@@ -165,8 +164,8 @@ export default function UserEventRegModal(props) {
   const [haveRepTel, setHavetel] = useState(false);
   const [isRep, setIsRep] = useState(false);
   const [dobCounter, setDobCounter] = useState(0);
-  const [addressCount,setAddressCount] = useState(0);
-  const [fetchZipCode,setFetchedZipCode] = useState("");
+  const [addressCount, setAddressCount] = useState(0);
+  const [fetchZipCode, setFetchedZipCode] = useState("");
 
   useEffect(() => {
     setMIsRecording(isRecording);
@@ -224,50 +223,50 @@ export default function UserEventRegModal(props) {
     registerModalAction == "edit"
       ? editObj
       : {
-          id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
-          checked: evacuee && evacuee.length > 0 ? false : true,
-          name: "",
-          name_furigana: "",
-          dob: {
-            year: "",
-            month: "",
-            date: "",
-          },
-          age: "",
-          age_m: "",
-          gender: null,
-          postalCode: "",
-          prefecture_id: null,
-          address: "",
-          address2: "",
-          email: "",
-          tel: "",
-          specialCareType: null,
-          connecting_code: "",
-          remarks: "",
-          individualQuestions: null,
-          telAsRep:false,
-          addressAsRep:false,
-        };
+        id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
+        checked: evacuee && evacuee.length > 0 ? false : true,
+        name: "",
+        name_furigana: "",
+        dob: {
+          year: "",
+          month: "",
+          date: "",
+        },
+        age: "",
+        age_m: "",
+        gender: null,
+        postalCode: "",
+        prefecture_id: null,
+        address: "",
+        address2: "",
+        email: "",
+        tel: "",
+        specialCareType: null,
+        connecting_code: "",
+        remarks: "",
+        individualQuestions: null,
+        telAsRep: false,
+        addressAsRep: false,
+      };
 
   function calculateAge(birthdate) {
     const birthdateObj = new Date(birthdate);
     const currentDate = new Date();
-  
+
     let years = currentDate.getFullYear() - birthdateObj.getFullYear();
     let months = currentDate.getMonth() - birthdateObj.getMonth();
-  
+
     if (currentDate.getDate() < birthdateObj.getDate()) {
       // Adjust for cases where the birthdate has not occurred yet in the current month
       months--;
     }
-  
+
     if (months < 0) {
       // Adjust for cases where the birthdate month is ahead of the current month
       years--;
       months += 12;
     }
-  
+
     return { years, months };
   }
   // useEffect(() => {
@@ -302,20 +301,20 @@ export default function UserEventRegModal(props) {
   //   }
   // }, [editObj]);
 
-//   useEffect(() => {
-//     const filteredData = evacuee
-//       .filter((item) => item.checked === true)
-//       .map((item) => {
-//         return {
-//           address: item.address,
-//           address2: item.address2,
-//           prefecture_id: item.prefecture_id,
-//           postalCode: item.postalCode,
-//           tel:item.tel,
-//         };
-//       });
-//     setRepAddress(filteredData);
-//   }, [evacuee]);
+  //   useEffect(() => {
+  //     const filteredData = evacuee
+  //       .filter((item) => item.checked === true)
+  //       .map((item) => {
+  //         return {
+  //           address: item.address,
+  //           address2: item.address2,
+  //           prefecture_id: item.prefecture_id,
+  //           postalCode: item.postalCode,
+  //           tel:item.tel,
+  //         };
+  //       });
+  //     setRepAddress(filteredData);
+  //   }, [evacuee]);
 
   // useEffect(() => {
   //   // Scroll to the first error on form submission
@@ -530,30 +529,30 @@ export default function UserEventRegModal(props) {
   //     else {
   //       setFetchedZipCode("")
   //       formikRef.current.validateField("postalCode") 
-        
+
   //     }
   //   })
   // }
   // },[addressCount])
   const layoutReducer = useSelector((state) => state.layoutReducer);
   const mapObjects = (object1) => {
-    const object2 = [{
-        "event_id": layoutReducer?.user?.event?.id, // Fill this value accordingly
-        "zip_code": object1.postalCode,
-        "family_code": null, // Fill this value accordingly
-        "prefecture_id": object1.prefecture_id,
-        "address": object1.address + ' ' + object1.address2,
-        "address_default": null, // Fill this value accordingly
-        "tel": object1.tel,
-        "refugee_name": object1.name,
-        "name": null, // Fill this value accordingly
-        "dob": `${object1.dob.year}/${parseInt(object1.dob.month) < 10 ? '0' + object1.dob.month : object1.dob.month}/${object1.dob.date < 10 ? '0' + object1.dob.date : object1.dob.date}`,
-        "age": object1.age,
-        "month": object1.age_m,
-        "gender": object1.gender
-    }];
+    const object2 = {
+      "event_id": layoutReducer?.user?.event?.id, // Fill this value accordingly
+      "zip_code": object1.postalCode ? convertToSingleByte(object1.postalCode) : "",
+      // "family_code": null, // Fill this value accordingly
+      "prefecture_id": object1.prefecture_id ? convertToSingleByte(object1.prefecture_id) : "",
+      "address": object1.address + ' ' + object1.address2,
+      "address_default": null, // Fill this value accordingly
+      "tel": object1.tel ? convertToSingleByte(object1.tel) : "",
+      "refugee_name": object1.name_furigana,
+      "name": object1.name, // Fill this value accordingly
+      "dob": `${object1.dob.year}/${parseInt(object1.dob.month) < 10 ? '0' + object1.dob.month : object1.dob.month}/${object1.dob.date < 10 ? '0' + object1.dob.date : object1.dob.date}`,
+      "age": object1.age,
+      "month": object1.age_m,
+      "gender": object1.gender
+    };
     return object2;
-}
+  }
 
   // useEffect(()=> {
   //   formikRef.current.validateField("postalCode") 
@@ -586,16 +585,18 @@ export default function UserEventRegModal(props) {
             // setEvacueeValues(values);
             // setQuestions(initialQuestion);
             // setCounter(count + 1);
-            
+
             // setHaveRepAddress(false);
             // setHavetel(false);
             // setIsRep(false);
             // setFetchedZipCode("")
             // mapObjects(values);/
-            UserEventListServices.createUserEvent(mapObjects(values), (res)=> {
+            setLoader(true);
+            UserEventListServices.createUserEvent(mapObjects(values), (res) => {
               setFetchedZipCode("")
               close();
               actions.resetForm({ values: initialValues });
+              setLoader(false);
             })
             // close();
             // actions.resetForm({ values: initialValues });
@@ -618,7 +619,7 @@ export default function UserEventRegModal(props) {
               <Dialog
                 className="custom-modal h-6 w-full lg:w-30rem md:w-7 sm:w-9"
                 header={
-                  <div>
+                  <div className="hidden">
                     <CustomHeader
                       headerClass={"page-header1"}
                       customParentClassName={"mb-0"}
@@ -631,8 +632,8 @@ export default function UserEventRegModal(props) {
                 op
                 blockScroll={true}
                 onHide={() => {
-                    resetForm();
-                    close();
+                  resetForm();
+                  close();
                 }}
                 footer={
                   <div className="text-center flex flex-column pl-5 pr-5 evacueeFooterButtonText">
@@ -645,9 +646,9 @@ export default function UserEventRegModal(props) {
                         onClick: () => {
                           setCounter(count + 1);
                           setIsFormSubmitted(true);
-                          setFieldValue("dob.year",convertToSingleByte(values.dob.year))
-                          setFieldValue("dob.month",convertToSingleByte(values.dob.month))
-                          setFieldValue("dob.date",convertToSingleByte(values.dob.date))
+                          setFieldValue("dob.year", convertToSingleByte(values.dob.year))
+                          setFieldValue("dob.month", convertToSingleByte(values.dob.month))
+                          setFieldValue("dob.date", convertToSingleByte(values.dob.date))
                           handleSubmit();
                         },
                       }}
@@ -660,9 +661,9 @@ export default function UserEventRegModal(props) {
                         text: translate(localeJson, "cancel"),
                         type: "reset",
                         onClick: () => {
-                            close();
-                            resetForm();
-                          }
+                          close();
+                          resetForm();
+                        }
                       }}
                       parentClass={"inline back-button"}
                     />
@@ -675,9 +676,8 @@ export default function UserEventRegModal(props) {
                       <div className="mb-2 col-12">
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.name && touched.name && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input ${errors.name && touched.name && "p-invalid"
+                              }`,
                             labelProps: {
                               text: translate(localeJson, "c_name_kanji"),
                               inputLabelClassName: "block font-bold",
@@ -695,7 +695,7 @@ export default function UserEventRegModal(props) {
                             onBlur: handleBlur,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording
+                                isMRecording
                                 ? true
                                 : false,
                             inputRightIconProps: {
@@ -729,11 +729,10 @@ export default function UserEventRegModal(props) {
                         <div className="w-12">
                           <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.name_furigana &&
+                              inputParentClassName: `w-full custom_input ${errors.name_furigana &&
                                 touched.name_furigana &&
                                 "p-invalid"
-                              }`,
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "c_refugee_name"),
                                 spanText: "*",
@@ -747,7 +746,7 @@ export default function UserEventRegModal(props) {
                               value: values.name_furigana,
                               disabled:
                                 values?.family_register_from == "0" ||
-                                isMRecording
+                                  isMRecording
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -793,9 +792,8 @@ export default function UserEventRegModal(props) {
                         <div className="w-12">
                           <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.tel && touched.tel && "p-invalid"
-                              }`,
+                              inputParentClassName: `w-full custom_input ${errors.tel && touched.tel && "p-invalid"
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "phone_number"),
                                 spanText: "*",
@@ -810,7 +808,7 @@ export default function UserEventRegModal(props) {
                               inputMode: "numeric",
                               disabled:
                                 values?.family_register_from == "0" ||
-                                isMRecording || values.telAsRep
+                                  isMRecording || values.telAsRep
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -842,9 +840,8 @@ export default function UserEventRegModal(props) {
                                   getText(fromData, (res) => {
                                     const re = /^[0-9-]+$/;
                                     if (res?.data?.content) {
-                                      if(re.test(res?.data?.content))
-                                      {
-                                      setFieldValue("tel", res?.data?.content);
+                                      if (re.test(res?.data?.content)) {
+                                        setFieldValue("tel", res?.data?.content);
                                       }
                                     }
                                   });
@@ -867,11 +864,10 @@ export default function UserEventRegModal(props) {
                         </div>
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.postalCode &&
+                            inputParentClassName: `w-full custom_input ${errors.postalCode &&
                               touched.postalCode &&
                               "p-invalid"
-                            }`,
+                              }`,
                             labelProps: {
                               text: "",
                               spanText: "*",
@@ -887,7 +883,7 @@ export default function UserEventRegModal(props) {
                             value: values.postalCode,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "post_letter"),
@@ -905,8 +901,8 @@ export default function UserEventRegModal(props) {
                                   setFieldValue("postalCode", val);
                                   setFetchedZipCode(val.replace(/-/g, ""))
                                 } else {
-                                  setFieldValue("postalCode", val.slice(0,7));
-                                  setFetchedZipCode(val.slice(0,7))
+                                  setFieldValue("postalCode", val.slice(0, 7));
+                                  setFetchedZipCode(val.slice(0, 7))
                                   return;
                                 }
                               }
@@ -927,7 +923,7 @@ export default function UserEventRegModal(props) {
                                     setFieldValue(
                                       "address",
                                       address.address2 + address.address3 ||
-                                        ""
+                                      ""
                                     );
                                   } else {
                                     setFieldValue("prefecture_id", "");
@@ -950,12 +946,11 @@ export default function UserEventRegModal(props) {
                                 getText(fromData, (res) => {
                                   if (res?.data?.content) {
                                     const re = /^[0-9-]+$/;
-                                    if(re.test(res?.data?.content))
-                                    {
-                                    setFieldValue(
-                                      "postalCode",
-                                      res?.data?.content
-                                    );
+                                    if (re.test(res?.data?.content)) {
+                                      setFieldValue(
+                                        "postalCode",
+                                        res?.data?.content
+                                      );
                                     }
                                   }
                                 });
@@ -974,11 +969,10 @@ export default function UserEventRegModal(props) {
                         />
                         <InputDropdown
                           inputDropdownProps={{
-                            inputDropdownParentClassName: `custom_input mt-2 ${
-                              errors.prefecture_id &&
+                            inputDropdownParentClassName: `custom_input mt-2 ${errors.prefecture_id &&
                               touched.prefecture_id &&
                               "p-invalid"
-                            }`,
+                              }`,
                             labelProps: {
                               inputDropdownLabelClassName: "block font-bold",
                               spanText: "*",
@@ -1009,14 +1003,14 @@ export default function UserEventRegModal(props) {
                             // onBlur: handleBlur,
                             onChange: (e) => {
                               setFieldValue("prefecture_id", e.target.value);
-                              if(values.postalCode) {
-                              let payload = values.postalCode;
-                               getAddress(
-                                payload, (res) => {
-                                  if(res && res.prefcode != e.target.value) {
-                                    setErrors({ ...errors, postalCode : translate(localeJson,"zip_code_mis_match")});
-                                  }
-                                })
+                              if (values.postalCode) {
+                                let payload = values.postalCode;
+                                getAddress(
+                                  payload, (res) => {
+                                    if (res && res.prefcode != e.target.value) {
+                                      setErrors({ ...errors, postalCode: translate(localeJson, "zip_code_mis_match") });
+                                    }
+                                  })
                               }
                             },
                             // onBlur: handleBlur,
@@ -1035,9 +1029,8 @@ export default function UserEventRegModal(props) {
                         />
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input mt-2 mb-2 ${
-                              errors.address && touched.address && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input mt-2 mb-2 ${errors.address && touched.address && "p-invalid"
+                              }`,
                             labelProps: {
                               spanText: "*",
                               inputLabelClassName: "block font-bold",
@@ -1050,18 +1043,18 @@ export default function UserEventRegModal(props) {
                             value: values.address,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "city_ward"),
-                            onChange: (evt)=>{
-                              setFieldValue("address",evt.target.value)
+                            onChange: (evt) => {
+                              setFieldValue("address", evt.target.value)
                             },
-                            onMouseLeave:(evt)=> {
-                              setAddressCount(addressCount+1)                              
+                            onMouseLeave: (evt) => {
+                              setAddressCount(addressCount + 1)
                             },
-                            onTouchEnd:(evt)=> {
-                              setAddressCount(addressCount+1)                              
+                            onTouchEnd: (evt) => {
+                              setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
@@ -1095,9 +1088,8 @@ export default function UserEventRegModal(props) {
                         />
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.address2 && touched.address2 && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input ${errors.address2 && touched.address2 && "p-invalid"
+                              }`,
                             labelProps: {
                               spanText: "*",
                               inputLabelClassName: "block font-bold",
@@ -1110,16 +1102,16 @@ export default function UserEventRegModal(props) {
                             value: values.address2,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(
                               localeJson,
                               "house_name_number"
                             ),
-                            onChange: (evt)=>{
-                              setFieldValue("address2",evt.target.value)
-                              setAddressCount(addressCount+1)
+                            onChange: (evt) => {
+                              setFieldValue("address2", evt.target.value)
+                              setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
@@ -1154,9 +1146,9 @@ export default function UserEventRegModal(props) {
                           }
                         />
                       </div>
-                      
+
                       {/* dob age and age_month start */}
-                      
+
                       <div className="mb-2 col-12">
                         <div className="outer-label pb-1 w-12">
                           <label>{translate(localeJson, "c_dob")}</label>
@@ -1182,7 +1174,7 @@ export default function UserEventRegModal(props) {
                                     name: "dob.year",
                                     inputMode: "numeric",
                                     value: values.dob.year,
-                                    type:"text",
+                                    type: "text",
                                     disabled:
                                       values?.family_register_from == "0"
                                         ? true
@@ -1203,21 +1195,21 @@ export default function UserEventRegModal(props) {
                                         new Date().getFullYear();
                                       if (evt.target.value.length <= 3 && re.test(convertToSingleByte(evt.target.value))) {
                                         setFieldValue(
-                                          "dob.year",evt.target.value
+                                          "dob.year", evt.target.value
                                         );
                                       }
                                       let minYear = 1899;
                                       if (evt.target.value?.length <= 4 && re.test(convertToSingleByte(evt.target.value))) {
                                         if (
                                           evt.target.value.length == 4 &&
-                                          enteredYear > minYear&&
+                                          enteredYear > minYear &&
                                           enteredYear <= currentYear
                                         ) {
-                                          setFieldValue("dob.year",evt.target.value);
+                                          setFieldValue("dob.year", evt.target.value);
                                         }
                                       }
                                     },
- 
+
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1264,7 +1256,7 @@ export default function UserEventRegModal(props) {
                                         return;
                                       }
                                       let Month = (
-                                       convertToSingleByte(evt.target.value)
+                                        convertToSingleByte(evt.target.value)
                                       );
                                       const enteredMonth = parseInt(Month)
                                       const currentMonth =
@@ -1360,8 +1352,8 @@ export default function UserEventRegModal(props) {
                                           // February
                                           maxDays =
                                             year % 4 === 0 &&
-                                            (year % 100 !== 0 ||
-                                              year % 400 === 0)
+                                              (year % 100 !== 0 ||
+                                                year % 400 === 0)
                                               ? 29
                                               : 28;
                                         } else if (
@@ -1379,7 +1371,7 @@ export default function UserEventRegModal(props) {
                                         }
                                       }
                                     },
- 
+
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1420,70 +1412,68 @@ export default function UserEventRegModal(props) {
                         </div>
                       </div>
 
-<div className="mb-2 col-12 ">
-<InputNumber
-  inputNumberProps={{
-    inputNumberParentClassName: `${
-      errors.age && touched.age && "p-invalid pb-0"
-    }`,
-    labelProps: {
-      text: translate(localeJson, "c_age_y"),
-      inputNumberLabelClassName: "block font-bold",
-      spanText: "*",
-      inputNumberLabelSpanClassName: "p-error",
-      labelMainClassName: "pb-1",
-    },
-    inputNumberClassName: "w-full w-full",
-    id: "age",
-    name: "age",
-    value: values.age,
-    disabled: true,
-    onChange: (evt) => {
-      setFieldValue("age", evt.value);
-    },
-    onValueChange: (evt) => {
-      setFieldValue("age", evt.value);
-    },
-    onBlur: handleBlur,
-  }}
-/>
-<ValidationError
-  errorBlock={errors.age && touched.age && errors.age}
-/>
-</div>
-<div className="mb-2 col-12 ">
-<InputNumber
-  inputNumberProps={{
-    inputNumberParentClassName: `${
-      errors.age && touched.age && "p-invalid pb-0"
-    }`,
-    labelProps: {
-      text: translate(localeJson, "c_age_m"),
-      inputNumberLabelClassName: "block font-bold",
-      spanText: "*",
-      inputNumberLabelSpanClassName: "p-error",
-      labelMainClassName: "pb-1",
-    },
-    inputNumberClassName: "w-full w-full",
-    id: "age_m",
-    name: "age_m",
-    value: values.age_m,
-    disabled: true,
-    onChange: (evt) => {
-      setFieldValue("age_m", evt.value);
-    },
-    onValueChange: (evt) => {
-      setFieldValue("age_m", evt.value);
-    },
-    onBlur: handleBlur,
-  }}
-/>
-<ValidationError
-  errorBlock={
-    errors.age_m && touched.age_m && errors.age_m
-  }
-/>
-</div>
+                      <div className="mb-2 col-12 hidden">
+                        <InputNumber
+                          inputNumberProps={{
+                            inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "c_age_y"),
+                              inputNumberLabelClassName: "block font-bold",
+                              spanText: "*",
+                              inputNumberLabelSpanClassName: "p-error",
+                              labelMainClassName: "pb-1",
+                            },
+                            inputNumberClassName: "w-full w-full",
+                            id: "age",
+                            name: "age",
+                            value: values.age,
+                            disabled: true,
+                            onChange: (evt) => {
+                              setFieldValue("age", evt.value);
+                            },
+                            onValueChange: (evt) => {
+                              setFieldValue("age", evt.value);
+                            },
+                            onBlur: handleBlur,
+                          }}
+                        />
+                        <ValidationError
+                          errorBlock={errors.age && touched.age && errors.age}
+                        />
+                      </div>
+                      <div className="mb-2 col-12 hidden">
+                        <InputNumber
+                          inputNumberProps={{
+                            inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
+                              }`,
+                            labelProps: {
+                              text: translate(localeJson, "c_age_m"),
+                              inputNumberLabelClassName: "block font-bold",
+                              spanText: "*",
+                              inputNumberLabelSpanClassName: "p-error",
+                              labelMainClassName: "pb-1",
+                            },
+                            inputNumberClassName: "w-full w-full",
+                            id: "age_m",
+                            name: "age_m",
+                            value: values.age_m,
+                            disabled: true,
+                            onChange: (evt) => {
+                              setFieldValue("age_m", evt.value);
+                            },
+                            onValueChange: (evt) => {
+                              setFieldValue("age_m", evt.value);
+                            },
+                            onBlur: handleBlur,
+                          }}
+                        />
+                        <ValidationError
+                          errorBlock={
+                            errors.age_m && touched.age_m && errors.age_m
+                          }
+                        />
+                      </div>
                       {/* dob age and age_month end */}
 
                       <div className="mb-2 col-12">

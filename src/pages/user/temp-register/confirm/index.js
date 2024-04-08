@@ -13,18 +13,18 @@ import { Button } from "@/components";
 import { prefectures } from "@/utils/constant";
 import CustomHeader from "@/components/customHeader";
 import { useRouter } from "next/router";
-import { setSuccessData } from "@/redux/register";
+import { setSuccessData } from "@/redux/tempRegister";
 
 const TempRegisterConfirm = () => {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
   const [neighbourData, setNeighbourData] = useState(null);
   const [familyDetailData, setFamilyDetailData] = useState(null);
-  const registerReducer = useAppSelector((state) => state.registerReducer);
+  const registerReducer = useAppSelector((state) => state.tempRegisterReducer);
   const router = useRouter();
   const dispatch = useAppDispatch();
   let confirmData = registerReducer?.registerData;
-  const { registerUser } = TempRegisterServices;
+  const { tempRegister } = TempRegisterServices;
 
   useEffect(() => {
     fetchConfirmData();
@@ -154,7 +154,7 @@ const TempRegisterConfirm = () => {
     let masterQuestion = confirmData.master_question;
     let neighbourDataList = [];
     let neighbourData = {};
-    masterQuestion.map((ques, index) => {
+    masterQuestion?.map((ques, index) => {
       neighbourData[`question_${index}`] = ques.answer
         ? getAnswerData(locale == "ja" ? ques.answer : ques.answer_en)
         : "";
@@ -532,10 +532,10 @@ const TempRegisterConfirm = () => {
                   // Convert the modified data back to JSON
                   const modifiedJson = data;
                   setLoader(true);
-                  registerUser(modifiedJson, (res) => {
+                  tempRegister(modifiedJson, (res) => {
                     if (res) {
                       dispatch(setSuccessData(res));
-                      router.push("/user/register/success");
+                      router.push("/user/temp-register/success");
                       setLoader(false);
                     } else {
                       setLoader(false);
@@ -552,7 +552,7 @@ const TempRegisterConfirm = () => {
                   " w-full border-radius-5rem back-button h-4rem text-5xl",
                 text: translate(localeJson, "return"),
                 onClick: () => {
-                  router.push("/user/register");
+                  router.push("/user/tem-register");
                 },
               }}
               parentClass="block w-full back-button"

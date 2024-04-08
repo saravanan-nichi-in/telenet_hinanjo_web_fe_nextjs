@@ -7,7 +7,7 @@ export const StaffDashBoardServices = {
 
 function _getStaffDashboardList(payload, callBackFun) {
   axios
-    .get(`/staff/place/dashboard`, { params: payload })
+    .post(`/staff/place/dashboard`,payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
@@ -21,7 +21,7 @@ function _getStaffDashboardList(payload, callBackFun) {
 
 function _getStaffEventDashboardList(payload, callBackFun) {
   axios
-    .get(`/staff/event/dashboard`, { params: payload })
+    .post(`/staff/event/dashboard`, payload)
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);

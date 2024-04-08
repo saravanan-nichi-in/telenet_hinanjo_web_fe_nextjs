@@ -21,3 +21,4 @@ export * from "./user_event_list.services";
 export * from "./admin_evacuee_temp_reg.services";
 export * from "./admin_event_status.services";
 export * from "./public_evacuee.services";
+export * from "./user_qr.service"

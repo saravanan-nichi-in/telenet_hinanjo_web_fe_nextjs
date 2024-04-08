@@ -197,8 +197,7 @@ function _update(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _dropdown(payload, callBackFun) {
-    const queryParams = new URLSearchParams(payload).toString();
-    axios.get(`/staff/stockpile/dropdown/category?${queryParams}`)
+    axios.post(`/staff/stockpile/dropdown/category`,payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

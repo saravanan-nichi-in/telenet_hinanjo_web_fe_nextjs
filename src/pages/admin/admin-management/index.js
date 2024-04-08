@@ -10,10 +10,14 @@ import { AdminManagementServices } from '@/services'
 import AdminManagementCreateEditModal from '@/components/modal/adminManagementCreateEditModal';
 import { CommonServices } from '@/services';
 import { Input } from '@/components/input';
-import { gender_en, gender_jp } from '@/utils/constant';
+import { useAppSelector } from "@/redux/hooks";
 
 export default function AdminManagementPage() {
+    // Global variant
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const AuthReducer = useAppSelector((state) => state.authReducer);
+
+    // Local variant
     const [importModalOpen, setImportModalOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -54,28 +58,25 @@ export default function AdminManagementPage() {
         {
             field: 'name', header: translate(localeJson, 'name'), minWidth: "5rem", maxWidth: "5rem",
             body: (rowData) => (
-                <p className='text-link-class clickable-row' 
-                //Development
-                // onClick={(e) => {
-                //     e.preventDefault();
-                //     setDetailId(rowData['id']);
-                //     setDetailOpen(true);
-                //     hideOverFlow();
-                // }}
-                onClick= {() => {
-                    console.log(rowData)
-                    setCurrentObj(rowData);
-                    setRegisterModalAction("edit")
-                    setEditStaffOpen(true);
+                <p className='text-link-class clickable-row' onClick={(e) => {
+                    e.preventDefault();
+                    setDetailId(rowData['id']);
+                    setDetailOpen(true);
                     hideOverFlow();
-                }}
-                >
+                }}>
                     {rowData['name']}
                 </p>
             )
         },
-        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "5rem", maxWidth: "5rem" },
-        { field: 'gender', header: translate(localeJson, 'gender'), minWidth: "5rem", maxWidth: "5rem",className:"hidden"},
+        { field: 'username', header: translate(localeJson, 'userId'), minWidth: "5rem", maxWidth: "5rem" },
+        {
+            field: 'password',
+            header: translate(localeJson, 'password'),
+            body: (rowData) => {
+                return <PasswordColumn rowData={rowData} />
+            },
+            minWidth: "5rem", maxWidth: "5rem"
+        },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -101,6 +102,7 @@ export default function AdminManagementPage() {
                         buttonProps={{
                             text: translate(localeJson, 'delete'),
                             buttonClass: "delete-button ml-2",
+                            disabled: rowData?.id == AuthReducer?.admin?.user?.id,
                             onClick: () => {
                                 openDeleteDialog(rowData)
                             }
@@ -153,29 +155,18 @@ export default function AdminManagementPage() {
             if (response && response?.success && !_.isEmpty(response?.data) && response?.data?.model?.total > 0) {
                 let actualList = response.data.model.list;
                 actualList.forEach((element, index) => {
-                    let tempObj = { ...element,gender:getGenderId(element.gender) ,slno: index + parseInt(listPayload.filters.start) + 1 };
+                    let key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
+                    let decryptedData = decryptPassword(element.passwordfe, key);
+                    let tempObj = { ...element, password: decryptedData, slno: index + parseInt(listPayload.filters.start) + 1 };
                     tempList.push(tempObj);
                 });
                 listTotalCount = response.data.model.total;
             }
-            console.log(tempList)
             setLoader(false);
             setTableLoading(false);
             setColumnValues(tempList);
             setTotalCount(listTotalCount);
         });
-    }
-    const getGenderId=(name)=>{
-        let options=locale=="en"?gender_en:gender_jp
-        let id=options.find((res)=>{
-            let genderName = name+""
-           if((res.name).toLocaleLowerCase()== genderName.toLocaleLowerCase()){
-            return res
-           } else{
-            return ""
-           }
-        })
-        return id?id.value:""
     }
 
     /**
@@ -203,14 +194,15 @@ export default function AdminManagementPage() {
         setDeleteObj({
             firstLabel: translate(localeJson, 'name'),
             firstValue: rowdata.name,
-            secondLabel: translate(localeJson, 'external_evecuee_list_table_email_address'),
-            secondValue: rowdata.email
+            secondLabel: translate(localeJson, 'userId'),
+            secondValue: rowdata.username
         });
         setDeleteOpen(true);
         hideOverFlow();
     }
 
-    const onDeleteClose = (status = '') => {setLoader
+    const onDeleteClose = (status = '') => {
+        setLoader
         if (status == 'confirm') {
             setTableLoading(true);
             AdminManagementServices.delete(deleteId, () => {
@@ -286,7 +278,7 @@ export default function AdminManagementPage() {
                                     buttonClass: "evacuation_button_height create-button",
                                     text: translate(localeJson, 'create_admin'),
                                     onClick: () => {
-                                        setCurrentObj({ name: "", email: "", password: "", tel: "",gender:"" });
+                                        setCurrentObj({ username: "", name: "", password: "", tel: "" });
                                         setRegisterModalAction("create")
                                         setEditStaffOpen(true);
                                         hideOverFlow();

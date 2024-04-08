@@ -2,33 +2,47 @@ import React, { useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useContext, useState } from "react";
-
-import { getEnglishDateTimeDisplayFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from "@/helper";
-import { ButtonRounded } from "../button";
-import Image from "next/image";
 import BarcodeReader from "react-barcode-reader";
-import { CheckInOutServices } from "@/services";
+import Image from "next/image";
 import { useSelector } from "react-redux";
-import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
 import { toast } from "react-hot-toast";
+
+import {
+  getEnglishDateTimeDisplayFormat,
+  getJapaneseDateTimeDisplayFormat,
+  getValueByKeyRecursively as translate
+} from "@/helper";
+import { ButtonRounded } from "../button";
+import { CheckInOutServices } from "@/services";
+import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
 
 export default function YappleModal(props) {
   const { localeJson, setLoader } = useContext(LayoutContext);
   const layoutReducer = useSelector((state) => state.layoutReducer);
-  const { eventCheckIn, eventCheckOut } = CheckInOutServices;
+  const {
+    open,
+    close,
+    setBarcode,
+    successHeader,
+    isCheckIn,
+    successCallBack,
+    staffEventID,
+    isEvent,
+    dynamicButtonText,
+    eventList = [],
+    setRefugeeName,
+    setGetListPayload,
+    setFamilyCode
+  } = props;
+
   const [currentDiv, setCurrentDiv] = useState("start");
-  const { basicInfo } = CheckInOutServices;
-
   const [regData, setRegData] = useState([]);
-
   const url = window.location.href;
   const segments = url.split('/');
   const lastSegment = segments[segments.length - 1];
 
-  /**
-   * Destructing
-   */
-  const { open, close, setBarcode, successHeader, isCheckIn, successCallBack, staffEventID, isEvent, dynamicButtonText, eventList = [], setRefugeeName, setGetListPayload, setFamilyCode } = props;
+  //** Services */
+  const { eventCheckIn, eventCheckOut, basicInfo } = CheckInOutServices;
 
   let popupHeader = {
     start: "yapple_modal_start_icon_div",
@@ -145,7 +159,6 @@ export default function YappleModal(props) {
           {(currentDiv == "start" || currentDiv == "failed") && (
             <BarcodeReader onScan={handleBarcode} />
           )}
-
         </div>
       </Dialog>
     </div>
@@ -153,7 +166,6 @@ export default function YappleModal(props) {
 }
 
 function StartIconDiv() {
-  const { localeJson } = useContext(LayoutContext);
   return (
     <div>
       <div className="text-center my-3">
@@ -194,58 +206,29 @@ function FailedIconDiv() {
 
 function SuccessDiv(props) {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const { eventCheckIn, eventCheckOut } = CheckInOutServices;
-  const { updateCheckInDetail } = TemporaryStaffRegistrantServices;
-  const { regData, close, setCurrentDiv, isCheckIn, successCallBack, staffEventID, isEvent, dynamicButtonText, eventList, setRefugeeName, setGetListPayload, setFamilyCode } = props;
   const layoutReducer = useSelector((state) => state.layoutReducer);
+  const {
+    regData,
+    setCurrentDiv,
+    isCheckIn,
+    successCallBack,
+    staffEventID,
+    isEvent,
+    dynamicButtonText,
+    eventList,
+    setGetListPayload,
+    setFamilyCode
+  } = props;
   const [isEventDisabled, setEventDisabled] = useState(false);
   let payload = {
     event_id: staffEventID ? staffEventID : layoutReducer?.user?.place?.id,
     yapple_id: regData?.yapple_id,
     ppid: "",
   };
-  let checkout_payload = {
-    family_id: regData.lgwan_familiy_id,
-  };
 
-  const displayToastAndClose = (tag) => {
-    toast.error(translate(localeJson, tag), {
-      position: "top-right",
-    });
-    // setOpenBasicDataInfoDialog(false);
-  }
-
-  const confirmPlaceDataBeforeCheckIn = () => {
-    if (layoutReducer?.user?.place?.id != regData.place_id) {
-      let result = window.confirm(translate(localeJson, 'different_evacuation_confirmation'));
-      if (result) {
-        updateCheckInDetail({
-          place_id: layoutReducer?.user?.place?.id,
-          lgwan_family_id: regData.lgwan_familiy_id
-        }, (res) => {
-          setLoader(false);
-          if (res && successCallBack) {
-            successCallBack(res);
-          }
-        })
-      }
-      else {
-        setLoader(false);
-      }
-    }
-    else {
-
-      updateCheckInDetail({
-        place_id: regData.place_id,
-        lgwan_family_id: regData.lgwan_familiy_id
-      }, (res) => {
-        setLoader(false);
-        if (res && successCallBack) {
-          successCallBack(res);
-        }
-      })
-    }
-  }
+  /** Services */
+  const { eventCheckIn, eventCheckOut } = CheckInOutServices;
+  const { updateCheckInDetail } = TemporaryStaffRegistrantServices;
 
   useEffect(() => {
     if (layoutReducer?.user?.place?.type === "place" && isCheckIn) {
@@ -272,13 +255,46 @@ function SuccessDiv(props) {
           }
           return setEventDisabled(true);
         }
-        //  else {
-        //    setEventDisabled(false);
-        //  }
-
       });
     }
   }, [locale])
+
+  const displayToastAndClose = (tag) => {
+    toast.error(translate(localeJson, tag), {
+      position: "top-right",
+    });
+  }
+
+  const confirmPlaceDataBeforeCheckIn = () => {
+    if (layoutReducer?.user?.place?.id != regData.place_id) {
+      let result = window.confirm(translate(localeJson, 'different_evacuation_confirmation'));
+      if (result) {
+        updateCheckInDetail({
+          place_id: layoutReducer?.user?.place?.id,
+          lgwan_family_id: regData.lgwan_familiy_id
+        }, (res) => {
+          setLoader(false);
+          if (res && successCallBack) {
+            successCallBack(res);
+          }
+        })
+      }
+      else {
+        setLoader(false);
+      }
+    }
+    else {
+      updateCheckInDetail({
+        place_id: regData.place_id,
+        lgwan_family_id: regData.lgwan_familiy_id
+      }, (res) => {
+        setLoader(false);
+        if (res && successCallBack) {
+          successCallBack(res);
+        }
+      })
+    }
+  }
 
   return (
     <div>
@@ -369,7 +385,6 @@ function SuccessDiv(props) {
                     }
                   }) :
                     CheckInOutServices.placeCheckout({
-                      // place_id: layoutReducer?.user?.place?.id,
                       place_id: regData.place_id ?? 0,
                       lgwan_family_id: regData.lgwan_familiy_id
                     }, (res) => {
@@ -414,7 +429,6 @@ function SuccessDiv(props) {
 }
 
 function LoaderDiv() {
-  const { localeJson } = useContext(LayoutContext);
   return (
     <div className="my-3">
       <div class="loader-container">

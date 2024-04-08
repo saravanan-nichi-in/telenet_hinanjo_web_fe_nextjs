@@ -4,7 +4,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import { Button } from "../button";
-import { getValueByKeyRecursively as translate, getGeneralDateTimeDisplayFormat } from "@/helper";
+import {
+    getValueByKeyRecursively as translate,
+    getGeneralDateTimeDisplayFormat
+} from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ValidationError } from "../error";
 import { Input, TextArea } from "../input";
@@ -16,6 +19,7 @@ import {
 export default function EventCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
     const { open, close, onRegister, header, buttonText, modalAction, editObject } = props && props;
+
     const currentDate = new Date();
     let validation = {
         name: Yup.string()
@@ -61,14 +65,8 @@ export default function EventCreateEditModal(props) {
         opening_date: currentDate.toISOString().split('T')[0],
         closing_date: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate()).toISOString().split('T')[0]
     })
-    const [date5, setDate5] = useState(new Date());
-
     // Generate an array of dates before the current day
     const today = new Date();
-    const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
-        const day = index + 1;
-        return new Date(today.getFullYear(), today.getMonth(), day);
-    });
 
     useEffect(() => {
         if (open) {
@@ -96,6 +94,11 @@ export default function EventCreateEditModal(props) {
         }
 
     }, [open]);
+
+    const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
+        const day = index + 1;
+        return new Date(today.getFullYear(), today.getMonth(), day);
+    });
 
     const disFlagFunc = () => {
         let flg = false;
@@ -399,8 +402,6 @@ export default function EventCreateEditModal(props) {
                                                     },
                                                 }} parentClass={"back-button"} />
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>

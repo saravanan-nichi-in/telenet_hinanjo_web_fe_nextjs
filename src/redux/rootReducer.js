@@ -13,6 +13,8 @@ import selfIDReducer from './self_id'
 import staffRegisterReducer from './staff_register'
 import stockpileReducer from "./stockpile";
 import forgetPasswordReducer from './fwd_password';
+import qrAppReducer from './qr_app';
+import tempRegisterReducer from './tempRegister';
 
 // Define separate persist configs for each reducer
 const authPersistConfig = {
@@ -87,6 +89,19 @@ const forgetPasswordPersistConfig = {
   // whitelist: ['/* specify which parts of the state you want to persist */'],
 };
 
+const qrAppPersistConfig = {
+  key: 'checkIn',
+  storage: storage,
+  // whitelist: ['/* specify which parts of the state you want to persist */'],
+};
+
+const tempRegisterPersistConfig = {
+  key: 'register',
+  storage: storage,
+  // whitelist: ['/* specify which parts of the state you want to persist */'],
+};
+
+
 // Wrap each reducer with persistReducer using the corresponding config
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistPlaceReducer = persistReducer(placePersistConfig, placeReducer);
@@ -100,6 +115,8 @@ const persistSelfIDReducer = persistReducer(selfIDPersistConfig, selfIDReducer);
 const persistStaffRegisterReducer = persistReducer(staffRegisterPersistConfig, staffRegisterReducer);
 const persistStockpileReducer = persistReducer(stockpilePersistConfig, stockpileReducer);
 const persistForgetPasswordReducer = persistReducer(forgetPasswordPersistConfig, forgetPasswordReducer);
+const persistQrAppReducer = persistReducer(qrAppPersistConfig, qrAppReducer);
+const persistTempRegisterReducer = persistReducer(tempRegisterPersistConfig, tempRegisterReducer);
 
 let rootReducer = {
   authReducer: persistedAuthReducer,
@@ -113,7 +130,9 @@ let rootReducer = {
   selfIDReducer: persistSelfIDReducer,
   staffRegisterReducer:persistStaffRegisterReducer,
   stockpileReducer:persistStockpileReducer,
-  forgetPasswordReducer:persistForgetPasswordReducer
+  forgetPasswordReducer:persistForgetPasswordReducer,
+  qrAppReducer:persistQrAppReducer,
+  tempRegisterReducer:persistTempRegisterReducer
 };
 
 export default rootReducer;
