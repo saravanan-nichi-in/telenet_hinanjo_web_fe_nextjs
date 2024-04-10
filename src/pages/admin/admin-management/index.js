@@ -3,10 +3,8 @@ import _ from 'lodash';
 
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, Input, NormalTable } from '@/components';
-import { AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementImportModal } from '@/components/modal';
+import { Button, CustomHeader, Input, NormalTable, AdminManagementDeleteModal, AdminManagementDetailModal, AdminManagementImportModal, AdminManagementCreateEditModal } from '@/components';
 import { AdminManagementServices } from '@/services'
-import AdminManagementCreateEditModal from '@/components/modal/adminManagementCreateEditModal';
 import { CommonServices } from '@/services';
 import { useAppSelector } from "@/redux/hooks";
 

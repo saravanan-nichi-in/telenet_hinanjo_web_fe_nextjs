@@ -11,10 +11,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
-import { CommonDialog, YappleModal } from "@/components/modal";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
-import QrScannerModal from "@/components/modal/qrScannerModal";
-import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password } from "@/components";
+import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal } from "@/components";
 
 export default function Admission() {
   const router = useRouter();

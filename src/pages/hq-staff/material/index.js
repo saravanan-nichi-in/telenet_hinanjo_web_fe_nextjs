@@ -3,9 +3,7 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable } from '@/components';
-import MaterialCreateEditModal from '@/components/modal/materialCreateEditModal';
-import { AdminManagementDeleteModal, AdminManagementImportModal } from '@/components/modal';
+import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, AdminManagementImportModal, MaterialCreateEditModal } from '@/components';
 import { MaterialService } from '@/services/material.service';
 
 export default function AdminMaterialPage() {

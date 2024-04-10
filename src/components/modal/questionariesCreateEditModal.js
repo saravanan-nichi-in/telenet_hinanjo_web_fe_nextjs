@@ -3,11 +3,9 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, ValidationError, Input, TextArea } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
-import { Input, TextArea } from "../input";
 
 export default function QuestionnairesCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

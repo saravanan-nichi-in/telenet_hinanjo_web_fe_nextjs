@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 
-import { Button } from "../button";
+import { Button } from "@/components"; 
 
 const CommonDialog = (props) => {
   const {

@@ -10,9 +10,10 @@ import {
     Button,
     CustomHeader,
     NormalTable,
-    Input
+    Input,
+    QrCodeModal,
+    YappleModal
 } from '@/components';
-import { QrCodeModal, YappleModal } from '@/components/modal';
 import {
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,

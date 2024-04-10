@@ -2,13 +2,10 @@ import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { LockFilled } from '@ant-design/icons';
 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import Password, { InputLeftRightGroupFloat } from "../input";
-import { ValidationError } from "../error";
-import { Button } from "../button";
+import { Button, Password, ValidationError } from "@/components"; 
 import { AuthenticationAuthorizationService } from "@/services";
 
 export default function ChangePasswordModal(props) {

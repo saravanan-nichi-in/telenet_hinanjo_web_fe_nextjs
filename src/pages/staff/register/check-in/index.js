@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, NormalTable, Counter, Input, CustomHeader } from "@/components";
+import { Button, NormalTable, Counter, CustomHeader } from "@/components";
 import { StaffRegisterServices } from "@/services/register_check_in.services";
 
 export default function RegisterCheckIn() {

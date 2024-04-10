@@ -1,6 +1,5 @@
-import React from "react"
+import React, { useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
-import { useContext, useState } from 'react';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";

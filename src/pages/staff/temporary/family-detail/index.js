@@ -8,7 +8,6 @@ import {
     getEnglishDateDisplayFormat,
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
-    getJapaneseDateTimeDisplayFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getSpecialCareName
 } from '@/helper'

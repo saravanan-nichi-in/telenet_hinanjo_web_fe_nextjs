@@ -5,17 +5,14 @@ import * as Yup from "yup";
 import _ from "lodash";
 import { TabView, TabPanel } from 'primereact/tabview';
 
-import { Button } from "../button";
+import { Button, NormalTable, Input, Password, ValidationError } from "@/components"; 
 import {
     convertToSingleByte,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
-import { NormalTable } from "../datatable";
 import { CommonServices } from "@/services";
 import { StaffManagementService } from '@/services/staffmanagement.service';
-import Password, { Input } from "../input";
 
 export default function StaffManagementEditModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);

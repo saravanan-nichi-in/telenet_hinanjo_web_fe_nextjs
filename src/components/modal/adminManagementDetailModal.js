@@ -1,16 +1,14 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import { Button } from "../button";
 import {
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useContext, useState } from 'react';
-import { NormalTable } from "../datatable";
+import { Button, NormalTable } from "@/components"; 
 import { AdminManagementServices } from "@/services";
 
 export default function AdminManagementDetailModal(props) {

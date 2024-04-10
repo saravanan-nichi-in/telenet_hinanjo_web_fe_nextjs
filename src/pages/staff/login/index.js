@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';

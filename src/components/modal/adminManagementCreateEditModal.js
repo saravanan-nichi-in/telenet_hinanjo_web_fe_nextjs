@@ -3,12 +3,10 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Input, Button, Password, ValidationError } from "@/components"; 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
 import { AdminManagementServices } from "@/services";
-import Password, { Input } from "../input";
 
 export default function AdminManagementCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

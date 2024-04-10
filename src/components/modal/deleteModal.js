@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 
-import { InputSwitch } from "../switch";
-import { Button } from "../button";
+import { Button, InputSwitch } from "@/components"; 
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 
