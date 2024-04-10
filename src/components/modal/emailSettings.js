@@ -3,12 +3,9 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, NormalLabel, ValidationError, InputDropdown, TextArea } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
-import { ValidationError } from "../error";
-import { InputDropdown, TextArea } from "../input";
 
 export default function EmailSettings(props) {
     const { localeJson } = useContext(LayoutContext);

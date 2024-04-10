@@ -14,7 +14,7 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, ValidationError, NormalCheckBox, NormalLabel, QuestionList, MultiStepForm, CustomHeader, Input, InputDropdown } from '@/components';
-import { prefectures, prefectures_en } from '@/utils/constant';
+import { prefectures } from '@/utils/constant';
 import { TempRegisterServices } from '@/services';
 import { useAppSelector } from "@/redux/hooks";
 

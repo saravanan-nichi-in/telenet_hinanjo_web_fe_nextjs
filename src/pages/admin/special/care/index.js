@@ -3,8 +3,7 @@ import _ from "lodash";
 
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable } from '@/components';
-import { AdminManagementDeleteModal, AdminManagementImportModal, SpecialCareEditModal } from '@/components/modal';
+import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, AdminManagementImportModal, SpecialCareEditModal } from '@/components';
 import { SpecialCareServices } from "@/services";
 
 export default function AdminSpecialCarePage() {

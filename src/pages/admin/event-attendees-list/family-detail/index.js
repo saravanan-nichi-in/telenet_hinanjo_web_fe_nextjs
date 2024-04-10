@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 import { IoIosArrowBack } from "react-icons/io";
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
 
 import {
     getValueByKeyRecursively as translate,
@@ -18,7 +19,6 @@ import {
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
-import { FaArrowRightFromBracket } from 'react-icons/fa6';
 import { prefecturesCombined } from '@/utils/constant';
 
 export default function EventFamilyDetail() {

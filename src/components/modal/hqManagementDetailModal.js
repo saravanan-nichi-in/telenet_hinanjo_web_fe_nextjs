@@ -1,16 +1,15 @@
 import React, { useEffect } from "react"
+import { useContext, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import _ from 'lodash';
 
-import { Button } from "../button";
+import { Button, NormalTable } from "@/components"; 
 import {
     getValueByKeyRecursively as translate,
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateTimeDayDisplayActualFormat
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useContext, useState } from 'react';
-import { NormalTable } from "../datatable";
 import { HeadQuarterManagement } from "@/services/hqManagement.service";
 
 export default function HqManagementDetailModal(props) {

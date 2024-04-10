@@ -4,7 +4,7 @@ import { addLocale } from 'primereact/api';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { NormalLabel } from '../label';
+import { NormalLabel } from "@/components"; 
 
 export const DateTime = (props) => {
     const {

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
@@ -7,7 +8,6 @@ import {
   getValueByKeyRecursively as translate
 } from "@/helper";
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
-import { useSelector } from "react-redux";
 import { CustomHeader, Doughnut } from "@/components";
 
 function EventStaffDashboard() {

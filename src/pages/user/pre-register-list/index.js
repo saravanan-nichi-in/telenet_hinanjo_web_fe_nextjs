@@ -6,9 +6,7 @@ import { useRouter } from 'next/router';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { Button, CustomHeader } from '@/components';
-import BarcodeDialog from '@/components/modal/barcodeDialog';
-import PreRegisterConfirmDialog from '@/components/modal/preRegisterConfirmDialog';
+import { Button, CustomHeader, BarcodeDialog, PreRegisterConfirmDialog } from '@/components';
 import { TempRegisterServices } from '@/services';
 
 export default function HitachiList() {

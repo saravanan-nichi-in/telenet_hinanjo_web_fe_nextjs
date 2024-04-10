@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import { Button } from "../button";
+import { Button, NormalTable } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalTable } from "../datatable";
 import { BulkCheckoutService } from "@/services/bulkCheckout.service";
 
 export default function PlaceEventBulkCheckOut(props) {

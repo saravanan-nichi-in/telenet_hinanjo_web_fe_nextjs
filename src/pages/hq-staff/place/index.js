@@ -4,17 +4,10 @@ import { useRouter } from "next/router";
 import _ from "lodash";
 
 import {
-  AdminManagementDeleteModal,
-  AdminManagementImportModal,
-  PlaceEventBulkCheckOut,
-} from "@/components/modal";
-import {
-  hideOverFlow,
-  showOverFlow,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, DeleteModal, NormalTable, CommonDialog, CustomHeader } from "@/components";
+import { DeleteModal, NormalTable, CustomHeader } from "@/components";
 import { PlaceServices } from "@/services";
 import { setPlace } from "@/redux/place";
 import { useAppDispatch } from "@/redux/hooks";

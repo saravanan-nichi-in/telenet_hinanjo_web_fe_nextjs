@@ -5,7 +5,7 @@ import SingleSelectButtonGroup from "./singleSelect.js";
 import { CommonServices } from "@/services";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Input, InputDropdown } from "../input/index.js";
+import { Input, InputDropdown } from "@/components";
 
 const QuestionList = ({
   questions,

@@ -16,9 +16,8 @@ import {
     getSpecialCareName,
     convertToSingleByte
 } from "@/helper";
-import { Button, CustomHeader, NormalTable,Input } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, PersonCountModal } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
-import { PersonCountModal } from '@/components/modal';
 import { setFamily } from '@/redux/family';
 import { CommonServices } from '@/services';
 

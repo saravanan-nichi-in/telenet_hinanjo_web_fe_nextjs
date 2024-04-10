@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 
-import {
-    Button,
-} from "@/components";
+import { Button } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 

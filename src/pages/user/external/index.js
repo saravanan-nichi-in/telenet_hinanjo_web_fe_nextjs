@@ -19,9 +19,9 @@ import {
   ValidationError,
   CustomHeader,
   Input,
-  InputDropdown
+  InputDropdown,
+  External
 } from "@/components";
-import External from "@/components/modal/externalModal";
 import { prefectures, prefectures_en, gender_jp, gender_en } from "@/utils/constant";
 import { ExternalServices, CommonServices } from "@/services";
 

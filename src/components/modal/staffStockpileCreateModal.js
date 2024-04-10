@@ -4,14 +4,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 
-import { Button } from "../button";
+import { Button, NormalLabel, Input, InputDropdown, ValidationError, InputFile } from "@/components"; 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
-import { ValidationError } from "../error";
-import { InputFile } from '@/components/upload';
 import { StockpileStaffService } from "@/services/stockpilestaff.service";
-import { Input, InputDropdown } from "../input";
 
 export default function StaffStockpileCreateModal(props) {
     const { localeJson } = useContext(LayoutContext);

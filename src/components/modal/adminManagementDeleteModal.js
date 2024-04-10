@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import { Button } from "../button";
+import { Button } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 

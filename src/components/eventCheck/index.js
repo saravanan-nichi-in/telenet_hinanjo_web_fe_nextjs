@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
 
-import { Button, ButtonRounded } from "@/components";
+import { Button, ButtonRounded, UserEventRegModal, CustomHeader } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import CustomHeader from "@/components/customHeader";
-import UserEventRegModal from "../modal/userEventRegModal";
 
 const CommonPage = ({
   firstButtonClick,

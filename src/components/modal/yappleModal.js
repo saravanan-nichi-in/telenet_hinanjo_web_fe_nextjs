@@ -12,7 +12,7 @@ import {
   getJapaneseDateTimeDisplayFormat,
   getValueByKeyRecursively as translate
 } from "@/helper";
-import { ButtonRounded } from "../button";
+import { ButtonRounded } from "@/components"; 
 import { CheckInOutServices } from "@/services";
 import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
 

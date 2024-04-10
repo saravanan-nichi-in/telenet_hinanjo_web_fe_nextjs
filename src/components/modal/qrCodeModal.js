@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 
-import { Button } from "../button";
-import { BarcodeScanner } from "../qr";
+import { Button, BarcodeScanner } from "@/components"; 
 
 const QrCodeModal = (props) => {
     const {

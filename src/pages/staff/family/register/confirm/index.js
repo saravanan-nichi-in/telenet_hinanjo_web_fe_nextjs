@@ -7,13 +7,10 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
-  getJapaneseDateTimeDisplayFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { TempRegisterServices } from "@/services";
-import {
-  Button, CustomHeader,
-} from "@/components";
+import { Button, CustomHeader } from "@/components";
 import { prefectures } from "@/utils/constant";
 import { reset } from "@/redux/staff_register";
 

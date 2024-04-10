@@ -3,15 +3,13 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, Input, ValidationError, Password } from "@/components"; 
 import {
     convertToSingleByte,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
 import { HeadQuarterManagement } from "@/services/hqManagement.service";
-import Password, { Input } from "../input";
 
 export default function HqEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

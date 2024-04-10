@@ -3,11 +3,9 @@ import { Dialog } from "primereact/dialog";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, ValidationError, Input } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
-import { Input } from "../input";
 
 export default function SpecialCareEditModal(props) {
   const { localeJson } = useContext(LayoutContext);

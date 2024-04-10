@@ -3,8 +3,7 @@ import { Dialog } from 'primereact/dialog';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { TextArea } from '../input';
-import { Button } from '../button';
+import { Button, TextArea } from "@/components"; 
 
 const DetailModal = (props) => {
     const { localeJson } = useContext(LayoutContext);

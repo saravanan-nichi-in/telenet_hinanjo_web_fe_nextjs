@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from '@/helper'
-import {Input,ButtonRounded} from "@/components"
+import { Input, ButtonRounded } from "@/components"
 
 const BarcodeDialog = (props) => {
     const { localeJson } = useContext(LayoutContext);

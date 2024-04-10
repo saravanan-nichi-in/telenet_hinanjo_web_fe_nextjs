@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useRouter } from 'next/router';
 import { useSelector } from "react-redux";
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ValidationError, Button, CustomHeader, InputGroup } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';

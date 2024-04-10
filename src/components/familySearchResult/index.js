@@ -6,7 +6,7 @@ import {
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import CustomHeader from "../customHeader";
+import { CustomHeader } from "@/components";
 
 const FamilyListComponent = ({ data, header }) => {
   const { locale, localeJson } = useContext(LayoutContext);

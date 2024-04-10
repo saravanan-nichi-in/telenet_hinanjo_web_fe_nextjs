@@ -10,7 +10,9 @@ import {
     CommonDialog,
     CustomHeader,
     NormalTable,
-    Input
+    Input,
+    BarcodeDialog,
+    YappleModal
 } from '@/components';
 import {
     convertToSingleByte,
@@ -23,12 +25,9 @@ import {
     getSpecialCareName
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
-import YappleModal from '@/components/modal/yappleModal';
 import { setStaffTempFamily } from '@/redux/family';
 import { useAppSelector } from "@/redux/hooks";
-import { setSelfID } from '@/redux/self_id';
-import { CommonServices, TempRegisterServices } from '@/services';
-import BarcodeDialog from '@/components/modal/barcodeDialog';
+import { TempRegisterServices } from '@/services';
 
 function TemporaryRegistrants() {
     const { locale, localeJson } = useContext(LayoutContext);

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 import { IoIosArrowBack } from "react-icons/io";
-import { FaArrowRightFromBracket } from 'react-icons/fa6';
 
 import {
     getValueByKeyRecursively as translate,
