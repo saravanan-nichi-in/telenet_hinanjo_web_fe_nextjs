@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router'
-import { useAppDispatch } from '@/redux/hooks';
 
+import { useAppDispatch } from '@/redux/hooks';
 import {
   convertToSingleByte,
   getEnglishDateDisplayFormat,
@@ -11,11 +11,9 @@ import {
   getSpecialCareName
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, DeleteModal, NormalTable } from '@/components';
+import { Button, CustomHeader, DeleteModal, NormalTable, Input, InputDropdown } from '@/components';
 import { AdminEvacueeTempServices } from '@/services';
 import { setTempFamily } from '@/redux/family';
-import CustomHeader from '@/components/customHeader';
-import { Input, InputDropdown } from '@/components/input';
 
 export default function TempRegistration() {
   const { locale, localeJson } = useContext(LayoutContext);

@@ -1,14 +1,12 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
+import { IoIosArrowBack } from "react-icons/io";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, GoogleMapComponent, CardSpinner } from "@/components";
+import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector,useAppDispatch } from "@/redux/hooks";
-import CustomHeader from "@/components/customHeader";
-import { IoIosArrowBack } from "react-icons/io";
 import { prefecturesCombined } from "@/utils/constant";
 import {setSuccessData} from "@/redux/tempRegister"
 

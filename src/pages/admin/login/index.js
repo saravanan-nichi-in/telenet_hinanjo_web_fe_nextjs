@@ -10,9 +10,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { Button, ValidationError } from '@/components';
-import Password, { InputGroup } from '@/components/input';
-import CustomHeader from '@/components/customHeader';
+import { Button, CustomHeader, ValidationError, Password, InputGroup } from '@/components';
 import { setForgetPassword } from '@/redux/fwd_password';
 
 const LoginPage = () => {

@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
@@ -10,11 +12,9 @@ import {
 } from "@/helper";
 import { TempRegisterServices } from "@/services";
 import {
-  Button,
+  Button, CustomHeader,
 } from "@/components";
 import { prefectures } from "@/utils/constant";
-import CustomHeader from "@/components/customHeader";
-import { useRouter } from "next/router";
 import { reset } from "@/redux/staff_register";
 
 const TempRegisterConfirm = () => {

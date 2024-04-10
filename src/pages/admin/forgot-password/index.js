@@ -5,12 +5,11 @@ import * as Yup from "yup";
 import { useRouter } from 'next/router';
 import { useSelector } from "react-redux";
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ValidationError, Button } from '@/components';
+import { ValidationError, Button, CustomHeader } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
 import { InputGroup } from '@/components/input';
-import CustomHeader from '@/components/customHeader';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
+import { IoIosArrowBack } from 'react-icons/io';
 
 import {
     getValueByKeyRecursively as translate,
@@ -12,12 +13,10 @@ import {
     getSpecialCareName
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CardSpinner } from '@/components';
+import { Button, CardSpinner, CustomHeader } from '@/components';
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 import { CommonServices } from '@/services';
-import CustomHeader from '@/components/customHeader';
 import { useAppSelector } from "@/redux/hooks";
-import { IoIosArrowBack } from 'react-icons/io';
 
 export default function TemporaryFamilyDetail() {
     const router = useRouter();

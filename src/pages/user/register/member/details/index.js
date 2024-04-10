@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
-import FamilyListComponent from "@/components";
+import { useRouter } from "next/router";
+
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { useSelector } from "react-redux";
-import { ButtonRounded } from "@/components";
-import { useRouter } from "next/router";
+import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/check_in";
 import { CheckInOutServices } from "@/services";
+
 const SearchDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const checkInReducer = useSelector((state) => state.checkInReducer);

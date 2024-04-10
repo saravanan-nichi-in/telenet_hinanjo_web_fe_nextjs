@@ -3,12 +3,10 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable, Input } from '@/components';
 import { AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components/modal';
 import { StaffManagementService } from '@/services/staffmanagement.service';
 import { CommonServices } from '@/services';
-import CustomHeader from '@/components/customHeader';
-import { Input } from '@/components/input';
 
 export default function StaffManagementPage() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);

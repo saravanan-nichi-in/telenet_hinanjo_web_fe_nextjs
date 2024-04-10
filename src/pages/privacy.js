@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 
-import CustomHeader from '@/components/customHeader';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     getValueByKeyRecursively as translate,
 } from '@/helper'
+import { CustomHeader } from '@/components';
 
 const Privacy = () => {
     const { localeJson } = useContext(LayoutContext);

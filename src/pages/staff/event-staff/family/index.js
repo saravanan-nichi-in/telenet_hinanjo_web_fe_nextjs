@@ -15,12 +15,10 @@ import {
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
 } from "@/helper";
-import { Button, NormalTable } from '@/components';
+import { Button, CustomHeader, NormalTable, Input } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { CommonDialog, PersonCountModal, YappleModal } from '@/components/modal';
 import { setEventStaffFamily } from '@/redux/family';
-import CustomHeader from '@/components/customHeader';
-import { Input } from '@/components/input';
 import { CheckInOutServices, TempRegisterServices } from '@/services';
 import BarcodeDialog from '@/components/modal/barcodeDialog';
 import { setSelfID } from '@/redux/self_id';

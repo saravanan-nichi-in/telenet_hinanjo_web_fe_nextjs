@@ -1,10 +1,10 @@
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { useRouter } from "next/router";
 import {
     Button,
   } from "@/components";
   import { LayoutContext } from "@/layout/context/layoutcontext";
-  import React, { useContext, useEffect, useState, useRef } from "react";
   import { downloadImage, getValueByKeyRecursively as translate } from "@/helper";
-  import { useRouter } from "next/router";
   import { useAppSelector,useAppDispatch } from "@/redux/hooks";
   import { clearExceptSuccessData,reset,setSuccessData } from "@/redux/tempRegister";
   import {TempRegisterServices} from "@/services"

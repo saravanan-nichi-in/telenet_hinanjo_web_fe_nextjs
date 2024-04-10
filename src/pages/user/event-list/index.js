@@ -9,11 +9,10 @@ import {
   getJapaneseDateTimeDisplayActualFormat,
   getEnglishDateTimeDisplayFormat,
 } from "@/helper";
-import { NormalTable } from "@/components";
+import { CustomHeader, NormalTable } from "@/components";
 import { UserDashboardServices, UserEventListServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUserDetails } from "@/redux/layout";
-import CustomHeader from "@/components/customHeader";
 
 export default function EventList() {
   const { locale, localeJson } = useContext(LayoutContext);

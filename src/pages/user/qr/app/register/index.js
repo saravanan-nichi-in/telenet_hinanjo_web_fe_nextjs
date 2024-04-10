@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import FamilyListComponent from "@/components";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+
 import { showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useSelector } from "react-redux";
-import { ButtonRounded } from "@/components";
-import { useRouter } from "next/router";
+import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/qr_app";
 import { UserQrService } from "@/services";
+
 const SearchDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const qrAppReducer = useSelector((state) => state.qrAppReducer);

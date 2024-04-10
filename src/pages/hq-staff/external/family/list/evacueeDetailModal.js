@@ -8,9 +8,8 @@ import {
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalTable } from "@/components/datatable";
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
-import { Button } from "@/components";
+import { Button, NormalTable } from "@/components";
 
 export default function EvacueeDetailModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);

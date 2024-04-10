@@ -31,13 +31,11 @@ import {
   CheckInOutServices
 } from "@/services";
 import QrScannerModal from "@/components/modal/qrScannerModal";
-import { Calendar } from "@/components/date&time";
 import { result } from "lodash";
-import { Button, ButtonRounded, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, QuestionList, RadioBtn, ValidationError } from "@/components";
+import { Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, QuestionList, RadioBtn, ValidationError } from "@/components";
 import YaburuModal from "@/components/modal/userYaburuCardModal";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
 import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
-import CustomHeader from "@/components/customHeader";
 
 export default function Admission() {
   const personCount = localStorage.getItem("personCountStaff");

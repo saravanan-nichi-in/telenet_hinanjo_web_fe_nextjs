@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import _ from 'lodash';
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
+import { FiEdit2 } from "react-icons/fi";
+import { IoIosArrowBack } from 'react-icons/io';
 
 import {
     getValueByKeyRecursively as translate,
@@ -13,15 +16,11 @@ import {
     getSpecialCareName,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CommonDialog, NormalTable, RowExpansionTable, CardSpinner } from '@/components';
+import { Button, CommonDialog, NormalTable, RowExpansionTable, CardSpinner, CustomHeader } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefectures, prefecturesCombined } from '@/utils/constant';
-import CustomHeader from '@/components/customHeader';
-import { IoIosArrowBack } from 'react-icons/io';
 import { setOriginalData, setIsEdit } from '@/redux/staff_register';
 import { CommonServices } from '@/services';
-import { FaArrowRightFromBracket } from 'react-icons/fa6';
-import { FiEdit2 } from "react-icons/fi";
 
 export default function StaffFamilyDetail() {
     const router = useRouter();
