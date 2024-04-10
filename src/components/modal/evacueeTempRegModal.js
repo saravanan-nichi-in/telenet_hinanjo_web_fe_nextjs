@@ -21,7 +21,6 @@ import {
   InputNumber,
   QuestionList,
   QrScannerModal,
-  YaburuModal,
   CustomHeader
 } from "@/components";
 import {
