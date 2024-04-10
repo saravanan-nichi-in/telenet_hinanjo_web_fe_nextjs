@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { SelectButton } from 'primereact/selectbutton';
 
-import { Button, InputSwitch, NormalCheckBox } from '@/components';
+import { Button, InputSwitch, NormalCheckBox, Input } from '@/components';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Input } from '@/components/input-backup';
 
 const BaseTemplate = React.forwardRef((props, ref) => {
     const { localeJson, locale } = useContext(LayoutContext);
@@ -226,7 +225,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                 <div className="mt-2">
                                     <div className=''>
                                         <Input inputProps={{
-                                            inputClass: "w-full",
+                                            inputClassName: "w-full",
                                             value: item.questiontitle,
                                             maxLength: 255,
                                             placeholder: translate(localeJson, 'jp_title_placeholder'),
@@ -239,7 +238,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                     </div>
                                     <div className='mt-2 align-items-center'>
                                         <Input inputProps={{
-                                            inputClass: "w-full",
+                                            inputClassName: "w-full",
                                             value: item.questiontitle_en,
                                             maxLength: 255,
                                             placeholder: translate(localeJson, 'en_title_placeholder'),
@@ -262,23 +261,23 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                                         <div className="mt-2" >
                                             <div className='flex gap-1 align-items-center justify-content-between'>
                                                 <Input inputProps={{
+                                                    inputParentClassName: 'w-12',
                                                     value: option,
-                                                    inputClass: "w-12",
+                                                    inputClassName: "w-12",
                                                     maxLength: 255,
                                                     placeholder: translate(localeJson, 'jp_option_placeholder') + (i + 1),
                                                     onChange: (e) => updateInputFieldValue(e.target.value, i, "jp")
                                                 }}
-                                                    parentClass={'w-12'}
                                                 />
                                                 <div className='w-12 flex align-items-center gap-2'>
                                                     <Input inputProps={{
+                                                        inputParentClassName: 'w-12',
                                                         value: item.option_en[i],
-                                                        inputClass: "w-12",
+                                                        inputClassName: "w-12",
                                                         maxLength: 255,
                                                         placeholder: translate(localeJson, 'en_option_placeholder') + (i + 1),
                                                         onChange: (e) => updateInputFieldValue(e.target.value, i, "en")
                                                     }}
-                                                        parentClass={'w-12'}
                                                     />
                                                     <button className="pi pi-trash text-red-600 border-none bg-transparent" type='button' disabled={i === 0} onClick={() => updateFormChangeData(i, 'delete')} />
                                                 </div>

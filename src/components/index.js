@@ -1,7 +1,7 @@
-import { NormalTable, RowExpansionTable } from "./datatable";
-import { ValidationError } from "./error";
-import { Counter, CounterSupplies } from "./incrementDecrement";
-import { NormalLabel } from "./label";
+import { NormalTable, RowExpansionTable } from "@/components/datatable";
+import { ValidationError } from "@/components/error";
+import { Counter, CounterSupplies } from "@/components/incrementDecrement";
+import { NormalLabel } from "@/components/label";
 import {
   DeleteModal,
   DynamicModal,
@@ -37,30 +37,30 @@ import {
   StockpileCreateEditModal,
   UserEventRegModal,
   YaburuModal
-} from "./modal";
-import { ImageComponent } from "./image";
-import { NormalCheckBox } from "./checkbox";
-import { ToggleSwitch, InputSwitch } from "./switch";
-import { DND } from "./dragNdrop";
-import { GoogleMapComponent, GoogleMapMultiMarkerComponent } from "./map";
-import { Button, ButtonRounded } from "./button";
-import { RadioBtn } from "./radioButton";
-import { BarcodeScanner } from "./qr";
-import { InputFile } from "./upload";
-import { PerspectiveCropping } from "./perspectiveCropping";
-import { CardSpinner } from "./spinner";
-import { Input, TextArea, InputNumber, InputGroup, InputDropdown, MultiSelect, DropdownSelect, InputGroups,Password } from "./input";
-import { NotFound } from "./dataNotFound";
-import AudioRecorder from "./audio";
-import CommonPage from "./eventCheck";
-import FamilyListComponent from "./familySearchResult";
-import QuestionList from "./masterQuestion";
-import { MultiStepForm } from "./multiForm";
-import PersonCountButton from "./personCountButtons";
-import { BaseTemplate } from "./questionarrie";
-import Doughnut from "./chart";
-import CustomHeader from "./customHeader";
-import { DateTime ,Calendar } from "./date&time";
+} from "@/components/modal";
+import { ImageComponent } from "@/components/image";
+import { NormalCheckBox } from "@/components/checkbox";
+import { ToggleSwitch, InputSwitch } from "@/components/switch";
+import { DND } from "@/components/dragNdrop";
+import { GoogleMapComponent, GoogleMapMultiMarkerComponent } from "@/components/map";
+import { Button, ButtonRounded } from "@/components/button";
+import { RadioBtn } from "@/components/radioButton";
+import { BarcodeScanner } from "@/components/qr";
+import { InputFile } from "@/components/upload";
+import { PerspectiveCropping } from "@/components/perspectiveCropping";
+import { CardSpinner } from "@/components/spinner";
+import { Input, TextArea, InputNumber, InputGroup, InputDropdown, MultiSelect, DropdownSelect, InputGroups, Password } from "@/components/input";
+import { NotFound } from "@/components/dataNotFound";
+import AudioRecorder from "@/components/audio";
+import CommonPage from "@/components/eventCheck";
+import FamilyListComponent from "@/components/familySearchResult";
+import QuestionList from "@/components/masterQuestion";
+import { MultiStepForm } from "@/components/multiForm";
+import PersonCountButton from "@/components/personCountButtons";
+import { BaseTemplate } from "@/components/questionarrie";
+import Doughnut from "@/components/chart";
+import CustomHeader from "@/components/customHeader";
+import { DateTime, Calendar } from "@/components/date&time";
 
 export {
   NormalTable,
