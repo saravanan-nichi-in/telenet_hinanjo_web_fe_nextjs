@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import {
-    getValueByKeyRecursively as translate,
-} from '@/helper'
+import { getValueByKeyRecursively as translate } from '@/helper'
 import { CustomHeader } from '@/components';
 
 const Privacy = () => {

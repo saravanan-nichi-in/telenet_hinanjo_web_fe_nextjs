@@ -6,9 +6,8 @@ import { useRouter } from 'next/router';
 import { useSelector } from "react-redux";
 
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ValidationError, Button, CustomHeader } from '@/components';
+import { ValidationError, Button, CustomHeader, InputGroup } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
-import { InputGroup } from '@/components/input';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const ForgotPasswordPage = () => {

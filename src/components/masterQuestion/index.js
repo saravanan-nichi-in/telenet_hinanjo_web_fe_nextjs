@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import ButtonGroup from "./multiSelect.js";
-import SingleSelectButtonGroup from "./singleSelect.js";
+import ButtonGroup from "@/components/masterQuestion/multiSelect.js";
+import SingleSelectButtonGroup from "@/components/masterQuestion/singleSelect.js";
 import { CommonServices } from "@/services";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";

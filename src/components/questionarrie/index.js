@@ -1,1 +1,1 @@
-export {default as BaseTemplate} from './template/baseTemplate'
+export {default as BaseTemplate} from '@/components/questionarrie/template/baseTemplate'

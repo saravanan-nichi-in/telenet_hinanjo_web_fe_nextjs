@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
-import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -11,6 +10,7 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable } from '@/components';
+import { useAppSelector } from "@/redux/hooks";
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
 
 export default function EventFamilyDetail() {

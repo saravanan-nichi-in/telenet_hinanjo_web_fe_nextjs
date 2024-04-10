@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { setSelfID } from "@/redux/self_id";
-import { useAppDispatch } from "@/redux/hooks";
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, BarcodeDialog, PreRegisterConfirmDialog } from '@/components';
+import { setSelfID } from "@/redux/self_id";
+import { useAppDispatch } from "@/redux/hooks";
 import { TempRegisterServices } from '@/services';
 
 export default function HitachiList() {

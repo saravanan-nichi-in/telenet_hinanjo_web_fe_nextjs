@@ -8,9 +8,7 @@ import { Button, CustomHeader, Input, InputDropdown, NormalTable } from '@/compo
 import { EvacuationServices } from '@/services/evacuation.services';
 import { setFamily } from '@/redux/family';
 import { useAppDispatch } from '@/redux/hooks';
-import {
-    getSpecialCareName
-} from "@/helper";
+import { getSpecialCareName } from "@/helper";
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);

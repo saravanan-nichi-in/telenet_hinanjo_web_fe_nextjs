@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import { useAppDispatch } from '@/redux/hooks';
 import toast from 'react-hot-toast';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -26,7 +25,7 @@ import {
 } from "@/helper";
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 import { setStaffTempFamily } from '@/redux/family';
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector ,useAppDispatch } from "@/redux/hooks";
 import { TempRegisterServices } from '@/services';
 
 function TemporaryRegistrants() {

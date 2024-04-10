@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
-import { useAppSelector } from "@/redux/hooks";
 import _ from 'lodash';
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -13,9 +12,9 @@ import {
     getSpecialCareName
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { AdminEvacueeTempServices } from '@/services';
 import { Button, CardSpinner, CustomHeader } from '@/components';
-import { CommonServices } from '@/services';
+import { useAppSelector } from "@/redux/hooks";
+import { AdminEvacueeTempServices, CommonServices } from '@/services';
 
 export default function EvacueeTempFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);

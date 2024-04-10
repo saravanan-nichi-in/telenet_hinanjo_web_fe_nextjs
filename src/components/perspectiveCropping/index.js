@@ -11,7 +11,7 @@ import { AiOutlineCamera, AiOutlineRotateRight } from 'react-icons/ai';
 import { MdSettingsBackupRestore } from 'react-icons/md';
 
 import { Button } from "@/components";
-import Cropper from './cropper'
+import Cropper from '@/components/perspectiveCropping/cropper'
 
 const { Dragger } = Upload
 
