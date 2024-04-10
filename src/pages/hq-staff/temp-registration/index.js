@@ -11,7 +11,7 @@ import {
   getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, DeleteModal, NormalTable, Input, InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
 import { AdminEvacueeTempServices } from '@/services';
 import { setTempFamily } from '@/redux/family';
 

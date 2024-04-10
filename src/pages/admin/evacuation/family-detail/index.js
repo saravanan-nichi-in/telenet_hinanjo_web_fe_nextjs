@@ -15,8 +15,7 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
-import { Button, NormalTable, CommonDialog, CardSpinner } from '@/components';
-import CustomHeader from '@/components/customHeader';
+import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader } from '@/components';
 import { prefecturesCombined } from '@/utils/constant';
 
 export default function EvacueeFamilyDetail() {

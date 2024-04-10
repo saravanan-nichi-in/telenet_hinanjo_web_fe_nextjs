@@ -12,12 +12,15 @@ import {
   InputFloatLabel,
   InputNumberFloatLabel,
   ValidationError,
-  NormalTable, RowExpansionTable, AudioRecorder, CustomHeader
+  NormalTable, 
+  RowExpansionTable, 
+  AudioRecorder, 
+  CustomHeader,
+  QrScannerModal,
+  BarcodeDialog
 } from "@/components";
 import { CommonServices, CheckInOutServices } from "@/services";
 import { prefectures } from '@/utils/constant';
-import QrScannerModal from "@/components/modal/qrScannerModal";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
 
 export default function Admission() {
   const router = useRouter();

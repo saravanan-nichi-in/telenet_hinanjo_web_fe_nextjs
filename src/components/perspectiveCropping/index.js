@@ -10,9 +10,7 @@ import { IoMdReverseCamera } from 'react-icons/io';
 import { AiOutlineCamera, AiOutlineRotateRight } from 'react-icons/ai';
 import { MdSettingsBackupRestore } from 'react-icons/md';
 
-import {
-    Button,
-} from "@/components";
+import { Button } from "@/components";
 import Cropper from './cropper'
 
 const { Dragger } = Upload

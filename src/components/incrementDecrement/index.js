@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { InputGroups } from "../input";
+import { InputGroups } from "@/components";
 
 export const Counter = (props) => {
   const {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox } from "primereact/checkbox";
 
-import { NormalLabel } from "../label";
+import { NormalLabel } from "@/components"; 
 
 const NormalCheckBox = (props) => {
     const {

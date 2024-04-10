@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import _ from "lodash";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
@@ -7,9 +9,7 @@ import {
   getValueByKeyRecursively as translate
 } from "@/helper";
 import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
-import { useSelector } from "react-redux";
 import { staff_dashboard_status_jp, staff_dashboard_status_en } from '@/utils/constant'
-import _ from "lodash";
 import { CustomHeader, Doughnut } from "@/components";
 
 function StaffDashboard() {

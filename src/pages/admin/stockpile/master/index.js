@@ -3,9 +3,7 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, InputDropdown } from '@/components';
-import { AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal } from '@/components/modal';
-import StockpileCreateEditModal from '@/components/modal/stockpileCreateEditModal';
+import { Button, CustomHeader, NormalTable, InputDropdown, AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal, StockpileCreateEditModal } from '@/components';
 import { StockpileService } from '@/services/stockpilemaster.service';
 
 export default function AdminStockPileMaster() {

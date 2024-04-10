@@ -2,11 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Dialog } from "primereact/dialog";
 
-import { Button } from "../button";
+import { Button, CustomHeader, PersonCountButton } from "@/components"; 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import CustomHeader from "../customHeader";
-import PersonCountButton from "../personCountButtons";
 import { reset } from "@/redux/staff_register";
 import { useAppDispatch } from "@/redux/hooks";
 

@@ -3,14 +3,13 @@ import { Dialog } from "primereact/dialog";
 import _ from "lodash";
 import { TabView, TabPanel } from "primereact/tabview";
 
-import { Button } from "../button";
+import { Button, NormalTable } from "@/components"; 
 import {
   getEnglishDateTimeDisplayActualFormat,
   getJapaneseDateTimeDayDisplayActualFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalTable } from "../datatable";
 import { StaffManagementService } from "@/services/staffmanagement.service";
 
 export default function StaffManagementDetailModal(props) {

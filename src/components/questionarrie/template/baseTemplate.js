@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react';
+import { SelectButton } from 'primereact/selectbutton';
 
-import { Button } from '@/components/button';
+import { Button, InputSwitch, NormalCheckBox } from '@/components';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { NormalCheckBox } from '@/components/checkbox';
-import { InputSwitch } from '@/components';
 import { Input } from '@/components/input-backup';
-import { SelectButton } from 'primereact/selectbutton';
 
 const BaseTemplate = React.forwardRef((props, ref) => {
     const { localeJson, locale } = useContext(LayoutContext);

@@ -3,12 +3,9 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, NormalLabel, Input, TextArea, ValidationError } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
-import { ValidationError } from "../error";
-import { Input, TextArea } from "../input";
 
 export default function StockPileSummaryMailSettingsModal(props) {
     const { localeJson } = useContext(LayoutContext);

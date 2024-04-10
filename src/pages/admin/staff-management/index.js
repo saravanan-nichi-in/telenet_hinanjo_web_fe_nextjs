@@ -3,8 +3,7 @@ import _ from 'lodash';
 
 import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, Input } from '@/components';
-import { AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components/modal';
+import { Button, CustomHeader, NormalTable, Input, AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components';
 import { StaffManagementService } from '@/services/staffmanagement.service';
 import { CommonServices } from '@/services';
 

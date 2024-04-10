@@ -3,15 +3,12 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, Calendar, Input, InputDropdown, ValidationError, InputNumber } from "@/components"; 
 import {
     convertToSingleByte,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ValidationError } from "../error";
-import { Input, InputDropdown, InputNumber } from "../input";
-import { Calendar } from "../date&time";
 
 export default function StaffStockpileEdit(props) {
     const { localeJson } = useContext(LayoutContext);

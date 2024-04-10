@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { useAppDispatch } from '@/redux/hooks';
 import _ from 'lodash';
 import toast from "react-hot-toast";
 
@@ -10,17 +9,15 @@ import {
     getValueByKeyRecursively as translate,
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
-    getYYYYMMDDHHSSSSDateTimeFormat,
     getJapaneseDateTimeDisplayActualFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
 } from "@/helper";
-import { Button, CustomHeader, NormalTable, Input } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, CommonDialog, PersonCountModal, YappleModal, BarcodeDialog } from '@/components';
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
-import { CommonDialog, PersonCountModal, YappleModal } from '@/components/modal';
 import { setEventStaffFamily } from '@/redux/family';
+import { useAppDispatch } from '@/redux/hooks';
 import { CheckInOutServices, TempRegisterServices } from '@/services';
-import BarcodeDialog from '@/components/modal/barcodeDialog';
 import { setSelfID } from '@/redux/self_id';
 import { prefecturesCombined } from '@/utils/constant';
 

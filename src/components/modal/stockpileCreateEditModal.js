@@ -1,16 +1,12 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../button";
+import { Button, NormalLabel, Input, InputDropdown, ValidationError, InputFile } from "@/components"; 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { NormalLabel } from "../label";
-import { ValidationError } from "../error";
-import { InputFile } from '@/components/upload';
 import { StockpileService } from "@/services/stockpilemaster.service";
-import { Input, InputDropdown } from "../input";
 
 export default function StockpileCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

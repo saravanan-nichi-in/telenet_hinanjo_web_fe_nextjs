@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { result } from "lodash";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset } from "@/redux/staff_register";
@@ -21,21 +22,14 @@ import {
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
-  ExternalServices,
   CommonServices,
   TempRegisterServices,
   CheckInOutServices
 } from "@/services";
-import QrScannerModal from "@/components/modal/qrScannerModal";
-import { result } from "lodash";
-import { Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, QuestionList, RadioBtn, ValidationError } from "@/components";
-import YaburuModal from "@/components/modal/userYaburuCardModal";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
-import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
+import { Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, 
+QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal } from "@/components";
 
 export default function Admission() {
   const personCount = localStorage.getItem("personCountStaff");

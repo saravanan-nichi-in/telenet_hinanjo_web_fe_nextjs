@@ -12,7 +12,7 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable,Input,InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable,Input, InputDropdown } from '@/components';
 import { AdminEventStatusServices, CommonServices } from '@/services';
 import { prefecturesCombined } from '@/utils/constant';
 

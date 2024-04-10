@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from 'next/router';
 
-import { LayoutContext } from '../../../layout/context/layoutcontext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ValidationError, Button, CustomHeader, Password } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';

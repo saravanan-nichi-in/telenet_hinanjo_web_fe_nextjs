@@ -6,11 +6,9 @@ import {
     getValueByKeyRecursively as translate,
     getEnglishDateTimeDisplayFormat,
 } from '@/helper';
-import { Button, CustomHeader, NormalTable } from '@/components';
-import { AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut } from '@/components/modal';
+import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut, EventCreateEditModal } from '@/components';
 import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
 import { useAppDispatch } from '@/redux/hooks';
-import EventCreateEditModal from '@/components/modal/EventCreateEditModal';
 
 export default function Questionnaire() {
     const { localeJson, locale, setLoader} = useContext(LayoutContext);

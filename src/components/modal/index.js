@@ -1,5 +1,5 @@
 export { default as DeleteModal } from './deleteModal';
-export { default as AdminManagementCreateEditModal} from './adminManagementCreateEditModal';
+export { default as AdminManagementCreateEditModal } from './adminManagementCreateEditModal';
 export { default as DynamicModal } from './dynamicModal';
 export { default as DetailModal } from './detailModal';
 export { default as EmailSettings } from './emailSettings';
@@ -32,4 +32,3 @@ export { default as QrScannerModal } from './qrScannerModal';
 export { default as StockpileCreateEditModal } from './stockpileCreateEditModal';
 export { default as UserEventRegModal } from './userEventRegModal';
 export { default as YaburuModal } from './userYaburuCardModal';
- 

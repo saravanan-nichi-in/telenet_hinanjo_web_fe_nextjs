@@ -1,7 +1,7 @@
 import React from "react";
 import { RadioButton } from "primereact/radiobutton";
 
-import { NormalLabel } from "../label";
+import { NormalLabel } from "@/components"; 
 
 export function RadioBtn(props) {
     const {
