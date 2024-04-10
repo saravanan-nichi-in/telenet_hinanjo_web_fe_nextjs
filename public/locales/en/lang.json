@@ -1046,5 +1046,7 @@
     "current_number_of_visitors": "Total (Summary)",
     "checkin_date_time": "CheckIn Date Time",
     "smart_phone_register_url": "Smartphone Register URL",
-    "qr_notification_message":"Please show the QR code to the evacuation center reception"
+    "qr_notification_message":"Please show the QR code to the evacuation center reception",
+    "temp_inactive_place":"This shelter is not currently operating",
+    "already_register":"Registered in another evacuation center. Please delete and proceed for registration."
 }

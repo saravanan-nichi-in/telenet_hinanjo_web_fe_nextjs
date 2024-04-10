@@ -1042,5 +1042,7 @@
       "current_number_of_visitors": "現在の入場者数",
       "checkin_date_time": "入場日時",
       "smart_phone_register_url": "スマートフォン登録URL",
-      "qr_notification_message":"QRコードを避難所受付に見せてください"
+      "qr_notification_message":"QRコードを避難所受付に見せてください",
+      "temp_inactive_place":"この避難所は現在運営していません",
+      "already_register":"別の避難所で既に仮登録済みです。既存のデータを削除して、再度登録してください。"
 }

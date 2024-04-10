@@ -6,7 +6,6 @@ import { SelectButton } from "primereact/selectbutton";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   getValueByKeyRecursively as translate,
-  getEnglishDateDisplayFormat,
   convertToSingleByte,
   splitJapaneseAddress,
 } from "@/helper";
@@ -21,8 +20,6 @@ import {
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
   CommonServices,
@@ -31,20 +28,17 @@ import {
 } from "@/services";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import CustomHeader from "../customHeader";
-import YaburuModal from "./userYaburuCardModal";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const currentDate = new Date();
   const minDOBDate = new Date();
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
     { name: translate(localeJson, "c_not_answer"), value: 3 },
   ];
-  const minYear = parseInt(minDOBDate.getFullYear() - 120);
   const validationSchema = () =>
     Yup.object().shape({
       checked:Yup.boolean().nullable(),
@@ -360,13 +354,10 @@ export default function EvacueeTempRegModal(props) {
   };
   const qrResult = (result) => {
     setLoader(true);
-    let payload = {
-      yapple_id: "",
-      ppid: "",
-      chiica_qr: result,
-    };
+    let formData = new FormData()
+    formData.append('content',result)
     setOpenQrPopup(false);
-    basicInfo(payload, (res) => {
+    qrScanRegistration(formData, (res) => {
       if (res) {
         setOpenQrPopup(false);
         const evacueeArray = res.data;
@@ -560,11 +551,6 @@ export default function EvacueeTempRegModal(props) {
         hide={() => setPerspectiveCroppingVisible(false)}
         callback={ocrResult}
       />
-      {/* <YaburuModal
-       open={openQrPopup}
-       close={closeQrPopup}
-       callBack={qrResult}
-       /> */}
       <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -725,8 +711,7 @@ export default function EvacueeTempRegModal(props) {
                             "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
                           text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled:true,
-                            // values?.family_register_from == "0" ? true : false,
+                          disabled:values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                           },

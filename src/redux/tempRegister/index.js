@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   registerData: {},
   originalData:[],
-  successData:{ showButton: false},
-  placeId:{},
+  successData:{ showButton: false,placeId:""},
+  placeId:'',
 };
 
 export const temp_register = createSlice({

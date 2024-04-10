@@ -47,7 +47,9 @@ export default function StaffManagementEditPage() {
 
   useEffect(() => {
     localStorage.setItem("refreshing",false)
-    tempSuccessData && dispatch(setSuccessData({showButton:true}))
+    let personCount = localStorage.getItem("personCountTemp")
+   if(tempSuccessData && personCount !=null) 
+   dispatch(setSuccessData({showButton:true}))
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
     };

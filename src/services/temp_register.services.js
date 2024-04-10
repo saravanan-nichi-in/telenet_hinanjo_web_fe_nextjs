@@ -348,8 +348,7 @@ function _getppID(payload, callBackFun) {
 }
 
 function _deleteTempFamily (payload,callBackFun) {
-  console.log(payload)
-  axios.delete('/user/registration/delete/family', {params: payload})
+  axios.post('/user/registration/delete/family', payload)
   .then((response) => {
     callBackFun(response.data);
     toast.success(response?.data?.message, {

@@ -1,11 +1,9 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import { result } from "lodash";
 import toast from "react-hot-toast";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset,setPlaceId } from "@/redux/tempRegister";
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -22,8 +20,6 @@ import {
 import {
   Button,
   ButtonRounded,
-  ToggleSwitch,
-  NormalTable,
   ValidationError,
   RadioBtn,
   PerspectiveCropping,
@@ -36,20 +32,18 @@ import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
-  ExternalServices,
   CommonServices,
   TempRegisterServices,
   CheckInOutServices,
+  UserPlaceListServices,
+  MapServices
+
 } from "@/services";
 import QuestionList from "@/components/masterQuestion";
 import QrScannerModal from "@/components/modal/qrScannerModal";
 import BarcodeDialog from "@/components/modal/barcodeDialog";
-import YaburuModal from "@/components/modal/userYaburuCardModal";
-
 export default function Admission() {
   const personCount = localStorage.getItem("personCountTemp");
   const router = useRouter();
@@ -290,6 +284,10 @@ export default function Admission() {
     let key = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
     let decryptedData =queryParams ? CommonServices.decrypt(queryParams.get('hinan'), key):"";
     decryptedData && dispatch(setPlaceId(decryptedData))
+    if ((place_id == "" && decryptedData=="") || (!place_id && !decryptedData )) {
+      router.push("/user/list");
+      return;
+    }
     if(successData?.data)
     {
       router.push('/user/temp-register/success')
@@ -299,9 +297,24 @@ export default function Admission() {
 
   useEffect(()=>
   {
-    if (place_id == "" || !place_id) {
-      router.push("/user/list");
-      return;
+    if(place_id)
+    {
+      MapServices.getPlaceList((res)=>{
+        if(res)
+        {
+          let placeList = res.data.model.list;
+          let placeIsAvail = placeList.find((list)=> list.id==place_id)
+          if(placeIsAvail?.active_flg != "1")
+          {
+            toast.error(translate(localeJson, "temp_inactive_place"), {
+              position: "top-right",
+            });
+            window.location.href = '/'
+            return
+          }
+        }
+
+      })
     }
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
@@ -311,9 +324,11 @@ export default function Admission() {
         }, 1000);
       }
     } else {
+      console.log(personCount)
       if(!successData?.data)
       window.location.href = '/user/temp-person-count';
-    }
+    } 
+    
   },[place_id,locale])
 
   const fetchData = () => {
@@ -822,14 +837,11 @@ export default function Admission() {
   };
   const qrResult = (result) => {
     setLoader(true)
-    let payload = {
-      yapple_id: "",
-      ppid: "",
-      chiica_qr: result,
-    };
+    let formData = new FormData()
+    formData.append('content',result)
     setOpenQrPopup(false)
     showOverFlow();
-    basicInfo(payload, (res) => {
+    qrScanRegistration(formData, (res) => {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);

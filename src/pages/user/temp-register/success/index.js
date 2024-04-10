@@ -8,9 +8,10 @@ import {
   import { useAppSelector,useAppDispatch } from "@/redux/hooks";
   import { clearExceptSuccessData,reset,setSuccessData } from "@/redux/tempRegister";
   import {TempRegisterServices} from "@/services"
+  import toast from "react-hot-toast";
   
   const RegisterSuccess = () => {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader,locale } = useContext(LayoutContext);
     const router = useRouter()
     const regReducer = useAppSelector((state) => state.tempRegisterReducer);
     const family_code = regReducer.successData?.data?.familyCode  
@@ -18,27 +19,28 @@ import {
     const dispatch = useAppDispatch();
     const {deleteTempFamily} = TempRegisterServices
     useEffect(() => {
-      // Set flag in local storage to indicate if the page has been refreshed
-      localStorage.setItem("personCountTemp", null);
-      // Dispatch setSuccessData only if the page has been refreshed
-      if (localStorage.getItem("refreshing")==true) {
-        dispatch(setSuccessData({ showButton: true } ));
+      const navigationEntries = window.performance.getEntriesByType('navigation');
+      if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
+        localStorage.setItem("refreshing","true")
       }
     }, []);
     useEffect(() => {
-      const handleRefresh = (event) => {
-        // Set a flag in local storage to indicate that the page is being refreshed
-        localStorage.setItem('refreshing', true);
-      };
-  
-      // Add event listener for beforeunload event
-      window.addEventListener('beforeunload', handleRefresh);
-  
-      // Cleanup function to remove event listener when component unmounts
-      return () => {
-        window.removeEventListener('beforeunload', handleRefresh);
-      };
-    }, []);
+
+      let place_id = regReducer.placeId
+      let SuccessPlaceId = regReducer.successData?.placeId
+
+      if(place_id != SuccessPlaceId) 
+      {
+        toast.error(translate(localeJson, "already_register"), {
+          position: "top-right",
+        });
+      }
+      // Set flag in local storage to indicate if the page has been refreshed
+      localStorage.setItem("personCountTemp", null);
+      // Dispatch setSuccessData only if the page has been refreshed
+        let show = localStorage.getItem("refreshing");
+        show=="true" && dispatch(setSuccessData({ showButton: true } ));  
+    }, [locale]);
     return (
       <div className='grid flex-1'>
         <div className='col-12 flex-1'>
@@ -77,7 +79,7 @@ import {
                 regReducer.successData?.showButton &&
                 <Button buttonProps={{
                   type: "button",
-                  buttonClass: "w-full delete-button-user h-5rem border-radius-5rem mt-3 mb-3 border-2",
+                  buttonClass: "w-full delete-button-user h-5rem border-radius-5rem mt-3 border-2",
                   text: translate(localeJson, 'delete'),
                   onClick: () => 
                   {
@@ -93,17 +95,12 @@ import {
                         localStorage.setItem('refreshing', false);
                         router.push('/user/list')
                       }
-                      else {
-                        dispatch(reset())
-                        localStorage.setItem("personCountTemp",null)
-                        localStorage.setItem('refreshing', false);
-                      }
                     })
                   },
                 }}parentClass={"delete-button-user"}
                 />
               }
-              <div className="p-error">
+              <div className="p-error mt-3">
                 {translate(localeJson,"qr_notification_message")}
               </div>
             
