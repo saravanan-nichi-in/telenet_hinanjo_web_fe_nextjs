@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { usePathname } from 'next/navigation'
-
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button, CustomHeader, PersonCountButton } from "@/components";
@@ -27,7 +26,7 @@ const PersonCountScreen = () => {
         } else {
             dispatch(clearExceptPlaceId());
             // Person count selected, proceed with navigation
-            localStorage.setItem("personCount", personCount);
+            localStorage.setItem("personCountTemp", personCount);
             router.push('/user/temp-register');
         }
     };

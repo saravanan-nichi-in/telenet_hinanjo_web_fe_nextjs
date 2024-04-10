@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   registerData: {},
   originalData:[],
-  successData:{},
-  placeId:{},
+  successData:{ showButton: false,placeId:""},
+  placeId:'',
 };
 
 export const temp_register = createSlice({
@@ -18,6 +18,12 @@ export const temp_register = createSlice({
         placeId: state.placeId
       }
     },
+    clearExceptSuccessData: (state) => {
+      return {
+        ...initialState,
+        successData: state.successData
+      }
+    },
     setRegisterData: (state, action) => {
       state.registerData = action.payload;
     },
@@ -25,7 +31,10 @@ export const temp_register = createSlice({
       state.originalData = action.payload;
     },
     setSuccessData: (state, action) => {
-      state.successData = action.payload;
+      state.successData = {
+        ...state.successData, // Preserve other properties in successData
+        ...action.payload, // Merge new data with existing data
+      };
     },
     setPlaceId: (state, action) => {
       state.placeId = action.payload
@@ -33,5 +42,5 @@ export const temp_register = createSlice({
   },
 });
 
-export const { setRegisterData, setOriginalData,setSuccessData,setPlaceId,reset,clearExceptPlaceId } = temp_register.actions;
+export const { setRegisterData, setOriginalData,setSuccessData,setPlaceId,reset,clearExceptPlaceId,clearExceptSuccessData } = temp_register.actions;
 export default temp_register.reducer;

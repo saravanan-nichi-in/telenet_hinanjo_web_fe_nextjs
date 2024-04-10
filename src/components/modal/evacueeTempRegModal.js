@@ -21,14 +21,11 @@ import {
   InputNumber,
   QuestionList,
   QrScannerModal,
-  YaburuModal,
   CustomHeader
 } from "@/components";
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
   CommonServices,
@@ -40,14 +37,12 @@ export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const currentDate = new Date();
   const minDOBDate = new Date();
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
     { name: translate(localeJson, "c_not_answer"), value: 3 },
   ];
-  const minYear = parseInt(minDOBDate.getFullYear() - 120);
   const validationSchema = () =>
     Yup.object().shape({
       checked:Yup.boolean().nullable(),
@@ -363,13 +358,10 @@ export default function EvacueeTempRegModal(props) {
   };
   const qrResult = (result) => {
     setLoader(true);
-    let payload = {
-      yapple_id: "",
-      ppid: "",
-      chiica_qr: result,
-    };
+    let formData = new FormData()
+    formData.append('content',result)
     setOpenQrPopup(false);
-    basicInfo(payload, (res) => {
+    qrScanRegistration(formData, (res) => {
       if (res) {
         setOpenQrPopup(false);
         const evacueeArray = res.data;
@@ -473,8 +465,8 @@ export default function EvacueeTempRegModal(props) {
     return { years, months };
   }
 
-  const Scanner = {
-    url: "/layout/images/mapplescan.svg",
+  const Qr = {
+    url: "/layout/images/evacuee-qr.png",
   };
   const Card = {
     url: "/layout/images/evacuee-card.png",
@@ -563,16 +555,11 @@ export default function EvacueeTempRegModal(props) {
         hide={() => setPerspectiveCroppingVisible(false)}
         callback={ocrResult}
       />
-      <YaburuModal
-       open={openQrPopup}
-       close={closeQrPopup}
-       callBack={qrResult}
-       />
-      {/* <QrScannerModal
+      <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
-      ></QrScannerModal> */}
+      ></QrScannerModal>
       <Formik
         innerRef={formikRef}
         validationSchema={validationSchema}
@@ -726,10 +713,9 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
-                          text: translate(localeJson, "myNumberCardScan"),
+                          text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled:true,
-                            // values?.family_register_from == "0" ? true : false,
+                          disabled:values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                           },
@@ -745,8 +731,8 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "yaburuCardScan"),
-                          icon: <img src={Scanner.url} width={40} height={40} />,
+                          text: translate(localeJson, "c_qr_reg"),
+                          icon: <img src={Qr.url} width={30} height={30} />,
                           disabled:
                             values?.family_register_from == "0" ? true : false,
                           onClick: () => {

@@ -1,5 +1,5 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from "@/helper";
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay, toastDisplay } from "@/helper";
 import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
@@ -23,6 +23,7 @@ export const TempRegisterServices = {
   staffRegisterUser: _staffRegisterUser,
   staffEditUser: _staffEditUser,
   getPPID: _getppID,
+  deleteTempFamily:_deleteTempFamily,
 };
 
 function _getDefaultEventData(callBackFun) {
@@ -344,4 +345,18 @@ function _getppID(payload, callBackFun) {
         position: "top-right",
       });
     });
+}
+
+function _deleteTempFamily (payload,callBackFun) {
+  axios.post('/user/registration/delete/family', payload)
+  .then((response) => {
+    callBackFun(response.data);
+    toast.success(response?.data?.message, {
+      position: "top-right",
+    });
+  })
+  .catch((error) => {
+    callBackFun();
+   toastDisplay(error?.response)
+  });
 }

@@ -2,6 +2,7 @@
 import _ from 'lodash';
 import toast from "react-hot-toast";
 import { isObject, isArray } from "lodash";
+import axios from "@/utils/api";
 
 /**
  * 
@@ -710,4 +711,46 @@ export const getSpecialCareName = (nameList, locale = 'ja') => {
         });
     }
     return specialCareName;
+}
+
+export function downloadImage(url, fileName) {
+    // Create an image element
+    var img = new Image();
+    img.crossOrigin = "Anonymous"; // Set cross-origin to handle CORS
+    img.src = 'https://cors-anywhere.herokuapp.com/' + url;
+    img.onload = function() {
+        // Create a canvas element
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = this.width;
+        canvas.height = this.height;
+        // Draw the image onto the canvas
+        ctx.drawImage(this, 0, 0);
+        // Convert canvas to base64 string
+        var base64String = canvas.toDataURL('image/jpeg'); // Adjust format as needed
+        // Convert base64 string to Blob
+        var blob = base64ToBlob(base64String);
+        // Create a downloadable link with the Blob
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        // Append the link to the body
+        document.body.appendChild(link);
+        // Trigger the click event of the link
+        link.click();
+        // Remove the link from the body
+        document.body.removeChild(link);
+    };
+}
+
+// Function to convert base64 string to Blob
+function base64ToBlob(base64String) {
+    var byteString = atob(base64String.split(',')[1]);
+    var mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
 }

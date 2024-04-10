@@ -7,7 +7,6 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
-  getJapaneseDateTimeDisplayFormat,
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { TempRegisterServices } from "@/services";
@@ -535,6 +534,7 @@ const TempRegisterConfirm = () => {
                   tempRegister(modifiedJson, (res) => {
                     if (res) {
                       dispatch(setSuccessData(res));
+                      dispatch(setSuccessData({placeId: registerReducer?.placeId}))
                       router.push("/user/temp-register/success");
                       setLoader(false);
                     } else {
@@ -552,7 +552,7 @@ const TempRegisterConfirm = () => {
                   " w-full border-radius-5rem back-button h-4rem text-5xl",
                 text: translate(localeJson, "return"),
                 onClick: () => {
-                  router.push("/user/tem-register");
+                  router.push("/user/temp-register");
                 },
               }}
               parentClass="block w-full back-button"
