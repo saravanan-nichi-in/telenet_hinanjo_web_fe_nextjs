@@ -844,6 +844,7 @@
     "temp_reg_success": "Temporary registration completed",
     "temp_reg_message": "Please show the QR code in the reception of evacuation center",
     "reg_success_message": "Registration to the evacuation center is completed.",
+    "tem_reg_success_message": "Temporary Registration to the evacuation center is completed.",
     "your_family_code": "Your registered number",
     "or": "もしくは",
     "scan_my_card": "Scan My Number Card",
@@ -1044,5 +1045,6 @@
     "exit_all_together": "Bulk Checkout",
     "current_number_of_visitors": "Total (Summary)",
     "checkin_date_time": "CheckIn Date Time",
-    "smart_phone_register_url": "Smartphone Register URL"
+    "smart_phone_register_url": "Smartphone Register URL",
+    "qr_notification_message":"Please show the QR code to the evacuation center reception"
 }

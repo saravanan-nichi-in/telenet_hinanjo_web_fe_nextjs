@@ -856,6 +856,7 @@
       "temp_reg_success": "仮登録が完了しました",
       "temp_reg_message": "QRコードを避難所受付に見せてください",
       "reg_success_message": "登録が完了しました。",
+      "tem_reg_success_message": "仮登録が完了しました。",
       "your_family_code": "あなたの管理番号は",
       "header_title_info": "養父市　避難所管理",
       "disclose_information": "※公開すると、氏名・住所がオンライン上に公開されます",
@@ -1040,5 +1041,6 @@
       "exit_all_together": "一括退場",
       "current_number_of_visitors": "現在の入場者数",
       "checkin_date_time": "入場日時",
-      "smart_phone_register_url": "スマートフォン登録URL"
+      "smart_phone_register_url": "スマートフォン登録URL",
+      "qr_notification_message":"QRコードを避難所受付に見せてください"
 }

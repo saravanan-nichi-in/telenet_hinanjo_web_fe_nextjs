@@ -51,7 +51,7 @@ import { result } from "lodash";
 import YaburuModal from "@/components/modal/userYaburuCardModal";
 
 export default function Admission() {
-  const personCount = localStorage.getItem("personCount");
+  const personCount = localStorage.getItem("personCountTemp");
   const router = useRouter();
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const [evacuee, setEvacuee] = useState([]);
@@ -72,6 +72,7 @@ export default function Admission() {
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const regReducer = useAppSelector((state) => state.tempRegisterReducer);
   const place_id = regReducer.placeId;
+  const successData = regReducer.successData;
   const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
   const dispatch = useAppDispatch();
   const [isMRecording, setMIsRecording] = useState(false);
@@ -265,12 +266,12 @@ export default function Admission() {
 
     const handlePopstate = () => {
       // Clear localStorage when the back button is clicked
-      localStorage.removeItem("personCount");
+      localStorage.removeItem("personCountTemp");
     };
 
     const handleBeforeUnload = () => {
       // Clear localStorage when the page is about to be unloaded
-      localStorage.removeItem("personCount");
+      localStorage.removeItem("personCountTemp");
     };
 
     // Attach the event listeners when the component mounts
@@ -289,7 +290,11 @@ export default function Admission() {
     let key = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
     let decryptedData =queryParams ? CommonServices.decrypt(queryParams.get('hinan'), key):"";
     decryptedData && dispatch(setPlaceId(decryptedData))
-
+    if(successData?.data)
+    {
+      router.push('/user/temp-register/success')
+    }
+     return
   }, [locale]);
 
   useEffect(()=>
@@ -306,9 +311,10 @@ export default function Admission() {
         }, 1000);
       }
     } else {
+      if(!successData?.data)
       window.location.href = '/user/temp-person-count';
     }
-  },[place_id])
+  },[place_id,locale])
 
   const fetchData = () => {
     if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
@@ -1070,18 +1076,18 @@ export default function Admission() {
 
   return (
     <>
-      {/* <QrScannerModal
+      <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
-      ></QrScannerModal> */}
-      <YaburuModal
+      ></QrScannerModal> 
+      {/* <YaburuModal
         open={openQrPopup}
         close={closeQrPopup}
         callBack={qrResult}
       >
-      </YaburuModal>
+      </YaburuModal> */}
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}

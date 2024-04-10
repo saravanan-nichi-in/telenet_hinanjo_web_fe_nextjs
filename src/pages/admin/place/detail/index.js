@@ -6,15 +6,18 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, GoogleMapComponent, CardSpinner } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector,useAppDispatch } from "@/redux/hooks";
 import CustomHeader from "@/components/customHeader";
 import { IoIosArrowBack } from "react-icons/io";
 import { prefecturesCombined } from "@/utils/constant";
+import {setSuccessData} from "@/redux/tempRegister"
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const Place = useAppSelector((state) => state.placeReducer.place);
+  const tempSuccessData = useAppSelector((state) => state.tempRegisterReducer?.successData?.data);
   const id = Place?.id;
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
@@ -45,6 +48,8 @@ export default function StaffManagementEditPage() {
   const { encrypt } = CommonServices;
 
   useEffect(() => {
+    localStorage.setItem("refreshing",false)
+    tempSuccessData && dispatch(setSuccessData({showButton:true}))
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
     };

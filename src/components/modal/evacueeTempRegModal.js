@@ -470,8 +470,8 @@ export default function EvacueeTempRegModal(props) {
     return { years, months };
   }
 
-  const Scanner = {
-    url: "/layout/images/mapplescan.svg",
+  const Qr = {
+    url: "/layout/images/evacuee-qr.png",
   };
   const Card = {
     url: "/layout/images/evacuee-card.png",
@@ -560,16 +560,16 @@ export default function EvacueeTempRegModal(props) {
         hide={() => setPerspectiveCroppingVisible(false)}
         callback={ocrResult}
       />
-      <YaburuModal
+      {/* <YaburuModal
        open={openQrPopup}
        close={closeQrPopup}
        callBack={qrResult}
-       />
-      {/* <QrScannerModal
+       /> */}
+      <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
-      ></QrScannerModal> */}
+      ></QrScannerModal>
       <Formik
         innerRef={formikRef}
         validationSchema={validationSchema}
@@ -723,7 +723,7 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
-                          text: translate(localeJson, "myNumberCardScan"),
+                          text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
                           disabled:true,
                             // values?.family_register_from == "0" ? true : false,
@@ -742,8 +742,8 @@ export default function EvacueeTempRegModal(props) {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-3rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "yaburuCardScan"),
-                          icon: <img src={Scanner.url} width={40} height={40} />,
+                          text: translate(localeJson, "c_qr_reg"),
+                          icon: <img src={Qr.url} width={30} height={30} />,
                           disabled:
                             values?.family_register_from == "0" ? true : false,
                           onClick: () => {
