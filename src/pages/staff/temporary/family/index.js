@@ -34,19 +34,45 @@ function TemporaryRegistrants() {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useAppSelector((state) => state.layoutReducer);
+    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
 
     const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
     const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
     const [basicDataInfo, setBasicDataInfo] = useState(null);
-
     const [familyCount, setFamilyCount] = useState(0);
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
+        },
+        place_id: placeID,
+    });
+    const [totalList, setTotalList] = useState([])
+    const [fullListPayload, setFullListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
+        },
+        place_id: placeID,
+    });
+    const [importModalOpen, setImportModalOpen] = useState(false);
+    const [barcode, setBarcode] = useState(null);
+    const [eventDefaultDetails, setEventDefaultDetails] = useState(null);
+
     const temporaryRegistrantsColumns = [
         { field: 'number', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: "3rem", alignHeader: 'left', className: "sno_class" },
         { field: 'id', header: 'ID', sortable: false, textAlign: 'left', minWidth: "3rem", display: 'none' },
@@ -93,32 +119,7 @@ function TemporaryRegistrants() {
             ),
         },
     ];
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "",
-            order_by: "desc",
-            family_code: "",
-            refugee_name: ""
-        },
-        place_id: placeID,
-    });
-    const [totalList, setTotalList] = useState([])
-    const [fullListPayload, setFullListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "",
-            order_by: "desc",
-            family_code: "",
-            refugee_name: ""
-        },
-        place_id: placeID,
-    });
-    const [importModalOpen, setImportModalOpen] = useState(false);
-    const [barcode, setBarcode] = useState(null);
-    const [eventDefaultDetails, setEventDefaultDetails] = useState(null);
+
     const param = router?.query;
     const getCookieValueByKey = (key) => {
         const cookies = document.cookie.split(';');

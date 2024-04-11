@@ -28,13 +28,20 @@ import {
   TempRegisterServices,
   CheckInOutServices
 } from "@/services";
-import { Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, 
-QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal } from "@/components";
+import {
+  Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping,
+  QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
+} from "@/components";
 
 export default function Admission() {
+  const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCountStaff");
   const router = useRouter();
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+  const regReducer = useAppSelector((state) => state.staffRegisterReducer);
+  const place_id = layoutReducer?.user?.place?.id;
+  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
+
   const [evacuee, setEvacuee] = useState([]);
   const [registerModalAction, setRegisterModalAction] = useState("create");
   const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
@@ -50,15 +57,19 @@ export default function Admission() {
   const [count, setCounter] = useState(1);
   const [evacueeCount, setEvacueeCounter] = useState(0)
   const [hasErrors, setHasErrors] = useState(false);
-  const layoutReducer = useAppSelector((state) => state.layoutReducer);
-  const regReducer = useAppSelector((state) => state.staffRegisterReducer);
-  const place_id = layoutReducer?.user?.place?.id;
-  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
   const [isMRecording, setMIsRecording] = useState(false);
   const [inputType, setInputType] = useState("password")
   const dispatch = useAppDispatch();
   const [showDetails, setShowDetails] = useState(false);
   const [expandedFamilies, setExpandedFamilies] = useState([]);
+  const [modalCountFlag, setModalCountFlag] = useState(true);
+  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const formikRef = useRef();
+
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
       prevExpanded.includes(personId)
@@ -66,11 +77,12 @@ export default function Admission() {
         : [...prevExpanded, personId]
     );
   };
-  const { basicInfo } = CheckInOutServices;
-
   const toggleDetails = () => {
     setShowDetails(!showDetails);
   };
+
+  const { basicInfo } = CheckInOutServices;
+
   /* Services */
   const { getText, getAddress } = CommonServices;
   const {
@@ -80,160 +92,6 @@ export default function Admission() {
     qrScanRegistration,
     ocrScanRegistration
   } = TempRegisterServices;
-  const [modalCountFlag, setModalCountFlag] = useState(true);
-  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
-    useState(false);
-  const agreeTextWithHTML = (
-    <div>
-      {translate(localeJson, "agree_note_oneA")}
-      <span dangerouslySetInnerHTML={{ __html: `<a href="${window.location.origin}/privacy" target="_blank"><u>${translate(localeJson, 'c_individual_information')}</u></a>` }} />
-      {translate(localeJson, "agree_note_oneB")}
-    </div>
-  );
-  const formikRef = useRef();
-  const initialValues = {
-    evacuee_date: "",
-    postalCode: "",
-    prefecture_id: null,
-    address: "",
-    address2: "",
-    evacuee: "",
-    tel: "",
-    password: "",
-    questions: null,
-    agreeCheckOne: false,
-    agreeCheckTwo: false,
-    name_furigana: "",
-    name_kanji: ""
-  };
-  const currentDate = new Date();
-  // eslint-disable-next-line no-irregular-whitespace
-  const minDOBDate = new Date();
-  minDOBDate.setFullYear(minDOBDate.getFullYear() - 120);
-  const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const evacueeSchema = () =>
-    Yup.object().shape({
-      checked: Yup.boolean().nullable(),
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      dob: Yup.object().shape({
-        year: Yup.number().required(
-          translate(localeJson, "c_year") + translate(localeJson, "is_required")
-        ),
-        month: Yup.string().required(
-          translate(localeJson, "c_month") +
-          translate(localeJson, "is_required")
-        ),
-        date: Yup.string().required(
-          translate(localeJson, "c_date") + translate(localeJson, "is_required")
-        ),
-      }),
-      // Add other fields and validations as needed
-      age: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      age_m: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().nullable()
-        .min(7, translate(localeJson, "postal_code_length"))
-        .max(7, translate(localeJson, "postal_code_length")),
-      address: Yup.string()
-        .required(translate(localeJson, "c_address_is_required"))
-        .max(190, translate(localeJson, "address_max_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
-      tel: Yup.string().test(
-        "at-least-one-checked",
-        translate(localeJson, "c_required"),
-        (value, parent) => {
-          if (parent.parent.checked === true) {
-            return value ? true : false;
-          } else {
-            return true;
-          }
-        }
-      ),
-    });
-  const evacueeItemSchema = evacueeSchema();
-
-  const validationSchema = (localeJson) =>
-    Yup.object().shape({
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      name_kanji: Yup.string()
-        .max(200, translate(localeJson, "name_max")),
-      postalCode: Yup.string().nullable()
-        .min(7, translate(localeJson, "postal_code_length"))
-        .max(7, translate(localeJson, "postal_code_length")),
-      address: Yup.string()
-        .required(translate(localeJson, "address_required"))
-        .max(190, translate(localeJson, "address_max_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
-      password: Yup.string()
-        .required(translate(localeJson, "family_password_required"))
-        .test(
-          "is-four-digits",
-          translate(localeJson, "family_password_min_max"),
-          (value) => {
-            return String(convertToSingleByte(value)).length === 4;
-          }
-        ),
-      tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
-        .test(
-          "starts-with-zero",
-          translate(localeJson, "phone_num_start"),
-          (value) => {
-            if (value) {
-              return value.charAt(0) === "0";
-            }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-          }
-        )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() != ""; // Check if the string is not empty after trimming whitespace
-          }
-        )
-        .matches(/^[0-9]{10,11}$/, translate(localeJson, "phone")),
-      evacuee: Yup.array()
-        .required(translate(localeJson, "c_required"))
-        .test(
-          "evacuee-min-length",
-          translate(localeJson, "c_required"), // Change this message as needed
-          (value) => {
-            return value.length > 0;
-          }
-        )
-        .test(
-          "evacuee-max-length",
-          translate(localeJson, "table_count_max"), // Change this message as needed
-          (value) => {
-            return value.length <= 20;
-          }
-        ).of(evacueeItemSchema),
-      agreeCheckOne: Yup.boolean().required(translate(localeJson, "c_required"))
-        .test("check_is_true", translate(localeJson, "c_required"),
-          (value) => {
-            return value == true;
-          }
-        )
-    });
 
   useEffect(() => {
     let postal_code = layoutReducer?.user?.place?.zip_code;
@@ -284,24 +142,6 @@ export default function Admission() {
       router.push("/staff/family");
     }
   }, [locale]);
-
-  const fetchData = () => {
-    if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
-      let data = regReducer.originalData;
-      formikRef.current.setFieldValue("postalCode", data.postalCode);
-      formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-      formikRef.current.setFieldValue("address", data.address);
-      formikRef.current.setFieldValue("address2", data.address2 || "");
-      formikRef.current.setFieldValue("evacuee", data.evacuee);
-      data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
-      formikRef.current.setFieldValue("password", data.password);
-      formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
-      formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
-      formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-      formikRef.current.setFieldValue("name_kanji", data.name_kanji);
-      data.evacuee && setEvacuee(data.evacuee);
-    }
-  }
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -380,7 +220,6 @@ export default function Admission() {
     }
   }, [evacuee]);
 
-
   useEffect(() => {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
@@ -397,6 +236,216 @@ export default function Admission() {
     fetchSpecialCare();
     fetchData();
   }, [locale]);
+
+
+  useEffect(() => {
+    setMIsRecording(isRecording);
+  }, [isRecording]);
+
+  useEffect(() => {
+    if (Object.keys(formikRef.current.errors).length > 0) {
+      const firstErrorElement = document.querySelector('.p-error');
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [count]);
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      // Clear localStorage when the back button is clicked
+      localStorage.removeItem("personCountStaff");
+      dispatch(reset())
+    };
+
+    const handleBeforeUnload = () => {
+      // Clear localStorage when the page is about to be unloaded
+      localStorage.removeItem("personCountStaff");
+      dispatch(reset())
+    };
+
+    // Attach the event listeners when the component mounts
+    window.addEventListener("popstate", handlePopstate);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [locale]);
+
+  const agreeTextWithHTML = (
+    <div>
+      {translate(localeJson, "agree_note_oneA")}
+      <span dangerouslySetInnerHTML={{ __html: `<a href="${window.location.origin}/privacy" target="_blank"><u>${translate(localeJson, 'c_individual_information')}</u></a>` }} />
+      {translate(localeJson, "agree_note_oneB")}
+    </div>
+  );
+
+  const initialValues = {
+    evacuee_date: "",
+    postalCode: "",
+    prefecture_id: null,
+    address: "",
+    address2: "",
+    evacuee: "",
+    tel: "",
+    password: "",
+    questions: null,
+    agreeCheckOne: false,
+    agreeCheckTwo: false,
+    name_furigana: "",
+    name_kanji: ""
+  };
+
+  const currentDate = new Date();
+  // eslint-disable-next-line no-irregular-whitespace
+  const minDOBDate = new Date();
+  minDOBDate.setFullYear(minDOBDate.getFullYear() - 120);
+  const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
+  const evacueeSchema = () =>
+    Yup.object().shape({
+      checked: Yup.boolean().nullable(),
+      name_furigana: Yup.string()
+        .required(translate(localeJson, "c_name_phonetic_is_required"))
+        .max(200, translate(localeJson, "name_max"))
+        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      dob: Yup.object().shape({
+        year: Yup.number().required(
+          translate(localeJson, "c_year") + translate(localeJson, "is_required")
+        ),
+        month: Yup.string().required(
+          translate(localeJson, "c_month") +
+          translate(localeJson, "is_required")
+        ),
+        date: Yup.string().required(
+          translate(localeJson, "c_date") + translate(localeJson, "is_required")
+        ),
+      }),
+      // Add other fields and validations as needed
+      age: Yup.number()
+        .required(translate(localeJson, "age_required")),
+      age_m: Yup.number()
+        .required(translate(localeJson, "age_required")),
+      gender: Yup.string().required(translate(localeJson, "gender_required")),
+      postalCode: Yup.string().nullable()
+        .min(7, translate(localeJson, "postal_code_length"))
+        .max(7, translate(localeJson, "postal_code_length")),
+      address: Yup.string()
+        .required(translate(localeJson, "c_address_is_required"))
+        .max(190, translate(localeJson, "address_max_length")),
+      address2: Yup.string()
+        .nullable()
+        .max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string()
+        .nullable()
+        .required(translate(localeJson, "c_perfacture_is_required")),
+      tel: Yup.string().test(
+        "at-least-one-checked",
+        translate(localeJson, "c_required"),
+        (value, parent) => {
+          if (parent.parent.checked === true) {
+            return value ? true : false;
+          } else {
+            return true;
+          }
+        }
+      ),
+    });
+
+  const evacueeItemSchema = evacueeSchema();
+
+  const validationSchema = (localeJson) =>
+    Yup.object().shape({
+      name_furigana: Yup.string()
+        .required(translate(localeJson, "c_name_phonetic_is_required"))
+        .max(200, translate(localeJson, "name_max"))
+        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      name_kanji: Yup.string()
+        .max(200, translate(localeJson, "name_max")),
+      postalCode: Yup.string().nullable()
+        .min(7, translate(localeJson, "postal_code_length"))
+        .max(7, translate(localeJson, "postal_code_length")),
+      address: Yup.string()
+        .required(translate(localeJson, "address_required"))
+        .max(190, translate(localeJson, "address_max_length")),
+      address2: Yup.string()
+        .nullable()
+        .max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string()
+        .nullable()
+        .required(translate(localeJson, "prefecture_required")),
+      password: Yup.string()
+        .required(translate(localeJson, "family_password_required"))
+        .test(
+          "is-four-digits",
+          translate(localeJson, "family_password_min_max"),
+          (value) => {
+            return String(convertToSingleByte(value)).length === 4;
+          }
+        ),
+      tel: Yup.string()
+        .required(translate(localeJson, "phone_no_required"))
+        .test(
+          "starts-with-zero",
+          translate(localeJson, "phone_num_start"),
+          (value) => {
+            if (value) {
+              return value.charAt(0) === "0";
+            }
+            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+          }
+        )
+        .test(
+          "is-not-empty",
+          translate(localeJson, "phone_no_required"),
+          (value) => {
+            return value.trim() != ""; // Check if the string is not empty after trimming whitespace
+          }
+        )
+        .matches(/^[0-9]{10,11}$/, translate(localeJson, "phone")),
+      evacuee: Yup.array()
+        .required(translate(localeJson, "c_required"))
+        .test(
+          "evacuee-min-length",
+          translate(localeJson, "c_required"), // Change this message as needed
+          (value) => {
+            return value.length > 0;
+          }
+        )
+        .test(
+          "evacuee-max-length",
+          translate(localeJson, "table_count_max"), // Change this message as needed
+          (value) => {
+            return value.length <= 20;
+          }
+        ).of(evacueeItemSchema),
+      agreeCheckOne: Yup.boolean().required(translate(localeJson, "c_required"))
+        .test("check_is_true", translate(localeJson, "c_required"),
+          (value) => {
+            return value == true;
+          }
+        )
+    });
+
+  const fetchData = () => {
+    if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
+      let data = regReducer.originalData;
+      formikRef.current.setFieldValue("postalCode", data.postalCode);
+      formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
+      formikRef.current.setFieldValue("address", data.address);
+      formikRef.current.setFieldValue("address2", data.address2 || "");
+      formikRef.current.setFieldValue("evacuee", data.evacuee);
+      data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("password", data.password);
+      formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
+      formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
+      formikRef.current.setFieldValue("name_furigana", data.name_furigana);
+      formikRef.current.setFieldValue("name_kanji", data.name_kanji);
+      data.evacuee && setEvacuee(data.evacuee);
+    }
+  }
 
   const fetchSpecialCare = () => {
     getSpecialCareDetails((res) => {
@@ -457,15 +506,19 @@ export default function Admission() {
   const Scanner = {
     url: "/layout/images/mapplescan.svg",
   };
+
   const Card = {
     url: "/layout/images/evacuee-card.png",
   };
+
   const Edit = {
     url: "/layout/images/editIcon.svg",
   };
+
   const Delete = {
     url: "/layout/images/deleteIcon.svg",
   };
+
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
@@ -755,27 +808,26 @@ export default function Admission() {
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareJPNames = (values) => {
     return values?.map((value) => {
       const option = specialCareJPOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareENNames = (values) => {
     return values?.map((value) => {
       const option = specialCareENOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
-  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] =
-    useState(false);
 
-  const [openQrPopup, setOpenQrPopup] = useState(false);
   const closeQrPopup = () => {
     setOpenQrPopup(false);
     showOverFlow();
   };
+
   const qrResult = (result) => {
     setLoader(true)
     let payload = {
@@ -843,11 +895,6 @@ export default function Admission() {
     });
   }
 
-  const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    setMIsRecording(isRecording);
-  }, [isRecording]);
 
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
@@ -1012,41 +1059,6 @@ export default function Admission() {
     });
   };
 
-  useEffect(() => {
-    if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector('.p-error');
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [count]);
-
-
-  useEffect(() => {
-
-    const handlePopstate = () => {
-      // Clear localStorage when the back button is clicked
-      localStorage.removeItem("personCountStaff");
-      dispatch(reset())
-    };
-
-    const handleBeforeUnload = () => {
-      // Clear localStorage when the page is about to be unloaded
-      localStorage.removeItem("personCountStaff");
-      dispatch(reset())
-    };
-
-    // Attach the event listeners when the component mounts
-    window.addEventListener("popstate", handlePopstate);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Clean up the event listeners when the component unmounts
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [locale]);
-
   const getPrefectureName = (id) => {
     if (id) {
       let p_name = prefectures.find((item) => item.value === id);
@@ -1054,8 +1066,6 @@ export default function Admission() {
     }
     return "";
   };
-
-
 
   return (
     <>

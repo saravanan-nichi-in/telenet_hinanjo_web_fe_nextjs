@@ -6,8 +6,9 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 
 const RefugeeRegistrationPage = () => {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
-    const router = useRouter()
+    const { localeJson } = useContext(LayoutContext);
+    const router = useRouter();
+
     return (
         <div className='grid flex-1'>
             <div className='col-12 flex-1'>

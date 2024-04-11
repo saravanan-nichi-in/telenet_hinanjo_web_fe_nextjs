@@ -23,12 +23,12 @@ import { CommonServices, CheckInOutServices } from "@/services";
 import { prefectures } from '@/utils/constant';
 
 export default function Admission() {
-  const router = useRouter();
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+
   const [audioPasswordLoader, setAudioPasswordLoader] = useState(false);
   const [audioNameLoader, setAudioNameLoader] = useState(false);
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
-  const formikRef = useRef();
   const [tableLoading, setTableLoading] = useState(false);
   const [searchFlag, setSearchFlag] = useState(false);
   const [familyCode, setFamilyCode] = useState(null);
@@ -37,6 +37,11 @@ export default function Admission() {
   const [neighbourData, setNeighbourData] = useState(null);
   const [townAssociationColumn, setTownAssociationColumn] = useState([]);
   const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const formikRef = useRef();
+
   const schema = Yup.object().shape({
     name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
       test: function (value) {
@@ -59,10 +64,7 @@ export default function Admission() {
     }),
   });
 
-  const { getText } = CommonServices;
-  const { getList, checkOut } = CheckInOutServices;
-  const initialValues = { name: "", password: "", familyCode: "" };
-
+  
   const evacueeFamilyDetailColumns = [
     { field: "id", header: translate(localeJson, 'c_s_no'), minWidth: "5rem", className: "sno_class" },
     { field: "is_owner", header: translate(localeJson, 'c_representative'), minWidth: "10rem" },
@@ -88,6 +90,22 @@ export default function Admission() {
     { field: "connecting_code", header: translate(localeJson, 'c_connecting_code'), minWidth: "7rem" },
     { field: "remarks", header: translate(localeJson, 'c_remarks'), minWidth: "7rem" },
   ];
+
+  const initialValues = { name: "", password: "", familyCode: "" };
+
+  const { getText } = CommonServices;
+  const { getList, checkOut } = CheckInOutServices;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoader(false);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    scrollToCenter()
+  }, [searchFlag])
 
   const getGenderValue = (gender) => {
     if (gender == 1) {
@@ -132,12 +150,6 @@ export default function Admission() {
     return "";
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoader(false);
-    };
-    fetchData();
-  }, []);
 
   const fetchText = (res) => {
     let newPassword = res?.data?.content;
@@ -203,9 +215,6 @@ export default function Admission() {
       setAudioNameLoader(true);
     }
   };
-  useEffect(() => {
-    scrollToCenter()
-  }, [searchFlag])
 
   const scrollToCenter = () => {
     if (searchFlag) {
@@ -320,10 +329,6 @@ export default function Admission() {
     setLoader(false)
   }
 
-  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-    const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
-
-    const [openQrPopup, setOpenQrPopup] = useState(false);
   const closeQrPopup = () => {
       setOpenQrPopup(false);
   }

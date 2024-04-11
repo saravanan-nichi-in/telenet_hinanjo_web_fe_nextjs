@@ -20,7 +20,23 @@ export default function EventList() {
   const dispatch = useAppDispatch();
   // Getting storage data with help of reducers
   const layoutReducer = useSelector((state) => state.layoutReducer);
+
+  const [getEventsListPayload, setEventsListPayload] = useState({
+    filters: {
+      start: 0,
+      limit: 10,
+      sort_by: "name",
+      order_by: "asc",
+    },
+    search: "",
+  });
+  const [tableLoading, setTableLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [eventList, setEventList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
   const { getEventListByID } = UserDashboardServices;
+
   const columnsData = [
     {
       field: "number",
@@ -71,19 +87,7 @@ export default function EventList() {
       alignHeader: "center",
     },
   ];
-  const [getEventsListPayload, setEventsListPayload] = useState({
-    filters: {
-      start: 0,
-      limit: 10,
-      sort_by: "name",
-      order_by: "asc",
-    },
-    search: "",
-  });
-  const [tableLoading, setTableLoading] = useState(false);
-  const [columns, setColumns] = useState([]);
-  const [eventList, setEventList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
+
 
   /* Services */
   const { getEventsList } = UserEventListServices;
@@ -238,23 +242,22 @@ export default function EventList() {
                     if (e.value.is_q_active_value == 1) {
                       let payload = {
                         event_id: e.value.id
-                    }
-                    getEventListByID(payload, (response) => {
-                      if (response && response.data) {
-                      let obj = response.data.model;
-                      if(obj.is_q_active=="1")
-                      {
-                      let payload = Object.assign({}, layoutReducer?.user);
-                      payload["place"] = e.value.entireObj;
-                      payload["event"] = e.value.entireObj;
-                      dispatch(setUserDetails(payload));
-                      localStorage.setItem("redirect", "/user/event-list");
-                      router.push("/user/dashboard");
-                        }
-                        else {
-                          getEventsList(getEventsListPayload, onGetPublicEventsList);
-                        }
                       }
+                      getEventListByID(payload, (response) => {
+                        if (response && response.data) {
+                          let obj = response.data.model;
+                          if (obj.is_q_active == "1") {
+                            let payload = Object.assign({}, layoutReducer?.user);
+                            payload["place"] = e.value.entireObj;
+                            payload["event"] = e.value.entireObj;
+                            dispatch(setUserDetails(payload));
+                            localStorage.setItem("redirect", "/user/event-list");
+                            router.push("/user/dashboard");
+                          }
+                          else {
+                            getEventsList(getEventsListPayload, onGetPublicEventsList);
+                          }
+                        }
                       })
                     }
                   }

@@ -9,12 +9,13 @@ import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/register";
 
 const PersonCountScreen = () => {
-    const router = useRouter()
-    const pathname = usePathname()
     const { localeJson, locale } = useContext(LayoutContext);
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+    const pathname = usePathname()
+
     const [buttonStates, setButtonStates] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
     const [personCount, setPersonCount] = useState("");
-    const dispatch = useAppDispatch()
 
     // Define a function to handle selection changes
     const handleSingleSelectionChange = (selectedName) => {

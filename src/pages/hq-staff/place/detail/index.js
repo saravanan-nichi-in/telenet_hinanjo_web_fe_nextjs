@@ -38,6 +38,7 @@ export default function StaffManagementEditPage() {
   const [tableLoading, setTableLoading] = useState(false);
   const [prefectureId, setPrefectureId] = useState("");
   const [prefectureDefaultId, setPrefectureDefaultId] = useState("");
+  
   /* Services */
   const { details } = PlaceServices;
   const { encrypt } = CommonServices;
@@ -176,33 +177,33 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-      {!default_place_id.includes(id) &&(
-      <div className="col-12">
-        {tableLoading ? (
-          <CardSpinner />
-        ) : (
-          <div className="custom-card-no-shadow ">
-            <div className="grid">
-              <div className="col-12">
-                <div className="font-bold mt-2">
-                  {translate(localeJson, "place_url")}
-                </div>
-                <div className="mt-2">
-                  {translate(localeJson, "place_url_url")} :
-                  <a
-                    className="text-link-class cursor-pointer"
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {url}
-                  </a>
+      {!default_place_id.includes(id) && (
+        <div className="col-12">
+          {tableLoading ? (
+            <CardSpinner />
+          ) : (
+            <div className="custom-card-no-shadow ">
+              <div className="grid">
+                <div className="col-12">
+                  <div className="font-bold mt-2">
+                    {translate(localeJson, "place_url")}
+                  </div>
+                  <div className="mt-2">
+                    {translate(localeJson, "place_url_url")} :
+                    <a
+                      className="text-link-class cursor-pointer"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {url}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
       )}
 
       <div className="col-12">

@@ -14,6 +14,7 @@ const ForgotPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const stateData = useSelector((state) => state.forgetPasswordReducer);
+    
     const containerClassName = classNames('flex align-items-start justify-content-center overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         email: Yup.string()

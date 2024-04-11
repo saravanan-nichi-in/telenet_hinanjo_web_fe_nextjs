@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { useSelector } from "react-redux";
 import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/check_in";
@@ -11,18 +11,24 @@ import { CheckInOutServices } from "@/services";
 
 const SearchDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const checkInReducer = useSelector((state) => state.checkInReducer);
   const layoutReducer = useSelector((state) => state.layoutReducer);
-  const { checkIn } = CheckInOutServices;
-  const router = useRouter();
-  let data = checkInReducer?.checkInData || [];
-  let family_id = data.length > 0 ? data[0].family_id : "";
+
   const [familyCode, setFamilyCode] = useState(family_id);
-  const dispatch = useAppDispatch();
+
+  const { checkIn } = CheckInOutServices;
+
+  let data = checkInReducer?.checkInData || [];
+
+  let family_id = data.length > 0 ? data[0].family_id : "";
+
   const isCheckedIn = (res) => {
     setLoader(false)
     res && router.push('/user/dashboard')
   }
+
   return (
     <div className="flex justify-content-center">
       <div className="m-2 w-full xlScreenMaxWidth mdScreenMaxWidth">

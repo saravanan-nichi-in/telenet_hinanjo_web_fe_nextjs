@@ -12,15 +12,17 @@ import { useAppDispatch } from "@/redux/hooks";
 
 function StockpileDashboard() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
-    const storeData = useSelector((state) => state.stockpileReducer);
     const router = useRouter();
+    const dispatch = useAppDispatch();
+    const storeData = useSelector((state) => state.stockpileReducer);
+    const layoutReducer = useSelector((state) => state.layoutReducer);
+    
     const [staffStockpileCreateOpen, setStaffStockpileCreateOpen] = useState(false);
     const [staffStockpileEditOpen, setStaffStockpileEditOpen] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [importStaffStockpileOpen, setImportStaffStockpileOpen] = useState(false);
     const [image, setImage] = useState(null);
     const [editObject, setEditObject] = useState({});
-    const layoutReducer = useSelector((state) => state.layoutReducer);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [productNames, setProductNames] = useState({});
@@ -30,10 +32,73 @@ function StockpileDashboard() {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [deleteObj, setDeleteObj] = useState(null);
-    const dispatch = useAppDispatch();
+    const [stockPileList, setStockPileList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        "filters": {
+            "start": 0,
+            "limit": 10,
+            "sort_by": "category",
+            "order_by": "desc"
+        },
+        place_id: layoutReducer?.user?.place?.id,
+    });
+
+    const columns = [
+        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
+        { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
+        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "12rem" },
+        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "center", alignHeader: "center" },
+        { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "10rem" },
+        { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
+        { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "10rem" },
+        { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
+        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'action'),
+            textAlign: "center",
+            alignHeader: "center",
+            className: "action_class",
+            body: (rowData) => (
+                <div>
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'edit'),
+                            buttonClass: "edit-button",
+                            onClick: () => {
+                                setEditObject(rowData);
+                                setSelectedCategory(rowData.category)
+                                setStaffStockpileEditOpen(true);
+                                hideOverFlow();
+                            },
+                        }} parentClass={"edit-button"} />
+                    <Button
+                        parentStyle={{ display: "inline" }}
+                        buttonProps={{
+                            text: translate(localeJson, 'delete'),
+                            buttonClass: "delete-button-user ml-2",
+                            onClick: () => openDeleteDialog(rowData)
+                        }} parentClass={"delete-button-user"} />
+                </div>
+            ),
+        },
+    ];
 
     /* Services */
     const { getList, exportData, getPlaceNamesByCategory, deleteByID } = StockpileStaffService;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetMaterialListOnMounting()
+            setLoader(false);
+        };
+        fetchData();
+
+    }, [locale, getListPayload]);
 
     const onStaffStockCreated = () => {
         staffStockpileCreateOpen(false);
@@ -95,48 +160,6 @@ function StockpileDashboard() {
 
         });
     }
-
-    const columns = [
-        { field: 'slno', header: translate(localeJson, 's_no'), className: "sno_class", textAlign: "center" },
-        { field: 'category', header: translate(localeJson, 'product_type'), sortable: true, minWidth: "5rem" },
-        { field: 'product_name', header: translate(localeJson, 'product_name'), minWidth: "12rem" },
-        { field: 'after_count', header: translate(localeJson, 'quantity'), minWidth: "5rem", textAlign: "center", alignHeader: "center" },
-        { field: 'InspectionDateTime', header: translate(localeJson, 'inventory_date'), minWidth: "10rem" },
-        { field: 'incharge', header: translate(localeJson, 'confirmer'), minWidth: "5rem" },
-        { field: 'expiryDate', header: translate(localeJson, 'expiry_date'), minWidth: "10rem" },
-        { field: 'remarks', header: translate(localeJson, 'remarks'), minWidth: "5rem" },
-        { field: "stock_pile_image", header: translate(localeJson, 'image'), textAlign: "center", minWidth: "4rem" },
-        {
-            field: 'actions',
-            header: translate(localeJson, 'action'),
-            textAlign: "center",
-            alignHeader: "center",
-            className: "action_class",
-            body: (rowData) => (
-                <div>
-                    <Button
-                        parentStyle={{ display: "inline" }}
-                        buttonProps={{
-                            text: translate(localeJson, 'edit'),
-                            buttonClass: "edit-button",
-                            onClick: () => {
-                                setEditObject(rowData);
-                                setSelectedCategory(rowData.category)
-                                setStaffStockpileEditOpen(true);
-                                hideOverFlow();
-                            },
-                        }} parentClass={"edit-button"} />
-                    <Button
-                        parentStyle={{ display: "inline" }}
-                        buttonProps={{
-                            text: translate(localeJson, 'delete'),
-                            buttonClass: "delete-button-user ml-2",
-                            onClick: () => openDeleteDialog(rowData)
-                        }} parentClass={"delete-button-user"} />
-                </div>
-            ),
-        },
-    ];
 
     /**
      * Delete modal open handler
@@ -265,20 +288,6 @@ function StockpileDashboard() {
         hideOverFlow();
     }
 
-    const [getListPayload, setGetListPayload] = useState({
-        "filters": {
-            "start": 0,
-            "limit": 10,
-            "sort_by": "category",
-            "order_by": "desc"
-        },
-        place_id: layoutReducer?.user?.place?.id,
-    });
-
-    const [stockPileList, setStockPileList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
-
     const updateStockPileBufferList = (data, id) => {
         let updatedList = stockPileList.map(stock => { return stock });
         let index = stockPileList.findIndex((item) => item.summary_id == id);
@@ -383,16 +392,6 @@ function StockpileDashboard() {
     const rowClassName = (rowData) => {
         return rowData.save_flag === true ? 'highlight-row' : "";
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetMaterialListOnMounting()
-            setLoader(false);
-        };
-        fetchData();
-
-    }, [locale, getListPayload]);
 
     return (
         <>

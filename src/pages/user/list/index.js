@@ -16,6 +16,21 @@ export default function PublicEvacuees() {
   const dispatch = useAppDispatch();
   // Getting storage data with help of reducers
   const layoutReducer = useSelector((state) => state.layoutReducer);
+
+  const [tableLoading, setTableLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [getListPayload, setGetListPayload] = useState({
+    filters: {
+      start: 0,
+      limit: 10,
+      sort_by: "refugee_name",
+      order_by: "asc",
+    },
+    search: "",
+  });
+
   const columnsData = [
     {
       field: "number",
@@ -74,19 +89,6 @@ export default function PublicEvacuees() {
       alignHeader: "center",
     },
   ];
-  const [getListPayload, setGetListPayload] = useState({
-    filters: {
-      start: 0,
-      limit: 10,
-      sort_by: "refugee_name",
-      order_by: "asc",
-    },
-    search: "",
-  });
-  const [tableLoading, setTableLoading] = useState(false);
-  const [columns, setColumns] = useState([]);
-  const [list, setList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
 
   /* Services */
   const { getList, getActiveList } = UserPlaceListServices;

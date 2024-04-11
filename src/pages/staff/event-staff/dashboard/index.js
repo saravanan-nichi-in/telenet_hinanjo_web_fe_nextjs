@@ -20,12 +20,12 @@ function EventStaffDashboard() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [data, setData] = useState(null);
 
+  /* Services */
+  const { getEventList } = StaffDashBoardServices;
+
   useEffect(() => {
     getListDataOnMount();
   }, [locale]);
-
-  /* Services */
-  const { getEventList } = StaffDashBoardServices;
 
   const getListDataOnMount = async () => {
     setLoader(true);

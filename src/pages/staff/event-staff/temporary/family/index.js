@@ -24,18 +24,33 @@ import {
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 
 function EventStaffTemporaryRegistrants() {
-    const router = useRouter();
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const router = useRouter();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
+
     const [familyCount, setFamilyCount] = useState(0);
     const [evacueesDataList, setEvacueesDataList] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
+    const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
+    const [importModalOpen, setImportModalOpen] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc"
+        },
+        place_id: placeID,
+        family_code: "",
+        refugee_name: ""
+    });
+
     const temporaryRegistrantsColumns = [
         {
             field: 'actions',
@@ -70,22 +85,7 @@ function EventStaffTemporaryRegistrants() {
         { field: 'remarks', header: translate(localeJson, 'remarks'), headerClassName: "custom-header", minWidth: "5rem" },
         { field: 'check_in_date', header: translate(localeJson, 'date_created'), headerClassName: "custom-header", minWidth: "10rem" },
         { field: 'evacuation_days', header: translate(localeJson, 'evacuation_days'), headerClassName: "custom-header", minWidth: "6rem", textAlign: "center", alignHeader: "center" },
-
     ];
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "",
-            order_by: "desc"
-        },
-        place_id: placeID,
-        family_code: "",
-        refugee_name: ""
-
-    });
-    const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
-    const [importModalOpen, setImportModalOpen] = useState(false);
 
     /* Services */
     const { getList, exportTemporaryEvacueesCSVList, updateCheckInDetail } = TemporaryStaffRegistrantServices;

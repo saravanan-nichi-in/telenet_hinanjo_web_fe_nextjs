@@ -12,14 +12,17 @@ import { CheckInOutServices } from "@/services";
 
 const CheckOutDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const checkOutReducer = useSelector((state) => state.checkOutReducer);
-  const { checkOut } = CheckInOutServices;
   const router = useRouter();
-  let data = checkOutReducer?.checkOutData || [];
-  let family_id = data.length > 0 ? data[0].family_id : "";
+  const dispatch = useAppDispatch();
+  const checkOutReducer = useSelector((state) => state.checkOutReducer);
+
   const [familyCode, setFamilyCode] = useState(family_id);
 
-  const dispatch = useAppDispatch();
+  const { checkOut } = CheckInOutServices;
+  
+  let data = checkOutReducer?.checkOutData || [];
+  
+  let family_id = data.length > 0 ? data[0].family_id : "";
 
   const isCheckedOut = (res) => {
     setLoader(false)

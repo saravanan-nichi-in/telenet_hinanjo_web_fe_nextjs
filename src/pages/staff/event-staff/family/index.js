@@ -22,17 +22,18 @@ import { setSelfID } from '@/redux/self_id';
 import { prefecturesCombined } from '@/utils/constant';
 
 function EventStaffFamily() {
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
+    const [eventID, setEventID] = useState(!_.isNull(layoutReducer?.user?.event?.id) ? layoutReducer?.user?.event?.id : "")
+
     const [familyCount, setFamilyCount] = useState(0);
     const [columnValues, setColumnValues] = useState([]);
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
-    const [eventID, setEventID] = useState(!_.isNull(layoutReducer?.user?.event?.id) ? layoutReducer?.user?.event?.id : "")
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [importModalOpen, setImportModalOpen] = useState(false);
@@ -66,6 +67,7 @@ function EventStaffFamily() {
     });
     const [barcode, setBarcode] = useState(null);
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
+
     const columnNames = [
         { field: 'number', header: translate(localeJson, 'staff_attendees_table_slno'), sortable: false, textAlign: 'center', className: "sno_class" },
         // { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
@@ -98,6 +100,15 @@ function EventStaffFamily() {
     const { getList, exportEvacueesCSVList } = StaffEvacuationServices;
     const { eventCheckIn } = CheckInOutServices;
     const { getBasicDetailsInfo } = TempRegisterServices;
+    
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await listApiCall();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale, listPayload]);
 
     const handleFamilyCode = (e) => {
         if ((e.target.value).length == 4) {
@@ -230,15 +241,6 @@ function EventStaffFamily() {
             setTotalCount(listTotalCount);
         });
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await listApiCall();
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale, listPayload]);
 
     const yappleModalSuccessCallBack = (res) => {
         listApiCall();

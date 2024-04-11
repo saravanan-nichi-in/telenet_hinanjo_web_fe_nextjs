@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { usePathname } from 'next/navigation'
+
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button, CustomHeader, PersonCountButton } from "@/components";
@@ -8,12 +9,13 @@ import { useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
 
 const PersonCountScreen = () => {
-    const router = useRouter()
-    const pathname = usePathname()
     const { localeJson, locale } = useContext(LayoutContext);
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+    const pathname = usePathname()
+
     const [buttonStates, setButtonStates] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
     const [personCount, setPersonCount] = useState("");
-    const dispatch = useAppDispatch()
 
     // Define a function to handle selection changes
     const handleSingleSelectionChange = (selectedName) => {

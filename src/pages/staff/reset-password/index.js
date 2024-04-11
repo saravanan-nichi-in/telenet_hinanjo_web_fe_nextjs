@@ -12,6 +12,7 @@ import { AuthenticationAuthorizationService } from '@/services';
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
+    
     const containerClassName = classNames('auth_surface_ground flex align-items-start justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         password: Yup.string()

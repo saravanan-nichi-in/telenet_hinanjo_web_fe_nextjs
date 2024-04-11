@@ -14,20 +14,27 @@ import { setCheckOutData } from "@/redux/checkout";
 import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal } from "@/components";
 
 export default function Admission() {
-  const router = useRouter();
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+
   const [audioPasswordLoader, setAudioPasswordLoader] = useState(false);
   const [audioNameLoader, setAudioNameLoader] = useState(false);
-  const layoutReducer = useSelector((state) => state.layoutReducer);
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
-  const formikRef = useRef();
-  const dispatch = useAppDispatch();
   const [tableLoading, setTableLoading] = useState(false);
   const [searchResult, setSearchResult] = useState(false);
   const [searchFlag, setSearchFlag] = useState(false);
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [isSearch, setSearch] = useState(false);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [barcode, setBarcode] = useState(null);
+  const formikRef = useRef();
+
   const schema = Yup.object().shape({
     name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
       test: function (value) {
@@ -50,14 +57,16 @@ export default function Admission() {
     }),
   });
 
+  const initialValues = { name: "", password: "", familyCode: "" };
+
   const { getText } = CommonServices;
   const { getList, checkOut, eventCheckOut, placeCheckout } = CheckInOutServices;
   const { getBasicDetailsInfo, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
-  const initialValues = { name: "", password: "", familyCode: "" };
   const { getActiveList } = UserPlaceListServices;
 
   /* Services */
   const { getEventListByID } = UserDashboardServices;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoader(false);
@@ -78,6 +87,7 @@ export default function Admission() {
     }
     setAudioPasswordLoader(false);
   };
+
   const fetchName = (res) => {
     let name = res?.data?.content;
     if (name) {
@@ -85,6 +95,7 @@ export default function Admission() {
     }
     setAudioNameLoader(false);
   };
+
   const fetchFamilyCode = (res) => {
     let familyCode = res?.data?.content;
     const re = /^[0-9-]+$/;
@@ -95,6 +106,7 @@ export default function Admission() {
     }
     setAudioFamilyCodeLoader(false);
   };
+
   const handleAudioRecorded = async (audioBlob) => {
     const fromData = new FormData();
     fromData.append("audio_sample", audioBlob);
@@ -147,11 +159,6 @@ export default function Admission() {
     }
   };
 
-
-
-  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
-  const [importModalOpen, setImportModalOpen] = useState(false);
   const getCookieValueByKey = (key) => {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -163,9 +170,9 @@ export default function Admission() {
     }
     return '';
   };
+
   const myCookieValue = getCookieValueByKey('idToken');
 
-  const [openQrPopup, setOpenQrPopup] = useState(false);
   const param = router?.query;
   const closeQrPopup = () => {
     setOpenQrPopup(false);
@@ -338,7 +345,6 @@ export default function Admission() {
     // Logic for the staff button click
   };
 
-  const [barcode, setBarcode] = useState(null);
   const onImportModalClose = () => {
     setImportModalOpen(false);
   };
