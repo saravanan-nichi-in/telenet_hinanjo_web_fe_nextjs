@@ -1,25 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import _ from 'lodash';
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { Button, CustomHeader, NormalTable } from "@/components";
 import { UserPlaceListServices } from '@/services';
-import { useAppDispatch } from '@/redux/hooks';
-import { setUserDetails } from '@/redux/layout';
 
 export default function HinanjoList() {
     const { locale, localeJson } = useContext(LayoutContext);
-    const router = useRouter();
-    const dispatch = useAppDispatch();
-    // Getting storage data with help of reducers
-    const layoutReducer = useSelector((state) => state.layoutReducer);
 
     const [tableLoading, setTableLoading] = useState(false);
     const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
@@ -58,7 +48,6 @@ export default function HinanjoList() {
                         buttonProps={{
                             text: 'View',
                             buttonClass: "delete-button ml-2 danger",
-                            // onClick: () => openDeleteDialog(rowData.id)
                         }} parentClass={"delete-button"} />
                 </>
             ),
@@ -105,78 +94,8 @@ export default function HinanjoList() {
             { "sl_no": 4, "name": "Event D", "name_en": "Event D (EN)", "tel": "111-222-3333", "total_place": 200, "full_status": "Full", "altitude": 800, "refugee_name": "Refugee 4", "opening_date_time": "2022-05-10T13:15:00", "closing_date_time": "2022-05-10T22:00:00", "public_availability": "No", "remarks": "Example Remark D" },
             { "sl_no": 5, "name": "Event E", "name_en": "Event E (EN)", "tel": "999-888-7777", "total_place": 80, "full_status": "Not Full", "altitude": 900, "refugee_name": "Refugee 5", "opening_date_time": "2022-06-25T08:00:00", "closing_date_time": "2022-06-25T16:45:00", "public_availability": "Yes", "remarks": "Example Remark E" }
         ]);
-        // setList(preparedList);
         setTotalCount(5);
         setTableLoading(false);
-    }
-
-    /**
-     * Place name callback function
-     * @param {*} obj 
-     * @returns 
-     */
-    const onClickPlaceName = async (obj) => {
-        if (obj) {
-            let payload = Object.assign({}, layoutReducer?.user);
-            payload['place'] = obj;
-            await dispatch(setUserDetails(payload));
-            router.push('/user/dashboard');
-        }
-    }
-
-    /**
-     * Get total capacity
-     * @param {*} obj 
-     * @returns value
-     */
-    const getTotalCapacity = (obj) => {
-        if (obj && obj.full_status == 1) {
-            return `${obj.total_place} / ${obj.total_place} ${translate(localeJson, 'people')}`;
-        } else {
-            if (obj.total_person > obj.total_place) {
-                return `${obj.total_place} / ${obj.total_place} ${translate(localeJson, 'people')}`
-            } else {
-                return `${obj.total_person} / ${obj.total_place} ${translate(localeJson, 'people')}`
-            }
-        }
-    }
-
-    /**
-     * Action column for dashboard list
-     * @param {*} obj 
-     * @returns view
-     */
-    const action = (obj) => {
-        return (
-            <div>
-                <Button buttonProps={{
-                    text: obj.active_flg === 1 ? translate(localeJson, 'active') : translate(localeJson, 'inactive'), buttonClass: "text-white w-9",
-                    bg: obj.active_flg === 1 ? "bg-red-500" : "bg-grey-500",
-                    style: { cursor: "not-allowed" },
-                }} />
-            </div>
-        );
-    };
-
-    /**
-     * Pagination handler
-     * @param {*} e 
-     */
-    const onPaginationChange = async (e) => {
-        setTableLoading(true);
-        if (!_.isEmpty(e)) {
-            const newStartValue = e.first; // Replace with your desired page value
-            const newLimitValue = e.rows; // Replace with your desired limit value
-            await setGetListPayload(prevState => ({
-                ...prevState,
-                filters: {
-                    ...prevState.filters,
-                    start: newStartValue,
-                    limit: newLimitValue
-                },
-                search: ""
-            }));
-        }
     }
 
     return (
@@ -198,11 +117,8 @@ export default function HinanjoList() {
                                 filterDisplay="menu"
                                 emptyMessage={translate(localeJson, "data_not_found")}
                                 paginator={true}
-                                // first={getListPayload.filters.start}
-                                // rows={getListPayload.filters.limit}
                                 paginatorLeft={true}
                                 tableStyle={{ minWidth: "70rem" }}
-                            // onPageHandler={(e) => onPaginationChange(e)}
                             />
                         </div>
                     </div>

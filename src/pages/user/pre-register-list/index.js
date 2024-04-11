@@ -10,7 +10,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { TempRegisterServices } from '@/services';
 
 export default function HitachiList() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
 
@@ -34,7 +34,6 @@ export default function HitachiList() {
         setYappleID(getCookie("city_id"))
         setPpid(getCookie("ppid"))
         setUserProfile(getCookie("profile"))
-        // const windowURL = "https://shelter.biz.cityos-dev.hitachi.co.jp/user/pre-register-list/";
         const windowURLSplitted = windowURL.split('/');
         const clientDomain = "shelter.biz.cityos-dev.hitachi.co.jp";
         if (windowURLSplitted[2] != clientDomain) {
@@ -45,10 +44,6 @@ export default function HitachiList() {
         }
 
     }, []);
-
-    const inputPPIDData = (e) => {
-        setOpenBarcodeDialog(true)
-    }
 
     const validateAndMoveToForm = (id) => {
         triggerPreRegisterConfirmation(id);
@@ -68,7 +63,6 @@ export default function HitachiList() {
                     })
                 }
             }
-
         })
     }
 
@@ -83,30 +77,22 @@ export default function HitachiList() {
             "ppid": "",
             "yapple_id": id ? id : ""
         };
-
         if (id == null) {
             toast.error(translate(localeJson, 'no_data_in_request_header'), {
                 position: "top-right",
             });
             return;
         }
-
         dispatch(setSelfID({
             id: id,
             ppid: ppid
         }));
-
         getBasicDetailsInfo(payload, (response) => {
             if (response.code == "ERR_NETWORK") {
                 toast.error(translate(localeJson, 'base_info_connection_error'), {
                     position: "top-right",
                 });
             }
-            // else if (response?.response?.status == 404) {
-            //     toast.error(translate(localeJson, 'no_data_in_DB'), {
-            //         position: "top-right",
-            //     });
-            // }
             else if (response.success) {
                 const data = response.data;
                 let lgwanID = data.lgwan_familiy_id;
@@ -139,8 +125,6 @@ export default function HitachiList() {
         })
     }
 
-    const allCookies = document.cookie;
-
     const getCookie = (cookieName) => {
         var name = cookieName + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -158,7 +142,6 @@ export default function HitachiList() {
     }
 
     const onClickReturn = () => {
-        // document.cookie = `my-number-redirectUrl=${window.location.href}; domain=.hitachi.co.jp; path=/;`;
         router.push({
             pathname: `${process.env.NEXT_PUBLIC_PRODUCTION_HOST}`,
             target: '_blank'
@@ -226,7 +209,6 @@ export default function HitachiList() {
                                                 }} parentClass={"p-2"} />
                                             </div>)
                                         }
-
                                         <Button buttonProps={{
                                             type: "button",
                                             text: translate(localeJson, 'back'),

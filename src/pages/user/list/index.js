@@ -99,15 +99,6 @@ export default function PublicEvacuees() {
       await getPublicEvacueesList();
     };
     fetchData();
-
-    // Development
-    // Listening for messages from the popup
-    // window.addEventListener("message", (event) => {
-    //   if (event.origin === window.origin) {
-    //     const receivedData = event.data;
-    // console.warn("Received from popup:", receivedData);
-    //   }
-    // });
   }, [locale, getListPayload]);
 
   /**
@@ -174,25 +165,10 @@ export default function PublicEvacuees() {
       }
       preparedTotalCount = response.data.model.total;
     }
-
     setTableLoading(false);
     setColumns(additionalColumnsArrayWithOldData);
     setList(preparedList);
     setTotalCount(preparedTotalCount);
-  };
-
-  /**
-   * Place name callback function
-   * @param {*} obj
-   * @returns
-   */
-  const onClickPlaceName = async (obj) => {
-    if (obj) {
-      let payload = Object.assign({}, layoutReducer?.user);
-      payload["place"] = obj;
-      await dispatch(setUserDetails(payload));
-      router.push("/user/dashboard");
-    }
   };
 
   /**
@@ -251,19 +227,6 @@ export default function PublicEvacuees() {
                 "evacuation_center_management_system_list"
               )}
             />
-            {/* Development */}
-            {/* <button className="p-5 mt-2" onClick={() => {
-                            const popupWidth = screen.width;
-                            const popupHeight = screen.height;
-                            const popup = window.open(`${window.origin}/user/event-list`, 'Popup', `width=${popupWidth},height=${popupHeight}`);
-                            console.warn("Popup Loaded");
-                            popup.parent_information = {
-                                data: "Hello popup"
-                            }
-                        }}>
-                            Click
-                        </button> */}
-            {/* Development */}
             <div className="mt-3">
               <NormalTable
                 lazy
@@ -285,11 +248,6 @@ export default function PublicEvacuees() {
                 tableStyle={{ minWidth: "70rem" }}
                 onPageHandler={(e) => onPaginationChange(e)}
                 selectionMode="single"
-                // Development
-                // Row Hover only for active flag
-                // rowClassName={(rowData) => {
-                //     return rowData.entire_data.active_flg ? "" : "bg:white hover:bg-white pointer-events-none";
-                // }}
                 onSelectionChange={async (e) => {
                   if (e.value.entire_data) {
                     let payload = { id: e.value.entire_data.id }

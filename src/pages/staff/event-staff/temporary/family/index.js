@@ -140,13 +140,6 @@ function EventStaffTemporaryRegistrants() {
         }
     }
 
-    /**
-     * CommonDialog modal close
-     */
-    const onClickCancelButton = () => {
-        setStaffFamilyDialogVisible(false);
-    };
-
     const updateCheckInStatus = (rowData) => {
         let param = {
             place_id: getListPayload.place_id,

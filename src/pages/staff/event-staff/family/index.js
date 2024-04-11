@@ -27,7 +27,6 @@ function EventStaffFamily() {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const [placeID, setPlaceID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
     const [eventID, setEventID] = useState(!_.isNull(layoutReducer?.user?.event?.id) ? layoutReducer?.user?.event?.id : "")
 
     const [familyCount, setFamilyCount] = useState(0);
@@ -40,7 +39,7 @@ function EventStaffFamily() {
     const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
     const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
     const [basicDataInfo, setBasicDataInfo] = useState(null);
-    const [totalList,setTotalList] = useState([])
+    const [totalList, setTotalList] = useState([])
     const [fullListPayload, setFullListPayload] = useState({
         filters: {
             start: 0,
@@ -70,7 +69,6 @@ function EventStaffFamily() {
 
     const columnNames = [
         { field: 'number', header: translate(localeJson, 'staff_attendees_table_slno'), sortable: false, textAlign: 'center', className: "sno_class" },
-        // { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         {
             field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: true, alignHeader: "left", minWidth: "8rem",
             body: (rowData) => {
@@ -87,20 +85,17 @@ function EventStaffFamily() {
         { field: "family_code", header: translate(localeJson, 'staff_attendees_table_family_code'), sortable: true, textAlign: 'left', minWidth: "5rem" },
         { field: "full_address", header: translate(localeJson, 'staff_attendees_table_adress'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "8rem" },
         { field: "person_dob", header: translate(localeJson, 'staff_attendees_table_dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
-        // { field: "age_gender", header: translate(localeJson, 'staff_attendees_table_age_gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "person_gender", header: translate(localeJson, 'staff_attendees_table_gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
-        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem'},
+        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem' },
         { field: "family_join_date", header: translate(localeJson, 'event_admission_date_time'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "family_out_date", header: translate(localeJson, 'discharge_date_time_attendees'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
-        
     ];
 
     /* Services */
-    const { getList, exportEvacueesCSVList } = StaffEvacuationServices;
     const { eventCheckIn } = CheckInOutServices;
     const { getBasicDetailsInfo } = TempRegisterServices;
-    
+
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
@@ -110,26 +105,6 @@ function EventStaffFamily() {
         fetchData();
     }, [locale, listPayload]);
 
-    const handleFamilyCode = (e) => {
-        if ((e.target.value).length == 4) {
-            const newValue = e.target.value;
-            if (newValue.indexOf("-") !== -1) {
-                setFamilyCode(e.target.value);
-            }
-            else {
-                const formattedValue = newValue.substring(0, 3) + "-" + newValue.substring(3);
-                setFamilyCode(formattedValue);
-            }
-        }
-        else if ((e.target.value).length == 3) {
-            const newValue = e.target.value;
-            const formattedValue = newValue.substring(0, 3);
-            setFamilyCode(formattedValue);
-        }
-        else {
-            setFamilyCode(e.target.value)
-        }
-    }
 
     /**
      * Pagination handler
@@ -212,7 +187,7 @@ function EventStaffFamily() {
                     let dob = element.person_dob ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(element.person_dob) : getEnglishDateDisplayFormat(element.person_dob)) : "";
                     let check_in = element.family_join_date ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.family_join_date) : getEnglishDateTimeDisplayActualFormat(element.family_join_date)) : "";
                     let check_out = element.family_out_date ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.family_out_date) : getEnglishDateTimeDisplayActualFormat(element.family_out_date)) : "";
-                    let full_address = (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? "") 
+                    let full_address = (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? "")
                     let main_gender = getGenderValueFromInt(element.person_gender);
                     let yapple_id = element.yapple_id ?? "";
                     let age_gender = element.person_age + "/" + getGenderValueFromInt(element.person_gender)
@@ -223,11 +198,11 @@ function EventStaffFamily() {
                 listTotalCount = response.data.total;
             }
             setTableLoading(false);
-            setFullListPayload((prev)=>({
+            setFullListPayload((prev) => ({
                 ...prev,
-                filters:{
+                filters: {
                     ...prev.filters,
-                    limit:listTotalCount>0?listTotalCount:10
+                    limit: listTotalCount > 0 ? listTotalCount : 10
                 }
             }))
             StaffEvacuationServices.getStaffAttendeesList(fullListPayload, (response) => {
@@ -390,10 +365,10 @@ function EventStaffFamily() {
                 successCallBack={yappleModalSuccessCallBack}
                 successHeader={"checkin_info_event"}
                 isEvent={true}
-                eventList = {totalList}
-                setRefugeeName = {setRefugeeName}
+                eventList={totalList}
+                setRefugeeName={setRefugeeName}
                 dynamicButtonText={true}
-                keyJson={ "register_event_qr"}
+                keyJson={"register_event_qr"}
                 type={layoutReducer?.user?.place?.type}
             />
             <CommonDialog
@@ -463,20 +438,6 @@ function EventStaffFamily() {
                                 </div>
                                 <form>
                                     <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
-                                        {/* <Input
-                                            inputProps={{
-                                                inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                                labelProps: {
-                                                    text: translate(localeJson, 'family_code'),
-                                                    inputLabelClassName: "block",
-                                                },
-                                                inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                                id: "familyCode",
-                                                name: "familyCode",
-                                                value: familyCode,
-                                                onChange: (e) => handleFamilyCode(e),
-                                            }}
-                                        /> */}
                                         <Input
                                             inputProps={{
                                                 inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
@@ -487,7 +448,6 @@ function EventStaffFamily() {
                                                 inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
                                                 value: refugeeName,
                                                 onChange: (e) => setRefugeeName(e.target.value)
-
                                             }}
                                         />
                                         <div className="flex align-items-end">

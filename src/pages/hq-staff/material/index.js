@@ -197,14 +197,12 @@ export default function AdminMaterialPage() {
                 currentEditObj={{ ...currentEditObj }}
                 refreshList={onGetMaterialListOnMounting}
             />
-
             <AdminManagementDeleteModal
                 open={deleteOpen}
                 close={onDeleteClose}
                 refreshList={onGetMaterialListOnMounting}
                 deleteObj={deleteObj}
             />
-
             <AdminManagementImportModal
                 open={importPlaceOpen}
                 close={onStaffImportClose}
@@ -247,7 +245,6 @@ export default function AdminMaterialPage() {
                                         })
                                     }
                                 }} parentClass={"mr-1 mt-1 export-button"} />
-
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",

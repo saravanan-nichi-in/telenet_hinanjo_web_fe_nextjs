@@ -113,11 +113,6 @@ function StockpileDashboard() {
         setProductNames(dataMapping);
     };
 
-    const onRegister = (values) => {
-        setImportStaffStockpileOpen(false);
-        showOverFlow();
-    }
-
     const callDropDownApi = (stockList) => {
         let payload = {
             place_id: layoutReducer?.user?.place?.id
@@ -144,7 +139,6 @@ function StockpileDashboard() {
                 }
             })
             setCategories([...tempCategories]);
-            // setProductNames(dataMapping);
         });
     }
 
@@ -157,7 +151,6 @@ function StockpileDashboard() {
             showOverFlow();
             setTableLoading(true);
             onGetMaterialListOnMounting();
-
         });
     }
 
@@ -315,7 +308,6 @@ function StockpileDashboard() {
                     setEditedStockPile([...editedStockPile, updatedList[index]])
                     dispatch(setStaffEditedStockpile([...editedStockPile, updatedList[index]]));
                 }
-
             }
             else {
                 setEditedStockPile([...editedStockPile, updatedList[index]])
@@ -370,10 +362,6 @@ function StockpileDashboard() {
                 }
             }
         }
-    }
-
-    const updateCategoryChange = (value) => {
-        setSelectedCategory(value);
     }
 
     const updatePlaceNameOptionsByCategory = (value) => {

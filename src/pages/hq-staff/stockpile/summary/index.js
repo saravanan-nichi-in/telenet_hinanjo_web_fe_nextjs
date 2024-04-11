@@ -157,7 +157,7 @@ function HQStockpileSummary() {
             hideOverFlow();
         }
     };
-    
+
     /**
     * Image setting modal close
    */
@@ -165,6 +165,7 @@ function HQStockpileSummary() {
         setImageModal(!imageModal);
         showOverFlow();
     };
+
     /**
     * Email setting modal close
    */
@@ -172,6 +173,7 @@ function HQStockpileSummary() {
         setEmailModal(!emailModal);
         showOverFlow();
     };
+
     /**
      * 
      * @param {*} values 
@@ -188,7 +190,6 @@ function HQStockpileSummary() {
                 place_name: values.place_name,
                 place_id: emailSettingValues.place_id
             }
-
             getStockPileEmailUpdate(payload, (response) => {
                 setEmailSettingValues(emailData);
                 getSummaryList(getListPayload, onGetStockPileSummaryList);

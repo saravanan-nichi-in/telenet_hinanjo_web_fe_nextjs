@@ -15,7 +15,6 @@ export default function Supplies() {
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
 
-
   const [list, setList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [tableLoading, setTableLoading] = useState(false);
