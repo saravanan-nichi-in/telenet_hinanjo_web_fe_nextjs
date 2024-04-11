@@ -12,16 +12,15 @@ import { UserQrService } from "@/services";
 const SearchDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const qrAppReducer = useSelector((state) => state.qrAppReducer);
-  const layoutReducer = useSelector((state) => state.layoutReducer);
   const { create } = UserQrService;
   const router = useRouter();
   let data = qrAppReducer?.checkInData || [];
   let family_id = data.length > 0 ? data[0].family_id : "";
-  const [familyCode, setFamilyCode] = useState(family_id);
+  let place_id = data.length > 0 ? data[0].place_id : "";
   const dispatch = useAppDispatch();
   const isCheckedIn = (res) => {
     setLoader(false);
-    res && router.push("/user/qr/app/dashboard");
+    res && router.push("/user/qr/app");
   };
   useEffect(() => {
     showOverFlow();
@@ -45,8 +44,8 @@ const SearchDetails = () => {
                     text: translate(localeJson, "admission_button"),
                     onClick: () => {
                       let payload = {
-                        family_id: familyCode,
-                        place_id: layoutReducer?.user?.place?.id,
+                        family_id: family_id,
+                        place_id: place_id,
                       };
                       setLoader(true);
                       create(payload, isCheckedIn);
