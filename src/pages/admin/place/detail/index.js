@@ -8,7 +8,8 @@ import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/compone
 import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector,useAppDispatch } from "@/redux/hooks";
 import { prefecturesCombined } from "@/utils/constant";
-import {setSuccessData} from "@/redux/tempRegister"
+import {setSuccessData } from "@/redux/tempRegister" 
+// import { default_place_id } from "@/utils/constant";
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -183,6 +184,7 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
+      {/* {!default_place_id.includes(id) &&( */}
       <div className="col-12">
         {tableLoading ? (
           <CardSpinner />
@@ -220,7 +222,7 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-
+ {/* )} */}
       <div className="col-12">
         <div
           className="flex pt-3 pb-3 gap-2"
