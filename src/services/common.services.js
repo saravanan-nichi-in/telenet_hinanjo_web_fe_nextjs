@@ -133,15 +133,23 @@ function _decryptPassword(encryptedData, encryptionKey) {
         const decrypted = CryptoJS.AES.decrypt(value, cryptoJsKey, {
             iv: iv,
         });
-
+        
+        if(decrypted)
+        {
         // Convert the decrypted result to a string
-        const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-
+        let decryptedString;
+        try {
+          decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+        } catch (error) {
+          decryptedString = ''; // Provide a default value or handle the error gracefully
+          return null
+        }
         // Use a regular expression to extract the password
         const match = decryptedString.match(/"([^"]+)"/);
-
         // Check if a match is found, and return the password
         return match ? match[1] : null;
+        }
+        else return null
     }
 }
 

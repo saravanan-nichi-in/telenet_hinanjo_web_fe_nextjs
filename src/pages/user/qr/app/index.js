@@ -23,10 +23,9 @@ export default function App() {
     formData.append("content",res)
     register(formData,(result)=>
     {   
-    console.log(res)
+      dispatch(setCheckInData(result.data.data))
+      router.push('/user/qr/app/register')
    })
-   dispatch(setCheckInData(family_dummy_data))
-   router.push('/user/qr/app/register')
 }
 
     return (<div className='grid flex-1'>

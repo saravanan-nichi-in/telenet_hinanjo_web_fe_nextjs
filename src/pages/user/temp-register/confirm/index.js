@@ -497,6 +497,42 @@ const TempRegisterConfirm = () => {
             </div>
             <div className="block">
               <MasterQuestions questions={neighbourData} />
+              <div className="mb-3 mt-3">
+                <CustomHeader
+                  headerClass={"page-header1"}
+                  header={translate(localeJson, "individual_agree_note")}
+                />
+              </div>
+              <div className=" mt-3">
+                <div className=" flex_row_space_between">
+                  <label
+                    htmlFor="evacuation_place"
+                    className="pb-1 font-bold block"
+                  >
+                    {translate(localeJson, "agree_label")}
+                  </label>
+                </div>
+                <div className=" mt-1 body_table" id="phone-number">
+                  {confirmData.is_public == 0
+                    ? translate(localeJson, "agree")
+                    : translate(localeJson, "disagree")}
+                </div>
+              </div>
+              <div className=" mt-3">
+                <div className=" flex_row_space_between">
+                  <label
+                    htmlFor="evacuation_place"
+                    className="pb-1 font-bold block"
+                  >
+                    {translate(localeJson, "publish_label")}
+                  </label>
+                </div>
+                <div className=" mt-1 body_table" id="phone-number">
+                  {confirmData.public_info == 0
+                    ? translate(localeJson, "to_publish")
+                    : translate(localeJson, "not_to_publish")}
+                </div>
+              </div>
             </div>
           </div>
           <div className="pt-5 text-center  footerButtonText  ">

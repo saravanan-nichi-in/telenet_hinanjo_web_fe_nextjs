@@ -90,10 +90,10 @@ import {
                     deleteTempFamily(payload,(res)=> {
                       if(res)
                       {
-                        dispatch(reset())
                         localStorage.setItem("personCountTemp",null)
                         localStorage.setItem('refreshing', false);
                         router.push('/user/list')
+                        dispatch(reset())
                       }
                     })
                   },
