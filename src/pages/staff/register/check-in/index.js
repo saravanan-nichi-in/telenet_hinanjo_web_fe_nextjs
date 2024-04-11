@@ -15,7 +15,6 @@ export default function RegisterCheckIn() {
   const layoutReducer = useSelector((state) => state.layoutReducer);
 
   const [frozenArray, setFrozenArray] = useState([]);
-  const [columns, setColumns] = useState([]);
   const [list, setList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [tableLoading, setTableLoading] = useState(false);
@@ -26,17 +25,9 @@ export default function RegisterCheckIn() {
   const initialValues = {};
 
   const columnsData = [
-    // {
-    //   field: "slno",
-    //   header: translate(localeJson, "supplies_slno"),
-    //   className: "sno_class",
-    //   textAlign: "center",
-    //   alignHeader: "center"
-    // },
     {
       field: "name",
       headerStyle: { fontSize: "16px", background: "white" },
-      // header: translate(localeJson, "supplies_name"),
       minWidth: "10rem",
       maxWidth: "10rem",
 
@@ -77,7 +68,7 @@ export default function RegisterCheckIn() {
   ];
 
   /* Services */
-  const { getList, create } = StaffRegisterServices;
+  const { getList } = StaffRegisterServices;
 
   useEffect(() => {
     setTableLoading(true);
@@ -153,24 +144,15 @@ export default function RegisterCheckIn() {
     });
   };
 
-  const isCreated = (res) => {
-    setLoader(false)
-    if (res) {
-      onGetMaterialListOnMounting();
-    }
-  };
-
   return (
     <>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-
           let payload = {
             place_id: layoutReducer?.user?.place?.id,
             people_checkin: [],
           };
-
           if (list) {
             payload.people_checkin.push(
               ...list.map((item) => {
@@ -181,7 +163,6 @@ export default function RegisterCheckIn() {
               })
             );
           }
-
           if (frozenArray) {
             payload.people_checkin.push(
               ...frozenArray.map((item) => {

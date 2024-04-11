@@ -25,7 +25,7 @@ export default function EvacueeDetailModal(props) {
         place_id: layoutReducer?.user?.place?.id,
     });
     const { open, close } = props && props;
-    
+
     const header = (
         <div className="custom-modal">
             {translate(localeJson, 'external_evecuee_details_popup_header')}
@@ -124,9 +124,7 @@ export default function EvacueeDetailModal(props) {
                 >
                     <div className={`modal-content`}>
                         <div>
-
                             <div className="mt-5">
-
                                 <div>
                                     <NormalTable
                                         lazy

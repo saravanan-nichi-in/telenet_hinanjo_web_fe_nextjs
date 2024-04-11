@@ -56,7 +56,6 @@ export default function TempRegister() {
 
     const { getBasicDetailsInfo, getActiveEvacuationPlaceList, getMasterQuestionnaireList, getIndividualQuestionnaireList, getSpecialCareDetails, registerTemporaryUser } = TempRegisterServices;
 
-
     useEffect(() => {
         const fetchData = async () => {
             setLoader(true)
@@ -158,14 +157,6 @@ export default function TempRegister() {
                 fetchMasterQuestion(masterBase);
             }
         })
-    }
-
-    const getPrefectureName = (id) => {
-        let prefectureName = prefectures.find((item) => item.value == id);
-        if (prefectureName) {
-            return prefectureName.name;
-        }
-        return "";
     }
 
     const getPrefectureID = (address) => {
@@ -351,6 +342,7 @@ export default function TempRegister() {
                 }
             })
     });
+
     const step2Schema = Yup.object().shape({
         specialCareType: Yup.array()
             .min(0, translate(localeJson, 'special_care_list') + translate(localeJson, 'is_required'))
@@ -393,11 +385,6 @@ export default function TempRegister() {
     }
 
     const yearOptions = getYearOptions();
-
-    const getBasicAddress = () => {
-        return ((basicDataInfo.address?.prefecture ? basicDataInfo.address.prefecture : "") + " " + basicDataInfo.address?.cityWard
-            + basicDataInfo.address?.houseNameNumber);
-    }
 
     const agreeTextWithHTML = (
         <div>
@@ -450,8 +437,6 @@ export default function TempRegister() {
                     values,
                     errors,
                     touched,
-                    handleChange,
-                    handleBlur,
                     handleSubmit,
                     setFieldValue
                 }) => (

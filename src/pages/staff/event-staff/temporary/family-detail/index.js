@@ -85,7 +85,6 @@ export default function EventStaffTemporaryFamilyDetail() {
      * CommonDialog modal open
      */
     const onClickOkButton = () => {
-
         updateCheckInDetail(param, (response) => {
             if (response.success) {
                 router.push("/staff/event-staff/temporary/family");
@@ -301,7 +300,6 @@ export default function EventStaffTemporaryFamilyDetail() {
                             <div className='mb-2'>
                                 <CustomHeader headerClass={"page-header2"} header={translate(localeJson, "household_list")} />
                             </div>
-
                             <RowExpansionTable
                                 id={"evacuation-detail-list"}
                                 rows={10}

@@ -11,15 +11,14 @@ export default function HQEvacueesStatistics() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
 
   const [options, setOptions] = useState(null);
-  const [evacueesShelterOptions, setEvacueesShelterOptions] = useState(initialOptions);
-  const [data, setData] = useState(evacueesShelterOptions[0].value);
-  const [chartData, setChartData] = useState({});
-
   const initialOptions = [
     { name: "current_number_of_evacuees", value: "NY" },
     { name: "evacuation_center_occupancy_rate", value: "RM" },
     { name: "special_care_percentage", value: "LDN" },
   ];
+  const [evacueesShelterOptions, setEvacueesShelterOptions] = useState(initialOptions);
+  const [data, setData] = useState(evacueesShelterOptions[0].value);
+  const [chartData, setChartData] = useState({});
 
   /* Services */
   const { getList } = StatisticsServices;

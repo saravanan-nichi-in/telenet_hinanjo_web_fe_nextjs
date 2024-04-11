@@ -38,7 +38,6 @@ export default function StaffFamilyDetail() {
     const [tableLoading, setTableLoading] = useState(false);
     const [familyBasicDetail, setFamilyBasicDetail] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
-    const [individualQuestionnaires, setIndividualQuestionnaires] = useState([]);
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState([]);
     const [personList, setPersonList] = useState([]);
@@ -111,31 +110,6 @@ export default function StaffFamilyDetail() {
         }
     }
 
-    const getRegisteredLanguage = (language) => {
-        if (language == "en") {
-            return translate(localeJson, 'english');
-        }
-        else {
-            return translate(localeJson, 'japanese');
-        }
-    }
-
-    const getAnswerData = (answer) => {
-        let answerData = null;
-        answer.map((item) => {
-            answerData = answerData ? (answerData + ", " + item) : item
-        });
-        return answerData;
-    }
-
-    const getPrefectureName = (id) => {
-        if (id) {
-            let p_name = prefectures.find((item) => item.value === id);
-            return p_name.name;
-        }
-        return "";
-    }
-
     const onGetEvacueesFamilyDetailOnMounting = () => {
         StaffEvacuationServices.getStaffPermanantEvecueesDetail(
             param, getEvacueesFamilyDetail)
@@ -169,7 +143,6 @@ export default function StaffFamilyDetail() {
                     }
                 }
                 responseList.forEach((tempObj, index) => {
-
                     let personAnswers = {};
                     if (tempObj.person_answers.length > 0) {
                         tempObj.person_answers.forEach((val, index) => {
@@ -206,12 +179,10 @@ export default function StaffFamilyDetail() {
                     });
                 }
             }
-
             let withOverallQuestionAnswer = tempOverallQuestion.map((val, index) => {
                 return { ...val, actual_answer: overallAnswers[val.id] }
             })
             setOverallQuestionnaires(withOverallQuestionAnswer);
-
             if (response.data.history.list.length > 0) {
                 const formattedDates = response.data.history.list.map(item => {
                     const formattedCheckin = item.checkin && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkin) : getEnglishDateTimeDisplayActualFormat(item.checkin));
@@ -508,12 +479,14 @@ export default function StaffFamilyDetail() {
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].connecting_code}</span>
                                     </div>
                                 </div>
+
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "remarks")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].remarks}</span>
                                     </div>
                                 </div>
+                                
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "c_special_care")}: </span>

@@ -108,8 +108,7 @@ export default function AdminPlacePage() {
   ];
 
   /* Services */
-  const { getList, updateStatus, exportData, importData, deletePlace } =
-    PlaceServices;
+  const { getList, updateStatus } = PlaceServices;
 
   useEffect(() => {
     setTableLoading(true);

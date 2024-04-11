@@ -24,12 +24,10 @@ export default function Admission() {
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [searchResult, setSearchResult] = useState(false);
-  const [searchFlag, setSearchFlag] = useState(false);
   const [openBasicDataInfoDialog, setOpenBasicDataInfoDialog] = useState(false);
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [isSearch, setSearch] = useState(false);
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const [barcode, setBarcode] = useState(null);
@@ -60,8 +58,8 @@ export default function Admission() {
   const initialValues = { name: "", password: "", familyCode: "" };
 
   const { getText } = CommonServices;
-  const { getList, checkOut, eventCheckOut, placeCheckout } = CheckInOutServices;
-  const { getBasicDetailsInfo, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
+  const { getList, eventCheckOut, placeCheckout } = CheckInOutServices;
+  const { getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
   const { getActiveList } = UserPlaceListServices;
 
   /* Services */
@@ -105,43 +103,6 @@ export default function Admission() {
       formikRef.current.setFieldValue("familyCode", val);
     }
     setAudioFamilyCodeLoader(false);
-  };
-
-  const handleAudioRecorded = async (audioBlob) => {
-    const fromData = new FormData();
-    fromData.append("audio_sample", audioBlob);
-    getText(fromData, fetchText);
-  };
-
-  const handleFamilyCodeRecordingStateChange = (isRecording) => {
-    if (isRecording) {
-      // Start loader
-      setAudioFamilyCodeLoader(true);
-    }
-  };
-  const handleFamilyCodeAudioRecorded = async (audioBlob) => {
-    const fromData = new FormData();
-    fromData.append("audio_sample", audioBlob);
-    getText(fromData, fetchFamilyCode);
-  };
-
-  const handleRecordingStateChange = (isRecording) => {
-    if (isRecording) {
-      // Start loader
-      setAudioPasswordLoader(true);
-    }
-  };
-  const handleNameAudioRecorded = async (audioBlob) => {
-    const fromData = new FormData();
-    fromData.append("audio_sample", audioBlob);
-    getText(fromData, fetchName);
-  };
-
-  const handleNameRecordingStateChange = (isRecording) => {
-    if (isRecording) {
-      // Start loader
-      setAudioNameLoader(true);
-    }
   };
 
   const getSearchResult = (res) => {
@@ -526,7 +487,6 @@ export default function Admission() {
                             {translate(localeJson, "or")}
                           </div>
                           <div className="mt-3 col-12 md:col-6 lg:col-6">
-
                             <div
                               className=" lg:ml-8 md:ml-5"
                             >
@@ -730,7 +690,6 @@ export default function Admission() {
                               </div>
                             </div>
                           </div>
-                          {/* </div> */}
                         </div>
                       </div>
                     </div>

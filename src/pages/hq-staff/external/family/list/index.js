@@ -2,10 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 
-import {
-    getValueByKeyRecursively as translate,
-    getYYYYMMDDHHSSSSDateTimeFormat,
-} from '@/helper';
+import { getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, InputDropdown } from '@/components';
 import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
@@ -58,7 +55,7 @@ export default function HQExternalEvacuationPage() {
         { name: translate(localeJson, 'city_out'), id: 2 },
         { name: translate(localeJson, 'pref_out'), id: 3 },
     ];
-    
+
     const externalEvacueesListColumns = [
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", textAlign: "center", sortable: false },
         { field: "place_category", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
@@ -71,7 +68,7 @@ export default function HQExternalEvacuationPage() {
     ];
 
     /* Services */
-    const { getList, exportExternalEvacueesCSVList, getPlaceDropdownList } = ExternalEvacuationServices;
+    const { getList, getPlaceDropdownList } = ExternalEvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -82,34 +79,7 @@ export default function HQExternalEvacuationPage() {
         fetchData();
     }, [locale, getListPayload]);
 
-    const downloadExternalEvacueesListCSV = () => {
-        exportExternalEvacueesCSVList(getListPayload, exportExternalEvacueesCSV);
-    }
-
-    const exportExternalEvacueesCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName = "ExternalEvacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    };
-
     const onGetExternalEvacueesListOnMounting = () => {
-        // Development
-        // let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit);
-        // let payload = {
-        //     filters: {
-        //         start: pageStart,
-        //         limit: getListPayload.filters.limit,
-        //         sort_by: getListPayload.filters.sort_by,
-        //         order_by: getListPayload.filters.order_by,
-        //     },
-        //     food_required: getListPayload.food_required,
-        //     evacuationCenter: getListPayload.evacuationCenter,
-        //     place_category: getListPayload.place_category
-        // };
         getList(getListPayload, getExternalEvacueesList);
     }
 
@@ -234,7 +204,6 @@ export default function HQExternalEvacuationPage() {
                                         emptyMessage: translate(localeJson, "data_not_found"),
                                     }}
                                     />
-
                                     <InputDropdown inputDropdownProps={{
                                         inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
                                         labelProps: {
@@ -308,7 +277,6 @@ export default function HQExternalEvacuationPage() {
                             }
                         }
                     />
-
                     <div className='mt-3 flex justify-content-center'>
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                             <Button buttonProps={{

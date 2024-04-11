@@ -40,7 +40,7 @@ export default function PublicExternal() {
   const formikRef = useRef();
 
   /* Services */
-  const { getActivePlaceList, getAddressByZipCode, create } = ExternalServices;
+  const { getActivePlaceList, create } = ExternalServices;
   const { getAddress, getZipCode } = CommonServices;
 
   useEffect(() => {
@@ -84,7 +84,6 @@ export default function PublicExternal() {
         />
       );
     });
-
     setToggleSwitchShelterComponents(newToggleSwitchComponents);
   }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
@@ -134,6 +133,7 @@ export default function PublicExternal() {
     toggleFoodSwitches: Array(2).fill(false),
     togglePlaceSwitches: "",
   };
+  
   const validationSchema = (localeJson) =>
     Yup.object().shape({
       toggleSwitches: Yup.array()

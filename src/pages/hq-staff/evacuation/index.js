@@ -8,7 +8,6 @@ import {
     getGeneralDateTimeSlashDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     getSpecialCareName,
-    getYYYYMMDDHHSSSSDateTimeFormat,
     getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -149,21 +148,6 @@ export default function HQEvacuationPage() {
             maxWidth: "3rem",
         },
     ];
-
-    const downloadEvacueesListCSV = () => {
-        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
-    };
-
-    const exportEvacueesCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName =
-                "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    };
 
     /**
      * Get Evacuees list on mounting
@@ -346,7 +330,7 @@ export default function HQEvacuationPage() {
     };
 
     /* Services */
-    const { getList, exportEvacueesCSVList } = EvacuationServices;
+    const { getList } = EvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -505,17 +489,6 @@ export default function HQEvacuationPage() {
                                     {translate(localeJson, "totalSummary")}: {familyCount}
                                 </p>
                             </div>
-                            {/* Development */}
-                            {/* <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    export: true,
-                                    buttonClass: "evacuation_button_height export-button",
-                                    text: translate(localeJson, 'export'),
-                                    onClick: () => downloadEvacueesListCSV()
-                                }} parentClass={"mb-3 export-button"} />
-                            </div> */}
                         </div>
                     </div>
                     <NormalTable

@@ -78,11 +78,6 @@ export default function Admission() {
     );
   };
 
-
-  const toggleDetails = () => {
-    setShowDetails(!showDetails);
-  };
-
   const { basicInfo } = CheckInOutServices;
 
   /* Services */
@@ -91,7 +86,6 @@ export default function Admission() {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
     getAddressByZipCode,
-    qrScanRegistration,
     ocrScanRegistration
   } = TempRegisterServices;
 
@@ -511,223 +505,6 @@ export default function Admission() {
     { name: translate(localeJson, "c_not_answer"), value: 3 },
   ];
 
-  const cols = [
-    {
-      field: "rep_name",
-      header: translate(localeJson, "c_representative"),
-      minWidth: locale === "ja" ? "5rem" : "5rem",
-      maxWidth: locale === "ja" ? "5rem" : "5rem",
-      width: "5rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const handleRadioChange = (evt) => {
-          const isChecked = evt.target.checked;
-          let latest_Data = evacuee.map((row) => {
-            if (isChecked) {
-              let data = rowData;
-              if (row.id !== rowData.id) {
-                return { ...row, checked: false };
-              } else {
-                return { ...row, checked: true };
-              }
-            } else {
-              return { ...row, checked: false }; // Handle the case when isChecked is false
-            }
-          });
-          if (isChecked) {
-            let data = rowData;
-            formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
-            formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-            formikRef.current.setFieldValue("address", data.address);
-            formikRef.current.setFieldValue("address2", data.address2 || "");
-            data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
-            formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-            formikRef.current.setFieldValue("name_kanji", data.name);
-          }
-          formikRef.current.setFieldValue("evacuee", latest_Data)
-          setEvacuee(latest_Data);
-        };
-        return (
-          <a className="flex justify-content-center">
-            <RadioBtn
-              radioBtnProps={{
-                onChange: handleRadioChange,
-                checked: rowData.checked,
-              }}
-            />
-          </a>
-        );
-      },
-    },
-    {
-      field: "name_furigana",
-      header: translate(localeJson, "c_refugee_name"),
-      minWidth: "8rem",
-      maxWidth: "8rem",
-      width: "8rem",
-      body: (rowData) => {
-        return (
-          <div className="flex flex-column">
-            <div className="custom-header">{rowData.name}</div>
-            <div>{rowData.name_furigana}</div>
-          </div>
-        );
-      },
-      headerClassName: "custom-header",
-    },
-    {
-      field: "age",
-      header: translate(localeJson, "c_age"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-    },
-    {
-      field: "gender",
-      header: translate(localeJson, "c_gender"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const gender = genderOptions;
-        const selectedGenderOption = gender.find(
-          (option) => option.value === rowData.gender
-        );
-        const displayedGenderName = selectedGenderOption
-          ? selectedGenderOption.name
-          : "Unknown";
-
-        return <span>{displayedGenderName}</span>;
-      },
-    },
-    {
-      field: "family_register_from",
-      header: translate(localeJson, "c_table_remarks"),
-      minWidth: "0rem",
-      maxWidth: "0rem",
-      width: "0rem",
-      display: "none",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-    },
-
-    {
-      field: "actions",
-      header: translate(localeJson, "common_action"),
-      textAlign: "center",
-      alignHeader: "center",
-      minWidth: "9rem",
-      maxWidth: "9rem",
-      className: "action_class",
-      body: (rowData) => (
-        <div>
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              // text: translate(localeJson, "edit"),
-              buttonClass: "back-button",
-              icon: <img src={Edit.url} width={20} height={20} />,
-              onClick: () => {
-                setRegisterModalAction("edit");
-                setSpecialCareEditOpen(true);
-                hideOverFlow();
-                let currentData = {
-                  id: rowData.id,
-                  checked: rowData.checked,
-                  name: rowData.name,
-                  name_furigana: rowData.name_furigana,
-                  dob: rowData.dob,
-                  age: rowData.age,
-                  age_m: rowData.age_m,
-                  gender: rowData.gender,
-                  postalCode: rowData.postalCode ? rowData.postalCode.replace(/-/g, "") : "",
-                  prefecture_id: rowData.prefecture_id,
-                  address: rowData.address,
-                  address2: rowData.address2,
-                  email: rowData.email,
-                  tel: rowData.tel,
-                  evacuee: rowData.evacuee,
-                  password: rowData.password,
-                  specialCareType: rowData.specialCareType,
-                  connecting_code: rowData.connecting_code,
-                  remarks: rowData.remarks,
-                  individualQuestions: rowData.individualQuestions,
-                  family_register_from: rowData.family_register_from,
-                  telAsRep: rowData.telAsRep,
-                  addressAsRep: rowData.addressAsRep
-                };
-                setEditObj(currentData);
-              },
-            }}
-            parentClass="back-button"
-          />
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              // text: translate(localeJson, "remove"),
-              buttonClass: "ml-2 delete-button-user",
-              disabled: (isHitachi && evacuee.length <= 1),
-              icon: <img src={Delete.url} width={20} height={20} />,
-              onClick: () => {
-                if (rowData.checked === true) {
-                  const message = translate(localeJson, 'rep_del_error');
-                  const isConfirmed = window.confirm(message);
-
-                  if (isConfirmed) {
-                    setEvacuee((prevEvacuee) => {
-                      let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                      // Update the IDs of the remaining items
-                      updated = updated.map((evacuee, index) => ({
-                        ...evacuee,
-                        id: index + 1,
-                      }));
-
-                      if (updated.length > 0) {
-                        updated[0].checked = true;
-                      }
-
-                      formikRef.current?.setFieldValue("evacuee", updated);
-                      return updated;
-                    });
-                  }
-                } else {
-                  setEvacuee((prevEvacuee) => {
-                    let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                    // Update the IDs of the remaining items
-                    updated = updated.map((evacuee, index) => ({
-                      ...evacuee,
-                      id: index + 1,
-                    }));
-
-
-
-                    formikRef.current?.setFieldValue("evacuee", updated);
-                    return updated;
-                  });
-                }
-
-              },
-            }}
-            parentClass={"delete-button-user"}
-          />
-        </div>
-      ),
-    },
-  ];
-
   const handleRadioChange = (evt, rowData) => {
     const isChecked = evt.target.checked;
     let latest_Data = evacuee.map((row) => {
@@ -819,7 +596,6 @@ export default function Admission() {
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
-
 
   const closeQrPopup = () => {
     setOpenQrPopup(false);
@@ -1051,18 +827,6 @@ export default function Admission() {
     return boundObject;
   }
 
-  const displayToastMessages = (errorArray) => {
-    errorArray.forEach((errorObject) => {
-      if (errorObject) {
-        Object.values(errorObject).forEach((message) => {
-          toast.error(message, {
-            position: "top-right",
-          });
-        });
-      }
-    });
-  };
-
   const getPrefectureName = (id) => {
     if (id) {
       let p_name = prefectures.find((item) => item.value === id);
@@ -1073,12 +837,6 @@ export default function Admission() {
 
   return (
     <>
-      {/* <QrScannerModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callback={qrResult}
-        setOpenQrPopup={setOpenQrPopup}
-      ></QrScannerModal> */}
       <YaburuModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -1135,7 +893,6 @@ export default function Admission() {
             dispatch(setRegisterData(payload));
             router.push("/staff/family/edit/confirm");
           }
-          // tempRegister(payload, (res) => {});
         }}
       >
         {({
@@ -1161,7 +918,6 @@ export default function Admission() {
                       className="w-full mb-0  gap-3 column-gap-4 row-gap-6 card p-5 pt-3 border-round-3xl footerButtonText"
                       style={{ justifyContent: "start" }}
                     >
-
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -1535,7 +1291,6 @@ export default function Admission() {
                                 },
                                 icon: "",
                                 isRecording,
-                                // audioCustomClass: "mt-2 mb-2",
                                 onRecordValueChange: (rec) => {
                                   const fromData = new FormData();
                                   fromData.append("audio_sample", rec);
@@ -1698,29 +1453,6 @@ export default function Admission() {
                       <div className="mb-3">
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "evacuee")} />
                       </div>
-                      {/* <div className="mb-2 block">
-                        <NormalTable
-                          lazy
-                          totalRecords={5}
-                          stripedRows={true}
-                          className={"custom-table-cell"}
-                          showGridlines={"true"}
-                          tableStyle={{width:"100%"}}
-                          value={evacuee}
-                          columns={cols}
-                          paginator={false}
-                          paginatorLeft={false}
-                          emptyMessage={translate(
-                            localeJson,
-                            "external_table_count_message"
-                          )}
-                        />
-                        <ValidationError
-                          errorBlock={
-                            !Array.isArray(errors.evacuee) && errors.evacuee && touched.evacuee && errors.evacuee
-                          }
-                        />
-                      </div> */}
                       <div className="flex">
                         <div className="w-full">
                           {evacuee?.map((person, index) => (
@@ -1787,7 +1519,6 @@ export default function Admission() {
                                         )
                                         : getEnglishDateDisplayFormat(`${person.dob.year}-${person.dob.month}-${person.dob.date}`)
                                       }
-                                      {/* <div className="body_table">{person.dob}</div> */}
                                     </div>
                                     <div className=" mt-3">
                                       <div className=" flex_row_space_between">
@@ -1826,7 +1557,6 @@ export default function Admission() {
                                     </div>
                                   </div>
                                   {expandedFamilies?.includes(person.id) && (
-
                                     <><div className=" mt-3">
                                       <div className=" flex_row_space_between">
                                         <label className="header_table">
@@ -1946,11 +1676,9 @@ export default function Admission() {
                                             if (rowData.checked === true) {
                                               const message = translate(localeJson, 'rep_del_error');
                                               const isConfirmed = window.confirm(message);
-
                                               if (isConfirmed) {
                                                 setEvacuee((prevEvacuee) => {
                                                   let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
                                                   // Update the IDs of the remaining items
                                                   updated = updated.map((evacuee, index) => ({
                                                     ...evacuee,
@@ -1968,15 +1696,11 @@ export default function Admission() {
                                             } else {
                                               setEvacuee((prevEvacuee) => {
                                                 let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
                                                 // Update the IDs of the remaining items
                                                 updated = updated.map((evacuee, index) => ({
                                                   ...evacuee,
                                                   id: index + 1,
                                                 }));
-
-
-
                                                 formikRef.current?.setFieldValue("evacuee", updated);
                                                 return updated;
                                               });
@@ -1988,11 +1712,8 @@ export default function Admission() {
                                     </div>
                                   </>
                                   {/* Add other details as needed */}
-
                                 </div>
-
                               </div>
-
                             </div>
                           ))}
                         </div>
@@ -2121,7 +1842,6 @@ export default function Admission() {
                                   (question) =>
                                     question.isRequired == "1" && (question.answer == null || question.answer.length == 0)
                                 );
-
                                 return hasNullAnswer;
                               });
                               if (evacueesWithNullAnswer?.length > 0) {

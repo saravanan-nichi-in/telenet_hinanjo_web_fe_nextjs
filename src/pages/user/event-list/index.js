@@ -232,11 +232,6 @@ export default function EventList() {
                 tableStyle={{ minWidth: "70rem" }}
                 onPageHandler={(e) => onPaginationChange(e)}
                 selectionMode="single"
-                // Development
-                // Row Hover only for active flag
-                //  rowClassName={(rowData) => {
-                //     return rowData.entireObj.is_q_active ? "" : "bg:white hover:bg-white pointer-events-none";
-                // }}
                 onSelectionChange={(e) => {
                   if (e.value) {
                     if (e.value.is_q_active_value == 1) {

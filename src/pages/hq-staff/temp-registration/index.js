@@ -62,7 +62,7 @@ export default function HQTempRegistration() {
     { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
   ];
-  
+
   useEffect(() => {
     setTableLoading(true);
     const fetchTempData = async () => {
@@ -296,27 +296,6 @@ export default function HQTempRegistration() {
                 </div>
               </form>
             </div>
-            {/* Development */}
-            {/* <div style={{ display: "flex", justifyContent: "right" }}>
-              <div
-                className="flex pt-3"
-                style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
-              >
-                <Button
-                  buttonProps={{
-                    type: "submit",
-                    rounded: "true",
-                    buttonClass: "evacuation_button_height export-button",
-                    export: true,
-                    text: translate(localeJson, "export"),
-                    onClick: () => {
-                      alert("downloading");
-                    },
-                  }}
-                  parentClass={"mb-3 export-button"}
-                />
-              </div>
-            </div> */}
           </div>
           <NormalTable
             lazy
