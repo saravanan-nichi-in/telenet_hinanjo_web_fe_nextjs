@@ -190,15 +190,6 @@ function StaffFamily() {
       maxWidth: "3rem",
     },
     {
-      field: "yapple_id",
-      header: translate(localeJson, "yapple_id"),
-      sortable: true,
-      textAlign: "left",
-      alignHeader: "left",
-      minWidth: "3.5rem",
-      maxWidth: "3.5rem",
-    },
-    {
       field: "person_is_owner",
       header: translate(localeJson, "representative"),
       sortable: true,

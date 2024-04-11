@@ -22,13 +22,12 @@ export default function EventStaffFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     // Getting storage data with help of reducers
-    const layoutReducer = useSelector((state) => state.layoutReducer);
     const familyReducer = useSelector((state) => state.familyReducer);
 
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
-    const [checkoutVisible, setCheckoutVisible] = useState(false);
+    
     const param = {
         event_id: familyReducer?.eventStaffFamily?.event_id ?? 0,
         lgwan_family_id: familyReducer?.eventStaffFamily?.family_id ?? 0
@@ -180,16 +179,6 @@ export default function EventStaffFamilyDetail() {
                                 columns={familyAdmissionColumns}
                             />
                         </div>
-                        {/* for event There is no check out */}
-                        {/* <div className="flex mt-2 gap-2 justify-content-center">
-                            <Button buttonProps={{
-                                buttonClass: "w-10rem exit-procedure-button ",
-                                text: translate(localeJson, 'event_exit_procedure'),
-                                icon: <FaArrowRightFromBracket className='mr-1'/>,
-                                disabled: (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) ? false : true,
-                                onClick: () => (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) ? setCheckoutVisible(true) : null,
-                            }} parentClass={"inline exit-procedure-button "} />
-                        </div> */}
                     </div>
                 </div>
             </div>

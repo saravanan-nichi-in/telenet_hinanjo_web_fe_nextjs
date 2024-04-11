@@ -11,7 +11,7 @@ import { reset } from "@/redux/checkout";
 import { CheckInOutServices } from "@/services";
 
 const CheckOutDetails = () => {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const checkOutReducer = useSelector((state) => state.checkOutReducer);
@@ -88,7 +88,6 @@ const CheckOutDetails = () => {
             </div>
           </>
         )}
-
       </div>
     </div>
   );

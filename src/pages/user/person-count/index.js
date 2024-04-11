@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { usePathname } from 'next/navigation'
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -12,7 +11,6 @@ const PersonCountScreen = () => {
     const { localeJson, locale } = useContext(LayoutContext);
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const pathname = usePathname()
 
     const [buttonStates, setButtonStates] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
     const [personCount, setPersonCount] = useState("");
@@ -46,7 +44,6 @@ const PersonCountScreen = () => {
                         <div style={{ maxWidth: "330px" }}>
                             <div className=''>
                                 <CustomHeader customParentClassName={"mb-0"} headerClass={`${locale == "en" ? "pt-4" : "pt-0"} font-bold`} header={translate(localeJson, "evacuee_count")} />
-                                {/* <p style={{fontWeight: "bold"}}><span style={{ borderLeft: '4px solid black', paddingLeft: '3px', fontWeight: "bold",lineHeight:"5px" }}></span> {translate(localeJson, "evacuee_count")}</p> */}
                             </div>
                             <div className=''>
                                 <p className='pb-0' style={{ fontSize: "16px" }}>{translate(localeJson, "person_count_evacuated")}

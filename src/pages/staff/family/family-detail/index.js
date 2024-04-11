@@ -38,7 +38,6 @@ export default function StaffFamilyDetail() {
     const [tableLoading, setTableLoading] = useState(false);
     const [familyBasicDetail, setFamilyBasicDetail] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
-    const [individualQuestionnaires, setIndividualQuestionnaires] = useState([]);
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState([]);
     const [personList, setPersonList] = useState([]);
@@ -47,7 +46,7 @@ export default function StaffFamilyDetail() {
 
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
-        lgwan_family_id: useAppSelector((state) => state.familyReducer.family.family_id),
+        family_id: useAppSelector((state) => state.familyReducer.family.family_id),
     };
 
     const columnNames = [
@@ -71,9 +70,7 @@ export default function StaffFamilyDetail() {
         { field: "person_age", header: translate(localeJson, 'age'), headerClassName: "custom-header", sortable: false, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "gender", header: translate(localeJson, 'gender'), headerClassName: "custom-header", sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' },
-        
     ];
 
     /**
@@ -113,31 +110,6 @@ export default function StaffFamilyDetail() {
         }
     }
 
-    const getRegisteredLanguage = (language) => {
-        if (language == "en") {
-            return translate(localeJson, 'english');
-        }
-        else {
-            return translate(localeJson, 'japanese');
-        }
-    }
-
-    const getAnswerData = (answer) => {
-        let answerData = null;
-        answer.map((item) => {
-            answerData = answerData ? (answerData + ", " + item) : item
-        });
-        return answerData;
-    }
-
-    const getPrefectureName = (id) => {
-        if (id) {
-            let p_name = prefectures.find((item) => item.value === id);
-            return p_name.name;
-        }
-        return "";
-    }
-
     const onGetEvacueesFamilyDetailOnMounting = () => {
         StaffEvacuationServices.getStaffPermanantEvecueesDetail(
             param, getEvacueesFamilyDetail)
@@ -171,7 +143,6 @@ export default function StaffFamilyDetail() {
                     }
                 }
                 responseList.forEach((tempObj, index) => {
-
                     let personAnswers = {};
                     if (tempObj.person_answers.length > 0) {
                         tempObj.person_answers.forEach((val, index) => {
@@ -208,12 +179,10 @@ export default function StaffFamilyDetail() {
                     });
                 }
             }
-
             let withOverallQuestionAnswer = tempOverallQuestion.map((val, index) => {
                 return { ...val, actual_answer: overallAnswers[val.id] }
             })
             setOverallQuestionnaires(withOverallQuestionAnswer);
-
             if (response.data.history.list.length > 0) {
                 const formattedDates = response.data.history.list.map(item => {
                     const formattedCheckin = item.checkin && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.checkin) : getEnglishDateTimeDisplayActualFormat(item.checkin));
@@ -342,7 +311,7 @@ export default function StaffFamilyDetail() {
                         convertedData.data[0].family_public_info == 1 ? false : true,
                     name_furigana: convertedData.data[0].person_refugee_name,
                     name_kanji: convertedData.data[0].person_name,
-                    "lgwan_family_id": lgwan_family_id_from_store,
+                    family_id: lgwan_family_id_from_store,
                 },
             ],
         };
@@ -362,7 +331,7 @@ export default function StaffFamilyDetail() {
      */
     const onClickOkButton = () => {
         let preparedParam = {
-            lgwan_family_id: lgwan_family_id_from_store,
+            family_id: lgwan_family_id_from_store,
             place_id: familyBasicDetail.length > 0 && familyBasicDetail[0].place_id
         };
         updateCheckoutDetail(preparedParam, (response) => {
@@ -511,30 +480,20 @@ export default function StaffFamilyDetail() {
                                     </div>
                                 </div>
 
-                               
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "remarks")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].remarks}</span>
                                     </div>
                                 </div>
-
+                                
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "c_special_care")}: </span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].special_care_name}</span>
                                     </div>
                                 </div>
-
-                                <div className='flex align-items-center'>
-                                    <div >
-                                        <span className='page-header3'>{translate(localeJson, "yapple_id")}:</span>
-                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].yapple_id}</span>
-                                    </div>
-                                </div>
                             </div>
-
                             <div className="mt-3">
                                 <CustomHeader className="mt-2" headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_individual")} />
                                 {(personList[individualQuestionnairesContentIDX].withIndividualQuestionAnswer && personList[individualQuestionnairesContentIDX].withIndividualQuestionAnswer.length > 0) && (
@@ -640,7 +599,7 @@ export default function StaffFamilyDetail() {
                                                 <span className='page-header3-sub ml-1'>{person.connecting_code}</span>
                                             </div>
                                         </div>
-                                       
+
                                         <div className='flex align-items-center'>
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "remarks")}:</span>
@@ -651,12 +610,6 @@ export default function StaffFamilyDetail() {
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "c_special_care")}:</span>
                                                 <span className='page-header3-sub ml-1'>{person.special_care_name}</span>
-                                            </div>
-                                        </div>
-                                        <div className='flex align-items-center'>
-                                            <div className='details-text-overflow'>
-                                                <span className='page-header3'>{translate(localeJson, "yapple_id")}:</span>
-                                                <span className='page-header3-sub ml-1'>{person.yapple_id}</span>
                                             </div>
                                         </div>
                                     </div>

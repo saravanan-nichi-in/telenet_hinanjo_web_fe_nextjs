@@ -233,8 +233,8 @@ export default function PlaceUpdatePage() {
   });
 
   /* Services */
-  const { update, getAddressByZipCode, details } = PlaceServices;
-  const { getAddress, getZipCode } = CommonServices;
+  const { update, details } = PlaceServices;
+  const { getAddress } = CommonServices;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -250,6 +250,7 @@ export default function PlaceUpdatePage() {
     // Get places list
     details(id, fetchData);
   };
+  
   const initialValues = {
     place_id: id,
     name: "",
@@ -363,15 +364,6 @@ export default function PlaceUpdatePage() {
     }
   };
 
-  const deleteContent = (
-    <div className="text-center">
-      <div className="mb-3">
-        {translate(localeJson, "Place_Delete_Content_1")}
-      </div>
-      <div>{translate(localeJson, "Place_Delete_Content_2")}</div>
-    </div>
-  );
-
   return (
     <>
       <Formik
@@ -423,8 +415,6 @@ export default function PlaceUpdatePage() {
           values.postal_code_default_2 = convertToSingleByte(values.postal_code_default_2);
           values.total_place = convertToSingleByte(values.total_place);
           values.tel = convertToSingleByte(values.tel);
-          // values.public_availability = values.public_availability ? "1" : "0";
-          // values.active_flg = values.active_flg ? "1" : "0";
           values.public_availability = Number(publicAvailabilityFlagValue)
           values.active_flg = Number(activeFlagValue)
           update(values, updatePlace);
@@ -500,7 +490,6 @@ export default function PlaceUpdatePage() {
                             }
                           />
                         </div>
-
                         <div className="modal-field-top-space modal-field-bottom-space">
                           <Input
                             inputProps={{
@@ -525,7 +514,6 @@ export default function PlaceUpdatePage() {
                             }
                           />
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
                             <Input
@@ -732,7 +720,6 @@ export default function PlaceUpdatePage() {
                                     })
                                 }
                               },
-                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />
@@ -1036,7 +1023,6 @@ export default function PlaceUpdatePage() {
                                     })
                                 }
                               },
-                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />

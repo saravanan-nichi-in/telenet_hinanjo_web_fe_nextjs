@@ -7,23 +7,17 @@ import {
     getGeneralDateTimeDisplayFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getJapaneseDateTimeDisplayActualFormat,
-    getYYYYMMDDHHSSSSDateTimeFormat,
-    hideOverFlow,
-    showOverFlow,
     getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, CustomHeader, DateTime, NormalTable, InputDropdown, EmailSettings } from "@/components";
+import { Button, CustomHeader, DateTime, NormalTable, InputDropdown } from "@/components";
 import { HistoryServices } from "@/services/history.services";
-import { MailSettingsOption1 } from "@/utils/constant";
 
 export default function HQHistoryPlacePage() {
     const { localeJson, locale } = useContext(LayoutContext);
 
     const [historyPlaceList, setHistoryPlaceList] = useState([]);
-    const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [historyPlaceDropdown, setHistoryPlaceDropdown] = useState([]);
-    const [prefectureListDropdown, setprefectureListDropdown] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [tableLoading, setTableLoading] = useState(false);
@@ -154,9 +148,6 @@ export default function HQHistoryPlacePage() {
     const {
         getList,
         getPlaceDropdownList,
-        exportPlaceHistoryCSVList,
-        registerEmailConfiguration,
-        getPrefectureList,
         getEmailConfiguration,
     } = HistoryServices;
 
@@ -307,85 +298,6 @@ export default function HQHistoryPlacePage() {
         setTotalCount(listTotalCount);
     };
 
-    const downloadPlaceHistoryCSV = () => {
-        let payload = {
-            filters: {
-                start: getListPayload.filters.start,
-                limit: getListPayload.filters.limit,
-                sort_by: "place_refugee_name",
-                order_by: "asc",
-            },
-            start_date: selectedDate
-                ? getGeneralDateTimeDisplayFormat(selectedDate[0])
-                : "",
-            end_date: selectedDate
-                ? selectedDate[1]
-                    ? getGeneralDateTimeDisplayFormat(selectedDate[1])
-                    : getGeneralDateTimeDisplayFormat(new Date())
-                : "",
-            place_name: selectedCity && selectedCity.code ? selectedCity.name : "",
-        };
-        exportPlaceHistoryCSVList(payload, exportPlaceHistoryCSV);
-    };
-
-    const exportPlaceHistoryCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName =
-                "Place_history" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    };
-
-    /**
-     * Email setting modal close
-     */
-    const onEmailSettingsClose = () => {
-        setEmailSettingsOpen(!emailSettingsOpen);
-        showOverFlow();
-    };
-
-    /**
-     * Register email related information
-     * @param {*} values
-     */
-    const onRegister = (values) => {
-        var emailList;
-        if (typeof values.email === "string") {
-            emailList = values.email.split(",");
-        } else {
-            emailList = values.email;
-        }
-        if (Object.keys(values.errors).length == 0 && values.email.length > 0) {
-            let payload = {
-                email: emailList,
-                frequency:
-                    values.transmissionInterval == 0 ? 0 : values.transmissionInterval,
-                prefecture_id:
-                    values.outputTargetArea == 0 ? null : values.outputTargetArea,
-            };
-            let emailData = {
-                email: emailList,
-                transmissionInterval: values.transmissionInterval,
-                outputTargetArea: values.outputTargetArea,
-            };
-            registerEmailConfiguration(payload, (response) => {
-                getEmailConfiguration({}, getEmailConfig);
-                setEmailSettingsOpen(false);
-                showOverFlow();
-            });
-        }
-    };
-
-    const mailSettingModel = () => {
-        getPrefectureList({}, loadPrefectureDropdownList);
-        getEmailConfiguration({}, getEmailConfig);
-        setEmailSettingsOpen(true);
-        hideOverFlow();
-    };
-
     const getEmailConfig = (response) => {
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.model;
@@ -395,26 +307,6 @@ export default function HQHistoryPlacePage() {
                 outputTargetArea: data.prefecture_id ? data.prefecture_id : 0,
             };
             setEmailSettingValues(emailData);
-        }
-    };
-
-    const loadPrefectureDropdownList = (response) => {
-        let prefectureList = [
-            {
-                name: "--",
-                value: 0,
-            },
-        ];
-        if (response.success && !_.isEmpty(response.data)) {
-            const data = response.data.list;
-            data.map((obj) => {
-                let option = {
-                    name: obj.name,
-                    value: obj.id,
-                };
-                prefectureList.push(option);
-            });
-            setprefectureListDropdown(prefectureList);
         }
     };
 
@@ -455,14 +347,6 @@ export default function HQHistoryPlacePage() {
 
     return (
         <React.Fragment>
-            <EmailSettings
-                open={emailSettingsOpen}
-                close={onEmailSettingsClose}
-                register={onRegister}
-                intervalFrequency={MailSettingsOption1}
-                prefectureList={prefectureListDropdown}
-                emailSettingValues={emailSettingValues}
-            />
             <div className="grid">
                 <div className="col-12">
                     <div className="card">

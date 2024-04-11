@@ -56,7 +56,6 @@ export default function EvacuationPage() {
         { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
 
     const downloadEvacueesListCSV = () => {
@@ -169,7 +168,6 @@ export default function EvacuationPage() {
                     "place": item.place_id ? getPlaceName(item.place_id) : "",
                     "connecting_code": item.person_connecting_code,
                     "out_date": item.family_out_date ? getGeneralDateTimeSlashDisplayFormat(item.family_out_date) : "",
-                    "yapple_id": item.yapple_id,
                 };
                 let personAnswers = item.person_answers ? item.person_answers : []
                 if (personAnswers.length > 0) {
@@ -253,35 +251,33 @@ export default function EvacuationPage() {
 
     const handleFamilyCode = (e) => {
         const re = /^[0-9-]+$/;
-        if(e.target.value.length<=0)
-        {
-          setFamilyCode("");
-          return;
+        if (e.target.value.length <= 0) {
+            setFamilyCode("");
+            return;
         }
-        if(re.test(convertToSingleByte(e.target.value)))
-        {
-        if ((e.target.value).length == 4) {
-          const newValue = e.target.value;
-          if (newValue.indexOf("-") !== -1) {
-            setFamilyCode(e.target.value);
-          }
-          else {
-            setFamilyCode(newValue);
-          }
-        }
-        else if ((e.target.value).length == 3) {
-          const newValue = e.target.value;
-          const formattedValue = newValue.substring(0, 3);
-          setFamilyCode(formattedValue);
+        if (re.test(convertToSingleByte(e.target.value))) {
+            if ((e.target.value).length == 4) {
+                const newValue = e.target.value;
+                if (newValue.indexOf("-") !== -1) {
+                    setFamilyCode(e.target.value);
+                }
+                else {
+                    setFamilyCode(newValue);
+                }
+            }
+            else if ((e.target.value).length == 3) {
+                const newValue = e.target.value;
+                const formattedValue = newValue.substring(0, 3);
+                setFamilyCode(formattedValue);
+            }
+            else {
+                setFamilyCode(e.target.value)
+            }
         }
         else {
-          setFamilyCode(e.target.value)
+            setFamilyCode("")
         }
-      }
-      else {
-        setFamilyCode("")
-      }
-      }
+    }
 
     return (
         <div className="grid">
@@ -394,7 +390,7 @@ export default function EvacuationPage() {
                         selectionMode="single"
                         onSelectionChange={
                             (e) => {
-                                dispatch(setFamily({ lgwan_family_id: e.value.id }));
+                                dispatch(setFamily({ family_id: e.value.id }));
                                 router.push({
                                     pathname: '/admin/evacuation/family-detail',
                                 });

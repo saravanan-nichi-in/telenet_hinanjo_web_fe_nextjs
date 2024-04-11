@@ -86,17 +86,12 @@ function TemporaryRegistrants() {
                 </div>
             },
         },
-        // { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '7rem' },
         { field: 'family_code', header: translate(localeJson, 'family_code'), minWidth: "6rem", sortable: true, textAlign: "left", alignHeader: "left" },
         { field: "person_dob", header: translate(localeJson, 'dob'), minWidth: "11rem", maxWidth: "11rem", sortable: true, textAlign: 'left', alignHeader: 'left' },
         { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "5rem" },
         { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: "8rem" },
-        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem", textAlign: 'left' },
-        
-        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: true, textAlign: "center", alignHeader: "left", minWidth: "6rem", display: 'none' },
-        
-        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
-        // { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
+        { field: "special_care_name", header: translate(localeJson, 'special_care_name'), minWidth: "8rem", textAlign: 'left' },        
+        { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: true, textAlign: "center", alignHeader: "left", minWidth: "6rem", display: 'none' },        
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: true, textAlign: 'left', minWidth: "7rem", display: 'none' },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: true, textAlign: 'left', display: 'none' },
         { field: "remarks", header: translate(localeJson, 'remarks'), sortable: true, textAlign: 'left', minWidth: "8rem", display: 'none' },
@@ -134,11 +129,9 @@ function TemporaryRegistrants() {
     };
     const myCookieValue = getCookieValueByKey('idToken');
 
-
-
     /* Services */
     const { getDefaultEventDetails, getList, updateCheckInDetail } = TemporaryStaffRegistrantServices;
-    const { getBasicDetailsInfoStaffTemp, getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
+    const { getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -357,7 +350,6 @@ function TemporaryRegistrants() {
     }
 
     const yappleModalSuccessCallBack = (res) => {
-        // getList(getListPayload, onGetTemporaryRegistrantListSuccess);
         getList({
             filters: {
                 start: 0,
@@ -582,17 +574,6 @@ function TemporaryRegistrants() {
                                 </div>
                             </form>
                         </div>
-                        {/* 
-                        // Development
-                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                export: true,
-                                buttonClass: "evacuation_button_height export-button",
-                                text: translate(localeJson, 'export'),
-                            }} parentClass={"mr-1 mt-1 export-button"} />
-                        </div> */}
                         <div className="mt-3">
                             <NormalTable
                                 customActionsField="actions"
@@ -626,7 +607,7 @@ function TemporaryRegistrants() {
                                 }}
                                 onSelectionChange={
                                     (e) => {
-                                        dispatch(setStaffTempFamily({ lgwan_family_id: e.value.id }));
+                                        dispatch(setStaffTempFamily({ family_id: e.value.id }));
                                         router.push({
                                             pathname: '/staff/temporary/family-detail',
                                         });

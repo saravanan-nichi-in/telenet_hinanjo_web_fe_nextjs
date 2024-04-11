@@ -55,17 +55,6 @@ function ExternalFamilyList() {
      * Get dashboard list on mounting
      */
     const onGetMaterialListOnMounting = () => {
-        // Development
-        // let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit);
-        // let payload = {
-        //     filters: {
-        //         start: pageStart,
-        //         limit: getListPayload.filters.limit,
-        //         sort_by: getListPayload.filters.sort_by,
-        //         order_by: getListPayload.filters.order_by,
-        //     },
-        //     place_id: getListPayload.place_id
-        // };
         getList(getListPayload, (response) => {
             var preparedList = [];
             var listTotalCount = 0;

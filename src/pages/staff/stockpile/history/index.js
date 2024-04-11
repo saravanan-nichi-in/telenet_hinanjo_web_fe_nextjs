@@ -257,7 +257,6 @@ function StockpileHistory() {
       // Update total count
       totalCount = response.data.total;
     }
-
     setColumns(additionalColumnsArrayWithOldData);
     setList(preparedList);
     setTotalCount(totalCount);
@@ -358,7 +357,6 @@ function StockpileHistory() {
                       calendarClassName: "w-full",
                       name: "inventoryDate",
                       id: "inventoryDate",
-                      // placeholder: "yyyy-mm-dd",
                       value: inspectionDateTime,
                       onChange: (e) => setInspectionDateTime(e.target.value),
                     }}

@@ -27,19 +27,12 @@ export default function TemporaryFamilyDetail() {
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
-    const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [place, setPlace] = useState([]);
 
-    const familyAdmissionColumns = [
-        { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
-        { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
-        { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time_temp_register'), minWidth: "10rem", textAlign: 'left' },
-    ];
-
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
-        lgwan_family_id: familyReducer?.staffTempFamily?.lgwan_family_id,
+        family_id: familyReducer?.staffTempFamily?.family_id,
     };
 
     /* Services */
@@ -70,7 +63,6 @@ export default function TemporaryFamilyDetail() {
         var basicDetailList = [];
         var familyCode = "";
         var familyDataList = [];
-        var admittedHistory = [];
         var listOfIndividualQuestions = [];
         var listOfOverallQuestions = [];
         if (response.success && !_.isEmpty(response.data)) {
@@ -313,7 +305,6 @@ export default function TemporaryFamilyDetail() {
                             </div>
                         )}
                     </div>
-                    {/* Development */}
                     <div className='section-space'>
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_individual")} />
                         {tableLoading ? (
@@ -334,29 +325,7 @@ export default function TemporaryFamilyDetail() {
                             </div>
                         )}
                     </div>
-                    {/* 
-                    Development
-                    <div className='mt-2 flex justify-content-center overflow-x-auto'>
-                        <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            loading={tableLoading}
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            tableStyle={{ maxWidth: "20rem" }}
-                            value={familyAdmittedData}
-                            columns={familyAdmissionColumns}
-                        />
-                    </div> */}
                     <div className='flex mt-2' style={{ justifyContent: "center", flexWrap: "wrap", gap: '.5rem' }}>
-                        {/* 
-                        development
-                        <Button buttonProps={{
-                            buttonClass: "w-12 update-button",
-                            text: translate(localeJson, 'edit'),
-                        }} parentClass={"update-button"} /> */}
                         <Button buttonProps={{
                             buttonClass: "w-12 search-button",
                             text: translate(localeJson, 'check_in'),
