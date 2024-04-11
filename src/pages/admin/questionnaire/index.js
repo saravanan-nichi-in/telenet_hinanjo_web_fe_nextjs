@@ -95,7 +95,7 @@ export default function Questionnaire() {
         setTableLoading(true);
         getSingleEvent({}, (response) => {
             let tempValues = [];
-            if (response.data.model) {
+            if (response?.data?.model) {
                 tempValues.push({
                     ...response.data.model,
                     orders: [{
