@@ -28,29 +28,32 @@ import {
   Input,
   InputDropdown,
   QuestionList,
-  CustomHeader
+  CustomHeader,
+  YaburuModal,
+  BarcodeDialog,
+  QrScannerModal
 } from "@/components";
 import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
-  ExternalServices,
   CommonServices,
   TempRegisterServices,
   CheckInOutServices,
 } from "@/services";
-import QrScannerModal from "@/components/modal/qrScannerModal";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
-import YaburuModal from "@/components/modal/userYaburuCardModal";
 
 export default function Admission() {
+  const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCount");
   const router = useRouter();
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const dispatch = useAppDispatch();
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+  const regReducer = useAppSelector((state) => state.registerReducer);
+  const place_id = layoutReducer?.user?.place?.id;
+  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
+
   const [evacuee, setEvacuee] = useState([]);
   const [registerModalAction, setRegisterModalAction] = useState("create");
   const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
@@ -66,15 +69,18 @@ export default function Admission() {
   const [count, setCounter] = useState(1);
   const [evacueeCount, setEvacueeCounter] = useState(0)
   const [hasErrors, setHasErrors] = useState(false);
-  const layoutReducer = useAppSelector((state) => state.layoutReducer);
-  const regReducer = useAppSelector((state) => state.registerReducer);
-  const place_id = layoutReducer?.user?.place?.id;
-  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
-  const dispatch = useAppDispatch();
   const [isMRecording, setMIsRecording] = useState(false);
   const [inputType, setInputType] = useState("password");
   const [showDetails, setShowDetails] = useState(false);
   const [expandedFamilies, setExpandedFamilies] = useState([]);
+  const [modalCountFlag, setModalCountFlag] = useState(true);
+  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const formikRef = useRef();
+
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
       prevExpanded.includes(personId)
@@ -82,22 +88,177 @@ export default function Admission() {
         : [...prevExpanded, personId]
     );
   };
-  const { basicInfo } = CheckInOutServices;
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
   };
+
+  const { basicInfo } = CheckInOutServices;
+
   /* Services */
   const { getText, getAddress } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
-    qrScanRegistration,
     ocrScanRegistration
   } = TempRegisterServices;
-  const [modalCountFlag, setModalCountFlag] = useState(true);
-  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
-    useState(false);
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      // Clear localStorage when the back button is clicked
+      localStorage.removeItem("personCount");
+    };
+
+    const handleBeforeUnload = () => {
+      // Clear localStorage when the page is about to be unloaded
+      localStorage.removeItem("personCount");
+    };
+
+    // Attach the event listeners when the component mounts
+    window.addEventListener("popstate", handlePopstate);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [locale]);
+
+  useEffect(() => {
+    if (place_id == "" || !place_id) {
+      router.push("/user/list");
+      return;
+    }
+    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
+      if (regReducer.originalData?.length <= 0) {
+        setTimeout(() => {
+          setSpecialCareEditOpen(true);
+          hideOverFlow();
+        }, 1000);
+      }
+    } else {
+      window.location.href = '/user/person-count';
+    }
+  }, [locale]);
+
+  useEffect(() => {
+    if (evacueeValues !== "") {
+      setEvacueeCounter((prevCount) => prevCount + 1);
+      let data = evacueeValues;
+      if (data.checked == true) {
+        formikRef.current.setFieldValue("postalCode", data.postalCode);
+        formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
+        formikRef.current.setFieldValue("address", data.address);
+        formikRef.current.setFieldValue("address2", data.address2 || "");
+        data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
+        formikRef.current.setFieldValue("name_furigana", data.name_furigana);
+        formikRef.current.setFieldValue("name_kanji", data.name);
+      }
+      setEvacuee((prevEvacuee) => {
+        const updatedEvacuees = prevEvacuee.map((evacuee) => {
+          if (evacuee.addressAsRep || evacuee.telAsRep) {
+            // Update existing evacuee if conditions are met
+            return {
+              ...evacuee,
+              postalCode: evacuee.addressAsRep ? evacueeValues.postalCode : evacuee.postalCode,
+              prefecture_id: evacuee.addressAsRep ? evacueeValues.prefecture_id : evacuee.prefecture_id,
+              address: evacuee.addressAsRep ? evacueeValues.address : evacuee.address,
+              tel: evacuee.telAsRep ? evacueeValues.tel : evacuee.tel
+            };
+          } else {
+            return evacuee;
+          }
+        });
+
+        const evacueeIndex = updatedEvacuees.findIndex(
+          (evacuee) => evacuee.id === evacueeValues.id
+        );
+
+        if (evacueeIndex !== -1) {
+          // Update existing evacuee
+          const updatedEvacuee = [...updatedEvacuees];
+          updatedEvacuee[evacueeIndex] = evacueeValues;
+          formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
+          return updatedEvacuee;
+        } else {
+          formikRef.current?.setFieldValue("evacuee", [
+            ...prevEvacuee,
+            evacueeValues,
+          ]);
+          return [...prevEvacuee, evacueeValues];
+        }
+      });
+    }
+  }, [evacueeValues, setEvacuee]);
+
+  useEffect(() => {
+    if (evacuee?.length > 0) {
+      evacuee.forEach((data) => {
+        if (data.checked === true) {
+          formikRef.current.setFieldValue("postalCode", data.postalCode);
+          formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
+          formikRef.current.setFieldValue("address", data.address);
+          formikRef.current.setFieldValue("address2", data.address2 || "");
+          if (data.tel !== "") {
+            formikRef.current.setFieldValue("tel", data.tel);
+          }
+          formikRef.current.setFieldValue("name_furigana", data.name_furigana);
+          formikRef.current.setFieldValue("name_kanji", data.name);
+        }
+      });
+    } else {
+      formikRef.current.setFieldValue("postalCode", "");
+      formikRef.current.setFieldValue("prefecture_id", "");
+      formikRef.current.setFieldValue("address", "");
+      formikRef.current.setFieldValue("address2", "");
+      formikRef.current.setFieldValue("tel", "");
+      formikRef.current.setFieldValue("name_furigana", "");
+      formikRef.current.setFieldValue("name_kanji", "");
+    }
+  }, [evacuee]);
+
+  useEffect(() => {
+    let postal_code = layoutReducer?.user?.place?.zip_code;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+    let address = layoutReducer?.user?.place?.address;
+
+    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+    formikRef.current.setFieldValue("address", address);
+  }, [])
+
+  useEffect(() => {
+    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
+      if (regReducer.originalData?.length <= 0) {
+        setTimeout(() => {
+          setSpecialCareEditOpen(true);
+        }, 1000);
+      }
+    }
+  }, [evacueeCount])
+
+  useEffect(() => {
+    fetchMasterQuestion();
+    fetchSpecialCare();
+    fetchData();
+  }, [locale]);
+
+
+  useEffect(() => {
+    setMIsRecording(isRecording);
+  }, [isRecording]);
+
+  useEffect(() => {
+    if (Object.keys(formikRef.current.errors).length > 0) {
+      const firstErrorElement = document.querySelector('.p-error');
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [count]);
+
+
   const agreeTextWithHTML = (
     <div>
       {translate(localeJson, "agree_note_oneA")}
@@ -105,7 +266,7 @@ export default function Admission() {
       {translate(localeJson, "agree_note_oneB")}
     </div>
   );
-  const formikRef = useRef();
+
   const initialValues = {
     evacuee_date: "",
     postalCode: "",
@@ -121,6 +282,7 @@ export default function Admission() {
     name_furigana: "",
     name_kanji: ""
   };
+
   const currentDate = new Date();
   // eslint-disable-next-line no-irregular-whitespace
   const minDOBDate = new Date();
@@ -258,46 +420,6 @@ export default function Admission() {
         )
     });
 
-  useEffect(() => {
-
-    const handlePopstate = () => {
-      // Clear localStorage when the back button is clicked
-      localStorage.removeItem("personCount");
-    };
-
-    const handleBeforeUnload = () => {
-      // Clear localStorage when the page is about to be unloaded
-      localStorage.removeItem("personCount");
-    };
-
-    // Attach the event listeners when the component mounts
-    window.addEventListener("popstate", handlePopstate);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Clean up the event listeners when the component unmounts
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [locale]);
-
-  useEffect(() => {
-    if (place_id == "" || !place_id) {
-      router.push("/user/list");
-      return;
-    }
-    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
-      if (regReducer.originalData?.length <= 0) {
-        setTimeout(() => {
-          setSpecialCareEditOpen(true);
-          hideOverFlow();
-        }, 1000);
-      }
-    } else {
-      window.location.href = '/user/person-count';
-    }
-  }, [locale]);
-
   const fetchData = () => {
     if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
       let data = regReducer.originalData;
@@ -315,111 +437,6 @@ export default function Admission() {
       data.evacuee && setEvacuee(data.evacuee);
     }
   }
-
-  useEffect(() => {
-    if (evacueeValues !== "") {
-      setEvacueeCounter((prevCount) => prevCount + 1);
-      let data = evacueeValues;
-      if (data.checked == true) {
-        formikRef.current.setFieldValue("postalCode", data.postalCode);
-        formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-        formikRef.current.setFieldValue("address", data.address);
-        formikRef.current.setFieldValue("address2", data.address2 || "");
-        data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
-        formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-        formikRef.current.setFieldValue("name_kanji", data.name);
-      }
-      setEvacuee((prevEvacuee) => {
-        const updatedEvacuees = prevEvacuee.map((evacuee) => {
-          if (evacuee.addressAsRep || evacuee.telAsRep) {
-            // Update existing evacuee if conditions are met
-            return {
-              ...evacuee,
-              postalCode: evacuee.addressAsRep ? evacueeValues.postalCode : evacuee.postalCode,
-              prefecture_id: evacuee.addressAsRep ? evacueeValues.prefecture_id : evacuee.prefecture_id,
-              address: evacuee.addressAsRep ? evacueeValues.address : evacuee.address,
-              tel: evacuee.telAsRep ? evacueeValues.tel : evacuee.tel
-            };
-          } else {
-            return evacuee;
-          }
-        });
-
-        const evacueeIndex = updatedEvacuees.findIndex(
-          (evacuee) => evacuee.id === evacueeValues.id
-        );
-
-        if (evacueeIndex !== -1) {
-          // Update existing evacuee
-          const updatedEvacuee = [...updatedEvacuees];
-          updatedEvacuee[evacueeIndex] = evacueeValues;
-          formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
-          return updatedEvacuee;
-        } else {
-          formikRef.current?.setFieldValue("evacuee", [
-            ...prevEvacuee,
-            evacueeValues,
-          ]);
-          return [...prevEvacuee, evacueeValues];
-        }
-      });
-    }
-  }, [evacueeValues, setEvacuee]);
-
-  useEffect(() => {
-    if (evacuee?.length > 0) {
-      evacuee.forEach((data) => {
-        if (data.checked === true) {
-          formikRef.current.setFieldValue("postalCode", data.postalCode);
-          formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-          formikRef.current.setFieldValue("address", data.address);
-          formikRef.current.setFieldValue("address2", data.address2 || "");
-          if (data.tel !== "") {
-            formikRef.current.setFieldValue("tel", data.tel);
-          }
-          formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-          formikRef.current.setFieldValue("name_kanji", data.name);
-        }
-      });
-    } else {
-      formikRef.current.setFieldValue("postalCode", "");
-      formikRef.current.setFieldValue("prefecture_id", "");
-      formikRef.current.setFieldValue("address", "");
-      formikRef.current.setFieldValue("address2", "");
-      formikRef.current.setFieldValue("tel", "");
-      formikRef.current.setFieldValue("name_furigana", "");
-      formikRef.current.setFieldValue("name_kanji", "");
-    }
-  }, [evacuee]);
-
-
-
-  useEffect(() => {
-    let postal_code = layoutReducer?.user?.place?.zip_code;
-    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let address = layoutReducer?.user?.place?.address;
-
-    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-    formikRef.current.setFieldValue("address", address);
-  }, [])
-
-
-  useEffect(() => {
-    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
-      if (regReducer.originalData?.length <= 0) {
-        setTimeout(() => {
-          setSpecialCareEditOpen(true);
-        }, 1000);
-      }
-    }
-  }, [evacueeCount])
-
-  useEffect(() => {
-    fetchMasterQuestion();
-    fetchSpecialCare();
-    fetchData();
-  }, [locale]);
 
   const fetchSpecialCare = () => {
     getSpecialCareDetails((res) => {
@@ -480,15 +497,19 @@ export default function Admission() {
   const Scanner = {
     url: "/layout/images/mapplescan.svg",
   };
+
   const Card = {
     url: "/layout/images/evacuee-card.png",
   };
+
   const Edit = {
     url: "/layout/images/editIcon.svg",
   };
+
   const Delete = {
     url: "/layout/images/deleteIcon.svg",
   };
+
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
@@ -765,6 +786,7 @@ export default function Admission() {
       });
     return specialCareName || "-";
   };
+
   const getGenderValue = (gender) => {
     if (gender == 1) {
       return translate(localeJson, "c_male");
@@ -781,27 +803,26 @@ export default function Admission() {
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareJPNames = (values) => {
     return values?.map((value) => {
       const option = specialCareJPOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareENNames = (values) => {
     return values?.map((value) => {
       const option = specialCareENOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
-  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] =
-    useState(false);
 
-  const [openQrPopup, setOpenQrPopup] = useState(false);
   const closeQrPopup = () => {
     setOpenQrPopup(false);
     showOverFlow();
   };
+
   const qrResult = (result) => {
     setLoader(true)
     let payload = {
@@ -869,12 +890,6 @@ export default function Admission() {
     });
   }
 
-  const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    setMIsRecording(isRecording);
-  }, [isRecording]);
-
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
     setIsRecording(isRecord);
@@ -894,7 +909,7 @@ export default function Admission() {
       is_public: inputData.agreeCheckOne ? 0 : 1,
       public_info: inputData.agreeCheckTwo ? 0 : 1,
       register_from: 1,
-      is_registered:1,
+      is_registered: 1,
       person: inputData.evacuee.map((evacuee, index) => {
         let data = evacuee.dob;
         const convertedDate = new Date(data.year, data.month - 1, data.date);
@@ -1037,15 +1052,6 @@ export default function Admission() {
       }
     });
   };
-
-  useEffect(() => {
-    if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector('.p-error');
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [count]);
 
   const getPrefectureName = (id) => {
     if (id) {

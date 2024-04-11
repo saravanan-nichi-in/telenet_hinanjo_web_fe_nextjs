@@ -9,6 +9,7 @@ import { prefectures } from "@/utils/constant";
 
 export default function PublicEvacuee() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [publicEvacueesColumn, setPublicEvacueesColumn] = useState([])
     const [searchName, setSearchName] = useState('');
@@ -21,7 +22,6 @@ export default function PublicEvacuee() {
             refugee_name: ""
         }
     });
-
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
 

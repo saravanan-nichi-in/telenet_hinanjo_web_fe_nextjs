@@ -3,17 +3,18 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
-import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable, CommonDialog, RowExpansionTable, CustomHeader } from '@/components';
 import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 import { prefectures } from '@/utils/constant';
 
 export default function EventStaffTemporaryFamilyDetail() {
-    const router = useRouter();
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const router = useRouter();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
@@ -63,6 +64,15 @@ export default function EventStaffTemporaryFamilyDetail() {
 
     /* Services */
     const { getFamilyTemporaryEvacueesDetail, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+ 
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetTemporaryEvacueesFamilyDetailOnMounting();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale]);
 
     /**
      * CommonDialog modal close
@@ -229,18 +239,6 @@ export default function EventStaffTemporaryFamilyDetail() {
             setTableLoading(false);
         }
     }
-
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetTemporaryEvacueesFamilyDetailOnMounting();
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale]);
-
-
 
     return (
         <>

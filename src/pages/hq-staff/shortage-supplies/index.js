@@ -12,6 +12,28 @@ import { ShortageSuppliesServices } from '@/services';
 
 function HQShortageSupplies() {
   const { locale, localeJson } = useContext(LayoutContext);
+
+  const [tableLoading, setTableLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [frozenArray, setFrozenArray] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [getListPayload, setGetListPayload] = useState({
+    filters: {
+      start: 0,
+      limit: 10,
+      sort_by: "",
+      order_by: "",
+    },
+    search: "",
+  });
+
+  const memoIcon = {
+    url: "/layout/images/memo.svg",
+  };
+
   const columnsData = [
     {
       field: 'evacuation_place', header: "", minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header", textAlign: 'left'
@@ -22,25 +44,6 @@ function HQShortageSupplies() {
       }
     },
   ]
-  const [getListPayload, setGetListPayload] = useState({
-    filters: {
-      start: 0,
-      limit: 10,
-      sort_by: "",
-      order_by: "",
-    },
-    search: "",
-  });
-  const [tableLoading, setTableLoading] = useState(false);
-  const [columns, setColumns] = useState([]);
-  const [list, setList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [frozenArray, setFrozenArray] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const memoIcon = {
-    url: "/layout/images/memo.svg",
-  };
 
   /* Services */
   const { callExport, getList } = ShortageSuppliesServices;

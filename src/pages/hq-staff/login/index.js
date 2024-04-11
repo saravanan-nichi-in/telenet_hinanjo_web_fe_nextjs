@@ -17,6 +17,7 @@ const LoginPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
+
     const containerClassName = classNames('auth_surface_ground flex align-items-start justify-content-center overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         username: Yup.string()
@@ -30,6 +31,12 @@ const LoginPage = () => {
 
     /* Services */
     const { login } = AuthenticationAuthorizationService;
+    
+    useEffect(() => {
+        dispatch(setForgetPassword({
+            username: ''
+        }));
+    }, []);
 
     const onLoginSuccess = (values) => {
         if (AuthenticationAuthorizationService.hqStaffValue) {
@@ -54,13 +61,7 @@ const LoginPage = () => {
             });
         }
     }
-
-    useEffect(() => {
-        dispatch(setForgetPassword({
-            username: ''
-        }));
-    }, []);
-
+    
     return (
         <>
             <Formik

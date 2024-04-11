@@ -15,15 +15,18 @@ import { prefectures } from "@/utils/constant";
 import { reset } from "@/redux/staff_register";
 
 const TempRegisterConfirm = () => {
-  const { localeJson, locale , setLoader } = useContext(LayoutContext);
+  const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const registerReducer = useAppSelector((state) => state.staffRegisterReducer);
+  const dispatch = useAppDispatch();
+
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
   const [neighbourData, setNeighbourData] = useState(null);
   const [familyDetailData, setFamilyDetailData] = useState(null);
-  const registerReducer = useAppSelector((state) => state.staffRegisterReducer);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+
   let confirmData = registerReducer?.registerData;
-  const {staffEditUser} = TempRegisterServices
+
+  const { staffEditUser } = TempRegisterServices
 
   useEffect(() => {
     fetchConfirmData();
@@ -62,7 +65,7 @@ const TempRegisterConfirm = () => {
     const ownerPerson = confirmData?.person?.find(person => person.id === confirmData.is_owner);
 
     let basicData = {
-      evacuation_date_time: locale=="ja"?getJapaneseDateDisplayYYYYMMDDFormat(data.join_date):getEnglishDateDisplayFormat(data.join_date),
+      evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(data.join_date) : getEnglishDateDisplayFormat(data.join_date),
       address: (
         <div
           dangerouslySetInnerHTML={{
@@ -73,7 +76,7 @@ const TempRegisterConfirm = () => {
               (data.address_default || ""),
           }}
         />
-      ), 
+      ),
       tel: data.tel,
       password: data.password,
       rep_kanji: ownerPerson?.name || "", // Assuming 'name' is the rep_kanji field
@@ -87,18 +90,18 @@ const TempRegisterConfirm = () => {
       let familyData = {
         id: index + 1,
         is_owner:
-          person.id == confirmData.is_owner ? "（"+translate(localeJson, "c_representative")+"）": "",
-        refugee_name: person.refugee_name||"-",
-        name: person.name||"-",
+          person.id == confirmData.is_owner ? "（" + translate(localeJson, "c_representative") + "）" : "",
+        refugee_name: person.refugee_name || "-",
+        name: person.name || "-",
         dob:
           locale == "ja"
             ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob)
             : getEnglishDateDisplayFormat(person.dob),
-        age: person.age+""||"-",
-        age_month: person.month+""||"-",
-        gender: getGenderValue(person.gender)||"-",
-        created_date: person.createdDate||"-",
-        tel:person.tel,
+        age: person.age + "" || "-",
+        age_month: person.month + "" || "-",
+        gender: getGenderValue(person.gender) || "-",
+        created_date: person.createdDate || "-",
+        tel: person.tel,
         orders: [
           {
             address: (
@@ -111,12 +114,12 @@ const TempRegisterConfirm = () => {
                     (person.address_default || ""),
                 }}
               />
-            ), 
+            ),
             special_care_name: person.specialCareName
-              ? getSpecialCareName(locale=="ja"?person.specialCareName:person.specialCareName2)
+              ? getSpecialCareName(locale == "ja" ? person.specialCareName : person.specialCareName2)
               : "",
-            connecting_code: person.connecting_code||"-",
-            remarks: person.note||"-",
+            connecting_code: person.connecting_code || "-",
+            remarks: person.note || "-",
           },
         ],
       };
@@ -125,7 +128,7 @@ const TempRegisterConfirm = () => {
       if (question?.length > 0) {
         question.map((ques, index) => {
           familyData.orders[0][`question_${index}`] = ques.answer
-            ? getAnswerData(locale == "ja" ? ques.answer:ques.answer_en)
+            ? getAnswerData(locale == "ja" ? ques.answer : ques.answer_en)
             : "";
           familyData.orders[0][`question_${index}_title`] =
             locale == "ja" ? ques.title : ques.title_en;
@@ -142,7 +145,7 @@ const TempRegisterConfirm = () => {
     let neighbourData = {};
     masterQuestion.map((ques, index) => {
       neighbourData[`question_${index}`] = ques.answer
-        ? getAnswerData(locale == "ja" ? ques.answer:ques.answer_en)
+        ? getAnswerData(locale == "ja" ? ques.answer : ques.answer_en)
         : "";
       neighbourData[`question_${index}_title`] =
         locale == "ja" ? ques.title : ques.title_en;
@@ -166,101 +169,98 @@ const TempRegisterConfirm = () => {
       setShowDetails(!showDetails);
     };
 
-    
-
     return (
       <div className="">
-          <div className="flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 mb-3 pt-2  justify-content-center">
+        <div className="flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 mb-3 pt-2  justify-content-center">
+          <div className="">
             <div className="">
-              <div className="">
-                <div className=" flex_row_space_between">
-                  <label className="page-header1">
-                  {person.id}{translate(localeJson,"per_information")}{person.is_owner}
-                  </label>
-                </div>
-              </div>
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "name_kanji")}
-                  </label>
-                </div>
-                <div className="body_table">{person.name}</div>
-              </div>
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "c_refugee_name")}
-                  </label>
-                </div>
-                <div className="body_table">{person.refugee_name}</div>
-              </div>
-             
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "c_dob")}
-                  </label>
-                </div>
-                <div className="body_table">{person.dob}</div>
-              </div>
-              <div className=" mt-3">
-                  <div className=" flex_row_space_between">
-                    <label className="header_table">
-                      {translate(localeJson, "phone_number")}
-                    </label>
-                  </div>
-            <div className=" mt-1 body_table" id="phone-number">
-                    {person.tel||"-"}
-                  </div>
-                  </div>
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "c_age")}
-                  </label>
-                </div>
-                <div className="body_table">{person.age}</div>
-              </div>
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "age_m")}
-                  </label>
-                </div>
-                <div className="body_table">{person.age_month}</div>
-              </div>
-
-              <div className=" mt-3">
-                <div className=" flex_row_space_between">
-                  <label className="header_table">
-                    {translate(localeJson, "c_gender")}
-                  </label>
-                </div>
-                <div className="body_table">{person.gender}</div>
+              <div className=" flex_row_space_between">
+                <label className="page-header1">
+                  {person.id}{translate(localeJson, "per_information")}{person.is_owner}
+                </label>
               </div>
             </div>
-            {showDetails &&
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "name_kanji")}
+                </label>
+              </div>
+              <div className="body_table">{person.name}</div>
+            </div>
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "c_refugee_name")}
+                </label>
+              </div>
+              <div className="body_table">{person.refugee_name}</div>
+            </div>
+
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "c_dob")}
+                </label>
+              </div>
+              <div className="body_table">{person.dob}</div>
+            </div>
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "phone_number")}
+                </label>
+              </div>
+              <div className=" mt-1 body_table" id="phone-number">
+                {person.tel || "-"}
+              </div>
+            </div>
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "c_age")}
+                </label>
+              </div>
+              <div className="body_table">{person.age}</div>
+            </div>
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "age_m")}
+                </label>
+              </div>
+              <div className="body_table">{person.age_month}</div>
+            </div>
+
+            <div className=" mt-3">
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "c_gender")}
+                </label>
+              </div>
+              <div className="body_table">{person.gender}</div>
+            </div>
+          </div>
+          {showDetails &&
             <PersonQuestions questions={person.orders} />
           }
-            <div className=" flex justify-content-center align-items-center text-custom-color font-bold">
-                  <div
-                    onClick={() => toggleDetails()}
-                    className="cursor-pointer flex align-items-center"
-                  >
-                    <i
-                      className={`pi mr-2 font-bold ${
-                        showDetails ? "pi-chevron-up" : "pi-chevron-down"
-                      }`}
-                    ></i>
-                    
-                     {showDetails ? translate(localeJson, "see_details")
-                      : translate(localeJson, "see_details")}
-                  </div>
-                </div>
-            {/* Add other details as needed */}
-           
+          <div className=" flex justify-content-center align-items-center text-custom-color font-bold">
+            <div
+              onClick={() => toggleDetails()}
+              className="cursor-pointer flex align-items-center"
+            >
+              <i
+                className={`pi mr-2 font-bold ${showDetails ? "pi-chevron-up" : "pi-chevron-down"
+                  }`}
+              ></i>
+
+              {showDetails ? translate(localeJson, "see_details")
+                : translate(localeJson, "see_details")}
+            </div>
           </div>
+          {/* Add other details as needed */}
+
+        </div>
       </div>
     );
   };
@@ -272,20 +272,20 @@ const TempRegisterConfirm = () => {
           {Object.keys(questionSet).map((key, index) => {
             // Assuming each key is in the format "question_N_title"
             const match = key.match(/^question_(\d+)_title$/);
-    
+
             if (match) {
               const questionNumber = match[1];
               const questionTitle = questionSet[key];
               const answerKey = `question_${questionNumber}`;
               const answer = questionSet[answerKey];
-    
+
               return (
                 <div key={index} className="mt-3">
                   <div className="flex_row_space_between">
                     <label className="header_table">{questionTitle}</label>
                   </div>
                   <div className="mt-1 body_table" id="date-create">
-                    {answer||"-"}
+                    {answer || "-"}
                   </div>
                 </div>
               );
@@ -405,7 +405,7 @@ const TempRegisterConfirm = () => {
           <div>
             <div className="block">
               <div className="reg_tbl">
-              <div className=" mt-3">
+                <div className=" mt-3">
                   <div className=" flex_row_space_between">
                     <label className="header_table">
                       {translate(localeJson, "rep_kanji")}
@@ -453,21 +453,21 @@ const TempRegisterConfirm = () => {
                   </div>
                   {basicFamilyDetail[0]?.password ? (
                     <div
-                    className="body_table"
-                    onMouseOver={handleMouseOver}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {showPassword ? (
-                      <span> {basicFamilyDetail[0]?.password}</span>
-                    ) : (
-                      <span>****</span>
-                    )}
-                  </div>
-                  ):
-                  <div
+                      className="body_table"
+                      onMouseOver={handleMouseOver}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      {showPassword ? (
+                        <span> {basicFamilyDetail[0]?.password}</span>
+                      ) : (
+                        <span>****</span>
+                      )}
+                    </div>
+                  ) :
+                    <div
                       className="body_table"
                     >
-                     <span>-</span>
+                      <span>-</span>
                     </div>}
                 </div>
               </div>
@@ -502,25 +502,25 @@ const TempRegisterConfirm = () => {
                 />
               </div>
               <div className=" mt-3">
-                  <div className=" flex_row_space_between">
+                <div className=" flex_row_space_between">
                   <label htmlFor="evacuation_place" className='pb-1 font-bold block'>
-                                {translate(localeJson, 'agree_label')}
-                            </label>
-                  </div>
-                  <div className=" mt-1 body_table" id="phone-number">
-                  {confirmData.is_public==0 ? translate(localeJson, 'agree') : translate(localeJson, 'disagree')}
-                  </div>
+                    {translate(localeJson, 'agree_label')}
+                  </label>
                 </div>
-                <div className=" mt-3">
-                  <div className=" flex_row_space_between">
+                <div className=" mt-1 body_table" id="phone-number">
+                  {confirmData.is_public == 0 ? translate(localeJson, 'agree') : translate(localeJson, 'disagree')}
+                </div>
+              </div>
+              <div className=" mt-3">
+                <div className=" flex_row_space_between">
                   <label htmlFor="evacuation_place" className='pb-1 font-bold block'>
-                                {translate(localeJson, 'publish_label')}
-                            </label>
-                  </div>
-                  <div className=" mt-1 body_table" id="phone-number">
-                  {confirmData.public_info==0 ? translate(localeJson, 'to_publish') : translate(localeJson, 'not_to_publish')}
-                  </div>
+                    {translate(localeJson, 'publish_label')}
+                  </label>
                 </div>
+                <div className=" mt-1 body_table" id="phone-number">
+                  {confirmData.public_info == 0 ? translate(localeJson, 'to_publish') : translate(localeJson, 'not_to_publish')}
+                </div>
+              </div>
             </div>
           </div>
           <div className="pt-5 text-center">

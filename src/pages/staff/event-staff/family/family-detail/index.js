@@ -19,11 +19,12 @@ import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefecturesCombined } from '@/utils/constant';
 
 export default function EventStaffFamilyDetail() {
-    const router = useRouter();
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const router = useRouter();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const familyReducer = useSelector((state) => state.familyReducer);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
@@ -32,6 +33,7 @@ export default function EventStaffFamilyDetail() {
         event_id: familyReducer?.eventStaffFamily?.event_id ?? 0,
         lgwan_family_id: familyReducer?.eventStaffFamily?.family_id ?? 0
     };
+
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'questionnaire_name'), minWidth: "10rem", maxWidth: "12rem" },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time_attendees'), minWidth: "12rem", textAlign: 'left' },
@@ -40,6 +42,15 @@ export default function EventStaffFamilyDetail() {
 
     /* Services */
     const { getStaffFamilyEvacueesDetail } = StaffEvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyDetailOnMounting();
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale]);
 
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getStaffFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
@@ -90,15 +101,6 @@ export default function EventStaffFamilyDetail() {
         setFamilyDetailData(familyDataList);
         setFamilyAdmittedData(admittedHistory);
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesFamilyDetailOnMounting();
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale]);
 
     return (
         <>

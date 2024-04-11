@@ -19,6 +19,7 @@ import { MailSettingsOption1 } from "@/utils/constant";
 
 export default function HQHistoryPlacePage() {
     const { localeJson, locale } = useContext(LayoutContext);
+
     const [historyPlaceList, setHistoryPlaceList] = useState([]);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [historyPlaceDropdown, setHistoryPlaceDropdown] = useState([]);
@@ -47,6 +48,7 @@ export default function HQHistoryPlacePage() {
         ),
         place_name: "",
     });
+
     const historyTableColumns = [
         {
             field: "si_no",

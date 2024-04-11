@@ -10,8 +10,27 @@ import { Button, NormalTable } from "@/components";
 
 export default function EvacueeDetailModal(props) {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const layoutReducer = useSelector((state) => state.layoutReducer);
+    
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10
+        },
+        person_id: props.staff.external_person_id,
+        place_id: layoutReducer?.user?.place?.id,
+    });
     const { open, close } = props && props;
-    const [staffDetail, setStaffDetail] = useState([]);
+    
+    const header = (
+        <div className="custom-modal">
+            {translate(localeJson, 'external_evecuee_details_popup_header')}
+        </div>
+    );
 
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
@@ -22,21 +41,15 @@ export default function EvacueeDetailModal(props) {
 
     // Main Table listing starts
     const { getEvacueeList } = ExternalEvacueesService;
-    const layoutReducer = useSelector((state) => state.layoutReducer);
 
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10
-        },
-        person_id: props.staff.external_person_id,
-        place_id: layoutReducer?.user?.place?.id,
-    });
-
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await getStaffList()
+            setLoader(false);
+        };
+        fetchData();
+    }, [locale, getListPayload, props.staff]);
 
     const getStaffList = () => {
         getEvacueeList(getListPayload, (response) => {
@@ -87,21 +100,6 @@ export default function EvacueeDetailModal(props) {
             }));
         }
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await getStaffList()
-            setLoader(false);
-        };
-        fetchData();
-    }, [locale, getListPayload, props.staff]);
-
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'external_evecuee_details_popup_header')}
-        </div>
-    );
 
     return (
         <React.Fragment>

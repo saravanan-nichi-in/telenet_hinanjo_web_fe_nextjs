@@ -22,20 +22,25 @@ import {
 import {
   prefectures,
   prefectures_en,
-  gender_jp,
-  gender_en,
 } from "@/utils/constant";
 import {
   CommonServices,
   TempRegisterServices,
   CheckInOutServices
 } from "@/services";
-import { Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping, 
-QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal } from "@/components";
+import {
+  Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping,
+  QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
+} from "@/components";
 
 export default function Admission() {
-  const router = useRouter();
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+  const regReducer = useAppSelector((state) => state.staffRegisterReducer);
+  const place_id = layoutReducer?.user?.place?.id;
+  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
+
   const [evacuee, setEvacuee] = useState([]);
   const [registerModalAction, setRegisterModalAction] = useState("create");
   const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
@@ -51,16 +56,20 @@ export default function Admission() {
   const [count, setCounter] = useState(1);
   const [evacueeCount, setEvacueeCounter] = useState(0)
   const [hasErrors, setHasErrors] = useState(false);
-  const layoutReducer = useAppSelector((state) => state.layoutReducer);
-  const regReducer = useAppSelector((state) => state.staffRegisterReducer);
-  const place_id = layoutReducer?.user?.place?.id;
-  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
   const dispatch = useAppDispatch();
   const [isHitachi, setIsHitachi] = useState(false);
   const [isMRecording, setMIsRecording] = useState(false);
   const [inputType, setInputType] = useState("password");
   const [showDetails, setShowDetails] = useState(false);
   const [expandedFamilies, setExpandedFamilies] = useState([]);
+  const [modalCountFlag, setModalCountFlag] = useState(true);
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
+  const formikRef = useRef();
+
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
       prevExpanded.includes(personId)
@@ -68,11 +77,14 @@ export default function Admission() {
         : [...prevExpanded, personId]
     );
   };
-  const { basicInfo } = CheckInOutServices;
+
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
   };
+
+  const { basicInfo } = CheckInOutServices;
+
   /* Services */
   const { getText, getAddress } = CommonServices;
   const {
@@ -82,237 +94,6 @@ export default function Admission() {
     qrScanRegistration,
     ocrScanRegistration
   } = TempRegisterServices;
-  const [modalCountFlag, setModalCountFlag] = useState(true);
-  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
-    useState(false);
-  const agreeTextWithHTML = (
-    <div>
-      {translate(localeJson, "agree_note_oneA")}
-      <span dangerouslySetInnerHTML={{ __html: `<a href="${window.location.origin}/privacy" target="_blank"><u>${translate(localeJson, 'c_individual_information')}</u></a>` }} />
-      {translate(localeJson, "agree_note_oneB")}
-    </div>
-  );
-  const formikRef = useRef();
-  const initialValues = {
-    evacuee_date: "",
-    postalCode: "",
-    prefecture_id: null,
-    address: "",
-    address2: "",
-    evacuee: "",
-    tel: "",
-    doubleByteTel: "",
-    password: "",
-    questions: null,
-    agreeCheckOne: false,
-    agreeCheckTwo: false,
-    name_furigana: "",
-    name_kanji: "",
-    lgwan_family_id: ""
-  };
-  const currentDate = new Date();
-  // eslint-disable-next-line no-irregular-whitespace
-  const minDOBDate = new Date();
-  minDOBDate.setFullYear(minDOBDate.getFullYear() - 120);
-  const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const evacueeSchema = () =>
-    Yup.object().shape({
-      checked: Yup.boolean().nullable(),
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      dob: Yup.object().shape({
-        year: Yup.number().required(
-          translate(localeJson, "c_year") + translate(localeJson, "is_required")
-        ),
-        month: Yup.string().required(
-          translate(localeJson, "c_month") +
-          translate(localeJson, "is_required")
-        ),
-        date: Yup.string().required(
-          translate(localeJson, "c_date") + translate(localeJson, "is_required")
-        ),
-      }),
-      // Add other fields and validations as needed
-      age: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      age_m: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().nullable()
-        .min(7, translate(localeJson, "postal_code_length"))
-        .max(7, translate(localeJson, "postal_code_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
-      tel: Yup.string().test(
-        "at-least-one-checked",
-        translate(localeJson, "c_required"),
-        (value, parent) => {
-          if (parent.parent.checked === true) {
-            return value ? true : false;
-          } else {
-            return true;
-          }
-        }
-      ),
-    });
-  const evacueeItemSchema = evacueeSchema();
-
-  const validationSchema = (localeJson) =>
-    Yup.object().shape({
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      name_kanji: Yup.string().nullable()
-        .max(200, translate(localeJson, "name_max")),
-      postalCode: Yup.string().nullable()
-        .min(7, translate(localeJson, "postal_code_length"))
-        .max(7, translate(localeJson, "postal_code_length")),
-      address: Yup.string()
-        .required(translate(localeJson, "address_required"))
-        .max(190, translate(localeJson, "address_max_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
-      password: Yup.string()
-        .nullable()
-        .test(
-          "is-four-digits",
-          translate(localeJson, "family_password_min_max"),
-          (value) => {
-            return (value == null || value == undefined || value == "") ? true : String(convertToSingleByte(value)).length === 4;
-          }
-        ),
-      tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
-        .test(
-          "starts-with-zero",
-          translate(localeJson, "phone_num_start"),
-          (value) => {
-            if (value) {
-              value = convertToSingleByte(value);
-              return value.charAt(0) === "0";
-            }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-          }
-        )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-          }
-        )
-        .test(
-          "matches-pattern",
-          translate(localeJson, "phone"),
-          (value) => {
-            const singleByteValue = convertToSingleByte(value);
-            return /^[0-9]{10,11}$/.test(singleByteValue);
-          }
-        ),
-
-      evacuee: Yup.array()
-        .required(translate(localeJson, "c_required"))
-        .test(
-          "evacuee-min-length",
-          translate(localeJson, "c_required"), // Change this message as needed
-          (value) => {
-            return value.length > 0;
-          }
-        )
-        .test(
-          "evacuee-max-length",
-          translate(localeJson, "table_count_max"), // Change this message as needed
-          (value) => {
-            return value.length <= 20;
-          }
-        ).of(evacueeItemSchema),
-      agreeCheckOne: Yup.boolean().required(translate(localeJson, "c_required"))
-        .test("check_is_true", translate(localeJson, "c_required"),
-          (value) => {
-            return value == true;
-          }
-        )
-    });
-
-
-
-  useEffect(() => {
-    if (place_id == "" || !place_id) {
-      router.push("/user/list");
-      return;
-    }
-  }, [locale]);
-
-  const fetchData = () => {
-    if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
-      let data = regReducer.originalData;
-      setIsHitachi(data.evacuee[0].family_register_from == "0" ? true : false)
-      formikRef.current.setFieldValue("evacuee_date", new Date(data.evacuee_date));
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
-      formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-      formikRef.current.setFieldValue("address", data.address);
-      formikRef.current.setFieldValue("address2", data.address2 || "");
-      formikRef.current.setFieldValue("evacuee", data.evacuee);
-      formikRef.current.setFieldValue("tel", data.tel);
-      formikRef.current.setFieldValue("password", data.password);
-      formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
-      formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
-      formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-      formikRef.current.setFieldValue("name_kanji", data.name_kanji);
-      formikRef.current.setFieldValue("lgwan_family_id", data.lgwan_family_id)
-      data.evacuee && setEvacuee(data.evacuee);
-    }
-  }
-
-  const createEditObj = (rowData) => {
-    let currentData = {
-      id: rowData.id,
-      checked: rowData.checked,
-      name: rowData.name,
-      name_furigana: rowData.name_furigana,
-      dob: rowData.dob,
-      age: rowData.age,
-      age_m: rowData.age_m,
-      gender: rowData.gender,
-      postalCode: rowData.postalCode ? rowData.postalCode.replace(/-/g, "") : null,
-      prefecture_id: rowData.prefecture_id,
-      address: rowData.address,
-      tel: rowData.tel,
-      address2: rowData.address2,
-      email: rowData.email,
-      evacuee: rowData.evacuee,
-      password: rowData.password,
-      specialCareType: rowData.specialCareType,
-      connecting_code: rowData.connecting_code,
-      remarks: rowData.remarks,
-      individualQuestions:
-        rowData.individualQuestions,
-      family_register_from: rowData.family_register_from,
-      telAsRep: rowData.telAsRep,
-      addressAsRep: rowData.addressAsRep
-    };
-    setEditObj(currentData);
-  }
-
-  const getAnswerData = (answer) => {
-    let answerData = null;
-    answer?.map((item) => {
-      answerData = answerData ? answerData + ", " + item : item;
-    });
-    return answerData || "-";
-  };
-
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -398,13 +179,245 @@ export default function Admission() {
     }
   }, [evacuee]);
 
-
-
   useEffect(() => {
     fetchMasterQuestion();
     fetchSpecialCare();
     fetchData();
   }, [locale]);
+
+
+  useEffect(() => {
+    setMIsRecording(isRecording);
+  }, [isRecording]);
+
+  useEffect(() => {
+    if (Object.keys(formikRef.current.errors).length > 0) {
+      const firstErrorElement = document.querySelector('.p-error');
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [count]);
+
+  const agreeTextWithHTML = (
+    <div>
+      {translate(localeJson, "agree_note_oneA")}
+      <span dangerouslySetInnerHTML={{ __html: `<a href="${window.location.origin}/privacy" target="_blank"><u>${translate(localeJson, 'c_individual_information')}</u></a>` }} />
+      {translate(localeJson, "agree_note_oneB")}
+    </div>
+  );
+
+  const initialValues = {
+    evacuee_date: "",
+    postalCode: "",
+    prefecture_id: null,
+    address: "",
+    address2: "",
+    evacuee: "",
+    tel: "",
+    doubleByteTel: "",
+    password: "",
+    questions: null,
+    agreeCheckOne: false,
+    agreeCheckTwo: false,
+    name_furigana: "",
+    name_kanji: "",
+    lgwan_family_id: ""
+  };
+  const currentDate = new Date();
+  // eslint-disable-next-line no-irregular-whitespace
+  const minDOBDate = new Date();
+  minDOBDate.setFullYear(minDOBDate.getFullYear() - 120);
+  const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
+  const evacueeSchema = () =>
+    Yup.object().shape({
+      checked: Yup.boolean().nullable(),
+      name_furigana: Yup.string()
+        .required(translate(localeJson, "c_name_phonetic_is_required"))
+        .max(200, translate(localeJson, "name_max"))
+        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      dob: Yup.object().shape({
+        year: Yup.number().required(
+          translate(localeJson, "c_year") + translate(localeJson, "is_required")
+        ),
+        month: Yup.string().required(
+          translate(localeJson, "c_month") +
+          translate(localeJson, "is_required")
+        ),
+        date: Yup.string().required(
+          translate(localeJson, "c_date") + translate(localeJson, "is_required")
+        ),
+      }),
+      // Add other fields and validations as needed
+      age: Yup.number()
+        .required(translate(localeJson, "age_required")),
+      age_m: Yup.number()
+        .required(translate(localeJson, "age_required")),
+      gender: Yup.string().required(translate(localeJson, "gender_required")),
+      postalCode: Yup.string().nullable()
+        .min(7, translate(localeJson, "postal_code_length"))
+        .max(7, translate(localeJson, "postal_code_length")),
+      address2: Yup.string()
+        .nullable()
+        .max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string()
+        .nullable()
+        .required(translate(localeJson, "c_perfacture_is_required")),
+      tel: Yup.string().test(
+        "at-least-one-checked",
+        translate(localeJson, "c_required"),
+        (value, parent) => {
+          if (parent.parent.checked === true) {
+            return value ? true : false;
+          } else {
+            return true;
+          }
+        }
+      ),
+    });
+
+  const evacueeItemSchema = evacueeSchema();
+
+  const validationSchema = (localeJson) =>
+    Yup.object().shape({
+      name_furigana: Yup.string()
+        .required(translate(localeJson, "c_name_phonetic_is_required"))
+        .max(200, translate(localeJson, "name_max"))
+        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      name_kanji: Yup.string().nullable()
+        .max(200, translate(localeJson, "name_max")),
+      postalCode: Yup.string().nullable()
+        .min(7, translate(localeJson, "postal_code_length"))
+        .max(7, translate(localeJson, "postal_code_length")),
+      address: Yup.string()
+        .required(translate(localeJson, "address_required"))
+        .max(190, translate(localeJson, "address_max_length")),
+      address2: Yup.string()
+        .nullable()
+        .max(190, translate(localeJson, "address_max_length")),
+      prefecture_id: Yup.string()
+        .nullable()
+        .required(translate(localeJson, "prefecture_required")),
+      password: Yup.string()
+        .nullable()
+        .test(
+          "is-four-digits",
+          translate(localeJson, "family_password_min_max"),
+          (value) => {
+            return (value == null || value == undefined || value == "") ? true : String(convertToSingleByte(value)).length === 4;
+          }
+        ),
+      tel: Yup.string()
+        .required(translate(localeJson, "phone_no_required"))
+        .test(
+          "starts-with-zero",
+          translate(localeJson, "phone_num_start"),
+          (value) => {
+            if (value) {
+              value = convertToSingleByte(value);
+              return value.charAt(0) === "0";
+            }
+            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+          }
+        )
+        .test(
+          "is-not-empty",
+          translate(localeJson, "phone_no_required"),
+          (value) => {
+            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
+          }
+        )
+        .test(
+          "matches-pattern",
+          translate(localeJson, "phone"),
+          (value) => {
+            const singleByteValue = convertToSingleByte(value);
+            return /^[0-9]{10,11}$/.test(singleByteValue);
+          }
+        ),
+
+      evacuee: Yup.array()
+        .required(translate(localeJson, "c_required"))
+        .test(
+          "evacuee-min-length",
+          translate(localeJson, "c_required"), // Change this message as needed
+          (value) => {
+            return value.length > 0;
+          }
+        )
+        .test(
+          "evacuee-max-length",
+          translate(localeJson, "table_count_max"), // Change this message as needed
+          (value) => {
+            return value.length <= 20;
+          }
+        ).of(evacueeItemSchema),
+      agreeCheckOne: Yup.boolean().required(translate(localeJson, "c_required"))
+        .test("check_is_true", translate(localeJson, "c_required"),
+          (value) => {
+            return value == true;
+          }
+        )
+    });
+
+  const fetchData = () => {
+    if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
+      let data = regReducer.originalData;
+      setIsHitachi(data.evacuee[0].family_register_from == "0" ? true : false)
+      formikRef.current.setFieldValue("evacuee_date", new Date(data.evacuee_date));
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
+      formikRef.current.setFieldValue("address", data.address);
+      formikRef.current.setFieldValue("address2", data.address2 || "");
+      formikRef.current.setFieldValue("evacuee", data.evacuee);
+      formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("password", data.password);
+      formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
+      formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
+      formikRef.current.setFieldValue("name_furigana", data.name_furigana);
+      formikRef.current.setFieldValue("name_kanji", data.name_kanji);
+      formikRef.current.setFieldValue("lgwan_family_id", data.lgwan_family_id)
+      data.evacuee && setEvacuee(data.evacuee);
+    }
+  }
+
+  const createEditObj = (rowData) => {
+    let currentData = {
+      id: rowData.id,
+      checked: rowData.checked,
+      name: rowData.name,
+      name_furigana: rowData.name_furigana,
+      dob: rowData.dob,
+      age: rowData.age,
+      age_m: rowData.age_m,
+      gender: rowData.gender,
+      postalCode: rowData.postalCode ? rowData.postalCode.replace(/-/g, "") : null,
+      prefecture_id: rowData.prefecture_id,
+      address: rowData.address,
+      tel: rowData.tel,
+      address2: rowData.address2,
+      email: rowData.email,
+      evacuee: rowData.evacuee,
+      password: rowData.password,
+      specialCareType: rowData.specialCareType,
+      connecting_code: rowData.connecting_code,
+      remarks: rowData.remarks,
+      individualQuestions:
+        rowData.individualQuestions,
+      family_register_from: rowData.family_register_from,
+      telAsRep: rowData.telAsRep,
+      addressAsRep: rowData.addressAsRep
+    };
+    setEditObj(currentData);
+  }
+
+  const getAnswerData = (answer) => {
+    let answerData = null;
+    answer?.map((item) => {
+      answerData = answerData ? answerData + ", " + item : item;
+    });
+    return answerData || "-";
+  };
 
   const fetchSpecialCare = () => {
     getSpecialCareDetails((res) => {
@@ -479,15 +492,19 @@ export default function Admission() {
   const Scanner = {
     url: "/layout/images/mapplescan.svg",
   };
+
   const Card = {
     url: "/layout/images/evacuee-card.png",
   };
+
   const Edit = {
     url: "/layout/images/editIcon.svg",
   };
+
   const Delete = {
     url: "/layout/images/deleteIcon.svg",
   };
+
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
@@ -767,6 +784,7 @@ export default function Admission() {
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareName = (nameList) => {
     let specialCareName = "";
     nameList &&
@@ -777,6 +795,7 @@ export default function Admission() {
       });
     return specialCareName || "-";
   };
+
   const getGenderValue = (gender) => {
     if (gender == 1) {
       return translate(localeJson, "c_male");
@@ -786,27 +805,27 @@ export default function Admission() {
       return translate(localeJson, "c_others_count");
     }
   };
+
   const getSpecialCareJPNames = (values) => {
     return values?.map((value) => {
       const option = specialCareJPOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
+
   const getSpecialCareENNames = (values) => {
     return values?.map((value) => {
       const option = specialCareENOptions.find((opt) => opt.value === value);
       return option ? option.name : ""; // Return the name or an empty string if not found
     });
   };
-  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] =
-    useState(false);
 
-  const [openQrPopup, setOpenQrPopup] = useState(false);
+
   const closeQrPopup = () => {
     setOpenQrPopup(false);
     showOverFlow();
   };
+
   const qrResult = (result) => {
     setLoader(true)
     let payload = {
@@ -876,11 +895,6 @@ export default function Admission() {
     });
   }
 
-  const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    setMIsRecording(isRecording);
-  }, [isRecording]);
 
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
@@ -1049,15 +1063,6 @@ export default function Admission() {
     });
   };
 
-  useEffect(() => {
-    if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector('.p-error');
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [count]);
-
   const getPrefectureName = (id) => {
     if (id) {
       let p_name = prefectures.find((item) => item.value === id);
@@ -1065,8 +1070,6 @@ export default function Admission() {
     }
     return "";
   };
-
-
 
   return (
     <>

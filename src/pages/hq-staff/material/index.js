@@ -1,16 +1,34 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, AdminManagementImportModal, MaterialCreateEditModal } from '@/components';
 import { MaterialService } from '@/services/material.service';
 
 export default function AdminMaterialPage() {
-    const { locale, localeJson , setLoader} = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
+
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteObj, setDeleteObj] = useState(null);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [importPlaceOpen, setImportPlaceOpen] = useState(false);
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [currentEditObj, setCurrentEditObj] = useState('');
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+        },
+        search: "",
+    });
+
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'material_management_table_header_slno'), className: "sno_class", textAlign: "center" },
         { field: 'name', header: translate(localeJson, 'material_management_table_header_name'), minWidth: "15rem", maxWidth: "15rem" },
@@ -46,21 +64,6 @@ export default function AdminMaterialPage() {
             ),
         }
     ];
-
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "",
-            order_by: "desc",
-        },
-        search: "",
-    });
-
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
-
 
     /* Services */
     const { getList, exportData } = MaterialService;
@@ -102,9 +105,6 @@ export default function AdminMaterialPage() {
         });
     }
 
-
-    const [deleteId, setDeleteId] = useState(null);
-
     const openDeleteDialog = (rowdata) => {
         setDeleteId(rowdata.id);
         setDeleteObj({
@@ -128,14 +128,6 @@ export default function AdminMaterialPage() {
         showOverFlow();
     };
 
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
-
     /**
     * Email setting modal close
    */
@@ -152,8 +144,6 @@ export default function AdminMaterialPage() {
         setEmailSettingsOpen(false);
         hideOverFlow();
     };
-
-    const [importPlaceOpen, setImportPlaceOpen] = useState(false);
 
     const onStaffImportClose = () => {
         setImportPlaceOpen(!importPlaceOpen);
@@ -197,9 +187,6 @@ export default function AdminMaterialPage() {
         }
     }
 
-    const [registerModalAction, setRegisterModalAction] = useState('');
-    const [currentEditObj, setCurrentEditObj] = useState('');
-
     return (
         <>
             <MaterialCreateEditModal
@@ -210,7 +197,7 @@ export default function AdminMaterialPage() {
                 currentEditObj={{ ...currentEditObj }}
                 refreshList={onGetMaterialListOnMounting}
             />
-            
+
             <AdminManagementDeleteModal
                 open={deleteOpen}
                 close={onDeleteClose}

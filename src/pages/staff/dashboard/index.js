@@ -19,10 +19,8 @@ function StaffDashboard() {
 
   const [labelsSpecialCares, setLabelsSpecialCares] = useState(null);
   const [dataSpecialCares, setDataSpecialCares] = useState(null);
-  const [labelsTotalCapacityBreakdown, setLabelsTotalCapacityBreakdown] =
-    useState(null);
-  const [dataTotalCapacityBreakdown, setDataTotalCapacityBreakdown] =
-    useState(null);
+  const [labelsTotalCapacityBreakdown, setLabelsTotalCapacityBreakdown] = useState(null);
+  const [dataTotalCapacityBreakdown, setDataTotalCapacityBreakdown] = useState(null);
   const [labelsOther, setLabelsOther] = useState(null);
   const [dataOther, setDataOther] = useState(null);
   const [labelsDetailsOther, setLabelsDetailsOther] = useState(null);
@@ -30,12 +28,12 @@ function StaffDashboard() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const formattedDateTime = currentDateTime;
 
+  /* Services */
+  const { getList } = StaffDashBoardServices;
+  
   useEffect(() => {
     getListDataOnMount();
   }, [locale]);
-
-  /* Services */
-  const { getList } = StaffDashBoardServices;
 
   const getListDataOnMount = async () => {
     let payload = { place_id: layoutReducer?.user?.place?.id };
@@ -74,9 +72,9 @@ function StaffDashboard() {
       setLoader(false);
     }
   };
+
   return (
     <>
-
       <div className="grid">
         <div className="col-12">
           <div className="card">

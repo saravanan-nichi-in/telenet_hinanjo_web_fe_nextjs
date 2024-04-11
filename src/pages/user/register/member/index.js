@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import _ from "lodash";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
@@ -11,18 +12,17 @@ import {
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
-import { useRouter } from "next/router";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckInData } from "@/redux/check_in";
 import { setSelfID } from "@/redux/self_id";
-import { Button, ButtonRounded, CommonDialog, CommonPage, CustomHeader, Input, ValidationError, Password } from "@/components";
-import BarcodeDialog from "@/components/modal/barcodeDialog";
-import { YappleModal } from "@/components/modal";
+import { Button, ButtonRounded, CommonDialog, CommonPage, CustomHeader, Input, ValidationError, Password, YappleModal, BarcodeDialog } from "@/components";
 
 export default function Admission() {
-  const router = useRouter();
-  const layoutReducer = useSelector((state) => state.layoutReducer);
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+
   const [audioPasswordLoader, setAudioPasswordLoader] = useState(false);
   const [audioNameLoader, setAudioNameLoader] = useState(false);
   const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
@@ -34,11 +34,19 @@ export default function Admission() {
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isSearch, setSearch] = useState(false);
+
   const { getActiveList } = UserPlaceListServices;
 
   /* Services */
   const { getEventListByID } = UserDashboardServices;
-  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoader(false);
+    };
+    fetchData();
+  }, []);
+
   const schema = Yup.object().shape({
     name: Yup.string()
       .max(100, translate(localeJson, "family_name_max"))
@@ -68,8 +76,11 @@ export default function Admission() {
   });
 
   const { getText } = CommonServices;
+
   const { getList, checkIn, eventCheckIn } = CheckInOutServices;
+
   const { getBasicDetailsInfo } = TempRegisterServices;
+
   const initialValues = { name: "", password: "", familyCode: "" };
   const openYappleModal = () => {
     let payload = { id: layoutReducer?.user?.place?.id }
@@ -100,13 +111,6 @@ export default function Admission() {
   const onImportModalClose = () => {
     setImportModalOpen(false);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoader(false);
-    };
-    fetchData();
-  }, []);
 
   const fetchText = (res) => {
     let newPassword = res?.data?.content;

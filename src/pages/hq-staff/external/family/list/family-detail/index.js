@@ -20,6 +20,7 @@ export default function HQEventFamilyDetail() {
 
     const [tableLoading, setTableLoading] = useState(false);
     const [externalDataset, setExternalDataset] = useState(null);
+    
     const externalColumns = [
         { field: "si_no", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
         {

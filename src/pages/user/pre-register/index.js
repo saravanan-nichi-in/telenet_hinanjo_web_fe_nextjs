@@ -19,10 +19,11 @@ import { TempRegisterServices } from '@/services';
 import { useAppSelector } from "@/redux/hooks";
 
 export default function TempRegister() {
-    const [activeIndex, setActiveIndex] = useState(0);
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const selfID = useAppSelector((state) => state.selfIDReducer.selfID);
+
+    const [activeIndex, setActiveIndex] = useState(0);
     const [individualQuestionAnswer, setIndividualQuestionAnswer] = useState([]);
     const [masterQuestionAnswer, setMasterQuestionAnswer] = useState([]);
     const [basicDataInfo, setBasicDataInfo] = useState({})
@@ -47,6 +48,7 @@ export default function TempRegister() {
     const [specialCare, setSpecialCare] = useState([]);
     const [activeEvacuationOptions, setActiveEvacutaionOptions] = useState([]);
     const [submitLoader, setSubmitLoader] = useState(false)
+
     const steps = [
         { label: 'Step 1' },
         { label: 'Step 2' }

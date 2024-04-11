@@ -18,12 +18,32 @@ function StockpileHistory() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   // Getting storage data with help of reducers
   const layoutReducer = useSelector((state) => state.layoutReducer);
+
   const [inspectionDateTime, setInspectionDateTime] = useState("");
   const [productTypes, setProductTypes] = useState([]);
   const [productType, setProductType] = useState("");
   const [productNames, setProductNames] = useState([]);
   const [productName, setProductName] = useState("");
   const [inCharge, setInCharge] = useState("");
+  const [tableLoading, setTableLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [getHistoryListPayload, setGetHistoryListPayload] = useState({
+    filters: {
+      start: 0,
+      limit: 10,
+      order_by: "",
+    },
+    place_id: !_.isNull(layoutReducer?.user?.place?.id)
+      ? layoutReducer?.user?.place?.id
+      : "",
+    Inspection_date_time: "",
+    category: "",
+    product_name: "",
+    incharge: "",
+  });
+
   const columnsData = [
     {
       field: "number",
@@ -99,24 +119,6 @@ function StockpileHistory() {
       minWidth: "5rem",
     },
   ];
-  const [getHistoryListPayload, setGetHistoryListPayload] = useState({
-    filters: {
-      start: 0,
-      limit: 10,
-      order_by: "",
-    },
-    place_id: !_.isNull(layoutReducer?.user?.place?.id)
-      ? layoutReducer?.user?.place?.id
-      : "",
-    Inspection_date_time: "",
-    category: "",
-    product_name: "",
-    incharge: "",
-  });
-  const [tableLoading, setTableLoading] = useState(false);
-  const [columns, setColumns] = useState([]);
-  const [list, setList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
 
   /* Services */
   const { getProductTypes, getProductNames, getHistoryList, exportStockpileHistoryCSVList } = StockpileHistoryServices;

@@ -13,8 +13,18 @@ export default function RegisterCheckIn() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const layoutReducer = useSelector((state) => state.layoutReducer);
+
   const [frozenArray, setFrozenArray] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [getListPayload, setGetListPayload] = useState({
+    place_id: layoutReducer?.user?.place?.id,
+  });
+
   const initialValues = {};
+
   const columnsData = [
     // {
     //   field: "slno",
@@ -61,19 +71,10 @@ export default function RegisterCheckIn() {
       header: translate(localeJson, "residence_with_out_information"),
       minWidth: "10rem",
       maxWidth: "10rem",
-      textAlign:"center",
+      textAlign: "center",
       alignHeader: "center",
     },
   ];
-
-  const [getListPayload, setGetListPayload] = useState({
-    place_id: layoutReducer?.user?.place?.id,
-  });
-
-  const [columns, setColumns] = useState([]);
-  const [list, setList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [tableLoading, setTableLoading] = useState(false);
 
   /* Services */
   const { getList, create } = StaffRegisterServices;
@@ -113,29 +114,29 @@ export default function RegisterCheckIn() {
             frozenCount: obj.count ?? "",
           };
           if (i == 0) {
-            preparedObj['count'] = 
-            <div className="register-checkIn-group-border ">
-            <Counter
-              inputClass={"text-center"}
-              onValueChange={(value) => {
-                if (frozenArray && frozenArray.length > 0) {
-                  let updateFrozenArray = frozenArray;
-                  updateFrozenArray[0]['frozenCount'] = value;
-                  setFrozenArray(updateFrozenArray);
-                } else {
-                  preparedObj['frozenCount'] = value;
-                }
-              }}
-              value={obj.count ?? ""}
-              min={0}
-              max={9999}
-              style={{ fontWeight: "bold", padding: "8px" }}
-              leftStyle={{ fontWeight: "bold", padding: "8px" }}
-              rightStyle={{ fontWeight: "bold", padding: "8px" }}
-            />
-            </div>;
+            preparedObj['count'] =
+              <div className="register-checkIn-group-border ">
+                <Counter
+                  inputClass={"text-center"}
+                  onValueChange={(value) => {
+                    if (frozenArray && frozenArray.length > 0) {
+                      let updateFrozenArray = frozenArray;
+                      updateFrozenArray[0]['frozenCount'] = value;
+                      setFrozenArray(updateFrozenArray);
+                    } else {
+                      preparedObj['frozenCount'] = value;
+                    }
+                  }}
+                  value={obj.count ?? ""}
+                  min={0}
+                  max={9999}
+                  style={{ fontWeight: "bold", padding: "8px" }}
+                  leftStyle={{ fontWeight: "bold", padding: "8px" }}
+                  rightStyle={{ fontWeight: "bold", padding: "8px" }}
+                />
+              </div>;
             preparedObj['specialCarePersonsCount'] = <>
-            {obj.person_total || obj.specialCarePersonsCount}
+              {obj.person_total || obj.specialCarePersonsCount}
             </>
             frozenData.push(preparedObj)
           } else {

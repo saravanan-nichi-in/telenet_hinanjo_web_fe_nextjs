@@ -8,24 +8,26 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 
 const Map = () => {
   const { loader } = useContext(LayoutContext);
+  const dispatch = useAppDispatch();
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
-  const { getPlaceList } = MapServices;
   const [maps, setMaps] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [result, setResult] = useState();
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const layoutReducer = useAppSelector((state) => state.layoutReducer);
-  const dispatch = useAppDispatch();
 
   const payload = {
-      "filters": {
-          "sort_by": "refugee_name",
-          "order_by": "asc"
-      },
-      "search": "",
-      "map":true
+    "filters": {
+      "sort_by": "refugee_name",
+      "order_by": "asc"
+    },
+    "search": "",
+    "map": true
   };
+
+  const { getPlaceList } = MapServices;
 
   useEffect(() => {
     getLocation();

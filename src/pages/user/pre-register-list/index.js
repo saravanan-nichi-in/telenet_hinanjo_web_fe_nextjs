@@ -13,6 +13,7 @@ export default function HitachiList() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
+
     const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
     const [yappleID, setYappleID] = useState(null);
     const [ppid, setPpid] = useState(null);
@@ -27,6 +28,23 @@ export default function HitachiList() {
     })
 
     const { getdefaultEventData, getBasicDetailsInfo, autoCheckoutEvacuee } = TempRegisterServices;
+
+    useEffect(() => {
+        const windowURL = window.location.pathname;
+        setYappleID(getCookie("city_id"))
+        setPpid(getCookie("ppid"))
+        setUserProfile(getCookie("profile"))
+        // const windowURL = "https://shelter.biz.cityos-dev.hitachi.co.jp/user/pre-register-list/";
+        const windowURLSplitted = windowURL.split('/');
+        const clientDomain = "shelter.biz.cityos-dev.hitachi.co.jp";
+        if (windowURLSplitted[2] != clientDomain) {
+            const fetchData = async () => {
+                await onGetTempRegisterDefaultEvent()
+            }
+            fetchData()
+        }
+
+    }, []);
 
     const inputPPIDData = (e) => {
         setOpenBarcodeDialog(true)
@@ -139,23 +157,6 @@ export default function HitachiList() {
         return "";
     }
 
-    useEffect(() => {
-        const windowURL = window.location.pathname;
-        setYappleID(getCookie("city_id"))
-        setPpid(getCookie("ppid"))
-        setUserProfile(getCookie("profile"))
-        // const windowURL = "https://shelter.biz.cityos-dev.hitachi.co.jp/user/pre-register-list/";
-        const windowURLSplitted = windowURL.split('/');
-        const clientDomain = "shelter.biz.cityos-dev.hitachi.co.jp";
-        if (windowURLSplitted[2] != clientDomain) {
-            const fetchData = async () => {
-                await onGetTempRegisterDefaultEvent()
-            }
-            fetchData()
-        }
-
-    }, []);
-
     const onClickReturn = () => {
         // document.cookie = `my-number-redirectUrl=${window.location.href}; domain=.hitachi.co.jp; path=/;`;
         router.push({
@@ -164,80 +165,81 @@ export default function HitachiList() {
         })
     }
 
-    return (<>
-        <div>
-            <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
-                visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}
-                validateAndMoveToTempReg={(data) => validateAndMoveToForm(data)}
-            ></BarcodeDialog>
-            <PreRegisterConfirmDialog header={translate(localeJson, "c_temp_register_status")}
-                visible={openBarcodeConfirmDialog}
-                setVisible={setOpenBarcodeConfirmDialog}
-                doAutoCheckout={proceedToAutoCheckout}
-            />
-            <div className="grid col-12 justify-content-center">
-                <div className="col-12 sm:col-12 md:col-10 lg:col-8">
-                    <div className="card">
-                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "hitachi_list_main_heading")} />
-                        <div>
-                            <h6 className="mt-2">{defaultEventData.remarks}</h6>
-                            <p className='text-red-500 mt-3'>{translate(localeJson, 'pre_register_main_list_note')}</p>
-                        </div>
-                        <div className={userProfile == '[yabu_cityworker]' ? 'mt-6' : 'mt-8 pt-8'}>
-                            <div className={`p-2 w-12 text-center ${userProfile == '[yabu_cityworker]' ? '' : 'mt-5 pt-5'}`}>
-                                <div className=''>
-                                    <Button buttonProps={{
-                                        type: "button",
-                                        text: translate(localeJson, 'c_temp_register'),
-                                        buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                        rounded: true,
-                                        onClick: () => {
-                                            if (window.location.origin === "https://hitachi.nichi.in" || window.location.origin === "http://localhost:3000" || window.location.origin === "https://hitachi-dev-delta.vercel.app") {
-                                                triggerPreRegisterConfirmation("357703");
-                                            } else {
-                                                triggerPreRegisterConfirmation(yappleID);
+    return (
+        <>
+            <div>
+                <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
+                    visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}
+                    validateAndMoveToTempReg={(data) => validateAndMoveToForm(data)}
+                ></BarcodeDialog>
+                <PreRegisterConfirmDialog header={translate(localeJson, "c_temp_register_status")}
+                    visible={openBarcodeConfirmDialog}
+                    setVisible={setOpenBarcodeConfirmDialog}
+                    doAutoCheckout={proceedToAutoCheckout}
+                />
+                <div className="grid col-12 justify-content-center">
+                    <div className="col-12 sm:col-12 md:col-10 lg:col-8">
+                        <div className="card">
+                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "hitachi_list_main_heading")} />
+                            <div>
+                                <h6 className="mt-2">{defaultEventData.remarks}</h6>
+                                <p className='text-red-500 mt-3'>{translate(localeJson, 'pre_register_main_list_note')}</p>
+                            </div>
+                            <div className={userProfile == '[yabu_cityworker]' ? 'mt-6' : 'mt-8 pt-8'}>
+                                <div className={`p-2 w-12 text-center ${userProfile == '[yabu_cityworker]' ? '' : 'mt-5 pt-5'}`}>
+                                    <div className=''>
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            text: translate(localeJson, 'c_temp_register'),
+                                            buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                            rounded: true,
+                                            onClick: () => {
+                                                if (window.location.origin === "https://hitachi.nichi.in" || window.location.origin === "http://localhost:3000" || window.location.origin === "https://hitachi-dev-delta.vercel.app") {
+                                                    triggerPreRegisterConfirmation("357703");
+                                                } else {
+                                                    triggerPreRegisterConfirmation(yappleID);
+                                                }
                                             }
+                                        }} parentClass={"p-2"} />
+                                        {userProfile == '[yabu_cityworker]' &&
+                                            (<div>
+                                                <Button buttonProps={{
+                                                    type: "button",
+                                                    text: translate(localeJson, 'to_staff_screen'),
+                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                    rounded: true,
+                                                    onClick: () => router.push("/user/list")
+                                                }} parentClass={"p-2"} />
+                                                <Button buttonProps={{
+                                                    type: "button",
+                                                    text: translate(localeJson, 'to_head_staff'),
+                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                    rounded: true,
+                                                    onClick: () => router.push("/hq-staff/login")
+                                                }} parentClass={"p-2"} />
+                                                <Button buttonProps={{
+                                                    type: "button",
+                                                    text: translate(localeJson, 'to_admin'),
+                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                    rounded: true,
+                                                    onClick: () => router.push("/admin/login")
+                                                }} parentClass={"p-2"} />
+                                            </div>)
                                         }
-                                    }} parentClass={"p-2"} />
-                                    {userProfile == '[yabu_cityworker]' &&
-                                        (<div>
-                                            <Button buttonProps={{
-                                                type: "button",
-                                                text: translate(localeJson, 'to_staff_screen'),
-                                                buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                rounded: true,
-                                                onClick: () => router.push("/user/list")
-                                            }} parentClass={"p-2"} />
-                                            <Button buttonProps={{
-                                                type: "button",
-                                                text: translate(localeJson, 'to_head_staff'),
-                                                buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                rounded: true,
-                                                onClick: () => router.push("/hq-staff/login")
-                                            }} parentClass={"p-2"} />
-                                            <Button buttonProps={{
-                                                type: "button",
-                                                text: translate(localeJson, 'to_admin'),
-                                                buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                rounded: true,
-                                                onClick: () => router.push("/admin/login")
-                                            }} parentClass={"p-2"} />
-                                        </div>)
-                                    }
 
-                                    <Button buttonProps={{
-                                        type: "button",
-                                        text: translate(localeJson, 'back'),
-                                        buttonClass: "multi-form-submit return w-12 sm:w-10 md:w-6 lg:w-5",
-                                        rounded: true,
-                                        onClick: () => onClickReturn()
-                                    }} parentClass={"p-2 back-button"} />
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            text: translate(localeJson, 'back'),
+                                            buttonClass: "multi-form-submit return w-12 sm:w-10 md:w-6 lg:w-5",
+                                            rounded: true,
+                                            onClick: () => onClickReturn()
+                                        }} parentClass={"p-2 back-button"} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </>);
+        </>);
 }

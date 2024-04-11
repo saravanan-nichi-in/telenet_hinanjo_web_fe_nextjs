@@ -17,6 +17,7 @@ import { StockPileSummaryServices } from '@/services/stockpile_summary.services'
 
 function HQStockpileSummary() {
     const { locale, localeJson } = useContext(LayoutContext);
+
     const [emailModal, setEmailModal] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
@@ -46,6 +47,7 @@ function HQStockpileSummary() {
         },
         search: ""
     });
+
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
@@ -67,11 +69,15 @@ function HQStockpileSummary() {
         { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
         { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" }
     ];
+
     const bindImageModalData = (image) => {
         setImageUrl(image);
         setImageModal(true);
         hideOverFlow();
     }
+    /* Services */
+    const { getSummaryList, exportStockPileSummaryCSVList, getPlaceDropdownList,
+        getStockPileEmailUpdate, getStockPileEmailData, exportData, importData, getPlaceList } = StockPileSummaryServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -151,8 +157,7 @@ function HQStockpileSummary() {
             hideOverFlow();
         }
     };
-
-
+    
     /**
     * Image setting modal close
    */
@@ -327,9 +332,6 @@ function HQStockpileSummary() {
         }
     }
 
-    /* Services */
-    const { getSummaryList, exportStockPileSummaryCSVList, getPlaceDropdownList,
-        getStockPileEmailUpdate, getStockPileEmailData, exportData, importData, getPlaceList } = StockPileSummaryServices;
 
     const onImportModalClose = () => {
         setImportModalOpen(false);

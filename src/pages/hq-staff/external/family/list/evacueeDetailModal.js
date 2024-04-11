@@ -5,6 +5,8 @@ import _ from 'lodash';
 import {
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
+    hideOverFlow,
+    showOverFlow,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -13,15 +15,11 @@ import { Button, NormalTable } from "@/components";
 
 export default function EvacueeDetailModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
-    const { open, close } = props && props;
-    const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
-        { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
-        { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
-        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", textAlign: "center", alignHeader: "center" },
-        { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }
-    ];
-    const { getExternalEvacueesDetail } = ExternalEvacuationServices;
+
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
     const [getListPayload, setGetListPayload] = useState({
         "filters": {
             "start": 0,
@@ -29,10 +27,44 @@ export default function EvacueeDetailModal(props) {
         },
         "evacuee_id": props.evacuee.id,
     });
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+    const { open, close } = props && props;
+
+    const columnsData = [
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
+        { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), maxWidth: "2rem" },
+        { field: 'dob', header: translate(localeJson, 'external_evecuee_details_popup_table_dob'), maxWidth: "2rem" },
+        { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), maxWidth: "2rem", textAlign: "center", alignHeader: "center" },
+        { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), maxWidth: "2rem" }
+    ];
+
+    const { getExternalEvacueesDetail } = ExternalEvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await getEvacueesList()
+        };
+        fetchData();
+    }, [locale, getListPayload, props.evacuee]);
+    
+    useEffect(() => {
+        if (open) {
+            hideOverFlow();
+        } else {
+            showOverFlow();
+        }
+        
+        return () => {
+            // Cleanup when the component unmounts
+            showOverFlow();
+        };
+    }, [open]);
+    
+    const header = (
+        <div className="custom-modal">
+            {translate(localeJson, 'external_evecuee_details_popup_header')}
+        </div>
+    );
 
     const getEvacueesList = () => {
         getExternalEvacueesDetail(getListPayload, (response) => {
@@ -80,33 +112,6 @@ export default function EvacueeDetailModal(props) {
             }));
         }
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await getEvacueesList()
-        };
-        fetchData();
-    }, [locale, getListPayload, props.evacuee]);
-
-    const header = (
-        <div className="custom-modal">
-            {translate(localeJson, 'external_evecuee_details_popup_header')}
-        </div>
-    );
-
-    useEffect(() => {
-        if (open) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
-        return () => {
-            // Cleanup when the component unmounts
-            document.body.style.overflow = 'auto';
-        };
-    }, [open]);
 
     return (
         <React.Fragment>

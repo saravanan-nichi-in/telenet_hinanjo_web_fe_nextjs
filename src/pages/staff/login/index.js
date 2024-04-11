@@ -20,6 +20,7 @@ const LoginPage = () => {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+
     const containerClassName = classNames('auth_surface_ground flex align-items-start justify-content-center overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     const schema = Yup.object().shape({
         username: Yup.string()
@@ -33,6 +34,12 @@ const LoginPage = () => {
 
     /* Services */
     const { login } = AuthenticationAuthorizationService;
+    
+    useEffect(() => {
+        dispatch(setForgetPassword({
+            username: ''
+        }));
+    }, []);
 
     const onLoginSuccess = (values) => {
         if (AuthenticationAuthorizationService.staffValue) {
@@ -61,12 +68,6 @@ const LoginPage = () => {
             });
         }
     }
-
-    useEffect(() => {
-        dispatch(setForgetPassword({
-            username: ''
-        }));
-    }, []);
 
     return (
         <>

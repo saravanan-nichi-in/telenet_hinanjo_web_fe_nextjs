@@ -19,6 +19,7 @@ export default function HQTempRegistration() {
   const { locale, localeJson } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const [refugeeName, setRefugeeName] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState({
     id: 0,
@@ -61,7 +62,7 @@ export default function HQTempRegistration() {
     { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
   ];
-  const [checkedValue, setCheckedValue] = useState(false);
+  
   useEffect(() => {
     setTableLoading(true);
     const fetchTempData = async () => {

@@ -45,17 +45,20 @@ export default function HQExternalEvacuationPage() {
         evacuationCenter: "",
         place_category: ""
     });
+
     const evacuationFoodSupport = [
         { name: "--", id: 2 },
         { name: translate(localeJson, 'yes'), id: 1 },
         { name: translate(localeJson, 'no'), id: 0 },
     ];
+
     const evacuationSiteType = [
         { name: "--", id: 0 },
         { name: translate(localeJson, 'city_in'), id: 1 },
         { name: translate(localeJson, 'city_out'), id: 2 },
         { name: translate(localeJson, 'pref_out'), id: 3 },
     ];
+    
     const externalEvacueesListColumns = [
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", textAlign: "center", sortable: false },
         { field: "place_category", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
@@ -69,6 +72,15 @@ export default function HQExternalEvacuationPage() {
 
     /* Services */
     const { getList, exportExternalEvacueesCSVList, getPlaceDropdownList } = ExternalEvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetExternalEvacueesListOnMounting();
+            await onGetPlaceDropdownListOnMounting();
+        };
+        fetchData();
+    }, [locale, getListPayload]);
 
     const downloadExternalEvacueesListCSV = () => {
         exportExternalEvacueesCSVList(getListPayload, exportExternalEvacueesCSV);
@@ -183,15 +195,6 @@ export default function HQExternalEvacuationPage() {
             }));
         }
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetExternalEvacueesListOnMounting();
-            await onGetPlaceDropdownListOnMounting();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
 
     return (
         <div className="grid">

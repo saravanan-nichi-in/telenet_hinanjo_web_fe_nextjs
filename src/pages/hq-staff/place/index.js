@@ -14,15 +14,12 @@ import { useAppDispatch } from "@/redux/hooks";
 import { default_place_id } from "@/utils/constant";
 
 export default function AdminPlacePage() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const [importPlaceOpen, setImportPlaceOpen] = useState(false);
-  const [bulkCheckoutOpen, setBulkCheckoutOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [deleteObj, setDeleteObj] = useState(null);
+  const { locale, localeJson } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const [tableLoading, setTableLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [placeEditDialogVisible, setPlaceEditDialogVisible] = useState(false);
   const [columns, setColumns] = useState([]);
   const [id, setId] = useState(0);
   const [list, setList] = useState([]);
@@ -36,8 +33,7 @@ export default function AdminPlacePage() {
     search: "",
   });
   const [checkedValue, setCheckedValue] = useState(false);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+
   const handleRowClick = (rowData) => {
     let id = { id: rowData.ID };
     dispatch(setPlace(id));
@@ -49,6 +45,7 @@ export default function AdminPlacePage() {
       "/hq-staff/place/detail"
     );
   };
+
   const columnsData = [
     {
       field: "index",
@@ -130,9 +127,6 @@ export default function AdminPlacePage() {
     getList(getPayload, fetchData);
   };
 
-
-
-
   function fetchData(response) {
     var additionalColumnsArrayWithOldData = [...columnsData];
     var preparedList = [];
@@ -154,7 +148,7 @@ export default function AdminPlacePage() {
           active_flg: obj.active_flg,
           isActive: obj.is_active,
           furigana_name: obj.refugee_name,
-          status: (obj.is_active||default_place_id.includes(obj.id)) ? "place-status-cell" : "",
+          status: (obj.is_active || default_place_id.includes(obj.id)) ? "place-status-cell" : "",
         };
         preparedList.push(preparedObj);
       });
@@ -235,11 +229,6 @@ export default function AdminPlacePage() {
     !(
       event.data.field === "status" && event.data.value === "place-status-cell"
     );
-
-
-
-
-  
 
   return (
     <>

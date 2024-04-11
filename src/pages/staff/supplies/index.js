@@ -12,18 +12,26 @@ import { StaffSuppliesServices } from "@/services/supplies.services";
 
 export default function Supplies() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const layoutReducer = useSelector((state) => state.layoutReducer);
+
+
+  const [list, setList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [getListPayload, setGetListPayload] = useState({
+    place_id: layoutReducer?.user?.place?.id,
+  });
+
   const schema = Yup.object().shape({
     comment: Yup.string().notRequired(),
     remarks: Yup.string().notRequired(),
   });
 
-  const router = useRouter();
-  const layoutReducer = useSelector((state) => state.layoutReducer);
   const initialValues = {
     comment: "",
     remarks: "",
   };
-
 
   const columnsData = [
     {
@@ -94,12 +102,7 @@ export default function Supplies() {
     },
   ];
 
-  const [getListPayload, setGetListPayload] = useState({
-    place_id: layoutReducer?.user?.place?.id,
-  });
-  const [list, setList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [tableLoading, setTableLoading] = useState(false);
+
 
   /* Services */
   const { getList, create } = StaffSuppliesServices;

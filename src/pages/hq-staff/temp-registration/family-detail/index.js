@@ -20,11 +20,13 @@ export default function HQEvacueeTempFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.tempFamily);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [place, setPlace] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
+    
     const familyAdmissionColumns = [
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },

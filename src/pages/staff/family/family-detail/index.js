@@ -13,6 +13,8 @@ import {
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
     getSpecialCareName,
+    hideOverFlow,
+    showOverFlow,
 } from '@/helper'
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -23,17 +25,17 @@ import { setOriginalData, setIsEdit } from '@/redux/staff_register';
 import { CommonServices } from '@/services';
 
 export default function StaffFamilyDetail() {
+    const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const dispatch = useAppDispatch();
     const key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
     const { decryptPassword } = CommonServices
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const lgwan_family_id_from_store = useAppSelector((state) => state.familyReducer.family.family_id);
+
     const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
-    const [familyCode, setFamilyCode] = useState(null);
     const [familyBasicDetail, setFamilyBasicDetail] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [individualQuestionnaires, setIndividualQuestionnaires] = useState([]);
@@ -41,12 +43,12 @@ export default function StaffFamilyDetail() {
     const [familyAdmittedData, setFamilyAdmittedData] = useState([]);
     const [personList, setPersonList] = useState([]);
     const [editData, setEditData] = useState([]);
+    const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
+
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         lgwan_family_id: useAppSelector((state) => state.familyReducer.family.family_id),
     };
-
-    const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
 
     const columnNames = [
         { field: 'slno', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: '1rem', maxWidth: '1rem', alignHeader: "left" },
@@ -92,6 +94,14 @@ export default function StaffFamilyDetail() {
 
     /* Services */
     const { updateCheckoutDetail } = StaffEvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyDetailOnMounting();
+        };
+        fetchData();
+    }, [locale]);
 
     const getGenderValue = (gender) => {
         if (gender == 1) {
@@ -340,9 +350,6 @@ export default function StaffFamilyDetail() {
         return originalData;
     }
 
-
-
-
     /**
      * CommonDialog modal close
      */
@@ -365,22 +372,6 @@ export default function StaffFamilyDetail() {
             }
         });
     };
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesFamilyDetailOnMounting();
-        };
-        fetchData();
-    }, [locale]);
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
 
     return (
         <>

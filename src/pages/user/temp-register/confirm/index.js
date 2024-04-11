@@ -2,8 +2,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { LayoutContext } from "@/layout/context/layoutcontext";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
@@ -16,13 +16,16 @@ import { setSuccessData } from "@/redux/tempRegister";
 
 const TempRegisterConfirm = () => {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const registerReducer = useAppSelector((state) => state.tempRegisterReducer);
+
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
   const [neighbourData, setNeighbourData] = useState(null);
   const [familyDetailData, setFamilyDetailData] = useState(null);
-  const registerReducer = useAppSelector((state) => state.tempRegisterReducer);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+
   let confirmData = registerReducer?.registerData;
+
   const { tempRegister } = TempRegisterServices;
 
   useEffect(() => {
@@ -50,6 +53,7 @@ const TempRegisterConfirm = () => {
       return translate(localeJson, "c_others_count");
     }
   };
+
   const getPrefectureName = (id) => {
     if (id) {
       let p_name = prefectures.find((item) => item.value === id);
@@ -70,17 +74,17 @@ const TempRegisterConfirm = () => {
         locale == "ja"
           ? getJapaneseDateDisplayYYYYMMDDFormat(data.join_date)
           : getEnglishDateDisplayFormat(data.join_date),
-          address: (
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  ((data.zip_code !== null && data.zip_code !== undefined) ? (translate(localeJson, "post_letter") + data.zip_code + "<br />") : "") +
-                  getPrefectureName(parseInt(data?.prefecture_id)) +
-                  (data.address || "") +
-                  (data.address_default || ""),
-              }}
-            />
-          ),          
+      address: (
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              ((data.zip_code !== null && data.zip_code !== undefined) ? (translate(localeJson, "post_letter") + data.zip_code + "<br />") : "") +
+              getPrefectureName(parseInt(data?.prefecture_id)) +
+              (data.address || "") +
+              (data.address_default || ""),
+          }}
+        />
+      ),
       tel: data.tel,
       password: data.password,
       rep_kanji: ownerPerson?.name || "", // Assuming 'name' is the rep_kanji field
@@ -107,7 +111,7 @@ const TempRegisterConfirm = () => {
         age_month: person.month + "" || "-",
         gender: getGenderValue(person.gender) || "-",
         created_date: person.createdDate || "-",
-        tel:person.tel,
+        tel: person.tel,
         orders: [
           {
             address: (
@@ -120,13 +124,13 @@ const TempRegisterConfirm = () => {
                     (person.address_default || ""),
                 }}
               />
-            ),            
+            ),
             special_care_name: person.special_cares
               ? getSpecialCareName(
-                  locale == "ja"
-                    ? person.specialCareName
-                    : person.specialCareName2
-                )
+                locale == "ja"
+                  ? person.specialCareName
+                  : person.specialCareName2
+              )
               : "-",
             connecting_code: person.connecting_code || "-",
             remarks: person.note || "-",
@@ -217,15 +221,15 @@ const TempRegisterConfirm = () => {
               <div className="body_table">{person.dob}</div>
             </div>
             <div className=" mt-3">
-                  <div className=" flex_row_space_between">
-                    <label className="header_table">
-                      {translate(localeJson, "phone_number")}
-                    </label>
-                  </div>
-            <div className=" mt-1 body_table" id="phone-number">
-                    {person.tel||"-"}
-                  </div>
-                  </div>
+              <div className=" flex_row_space_between">
+                <label className="header_table">
+                  {translate(localeJson, "phone_number")}
+                </label>
+              </div>
+              <div className=" mt-1 body_table" id="phone-number">
+                {person.tel || "-"}
+              </div>
+            </div>
             <div className=" mt-3">
               <div className=" flex_row_space_between">
                 <label className="header_table">
@@ -259,9 +263,8 @@ const TempRegisterConfirm = () => {
               className="cursor-pointer flex align-items-center"
             >
               <i
-                className={`pi mr-2 font-bold ${
-                  showDetails ? "pi-chevron-up" : "pi-chevron-down"
-                }`}
+                className={`pi mr-2 font-bold ${showDetails ? "pi-chevron-up" : "pi-chevron-down"
+                  }`}
               ></i>
 
               {showDetails
@@ -570,7 +573,7 @@ const TempRegisterConfirm = () => {
                   tempRegister(modifiedJson, (res) => {
                     if (res) {
                       dispatch(setSuccessData(res));
-                      dispatch(setSuccessData({placeId: registerReducer?.placeId}))
+                      dispatch(setSuccessData({ placeId: registerReducer?.placeId }))
                       router.push("/user/temp-register/success");
                       setLoader(false);
                     } else {

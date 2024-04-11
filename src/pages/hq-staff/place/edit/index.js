@@ -29,26 +29,27 @@ import CustomHeader from "@/components/customHeader";
 export default function PlaceUpdatePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
-  const [apiResponse, setApiResponse] = useState({});
   const Place = useAppSelector((state) => state.placeReducer.place);
   const id = Place?.id
   const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+  
+  const [apiResponse, setApiResponse] = useState({});
   const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(0);
   const [postalCodeDefaultPrefectureId, setPostalCodeDefaultPrefectureId] = useState(0);
+  const [currentLattitude, setCurrentlatitude] = useState(0);
+  const [currentLongitude, setCurrentlongitude] = useState(0);
+  const [activeFlagValue, setActiveFlagValue] = useState(false);
+  const [publicAvailabilityFlagValue, setPublicAvailabilityFlagValue] = useState(false);
+  // map search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
+
   const today = new Date();
   const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
     const day = index + 1;
     return new Date(today.getFullYear(), today.getMonth(), day);
   });
 
-  /* Services */
-  const { update, getAddressByZipCode, details } = PlaceServices;
-  const { getAddress, getZipCode } = CommonServices;
-
-  const [currentLattitude, setCurrentlatitude] = useState(0);
-  const [currentLongitude, setCurrentlongitude] = useState(0);
-  const [activeFlagValue, setActiveFlagValue] = useState(false);
-  const [publicAvailabilityFlagValue, setPublicAvailabilityFlagValue] = useState(false);
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(
@@ -231,6 +232,10 @@ export default function PlaceUpdatePage() {
 
   });
 
+  /* Services */
+  const { update, getAddressByZipCode, details } = PlaceServices;
+  const { getAddress, getZipCode } = CommonServices;
+
   useEffect(() => {
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
@@ -330,10 +335,6 @@ export default function PlaceUpdatePage() {
     setActiveFlagValue(Boolean(model.active_flg))
     setPublicAvailabilityFlagValue(Boolean(model.public_availability))
   }
-
-  // map search
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResult, setSearchResult] = useState(null);
 
   const handleSearch = (setFieldValue) => {
     const geocoder = new window.google.maps.Geocoder();
@@ -935,10 +936,9 @@ export default function PlaceUpdatePage() {
                                       "postal_code_default_2",
                                       evt.target.value
                                     );
-                                      return;
+                                    return;
                                   }
-                                  if(re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length<=4)
-                                  {
+                                  if (re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length <= 4) {
                                     setFieldValue(
                                       "postal_code_default_2",
                                       evt.target.value

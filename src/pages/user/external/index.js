@@ -29,10 +29,6 @@ export default function PublicExternal() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
 
-  /* Services */
-  const { getActivePlaceList, getAddressByZipCode, create } = ExternalServices;
-  const { getAddress, getZipCode } = CommonServices;
-
   const [evacuee, setEvacuee] = useState([]);
   const [sortable, setSortable] = useState(false);
   const [registerModalAction, setRegisterModalAction] = useState("create");
@@ -41,8 +37,93 @@ export default function PublicExternal() {
   const [shelterData, setShelterData] = useState([]);
   const [toggleSwitchShelterComponents, setToggleSwitchShelterComponents] = useState([]);
   const [editObj, setEditObj] = useState({});
-  const [columns, setColumns] = useState([]);
   const formikRef = useRef();
+
+  /* Services */
+  const { getActivePlaceList, getAddressByZipCode, create } = ExternalServices;
+  const { getAddress, getZipCode } = CommonServices;
+
+  useEffect(() => {
+    if (evacueeValues !== "") {
+      setEvacuee((prevEvacuee) => {
+        const evacueeIndex = prevEvacuee.findIndex((evacuee) => evacuee.id === evacueeValues.id);
+
+        if (evacueeIndex !== -1) {
+          // Update existing evacuee
+          const updatedEvacuee = [...prevEvacuee];
+          updatedEvacuee[evacueeIndex] = evacueeValues;
+          formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
+          return updatedEvacuee;
+        } else {
+          // Add new evacuee
+          formikRef.current?.setFieldValue("evacuee", [...prevEvacuee, evacueeValues]);
+          return [...prevEvacuee, evacueeValues];
+        }
+      });
+    }
+  }, [evacueeValues, setEvacuee]);
+
+  useEffect(() => {
+    getDataOnMount()
+  }, [locale]);
+
+  useEffect(() => {
+    const newToggleSwitchComponents = shelterData.map((shelter, index) => {
+      const onLabel = locale == 'ja' ? shelter.name : (shelter.name_en ?? shelter.name);
+      const sliceLimit = locale == 'ja' ? 10 : 30;
+      const offLabel = onLabel.length > sliceLimit ? (onLabel.slice(0, sliceLimit) + " ...") : onLabel;
+      return (
+        <ToggleSwitch
+          key={shelter.id}
+          className={"external-selector-button"}
+          checked={placeButtonStates[index]} // Assuming placeButtonStates is an array of booleans
+          onLabel={onLabel}
+          offLabel={offLabel}
+          parentClass={"w-15rem white-space-nowrap overflow-hidden text-overflow-ellipsis eli_button"}
+          onChange={() => handlePlaceButtonClick(index)} // Assuming handleFoodButtonClick is your click handler
+        />
+      );
+    });
+
+    setToggleSwitchShelterComponents(newToggleSwitchComponents);
+  }, [shelterData, placeButtonStates]); // Include other dependencies as needed
+
+  useEffect(() => {
+    let address = formikRef.current.values.address;
+    let stateId = formikRef.current.values.prefecture_id;
+    let { city, street } = splitJapaneseAddress(address);
+    let postalCode = formikRef.current.values.postalCode
+    let state = prefectures.find(x => x.value == stateId)?.name;
+    if (state && (city && street)) {
+      getZipCode(state, city, street, (res) => {
+        if (res) {
+          let zipCode = res.result.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""))
+          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+          formikRef.current.validateField("postalCode")
+          return
+        }
+        else {
+          setFetchedZipCode("")
+          return
+        }
+      })
+    }
+    if (postalCode) {
+      getAddress(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
+          setFetchedZipCode("")
+          formikRef.current.validateField("postalCode");
+        }
+      })
+    }
+  }, [addressCount])
+
+  useEffect(() => {
+    formikRef.current.validateField("postalCode");
+  }, [fetchZipCode])
+
   const initialValues = {
     evacuee: [],
     postalCode: "",
@@ -274,7 +355,6 @@ export default function PublicExternal() {
         return <span>{displayedGenderName}</span>;
       },
     },
-
     {
       field: "actions",
       header: translate(localeJson, "common_action"),
@@ -327,31 +407,6 @@ export default function PublicExternal() {
     },
   ];
 
-  useEffect(() => {
-    if (evacueeValues !== "") {
-      setEvacuee((prevEvacuee) => {
-        const evacueeIndex = prevEvacuee.findIndex((evacuee) => evacuee.id === evacueeValues.id);
-
-        if (evacueeIndex !== -1) {
-          // Update existing evacuee
-          const updatedEvacuee = [...prevEvacuee];
-          updatedEvacuee[evacueeIndex] = evacueeValues;
-          formikRef.current?.setFieldValue("evacuee", updatedEvacuee);
-          return updatedEvacuee;
-        } else {
-          // Add new evacuee
-          formikRef.current?.setFieldValue("evacuee", [...prevEvacuee, evacueeValues]);
-          return [...prevEvacuee, evacueeValues];
-        }
-      });
-    }
-  }, [evacueeValues, setEvacuee]);
-
-
-  useEffect(() => {
-    getDataOnMount()
-  }, [locale]);
-
   const getDataOnMount = () => {
     getActivePlaceList(isActivePlaces)
   }
@@ -365,26 +420,6 @@ export default function PublicExternal() {
     setPlaceButtonStates(Array(filteredData.length).fill(false))
 
   }
-  useEffect(() => {
-    const newToggleSwitchComponents = shelterData.map((shelter, index) => {
-      const onLabel = locale == 'ja' ? shelter.name : (shelter.name_en ?? shelter.name);
-      const sliceLimit = locale == 'ja' ? 10 : 30;
-      const offLabel = onLabel.length > sliceLimit ? (onLabel.slice(0, sliceLimit) + " ...") : onLabel;
-      return (
-        <ToggleSwitch
-          key={shelter.id}
-          className={"external-selector-button"}
-          checked={placeButtonStates[index]} // Assuming placeButtonStates is an array of booleans
-          onLabel={onLabel}
-          offLabel={offLabel}
-          parentClass={"w-15rem white-space-nowrap overflow-hidden text-overflow-ellipsis eli_button"}
-          onChange={() => handlePlaceButtonClick(index)} // Assuming handleFoodButtonClick is your click handler
-        />
-      );
-    });
-
-    setToggleSwitchShelterComponents(newToggleSwitchComponents);
-  }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
   const isCreated = (res) => {
     if (res) {
@@ -392,42 +427,6 @@ export default function PublicExternal() {
     }
     setLoader(false)
   }
-
-  useEffect(() => {
-    let address = formikRef.current.values.address;
-    let stateId = formikRef.current.values.prefecture_id;
-    let { city, street } = splitJapaneseAddress(address);
-    let postalCode = formikRef.current.values.postalCode
-    let state = prefectures.find(x => x.value == stateId)?.name;
-    if (state && (city && street)) {
-      getZipCode(state, city, street, (res) => {
-        if (res) {
-          let zipCode = res.result.zipcode;
-          setFetchedZipCode(zipCode.replace(/-/g, ""))
-          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
-          formikRef.current.validateField("postalCode")
-          return
-        }
-        else {
-          setFetchedZipCode("")
-          return
-        }
-      })
-    }
-    if (postalCode) {
-      getAddress(postalCode, (res) => {
-        let _address = res;
-        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
-          setFetchedZipCode("")
-          formikRef.current.validateField("postalCode");
-        }
-      })
-    }
-  }, [addressCount])
-
-  useEffect(() => {
-    formikRef.current.validateField("postalCode");
-  }, [fetchZipCode])
 
   return (
     <div>

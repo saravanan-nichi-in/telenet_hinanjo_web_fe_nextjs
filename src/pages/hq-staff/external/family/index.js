@@ -11,6 +11,7 @@ import { ExternalEvacuationServices } from '@/services/external_evacuation.servi
 export default function HQExternalEvacuees() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
+    
     const [chartData, setChartData] = useState(null);
     const [chartOptions, setChartOptions] = useState({});
     const [pieChartPlaceCategoryData, setPieChartPlaceCategoryData] = useState(null);
@@ -18,11 +19,19 @@ export default function HQExternalEvacuees() {
     const [pieChartFoodSupportData, setPieChartFoodSupportData] = useState(null);
     const [pieChartFoodSupportOptions, setPieChartFoodSupportOptions] = useState({});
     const [foodSupportCount, setFoodSupportCount] = useState(0);
-    const chartRef = useRef();
     const [chartDataFound, setChartDataFound] = useState(0);
+    const chartRef = useRef();
 
     /* Services */
     const { getChartScreenData } = ExternalEvacuationServices;
+
+    useEffect(() => {
+        setLoader(true);
+        const fetchData = async () => {
+            await onGetExternalEvacueesChartScreenData();
+        };
+        fetchData();
+    }, []);
 
     const chartBackgroundColor = [
         {
@@ -324,14 +333,6 @@ export default function HQExternalEvacuees() {
             setChartDataFound(false);
         }
     }
-
-    useEffect(() => {
-        setLoader(true);
-        const fetchData = async () => {
-            await onGetExternalEvacueesChartScreenData();
-        };
-        fetchData();
-    }, []);
 
     return (
         <div className="grid">

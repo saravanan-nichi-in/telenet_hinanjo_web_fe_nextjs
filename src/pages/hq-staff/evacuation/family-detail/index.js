@@ -10,6 +10,8 @@ import {
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
     getSpecialCareName,
+    showOverFlow,
+    hideOverFlow,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { EvacuationServices } from '@/services/evacuation.services';
@@ -21,6 +23,7 @@ export default function EvacueeFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [checkoutVisible, setCheckoutVisible] = useState(false);
@@ -28,6 +31,7 @@ export default function EvacueeFamilyDetail() {
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
+    
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
         {
@@ -45,7 +49,7 @@ export default function EvacueeFamilyDetail() {
         { field: "c_special_care", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        
+
     ];
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
@@ -204,14 +208,6 @@ export default function EvacueeFamilyDetail() {
     const displayIndividualQuestionnaires = (index) => {
         setIndividualQuestionnairesContentIDX(index);
         setIndividualQuestionnairesVisible(true);
-    }
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
     }
 
     const translationAndObjectKeys = [

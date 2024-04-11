@@ -23,17 +23,20 @@ export default function TemporaryFamilyDetail() {
     // Getting storage data with help of reducers
     const layoutReducer = useAppSelector((state) => state.layoutReducer);
     const familyReducer = useAppSelector((state) => state.familyReducer);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [familyCode, setFamilyCode] = useState(null);
     const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [place, setPlace] = useState([]);
+
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
         { field: 'admission_date_time', header: translate(localeJson, 'admission_date_time_temp_register'), minWidth: "10rem", textAlign: 'left' },
     ];
+
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         lgwan_family_id: familyReducer?.staffTempFamily?.lgwan_family_id,
@@ -113,7 +116,7 @@ export default function TemporaryFamilyDetail() {
                     gender: getGenderValue(person.person_gender),
                     created_date: person.person_created_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_created_at) : "",
                     updated_date: person.person_updated_at ? getJapaneseDateTimeDayDisplayActualFormat(person.person_updated_at) : "",
-                    address: (person.person_postal_code ? translate(localeJson, 'post_letter') + person.person_postal_code : "") + " " +person.prefecture_name +" "+person.person_address,
+                    address: (person.person_postal_code ? translate(localeJson, 'post_letter') + person.person_postal_code : "") + " " + person.prefecture_name + " " + person.person_address,
                     special_care_name: person.person_special_cares ? getSpecialCareName(person.person_special_cares, locale) : "",
                     connecting_code: person.person_connecting_code || "",
                     remarks: person.person_note || "",

@@ -11,20 +11,27 @@ import { UserQrService } from "@/services";
 
 const SearchDetails = () => {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
-  const qrAppReducer = useSelector((state) => state.qrAppReducer);
-  const { create } = UserQrService;
   const router = useRouter();
-  let data = qrAppReducer?.checkInData || [];
-  let family_id = data.length > 0 ? data[0].family_id : "";
-  let place_id = data.length > 0 ? data[0].place_id : "";
+  const qrAppReducer = useSelector((state) => state.qrAppReducer);
   const dispatch = useAppDispatch();
+
+  const { create } = UserQrService;
+
+  let data = qrAppReducer?.checkInData || [];
+
+  let family_id = data.length > 0 ? data[0].family_id : "";
+
+  let place_id = data.length > 0 ? data[0].place_id : "";
+
   const isCheckedIn = (res) => {
     setLoader(false);
     res && router.push("/user/qr/app");
   };
+
   useEffect(() => {
     showOverFlow();
   }, [locale]);
+
   return (
     <div className="flex justify-content-center">
       <div className="m-2 w-full xlScreenMaxWidth mdScreenMaxWidth">

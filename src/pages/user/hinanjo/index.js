@@ -16,6 +16,21 @@ export default function HinanjoList() {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
+
+    const [tableLoading, setTableLoading] = useState(false);
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "",
+            order_by: "desc",
+        },
+        search: "",
+    });
+
     const columnsData = [
         { field: 'sl_no', header: translate(localeJson, 'event_places_list_column_header_sl_no'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center' },
         { field: 'name', header: translate(localeJson, 'event_places_list_column_header_name'), headerClassName: "custom-header", minWidth: "13rem", maxWidth: "13rem", textAlign: 'left' },
@@ -49,19 +64,6 @@ export default function HinanjoList() {
             ),
         }
     ];
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "",
-            order_by: "desc",
-        },
-        search: "",
-    });
-    const [tableLoading, setTableLoading] = useState(false);
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
 
     /* Services */
     const { getList } = UserPlaceListServices;

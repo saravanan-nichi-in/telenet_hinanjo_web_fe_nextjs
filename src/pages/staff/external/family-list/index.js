@@ -16,14 +16,10 @@ function ExternalFamilyList() {
     const router = useRouter();
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
-    const columnsData = [
-        { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class", textAlign: "center", sortable: false },
-        { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "10rem", sortable: false, },
-        { field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "10rem", sortable: false },
-        { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "10rem", maxWidth: "15rem", sortable: false, },
-        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "10rem", sortable: false, },
-        { field: 'address', header: translate(localeJson, 'external_evecuee_list_table_address'), minWidth: "10rem", sortable: false, },
-    ];
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [totalPersonCount, setTotalPersonCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -33,10 +29,15 @@ function ExternalFamilyList() {
         },
         place_id: layoutReducer?.user?.place?.id,
     });
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [totalPersonCount, setTotalPersonCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+
+    const columnsData = [
+        { field: 'slno', header: translate(localeJson, 'external_evecuee_list_table_slno'), className: "sno_class", textAlign: "center", sortable: false },
+        { field: 'place_category', header: translate(localeJson, 'external_evecuee_list_table_place_category'), minWidth: "10rem", sortable: false, },
+        { field: 'external_person_count', header: translate(localeJson, 'external_evecuee_list_table_person_count'), minWidth: "10rem", sortable: false },
+        { field: 'hinan_id', header: translate(localeJson, 'external_evecuee_list_table_hinan_id'), minWidth: "10rem", maxWidth: "15rem", sortable: false, },
+        { field: 'email', header: translate(localeJson, 'external_evecuee_list_table_email_address'), minWidth: "10rem", sortable: false, },
+        { field: 'address', header: translate(localeJson, 'external_evecuee_list_table_address'), minWidth: "10rem", sortable: false, },
+    ];
 
     /* Services */
     const { getList, exportData } = ExternalEvacueesService;
