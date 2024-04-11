@@ -13,7 +13,7 @@ import { Button, DeleteModal, NormalTable, CommonDialog, CustomHeader, AdminMana
 import { PlaceServices } from "@/services";
 import { setPlace } from "@/redux/place";
 import { useAppDispatch } from "@/redux/hooks";
-// import { default_place_id } from "@/utils/constant"; 
+import { default_place_id } from "@/utils/constant"; 
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -123,7 +123,7 @@ export default function AdminPlacePage() {
               buttonProps={{
                 text: translate(localeJson, "delete"),
                 buttonClass: "delete-button",
-                disabled: rowData.isActive,
+                disabled: (rowData.isActive||default_place_id.includes(rowData.ID)),
                 onClick: () => {
                   openDeleteDialog(rowData);
                 },
@@ -195,7 +195,7 @@ export default function AdminPlacePage() {
           active_flg: obj.active_flg,
           isActive: obj.is_active,
           furigana_name: obj.refugee_name,
-          status: (obj.is_active) ? "place-status-cell" : "",
+          status: (obj.is_active||default_place_id.includes(obj.id)) ? "place-status-cell" : "",
         };
         preparedList.push(preparedObj);
       });
@@ -376,7 +376,7 @@ export default function AdminPlacePage() {
         refreshList={onGetPlaceListOnMounting}
         deleteObj={deleteObj}
       />
-      {/* <PlaceEventBulkCheckOut
+      <PlaceEventBulkCheckOut
         modalHeaderText={translate(localeJson, "place_name")}
         open={bulkCheckoutOpen}
         onBulkCheckoutSuccess={handleTableReload}
@@ -385,7 +385,7 @@ export default function AdminPlacePage() {
           showOverFlow();
         }}
         type={"places"}
-      /> */}
+      />
       <div className="grid">
         <div className="col-12">
           <div className="card">
@@ -400,7 +400,7 @@ export default function AdminPlacePage() {
                 className="flex"
                 style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
               >
-                {/* <Button
+                <Button
                   buttonProps={{
                     rounded: "true",
                     buttonClass: "evacuation_button_height",
@@ -411,7 +411,7 @@ export default function AdminPlacePage() {
                     },
                   }}
                   parentClass={"mr-1 mt-1"}
-                /> */}
+                />
                 <Button
                   buttonProps={{
                     rounded: "true",

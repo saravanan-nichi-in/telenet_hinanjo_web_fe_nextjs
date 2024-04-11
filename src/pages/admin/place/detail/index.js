@@ -6,9 +6,9 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
-import { useAppSelector,useAppDispatch } from "@/redux/hooks";
-import { prefecturesCombined } from "@/utils/constant";
-import {setSuccessData} from "@/redux/tempRegister"
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { prefecturesCombined, default_place_id } from "@/utils/constant";
+import { setSuccessData } from "@/redux/tempRegister"
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -30,7 +30,7 @@ export default function StaffManagementEditPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coordinates, setCoordinates] = useState("");
   const [url, setUrl] = useState("");
-  const [tempUrl,setTempUrl] = useState("")
+  const [tempUrl, setTempUrl] = useState("")
   const [altitude, setAltitude] = useState("-");
   const [status, setStatus] = useState("");
   const [longitude, setLangitude] = useState(0);
@@ -46,9 +46,9 @@ export default function StaffManagementEditPage() {
   const { encrypt } = CommonServices;
 
   useEffect(() => {
-    localStorage.setItem("refreshing",false)
-   if(tempSuccessData) 
-   dispatch(setSuccessData({showButton:true}))
+    localStorage.setItem("refreshing", false)
+    if (tempSuccessData)
+      dispatch(setSuccessData({ showButton: true }))
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
     };
@@ -183,44 +183,45 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-      <div className="col-12">
-        {tableLoading ? (
-          <CardSpinner />
-        ) : (
-          <div className="custom-card-no-shadow ">
-            <div className="grid">
-              <div className="col-12">
-                <div className="font-bold mt-2">
-                  {translate(localeJson, "place_url")}
-                </div>
-                <div className="mt-2">
-                  {translate(localeJson, "place_url_url")} :
-                  <a
-                    className="text-link-class cursor-pointer"
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {url}
-                  </a>
-                </div>
-                <div className="mt-2">
-                  {translate(localeJson, "smart_phone_register_url")} :
-                  <a
-                    className="text-link-class cursor-pointer"
-                    href={tempUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {tempUrl}
-                  </a>
+      {!default_place_id.includes(id) && (
+        <div className="col-12">
+          {tableLoading ? (
+            <CardSpinner />
+          ) : (
+            <div className="custom-card-no-shadow ">
+              <div className="grid">
+                <div className="col-12">
+                  <div className="font-bold mt-2">
+                    {translate(localeJson, "place_url")}
+                  </div>
+                  <div className="mt-2">
+                    {translate(localeJson, "place_url_url")} :
+                    <a
+                      className="text-link-class cursor-pointer"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {url}
+                    </a>
+                  </div>
+                  <div className="mt-2">
+                    {translate(localeJson, "smart_phone_register_url")} :
+                    <a
+                      className="text-link-class cursor-pointer"
+                      href={tempUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {tempUrl}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-
+          )}
+        </div>
+      )}
       <div className="col-12">
         <div
           className="flex pt-3 pb-3 gap-2"
