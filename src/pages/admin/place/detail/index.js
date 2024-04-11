@@ -46,9 +46,11 @@ export default function StaffManagementEditPage() {
   const { encrypt } = CommonServices;
 
   useEffect(() => {
-    localStorage.setItem("refreshing", false)
-    if (tempSuccessData)
-      dispatch(setSuccessData({ showButton: true }))
+    localStorage.setItem("refreshing",false)
+   if(tempSuccessData) 
+   {
+   dispatch(setSuccessData({showButton:true}))
+   }
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
     };

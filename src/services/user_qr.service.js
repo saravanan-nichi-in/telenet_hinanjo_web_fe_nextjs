@@ -41,7 +41,7 @@ function _create(payload, callBackFun) {
         .post("/user/registration/qr/app/checkin", payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun(response.data.data);
+                callBackFun(response.data);
 
                 if (response?.data?.success) {
                     toast.success(response?.data?.message, {
