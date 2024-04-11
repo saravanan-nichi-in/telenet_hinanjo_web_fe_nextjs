@@ -95,7 +95,6 @@ function TemporaryRegistrants() {
         
         { field: 'family_count', header: translate(localeJson, 'family_count'), sortable: true, textAlign: "center", alignHeader: "left", minWidth: "6rem", display: 'none' },
         
-        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
         // { field: 'person_is_owner', header: translate(localeJson, 'representative'), sortable: true, textAlign: 'left', alignHeader: 'left', minWidth: '7rem' },
         { field: "age_month", header: translate(localeJson, 'age_month'), sortable: true, textAlign: 'left', minWidth: "7rem", display: 'none' },
         { field: "connecting_code", header: translate(localeJson, 'connecting_code'), minWidth: "7rem", sortable: true, textAlign: 'left', display: 'none' },
@@ -626,7 +625,7 @@ function TemporaryRegistrants() {
                                 }}
                                 onSelectionChange={
                                     (e) => {
-                                        dispatch(setStaffTempFamily({ lgwan_family_id: e.value.id }));
+                                        dispatch(setStaffTempFamily({ family_id: e.value.id }));
                                         router.push({
                                             pathname: '/staff/temporary/family-detail',
                                         });

@@ -44,7 +44,6 @@ export default function EvacueeFamilyDetail() {
         { field: "age", header: translate(localeJson, 'age'), sortable: false, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
         { field: "gender", header: translate(localeJson, 'gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "c_special_care", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-        { field: 'yapple_id', header: translate(localeJson, 'yapple_id'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
     const familyAdmissionColumns = [
@@ -124,7 +123,6 @@ export default function EvacueeFamilyDetail() {
                         evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
                         place_id: person.place_id,
                         family_is_registered: person.family_is_registered,
-                        yapple_id: person.yapple_id,
                     };
                     let personAnswers = person.person_answers;
                     if (listOfIndividualQuestions.length > 0) {
@@ -226,7 +224,6 @@ export default function EvacueeFamilyDetail() {
         "connecting_code",
         "remarks",
         "c_special_care",
-        "yapple_id",
     ];
 
     return (

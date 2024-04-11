@@ -39,7 +39,7 @@ export default function TemporaryFamilyDetail() {
 
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
-        lgwan_family_id: familyReducer?.staffTempFamily?.lgwan_family_id,
+        family_id: familyReducer?.staffTempFamily?.family_id,
     };
 
     /* Services */
