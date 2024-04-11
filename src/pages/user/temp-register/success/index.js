@@ -19,6 +19,8 @@ const RegisterSuccess = () => {
 
   const url = regReducer.successData?.data?.url
 
+  const baseUrl = regReducer.successData?.data?.baseUrl
+
   const { deleteTempFamily } = TempRegisterServices
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const RegisterSuccess = () => {
                 onClick: () => {
                   localStorage.setItem("personCount", null)
                   dispatch(clearExceptSuccessData())
-                  downloadImage(url, 'qr.jpg');
+                  downloadImage(baseUrl, 'qr.JPEG');
                 },
               }} parentClass={"back-button"}
               />
@@ -88,12 +90,13 @@ const RegisterSuccess = () => {
                     let payload = {
                       family_id: regReducer.successData?.data?.familyId
                     }
-                    deleteTempFamily(payload, (res) => {
-                      if (res) {
-                        localStorage.setItem("personCountTemp", null)
+                    deleteTempFamily(payload,(res)=> {
+                      if(res)
+                      {
+                        dispatch(reset())
+                        localStorage.setItem("personCountTemp",null)
                         localStorage.setItem('refreshing', false);
                         router.push('/user/list')
-                        dispatch(reset())
                       }
                     })
                   },

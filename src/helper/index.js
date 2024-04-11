@@ -713,44 +713,44 @@ export const getSpecialCareName = (nameList, locale = 'ja') => {
     return specialCareName;
 }
 
-export function downloadImage(url, fileName) {
-    // Create an image element
-    var img = new Image();
-    img.crossOrigin = "Anonymous"; // Set cross-origin to handle CORS
-    img.src = 'https://cors-anywhere.herokuapp.com/' + url;
-    img.onload = function() {
-        // Create a canvas element
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        // Draw the image onto the canvas
-        ctx.drawImage(this, 0, 0);
-        // Convert canvas to base64 string
-        var base64String = canvas.toDataURL('image/jpeg'); // Adjust format as needed
-        // Convert base64 string to Blob
-        var blob = base64ToBlob(base64String);
-        // Create a downloadable link with the Blob
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-        // Append the link to the body
-        document.body.appendChild(link);
-        // Trigger the click event of the link
-        link.click();
-        // Remove the link from the body
-        document.body.removeChild(link);
-    };
-}
+export function downloadImage(base64String,fileName) {
 
-// Function to convert base64 string to Blob
-function base64ToBlob(base64String) {
-    var byteString = atob(base64String.split(',')[1]);
-    var mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+     //Convert base64 string to binary data
+  const byteCharacters = atob(base64String);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+    const slice = byteCharacters.slice(offset, offset + 512);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
     }
-    return new Blob([ab], { type: mimeString });
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  // Create Blob object from binary data
+  const blob = new Blob(byteArrays, { type: 'image/png' }); // Adjust type if necessary
+
+  // Create a URL for the Blob object
+  const downloadUrl = URL.createObjectURL(blob);
+
+  // Create a link element
+  const link = document.createElement('a');
+  link.href = downloadUrl;
+  link.download = fileName;
+
+  // Append the link to the body
+  document.body.appendChild(link);
+
+  // Click the link to trigger the download
+  link.click();
+
+  // Remove the link from the DOM
+  document.body.removeChild(link);
+
+  // Revoke the URL to free up memory
+  URL.revokeObjectURL(downloadUrl);
 }
