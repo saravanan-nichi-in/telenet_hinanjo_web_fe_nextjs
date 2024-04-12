@@ -8,14 +8,13 @@ import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/compone
 import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { prefecturesCombined, default_place_id } from "@/utils/constant";
-import { setSuccessData,reset } from "@/redux/tempRegister"
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const Place = useAppSelector((state) => state.placeReducer.place);
-  const tempSuccessData = useAppSelector((state) => state.tempRegisterReducer?.successData?.data);
+  const tempSuccessData = useAppSelector((state) => state.tempRegisterReducer);
   const id = Place?.id;
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
@@ -47,9 +46,6 @@ export default function StaffManagementEditPage() {
 
   useEffect(() => {
     localStorage.setItem("refreshing", false)
-    if (tempSuccessData) {
-      dispatch(setSuccessData({ showButton: true }))
-    }
     const fetchData = async () => {
       await onGetPlaceDetailsOnMounting();
     };
@@ -83,7 +79,7 @@ export default function StaffManagementEditPage() {
     setPhoneNumber(model.tel);
     setCoordinates(`${model.map.latitude} / ${model.map.longitude}`);
     setUrl(`${window?.location?.origin}/user/dashboard?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
-    setTempUrl(`${window?.location?.origin}/user/temp-register?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
+    setTempUrl(`${window?.location?.origin}/user/temp-register/member?hinan=${encrypt(id, ENCRYPTION_KEY)}`);
     model.altitude && setAltitude(`${model.altitude}m`);
     setStatus(model.active_flg == 1 ? "有効" : "無効");
     setTotalPerson(model.total_person);
@@ -213,18 +209,6 @@ export default function StaffManagementEditPage() {
                       href={tempUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={()=>{
-                        let isTempData = localStorage.getItem("tempDataDeleted")||false
-                        if(isTempData)
-                        {
-                          dispatch(reset());
-                          return
-                        }
-                        if(tempSuccessData) 
-                        {
-                        dispatch(setSuccessData({showButton:true}))
-                        }
-                      }}
                     >
                       {tempUrl}
                     </a>

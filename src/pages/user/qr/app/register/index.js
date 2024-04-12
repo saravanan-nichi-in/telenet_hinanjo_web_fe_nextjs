@@ -27,7 +27,8 @@ const SearchDetails = () => {
   const isCheckedIn = (res) => {
     if(res)
     {
-    localStorage.setItem("tempDataDeleted",true)
+    localStorage.setItem("tempDataDeleted","true")
+    localStorage.setItem("isSuccess","false");
     dispatch(clear());
     dispatch(reset())
     setLoader(false);

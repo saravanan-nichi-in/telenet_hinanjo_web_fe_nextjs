@@ -90,13 +90,13 @@ const forgetPasswordPersistConfig = {
 };
 
 const qrAppPersistConfig = {
-  key: 'checkIn',
+  key: 'checkInQr',
   storage: storage,
   // whitelist: ['/* specify which parts of the state you want to persist */'],
 };
 
 const tempRegisterPersistConfig = {
-  key: 'register',
+  key: 'TempRegister',
   storage: storage,
   // whitelist: ['/* specify which parts of the state you want to persist */'],
 };
