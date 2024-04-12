@@ -8,14 +8,13 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { ValidationError, Button, CustomHeader, Password } from '@/components';
 import { AuthenticationAuthorizationService } from '@/services';
-import { useAppSelector } from "@/redux/hooks";
 
 const ResetPasswordPage = () => {
     const { layoutConfig, localeJson } = useContext(LayoutContext);
     const router = useRouter();
-    // Getting storage data with help of reducers
-    const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+
     const containerClassName = classNames('auth_surface_ground flex align-items-start justify-content-center overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+
     const schema = Yup.object().shape({
         password: Yup.string()
             .required(translate(localeJson, 'new_password_required'))

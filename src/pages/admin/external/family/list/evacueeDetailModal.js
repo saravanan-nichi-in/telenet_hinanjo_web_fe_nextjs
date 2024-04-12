@@ -5,6 +5,8 @@ import _ from 'lodash';
 import {
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
+    hideOverFlow,
+    showOverFlow,
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -13,7 +15,19 @@ import { Button, NormalTable } from "@/components";
 
 export default function EvacueeDetailModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
+
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        "filters": {
+            "start": 0,
+        },
+        "evacuee_id": props.evacuee.id,
+    });
     const { open, close } = props && props;
+
     const columnsData = [
         { field: 'slno', header: translate(localeJson, 'external_evecuee_details_popup_table_slno'), className: "sno_class", textAlign: "center", alignHeader: "center" },
         { field: 'name_furigana', header: translate(localeJson, 'external_evecuee_details_popup_table_name_furigana'), minWidth: "8rem", maxWidth: "8rem" },
@@ -21,18 +35,29 @@ export default function EvacueeDetailModal(props) {
         { field: 'age', header: translate(localeJson, 'external_evecuee_details_popup_table_age'), minWidth: "3rem", maxWidth: "3rem", textAlign: "center", alignHeader: "center" },
         { field: 'gender', header: translate(localeJson, 'external_evecuee_details_popup_table_gender'), minWidth: "3rem", maxWidth: "3rem" }
     ];
+
     const { getExternalEvacueesDetail } = ExternalEvacuationServices;
-    const [getListPayload, setGetListPayload] = useState({
-        "filters": {
-            "start": 0,
-            // "limit": 10
-        },
-        "evacuee_id": props.evacuee.id,
-    });
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await getEvacueesList()
+        };
+        fetchData();
+    }, [locale, getListPayload, props.evacuee]);
+
+    useEffect(() => {
+        if (open) {
+            hideOverFlow();
+        } else {
+            showOverFlow();
+        }
+
+        return () => {
+            // Cleanup when the component unmounts
+            showOverFlow();
+        };
+    }, [open]);
 
     const getEvacueesList = () => {
         getExternalEvacueesDetail(getListPayload, (response) => {
@@ -81,31 +106,11 @@ export default function EvacueeDetailModal(props) {
         }
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await getEvacueesList()
-        };
-        fetchData();
-    }, [locale, getListPayload, props.evacuee]);
-
     const header = (
         <div className="new-custom-modal">
             {translate(localeJson, 'external_evecuee_details_popup_header')}
         </div>
     );
-    useEffect(() => {
-        if (open) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
-        return () => {
-            // Cleanup when the component unmounts
-            document.body.style.overflow = 'auto';
-        };
-    }, [open]);
 
     return (
         <React.Fragment>

@@ -8,14 +8,7 @@ import { AdminEventStatusServices, CommonServices } from '@/services';
 
 function EventStatusList() {
     const { locale, localeJson } = useContext(LayoutContext);
-    const columnNames = [
-        { field: 'number', header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center', alignHeader: "left" },
-        { field: 'name', header: translate(localeJson, 'questionnaire_name'), minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header" },
-        { field: 'total_person', header: translate(localeJson, 'number_of_evacuees_event_status_list'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold", textAlign: "center", alignHeader: "center" },
-        { field: 'maleCount', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
-        { field: 'femaleCount', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
-        { field: 'othersCount', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
-    ];
+
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
@@ -36,14 +29,14 @@ function EventStatusList() {
     const [totalCount, setTotalCount] = useState(0);
     const [frozenArray, setFrozenArray] = useState([]);
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            eventListApiCall()
-            await listApiCall();
-        };
-        fetchData();
-    }, [locale, listPayload]);
+    const columnNames = [
+        { field: 'number', header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center', alignHeader: "left" },
+        { field: 'name', header: translate(localeJson, 'questionnaire_name'), minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header" },
+        { field: 'total_person', header: translate(localeJson, 'number_of_evacuees_event_status_list'), minWidth: '10rem', headerClassName: "custom-header", fontWeight: "bold", textAlign: "center", alignHeader: "center" },
+        { field: 'maleCount', header: translate(localeJson, 'male'), minWidth: '5rem', headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'femaleCount', header: translate(localeJson, 'female'), minWidth: "7rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+        { field: 'othersCount', header: translate(localeJson, 'others_count'), minWidth: "10rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
+    ];
 
     const rowClassName = (rowData) => {
         return (rowData.name === '合計' || rowData.evacuation_place == 'Total') ? 'common_table_bg' : "";
@@ -102,6 +95,15 @@ function EventStatusList() {
             }
         })
     }
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            eventListApiCall()
+            await listApiCall();
+        };
+        fetchData();
+    }, [locale, listPayload]);
 
     const searchListWithCriteria = () => {
         setListPayload({

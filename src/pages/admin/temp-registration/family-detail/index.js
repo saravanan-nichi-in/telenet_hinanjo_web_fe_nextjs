@@ -20,16 +20,12 @@ export default function EvacueeTempFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.tempFamily);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [place, setPlace] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
-    const familyAdmissionColumns = [
-        { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },
-        { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
-        { field: 'admission_date_time', header: translate(localeJson, 'admin_temporary_register_check-in'), minWidth: "10rem", textAlign: 'left' },
-    ];
 
     /* Services */
     const { getPlaceList } = CommonServices;
@@ -48,7 +44,7 @@ export default function EvacueeTempFamilyDetail() {
     }, [locale]);
 
     useEffect(() => {
-        if (place !== null && place?.length>0) {
+        if (place !== null && place?.length > 0) {
             onGetEvacueesFamilyDetailOnMounting();
         }
     }, [place]);
@@ -264,7 +260,6 @@ export default function EvacueeTempFamilyDetail() {
                                     <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.yapple_id}</div>
                                 </div>
-                                
                             </div>
                         )
                     ))}
@@ -301,21 +296,6 @@ export default function EvacueeTempFamilyDetail() {
                                 ))}
                             </div>
                         ))}
-                    </div>
-                    <div className='mt-2 flex justify-content-center overflow-x-auto'>
-                        {/* Development */}
-                        {/* <NormalTable
-                            id="evacuee-family-detail"
-                            size={"small"}
-                            loading={tableLoading}
-                            emptyMessage={translate(localeJson, "data_not_found")}
-                            stripedRows={true}
-                            paginator={false}
-                            showGridlines={true}
-                            tableStyle={{ maxWidth: "20rem" }}
-                            value={familyAdmittedData}
-                            columns={familyAdmissionColumns}
-                        /> */}
                     </div>
                     <div className="text-center mt-2" style={{ display: "none" }}>
                         <Button buttonProps={{

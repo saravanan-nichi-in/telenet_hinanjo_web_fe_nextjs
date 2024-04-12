@@ -23,17 +23,22 @@ import { PlaceServices, CommonServices } from "@/services";
 export default function PlaceCreatePage() {
   const { localeJson, setLoader, locale } = useContext(LayoutContext);
   const router = useRouter();
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+
   const [currentLattitude, setCurrentlatitude] = useState(0);
   const [currentLongitude, setCurrentlongitude] = useState(0);
   const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(null);
-  const [prefCount,setPrefCount]=useState(1)
+  const [prefCount, setPrefCount] = useState(1)
   const [postalCodeDefaultPrefectureId, setPostalCodeDefaultPrefectureId] = useState(0);
-  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
+  const formikRef = useRef();
+
   const today = new Date();
+
   const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
     const day = index + 1;
     return new Date(today.getFullYear(), today.getMonth(), day);
   });
+
   const schema = Yup.object().shape({
     name: Yup.string()
       .required(
@@ -67,14 +72,12 @@ export default function PlaceCreatePage() {
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
-        if(context.parent.postal_code_2?.length==4)
-        {
-        const { prefecture_id } = context.parent;
-        if(postalCodePrefectureId != null && prefecture_id !=null)
-        {
-        return postalCodePrefectureId == prefecture_id
-        }
-        else return true
+        if (context.parent.postal_code_2?.length == 4) {
+          const { prefecture_id } = context.parent;
+          if (postalCodePrefectureId != null && prefecture_id != null) {
+            return postalCodePrefectureId == prefecture_id
+          }
+          else return true
         }
         else {
           return true
@@ -92,13 +95,12 @@ export default function PlaceCreatePage() {
         translate(localeJson, "postal_code") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
-        if(context.parent.postal_code_1?.length==3) {
-        const { prefecture_id } = context.parent;
-        if(postalCodePrefectureId != null && prefecture_id !=null)
-        {
-        return postalCodePrefectureId == prefecture_id
-        }
-        else return true
+        if (context.parent.postal_code_1?.length == 3) {
+          const { prefecture_id } = context.parent;
+          if (postalCodePrefectureId != null && prefecture_id != null) {
+            return postalCodePrefectureId == prefecture_id
+          }
+          else return true
         }
         else {
           return true
@@ -134,13 +136,12 @@ export default function PlaceCreatePage() {
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
-        if(context.parent.postal_code_default_2?.length==4) {
-        const { prefecture_id_default } = context.parent;
-        if(postalCodeDefaultPrefectureId != null && prefecture_id_default !=null)
-        {
-        return postalCodeDefaultPrefectureId == prefecture_id_default
-        }
-        else return true
+        if (context.parent.postal_code_default_2?.length == 4) {
+          const { prefecture_id_default } = context.parent;
+          if (postalCodeDefaultPrefectureId != null && prefecture_id_default != null) {
+            return postalCodeDefaultPrefectureId == prefecture_id_default
+          }
+          else return true
         }
         else {
           return true
@@ -158,13 +159,12 @@ export default function PlaceCreatePage() {
         translate(localeJson, "default_prefecture_place") +
         translate(localeJson, "is_required")
       ).test("testPostalCode", translate(localeJson, "zip_code_mis_match"), (value, context) => {
-        if(context.parent.postal_code_default_1?.length==3) {
-        const { prefecture_id_default } = context.parent;
-        if(postalCodeDefaultPrefectureId != null && prefecture_id_default !=null)
-        {
-        return postalCodeDefaultPrefectureId == prefecture_id_default
-        }
-        else return true
+        if (context.parent.postal_code_default_1?.length == 3) {
+          const { prefecture_id_default } = context.parent;
+          if (postalCodeDefaultPrefectureId != null && prefecture_id_default != null) {
+            return postalCodeDefaultPrefectureId == prefecture_id_default
+          }
+          else return true
         }
         else {
           return true
@@ -190,7 +190,7 @@ export default function PlaceCreatePage() {
       translate(localeJson, "max_length_255")
     ),
     tel: Yup.string()
-    .required(translate(localeJson, "phone_no_required"))
+      .required(translate(localeJson, "phone_no_required"))
       .test(
         "starts-with-zero",
         translate(localeJson, "phone_num_start"),
@@ -210,10 +210,9 @@ export default function PlaceCreatePage() {
         }
       )
       .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-        if(value)
-        {
-        const singleByteValue = convertToSingleByte(value);
-        return /^[0-9]{10,11}$/.test(singleByteValue);
+        if (value) {
+          const singleByteValue = convertToSingleByte(value);
+          return /^[0-9]{10,11}$/.test(singleByteValue);
         }
         else {
           return true;
@@ -257,12 +256,17 @@ export default function PlaceCreatePage() {
   });
 
   /* Services */
-  const { create, getAddressByZipCode } = PlaceServices;
-  const { getAddress, getZipCode } = CommonServices
+  const { create } = PlaceServices;
+  const { getAddress } = CommonServices
 
   useEffect(() => {
     getLocation();
   }, [locale]);
+
+  useEffect(() => {
+    formikRef.current.validateForm()
+  }, [prefCount])
+
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -279,6 +283,7 @@ export default function PlaceCreatePage() {
       console.error("Geolocation is not supported by your browser.");
     }
   };
+
   const initialValues = {
     name: "",
     refugee_name: "",
@@ -339,10 +344,6 @@ export default function PlaceCreatePage() {
       router.push("/admin/place");
     }
   };
-const formikRef = useRef();
-  useEffect(()=> {
-    formikRef.current.validateForm()
-  },[prefCount])
 
   return (
     <>
@@ -440,7 +441,6 @@ const formikRef = useRef();
                             }
                           />
                         </div>
-
                         <div className="modal-field-top-space modal-field-bottom-space">
                           <Input
                             inputProps={{
@@ -465,7 +465,6 @@ const formikRef = useRef();
                             }
                           />
                         </div>
-
                         <div className="modal-field-top-space modal-field-bottom-space">
                           <Input
                             inputProps={{
@@ -554,7 +553,7 @@ const formikRef = useRef();
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
-                                            setPrefCount(prefCount+1)
+                                            setPrefCount(prefCount + 1)
                                             validateForm();
                                           } else {
                                             setFieldValue(
@@ -641,7 +640,7 @@ const formikRef = useRef();
                                               address.address2 + (address.address3 || "")
                                             );
                                             setPostalCodePrefectureId(selectedPrefecture?.value);
-                                            setPrefCount(prefCount+1)
+                                            setPrefCount(prefCount + 1)
                                             validateForm();
                                           } else {
                                             setFieldValue(
@@ -669,7 +668,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-                        {/* </div> */}
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
                             <InputDropdown inputDropdownProps={{
@@ -694,14 +692,13 @@ const formikRef = useRef();
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
                                         setPostalCodePrefectureId(res.prefcode);
-                                        setPrefCount(prefCount+1)
+                                        setPrefCount(prefCount + 1)
                                         setErrors({ ...errors, postal_code_1: translate(localeJson, "zip_code_mis_match"), postal_code_2: translate(localeJson, "zip_code_mis_match") });
                                       }
                                       validateForm();
                                     })
                                 }
                               },
-                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />
@@ -713,7 +710,6 @@ const formikRef = useRef();
                               }
                             />
                           </div>
-
                           <div className="lg:col-6 pt-0 pb-0 lg:pr-0 mt-2 mb-2 lg:mt-0 lg:mb-0">
                             <Input
                               inputProps={{
@@ -741,7 +737,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 mb-2 mt-2 pt-0 pb-0 lg:mb-0 lg:mt-0 lg:pl-0">
                             <InputDropdown inputDropdownProps={{
@@ -793,7 +788,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 pt-0 pb-0 lg:pl-0 mb-2 mt-2 mb-2 lg:mt-0 lg:mb-0">
                             <Input
@@ -905,10 +899,9 @@ const formikRef = useRef();
                                       "postal_code_default_2",
                                       evt.target.value
                                     );
-                                      return;
+                                    return;
                                   }
-                                  if(re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length<=4)
-                                  {
+                                  if (re.test(convertToSingleByte(evt.target.value)) && evt.target.value.length <= 4) {
                                     setFieldValue(
                                       "postal_code_default_2",
                                       evt.target.value
@@ -1006,7 +999,6 @@ const formikRef = useRef();
                                     })
                                 }
                               },
-                              // onBlur: handleBlur,
                               emptyMessage: translate(localeJson, "data_not_found"),
                             }}
                             />
@@ -1128,13 +1120,11 @@ const formikRef = useRef();
                             }
                           />
                         </div>
-
                         <div className="modal-field-top-space modal-field-bottom-space">
-                        <Input
+                          <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.tel && touched.tel && "p-invalid"
-                              }`,
+                              inputParentClassName: `w-full custom_input ${errors.tel && touched.tel && "p-invalid"
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "phone_number"),
                                 spanText: "*",
@@ -1172,7 +1162,6 @@ const formikRef = useRef();
                             errorBlock={errors.tel && touched.tel && errors.tel}
                           />
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-6 pt-0 pb-0 mb-2 lg:mb-0 lg:pl-0 ">
                             <InputNumber inputNumberProps={{
@@ -1243,7 +1232,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-
                         <div className="modal-field-top-space modal-field-bottom-space">
                           <InputNumber inputNumberProps={{
                             inputNumberParentClassName: `${errors.altitude &&
@@ -1278,7 +1266,6 @@ const formikRef = useRef();
                             }
                           />
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-7 pt-0 pb-0 mb-2 mt-2 lg:mb-0 lg:mt-0 lg:pl-0">
                             <Calendar calendarProps={{
@@ -1311,7 +1298,6 @@ const formikRef = useRef();
                                 touched.opening_time &&
                                 "p-invalid"
                                 }`,
-
                               date: values.opening_date,
                               calendarClassName: "w-full",
                               name: "opening_time",
@@ -1325,7 +1311,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-7 pt-0 pb-0 mb-2 mt-0 lg:mb-0 lg:pl-0">
                             <ValidationError
@@ -1346,7 +1331,6 @@ const formikRef = useRef();
                             />
                           </div>
                         </div>
-
                         <div className="lg:flex modal-field-top-space modal-field-bottom-space">
                           <div className="lg:col-7 pt-0 pb-0 mb-2 mt-2 lg:mb-0 lg:pl-0">
                             <Calendar calendarProps={{
@@ -1378,7 +1362,6 @@ const formikRef = useRef();
                                 touched.closing_time &&
                                 "p-invalid"
                                 }`,
-
                               date: values.closing_date,
                               calendarClassName: "w-full",
                               name: "closing_time",

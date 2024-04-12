@@ -12,8 +12,10 @@ import { getSpecialCareName } from "@/helper";
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);
-    const [familyCount, setFamilyCount] = useState(0);
     const router = useRouter();
+    const dispatch = useAppDispatch();
+
+    const [familyCount, setFamilyCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
@@ -36,7 +38,6 @@ export default function EvacuationPage() {
             refugee_name: ""
         }
     });
-    const dispatch = useAppDispatch();
 
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
@@ -57,20 +58,6 @@ export default function EvacuationPage() {
         { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     ];
-
-    const downloadEvacueesListCSV = () => {
-        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
-    }
-
-    const exportEvacueesCSV = (response) => {
-        if (response.success) {
-            const downloadLink = document.createElement("a");
-            const fileName = "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-            downloadLink.href = response.result.filePath;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    }
 
     /**
      * Get Evacuees list on mounting
@@ -203,7 +190,15 @@ export default function EvacuationPage() {
     }
 
     /* Services */
-    const { getList, exportEvacueesCSVList } = EvacuationServices;
+    const { getList } = EvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesListOnMounting();
+        };
+        fetchData();
+    }, [locale, getListPayload]);
 
     /**
      * Pagination handler
@@ -225,13 +220,6 @@ export default function EvacuationPage() {
         }
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesListOnMounting();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
 
     const searchListWithCriteria = () => {
         let payload = {
@@ -346,17 +334,6 @@ export default function EvacuationPage() {
                             <div>
                                 <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
                             </div>
-                            {/* Development */}
-                            {/* <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    export: true,
-                                    buttonClass: "evacuation_button_height export-button",
-                                    text: translate(localeJson, 'export'),
-                                    onClick: () => downloadEvacueesListCSV()
-                                }} parentClass={"mb-3 export-button"} />
-                            </div> */}
                         </div>
                     </div>
                     <NormalTable

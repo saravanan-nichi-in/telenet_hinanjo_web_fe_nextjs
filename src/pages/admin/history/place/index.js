@@ -19,6 +19,7 @@ import { MailSettingsOption1 } from "@/utils/constant";
 
 export default function AdminHistoryPlacePage() {
   const { localeJson, locale } = useContext(LayoutContext);
+
   const [historyPlaceList, setHistoryPlaceList] = useState([]);
   const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
   const [historyPlaceDropdown, setHistoryPlaceDropdown] = useState([]);
@@ -47,6 +48,7 @@ export default function AdminHistoryPlacePage() {
     ),
     place_name: "",
   });
+
   const historyTableColumns = [
     {
       field: "si_no",
@@ -277,20 +279,20 @@ export default function AdminHistoryPlacePage() {
           place_opening_date_time: obj.place_opening_date_time
             ? locale == "ja"
               ? getJapaneseDateTimeDayDisplayActualFormat(
-                  obj.place_opening_date_time
-                )
+                obj.place_opening_date_time
+              )
               : getEnglishDateTimeDisplayActualFormat(
-                  obj.place_opening_date_time
-                )
+                obj.place_opening_date_time
+              )
             : "",
           place_closing_date_time: obj.place_closing_date_time
             ? locale == "ja"
               ? getJapaneseDateTimeDayDisplayActualFormat(
-                  obj.place_closing_date_time
-                )
+                obj.place_closing_date_time
+              )
               : getEnglishDateTimeDisplayActualFormat(
-                  obj.place_closing_date_time
-                )
+                obj.place_closing_date_time
+              )
             : "",
           place_remarks: obj.place_remarks,
         };

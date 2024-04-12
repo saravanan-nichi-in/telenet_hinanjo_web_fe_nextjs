@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper';
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components';
 import { StaffManagementService } from '@/services/staffmanagement.service';
 import { CommonServices } from '@/services';
 
 export default function StaffManagementPage() {
-    const { localeJson, setLoader, locale } = useContext(LayoutContext);
-    let blankStaffObj = { username: "", tel: "", name: "", password: "", event_id: "", place_id: "" };
+    const { localeJson, locale } = useContext(LayoutContext);
+
     const [staff, setStaff] = useState(null);
     const [importStaffOpen, setImportStaffOpen] = useState(false);
     const [staffDetailsOpen, setStaffDetailsOpen] = useState(false);
@@ -18,18 +18,24 @@ export default function StaffManagementPage() {
     const [createStaffOpen, setCreateStaffOpen] = useState(false);
     const [searchName, setSearchName] = useState("");
     const [registerModalAction, setRegisterModalAction] = useState('');
+    let blankStaffObj = { username: "", tel: "", name: "", password: "", event_id: "", place_id: "" };
     const [currentEditObj, setCurrentEditObj] = useState(blankStaffObj);
-    const { decryptPassword } = CommonServices;
     const [deleteId, setDeleteId] = useState(null);
     const [deleteObj, setDeleteObj] = useState(null);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        "filters": {
+            "start": 0,
+            "limit": 10,
+            "order_by": "desc",
+            "sort_by": "updated_at"
+        },
+        "name": ""
+    });
 
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
+    const { decryptPassword } = CommonServices;
 
     const openDeleteDialog = (rowdata) => {
         setDeleteId(rowdata.id);
@@ -136,14 +142,13 @@ export default function StaffManagementPage() {
         setImportStaffOpen(!importStaffOpen);
         showOverFlow();
     };
+
     const onStaffDetailClose = () => {
         setStaff(null);
         setStaffDetailsOpen(false);
         showOverFlow();
     };
-    const onStaffDeleteClose = () => {
-        openDeleteDialog(!deleteOpen);
-    };
+
     const onStaffEditClose = () => {
         setEditStaffOpen(false);
         showOverFlow();
@@ -170,20 +175,6 @@ export default function StaffManagementPage() {
     };
 
     const { getList, create, update, exportData } = StaffManagementService;
-
-    const [getListPayload, setGetListPayload] = useState({
-        "filters": {
-            "start": 0,
-            "limit": 10,
-            "order_by": "desc",
-            "sort_by": "updated_at"
-        },
-        "name": ""
-    });
-
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
 
     useEffect(() => {
         setTableLoading(true);

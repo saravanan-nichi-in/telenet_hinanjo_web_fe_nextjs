@@ -9,14 +9,26 @@ import {
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, DeleteModal, NormalTable, CommonDialog, CustomHeader, AdminManagementDeleteModal, AdminManagementImportModal, PlaceEventBulkCheckOut } from "@/components";
+import {
+  Button,
+  DeleteModal,
+  NormalTable,
+  CommonDialog,
+  CustomHeader,
+  AdminManagementDeleteModal,
+  AdminManagementImportModal,
+  PlaceEventBulkCheckOut,
+} from "@/components";
 import { PlaceServices } from "@/services";
 import { setPlace } from "@/redux/place";
 import { useAppDispatch } from "@/redux/hooks";
-import { default_place_id } from "@/utils/constant"; 
+import { default_place_id } from "@/utils/constant";
 
 export default function AdminPlacePage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const [importPlaceOpen, setImportPlaceOpen] = useState(false);
   const [bulkCheckoutOpen, setBulkCheckoutOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -28,6 +40,7 @@ export default function AdminPlacePage() {
   const [columns, setColumns] = useState([]);
   const [id, setId] = useState(0);
   const [list, setList] = useState([]);
+  const [checkedValue, setCheckedValue] = useState(false);
   const [getPayload, setPayload] = useState({
     filters: {
       start: 0,
@@ -37,9 +50,7 @@ export default function AdminPlacePage() {
     },
     search: "",
   });
-  const [checkedValue, setCheckedValue] = useState(false);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+
   const handleRowClick = (rowData) => {
     let id = { id: rowData.ID };
     dispatch(setPlace(id));
@@ -51,6 +62,7 @@ export default function AdminPlacePage() {
       "/admin/place/detail"
     );
   };
+
   const columnsData = [
     {
       field: "index",
@@ -123,7 +135,8 @@ export default function AdminPlacePage() {
               buttonProps={{
                 text: translate(localeJson, "delete"),
                 buttonClass: "delete-button",
-                disabled: (rowData.isActive||default_place_id.includes(rowData.ID)),
+                disabled:
+                  rowData.isActive || default_place_id.includes(rowData.ID),
                 onClick: () => {
                   openDeleteDialog(rowData);
                 },
@@ -195,7 +208,10 @@ export default function AdminPlacePage() {
           active_flg: obj.active_flg,
           isActive: obj.is_active,
           furigana_name: obj.refugee_name,
-          status: (obj.is_active||default_place_id.includes(obj.id)) ? "place-status-cell" : "",
+          status:
+            obj.is_active || default_place_id.includes(obj.id)
+              ? "place-status-cell"
+              : "",
         };
         preparedList.push(preparedObj);
       });
@@ -316,14 +332,13 @@ export default function AdminPlacePage() {
       onGetPlaceListOnMounting();
     }
   };
-  
+
   /**Bulk checkout on submit table loading*/
   const handleTableReload = () => {
     setTableLoading(true);
     setTimeout(() => {
-    onGetPlaceListOnMounting();
-    setTableLoading(false);
-
+      onGetPlaceListOnMounting();
+      setTableLoading(false);
     }, 1000);
   };
 

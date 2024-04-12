@@ -5,13 +5,15 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     getValueByKeyRecursively as translate,
     getEnglishDateTimeDisplayFormat,
+    showOverFlow,
+    hideOverFlow,
 } from '@/helper';
 import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut, EventCreateEditModal } from '@/components';
 import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
-import { useAppDispatch } from '@/redux/hooks';
 
 export default function Questionnaire() {
-    const { localeJson, locale, setLoader} = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
+
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
     const [bulkCheckoutOpen, setBulkCheckoutOpen] = useState(false);
@@ -31,15 +33,6 @@ export default function Questionnaire() {
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [eventData, setEventData] = useState([]);
-    const dispatch = useAppDispatch();
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
 
     const cols = [
         { field: "si_no", header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: "center" },
@@ -81,10 +74,8 @@ export default function Questionnaire() {
                         }} parentClass={"delete-button"} />
 
                 </div>
-            ),
-
+            ), s
         }, {
-
             field: "active_status",
             minWidth: "3.5rem",
             maxWidth: "3.5rem",

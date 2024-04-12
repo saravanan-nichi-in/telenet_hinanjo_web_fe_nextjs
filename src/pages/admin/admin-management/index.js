@@ -25,6 +25,8 @@ export default function AdminManagementPage() {
     const [columnValues, setColumnValues] = useState([]);
     const [searchField, setSearchField] = useState('');
     const [detailId, setDetailId] = useState(null);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
     const [listPayload, setListPayload] = useState({
         "filters": {
             "start": "0",
@@ -34,9 +36,9 @@ export default function AdminManagementPage() {
         },
         "search": ""
     });
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
+
     const { decryptPassword } = CommonServices;
+
     const PasswordColumn = ({ rowData }) => {
         const [showPassword, setShowPassword] = useState(false);
         return (
@@ -135,14 +137,6 @@ export default function AdminManagementPage() {
         onImportModalClose();
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await listApiCall();
-        };
-        fetchData();
-    }, [locale, listPayload]);
-
     const listApiCall = async () => {
         setTableLoading(true);
         await AdminManagementServices.getList(listPayload, (response) => {
@@ -164,6 +158,14 @@ export default function AdminManagementPage() {
             setTotalCount(listTotalCount);
         });
     }
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await listApiCall();
+        };
+        fetchData();
+    }, [locale, listPayload]);
 
     /**
      * Pagination handler
