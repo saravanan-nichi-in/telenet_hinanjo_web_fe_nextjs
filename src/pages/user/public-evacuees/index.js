@@ -186,7 +186,7 @@ export default function PublicEvacuee() {
                                                     ...prevState,
                                                     filters: {
                                                         ...prevState.filters,
-                                                        refugee_name: searchName.replace(/\s/g, '')
+                                                        refugee_name: searchName
                                                     }
                                                 }));
                                             }
