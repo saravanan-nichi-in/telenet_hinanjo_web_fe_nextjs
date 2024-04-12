@@ -6,7 +6,7 @@ import { Button } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { downloadImage, getValueByKeyRecursively as translate } from "@/helper";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { clearExceptSuccessData, reset, setSuccessData } from "@/redux/tempRegister";
+import { reset } from "@/redux/tempRegister";
 import { TempRegisterServices } from "@/services"
 
 const RegisterSuccess = () => {
@@ -44,11 +44,9 @@ const RegisterSuccess = () => {
         position: "top-right",
       });
     }
-    // Set flag in local storage to indicate if the page has been refreshed
-    localStorage.setItem("personCountTemp", null);
     // Dispatch setSuccessData only if the page has been refreshed
     let show = localStorage.getItem("refreshing");
-    show == "true" && dispatch(setSuccessData({ showButton: true }));
+    show == "true" && localStorage.setItem("showDelete","true");
   }, [locale]);
 
   return (
@@ -78,14 +76,12 @@ const RegisterSuccess = () => {
                 buttonClass: "w-full back-button h-5rem border-radius-5rem",
                 text: translate(localeJson, 'download'),
                 onClick: () => {
-                  localStorage.setItem("personCount", null)
-                  dispatch(clearExceptSuccessData())
                   downloadImage(baseUrl, 'qr.JPEG');
                 },
               }} parentClass={"back-button"}
               />
               {
-                regReducer.successData?.showButton &&
+                localStorage.getItem("showDelete") == "true" &&
                 <Button buttonProps={{
                   type: "button",
                   buttonClass: "w-full delete-button-user h-5rem border-radius-5rem mt-3 border-2",
@@ -101,7 +97,8 @@ const RegisterSuccess = () => {
                         dispatch(reset())
                         localStorage.setItem("personCountTemp",null)
                         localStorage.setItem('refreshing', false);
-                        localStorage.setItem("tempDataDeleted",true);
+                        localStorage.setItem("tempDataDeleted","true");
+                        localStorage.setItem("isSuccess","false");
                         router.push('/user/list')
                       }
                     })

@@ -25,12 +25,14 @@ const SearchDetails = () => {
   let place_id = data.length > 0 ? data[0].place_id : "";
 
   const isCheckedIn = (res) => {
-    if (res) {
-      localStorage.setItem("tempDataDeleted", true)
-      dispatch(clear());
-      dispatch(reset())
-      setLoader(false);
-      router.push("/user/qr/app");
+    if(res)
+    {
+    localStorage.setItem("tempDataDeleted","true")
+    localStorage.setItem("isSuccess","false");
+    dispatch(clear());
+    dispatch(reset())
+    setLoader(false);
+     router.push("/user/qr/app");
     }
   };
 

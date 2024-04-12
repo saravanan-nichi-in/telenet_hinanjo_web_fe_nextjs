@@ -574,7 +574,8 @@ const TempRegisterConfirm = () => {
                     if (res) {
                       dispatch(setSuccessData(res));
                       dispatch(setSuccessData({ placeId: registerReducer?.placeId }))
-                      localStorage.setItem("tempDataDeleted",false);
+                      localStorage.setItem("tempDataDeleted","false");
+                      localStorage.setItem("isSuccess","true");
                       setLoader(false);
                       router.push("/user/temp-register/success");
                     } else {
