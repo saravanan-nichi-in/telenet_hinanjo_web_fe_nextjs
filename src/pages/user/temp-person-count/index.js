@@ -31,9 +31,9 @@ const PersonCountScreen = () => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(clearExceptPlaceId());
-    },[])
+    }, [])
 
     return (
         <div className='grid flex-1'>
@@ -49,7 +49,6 @@ const PersonCountScreen = () => {
                                 <p className='pb-0' style={{ fontSize: "16px" }}>{translate(localeJson, "person_count_evacuated")}
                                 </p>
                             </div>
-
                             <div className=" flex flex-wrap justify-content-center">
                                 <PersonCountButton names={buttonStates}
                                     onSelectionChange={handleSingleSelectionChange}

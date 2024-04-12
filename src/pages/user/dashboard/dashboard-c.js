@@ -54,7 +54,6 @@ export default function PublicDashboard() {
                 <div className="col-12">
                     <div className="card">
                         <CustomHeader headerClass={"page-header1 white-space-nowrap overflow-hidden text-overflow-ellipsis"} header={locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name} />
-                        {/* <h5 className="page-header1 white-space-nowrap overflow-hidden text-overflow-ellipsis">{locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name}</h5> */}
                         <div>
                             <div className="mt-3">
                                 <div className='flex' style={{ justifyContent: "center", flexWrap: "wrap" }}>

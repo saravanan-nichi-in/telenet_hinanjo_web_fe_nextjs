@@ -256,10 +256,10 @@ export default function EvacueeTempFamilyDetail() {
                                     <div className='page-header3'>{translate(localeJson, "c_special_care")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.special_care_name}</div>
                                 </div>
-                                <div className='flex align-items-center details-text-overflow'>
+                                {/* Development <div className='flex align-items-center details-text-overflow'>
                                     <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.yapple_id}</div>
-                                </div>
+                                </div> */}
                             </div>
                         )
                     ))}
