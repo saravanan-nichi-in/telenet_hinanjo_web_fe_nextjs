@@ -34,6 +34,11 @@ const RegisterSuccess = () => {
     let place_id = regReducer.placeId
     let SuccessPlaceId = regReducer.successData?.placeId
 
+    if(!regReducer.successData?.data)
+    {
+      router.push('/user/temp-person-count')
+    }
+
     if (place_id != SuccessPlaceId) {
       toast.error(translate(localeJson, "already_register"), {
         position: "top-right",
@@ -96,6 +101,7 @@ const RegisterSuccess = () => {
                         dispatch(reset())
                         localStorage.setItem("personCountTemp",null)
                         localStorage.setItem('refreshing', false);
+                        localStorage.setItem("tempDataDeleted",true);
                         router.push('/user/list')
                       }
                     })

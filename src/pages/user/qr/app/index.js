@@ -24,7 +24,7 @@ export default function App() {
         let formData = new FormData();
         formData.append("content", res)
         register(formData, (result) => {
-            dispatch(setCheckInData(result.data.data))
+            dispatch(setCheckInData(result.data?.data))
             router.push('/user/qr/app/register')
         })
     }
