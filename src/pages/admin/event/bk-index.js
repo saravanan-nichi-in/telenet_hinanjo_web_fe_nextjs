@@ -74,7 +74,7 @@ export default function Questionnaire() {
                         }} parentClass={"delete-button"} />
 
                 </div>
-            ), s
+            ),
         }, {
             field: "active_status",
             minWidth: "3.5rem",
