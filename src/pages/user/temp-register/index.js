@@ -139,7 +139,7 @@ export default function Admission() {
       router.push("/user/list");
       return;
     }
-    if (successData?.data) {
+    if (successData?.data?.familyCode) {
       router.push('/user/temp-register/success')
     }
     return
