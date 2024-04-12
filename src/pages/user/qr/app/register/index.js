@@ -7,6 +7,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/qr_app";
+import {reset as clear} from "@/redux/tempRegister"
 import { UserQrService } from "@/services";
 
 const SearchDetails = () => {
@@ -24,8 +25,14 @@ const SearchDetails = () => {
   let place_id = data.length > 0 ? data[0].place_id : "";
 
   const isCheckedIn = (res) => {
+    if(res)
+    {
+    localStorage.setItem("tempDataDeleted",true)
+    dispatch(clear());
+    dispatch(reset())
     setLoader(false);
-    res && router.push("/user/qr/app");
+     router.push("/user/qr/app");
+    }
   };
 
   useEffect(() => {
@@ -69,8 +76,9 @@ const SearchDetails = () => {
                       "back-button w-full custom-icon-button h-3rem flex justify-content-center",
                     text: translate(localeJson, "return"),
                     onClick: () => {
-                      router.push("/user/qr/app");
                       dispatch(reset());
+                      router.push("/user/qr/app");
+
                     },
                   }}
                   parentClass={

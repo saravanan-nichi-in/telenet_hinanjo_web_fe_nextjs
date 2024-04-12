@@ -20,9 +20,6 @@ function _register(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
             }
         })
         .catch((error) => {

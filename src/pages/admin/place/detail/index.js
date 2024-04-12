@@ -8,7 +8,7 @@ import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/compone
 import { PlaceServices, CommonServices } from "@/services";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { prefecturesCombined, default_place_id } from "@/utils/constant";
-import { setSuccessData } from "@/redux/tempRegister"
+import { setSuccessData,reset } from "@/redux/tempRegister"
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -213,6 +213,18 @@ export default function StaffManagementEditPage() {
                       href={tempUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={()=>{
+                        let isTempData = localStorage.getItem("tempDataDeleted")||false
+                        if(isTempData)
+                        {
+                          dispatch(reset());
+                          return
+                        }
+                        if(tempSuccessData) 
+                        {
+                        dispatch(setSuccessData({showButton:true}))
+                        }
+                      }}
                     >
                       {tempUrl}
                     </a>

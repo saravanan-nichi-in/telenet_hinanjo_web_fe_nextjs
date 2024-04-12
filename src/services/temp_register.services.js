@@ -142,9 +142,6 @@ function _tempRegister(payload, callBackFun) {
     .post("/user/registration", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
     })
     .catch((error) => {
       callBackFun();
@@ -193,7 +190,7 @@ function _getSpecialCareDetails(callBackFun) {
 
 function _registerUser(payload, callBackFun) {
   axios
-    .post("/user/permanent/registration", payload)
+    .post("/user/registration", payload)
     .then((response) => {
       callBackFun(response.data);
       toast.success(response?.data?.message, {
