@@ -7,7 +7,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/qr_app";
-import {reset as clear} from "@/redux/tempRegister"
+import { reset as clear } from "@/redux/tempRegister"
 import { UserQrService } from "@/services";
 
 const SearchDetails = () => {

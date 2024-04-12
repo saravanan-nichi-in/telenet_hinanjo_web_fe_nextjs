@@ -221,6 +221,7 @@ export default function PublicExternal() {
           }
         ),
     });
+
   // Getting storage data with help of reducers
   const [buttonStates, setButtonStates] = useState(Array(3).fill(false));
   const [foodButtonStates, setFoodButtonStates] = useState(
@@ -491,9 +492,7 @@ export default function PublicExternal() {
             ...fullPayload,
             //on backend they are accepting food_not_required 0 and food_required 1
             "food_required": (getTrueIndex(data.toggleFoodSwitches) == 2) ? 0 : 1,
-            // "hinan_id": shelterData && shelterData[getTrueIndex(data.togglePlaceSwitches) - 1].id,
             ...hinan_obj,
-
           } :
             {
               ...fullPayload,
@@ -706,7 +705,6 @@ export default function PublicExternal() {
                                     }
                                   },
                                   onBlur: handleBlur,
-
                                 }}
                               />
                               <ValidationError
@@ -750,7 +748,6 @@ export default function PublicExternal() {
                                 }
                               />
                             </div>
-
                             <div className="col-12 md:col-4">
                               <Input
                                 inputProps={{
