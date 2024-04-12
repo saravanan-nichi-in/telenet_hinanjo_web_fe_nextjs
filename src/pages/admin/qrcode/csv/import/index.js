@@ -9,12 +9,16 @@ import { QRCodeCreateServices } from '@/services';
 
 export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
-    const fileInputRef = useRef(null);
+
     const [initialValues, setInitialValues] = useState({
         file: null
     })
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [importFileData, setImportFileData] = useState("");
+    const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
     const [deleteObj, setDeleteObj] = useState(null);
+    const fileInputRef = useRef(null);
+
     const schema = Yup.object().shape({
         file: Yup.mixed()
             .required(translate(localeJson, 'file_csv_required'))
@@ -26,8 +30,6 @@ export default function AdminQrCodeCreatePage() {
                 return allowedExtensions.includes(fileExtension.toLowerCase());
             }),
     });
-    const [importFileData, setImportFileData] = useState("");
-    const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
 
     /* Services */
     const { callExport, callImport, callDelete, callZipDownload } = QRCodeCreateServices;
@@ -104,7 +106,7 @@ export default function AdminQrCodeCreatePage() {
         if (status == 'confirm') {
             setLoader(true);
             callDelete(onDeleteSuccess)
-            
+
         }
         setDeleteOpen(false);
     };
@@ -159,7 +161,7 @@ export default function AdminQrCodeCreatePage() {
             <AdminManagementDeleteModal
                 open={deleteOpen}
                 close={onDeleteClose}
-                refreshList={()=>{}}
+                refreshList={() => { }}
                 deleteObj={deleteObj}
             />
             <Formik
@@ -188,7 +190,7 @@ export default function AdminQrCodeCreatePage() {
                                                     <Button buttonProps={{
                                                         type: 'button',
                                                         rounded: "true",
-                                                        export:true,
+                                                        export: true,
                                                         text: translate(localeJson, 'download_sample_csv'),
                                                         onClick: () => callExport(),
                                                     }} parentClass={"export-button"} />
@@ -216,7 +218,7 @@ export default function AdminQrCodeCreatePage() {
                                                     <Button buttonProps={{
                                                         buttonClass: "evacuation_button_height import-button",
                                                         type: 'submit',
-                                                        import:true,
+                                                        import: true,
                                                         text: translate(localeJson, 'import'),
                                                         rounded: "true",
                                                     }} parentClass={"import-button"} />

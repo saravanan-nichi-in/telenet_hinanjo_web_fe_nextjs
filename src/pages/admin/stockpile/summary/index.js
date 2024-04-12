@@ -16,6 +16,7 @@ import { StockPileSummaryServices } from '@/services/stockpile_summary.services'
 
 function AdminStockpileSummary() {
     const { locale, localeJson } = useContext(LayoutContext);
+
     const [emailModal, setEmailModal] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
@@ -26,9 +27,7 @@ function AdminStockpileSummary() {
     const [expandRows, setExpandRows] = useState();
     const [tableLoading, setTableLoading] = useState(false);
     const [importModalOpen, setImportModalOpen] = useState(false);
-    const [selectAll, setSelectAll] = useState(false);
     const [selectedCustomers, setSelectedCustomers] = useState(null);
-    const [innerTableSelectAllStates, setInnerTableSelectAllStates] = useState([]);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [selectedPlaceName, setSelectedPlaceName] = useState({
         name: "--",
@@ -49,6 +48,7 @@ function AdminStockpileSummary() {
         },
         search: ""
     });
+
     const stockPilerMainRow = [
         { field: "place_id", header: translate(localeJson, 'id'), display: 'none' },
         {
@@ -62,6 +62,7 @@ function AdminStockpileSummary() {
             ),
         },
     ]
+
     const stockPileRowExpansionColumn = [
         { field: "type", header: translate(localeJson, 'product_type'), minWidth: "7rem", maxWidth: "7rem" },
         { field: "stock_pile_name", header: translate(localeJson, 'product_name'), minWidth: "10rem", maxWidth: "10rem" },
@@ -71,20 +72,12 @@ function AdminStockpileSummary() {
         { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" },
         { selectionMode: "multiple", minWidth: "3rem", maxWidth: "3rem", alignHeader: 'center', textAlign: 'center' },
     ];
+
     const bindImageModalData = (image) => {
         setImageUrl(image);
         setImageModal(true);
         hideOverFlow();
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetStockPileSummaryListOnMounting();
-            await onGetPlaceDropdownListOnMounting();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
 
     const onGetStockPileSummaryListOnMounting = () => {
         getSummaryList(getListPayload, onGetStockPileSummaryList)
@@ -96,6 +89,15 @@ function AdminStockpileSummary() {
     const onGetPlaceDropdownListOnMounting = () => {
         getPlaceList(onGetPlaceDropdownList);
     }
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetStockPileSummaryListOnMounting();
+            await onGetPlaceDropdownListOnMounting();
+        };
+        fetchData();
+    }, [locale, getListPayload]);
 
     const onGetPlaceDropdownList = (response) => {
         let placeList = [{
@@ -231,7 +233,7 @@ function AdminStockpileSummary() {
                         quantity: item.after_count,
                         expiry_date: item.expiry_date,
                         expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
-                        shelf_life_date:item.shelf_life_date,
+                        shelf_life_date: item.shelf_life_date,
                         stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                     }],
                 }
@@ -251,7 +253,7 @@ function AdminStockpileSummary() {
                             quantity: item.after_count,
                             expiry_date: item.expiry_date,
                             expiration_date: item.expiry_date ? locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(item.expiry_date) : getEnglishDateDisplayFormat(item.expiry_date) : "",
-                            shelf_life_date:item.shelf_life_date,
+                            shelf_life_date: item.shelf_life_date,
                             stock_pile_image: item.stockpile_image ? <img style={{ cursor: "pointer" }} src={item.stockpile_image} width={'20px'} height={'20px'} alt={"img" + increment} onClick={() => bindImageModalData(item.stockpile_image)} /> : ""
                         }
                         stockPileList[index].orders.push(newOrder);
@@ -282,33 +284,33 @@ function AdminStockpileSummary() {
     }
 
     const showOnlyExpiringProducts = () => {
-      setShowExpiringProducts(!showExpiringProducts);
-      if (!showExpiringProducts) {
-        let dataManipulate = stockpileSummaryList.map((item) => ({ ...item }));
-        dataManipulate.map((item, index) => {
-          let data = item.orders;
-          let filteredDates = data.filter(
-            (obj) => new Date(obj.expiry_date) >= new Date()
-          );
-          if (filteredDates.length > 0) {
-            const currentDate = new Date(); // Get the current date
+        setShowExpiringProducts(!showExpiringProducts);
+        if (!showExpiringProducts) {
+            let dataManipulate = stockpileSummaryList.map((item) => ({ ...item }));
+            dataManipulate.map((item, index) => {
+                let data = item.orders;
+                let filteredDates = data.filter(
+                    (obj) => new Date(obj.expiry_date) >= new Date()
+                );
+                if (filteredDates.length > 0) {
+                    const currentDate = new Date(); // Get the current date
 
-            const filteredData = data.filter((item) => {
-              const expiryDate = new Date(item.expiry_date); // Parse expiry date
-              const shelfLifeDate = new Date(item.shelf_life_date); // Parse shelf life date
+                    const filteredData = data.filter((item) => {
+                        const expiryDate = new Date(item.expiry_date); // Parse expiry date
+                        const shelfLifeDate = new Date(item.shelf_life_date); // Parse shelf life date
 
-              // Check if current date is between expiry date and shelf life date
-              return currentDate >= shelfLifeDate && currentDate <= expiryDate;
+                        // Check if current date is between expiry date and shelf life date
+                        return currentDate >= shelfLifeDate && currentDate <= expiryDate;
+                    });
+                    dataManipulate[index].orders = filteredData;
+                } else {
+                    dataManipulate[index].orders = [];
+                }
             });
-            dataManipulate[index].orders = filteredData;
-          } else {
-            dataManipulate[index].orders = [];
-          }
-        });
-        setFilteredStockpileSummaryList(dataManipulate);
-      } else {
-        setFilteredStockpileSummaryList([...stockpileSummaryList]);
-      }
+            setFilteredStockpileSummaryList(dataManipulate);
+        } else {
+            setFilteredStockpileSummaryList([...stockpileSummaryList]);
+        }
     };
 
     const exportStockPileSummary = (response) => {

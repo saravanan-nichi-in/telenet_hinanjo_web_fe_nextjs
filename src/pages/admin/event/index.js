@@ -5,14 +5,16 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
     getValueByKeyRecursively as translate,
     getEnglishDateTimeDisplayFormat,
+    hideOverFlow,
+    showOverFlow,
 } from '@/helper';
-import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut,EventCreateEditModal } from '@/components';
+import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut, EventCreateEditModal } from '@/components';
 import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
-import { useAppDispatch } from '@/redux/hooks';
 import { CommonServices } from '@/services';
 
 export default function Questionnaire() {
-    const { localeJson, locale, setLoader } = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
+
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
     const [bulkCheckoutOpen, setBulkCheckoutOpen] = useState(false);
@@ -21,28 +23,18 @@ export default function Questionnaire() {
     const [deleteId, setDeleteId] = useState(null);
     const [deleteObj, setDeleteObj] = useState(null);
     const [copiedRows, setCopiedRows] = useState([]);
-    const [getListPayload, setGetListPayload] = useState({
-        "filters": {
-                start: 0, 
-                limit: 10, 
-                sort_by: "name", 
-                order_by: "asc"
-            },
-        "search": ""
-    });
-
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [eventData, setEventData] = useState([]);
-    const dispatch = useAppDispatch();
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
+    const [getListPayload, setGetListPayload] = useState({
+        "filters": {
+            start: 0,
+            limit: 10,
+            sort_by: "name",
+            order_by: "asc"
+        },
+        "search": ""
+    });
 
     const copyToClipboard = async (text, rowIndex) => {
         try {
@@ -128,9 +120,7 @@ export default function Questionnaire() {
 
                 </div>
             ),
-
         }, {
-
             field: "active_status",
             minWidth: "3.5rem",
             maxWidth: "3.5rem",

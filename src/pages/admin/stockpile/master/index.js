@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper';
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, InputDropdown, AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal, StockpileCreateEditModal } from '@/components';
 import { StockpileService } from '@/services/stockpilemaster.service';
 
 export default function AdminStockPileMaster() {
-    const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const { locale, localeJson } = useContext(LayoutContext);
+
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [toggleImageModal, setToggleImageModal] = useState(false);
     const [emailSettingsOpen, setEmailSettingsOpen] = useState(false);
@@ -16,6 +17,24 @@ export default function AdminStockPileMaster() {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedProductName, setSelectedProductName] = useState("");
     const [selectedImage, setSelectedImage] = useState('');
+    const [registerModalAction, setRegisterModalAction] = useState('');
+    const [currentEditObj, setCurrentEditObj] = useState('');
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteObj, setDeleteObj] = useState(null);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            order_by: "desc",
+            sort_by: "category"
+        },
+        category: "",
+        product_name: ""
+    });
+
 
     const callDropDownApi = () => {
         StockpileService.getCategoryAndProductList((res) => {
@@ -96,10 +115,6 @@ export default function AdminStockPileMaster() {
             ),
         }
     ];
-    const [registerModalAction, setRegisterModalAction] = useState('');
-    const [currentEditObj, setCurrentEditObj] = useState('');
-    const [deleteId, setDeleteId] = useState(null);
-    const [deleteObj, setDeleteObj] = useState(null);
 
     const openDeleteDialog = (rowdata) => {
         setDeleteId(rowdata.product_id);
@@ -111,14 +126,6 @@ export default function AdminStockPileMaster() {
         });
         setDeleteOpen(true);
         hideOverFlow();
-    }
-
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
-
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
     }
 
     const onDeleteClose = (action = "close") => {
@@ -170,23 +177,6 @@ export default function AdminStockPileMaster() {
         onStaffImportClose();
         showOverFlow();
     }
-
-    //Listing start
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            order_by: "desc",
-            sort_by: "category"
-        },
-        category: "",
-        product_name: ""
-    });
-
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
-
 
     /* Services */
     const { getList, exportData } = StockpileService;

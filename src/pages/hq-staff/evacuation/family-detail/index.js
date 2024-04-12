@@ -31,7 +31,7 @@ export default function EvacueeFamilyDetail() {
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
-    
+
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
         {
@@ -49,8 +49,8 @@ export default function EvacueeFamilyDetail() {
         { field: "c_special_care", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
         { field: 'is_owner', header: translate(localeJson, 'representative'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-
     ];
+
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'shelter_place'), minWidth: "10rem", maxWidth: "12rem" },
         { field: 'place_id', header: translate(localeJson, ''), minWidth: "10rem", display: 'none' },

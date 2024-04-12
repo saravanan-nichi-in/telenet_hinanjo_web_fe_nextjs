@@ -12,20 +12,20 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable,Input, InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
 import { AdminEventStatusServices, CommonServices } from '@/services';
 import { prefecturesCombined } from '@/utils/constant';
 
 export default function EventAttendeesList() {
     const { locale, localeJson } = useContext(LayoutContext);
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+
+    const [eventName, setEventName] = useState();
     const [selectedOption, setSelectedOption] = useState({
         name: "--",
         id: 0
     });
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-
-    const [eventName, setEventName] = useState();
     const [eventDropdownList, setEventDropdownList] = useState([]);
     const [searchFieldName, setSearchFieldName] = useState('');
     const [columnValues, setColumnValues] = useState([]);
@@ -45,6 +45,7 @@ export default function EventAttendeesList() {
             },
         }
     );
+
     const columnNames = [
         { field: 'number', header: translate(localeJson, 'staff_attendees_table_slno'), sortable: false, textAlign: 'center', className: "sno_class" },
         { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
@@ -132,7 +133,7 @@ export default function EventAttendeesList() {
                     let check_in = element.family_join_date ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.family_join_date) : getEnglishDateTimeDisplayActualFormat(element.family_join_date)) : "";
                     let check_out = element.family_out_date ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.family_out_date) : getEnglishDateTimeDisplayActualFormat(element.family_out_date)) : "";
                     // let full_address = (element.family_address ?? "") + "" + (element.family_zip_code ?? "")
-                    let full_address = (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? "") 
+                    let full_address = (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? "")
                     let main_gender = getGenderValueFromInt(element.person_gender);
                     let age_gender = element.person_age + "/" + getGenderValueFromInt(element.person_gender)
                     let tempObj = { ...element, age_gender: age_gender, person_gender: main_gender, person_dob: dob, family_join_date: check_in, family_out_date: check_out, event_name: event_name, full_address: full_address, number: index + parseInt(listPayload.filters.start) + 1 };
@@ -186,9 +187,6 @@ export default function EventAttendeesList() {
                 "refugee_name": searchFieldName
             },
         })
-    }
-
-    const downloadEvacueesListCSV = () => {
     }
 
     return (
@@ -247,17 +245,6 @@ export default function EventAttendeesList() {
                             <div>
                                 <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
                             </div>
-                            {/* Development */}
-                            {/* <div className='flex pt-3' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                                <Button buttonProps={{
-                                    type: 'submit',
-                                    rounded: "true",
-                                    export: true,
-                                    buttonClass: "evacuation_button_height export-button",
-                                    text: translate(localeJson, 'export'),
-                                    onClick: () => downloadEvacueesListCSV()
-                                }} parentClass={"mb-3 export-button"} />
-                            </div> */}
                         </div>
                     </div>
                     <div>

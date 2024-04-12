@@ -14,9 +14,9 @@ import {
   NormalCheckBox,
   NormalLabel,
   ValidationError,
-  Input, 
-  InputDropdown, 
-  InputNumber 
+  Input,
+  InputDropdown,
+  InputNumber
 } from "@/components";
 import { mapScaleRateOptions } from "@/utils/constant";
 import { systemSettingServices } from "@/services";
@@ -24,11 +24,21 @@ import { setLayout } from "@/redux/layout";
 import { useAppDispatch } from "@/redux/hooks";
 
 export default function Setting() {
-  const { setLoader } = useContext(LayoutContext);
-  const { localeJson, locale } = useContext(LayoutContext);
-  const [response, setResponse] = useState({});
-  const { getList, update } = systemSettingServices;
+  const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const dispatch = useAppDispatch();
+
+  const [response, setResponse] = useState({});
+  const [data, setData] = useState([]);
+
+  const { getList, update } = systemSettingServices;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await onGetSystemListOnMounting();
+      setLoader(false);
+    };
+    fetchData();
+  }, [locale]);
 
   const public_display_order_data = [
     {
@@ -89,6 +99,7 @@ export default function Setting() {
         translate(localeJson, "max_length_200")
       ),
     disclosure_info_ja: Yup.string()
+      .nullable()
       .max(
         255,
         translate(localeJson, "disclosure_information") +
@@ -109,6 +120,7 @@ export default function Setting() {
         translate(localeJson, "max_length_200")
       ),
     disclosure_info_en: Yup.string()
+      .nullable()
       .max(
         255,
         translate(localeJson, "disclosure_information") +
@@ -147,6 +159,7 @@ export default function Setting() {
         }
       ),
   });
+
   const initialValues = {
     map_scale: "",
     footer: "",
@@ -161,11 +174,10 @@ export default function Setting() {
     initial_load_status: false,
     default_shelf_life: "",
     scheduler_option: false,
-    // evacuee_entry_status: false,
     logo: "",
     logo_name: ""
   };
-  const [data, setData] = useState([]);
+
   const dragProps = {
     onDragEnd(fromIndex, toIndex) {
       const prepareData = [...data];
@@ -182,14 +194,6 @@ export default function Setting() {
     nodeSelector: "li",
     handleSelector: "a",
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await onGetSystemListOnMounting();
-      setLoader(false);
-    };
-    fetchData();
-  }, [locale]);
 
   const onGetSystemListOnMounting = async () => {
     getList(fetchData);
@@ -225,7 +229,6 @@ export default function Setting() {
       (initialValues.default_shelf_life = data?.default_shelf_life || ""),
         (initialValues.scheduler_option =
           data?.scheduler_option == "1" ? true : false || "");
-      // initialValues.evacuee_entry_status = data?.evacuee_entry_status == "1" ? true : false || "";
 
       setLoader(false);
       let public_data = data?.public_display_order || public_display_order_data;

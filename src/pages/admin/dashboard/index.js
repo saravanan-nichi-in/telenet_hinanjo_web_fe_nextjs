@@ -9,6 +9,21 @@ import { default_place_id } from '@/utils/constant';
 
 function AdminDashboard() {
     const { locale, localeJson } = useContext(LayoutContext);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [columns, setColumns] = useState([]);
+    const [list, setList] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [frozenArray, setFrozenArray] = useState([]);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            start: 0,
+            limit: 10,
+            sort_by: "refugee_name",
+            order_by: "asc",
+        },
+        search: "",
+    });
+
     const columnsData = [
         { field: 'number', header: translate(localeJson, 'number'), headerClassName: "custom-header", className: "sno_class", textAlign: 'center', alignHeader: "center" },
         { field: 'evacuation_place', header: translate(localeJson, 'evacuation_place'), minWidth: '15rem', maxWidth: "15rem", headerClassName: "custom-header" },
@@ -24,20 +39,6 @@ function AdminDashboard() {
         { field: 'food_assistance', header: translate(localeJson, 'food_assistance'), minWidth: "12rem", headerClassName: "custom-header", textAlign: "center", alignHeader: "center" },
         { field: 'switch_to_full', header: translate(localeJson, 'switch_to_full'), minWidth: "7rem", headerClassName: "custom-header", textAlign: 'center', alignHeader: "center" },
     ]
-    const [getListPayload, setGetListPayload] = useState({
-        filters: {
-            start: 0,
-            limit: 10,
-            sort_by: "refugee_name",
-            order_by: "asc",
-        },
-        search: "",
-    });
-    const [tableLoading, setTableLoading] = useState(false);
-    const [columns, setColumns] = useState([]);
-    const [list, setList] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [frozenArray, setFrozenArray] = useState([]);
 
     /* Services */
     const { getList, updateFullStatus } = DashboardServices;
@@ -146,7 +147,7 @@ function AdminDashboard() {
                     content={translate(localeJson, 'change_active_place')}
                     data={obj}
                     checked={obj.full_status == 1 ? true : false}
-                    disabled = { default_place_id.includes(obj.id) || false}
+                    disabled={default_place_id.includes(obj.id) || false}
                     parentClass={"custom-switch"}
                     cancelButton={true}
                     updateButton={true}

@@ -25,6 +25,7 @@ export default function EventFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
+
     const [tableLoading, setTableLoading] = useState(false);
     const [yappleID, setYappleID] = useState(null);
     const [familyDetailData, setFamilyDetailData] = useState(null);
@@ -40,6 +41,14 @@ export default function EventFamilyDetail() {
 
     /* Services */
     const { getFamilyEvacueesAttendeesDetail, eventAttendeesCheckout } = EvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyAttendeesDetailOnMounting();
+        };
+        fetchData();
+    }, [locale]);
 
     const getGenderValue = (gender) => {
         if (gender == 1) {
@@ -114,14 +123,6 @@ export default function EventFamilyDetail() {
             setCheckoutVisible(false);
         })
     }
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesFamilyAttendeesDetailOnMounting();
-        };
-        fetchData();
-    }, [locale]);
 
     return (
         <>

@@ -19,6 +19,7 @@ export default function TempRegistration() {
   const { locale, localeJson } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const [refugeeName, setRefugeeName] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState({
     id: 0,
@@ -61,7 +62,7 @@ export default function TempRegistration() {
     { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
     { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '4rem', maxWidth: '4rem' },
   ];
-  const [checkedValue, setCheckedValue] = useState(false);
+
   useEffect(() => {
     setTableLoading(true);
     const fetchTempData = async () => {
@@ -191,34 +192,32 @@ export default function TempRegistration() {
 
   const handleFamilyCode = (e) => {
     const re = /^[0-9-]+$/;
-    if(e.target.value.length<=0)
-    {
+    if (e.target.value.length <= 0) {
       setFamilyCode("");
       return;
     }
-    if(re.test(convertToSingleByte(e.target.value)))
-    {
-    if ((e.target.value).length == 4) {
-      const newValue = e.target.value;
-      if (newValue.indexOf("-") !== -1) {
-        setFamilyCode(e.target.value);
+    if (re.test(convertToSingleByte(e.target.value))) {
+      if ((e.target.value).length == 4) {
+        const newValue = e.target.value;
+        if (newValue.indexOf("-") !== -1) {
+          setFamilyCode(e.target.value);
+        }
+        else {
+          setFamilyCode(newValue);
+        }
+      }
+      else if ((e.target.value).length == 3) {
+        const newValue = e.target.value;
+        const formattedValue = newValue.substring(0, 3);
+        setFamilyCode(formattedValue);
       }
       else {
-        setFamilyCode(newValue);
+        setFamilyCode(e.target.value)
       }
     }
-    else if ((e.target.value).length == 3) {
-      const newValue = e.target.value;
-      const formattedValue = newValue.substring(0, 3);
-      setFamilyCode(formattedValue);
-    }
     else {
-      setFamilyCode(e.target.value)
+      setFamilyCode("")
     }
-  }
-  else {
-    setFamilyCode("")
-  }
   }
 
   return (
@@ -295,27 +294,6 @@ export default function TempRegistration() {
                 </div>
               </form>
             </div>
-            {/* Development */}
-            {/* <div style={{ display: "flex", justifyContent: "right" }}>
-              <div
-                className="flex pt-3"
-                style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
-              >
-                <Button
-                  buttonProps={{
-                    type: "submit",
-                    rounded: "true",
-                    buttonClass: "evacuation_button_height export-button",
-                    export: true,
-                    text: translate(localeJson, "export"),
-                    onClick: () => {
-                      alert("downloading");
-                    },
-                  }}
-                  parentClass={"mb-3 export-button"}
-                />
-              </div>
-            </div> */}
           </div>
           <NormalTable
             lazy

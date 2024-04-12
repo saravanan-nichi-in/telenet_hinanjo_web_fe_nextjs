@@ -45,22 +45,24 @@ export default function ExternalEvacuationPage() {
         evacuationCenter: "",
         place_category: ""
     });
+
     const evacuationFoodSupport = [
         { name: "--", id: 2 },
         { name: translate(localeJson, 'yes'), id: 1 },
         { name: translate(localeJson, 'no'), id: 0 },
     ];
+
     const evacuationSiteType = [
         { name: "--", id: 0 },
         { name: translate(localeJson, 'city_in'), id: 1 },
         { name: translate(localeJson, 'city_out'), id: 2 },
         { name: translate(localeJson, 'pref_out'), id: 3 },
     ];
+
     const externalEvacueesListColumns = [
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", textAlign: "center", sortable: false },
         { field: "place_category", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
         { field: "external_person_count", header: translate(localeJson, 'people_count'), minWidth: "10rem", sortable: false },
-        // { field: "place_detail", header: translate(localeJson, 'evacuation_site_type'), minWidth: "10rem", sortable: false },
         { field: "hinan_id", header: translate(localeJson, 'receiving_shelter'), minWidth: "10rem", sortable: false },
         { field: "food_required", header: translate(localeJson, 'need_food_support'), minWidth: "10rem", sortable: false },
         { field: "email", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
@@ -69,6 +71,15 @@ export default function ExternalEvacuationPage() {
 
     /* Services */
     const { getList, exportExternalEvacueesCSVList, getPlaceDropdownList } = ExternalEvacuationServices;
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetExternalEvacueesListOnMounting();
+            await onGetPlaceDropdownListOnMounting();
+        };
+        fetchData();
+    }, [locale, getListPayload]);
 
     const downloadExternalEvacueesListCSV = () => {
         exportExternalEvacueesCSVList(getListPayload, exportExternalEvacueesCSV);
@@ -85,19 +96,6 @@ export default function ExternalEvacuationPage() {
     };
 
     const onGetExternalEvacueesListOnMounting = () => {
-        // Development
-        // let pageStart = Math.floor(getListPayload.filters.start / getListPayload.filters.limit);
-        // let payload = {
-        //     filters: {
-        //         start: pageStart,
-        //         limit: getListPayload.filters.limit,
-        //         sort_by: getListPayload.filters.sort_by,
-        //         order_by: getListPayload.filters.order_by,
-        //     },
-        //     food_required: getListPayload.food_required,
-        //     evacuationCenter: getListPayload.evacuationCenter,
-        //     place_category: getListPayload.place_category
-        // };
         getList(getListPayload, getExternalEvacueesList);
     }
 
@@ -184,15 +182,6 @@ export default function ExternalEvacuationPage() {
         }
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetExternalEvacueesListOnMounting();
-            await onGetPlaceDropdownListOnMounting();
-        };
-        fetchData();
-    }, [locale, getListPayload]);
-
     return (
         <div className="grid">
             <div className="col-12">
@@ -243,7 +232,6 @@ export default function ExternalEvacuationPage() {
                                         emptyMessage: translate(localeJson, "data_not_found"),
                                     }}
                                     />
-
                                     <InputDropdown inputDropdownProps={{
                                         inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
                                         labelProps: {
@@ -317,7 +305,6 @@ export default function ExternalEvacuationPage() {
                             }
                         }
                     />
-
                     <div className='mt-3 flex justify-content-center'>
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                             <Button buttonProps={{

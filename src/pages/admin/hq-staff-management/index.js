@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 
-import { getValueByKeyRecursively as translate } from '@/helper';
+import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, AdminManagementDeleteModal, AdminManagementImportModal, HqEditModal, HqManagementDetailModal } from '@/components';
 import { HeadQuarterManagement } from '@/services/hqManagement.service';
@@ -9,6 +9,7 @@ import { CommonServices } from '@/services';
 
 export default function HeadQuartersPage() {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
+
     const [importModalOpen, setImportModalOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -20,7 +21,20 @@ export default function HeadQuartersPage() {
     const [columnValues, setColumnValues] = useState([]);
     const [searchField, setSearchField] = useState('');
     const [detailId, setDetailId] = useState(null);
+    const [totalCount, setTotalCount] = useState(0);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [listPayload, setListPayload] = useState({
+        "filters": {
+            "start": "0",
+            "limit": 10,
+            "sort_by": "updated_at",
+            "order_by": "desc"
+        },
+        "search": ""
+    });
+
     const { decryptPassword } = CommonServices;
+
     const PasswordColumn = ({ rowData }) => {
         const [showPassword, setShowPassword] = useState(false);
         return (
@@ -32,26 +46,7 @@ export default function HeadQuartersPage() {
             </span>
         );
     };
-    const [listPayload, setListPayload] = useState({
-        "filters": {
-            "start": "0",
-            "limit": 10,
-            "sort_by": "updated_at",
-            "order_by": "desc"
-        },
-        "search": ""
-    });
-    
-    const hideOverFlow = () => {
-        document.body.style.overflow = 'hidden';
-    }
 
-    const showOverFlow = () => {
-        document.body.style.overflow = 'auto';
-    }
-
-    const [totalCount, setTotalCount] = useState(0);
-    const [tableLoading, setTableLoading] = useState(false);
     const columnNames = [
         { field: 'slno', header: translate(localeJson, 'header_slno'), className: "sno_class", textAlign: "center" },
         {
@@ -137,14 +132,6 @@ export default function HeadQuartersPage() {
         onImportModalClose();
     }
 
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await listApiCall();
-        };
-        fetchData();
-    }, [locale, listPayload]);
-
     const listApiCall = () => {
         setTableLoading(true);
         HeadQuarterManagement.getList(listPayload, (response) => {
@@ -166,6 +153,14 @@ export default function HeadQuartersPage() {
             setTotalCount(listTotalCount);
         });
     }
+
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await listApiCall();
+        };
+        fetchData();
+    }, [locale, listPayload]);
 
     /**
      * Pagination handler

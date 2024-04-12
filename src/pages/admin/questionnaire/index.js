@@ -11,6 +11,8 @@ import { useAppDispatch } from '@/redux/hooks';
 export default function Questionnaire() {
     const { localeJson, locale } = useContext(LayoutContext);
     const router = useRouter();
+    const dispatch = useAppDispatch();
+
     const [registerModalAction, setRegisterModalAction] = useState('create');
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
     const [bulkCheckoutOpen, setBulkCheckoutOpen] = useState(false);
@@ -18,7 +20,7 @@ export default function Questionnaire() {
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [eventData, setEventData] = useState([]);
-    const dispatch = useAppDispatch();
+
     const cols = [
         { field: 'name', header: translate(localeJson, 'interview_page_shelter_name'), minWidth: '11rem', maxWidth: "11rem", headerClassName: "custom-header" },
 
@@ -47,6 +49,7 @@ export default function Questionnaire() {
 
         }
     ]
+
     const innerColumn = [
         { field: "name", header: translate(localeJson, 'interview_page_inner_column_question_type') },
         { field: "id", header: translate(localeJson, 'id'), display: 'none' },

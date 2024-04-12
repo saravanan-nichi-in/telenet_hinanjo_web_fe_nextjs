@@ -11,7 +11,11 @@ import { QuestionnaireServices } from '@/services/questionnaire.services';
 
 export default function IndividualQuestionnaire() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
+    const router = useRouter();
     const param = useAppSelector((state) => state.eventReducer.event);
+
+    const [questionnaires, setQuestionnaires] = useState([]);
+    const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -22,10 +26,6 @@ export default function IndividualQuestionnaire() {
         search: "",
         event_id: param.event_id
     });
-    const [questionnaires, setQuestionnaires] = useState([]);
-    const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
-
-    const router = useRouter();
     const baseTemplateRefs = useRef([]);
 
     const triggerSubmitCall = () => {
@@ -73,6 +73,13 @@ export default function IndividualQuestionnaire() {
 
     /* Services */
     const { getIndividualList, registerIndividualQuestionnaire } = QuestionnaireServices;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await onGetQuestionnaireListMounting();
+        };
+        fetchData();
+    }, [locale]);
 
     const onGetQuestionnaireListMounting = () => {
         getIndividualList(getListPayload, getQuestionnaireList)
@@ -131,13 +138,6 @@ export default function IndividualQuestionnaire() {
             setLoader(false)
         }
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await onGetQuestionnaireListMounting();
-        };
-        fetchData();
-    }, [locale]);
 
     const bindQuestion = () => {
         return (

@@ -11,7 +11,11 @@ import { useAppSelector } from "@/redux/hooks";
 
 export default function IndividualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);
+    const router = useRouter();
     const param = useAppSelector((state) => state.eventReducer.event);
+
+    const [questionnaires, setQuestionnaires] = useState([]);
+    const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -22,10 +26,6 @@ export default function IndividualQuestionnaire() {
         search: "",
         event_id: param.event_id
     });
-    const [questionnaires, setQuestionnaires] = useState([]);
-    const [deletedQuestionnaire, setDeletedQuestionnaire] = useState([]);
-
-    const router = useRouter();
     const baseTemplateRefs = useRef([]);
 
     const triggerSubmitCall = () => {
@@ -73,6 +73,13 @@ export default function IndividualQuestionnaire() {
 
     /* Services */
     const { getList, registerQuestionnaire } = QuestionnaireServices;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await onGetQuestionnaireListMounting();
+        };
+        fetchData();
+    }, []);
 
     const onGetQuestionnaireListMounting = () => {
         getList(getListPayload, getQuestionnaireList)
@@ -130,13 +137,6 @@ export default function IndividualQuestionnaire() {
             setLoader(false);
         }
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await onGetQuestionnaireListMounting();
-        };
-        fetchData();
-    }, []);
 
     const bindQuestion = () => {
         return (

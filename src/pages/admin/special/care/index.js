@@ -7,7 +7,8 @@ import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, AdminMan
 import { SpecialCareServices } from "@/services";
 
 export default function AdminSpecialCarePage() {
-    const { localeJson, locale ,setLoader } = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
+
     const [specialCareEditOpen, setSpecialCareEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -162,7 +163,7 @@ export default function AdminSpecialCarePage() {
     }
 
     const submitForm = (res) => {
-        if (res.id) { 
+        if (res.id) {
             update(res, isUpdated)
         }
         else {
