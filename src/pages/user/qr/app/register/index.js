@@ -7,7 +7,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/qr_app";
-import {reset as clear} from "@/redux/tempRegister"
+import { reset as clear } from "@/redux/tempRegister"
 import { UserQrService } from "@/services";
 
 const SearchDetails = () => {
@@ -25,13 +25,12 @@ const SearchDetails = () => {
   let place_id = data.length > 0 ? data[0].place_id : "";
 
   const isCheckedIn = (res) => {
-    if(res)
-    {
-    localStorage.setItem("tempDataDeleted",true)
-    dispatch(clear());
-    dispatch(reset())
-    setLoader(false);
-     router.push("/user/qr/app");
+    if (res) {
+      localStorage.setItem("tempDataDeleted", true)
+      dispatch(clear());
+      dispatch(reset())
+      setLoader(false);
+      router.push("/user/qr/app");
     }
   };
 

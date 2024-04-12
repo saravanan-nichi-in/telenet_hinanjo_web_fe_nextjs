@@ -77,34 +77,6 @@ export default function Admission() {
     fetchData();
   }, [locale]);
 
-  const fetchText = (res) => {
-    let newPassword = res?.data?.content;
-    newPassword = parseInt(newPassword);
-    if (newPassword) {
-      formikRef.current.setFieldValue("password", newPassword);
-    }
-    setAudioPasswordLoader(false);
-  };
-
-  const fetchName = (res) => {
-    let name = res?.data?.content;
-    if (name) {
-      formikRef.current.setFieldValue("name", name);
-    }
-    setAudioNameLoader(false);
-  };
-
-  const fetchFamilyCode = (res) => {
-    let familyCode = res?.data?.content;
-    const re = /^[0-9-]+$/;
-    if (familyCode && re.test(familyCode)) {
-      let val = familyCode.replace(/-/g, ""); // Remove any existing hyphens
-      // Insert hyphen after the first three characters
-      formikRef.current.setFieldValue("familyCode", val);
-    }
-    setAudioFamilyCodeLoader(false);
-  };
-
   const getSearchResult = (res) => {
     if (res?.success && !_.isEmpty(res?.data)) {
       const data = res.data.model;
@@ -134,7 +106,6 @@ export default function Admission() {
 
   const myCookieValue = getCookieValueByKey('idToken');
 
-  const param = router?.query;
   const closeQrPopup = () => {
     setOpenQrPopup(false);
   }
@@ -225,7 +196,7 @@ export default function Admission() {
       </div>
     </div>
   }
-  // alert(layoutReducer?.user?.place?.type)
+  
   const confirmRegistrationBeforeCheckin = () => {
     if (basicDataInfo.is_registered == "1") {
       if (layoutReducer?.user?.place?.type === "event") {

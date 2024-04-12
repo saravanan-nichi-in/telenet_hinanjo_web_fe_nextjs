@@ -373,19 +373,6 @@ export default function TempRegister() {
         return specialCareName;
     }
 
-    const getYearOptions = () => {
-        let options = [];
-        for (let year = 2023; year >= 1990; year--) {
-            options.push({
-                name: year,
-                value: year
-            });
-        }
-        return options;
-    }
-
-    const yearOptions = getYearOptions();
-
     const agreeTextWithHTML = (
         <div>
             {translate(localeJson, 'agree_note_oneA')}
@@ -543,7 +530,6 @@ export default function TempRegister() {
                     </Form>
                 )}
             </Formik>
-
         </>,
         <>
             <Formik

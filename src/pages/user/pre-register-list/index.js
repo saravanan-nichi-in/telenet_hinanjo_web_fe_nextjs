@@ -185,30 +185,31 @@ export default function HitachiList() {
                                             }
                                         }} parentClass={"p-2"} />
                                         {userProfile == '[yabu_cityworker]' &&
-                                            (<div>
-                                                <Button buttonProps={{
-                                                    type: "button",
-                                                    text: translate(localeJson, 'to_staff_screen'),
-                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                    rounded: true,
-                                                    onClick: () => router.push("/user/list")
-                                                }} parentClass={"p-2"} />
-                                                <Button buttonProps={{
-                                                    type: "button",
-                                                    text: translate(localeJson, 'to_head_staff'),
-                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                    rounded: true,
-                                                    onClick: () => router.push("/hq-staff/login")
-                                                }} parentClass={"p-2"} />
-                                                <Button buttonProps={{
-                                                    type: "button",
-                                                    text: translate(localeJson, 'to_admin'),
-                                                    buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
-                                                    rounded: true,
-                                                    onClick: () => router.push("/admin/login")
-                                                }} parentClass={"p-2"} />
-                                            </div>)
-                                        }
+                                            (
+                                                <div>
+                                                    <Button buttonProps={{
+                                                        type: "button",
+                                                        text: translate(localeJson, 'to_staff_screen'),
+                                                        buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                        rounded: true,
+                                                        onClick: () => router.push("/user/list")
+                                                    }} parentClass={"p-2"} />
+                                                    <Button buttonProps={{
+                                                        type: "button",
+                                                        text: translate(localeJson, 'to_head_staff'),
+                                                        buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                        rounded: true,
+                                                        onClick: () => router.push("/hq-staff/login")
+                                                    }} parentClass={"p-2"} />
+                                                    <Button buttonProps={{
+                                                        type: "button",
+                                                        text: translate(localeJson, 'to_admin'),
+                                                        buttonClass: "multi-form-submit border-round-lg w-12 sm:w-10 md:w-6 lg:w-5",
+                                                        rounded: true,
+                                                        onClick: () => router.push("/admin/login")
+                                                    }} parentClass={"p-2"} />
+                                                </div>
+                                            )}
                                         <Button buttonProps={{
                                             type: "button",
                                             text: translate(localeJson, 'back'),

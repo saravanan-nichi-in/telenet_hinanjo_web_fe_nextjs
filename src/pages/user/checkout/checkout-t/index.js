@@ -12,9 +12,9 @@ import {
   InputFloatLabel,
   InputNumberFloatLabel,
   ValidationError,
-  NormalTable, 
-  RowExpansionTable, 
-  AudioRecorder, 
+  NormalTable,
+  RowExpansionTable,
+  AudioRecorder,
   CustomHeader,
   QrScannerModal,
   BarcodeDialog
@@ -38,7 +38,6 @@ export default function Admission() {
   const [townAssociationColumn, setTownAssociationColumn] = useState([]);
   const [evacueePersonInnerColumns, setEvacueePersonInnerColumns] = useState([]);
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const formikRef = useRef();
 
@@ -64,7 +63,7 @@ export default function Admission() {
     }),
   });
 
-  
+
   const evacueeFamilyDetailColumns = [
     { field: "id", header: translate(localeJson, 'c_s_no'), minWidth: "5rem", className: "sno_class" },
     { field: "is_owner", header: translate(localeJson, 'c_representative'), minWidth: "10rem" },
@@ -330,10 +329,10 @@ export default function Admission() {
   }
 
   const closeQrPopup = () => {
-      setOpenQrPopup(false);
+    setOpenQrPopup(false);
   }
   const qrResult = (result) => {
-      alert(result);
+    alert(result);
   }
 
   return (
@@ -364,12 +363,11 @@ export default function Admission() {
         }) => (
           <div>
             <QrScannerModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callback={qrResult}>
-
-        </QrScannerModal>
-        <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")} visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}></BarcodeDialog>
+              open={openQrPopup}
+              close={closeQrPopup}
+              callback={qrResult}>
+            </QrScannerModal>
+            <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")} visible={openBarcodeDialog} setVisible={setOpenBarcodeDialog}></BarcodeDialog>
             <div className="grid">
               <div className="col-12">
                 <div className="card">
@@ -399,33 +397,33 @@ export default function Admission() {
                     </div>
                     <div className="grid">
                       <div className="md:flex col-12 h-full">
-                      <div className=' mt-3 col-12 lg:col-5 md:col-5' >
-                        <div className="flex flex-column align-items-center justify-content-center h-full light_gray_color border-round-lg m-2 ">
-                          <ButtonRounded buttonProps={{
-                            type: 'button',
-                            rounded: "true",
-                            buttonClass: " w-full h_custom_white_button lg:w-17rem md:w-17rem sm:w-17rem h-3rem",
-                            text: translate(localeJson,"scan_my_card"),
-                            bg: "bg-white",
-                            onClick: () => {
-                              setOpenQrPopup(true)
-                            },
-                          }} parentClass={"mt-5 h_custom_white_button"} />
-                          <ButtonRounded buttonProps={{
-                            type: 'button',
-                            rounded: "true",
-                            buttonClass: "w-full  h_custom_white_button lg:w-17rem md:w-17rem sm:w-17rem h-3rem",
-                            text: translate(localeJson,"scan_my_yapple_card"),
-                            bg: "bg-white",
-                            onClick: () => {
-                              setOpenBarcodeDialog(true);
-                            },
-                          }} parentClass={"mt-5 h_custom_white_button mb-5"} />
+                        <div className=' mt-3 col-12 lg:col-5 md:col-5' >
+                          <div className="flex flex-column align-items-center justify-content-center h-full light_gray_color border-round-lg m-2 ">
+                            <ButtonRounded buttonProps={{
+                              type: 'button',
+                              rounded: "true",
+                              buttonClass: " w-full h_custom_white_button lg:w-17rem md:w-17rem sm:w-17rem h-3rem",
+                              text: translate(localeJson, "scan_my_card"),
+                              bg: "bg-white",
+                              onClick: () => {
+                                setOpenQrPopup(true)
+                              },
+                            }} parentClass={"mt-5 h_custom_white_button"} />
+                            <ButtonRounded buttonProps={{
+                              type: 'button',
+                              rounded: "true",
+                              buttonClass: "w-full  h_custom_white_button lg:w-17rem md:w-17rem sm:w-17rem h-3rem",
+                              text: translate(localeJson, "scan_my_yapple_card"),
+                              bg: "bg-white",
+                              onClick: () => {
+                                setOpenBarcodeDialog(true);
+                              },
+                            }} parentClass={"mt-5 h_custom_white_button mb-5"} />
                           </div>
                         </div>
                         <div className=" mt-3   col-12 lg:col-2 md:col-2">
                           <div className="flex justify-content-center align-items-center text-gray h-full">
-                                   {translate(localeJson,"or")}
+                            {translate(localeJson, "or")}
                           </div>
                         </div>
                         <div className="mt-3 col-12 lg:col-5 md:col-5">
@@ -614,10 +612,10 @@ export default function Admission() {
                               >
                                 <ButtonRounded
                                   buttonProps={{
-                                    buttonClass:"w-full h-3rem",
+                                    buttonClass: "w-full h-3rem",
                                     type: "submit",
                                     rounded: "true",
-                                    bg:"bg-primary",
+                                    bg: "bg-primary",
                                     text: translate(localeJson, "mem_search"),
                                   }}
                                   parentClass={"w-full"}
@@ -626,7 +624,7 @@ export default function Admission() {
                             </div>
                           </form>
                         </div>
-                       
+
                       </div>
                       {searchFlag &&
                         <div className="mt-3 col-12">
@@ -690,7 +688,7 @@ export default function Admission() {
                             <div className="flex justify-content-end">
                               <Button
                                 buttonProps={{
-                                  buttonClass:"update-button",
+                                  buttonClass: "update-button",
                                   type: "button",
                                   rounded: "true",
                                   text: translate(localeJson, "checkout_shelter"),
