@@ -1,4 +1,4 @@
-import { downloadBase64File, timestampFile, importErrorToastDisplay } from "@/helper";
+import { downloadBase64File, timestampFile, importErrorToastDisplay, toastDisplay } from "@/helper";
 import axios from "@/utils/api";
 import { isObject } from "lodash";
 import toast from 'react-hot-toast';
@@ -24,13 +24,13 @@ function _importData(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                importErrorToastDisplay(response);
+                toastDisplay(response, 'import');
             }
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
             callBackFun(false);
-            importErrorToastDisplay(error.response);
+            toastDisplay(error.response, 'import');
         });
 }
 

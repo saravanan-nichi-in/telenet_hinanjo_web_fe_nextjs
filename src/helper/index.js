@@ -357,9 +357,9 @@ export const common422ErrorToastDisplay = (error) => {
 export const toastDisplay = (response, key, position = "top-right", rawMsgType) => {
     if (response && response?.data && response?.status) {
         const { status, data } = response;
-        if (status != 511 && status != 401 && status != 403) {
+        if (status != 401 && status != 403) {
             if (data.success) {
-                if (key == 'import' && status == 206) {
+                if (key == 'import' && status == 206 && response?.data?.error_path) {
                     toast.success(() => (
                         <div>
                             <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
@@ -376,16 +376,23 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
                 }
             } else {
                 if (key == 'import' && status == 422) {
-                    toast.error(() => (
-                        <div>
-                            <a href={data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                                {data?.message}
-                            </a>
-                        </div>
-                    ), {
-                        position: position,
-                    });
-
+                    if (response?.data?.error_path) {
+                        toast.error(() => (
+                            <div>
+                                <a href={data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
+                                    {data?.message}
+                                </a>
+                            </div>
+                        ), {
+                            position: position,
+                        });
+                    } else {
+                        if (!isArray(data?.message)) {
+                            toast.error(data?.message, {
+                                position: "top-right",
+                            });
+                        }
+                    }
                 } else if (status == 422) {
                     if (isObject(data?.message)) {
                         let errorMessages = Object.values(data?.message);
@@ -713,44 +720,44 @@ export const getSpecialCareName = (nameList, locale = 'ja') => {
     return specialCareName;
 }
 
-export function downloadImage(base64String,fileName) {
+export function downloadImage(base64String, fileName) {
 
-     //Convert base64 string to binary data
-  const byteCharacters = atob(base64String);
-  const byteArrays = [];
+    //Convert base64 string to binary data
+    const byteCharacters = atob(base64String);
+    const byteArrays = [];
 
-  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-    const slice = byteCharacters.slice(offset, offset + 512);
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
 
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
     }
 
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
+    // Create Blob object from binary data
+    const blob = new Blob(byteArrays, { type: 'image/png' }); // Adjust type if necessary
 
-  // Create Blob object from binary data
-  const blob = new Blob(byteArrays, { type: 'image/png' }); // Adjust type if necessary
+    // Create a URL for the Blob object
+    const downloadUrl = URL.createObjectURL(blob);
 
-  // Create a URL for the Blob object
-  const downloadUrl = URL.createObjectURL(blob);
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = fileName;
 
-  // Create a link element
-  const link = document.createElement('a');
-  link.href = downloadUrl;
-  link.download = fileName;
+    // Append the link to the body
+    document.body.appendChild(link);
 
-  // Append the link to the body
-  document.body.appendChild(link);
+    // Click the link to trigger the download
+    link.click();
 
-  // Click the link to trigger the download
-  link.click();
+    // Remove the link from the DOM
+    document.body.removeChild(link);
 
-  // Remove the link from the DOM
-  document.body.removeChild(link);
-
-  // Revoke the URL to free up memory
-  URL.revokeObjectURL(downloadUrl);
+    // Revoke the URL to free up memory
+    URL.revokeObjectURL(downloadUrl);
 }
