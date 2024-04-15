@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { common422ErrorToastDisplay } from '@/helper';
+import { toastDisplay } from '@/helper';
 
 export const UserPlaceListServices = {
     getList: _getList,
@@ -41,7 +41,7 @@ function _getActiveList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            callBackFun()
-            common422ErrorToastDisplay(error);
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }

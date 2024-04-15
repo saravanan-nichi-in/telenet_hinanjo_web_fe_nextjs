@@ -1,9 +1,8 @@
 import { BehaviorSubject } from 'rxjs';
 import toast from 'react-hot-toast';
-import { isObject } from "lodash";
 
 import axios from '@/utils/api';
-import { common422ErrorToastDisplay } from '@/helper';
+import { toastDisplay } from '@/helper';
 
 const admin = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('admin')));
 const staff = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('staff')));
@@ -55,7 +54,7 @@ function _login(key, values, callBackFun, prepareKey) {
                 }
             })
             .catch((error) => {
-                common422ErrorToastDisplay(error);
+                toastDisplay(error?.response);
             });
     }
 }
@@ -91,7 +90,7 @@ function _logout(key, values, callBackFun, prepareKey) {
                 }
             })
             .catch((error) => {
-                common422ErrorToastDisplay(error);
+                toastDisplay(error?.response);
             });
     }
 }
@@ -113,7 +112,7 @@ function _forgot(key, values, callBackFun) {
             }
         })
         .catch((error) => {
-            common422ErrorToastDisplay(error);
+            toastDisplay(error?.response);
         });
 }
 
@@ -139,7 +138,7 @@ function _reset(key, values, callBackFun) {
             }
         })
         .catch((error) => {
-            common422ErrorToastDisplay(error);
+            toastDisplay(error?.response);
         });
 }
 
@@ -161,7 +160,7 @@ function _changePassword(key, values, callBackFun) {
                 }
             })
             .catch((error) => {
-                common422ErrorToastDisplay(error);
+                toastDisplay(error?.response);
             });
     }
 }

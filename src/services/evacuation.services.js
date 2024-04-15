@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { common422ErrorToastDisplay } from '@/helper';
+import { toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const EvacuationServices = {
@@ -150,7 +150,7 @@ function _eventAttendeesCheckout(payload, callBackFun) {
         })
         .catch((error) => {
             callBackFun(false);
-            common422ErrorToastDisplay(error);
+            toastDisplay(error?.response);
         });
 }
 

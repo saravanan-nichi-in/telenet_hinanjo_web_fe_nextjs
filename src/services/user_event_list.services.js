@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { common422ErrorToastDisplay } from '@/helper';
+import { toastDisplay } from '@/helper';
 
 export const UserEventListServices = {
     getEventsList: _getEventsList,
@@ -45,6 +45,6 @@ function _createUserEvent(payload, callBackFun) {
         })
         .catch((error) => {
             callBackFun(false);
-            common422ErrorToastDisplay(error);
+            toastDisplay(error?.response);
         });
 }
