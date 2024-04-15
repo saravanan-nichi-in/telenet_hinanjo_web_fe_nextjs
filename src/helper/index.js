@@ -414,11 +414,6 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
                             });
                         }
                     }
-                    else {
-                            toast.error(data?.message, {
-                                position: "top-right",
-                            });
-                    }
                 } else {
                     if (!isArray(data?.message)) {
                         toast.error(data?.message, {
