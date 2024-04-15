@@ -51,7 +51,7 @@ api.interceptors.response.use((response) => {
       window.location.href = '/hq-staff/login';
     } else if (window.location.pathname.startsWith('/staff')) {
       localStorage.removeItem('staff');
-      window.location.href = redirectPath;
+      window.location.href = '/user/list';
     }
   }
   return Promise.reject(error);
