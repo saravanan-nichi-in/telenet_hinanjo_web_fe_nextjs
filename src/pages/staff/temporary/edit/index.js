@@ -896,7 +896,7 @@ export default function Admission() {
             dispatch(setOriginalData(values));
             let payload = convertData(values);
             dispatch(setRegisterData(payload));
-            router.push("/staff/family/edit/confirm");
+            router.push("/staff/temporary/edit/confirm");
           }
         }}
       >
