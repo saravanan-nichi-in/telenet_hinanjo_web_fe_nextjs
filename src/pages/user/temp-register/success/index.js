@@ -99,7 +99,7 @@ const RegisterSuccess = () => {
                         localStorage.setItem('refreshing', false);
                         localStorage.setItem("tempDataDeleted","true");
                         localStorage.setItem("isSuccess","false");
-                        router.push('/user/list')
+                        router.push('/user/temp-person-count')
                       }
                     })
                   },
