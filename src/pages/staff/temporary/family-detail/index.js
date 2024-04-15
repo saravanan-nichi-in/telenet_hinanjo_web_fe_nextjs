@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
-import { FaArrowRightFromBracket } from 'react-icons/fa6';
+import { FaArrowRightToBracket } from 'react-icons/fa6';
 import { FiEdit2 } from "react-icons/fi";
 import { IoIosArrowBack } from 'react-icons/io';
 
@@ -647,11 +647,11 @@ export default function StaffFamilyDetail() {
                                 <Button buttonProps={{
                                     type: 'submit',
                                     rounded: "true",
-                                    buttonClass: "w-10rem ",
-                                    text: translate(localeJson, 'exit_procedures'),
-                                    icon: <FaArrowRightFromBracket className='mr-1' />,
+                                    buttonClass: "w-10rem search-button",
+                                    text: translate(localeJson, 'check_in'),
+                                    icon: <FaArrowRightToBracket className='mr-3' />,
                                     onClick: () => setStaffFamilyDialogVisible(true)
-                                }} parentClass={"mt-3 exit-procedure-button"} />
+                                }} parentClass={"mt-3 search-button"} />
                             </div>
                         </div>
                     </div>
