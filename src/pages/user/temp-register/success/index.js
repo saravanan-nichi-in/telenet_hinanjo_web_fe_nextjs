@@ -6,7 +6,7 @@ import { Button } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { downloadImage, getValueByKeyRecursively as translate } from "@/helper";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { reset } from "@/redux/tempRegister";
+import { clearExceptPlaceId, reset } from "@/redux/tempRegister";
 import { TempRegisterServices } from "@/services"
 
 const RegisterSuccess = () => {
@@ -94,7 +94,7 @@ const RegisterSuccess = () => {
                     deleteTempFamily(payload,(res)=> {
                       if(res)
                       {
-                        dispatch(reset())
+                        dispatch(clearExceptPlaceId())
                         localStorage.setItem("personCountTemp",null)
                         localStorage.setItem('refreshing', false);
                         localStorage.setItem("tempDataDeleted","true");
