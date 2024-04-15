@@ -13,6 +13,7 @@ import {
 import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
 import { setStaffTempFamily } from "@/redux/family";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { clearExceptPlaceId, reset, setSuccessData } from "@/redux/tempRegister";
 
 function TemporaryRegistrants() {
   const { locale, localeJson } = useContext(LayoutContext);
@@ -300,6 +301,11 @@ function TemporaryRegistrants() {
     };
     updateCheckInDetail(param, (response) => {
       if (response.success) {
+        dispatch(clearExceptPlaceId())
+        localStorage.setItem("personCountTemp",null)
+        localStorage.setItem('refreshing', false);
+        localStorage.setItem('deletedFromStaff',"true")
+        localStorage.setItem("showDelete","false")
         getList(getListPayload, onGetTemporaryRegistrantListSuccess);
       }
     });

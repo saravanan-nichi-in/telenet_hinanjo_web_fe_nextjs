@@ -22,6 +22,7 @@ import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/
 import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefectures, prefecturesCombined } from '@/utils/constant';
 import { setOriginalData, setIsEdit } from '@/redux/staff_temp_register';
+import { clearExceptPlaceId, reset, setSuccessData } from '@/redux/tempRegister';
 import { CommonServices,TemporaryStaffRegistrantServices } from '@/services';
 
 export default function StaffFamilyDetail() {
@@ -318,6 +319,11 @@ export default function StaffFamilyDetail() {
         updateCheckInDetail(preparedParam, (response) => {
             setStaffFamilyDialogVisible(false);
             if (response.success) {
+                dispatch(clearExceptPlaceId())
+                localStorage.setItem("personCountTemp",null)
+                localStorage.setItem('refreshing', false);
+                localStorage.setItem('deletedFromStaff',"true");
+                localStorage.setItem("showDelete","false")
                 router.push("/staff/temporary/family");
             }
         });
@@ -331,7 +337,7 @@ export default function StaffFamilyDetail() {
                 header={translate(localeJson, 'confirmation')}
                 content={
                     <div>
-                        <p>{translate(localeJson, 'do_you_want_to_exit_the_shelter')}</p>
+                        <p>{translate(localeJson, 'do_you_want_to_enter_the_shelter')}</p>
                     </div>
                 }
                 position={"center"}
@@ -339,15 +345,15 @@ export default function StaffFamilyDetail() {
                 footerButtonsArray={[
                     {
                         buttonProps: {
-                            buttonClass: "w-full del_ok-button",
+                            buttonClass: "w-full back-button",
                             type: "submit",
-                            text: translate(localeJson, 'de_register'),
+                            text: translate(localeJson, 'admission_button'),
                             onClick: () => {
                                 onClickOkButton();
                                 showOverFlow();
                             },
                         },
-                        parentClass: "del_ok-button modal-button-footer-space"
+                        parentClass: "back-button modal-button-footer-space"
                     },
                     {
                         buttonProps: {

@@ -209,6 +209,9 @@ export default function StaffManagementEditPage() {
                       href={tempUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={()=>{
+                        localStorage.setItem('deletedFromStaff',"false")
+                      }}
                     >
                       {tempUrl}
                     </a>
