@@ -34,7 +34,7 @@ const RegisterSuccess = () => {
     let place_id = regReducer.placeId
     let SuccessPlaceId = regReducer.successData?.placeId
 
-    if(!regReducer.successData?.data)
+    if(!regReducer.successData?.data||localStorage.getItem('deletedFromStaff')=="true")
     {
       router.push('/user/temp-person-count')
     }
