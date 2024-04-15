@@ -1,9 +1,8 @@
 import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from '@/helper';
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, toastDisplay } from '@/helper';
 
-/* Identity and Access management (IAM) */
 export const QRCodeCreateServices = {
     callExport: _callExport,
     callImport: _callImport,
@@ -48,8 +47,7 @@ function _callImport(payload, callBackFun) {
         })
         .catch((error) => {
             callBackFun(false);
-            // Handling import errors
-            importErrorToastDisplay(error.response);
+            toastDisplay(error.response, "import");
         });
 }
 

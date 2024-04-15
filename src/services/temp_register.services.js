@@ -1,8 +1,7 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay, toastDisplay } from "@/helper";
+import { toastDisplay } from "@/helper";
 import toast from "react-hot-toast";
-import { isArray, isObject } from "lodash";
-
+import { isObject } from "lodash";
 
 export const TempRegisterServices = {
   tempRegister: _tempRegister,
@@ -14,8 +13,8 @@ export const TempRegisterServices = {
   ocrScanRegistration: _ocrScanRegistration,
   getAddressByZipCode: _getAddressByZipCode,
   getBasicDetailsInfo: _getBasicDetailsInfo,
-  getBasicDetailsInfoStaffTemp:_getBasicDetailsInfoStaffTemp,
-  getBasicDetailsUsingUUID:_getBasicDetailsUsingUUID,
+  getBasicDetailsInfoStaffTemp: _getBasicDetailsInfoStaffTemp,
+  getBasicDetailsUsingUUID: _getBasicDetailsUsingUUID,
   registerTemporaryUser: _registerTemporaryUser,
   getActiveEvacuationPlaceList: _getActiveEvacuationPlaceList,
   getdefaultEventData: _getDefaultEventData,
@@ -23,7 +22,7 @@ export const TempRegisterServices = {
   staffRegisterUser: _staffRegisterUser,
   staffEditUser: _staffEditUser,
   getPPID: _getppID,
-  deleteTempFamily:_deleteTempFamily,
+  deleteTempFamily: _deleteTempFamily,
 };
 
 function _getDefaultEventData(callBackFun) {
@@ -344,16 +343,16 @@ function _getppID(payload, callBackFun) {
     });
 }
 
-function _deleteTempFamily (payload,callBackFun) {
+function _deleteTempFamily(payload, callBackFun) {
   axios.post('/user/registration/delete/family', payload)
-  .then((response) => {
-    callBackFun(response.data);
-    toast.success(response?.data?.message, {
-      position: "top-right",
+    .then((response) => {
+      callBackFun(response.data);
+      toast.success(response?.data?.message, {
+        position: "top-right",
+      });
+    })
+    .catch((error) => {
+      callBackFun();
+      toastDisplay(error?.response)
     });
-  })
-  .catch((error) => {
-    callBackFun();
-   toastDisplay(error?.response)
-  });
 }

@@ -407,6 +407,12 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
                         toast.error(formattedErrorMessage, {
                             position: position,
                         });
+                    } else {
+                        if (!isArray(data?.message)) {
+                            toast.error(data?.message, {
+                                position: "top-right",
+                            });
+                        }
                     }
                 } else {
                     if (!isArray(data?.message)) {
