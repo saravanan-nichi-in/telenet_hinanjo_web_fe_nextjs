@@ -1,8 +1,6 @@
 import axios from 'axios';
-import toast from 'react-hot-toast';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const PRODUCTION_HOST = process.env.NEXT_PUBLIC_PRODUCTION_HOST;
 
 // Create an Axios instance
 const api = axios.create({
