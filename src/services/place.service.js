@@ -1,9 +1,8 @@
 import axios from "@/utils/api";
-import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, importErrorToastDisplay } from "@/helper";
+import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, toastDisplay } from "@/helper";
 import toast from "react-hot-toast";
 import { isArray, isObject } from "lodash";
 
-/* Identity and Access management (IAM) */
 export const PlaceServices = {
   importData: _importData,
   exportData: _exportData,
@@ -26,12 +25,12 @@ function _importData(payload, callBackFun) {
     .post("/admin/place/import", payload)
     .then((response) => {
       callBackFun(response);
-      importErrorToastDisplay(response);
+      toastDisplay(response, 'import');
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
       callBackFun(false);
-      importErrorToastDisplay(error.response);
+      toastDisplay(error.response, 'import');
     });
 }
 

@@ -43,6 +43,15 @@ export default function PublicExternal() {
   const { getActivePlaceList, create } = ExternalServices;
   const { getAddress, getZipCode } = CommonServices;
 
+  // Getting storage data with help of reducers
+  const [buttonStates, setButtonStates] = useState(Array(3).fill(false));
+  const [foodButtonStates, setFoodButtonStates] = useState(
+    Array(2).fill(false)
+  );
+  const [placeButtonStates, setPlaceButtonStates] = useState();
+  const [addressCount, setAddressCount] = useState(0);
+  const [fetchZipCode, setFetchedZipCode] = useState("");
+
   useEffect(() => {
     if (evacueeValues !== "") {
       setEvacuee((prevEvacuee) => {
@@ -133,7 +142,7 @@ export default function PublicExternal() {
     toggleFoodSwitches: Array(2).fill(false),
     togglePlaceSwitches: "",
   };
-  
+
   const validationSchema = (localeJson) =>
     Yup.object().shape({
       toggleSwitches: Yup.array()
@@ -222,14 +231,6 @@ export default function PublicExternal() {
         ),
     });
 
-  // Getting storage data with help of reducers
-  const [buttonStates, setButtonStates] = useState(Array(3).fill(false));
-  const [foodButtonStates, setFoodButtonStates] = useState(
-    Array(2).fill(false)
-  );
-  const [placeButtonStates, setPlaceButtonStates] = useState();
-  const [addressCount, setAddressCount] = useState(0);
-  const [fetchZipCode, setFetchedZipCode] = useState("");
 
   const handleFoodButtonClick = (index) => {
     const newButtonStates = [...foodButtonStates];
