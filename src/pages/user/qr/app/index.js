@@ -24,8 +24,14 @@ export default function App() {
         let formData = new FormData();
         formData.append("content", res)
         register(formData, (result) => {
+            if(result)
+            {
             dispatch(setCheckInData(result.data?.data))
             router.push('/user/qr/app/register')
+            }
+            else {
+                closeQrPopup()
+            }
         })
     }
 

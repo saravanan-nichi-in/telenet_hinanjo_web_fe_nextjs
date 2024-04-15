@@ -34,6 +34,9 @@ const SearchDetails = () => {
     setLoader(false);
      router.push("/user/qr/app");
     }
+    else {
+      setLoader(false)
+    }
   };
 
   useEffect(() => {
