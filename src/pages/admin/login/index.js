@@ -45,7 +45,7 @@ const LoginPage = () => {
             dispatch(setAdminValue({
                 admin: values.data
             }));
-            router.push("/admin/event-status-list");
+            router.push("/admin/dashboard");
         }
     };
 

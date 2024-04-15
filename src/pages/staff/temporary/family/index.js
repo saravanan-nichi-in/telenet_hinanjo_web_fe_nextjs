@@ -509,7 +509,8 @@ function TemporaryRegistrants() {
                     </div>
                     <div>
                         <div>
-                            <div className="flex justify-between">
+                            {/* Future */}
+                            {/* <div className="flex justify-between">
                                 <Button buttonProps={{
                                     title: `https://login-portal-dev.biz.cityos-dev.hitachi.co.jp?screenID=HCS-202&idToken=${myCookieValue}`,
                                     buttonClass: "w-full p-4",
@@ -530,7 +531,7 @@ function TemporaryRegistrants() {
                                         hideOverFlow();
                                     },
                                 }} parentClass="flex-1 p-2" />
-                            </div>
+                            </div> */}
                             <form>
                                 <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
                                     <Input

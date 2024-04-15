@@ -326,7 +326,7 @@ export default function TempRegistration() {
             selectionMode="single"
             onSelectionChange={
               (e) => {
-                dispatch(setTempFamily({ lgwan_family_id: e.value.id }));
+                dispatch(setTempFamily({ family_id: e.value.id }));
                 router.push({
                   pathname: '/admin/temp-registration/family-detail',
                 });

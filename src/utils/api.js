@@ -49,20 +49,9 @@ api.interceptors.response.use((response) => {
     } else if (window.location.pathname.startsWith('/hq-staff')) {
       localStorage.removeItem('hq-staff');
       window.location.href = '/hq-staff/login';
-    } else {
-      let redirectPath = localStorage.getItem('redirect');
-      if (window.location.pathname.startsWith('/staff/event-staff/')) {
-        localStorage.removeItem('staff');
-        setTimeout(function () {
-          window.location.href = redirectPath;
-        }, 4000);
-      } else {
-        localStorage.removeItem('staff');
-        setTimeout(function () {
-          window.location.href = redirectPath;
-        }, 4000);
-      }
-      localStorage.removeItem('redirect');
+    } else if (window.location.pathname.startsWith('/staff')) {
+      localStorage.removeItem('staff');
+      window.location.href = redirectPath;
     }
   }
   return Promise.reject(error);

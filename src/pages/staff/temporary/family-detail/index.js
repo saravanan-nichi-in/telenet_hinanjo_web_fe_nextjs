@@ -116,7 +116,6 @@ export default function TemporaryFamilyDetail() {
                     family_code: person.family_code,
                     tel: person.family_tel,
                     place_name: locale === "en" && !_.isNull(person.place_name_en) ? person.place_name_en : person.place_name,
-                    yapple_id: person.yapple_id,
                 };
                 let personAnswers = person.person_answers;
                 if (listOfIndividualQuestions.length > 0) {
@@ -279,10 +278,6 @@ export default function TemporaryFamilyDetail() {
                                 <div className='flex align-items-center'>
                                     <div className='page-header3'>{translate(localeJson, "c_special_care")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.special_care_name}</div>
-                                </div>
-                                <div className='flex align-items-center'>
-                                    <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
-                                    <div className='page-header3-sub ml-1'>{val.yapple_id}</div>
                                 </div>
                             </div>
                         )
