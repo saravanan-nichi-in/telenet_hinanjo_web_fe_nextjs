@@ -131,9 +131,7 @@ function _getBasicDetailsUsingUUID(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(error);
-      toast.error(error.response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(error?.response)
     });
 }
 
@@ -145,7 +143,7 @@ function _tempRegister(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 
@@ -199,7 +197,7 @@ function _registerUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 
@@ -214,7 +212,7 @@ function _qrScanRegistration(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 
@@ -229,7 +227,7 @@ function _ocrScanRegistration(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 
@@ -244,7 +242,7 @@ function _staffRegisterUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 function _staffEditUser(payload, callBackFun) {
@@ -258,7 +256,7 @@ function _staffEditUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 function _staffTempEditUser(payload, callBackFun) {
@@ -272,7 +270,7 @@ function _staffTempEditUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
-      handleRegistrationError(error);
+      toastDisplay(error?.response)
     });
 }
 //_staffEditUser
@@ -293,32 +291,6 @@ async function _getAddressByZipCode(zipCode, callBackFun) {
   }
 }
 
-function handleRegistrationError(error) {
-  if (error.response && error.response?.status === 422) {
-    if (isObject(error.response?.data?.message)) {
-      let errorMessages = Object.values(error.response.data.message);
-      let errorString = errorMessages.join('.');
-      let errorArray = errorString.split(".");
-      errorArray = errorArray.filter(message => message.trim() !== "");
-      let formattedErrorMessage = errorArray
-        .map((message) => {
-          return `${message.trim()}`;
-        })
-        .join("\n");
-      toast.error(formattedErrorMessage, {
-        position: "top-right",
-      });
-    } else {
-      toast.error(error.response?.data?.message, {
-        position: "top-right",
-      });
-    }
-  } else {
-    toast.error(error?.response?.data?.message, {
-      position: "top-right",
-    });
-  }
-}
 
 function _getppID(payload, callBackFun) {
   let env = process.env.NEXT_PUBLIC_CLIENT_ENV;
