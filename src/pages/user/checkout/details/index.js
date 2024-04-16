@@ -16,14 +16,14 @@ const CheckOutDetails = () => {
   const dispatch = useAppDispatch();
   const checkOutReducer = useSelector((state) => state.checkOutReducer);
 
+  let data = checkOutReducer?.checkOutData || [];
+
+  let family_id = data.length > 0 ? data[0].family_id : "";
+
   const [familyCode, setFamilyCode] = useState(family_id);
 
   const { checkOut } = CheckInOutServices;
   
-  let data = checkOutReducer?.checkOutData || [];
-  
-  let family_id = data.length > 0 ? data[0].family_id : "";
-
   const isCheckedOut = (res) => {
     setLoader(false)
     if (res.success) {
