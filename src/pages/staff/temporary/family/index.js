@@ -303,7 +303,7 @@ function TemporaryRegistrants() {
       if (response.success) {
         dispatch(clearExceptPlaceId())
         localStorage.setItem("personCountTemp",null)
-        localStorage.setItem('refreshing', false);
+        localStorage.setItem('refreshing', "false");
         localStorage.setItem('deletedFromStaff',"true")
         localStorage.setItem("showDelete","false")
         getList(getListPayload, onGetTemporaryRegistrantListSuccess);

@@ -86,7 +86,8 @@ export default function Admission() {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
     getAddressByZipCode,
-    ocrScanRegistration
+    ocrScanRegistration,
+    qrScanRegistration
   } = TempRegisterServices;
 
   useEffect(() => {
@@ -216,7 +217,7 @@ export default function Admission() {
     agreeCheckTwo: false,
     name_furigana: "",
     name_kanji: "",
-    lgwan_family_id: ""
+    family_id: ""
   };
   const currentDate = new Date();
   // eslint-disable-next-line no-irregular-whitespace
@@ -370,7 +371,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name_kanji);
-      formikRef.current.setFieldValue("lgwan_family_id", data.lgwan_family_id)
+      formikRef.current.setFieldValue("family_id", data.family_id)
       data.evacuee && setEvacuee(data.evacuee);
     }
   }
@@ -483,8 +484,8 @@ export default function Admission() {
     });
   };
 
-  const Scanner = {
-    url: "/layout/images/mapplescan.svg",
+  const Qr = {
+    url: "/layout/images/evacuee-qr.png",
   };
 
   const Card = {
@@ -604,14 +605,11 @@ export default function Admission() {
 
   const qrResult = (result) => {
     setLoader(true)
-    let payload = {
-      yapple_id: "",
-      ppid: "",
-      chiica_qr: result,
-    };
+    let formData = new FormData()
+    formData.append('content', result)
     setOpenQrPopup(false)
     showOverFlow();
-    basicInfo(payload, (res) => {
+    qrScanRegistration(formData, (res) => {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);
@@ -683,8 +681,8 @@ export default function Admission() {
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(
         inputData.evacuee_date
       ),
-      "lgwan_family_id": inputData.lgwan_family_id,
-      zip_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
+      "family_id": inputData.family_id,
+      postal_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: inputData.address2,
@@ -699,12 +697,12 @@ export default function Admission() {
         let data = evacuee.dob;
         const convertedDate = new Date(data.year, data.month - 1, data.date);
         return {
-          "lgwan_person_id": evacuee.lgwan_person_id,
+          "person_id": evacuee.person_id,
           id: evacuee.id,
           refugee_name: evacuee.name_furigana,
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
-          zip_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
+          postal_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
           address_default: evacuee.address2,
@@ -837,12 +835,18 @@ export default function Admission() {
 
   return (
     <>
-      <YaburuModal
+      {/* <YaburuModal
         open={openQrPopup}
         close={closeQrPopup}
         callBack={qrResult}
       >
-      </YaburuModal>
+      </YaburuModal> */}
+       <QrScannerModal
+        open={openQrPopup}
+        close={closeQrPopup}
+        callback={qrResult}
+        setOpenQrPopup={setOpenQrPopup}
+      ></QrScannerModal>
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -925,9 +929,8 @@ export default function Admission() {
                           custom: "",
                           buttonClass:
                             "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "myNumberCardScan"),
+                          text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled: isHitachi || true,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                             hideOverFlow();
@@ -941,12 +944,11 @@ export default function Admission() {
                         buttonProps={{
                           type: "button",
                           rounded: "true",
-                          disabled: isHitachi,
                           custom: "",
                           buttonClass:
                             "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "yaburuCardScan"),
-                          icon: <img src={Scanner.url} width={40} height={40} />,
+                          text: translate(localeJson, "c_qr_reg"),
+                          icon: <img src={Qr.url} width={30} height={30} />,
                           onClick: () => {
                             setOpenQrPopup(true);
                             hideOverFlow();

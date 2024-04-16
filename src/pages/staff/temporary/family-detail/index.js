@@ -238,7 +238,7 @@ export default function StaffFamilyDetail() {
                             date: birthDate.getDate().toString().padStart(2, ""),
                         };
                         return {
-                            "lgwan_person_id": evacueeData.person_id,
+                            "person_id": evacueeData.person_id,
                             family_register_from: evacueeData.family_register_from,
                             id: index + 1, //evacueeData.family_id,
                             checked: evacueeData.person_is_owner == "0" ? true : false,
@@ -321,7 +321,7 @@ export default function StaffFamilyDetail() {
             if (response.success) {
                 dispatch(clearExceptPlaceId())
                 localStorage.setItem("personCountTemp",null)
-                localStorage.setItem('refreshing', false);
+                localStorage.setItem('refreshing', "false");
                 localStorage.setItem('deletedFromStaff',"true");
                 localStorage.setItem("showDelete","false")
                 router.push("/staff/temporary/family");
