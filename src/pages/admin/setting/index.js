@@ -159,7 +159,7 @@ export default function Setting() {
           if (!value) return true; // If no file is selected, the validation passes.
           const fileName = value.name;
           const fileExtension = fileName.split(".").pop().toLowerCase();
-          const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+          const allowedExtensions = ["jpg", "jpeg", "png"];
           // const fileExtension = value.split(".").pop().toLowerCase();
           if (allowedExtensions.includes(fileExtension)) {
             // Check image size not exceeding 3MB
