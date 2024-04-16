@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { SelectButton } from 'primereact/selectbutton';
-import toast from 'react-hot-toast';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -11,6 +10,7 @@ import {
     getEnglishDateSlashDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     convertToSingleByte,
+    toastDisplay,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, ValidationError, NormalCheckBox, NormalLabel, QuestionList, MultiStepForm, CustomHeader, Input, InputDropdown } from '@/components';
@@ -229,9 +229,7 @@ export default function TempRegister() {
         registerTemporaryUser(payload, (response) => {
             setSubmitLoader(false)
             if (response.code == 'ERR_NETWORK') {
-                toast.error(translate(localeJson, 'register_error_message'), {
-                    position: "top-right",
-                });
+                toastDisplay(translate(localeJson, 'register_error_message'), '', '', "error");
             }
             else if (response.code == "ERR_BAD_REQUEST") {
                 return "";

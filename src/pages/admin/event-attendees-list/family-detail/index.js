@@ -16,10 +16,10 @@ import {
     hideOverFlow
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
 import { useAppSelector } from "@/redux/hooks";
 import { prefecturesCombined } from '@/utils/constant';
+import { EvacuationServices } from '@/services';
 
 export default function EventFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);

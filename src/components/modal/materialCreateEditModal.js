@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Button, Input, ValidationError } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { MaterialService } from "@/services/material.service";
+import { MaterialService } from "@/services";
 
 export default function MaterialCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
 import { toastDisplay } from '@/helper';
 
@@ -58,15 +56,11 @@ function _exportTemporaryEvacueesCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -83,9 +77,7 @@ function _getFamilyTemporaryEvacueesDetail(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -100,9 +92,7 @@ function _updateCheckInDetail(payload, callBackFun) {
             if (response && response.data) {
                 callBackFun(response.data);
             }
-            toast.success(response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(response);
         })
         .catch((error) => {
             callBackFun();

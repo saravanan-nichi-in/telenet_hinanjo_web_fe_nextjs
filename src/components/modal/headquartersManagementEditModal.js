@@ -9,7 +9,7 @@ import {
     getValueByKeyRecursively as translate
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { HeadQuarterManagement } from "@/services/hqManagement.service";
+import { HeadQuarterManagement } from "@/services";
 
 export default function HqEditModal(props) {
     const { localeJson } = useContext(LayoutContext);

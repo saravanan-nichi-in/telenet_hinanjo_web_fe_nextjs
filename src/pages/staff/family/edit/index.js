@@ -1,10 +1,8 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { result } from "lodash";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset } from "@/redux/staff_register";
@@ -17,7 +15,8 @@ import {
   getGeneralDateTimeSecondSlashDisplayFormat,
   showOverFlow,
   hideOverFlow,
-  convertToSingleByte
+  convertToSingleByte,
+  toastDisplay
 } from "@/helper";
 import {
   prefectures,
@@ -841,7 +840,7 @@ export default function Admission() {
         callBack={qrResult}
       >
       </YaburuModal> */}
-       <QrScannerModal
+      <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
@@ -1824,9 +1823,7 @@ export default function Admission() {
                               setIsFormSubmitted(true);
                               if (errors.agreeCheckOne && !values.agreeCheckOne) {
                                 let message = translate(localeJson, "person_info_valiadation")
-                                toast.error(message, {
-                                  position: "top-right",
-                                });
+                                toastDisplay(message, '', '', "error");
                               }
                               if (Array.isArray(errors.evacuee)) {
                                 const indexOfObject = errors.evacuee.findIndex(

@@ -11,7 +11,7 @@ import {
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, CustomHeader, DateTime, NormalTable, InputDropdown } from "@/components";
-import { HistoryServices } from "@/services/history.services";
+import { HistoryServices } from "@/services";
 
 export default function HQHistoryPlacePage() {
     const { localeJson, locale } = useContext(LayoutContext);

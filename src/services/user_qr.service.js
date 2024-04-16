@@ -1,7 +1,5 @@
 import { toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import { isObject } from "lodash";
-import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
 export const UserQrService = {
@@ -39,11 +37,8 @@ function _create(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-
                 if (response?.data?.success) {
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
+                    toastDisplay(response);
                 }
             }
         })

@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
 import { toastDisplay } from '@/helper';
 
@@ -21,9 +19,7 @@ function _getEventsList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -38,9 +34,7 @@ function _createUserEvent(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {

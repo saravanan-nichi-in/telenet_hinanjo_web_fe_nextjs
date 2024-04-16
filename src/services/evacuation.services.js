@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
 import { toastDisplay } from '@/helper';
 
@@ -42,15 +40,11 @@ function _exportEvacueesCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -67,7 +61,6 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-
             console.error('Error fetching data:', error);
         });
 }
@@ -104,9 +97,7 @@ function _getFamilyEvacueesAttendeesDetail(payload, callBackFun) {
         })
         .catch((error) => {
             callBackFun(false);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -120,16 +111,12 @@ function _evacuationCheckout(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            callBackFun(error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -143,9 +130,7 @@ function _eventAttendeesCheckout(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
@@ -153,4 +138,3 @@ function _eventAttendeesCheckout(payload, callBackFun) {
             toastDisplay(error?.response);
         });
 }
-

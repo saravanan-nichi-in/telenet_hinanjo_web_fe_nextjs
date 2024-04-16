@@ -1,11 +1,10 @@
-import { downloadBase64File, timestampFile } from "@/helper";
+import { downloadBase64File, timestampFile, toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import toast from 'react-hot-toast';
 
 export const AdminEvacueeTempServices = {
     exportData: _exportData,
     getEvacueeTempList: _getEvacueeTempList,
-    getTempFamilyEvacueesDetail:_getTempFamilyEvacueesDetail
+    getTempFamilyEvacueesDetail: _getTempFamilyEvacueesDetail
 };
 
 
@@ -20,16 +19,11 @@ function _exportData(payload) {
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
                 downloadBase64File(response.data.result.filePath, timestampFile("Admin"));
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -59,7 +53,7 @@ function _getEvacueeTempList(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _getTempFamilyEvacueesDetail(payload, callBackFun) {
-    axios.post(`/admin/temp/evacuations/detail`,payload)
+    axios.post(`/admin/temp/evacuations/detail`, payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

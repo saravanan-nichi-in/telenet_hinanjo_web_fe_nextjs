@@ -4,8 +4,7 @@ import _ from 'lodash';
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, AdminManagementDeleteModal, AdminManagementImportModal, HqEditModal, HqManagementDetailModal } from '@/components';
-import { HeadQuarterManagement } from '@/services/hqManagement.service';
-import { CommonServices } from '@/services';
+import { CommonServices, HeadQuarterManagement } from '@/services';
 
 export default function HeadQuartersPage() {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);

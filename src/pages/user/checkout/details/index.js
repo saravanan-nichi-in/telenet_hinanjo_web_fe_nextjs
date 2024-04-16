@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
-import toast from 'react-hot-toast';
 import { useSelector } from "react-redux";
 
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { toastDisplay, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { ButtonRounded, FamilyListComponent } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
@@ -41,9 +40,7 @@ const CheckOutDetails = () => {
       checkOut(payload, isCheckedOut)
     }
     else {
-      toast.error(translate(localeJson, 'already_checked_out'), {
-        position: "top-right",
-      });
+      toastDisplay(translate(localeJson, 'already_checked_out'),'','',"error");
     }
   }
 

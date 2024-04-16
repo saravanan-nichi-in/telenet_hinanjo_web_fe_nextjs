@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { Button, NormalLabel, Input, InputDropdown, ValidationError, InputFile } from "@/components"; 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { StockpileStaffService } from "@/services/stockpilestaff.service";
+import { StockpileStaffService } from "@/services";
 
 export default function StaffStockpileCreateModal(props) {
     const { localeJson } = useContext(LayoutContext);

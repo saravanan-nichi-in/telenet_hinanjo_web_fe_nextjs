@@ -4,7 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { Button, NormalTable } from "@/components"; 
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { BulkCheckoutService } from "@/services/bulkCheckout.service";
+import { BulkCheckoutService } from "@/services";
 
 export default function PlaceEventBulkCheckOut(props) {
     const { localeJson } = useContext(LayoutContext);

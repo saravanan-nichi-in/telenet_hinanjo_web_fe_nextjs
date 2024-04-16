@@ -7,8 +7,8 @@ import {
   getJapaneseDateDisplayYYYYMMDDFormat,
   getValueByKeyRecursively as translate
 } from "@/helper";
-import { StaffDashBoardServices } from "@/services/staff_dashboard.service";
 import { CustomHeader, Doughnut } from "@/components";
+import { StaffDashBoardServices } from "@/services";
 
 function EventStaffDashboard() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

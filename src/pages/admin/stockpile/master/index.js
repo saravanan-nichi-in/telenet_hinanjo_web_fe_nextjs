@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, InputDropdown, AdminManagementDeleteModal, AdminManagementImportModal, StockpileSummaryImageModal, StockpileCreateEditModal } from '@/components';
-import { StockpileService } from '@/services/stockpilemaster.service';
+import { StockpileService } from '@/services';
 
 export default function AdminStockPileMaster() {
     const { locale, localeJson } = useContext(LayoutContext);

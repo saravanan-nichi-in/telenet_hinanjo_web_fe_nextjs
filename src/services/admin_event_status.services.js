@@ -1,14 +1,11 @@
-import { downloadBase64File, timestampFile } from "@/helper";
+import { downloadBase64File, timestampFile, toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import { isObject } from "lodash";
-import toast from 'react-hot-toast';
 
 export const AdminEventStatusServices = {
     exportData: _exportData,
     getAttendeesList: _getAttendeesList,
-    getEventStatusList : _getEventStatusList
+    getEventStatusList: _getEventStatusList
 };
-
 
 /**
  * Export place data
@@ -21,17 +18,11 @@ function _exportData(payload) {
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
                 downloadBase64File(response.data.result.filePath, timestampFile("Admin"));
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -72,4 +63,3 @@ function _getEventStatusList(payload, callBackFun) {
             callBackFun(false);
         });
 }
-

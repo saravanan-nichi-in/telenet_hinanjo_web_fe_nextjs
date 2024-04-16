@@ -18,9 +18,9 @@ import {
     Input,
     InputDropdown,
 } from "@/components";
-import { EvacuationServices } from "@/services/evacuation.services";
 import { setFamily } from "@/redux/family";
 import { useAppDispatch } from "@/redux/hooks";
+import { EvacuationServices } from "@/services";
 
 export default function HQEvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);

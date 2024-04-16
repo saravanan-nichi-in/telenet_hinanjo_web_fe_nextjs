@@ -26,11 +26,11 @@ import {
 import {
   CommonServices,
   TempRegisterServices,
+  UserEventListServices,
 } from "@/services";
 import {
   calculateAge
 } from "@/helper";
-import { UserEventListServices } from "@/services/user_event_list.services"
 
 export default function UserEventRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);

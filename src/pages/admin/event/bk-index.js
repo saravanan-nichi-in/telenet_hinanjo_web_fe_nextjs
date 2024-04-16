@@ -9,7 +9,7 @@ import {
     hideOverFlow,
 } from '@/helper';
 import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, DeleteModal, PlaceEventBulkCheckOut, EventCreateEditModal } from '@/components';
-import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
+import { EventQuestionnaireServices } from '@/services';
 
 export default function Questionnaire() {
     const { localeJson, locale } = useContext(LayoutContext);

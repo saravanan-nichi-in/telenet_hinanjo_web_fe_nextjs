@@ -4,8 +4,7 @@ import _ from 'lodash';
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, AdminManagementDeleteModal, AdminManagementImportModal, StaffManagementDetailModal, StaffManagementEditModal } from '@/components';
-import { StaffManagementService } from '@/services/staffmanagement.service';
-import { CommonServices } from '@/services';
+import { CommonServices, StaffManagementService } from '@/services';
 
 export default function StaffManagementPage() {
     const { localeJson, locale } = useContext(LayoutContext);

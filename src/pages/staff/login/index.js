@@ -4,11 +4,10 @@ import * as Yup from "yup";
 import { classNames } from 'primereact/utils';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { AuthenticationAuthorizationService } from '@/services';
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { toastDisplay, getValueByKeyRecursively as translate } from '@/helper'
 import { useAppDispatch } from '@/redux/hooks';
 import { setStaffValue } from '@/redux/auth';
 import { Button, CustomHeader, ValidationError, Password, InputGroup } from '@/components';
@@ -63,9 +62,7 @@ const LoginPage = () => {
             }));
             router.push('/staff/forgot-password')
         } else {
-            toast.error(translate(localeJson, 'contact_admin'), {
-                position: "top-right",
-            });
+            toastDisplay(translate(localeJson, 'contact_admin'), '', '', "error");
         }
     }
 

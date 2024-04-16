@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, CounterSupplies, CustomHeader, NormalTable, ValidationError, TextArea } from "@/components";
-import { StaffSuppliesServices } from "@/services/supplies.services";
+import { StaffSuppliesServices } from "@/services";
 
 export default function Supplies() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, RowExpansionTable, QuestionnairesCreateEditModal, PlaceEventBulkCheckOut } from '@/components';
-import { EventQuestionnaireServices } from '@/services/event_questionnaire.services';
 import { setEvent } from '@/redux/event';
 import { useAppDispatch } from '@/redux/hooks';
+import { EventQuestionnaireServices } from '@/services';
 
 export default function Questionnaire() {
     const { localeJson, locale } = useContext(LayoutContext);

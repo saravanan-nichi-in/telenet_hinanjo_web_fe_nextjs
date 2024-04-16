@@ -1,6 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
+import { toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const StatisticsServices = {
@@ -19,10 +18,7 @@ function _getList(callBackFun) {
             }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
             callBackFun(false);
         });
 }

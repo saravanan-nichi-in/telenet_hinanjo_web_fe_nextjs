@@ -16,9 +16,9 @@ import {
     hideOverFlow,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { EvacuationServices } from '@/services/evacuation.services';
 import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader } from '@/components';
 import { prefecturesCombined } from '@/utils/constant';
+import { EvacuationServices } from '@/services';
 
 export default function EvacueeFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);

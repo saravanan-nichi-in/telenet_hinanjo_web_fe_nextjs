@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
 
 import {
   getValueByKeyRecursively as translate,
   getGeneralDateTimeDisplayFormat,
-  convertToSingleByte
+  convertToSingleByte,
+  toastDisplay
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { prefectures, prefectures_en } from "@/utils/constant";
@@ -349,9 +349,7 @@ export default function PlaceUpdatePage() {
           lng: location.lng(),
         });
       } else {
-        toast.error(translate(localeJson, "loc_not_found"), {
-          position: "top-right",
-        });
+        toastDisplay(translate(localeJson, 'loc_not_found'),'','',"error");
       }
     });
   };

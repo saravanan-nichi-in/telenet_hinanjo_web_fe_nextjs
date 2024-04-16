@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import toast from "react-hot-toast";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import {
@@ -14,10 +13,9 @@ import {
     getEnglishDateTimeDisplayActualFormat,
 } from "@/helper";
 import { Button, CustomHeader, NormalTable, Input, CommonDialog, PersonCountModal, YappleModal, BarcodeDialog } from '@/components';
-import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { setEventStaffFamily } from '@/redux/family';
 import { useAppDispatch } from '@/redux/hooks';
-import { CheckInOutServices, TempRegisterServices } from '@/services';
+import { CheckInOutServices, StaffEvacuationServices, TempRegisterServices } from '@/services';
 import { setSelfID } from '@/redux/self_id';
 import { prefecturesCombined } from '@/utils/constant';
 
@@ -299,14 +297,10 @@ function EventStaffFamily() {
             });
         }
         else if (basicDataInfo.is_registered == 1) {
-            toast.error(translate(localeJson, 'already_checked_in'), {
-                position: "top-right",
-            });
+            toastDisplay(translate(localeJson, 'already_checked_in'), '', '', "error");
         }
         else {
-            toast.error(translate(localeJson, 'not_pre_registered_yet'), {
-                position: "top-right",
-            });
+            toastDisplay(translate(localeJson, 'not_pre_registered_yet'), '', '', "error");
         }
     }
 

@@ -21,7 +21,7 @@ import {
     getYYYYMMDDHHSSSSDateTimeFormat,
     getValueByKeyRecursively as translate
 } from "@/helper";
-import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
+import { TemporaryStaffRegistrantServices } from '@/services';
 
 function EventStaffTemporaryRegistrants() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);

@@ -1,6 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
+import { toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const DashboardServices = {
@@ -35,15 +34,11 @@ function _updateFullStatus(payload, callBackFun) {
     axios.post('/admin/place/status/update/full', payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun();
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                callBackFun(response.data);
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

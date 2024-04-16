@@ -1,19 +1,17 @@
+import { toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import toast from "react-hot-toast";
 
 /* Identity and Access management (IAM) */
 export const MapServices = {
   getPlaceList: _getPlaceList,
 };
 
-
-
 /**
  * Get place list
  * @param {*} payload
  * @param {*} callBackFun
  */
-function _getPlaceList(callBackFun, payload={}) {
+function _getPlaceList(callBackFun, payload = {}) {
   axios
     .post("/user/place/list", payload)
     .then((response) => {
@@ -22,9 +20,6 @@ function _getPlaceList(callBackFun, payload={}) {
       }
     })
     .catch((error) => {
-      
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-    });
+      toastDisplay(error?.response);
     });
 }

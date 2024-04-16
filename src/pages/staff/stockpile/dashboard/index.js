@@ -6,9 +6,9 @@ import _ from 'lodash';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, CustomHeader, NormalTable, AdminManagementDeleteModal, AdminManagementImportModal, StaffStockpileCreateModal, StaffStockpileEditModal, StockpileSummaryImageModal } from '@/components';
-import { StockpileStaffService } from '@/services/stockpilestaff.service';
 import { setStaffEditedStockpile } from "@/redux/stockpile";
 import { useAppDispatch } from "@/redux/hooks";
+import { StockpileStaffService } from '@/services';
 
 function StockpileDashboard() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
