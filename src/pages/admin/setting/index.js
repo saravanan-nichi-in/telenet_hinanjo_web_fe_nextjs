@@ -144,7 +144,6 @@ export default function Setting() {
           const fileName = value.name;
           const fileExtension = fileName.split(".").pop().toLowerCase();
           const allowedExtensions = ["jpg", "jpeg", "png"];
-          // const fileExtension = value.split(".").pop().toLowerCase();
           if (allowedExtensions.includes(fileExtension)) {
             // Check image size not exceeding 3MB
             return true
@@ -160,7 +159,6 @@ export default function Setting() {
           const fileName = value.name;
           const fileExtension = fileName.split(".").pop().toLowerCase();
           const allowedExtensions = ["jpg", "jpeg", "png"];
-          // const fileExtension = value.split(".").pop().toLowerCase();
           if (allowedExtensions.includes(fileExtension)) {
             // Check image size not exceeding 3MB
             if (value.size <= 3 * 1024 * 1024) {
