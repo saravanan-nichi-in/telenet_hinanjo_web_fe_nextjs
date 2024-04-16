@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import _ from "lodash";
 import { TabView, TabPanel } from 'primereact/tabview';
 
-import { Button, NormalTable, Input, Password, ValidationError } from "@/components"; 
+import { Button, NormalTable, Input, Password, ValidationError } from "@/components";
 import {
     convertToSingleByte,
     getValueByKeyRecursively as translate
@@ -13,10 +13,13 @@ import {
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CommonServices } from "@/services";
 import { StaffManagementService } from '@/services/staffmanagement.service';
+import { useAppSelector } from "@/redux/hooks";
 
 export default function StaffManagementEditModal(props) {
     const { localeJson, locale } = useContext(LayoutContext);
     const { open, close, currentEditObj } = props && props;
+    // Getting storage data with help of reducers
+    const layoutReducer = useAppSelector((state) => state.layoutReducer);
 
     const columnsData = [
         {
@@ -348,23 +351,25 @@ export default function StaffManagementEditModal(props) {
                                                 </div>
                                             </div>
                                         </TabPanel>
-                                        <TabPanel header={translate(localeJson, 'event_information')}>
-                                            <div className="">
+                                        {layoutReducer?.config?.ADMIN_STAFF_MANAGAMENT_EVENT_MAP && (
+                                            <TabPanel header={translate(localeJson, 'event_information')}>
                                                 <div className="">
-                                                    <NormalTable
-                                                        className={"custom-table-cell"}
-                                                        selection={selectedEvents}
-                                                        onSelectionChange={(e) => setSelectedEvents(e.value)}
-                                                        selectionMode={rowClick ? null : "checkbox"}
-                                                        tableStyle={{ maxWidth: "100%" }}
-                                                        showGridlines={"true"}
-                                                        value={eventList}
-                                                        columns={columnsData}
-                                                        filterDisplay="menu"
-                                                    />
+                                                    <div className="">
+                                                        <NormalTable
+                                                            className={"custom-table-cell"}
+                                                            selection={selectedEvents}
+                                                            onSelectionChange={(e) => setSelectedEvents(e.value)}
+                                                            selectionMode={rowClick ? null : "checkbox"}
+                                                            tableStyle={{ maxWidth: "100%" }}
+                                                            showGridlines={"true"}
+                                                            value={eventList}
+                                                            columns={columnsData}
+                                                            filterDisplay="menu"
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </TabPanel>
+                                            </TabPanel>
+                                        )}
                                         <TabPanel header={translate(localeJson, 'place_information')}>
                                             <div className="">
                                                 <div className="">
