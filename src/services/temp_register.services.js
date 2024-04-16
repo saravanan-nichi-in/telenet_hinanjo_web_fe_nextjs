@@ -1,7 +1,5 @@
 import axios from "@/utils/api";
 import { toastDisplay } from "@/helper";
-import toast from "react-hot-toast";
-import { isObject } from "lodash";
 
 export const TempRegisterServices = {
   tempRegister: _tempRegister,
@@ -55,33 +53,7 @@ function _registerTemporaryUser(payload, callBackFun) {
       callBackFun(response.data);
     })
     .catch((error) => {
-      if (error.response && error.response.status == 422) {
-        if (isObject(error.response.data.message)) {
-          let errorMessages = Object.values(error.response.data.message);
-          let errorString = errorMessages.join('.')
-          let errorArray = errorString.split(".");
-          errorArray = errorArray.filter(message => message.trim() !== "");
-          let formattedErrorMessage = errorArray
-            .map((message, index) => {
-              return `${message.trim()}`;
-            })
-            .join("\n");
-          toast.error(formattedErrorMessage, {
-            position: "top-right",
-          });
-          callBackFun(error)
-        }
-        else {
-          toast.error(error.response.data.message, {
-            position: "top-right",
-          });
-          callBackFun(error)
-        }
-      } else {
-        if (error.code == "ERR_NETWORK") {
-          callBackFun(error)
-        }
-      }
+      toastDisplay(error?.response);
     });
 }
 
@@ -90,14 +62,10 @@ function _autoCheckoutEvacuee(payload, callBackFun) {
     .post("/user/temporary/checkout", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      toast.error(error.response.data.message, {
-        position: "top-right",
-      });
+      toastDisplay(error?.response);
     });
 }
 
@@ -142,7 +110,7 @@ function _tempRegister(payload, callBackFun) {
       callBackFun(response.data);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -191,12 +159,10 @@ function _registerUser(payload, callBackFun) {
     .post("/user/registration", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -206,12 +172,10 @@ function _qrScanRegistration(payload, callBackFun) {
     .post("/user/registration/qr/scan", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -221,12 +185,10 @@ function _ocrScanRegistration(payload, callBackFun) {
     .post("/user/registration/ocr/scan", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -236,12 +198,10 @@ function _staffRegisterUser(payload, callBackFun) {
     .post("/staff/family/registration ", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -250,12 +210,10 @@ function _staffEditUser(payload, callBackFun) {
     .post("/staff/evacuees/edit ", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -264,12 +222,10 @@ function _staffTempEditUser(payload, callBackFun) {
     .post("/staff/temp/evacuees/edit ", payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }
@@ -317,16 +273,12 @@ function _getppID(payload, callBackFun) {
         callBackFun(data);
       } else {
         callBackFun();
-        toast.error("PPIDが空です。", {
-          position: "top-right",
-        });
+        toastDisplay("PPIDが空です。",'','',"success");
       }
     })
     .catch(error => {
       callBackFun();
-      toast.error(error?.message || "An error occurred", {
-        position: "top-right",
-      });
+      toastDisplay(error?.message || "An error occurred", '', '', "error");
     });
 }
 
@@ -334,12 +286,10 @@ function _deleteTempFamily(payload, callBackFun) {
   axios.post('/user/registration/delete/family', payload)
     .then((response) => {
       callBackFun(response.data);
-      toast.success(response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun();
+      callBackFun(false);
       toastDisplay(error?.response)
     });
 }

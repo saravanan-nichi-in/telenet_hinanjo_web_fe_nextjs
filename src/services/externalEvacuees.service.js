@@ -1,7 +1,5 @@
-import { downloadBase64File, timestampFile } from "@/helper";
+import { downloadBase64File, timestampFile, toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import { isObject } from "lodash";
-import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
 export const ExternalEvacueesService = {
@@ -9,7 +7,6 @@ export const ExternalEvacueesService = {
     getList: _getList,
     getEvacueeList: _getEvacueeList
 };
-
 
 /**
  * Export place data
@@ -20,18 +17,13 @@ function _exportData(payload) {
     axios
         .post("/staff/external/family/export", payload)
         .then((response) => {
-                if (response && response.data && response.data.result.filePath) {
-                    downloadBase64File(response.data.result.filePath, timestampFile("ExternalEvacuees"));
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
-                }
+            if (response && response.data && response.data.result.filePath) {
+                downloadBase64File(response.data.result.filePath, timestampFile("ExternalEvacuees"));
+                toastDisplay(response);
+            }
         })
         .catch((error) => {
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -49,11 +41,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -71,10 +59,6 @@ function _getEvacueeList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

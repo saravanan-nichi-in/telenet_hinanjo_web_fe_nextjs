@@ -12,7 +12,7 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { StockPileSummaryServices } from '@/services/stockpile_summary.services';
+import { StockPileSummaryServices } from '@/services';
 
 function AdminStockpileSummary() {
     const { locale, localeJson } = useContext(LayoutContext);

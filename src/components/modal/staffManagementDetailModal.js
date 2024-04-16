@@ -10,7 +10,7 @@ import {
   getValueByKeyRecursively as translate,
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { StaffManagementService } from "@/services/staffmanagement.service";
+import { StaffManagementService } from "@/services";
 
 export default function StaffManagementDetailModal(props) {
   const { localeJson, locale } = useContext(LayoutContext);

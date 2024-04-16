@@ -10,7 +10,7 @@ import {
     getJapaneseDateTimeDayDisplayActualFormat
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { HeadQuarterManagement } from "@/services/hqManagement.service";
+import { HeadQuarterManagement } from "@/services";
 
 export default function HqManagementDetailModal(props) {
     const { locale, localeJson } = useContext(LayoutContext);

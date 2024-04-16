@@ -5,8 +5,8 @@ import _ from 'lodash';
 
 import { getEnglishDateDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { ExternalEvacueesService } from "@/services/externalEvacuees.service";
 import { Button, NormalTable } from "@/components";
+import { ExternalEvacueesService } from "@/services";
 
 export default function EvacueeDetailModal(props) {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);

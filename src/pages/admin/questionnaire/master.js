@@ -6,8 +6,8 @@ import _ from 'lodash';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { BaseTemplate, Button, CustomHeader } from '@/components';
-import { QuestionnaireServices } from '@/services/questionnaire.services';
 import { useAppSelector } from "@/redux/hooks";
+import { QuestionnaireServices } from '@/services';
 
 export default function IndividualQuestionnaire() {
     const { localeJson, setLoader } = useContext(LayoutContext);

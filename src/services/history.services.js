@@ -1,7 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
-
+import { toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const HistoryServices = {
@@ -26,7 +24,6 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            console.error('Error fetching data:', error);
             callBackFun(false);
         });
 }
@@ -41,15 +38,11 @@ function _exportPlaceHistoryCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -63,15 +56,11 @@ function _registerEmailConfiguration(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -105,7 +94,6 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            
             console.error('Error fetching data:', error);
         });
 }
@@ -123,7 +111,6 @@ function _getPrefectureList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            
             console.error('Error fetching data:', error);
         });
 }

@@ -11,7 +11,7 @@ import {
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable } from '@/components';
 import { useAppSelector } from "@/redux/hooks";
-import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
+import { ExternalEvacuationServices } from '@/services';
 
 export default function EventFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);

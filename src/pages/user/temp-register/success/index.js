@@ -1,10 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 
 import { Button } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { downloadImage, getValueByKeyRecursively as translate } from "@/helper";
+import { downloadImage, toastDisplay, getValueByKeyRecursively as translate } from "@/helper";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId, reset } from "@/redux/tempRegister";
 import { TempRegisterServices } from "@/services"
@@ -40,9 +39,7 @@ const RegisterSuccess = () => {
     }
 
     if (place_id != SuccessPlaceId) {
-      toast.error(translate(localeJson, "already_register"), {
-        position: "top-right",
-      });
+      toastDisplay(translate(localeJson, "already_register"),'','',"error");
     }
     // Dispatch setSuccessData only if the page has been refreshed
     let show = localStorage.getItem("refreshing");

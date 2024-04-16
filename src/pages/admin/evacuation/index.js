@@ -5,10 +5,10 @@ import { useRouter } from 'next/router'
 import { convertToSingleByte, getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, Input, InputDropdown, NormalTable } from '@/components';
-import { EvacuationServices } from '@/services/evacuation.services';
 import { setFamily } from '@/redux/family';
 import { useAppDispatch } from '@/redux/hooks';
 import { getSpecialCareName } from "@/helper";
+import { EvacuationServices } from '@/services';
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);

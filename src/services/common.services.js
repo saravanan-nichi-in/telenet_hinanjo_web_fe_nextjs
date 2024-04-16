@@ -1,7 +1,8 @@
 import crypto from 'crypto';
-import toast from 'react-hot-toast';
+
 import axios from '@/utils/api';
 import CryptoJS from 'crypto-js';
+import { toastDisplay } from '@/helper';
 
 export const CommonServices = {
     zipDownload: _zipDownload,
@@ -13,9 +14,9 @@ export const CommonServices = {
     getPlaceList: _getPlaceList,
     getEventList: _getEventList,
     getStaffEventList: _getStaffEventList,
-    getZipCode:_getZipCode,
-    getAddress:_getAddress,
-    convertToKatakana:_convertToKatakana
+    getZipCode: _getZipCode,
+    getAddress: _getAddress,
+    convertToKatakana: _convertToKatakana
 };
 
 /**
@@ -133,21 +134,20 @@ function _decryptPassword(encryptedData, encryptionKey) {
         const decrypted = CryptoJS.AES.decrypt(value, cryptoJsKey, {
             iv: iv,
         });
-        
-        if(decrypted)
-        {
-        // Convert the decrypted result to a string
-        let decryptedString;
-        try {
-          decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-        } catch (error) {
-          decryptedString = ''; // Provide a default value or handle the error gracefully
-          return null
-        }
-        // Use a regular expression to extract the password
-        const match = decryptedString.match(/"([^"]+)"/);
-        // Check if a match is found, and return the password
-        return match ? match[1] : null;
+
+        if (decrypted) {
+            // Convert the decrypted result to a string
+            let decryptedString;
+            try {
+                decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+            } catch (error) {
+                decryptedString = ''; // Provide a default value or handle the error gracefully
+                return null
+            }
+            // Use a regular expression to extract the password
+            const match = decryptedString.match(/"([^"]+)"/);
+            // Check if a match is found, and return the password
+            return match ? match[1] : null;
         }
         else return null
     }
@@ -166,10 +166,8 @@ function _getPlaceList(callBackFun) {
             }
         })
         .catch((error) => {
-            callBackFun()
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -186,10 +184,8 @@ function _getEventList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            callBackFun()
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -206,75 +202,75 @@ function _getStaffEventList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            callBackFun()
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
 async function _getZipCode(state, city, street, callBackFun) {
-    let payload ={
+    let payload = {
         "prefecture": state,
-        "city" : city,
-        "street" : street
+        "city": city,
+        "street": street
     }
-    axios.post('/user/get/zipcode',payload )
+    axios.post('/user/get/zipcode', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
             }
         })
         .catch((error) => {
-            callBackFun()
+            callBackFun(false);
+            console.error('Error:', error);
         });
 }
 
 async function _getAddress(zipCode, callBackFun) {
 
-    let payload ={
-        "zipcode1" : zipCode.slice(0,3),
-        "zipcode2" : zipCode.slice(3)
+    let payload = {
+        "zipcode1": zipCode.slice(0, 3),
+        "zipcode2": zipCode.slice(3)
     }
-    axios.post('/user/get/address',payload )
+    axios.post('/user/get/address', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data.result);
             }
         })
         .catch((error) => {
-            callBackFun()
+            callBackFun(false);
+            console.error('Error:', error);
         });
 }
 
 async function _convertToKatakana(inputText, callBackFun) {
-const apiUrl = 'https://labs.goo.ne.jp/api/hiragana';
-const apiKey = '032207343b569cd84abf5af9ff408aa450b3edb048fd71728a05f4ce64e2f76a'; // Replace with your actual API key
+    const apiUrl = 'https://labs.goo.ne.jp/api/hiragana';
+    const apiKey = '032207343b569cd84abf5af9ff408aa450b3edb048fd71728a05f4ce64e2f76a'; // Replace with your actual API key
 
 
-// Create the request headers
-const headers = new Headers({
-  'Content-Type': 'application/x-www-form-urlencoded',
-});
+    // Create the request headers
+    const headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+    });
 
-// Make the Fetch API request
-fetch(apiUrl, {
-  method: 'POST',
-  headers: headers,
-  body: new URLSearchParams({
-    app_id: apiKey,
-    sentence: inputText,
-    request_id:"",
-    "output_type":"katakana"
-  }),
-})
-  .then(response => response.json())
-  .then(data => {
-    callBackFun(data)
-  })
-  .catch(error => {
-    callBackFun()
-    // Handle errors
-    console.error('Error:', error);
-  })
+    // Make the Fetch API request
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: headers,
+        body: new URLSearchParams({
+            app_id: apiKey,
+            sentence: inputText,
+            request_id: "",
+            "output_type": "katakana"
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            callBackFun(data)
+        })
+        .catch(error => {
+            callBackFun(false);
+            // Handle errors
+            console.error('Error:', error);
+        })
 }

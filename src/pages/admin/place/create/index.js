@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
 
 import { prefectures, prefectures_en } from "@/utils/constant";
-import { getValueByKeyRecursively as translate, getGeneralDateTimeDisplayFormat, convertToSingleByte } from "@/helper";
+import { getValueByKeyRecursively as translate, getGeneralDateTimeDisplayFormat, convertToSingleByte, toastDisplay } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   Button,
@@ -332,9 +331,7 @@ export default function PlaceCreatePage() {
           lng: location.lng(),
         });
       } else {
-        toast.error(translate(localeJson, "loc_not_found"), {
-          position: "top-right",
-        });
+        toastDisplay(translate(localeJson, 'loc_not_found'),'','',"error");
       }
     });
   };

@@ -1,7 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
-import { isObject } from "lodash";
+import { toastDisplay } from '@/helper';
 
 export const StockpileHistoryServices = {
     getProductTypes: _getProductTypes,
@@ -23,9 +21,7 @@ function _getProductTypes(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -42,9 +38,7 @@ function _getProductNames(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -61,28 +55,8 @@ function _getHistoryList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            if (error.response.status == 422) {
-                if (isObject(error.response.data.message)) {
-                    let errorMessages = Object.values(error.response.data.message);
-                    let errorString = errorMessages.join('.')
-                    let errorArray = errorString.split(".");
-                    errorArray = errorArray.filter(message => message.trim() !== "");
-                    let formattedErrorMessage = errorArray
-                        .map((message, index) => {
-                            return `${message.trim()}`;
-                        })
-                        .join("\n");
-                    callBackFun(false);
-                    toast.error(formattedErrorMessage, {
-                        position: "top-right",
-                    });
-                }
-            } else {
-                callBackFun(false);
-                toast.error(error.response.data.message, {
-                    position: "top-right",
-                });
-            }
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -96,14 +70,10 @@ function _exportStockpileHistoryCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

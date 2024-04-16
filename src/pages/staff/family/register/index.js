@@ -1,10 +1,8 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { result } from "lodash";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset } from "@/redux/staff_register";
@@ -18,6 +16,7 @@ import {
   convertToSingleByte,
   hideOverFlow,
   showOverFlow,
+  toastDisplay
 } from "@/helper";
 import {
   prefectures,
@@ -1047,17 +1046,6 @@ export default function Admission() {
     return boundObject;
   }
 
-  const displayToastMessages = (errorArray) => {
-    errorArray.forEach((errorObject) => {
-      if (errorObject) {
-        Object.values(errorObject).forEach((message) => {
-          toast.error(message, {
-            position: "top-right",
-          });
-        });
-      }
-    });
-  };
 
   const getPrefectureName = (id) => {
     if (id) {
@@ -2100,15 +2088,11 @@ export default function Admission() {
                               setIsFormSubmitted(true);
                               if (errors.agreeCheckOne && !values.agreeCheckOne) {
                                 let message = translate(localeJson, "person_info_valiadation")
-                                toast.error(message, {
-                                  position: "top-right",
-                                });
+                                toastDisplay(message, '', '', "error");
                               }
                               if (!Array.isArray(errors.evacuee) && errors.evacuee) {
                                 let message = translate(localeJson, "evacuee_family_required")
-                                toast.error(message, {
-                                  position: "top-right",
-                                });
+                                toastDisplay(message, '', '', "error");
                               }
                               if (Array.isArray(errors.evacuee)) {
                                 const indexOfObject = errors.evacuee.findIndex(

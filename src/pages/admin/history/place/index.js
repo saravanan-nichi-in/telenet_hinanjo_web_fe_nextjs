@@ -14,8 +14,8 @@ import {
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, CustomHeader, DateTime, NormalTable, InputDropdown, EmailSettings } from "@/components";
-import { HistoryServices } from "@/services/history.services";
 import { MailSettingsOption1 } from "@/utils/constant";
+import { HistoryServices } from "@/services";
 
 export default function AdminHistoryPlacePage() {
   const { localeJson, locale } = useContext(LayoutContext);

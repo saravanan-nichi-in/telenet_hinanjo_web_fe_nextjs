@@ -19,11 +19,10 @@ import {
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
-import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefectures, prefecturesCombined } from '@/utils/constant';
 import { setOriginalData, setIsEdit } from '@/redux/staff_temp_register';
 import { clearExceptPlaceId, reset, setSuccessData } from '@/redux/tempRegister';
-import { CommonServices,TemporaryStaffRegistrantServices } from '@/services';
+import { CommonServices,TemporaryStaffRegistrantServices, StaffEvacuationServices } from '@/services';
 
 export default function StaffFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);

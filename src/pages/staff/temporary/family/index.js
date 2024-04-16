@@ -10,10 +10,10 @@ import {
   getValueByKeyRecursively as translate,
   getSpecialCareName,
 } from "@/helper";
-import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
 import { setStaffTempFamily } from "@/redux/family";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId, reset, setSuccessData } from "@/redux/tempRegister";
+import { TemporaryStaffRegistrantServices } from "@/services";
 
 function TemporaryRegistrants() {
   const { locale, localeJson } = useContext(LayoutContext);

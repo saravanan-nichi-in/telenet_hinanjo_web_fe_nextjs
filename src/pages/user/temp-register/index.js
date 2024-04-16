@@ -1,7 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -17,6 +16,7 @@ import {
   convertToSingleByte,
   showOverFlow,
   hideOverFlow,
+  toastDisplay,
 } from "@/helper";
 import {
   Button,
@@ -152,9 +152,7 @@ export default function Admission() {
           let placeList = res.data.model.list;
           let placeIsAvail = placeList.find((list) => list.id == place_id)
           if (placeIsAvail?.active_flg != "1") {
-            toast.error(translate(localeJson, "temp_inactive_place"), {
-              position: "top-right",
-            });
+            toastDisplay(translate(localeJson, "temp_inactive_place"), '', '', "error");
             window.location.href = '/'
             return
           }
@@ -1073,9 +1071,7 @@ export default function Admission() {
     errorArray.forEach((errorObject) => {
       if (errorObject) {
         Object.values(errorObject).forEach((message) => {
-          toast.error(message, {
-            position: "top-right",
-          });
+          toastDisplay(message, '', '', "error");
         });
       }
     });
@@ -2124,15 +2120,11 @@ export default function Admission() {
                               setIsFormSubmitted(true);
                               if (errors.agreeCheckOne && !values.agreeCheckOne) {
                                 let message = translate(localeJson, "person_info_valiadation")
-                                toast.error(message, {
-                                  position: "top-right",
-                                });
+                                toastDisplay(message, '', '', "error");
                               }
                               if (!Array.isArray(errors.evacuee) && errors.evacuee) {
                                 let message = translate(localeJson, "evacuee_family_required")
-                                toast.error(message, {
-                                  position: "top-right",
-                                });
+                                toastDisplay(message, '', '', "error");
                               }
                               if (Array.isArray(errors.evacuee)) {
                                 const indexOfObject = errors.evacuee.findIndex(

@@ -1,5 +1,4 @@
 import { BehaviorSubject } from 'rxjs';
-import toast from 'react-hot-toast';
 
 import axios from '@/utils/api';
 import { toastDisplay } from '@/helper';
@@ -48,9 +47,7 @@ function _login(key, values, callBackFun, prepareKey) {
                     }
                     subject.next(response.data);
                     callBackFun(response.data);
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
+                    toastDisplay(response);
                 }
             })
             .catch((error) => {
@@ -106,9 +103,7 @@ function _forgot(key, values, callBackFun) {
         .then((response) => {
             if (response) {
                 callBackFun(response);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
@@ -132,9 +127,7 @@ function _reset(key, values, callBackFun) {
         .then((response) => {
             if (response) {
                 callBackFun();
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
@@ -154,9 +147,7 @@ function _changePassword(key, values, callBackFun) {
             .then((response) => {
                 if (response && response.data) {
                     callBackFun(response.data);
-                    toast.success(response?.data?.message, {
-                        position: "top-right",
-                    });
+                    toastDisplay(response);
                 }
             })
             .catch((error) => {

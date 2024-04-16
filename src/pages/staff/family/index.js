@@ -23,8 +23,8 @@ import {
   PersonCountModal,
 } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
-import { StaffEvacuationServices } from "@/services/staff_evacuation.services";
 import { setFamily } from "@/redux/family";
+import { StaffEvacuationServices } from "@/services";
 
 function StaffFamily() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

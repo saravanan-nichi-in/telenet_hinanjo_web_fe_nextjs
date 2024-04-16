@@ -1,7 +1,5 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
-
+import { toastDisplay } from '@/helper';
 
 /* Identity and Access management (IAM) */
 export const ExternalEvacuationServices = {
@@ -22,15 +20,11 @@ function _exportExternalEvacueesCSVList(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -47,9 +41,7 @@ function _getPlaceDropdownList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -66,9 +58,7 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
             callBackFun(false);
         });
 }
@@ -86,9 +76,7 @@ function _getExternalEvacueesDetail(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
             callBackFun(false);
         });
 }
@@ -106,9 +94,7 @@ function _getChartScreenData(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
             callBackFun(false);
         });
 }

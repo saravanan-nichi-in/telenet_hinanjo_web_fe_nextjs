@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { toastDisplay, getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, BarcodeDialog, PreRegisterConfirmDialog } from '@/components';
 import { setSelfID } from "@/redux/self_id";
 import { useAppDispatch } from "@/redux/hooks";
@@ -68,9 +67,7 @@ export default function HitachiList() {
 
     const triggerPreRegisterConfirmation = (id) => {
         if (id == null) {
-            toast.error(translate(localeJson, 'no_data_in_request_header'), {
-                position: "top-right",
-            });
+            toastDisplay(translate(localeJson, 'no_data_in_request_header'), '', '', "error");
             return;
         }
         let payload = {
@@ -78,9 +75,7 @@ export default function HitachiList() {
             "yapple_id": id ? id : ""
         };
         if (id == null) {
-            toast.error(translate(localeJson, 'no_data_in_request_header'), {
-                position: "top-right",
-            });
+            toastDisplay(translate(localeJson, 'no_data_in_request_header'), '', '', "error");
             return;
         }
         dispatch(setSelfID({
@@ -89,9 +84,7 @@ export default function HitachiList() {
         }));
         getBasicDetailsInfo(payload, (response) => {
             if (response.code == "ERR_NETWORK") {
-                toast.error(translate(localeJson, 'base_info_connection_error'), {
-                    position: "top-right",
-                });
+            toastDisplay(translate(localeJson, 'base_info_connection_error'), '', '', "error");
             }
             else if (response.success) {
                 const data = response.data;

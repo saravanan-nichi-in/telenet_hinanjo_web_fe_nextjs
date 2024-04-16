@@ -6,8 +6,8 @@ import _ from 'lodash';
 import { getEnglishDateDisplayFormat, getEnglishDateTimeDisplayActualFormat, getJapaneseDateDisplayYYYYMMDDFormat, getJapaneseDateTimeDisplayActualFormat, getJapaneseDateTimeDisplayFormat, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable, CommonDialog, RowExpansionTable, CustomHeader } from '@/components';
-import { TemporaryStaffRegistrantServices } from '@/services/staff_temporary_registrants.services';
 import { prefectures } from '@/utils/constant';
+import { TemporaryStaffRegistrantServices } from '@/services';
 
 export default function EventStaffTemporaryFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);

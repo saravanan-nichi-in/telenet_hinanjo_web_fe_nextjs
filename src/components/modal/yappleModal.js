@@ -5,16 +5,15 @@ import { useContext, useState } from "react";
 import BarcodeReader from "react-barcode-reader";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
 
 import {
   getEnglishDateTimeDisplayFormat,
   getJapaneseDateTimeDisplayFormat,
+  toastDisplay,
   getValueByKeyRecursively as translate
 } from "@/helper";
 import { ButtonRounded } from "@/components"; 
-import { CheckInOutServices } from "@/services";
-import { TemporaryStaffRegistrantServices } from "@/services/staff_temporary_registrants.services";
+import { CheckInOutServices, TemporaryStaffRegistrantServices } from "@/services";
 
 export default function YappleModal(props) {
   const { localeJson, setLoader } = useContext(LayoutContext);
@@ -260,9 +259,7 @@ function SuccessDiv(props) {
   }, [locale])
 
   const displayToastAndClose = (tag) => {
-    toast.error(translate(localeJson, tag), {
-      position: "top-right",
-    });
+    toastDisplay(translate(localeJson, tag),'','',"error");
   }
 
   const confirmPlaceDataBeforeCheckIn = () => {

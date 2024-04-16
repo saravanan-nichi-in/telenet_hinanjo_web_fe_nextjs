@@ -15,8 +15,8 @@ import {
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, NormalTable, CardSpinner, CustomHeader } from '@/components';
-import { StaffEvacuationServices } from '@/services/staff_evacuation.services';
 import { prefecturesCombined } from '@/utils/constant';
+import { StaffEvacuationServices } from '@/services';
 
 export default function EventStaffFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);

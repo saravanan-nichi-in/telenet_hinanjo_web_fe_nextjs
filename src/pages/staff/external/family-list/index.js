@@ -5,10 +5,10 @@ import { useRouter } from 'next/router';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
-import { ExternalEvacueesService } from '@/services/externalEvacuees.service';
 import { Button, CustomHeader, NormalTable } from '@/components';
 import { setStaffExternalFamily } from '@/redux/family';
 import { useAppDispatch } from '@/redux/hooks';
+import { ExternalEvacueesService } from '@/services';
 
 function ExternalFamilyList() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);

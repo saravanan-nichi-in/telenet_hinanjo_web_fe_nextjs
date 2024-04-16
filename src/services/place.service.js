@@ -1,7 +1,5 @@
 import axios from "@/utils/api";
 import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, toastDisplay } from "@/helper";
-import toast from "react-hot-toast";
-import { isArray, isObject } from "lodash";
 
 export const PlaceServices = {
   importData: _importData,
@@ -46,15 +44,11 @@ function _exportData(payload, callBackFun) {
       if (response && response.data && response.data.result.filePath) {
         let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
         downloadBase64File(response.data.result.filePath, `Place_${date}.csv`);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        toastDisplay(response);
       }
     })
     .catch((error) => {
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-      });
+      toastDisplay(error?.response);
     });
 }
 
@@ -88,37 +82,12 @@ function _create(payload, callBackFun) {
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        toastDisplay(response);
       }
     })
     .catch((error) => {
-      callBackFun();
-      if (error.response && error.response.status == 422) {
-        if (isObject(error.response.data.message)) {
-          let errorMessages = Object.values(error.response.data.message);
-          let errorString = errorMessages.join('.')
-          let errorArray = errorString.split(".");
-          errorArray = errorArray.filter(message => message.trim() !== "");
-          // Join the error messages with line breaks
-          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-          let formattedErrorMessage = errorArray
-            .map((message, index) => {
-              return `${message.trim()}`;
-            })
-            .join("\n");
-          toast.error(formattedErrorMessage, {
-            position: "top-right",
-          });
-        } else {
-          toast.error(error.response.data.message, {
-            position: "top-right",
-          });
-        }
-      } else {
-        console.error(error);
-      }
+      callBackFun(false);
+      console.error(error);
     });
 }
 
@@ -133,37 +102,12 @@ function _update(payload, callBackFun) {
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        toastDisplay(response);
       }
     })
     .catch((error) => {
-      callBackFun();
-      if (error.response && error.response.status == 422) {
-        if (isObject(error.response.data.message)) {
-          let errorMessages = Object.values(error.response.data.message);
-          let errorString = errorMessages.join('.')
-          let errorArray = errorString.split(".");
-          errorArray = errorArray.filter(message => message.trim() !== "");
-          // Join the error messages with line breaks
-          // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-          let formattedErrorMessage = errorArray
-            .map((message, index) => {
-              return `${message.trim()}`;
-            })
-            .join("\n");
-          toast.error(formattedErrorMessage, {
-            position: "top-right",
-          });
-        } else {
-          toast.error(error.response.data.message, {
-            position: "top-right",
-          });
-        }
-      } else {
-        console.error(error);
-      }
+      callBackFun(false);
+      console.error(error);
     });
 }
 
@@ -198,11 +142,10 @@ function _updateStatus(payload, callBackFun) {
     .put(`/admin/place/status/update`, payload)
     .then((response) => {
       if (response && response.data) {
-        callBackFun();
+        callBackFun(response.data);
       }
     })
     .catch((error) => {
-
       console.error("Error fetching data:", error);
     });
 }
@@ -239,16 +182,10 @@ function _deletePlace(id, callBackFun) {
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-        });
+        toastDisplay(response);
       }
     })
     .catch((error) => {
-      if (!isArray(error.response.data.message)) {
-        toast.error(error.response.data.message, {
-          position: "top-right",
-        });
-      }
+      toastDisplay(error?.response);
     });
 }

@@ -1,5 +1,5 @@
+import { toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
 export const PublicEvacueeService = {
@@ -20,8 +20,6 @@ function _getList(payload, callBackFun) {
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

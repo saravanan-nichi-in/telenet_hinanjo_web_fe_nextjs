@@ -1,12 +1,11 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import _ from 'lodash';
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
-import { convertToSingleByte, getJapaneseDateTimeDisplayActualFormat, getValueByKeyRecursively as translate } from '@/helper'
+import { convertToSingleByte, getJapaneseDateTimeDisplayActualFormat, toastDisplay, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CommonServices, CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
@@ -227,9 +226,7 @@ export default function Admission() {
   }
 
   const displayToastAndClose = () => {
-    toast.error(translate(localeJson, 'notcheck_in_shelter'), {
-      position: "top-right",
-    });
+    toastDisplay(translate(localeJson, 'notcheck_in_shelter'),'','',"error");
     setOpenBasicDataInfoDialog(false);
   }
 

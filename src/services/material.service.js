@@ -1,7 +1,5 @@
 import { downloadBase64File, timestampFile, toastDisplay } from "@/helper";
 import axios from "@/utils/api";
-import { isObject } from "lodash";
-import toast from 'react-hot-toast';
 
 export const MaterialService = {
     importData: _importData,
@@ -44,17 +42,11 @@ function _exportData(payload) {
         .then((response) => {
             if (response && response.data && response.data.result.filePath) {
                 downloadBase64File(response.data.result.filePath, timestampFile("Material"));
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -88,36 +80,12 @@ function _create(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            if (error.response && error.response.status == 422) {
-                if (isObject(error.response.data.message)) {
-                    let errorMessages = Object.values(error.response.data.message);
-                    let errorString = errorMessages.join('.')
-                    let errorArray = errorString.split(".");
-                    errorArray = errorArray.filter(message => message.trim() !== "");
-                    // Join the error messages with line breaks
-                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                    let formattedErrorMessage = errorArray
-                        .map((message, index) => {
-                            return `${message.trim()}`;
-                        })
-                        .join("\n");
-                    toast.error(formattedErrorMessage, {
-                        position: "top-right",
-                    });
-                }
-            } else {
-                callBackFun();
-                console.error(error);
-                toast.error(error.response.data.message, {
-                    position: "top-right",
-                });
-            }
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -131,37 +99,13 @@ function _update(id, payload, callBackFun) {
         .put(`/admin/material/update`, payload)
         .then((response) => {
             if (response && response.data) {
-                callBackFun();
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                callBackFun(response.data);
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            if (error.response && error.response.status == 422) {
-                if (isObject(error.response.data.message)) {
-                    let errorMessages = Object.values(error.response.data.message);
-                    let errorString = errorMessages.join('.')
-                    let errorArray = errorString.split(".");
-                    errorArray = errorArray.filter(message => message.trim() !== "");
-                    // Join the error messages with line breaks
-                    // Join the error messages with line breaks and add a comma at the end of each line, except the last one
-                    let formattedErrorMessage = errorArray
-                        .map((message, index) => {
-                            return `${message.trim()}`;
-                        })
-                        .join("\n");
-                    toast.error(formattedErrorMessage, {
-                        position: "top-right",
-                    });
-                }
-            } else {
-                callBackFun();
-                console.error(error);
-                toast.error(error.response.data.message, {
-                    position: "top-right",
-                });
-            }
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
 
@@ -176,16 +120,10 @@ function _delete(id, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-
-            console.error("Error fetching data:", error);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

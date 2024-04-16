@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Button, NormalLabel, Input, InputDropdown, ValidationError, InputFile } from "@/components"; 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { StockpileService } from "@/services/stockpilemaster.service";
+import { StockpileService } from "@/services";
 
 export default function StockpileCreateEditModal(props) {
     const { localeJson } = useContext(LayoutContext);
@@ -77,7 +77,6 @@ export default function StockpileCreateEditModal(props) {
                     }
                     if (props.registerModalAction == "create") {
                         StockpileService.create(formData, (res) => {
-
                             resetAndCloseForm(resetForm);
                             res && props.register(res);
                         })

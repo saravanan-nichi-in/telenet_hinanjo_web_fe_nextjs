@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { hideOverFlow, showOverFlow, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, MaterialCreateEditModal, AdminManagementDeleteModal, AdminManagementImportModal } from '@/components';
-import { MaterialService } from '@/services/material.service';
+import { MaterialService } from '@/services';
 
 export default function AdminMaterialPage() {
     const { locale, localeJson } = useContext(LayoutContext);

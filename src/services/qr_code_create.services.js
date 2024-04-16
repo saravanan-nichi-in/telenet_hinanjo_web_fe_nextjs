@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast';
-
 import axios from '@/utils/api';
 import { downloadBase64File, getYYYYMMDDHHSSSSDateTimeFormat, toastDisplay } from '@/helper';
 
@@ -21,15 +19,11 @@ function _callExport() {
                     let date = getYYYYMMDDHHSSSSDateTimeFormat(new Date());
                     downloadBase64File(response.data.result.filePath, `Sample_${date}.csv`);
                 }
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -60,16 +54,12 @@ function _callDelete(callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
             callBackFun(false);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }
 
@@ -82,15 +72,11 @@ function _callZipDownload(callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
+                toastDisplay(response);
             }
         })
         .catch((error) => {
             callBackFun(false);
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
+            toastDisplay(error?.response);
         });
 }

@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, NotFound } from '@/components';
-import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
+import { ExternalEvacuationServices } from '@/services';
 
 export default function ExternalEvacuees() {
     const { localeJson, setLoader } = useContext(LayoutContext);

@@ -8,9 +8,9 @@ import {
 } from '@/helper';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, InputDropdown } from '@/components';
-import { ExternalEvacuationServices } from '@/services/external_evacuation.services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setExternalFamily } from '@/redux/family';
+import { ExternalEvacuationServices } from '@/services';
 
 export default function ExternalEvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);

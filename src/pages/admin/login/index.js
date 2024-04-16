@@ -3,13 +3,12 @@ import { classNames } from 'primereact/utils';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAdminValue } from '@/redux/auth';
 import { AuthenticationAuthorizationService } from '@/services';
-import { getValueByKeyRecursively as translate } from '@/helper'
+import { toastDisplay, getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, ValidationError, Password, InputGroup } from '@/components';
 import { setForgetPassword } from '@/redux/fwd_password';
 
@@ -57,10 +56,7 @@ const LoginPage = () => {
             }));
             router.push('/admin/forgot-password')
         } else {
-            toast.error(translate(localeJson, 'contact_admin'),
-                {
-                    position: "top-right",
-                });
+            toastDisplay(translate(localeJson, 'contact_admin'),'','',"error");
         }
     }
 
