@@ -16,13 +16,13 @@ const SearchDetails = () => {
   const checkInReducer = useSelector((state) => state.checkInReducer);
   const layoutReducer = useSelector((state) => state.layoutReducer);
 
-  const [familyCode, setFamilyCode] = useState(family_id);
-
-  const { checkIn } = CheckInOutServices;
-
   let data = checkInReducer?.checkInData || [];
 
   let family_id = data.length > 0 ? data[0].family_id : "";
+
+  const [familyCode, setFamilyCode] = useState(family_id);
+
+  const { checkIn } = CheckInOutServices;
 
   const isCheckedIn = (res) => {
     setLoader(false)
