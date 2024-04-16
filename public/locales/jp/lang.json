@@ -490,7 +490,7 @@
       "latitude_required": "緯度は必須です。",
       "longitude_required": "経度は必須です。",
       "default_shell_life_days_required": "デフォルト期限のお知らせ (日)は必須です。",
-      "logo_img_correct_format": "ロゴ画像のフォーマットが正しいものをご使用ください。",
+      "logo_img_correct_format": "ロゴ画像はjpeg, png, jpgファイル形である必要です。",
       "logo_img_not_greater_than_3mb": "画像サイズは3MB以内のものをご使用ください。",
       "admin_name_max_200_characters": "管理者名は最大200文字です。",
       "special_care_name_max_required": "要配慮者事項は255文字以下で指定してください。",
