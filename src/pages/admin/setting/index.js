@@ -134,25 +134,40 @@ export default function Setting() {
     longitude: Yup.number().required(
       translate(localeJson, "longitude_required")
     ),
-    file: Yup.mixed()
+    logo: Yup.mixed()
       .nullable()
       .test(
         "is-image",
         translate(localeJson, "logo_img_correct_format"),
         (value) => {
           if (!value) return true; // If no file is selected, the validation passes.
+          const fileName = value.name;
+          const fileExtension = fileName.split(".").pop().toLowerCase();
+          const allowedExtensions = ["jpg", "jpeg", "png"];
+          // const fileExtension = value.split(".").pop().toLowerCase();
+          if (allowedExtensions.includes(fileExtension)) {
+            // Check image size not exceeding 3MB
+            return true
+          }
+          return false; // Return false for invalid input.
+        }
+      )
+      .test(
+        "is-image",
+        translate(localeJson, "logo_img_not_greater_than_3mb"),
+        (value) => {
+          if (!value) return true; // If no file is selected, the validation passes.
+          const fileName = value.name;
+          const fileExtension = fileName.split(".").pop().toLowerCase();
           const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
-          const fileExtension = value.split(".").pop().toLowerCase();
+          // const fileExtension = value.split(".").pop().toLowerCase();
           if (allowedExtensions.includes(fileExtension)) {
             // Check image size not exceeding 3MB
             if (value.size <= 3 * 1024 * 1024) {
               return true; // Pass validation
             } else {
               // Custom error message for image size exceeded
-              return new Yup.ValidationError(
-                translate(localeJson, "logo_img_not_greater_than_3mb"),
-                null
-              );
+              return false
             }
           }
           return false; // Return false for invalid input.
@@ -825,16 +840,16 @@ export default function Setting() {
                               );
                             },
                             name: "logo",
-                            accept: ".jpg,.png",
+                            accept: ".jpg,.png,.jpeg",
                             onBlur: handleBlur,
                             placeholder: values.logo_name
                           }}
-                          parentClass={`${errors.file && touched.file && "p-invalid pb-1"
+                          parentClass={`${errors.logo && touched.logo && "p-invalid mb-1"
                             }`}
                         />
                         <ValidationError
                           errorBlock={
-                            errors.file && touched.file && errors.file
+                            errors.logo && touched.logo && errors.logo
                           }
                         />
                       </div>
