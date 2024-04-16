@@ -64,7 +64,6 @@ $commonBorder: 1px solid var(--primary-color);
 /* Padding */
 $commonPadding: 0.5rem;
 
-
 /*color*/
 $customWhiteRegHoverBgColor: #E0F2ED;
 $customWhiteHoverBgColor: #106540;
@@ -101,12 +100,12 @@ $backButtonBgColor: var(--back-color);
 $backButtonHoverBgColor: var(--back-hover-color);
 $backButtonTextColor: var(--back-text);
 $backButtonHoverTextColor: var(--back-hover-text);
+
 /* Update,Save or submit button*/
 $updateButtonBgColor: var(--update-color);
 $updateButtonHoverBgColor: var(--update-hover-color);
 $updateButtonTextColor: var(--update-text-color);
 $updateButtonHoverTextColor: var(--update-hover-text);
-// $updateButtonHoverBgColor: #FFEAED;
 
 /*Edit action button*/
 $editButtonBgColor: var(--edit-color);
@@ -119,11 +118,6 @@ $deleteButtonBgColor: var(--delete-color);
 $deleteButtonHoverBgColor: var(--delete-hover-color);
 $deleteButtonTextColor: var(--delete-text);
 $deleteButtonHoverTextColor: var(--delete-hover-text);
-
-// $deleteButtonBgColor: #ffff;
-// $deleteButtonHoverBgColor: #DC2626;
-// $deleteButtonTextColor: #000000;
-// $deleteButtonHoverTextColor: #ffff;
 
 /*Delete action user button*/
 $deleteButtonBgColorUser: #ffff;
@@ -142,7 +136,6 @@ $backStaffButtonBgColor: var(--primary-color);
 $backStaffButtonHoverBgColor: #ffff;
 $backStaffButtonTextColor: #ffff;
 $backStaffButtonHoverTextColor: #000000;
-
 
 /* user primary button */
 $primaryButtonTextColor: #ffff;
