@@ -180,7 +180,7 @@ export default function StaffManagementEditPage() {
           </div>
         )}
       </div>
-      {!default_place_id.includes(id) && (
+      {!default_place_id.includes(id) ? (
         <div className="col-12">
           {tableLoading ? (
             <CardSpinner />
@@ -202,6 +202,34 @@ export default function StaffManagementEditPage() {
                       {url}
                     </a>
                   </div>
+                  <div className="mt-2">
+                    {translate(localeJson, "smart_phone_register_url")} :
+                    <a
+                      className="text-link-class cursor-pointer"
+                      href={tempUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={()=>{
+                        localStorage.setItem('deletedFromStaff',"false")
+                      }}
+                    >
+                      {tempUrl}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>)
+        :
+        (
+        <div className="col-12">
+          {tableLoading ? (
+            <CardSpinner />
+          ) : (
+            <div className="custom-card-no-shadow ">
+              <div className="grid">
+                <div className="col-12">
                   <div className="mt-2">
                     {translate(localeJson, "smart_phone_register_url")} :
                     <a
