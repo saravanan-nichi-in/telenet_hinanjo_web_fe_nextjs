@@ -3,9 +3,11 @@ import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setPlaceId } from "@/redux/tempRegister";
 import {
+    TempRegisterServices,
     CommonServices,
   } from "@/services";
   import { LayoutContext } from "@/layout/context/layoutcontext";
+import family from "@/redux/family";
 export default function Member() {
     const { locale} = useContext(LayoutContext);
     const router = useRouter();
@@ -24,12 +26,30 @@ export default function Member() {
           return;
         }
         if (successData?.data?.familyCode) {
-          localStorage.setItem("showDelete","true")
-          router.push('/user/temp-register/success')
+          let payload = {
+            family_code:successData?.data?.familyCode
+          }
+          TempRegisterServices.isRegistered(payload,(res)=>
+        {
+          if(res)
+          {
+            let data = res.data;
+            if(data?.isRegistered == "0")
+            {
+              localStorage.setItem("showDelete","true")
+              router.push('/user/temp-register/success')
+            }
+            else {
+              localStorage.setItem("showDelete","false")
+              router.push('/user/temp-person-count')
+            }
+          }
+        })
+         
         }
         else {
             localStorage.setItem("showDelete","false")
-            router.push('/user/temp-register')
+            router.push('/user/temp-person-count')
         }
         return
       }, [locale]);

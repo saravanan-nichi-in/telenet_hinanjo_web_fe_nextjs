@@ -22,6 +22,7 @@ export const TempRegisterServices = {
   staffTempEditUser: _staffTempEditUser,
   getPPID: _getppID,
   deleteTempFamily: _deleteTempFamily,
+  isRegistered: _isRegistered
 };
 
 function _getDefaultEventData(callBackFun) {
@@ -195,7 +196,7 @@ function _ocrScanRegistration(payload, callBackFun) {
 
 function _staffRegisterUser(payload, callBackFun) {
   axios
-    .post("/staff/family/registration ", payload)
+    .post("/user/registration ", payload)
     .then((response) => {
       callBackFun(response.data);
       toastDisplay(response);
@@ -291,5 +292,15 @@ function _deleteTempFamily(payload, callBackFun) {
     .catch((error) => {
       callBackFun(false);
       toastDisplay(error?.response)
+    });
+}
+
+function _isRegistered(payload,callBackFun) {
+  axios.post('/user/registration/status', payload)
+    .then((response) => {
+      callBackFun(response.data);
+    })
+    .catch((error) => {
+      callBackFun();
     });
 }
