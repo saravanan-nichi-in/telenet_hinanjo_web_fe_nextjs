@@ -21,6 +21,7 @@ export const TempRegisterServices = {
   autoCheckoutEvacuee: _autoCheckoutEvacuee,
   staffRegisterUser: _staffRegisterUser,
   staffEditUser: _staffEditUser,
+  staffTempEditUser: _staffTempEditUser,
   getPPID: _getppID,
   deleteTempFamily: _deleteTempFamily,
 };
@@ -249,6 +250,20 @@ function _staffRegisterUser(payload, callBackFun) {
 function _staffEditUser(payload, callBackFun) {
   axios
     .post("/staff/evacuees/edit ", payload)
+    .then((response) => {
+      callBackFun(response.data);
+      toast.success(response?.data?.message, {
+        position: "top-right",
+      });
+    })
+    .catch((error) => {
+      callBackFun();
+      handleRegistrationError(error);
+    });
+}
+function _staffTempEditUser(payload, callBackFun) {
+  axios
+    .post("/staff/temp/evacuees/edit ", payload)
     .then((response) => {
       callBackFun(response.data);
       toast.success(response?.data?.message, {

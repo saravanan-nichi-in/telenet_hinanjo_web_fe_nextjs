@@ -256,7 +256,7 @@ export default function StaffFamilyDetail() {
                             date: birthDate.getDate().toString().padStart(2, ""),
                         };
                         return {
-                            "lgwan_person_id": evacueeData.person_id,
+                            "person_id": evacueeData.person_id,
                             family_register_from: evacueeData.family_register_from,
                             id: index + 1, //evacueeData.family_id,
                             checked: evacueeData.person_is_owner == "0" ? true : false,
@@ -311,7 +311,7 @@ export default function StaffFamilyDetail() {
                         convertedData.data[0].family_public_info == 1 ? false : true,
                     name_furigana: convertedData.data[0].person_refugee_name,
                     name_kanji: convertedData.data[0].person_name,
-                    family_id: lgwan_family_id_from_store,
+                    family_id:  convertedData.data[0].family_id,
                 },
             ],
         };

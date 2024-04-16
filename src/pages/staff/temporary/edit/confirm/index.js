@@ -13,11 +13,12 @@ import { TempRegisterServices } from "@/services";
 import { Button, CustomHeader } from "@/components";
 import { prefectures } from "@/utils/constant";
 import { reset } from "@/redux/staff_temp_register";
+import { clearExceptPlaceId } from "@/redux/tempRegister";
 
 const TempRegisterConfirm = () => {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const router = useRouter();
-  const registerReducer = useAppSelector((state) => state.staffRegisterReducer);
+  const registerReducer = useAppSelector((state) => state.staffTempRegisterReducer);
   const dispatch = useAppDispatch();
 
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
@@ -26,7 +27,7 @@ const TempRegisterConfirm = () => {
 
   let confirmData = registerReducer?.registerData;
 
-  const { staffEditUser } = TempRegisterServices
+  const { staffTempEditUser } = TempRegisterServices
 
   useEffect(() => {
     fetchConfirmData();
@@ -537,13 +538,13 @@ const TempRegisterConfirm = () => {
                   // Remove "title" and "title_en" fields from each "question" object
                   // Function to remove "title" and "title_en" fields
                   const removeTitles = (questions) => {
-                    questions.forEach((question) => {
+                    questions?.forEach((question) => {
                       delete question.title;
                       delete question.title_en;
                     });
                   };
                   // Remove "title" and "title_en" fields from each "question" object in "person" array
-                  data.person.forEach((person) => {
+                  data.person?.forEach((person) => {
                     removeTitles(person.question);
                     delete person.specialCareName;
                     delete person.specialCareName2;
@@ -553,10 +554,10 @@ const TempRegisterConfirm = () => {
                   // Convert the modified data back to JSON
                   const modifiedJson = data;
                   setLoader(true)
-                  staffEditUser(modifiedJson, (res) => {
+                  staffTempEditUser(modifiedJson, (res) => {
                     if (res) {
                       dispatch(reset());
-                      router.push("/staff/family");
+                      router.push("/staff/temporary/family");
                       setLoader(false)
                     }
                     else {
@@ -573,7 +574,7 @@ const TempRegisterConfirm = () => {
                 buttonClass: "w-10rem back-button",
                 text: translate(localeJson, "return"),
                 onClick: () => {
-                  router.push("/staff/family/edit");
+                  router.push("/staff/temporary/edit");
                 },
               }}
               parentClass="block w-full back-button"

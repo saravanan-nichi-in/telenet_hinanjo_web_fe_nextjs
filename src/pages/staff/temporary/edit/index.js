@@ -217,7 +217,7 @@ export default function Admission() {
     agreeCheckTwo: false,
     name_furigana: "",
     name_kanji: "",
-    lgwan_family_id: ""
+    family_id: ""
   };
   const currentDate = new Date();
   // eslint-disable-next-line no-irregular-whitespace
@@ -372,7 +372,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name_kanji);
-      formikRef.current.setFieldValue("lgwan_family_id", data.lgwan_family_id)
+      formikRef.current.setFieldValue("family_id", data.family_id)
       data.evacuee && setEvacuee(data.evacuee);
     }
   }
@@ -682,8 +682,8 @@ export default function Admission() {
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(
         inputData.evacuee_date
       ),
-      "lgwan_family_id": inputData.lgwan_family_id,
-      zip_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
+      "family_id": inputData.family_id,
+      postal_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: inputData.address2,
@@ -698,12 +698,12 @@ export default function Admission() {
         let data = evacuee.dob;
         const convertedDate = new Date(data.year, data.month - 1, data.date);
         return {
-          "lgwan_person_id": evacuee.lgwan_person_id,
+          "person_id": evacuee.person_id,
           id: evacuee.id,
           refugee_name: evacuee.name_furigana,
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
-          zip_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
+          postal_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
           address_default: evacuee.address2,
