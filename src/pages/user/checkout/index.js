@@ -408,7 +408,8 @@ export default function Admission() {
                           </div>
                         </div>
                         <div className="grid md:gap-6 lg:gap-8">
-                          <div className="mt-3 col-12  md:col-5 lg:col-5" >
+                          {/* Feature */}
+                          {/* <div className="mt-3 col-12  md:col-5 lg:col-5" >
                             <div className="flex flex-column justify-content-start align-items-center h-full" style={{ background: "#E6E6E6" }}>
                               <div className="flex col-12 lg:col-6 w-full mt-2">
                                 <ButtonRounded
@@ -453,10 +454,10 @@ export default function Admission() {
                           </div>
                           <div className="flex md:hidden justify-content-center align-items-center text-gray w-full h-full mb-5 mt-5">
                             {translate(localeJson, "or")}
-                          </div>
-                          <div className="mt-3 col-12 md:col-6 lg:col-6">
+                          </div> */}
+                          <div className="mt-3 col-12 md:col-12 lg:col-12">
                             <div
-                              className=" lg:ml-8 md:ml-5"
+                              className=""
                             >
                               <div className="w-full">
                                 <div className="mb-3  w-12">

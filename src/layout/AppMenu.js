@@ -26,25 +26,28 @@ const AppMenu = () => {
     const layoutReducer = useAppSelector((state) => state.layoutReducer);
     // Admin side bar information
     const adminModel = [
-        // {
-        //     label: translate(localeJson, 'event_information_'),
-        //     icon: <MdSettings size={16} />,
-        //     class: "without-top-element",
-        //     items: [
-        //         {
-        //             label: translate(localeJson, 'event_status_list'),
-        //             icon: <BsHouseGearFill size={16} />,
-        //             to: '/admin/event-status-list',
-        //             active: router.pathname.startsWith('/admin/event-status-list')
-        //         },
-        //         {
-        //             label: translate(localeJson, 'attendee_list'),
-        //             icon: <BiSolidAddToQueue size={16} />,
-        //             to: '/admin/event-attendees-list',
-        //             active: router.pathname.startsWith('/admin/event-attendees-list')
-        //         },
-        //     ]
-        // },
+        {
+            label: translate(localeJson, 'event_information_'),
+            icon: <MdSettings size={16} />,
+            class: "without-top-element",
+            visible: layoutReducer?.config?.ADMIN_EVENT_STATUS_LIST && layoutReducer?.config?.ADMIN_EVENT_ATTENDEES_LIST ? true : false,
+            items: [
+                {
+                    label: translate(localeJson, 'event_status_list'),
+                    icon: <BsHouseGearFill size={16} />,
+                    to: '/admin/event-status-list',
+                    active: router.pathname.startsWith('/admin/event-status-list'),
+                    visible: layoutReducer?.config?.ADMIN_EVENT_STATUS_LIST ? true : false,
+                },
+                {
+                    label: translate(localeJson, 'attendee_list'),
+                    icon: <BiSolidAddToQueue size={16} />,
+                    to: '/admin/event-attendees-list',
+                    active: router.pathname.startsWith('/admin/event-attendees-list'),
+                    visible: layoutReducer?.config?.ADMIN_EVENT_ATTENDEES_LIST ? true : false,
+                },
+            ]
+        },
         {
             label: translate(localeJson, 'vault_info'),
             icon: <RiHome5Fill size={16} />,
@@ -133,12 +136,13 @@ const AppMenu = () => {
             label: translate(localeJson, 'setting'),
             icon: <MdSettings size={16} />,
             items: [
-                // {
-                //     label: translate(localeJson, 'events_management'),
-                //     icon: <BiSolidAddToQueue size={16} />,
-                //     to: '/admin/event',
-                //     active: router.pathname.startsWith('/admin/event')
-                // },
+                {
+                    label: translate(localeJson, 'events_management'),
+                    icon: <BiSolidAddToQueue size={16} />,
+                    to: '/admin/event',
+                    active: router.pathname.startsWith('/admin/event'),
+                    visible: layoutReducer?.config?.ADMIN_EVENT ? true : false,
+                },
                 {
                     label: translate(localeJson, 'interview_management'),
                     icon: <FaBoxes size={16} />,
@@ -342,7 +346,7 @@ const AppMenu = () => {
                     to: '/hq-staff/material',
                     active: router.pathname.startsWith('/hq-staff/material')
                 },
-                
+
             ]
         },
     ]
@@ -399,7 +403,7 @@ const AppMenu = () => {
                 <div className='sidebar-bottom-fixed-view pt-1 px-3 bottom-0 fixed'>
                     <Button buttonProps={{
                         buttonClass: "w-auto back-button-transparent mb-2 p-0",
-                        text: layoutReducer?.user?.place?.type === "place" ? translate(localeJson, "return_to_entrance_exit_screen"):translate(localeJson,"return_to_entrance_exit_screen_event"),
+                        text: layoutReducer?.user?.place?.type === "place" ? translate(localeJson, "return_to_entrance_exit_screen") : translate(localeJson, "return_to_entrance_exit_screen_event"),
                         icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
                         onClick: () => router.replace('/user/dashboard'),
                     }} parentClass={"back-button-transparent"} />
