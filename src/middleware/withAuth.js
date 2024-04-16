@@ -211,6 +211,8 @@ const withAuth = (WrappedComponent) => {
                         }
                     } else if (path == '/user' || path == '/user/') {
                         router.push('/user/list');
+                    } else {
+                        setAuthorized(true);
                     }
                 }
             });
