@@ -34,7 +34,8 @@ export default function Member() {
           if(res)
           {
             let data = res.data;
-            if(data?.isRegistered == "0")
+            console.log(data)
+            if(data?.is_registered == "0")
             {
               localStorage.setItem("showDelete","true")
               router.push('/user/temp-register/success')

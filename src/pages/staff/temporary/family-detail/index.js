@@ -25,7 +25,7 @@ import { clearExceptPlaceId, reset, setSuccessData } from '@/redux/tempRegister'
 import { CommonServices,TemporaryStaffRegistrantServices, StaffEvacuationServices } from '@/services';
 
 export default function StaffFamilyDetail() {
-    const { locale, localeJson } = useContext(LayoutContext);
+    const { locale, localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const dispatch = useAppDispatch();
     const key = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
@@ -655,7 +655,25 @@ export default function StaffFamilyDetail() {
                                     buttonClass: "w-10rem search-button",
                                     text: translate(localeJson, 'check_in'),
                                     icon: <FaArrowRightToBracket className='mr-3' />,
-                                    onClick: () => setStaffFamilyDialogVisible(true)
+                                    onClick: () => {
+                                        setLoader(true)
+                                        let preparedParam = {
+                                            family_id: familyReducer?.staffTempFamily?.family_id,
+                                            place_id: familyBasicDetail.length > 0 && familyBasicDetail[0].place_id
+                                        };
+                                        updateCheckInDetail(preparedParam, (response) => {
+                                            if (response.success) {
+                                                setLoader(false)
+                                                dispatch(clearExceptPlaceId())
+                                                localStorage.setItem("personCountTemp",null)
+                                                localStorage.setItem('refreshing', "false");
+                                                localStorage.setItem('deletedFromStaff',"true");
+                                                localStorage.setItem("showDelete","false")
+                                                router.push("/staff/temporary/family");
+                                            }
+                                            setLoader(false)
+                                        });
+                                    }
                                 }} parentClass={"mt-3 search-button"} />
                             </div>
                         </div>

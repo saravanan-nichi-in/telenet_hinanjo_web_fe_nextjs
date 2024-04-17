@@ -34,7 +34,7 @@ const RegisterSuccess = () => {
     let place_id = regReducer.placeId
     let SuccessPlaceId = regReducer.successData?.placeId
 
-    if(!regReducer.successData?.data||localStorage.getItem('deletedFromStaff')=="true")
+    if(localStorage.getItem('deletedFromStaff')=="true"||localStorage.getItem('tempDataDeleted')=="true"||!regReducer.successData?.data?.familyCode)
     {
       router.push('/user/temp-person-count')
     }
@@ -47,7 +47,7 @@ const RegisterSuccess = () => {
       if(res)
       {
         let data = res.data;
-        if((data?.isRegistered == "1"|| !data?.isRegistered) && !default_place_id.includes(parseInt(place_id)))
+        if(data?.is_registered != "0" && !default_place_id.includes(parseInt(place_id)))
         {
           localStorage.setItem("showDelete","false")
           router.push('/user/temp-person-count')
