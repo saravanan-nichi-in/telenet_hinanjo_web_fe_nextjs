@@ -45,7 +45,7 @@ const SearchDetails = () => {
                     text: translate(localeJson, "admission_button"),
                     onClick: () => {
                       let payload = {
-                        "lgwan_family_id": familyCode,
+                        "family_id": familyCode,
                         "place_id": layoutReducer?.user?.place?.id
                       }
                       setLoader(true)

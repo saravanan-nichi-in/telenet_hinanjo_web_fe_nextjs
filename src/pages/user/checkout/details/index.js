@@ -32,7 +32,7 @@ const CheckOutDetails = () => {
 
   const doCheckout = (placeID) => {
     let payload = {
-      "lgwan_family_id": familyCode,
+      "family_id": familyCode,
       "place_id": placeID
     }
     if (placeID) {
