@@ -14,6 +14,7 @@ export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const Place = useAppSelector((state) => state.placeReducer.place);
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const id = Place?.id;
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
@@ -34,7 +35,6 @@ export default function StaffManagementEditPage() {
   const [latitude, setLatitude] = useState(0);
   const [totalPerson, setTotalPerson] = useState("");
   const [percent, setPercentage] = useState("");
-  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const [tableLoading, setTableLoading] = useState(false);
   const [prefectureId, setPrefectureId] = useState("");
   const [prefectureDefaultId, setPrefectureDefaultId] = useState("");
@@ -205,30 +205,6 @@ export default function StaffManagementEditPage() {
           )}
         </div>
       )}
-
-      <div className="col-12">
-        <div
-          className="flex pt-3 pb-3 gap-2"
-          style={{ justifyContent: "center", flexWrap: "wrap" }}
-        >
-          <div className="">
-            <Button
-              buttonProps={{
-                buttonClass: "w-8rem update-button hidden",
-                type: "button",
-                onClick: () =>
-                  router.push({
-                    pathname: `/hq-staff/place/edit`,
-                  }),
-                text: translate(localeJson, "edit"),
-                rounded: "true",
-              }}
-              parentClass={"edit-button"}
-              parentStyle={{ marginTop: "10px" }}
-            />
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
