@@ -129,16 +129,17 @@ export default function EvacueeFamilyDetail() {
                         place_id: person.place_id,
                         family_is_registered: person.family_is_registered,
                     };
-                    let personAnswers = person.person_answers;
                     if (listOfIndividualQuestions.length > 0) {
-                        let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
-                        console.log(preparedListOfIndividualQuestions);
-                        preparedListOfIndividualQuestions.map((question) => {
-                            let indexOfMatchingAnswer = personAnswers.length > 0 && personAnswers.find(answer => answer.question_id == question.id);
-                            console.log(indexOfMatchingAnswer.answer_en);
-                            question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
+                        let personAnswers = {};
+                        if (person.person_answers.length > 0) {
+                            person.person_answers.forEach((val, index) => {
+                                personAnswers[val.question_id] = locale == "ja" ? val.answer.join(', ') : val.answer_en.join(', ');
+                            });
+                        }
+                        let withIndividualQuestionAnswer = listOfIndividualQuestions.map((val, index) => {
+                            return { ...val, answer: personAnswers[val.id] }
                         })
-                        familyData['individualQuestionnaires'] = preparedListOfIndividualQuestions;
+                        familyData['individualQuestionnaires'] = withIndividualQuestionAnswer;
                     }
                     familyDataList.push(familyData);
                 })
