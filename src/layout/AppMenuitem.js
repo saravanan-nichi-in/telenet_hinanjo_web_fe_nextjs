@@ -15,15 +15,16 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const AppMenuitem = (props) => {
     const { layoutConfig, layoutState, localeJson, locale } = useContext(LayoutContext);
-    const { activeMenu, setActiveMenu } = useContext(MenuContext);
-    const storeData = useSelector((state) => state.stockpileReducer);
     const router = useRouter();
+    const storeData = useSelector((state) => state.stockpileReducer);
+    const dispatch = useAppDispatch();
+
+    const { activeMenu, setActiveMenu } = useContext(MenuContext);
     const item = props.item;
     const key = props.parentKey ? props.parentKey + '-' + props.index : String(props.index);
     const isActiveRoute = item.to && router.pathname === item.to;
     const active = activeMenu === key || activeMenu.startsWith(key + '-');
     const menuRef = useRef(null);
-    const dispatch = useAppDispatch();
 
     useEffect(() => {
         // Reset active menu status

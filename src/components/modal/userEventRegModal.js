@@ -9,13 +9,12 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   getValueByKeyRecursively as translate,
   convertToSingleByte,
-  splitJapaneseAddress,
 } from "@/helper";
 import {
   Button,
   ValidationError,
-  Input, 
-  InputDropdown, 
+  Input,
+  InputDropdown,
   InputNumber,
   CustomHeader
 } from "@/components";
@@ -25,25 +24,18 @@ import {
 } from "@/utils/constant";
 import {
   CommonServices,
-  TempRegisterServices,
   UserEventListServices,
 } from "@/services";
-import {
-  calculateAge
-} from "@/helper";
 
 export default function UserEventRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
-  const currentDate = new Date();
-  const minDOBDate = new Date();
   const genderOptions = [
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
     { name: translate(localeJson, "c_not_answer"), value: 3 },
   ];
-  const minYear = parseInt(minDOBDate.getFullYear() - 120);
   const validationSchema = () =>
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
@@ -107,10 +99,6 @@ export default function UserEventRegModal(props) {
             }
           }
         ),
-      // Add other fields and validations as needed
-      // age: Yup.number()
-      //   .required(translate(localeJson, "age_required")),
-      // age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
         .test("is-correct",
@@ -136,35 +124,19 @@ export default function UserEventRegModal(props) {
   const {
     open,
     close,
-    onSpecialCareEditSuccess,
     header,
     buttonText,
-    setEvacueeValues,
     editObj,
     registerModalAction,
     evacuee,
-    setModalCountFlag,
-    isFrom = "user",
   } = props && props;
 
-  const { getText, getZipCode, getAddress } = CommonServices;
-  const {
-    getIndividualQuestionnaireList,
-    getSpecialCareDetails,
-    qrScanRegistration,
-    ocrScanRegistration,
-  } = TempRegisterServices;
+  const { getText, getAddress } = CommonServices;
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
   const [hasErrors, setHasErrors] = useState(false);
   const [isMRecording, setMIsRecording] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
-    useState(false);
-  const [repAddress, setRepAddress] = useState({});
-  const [haveRepAddress, setHaveRepAddress] = useState(false);
-  const [haveRepTel, setHavetel] = useState(false);
-  const [isRep, setIsRep] = useState(false);
   const [dobCounter, setDobCounter] = useState(0);
   const [addressCount, setAddressCount] = useState(0);
   const [fetchZipCode, setFetchedZipCode] = useState("");
@@ -178,48 +150,6 @@ export default function UserEventRegModal(props) {
     setIsRecording(isRecord);
   };
 
-  // const [initialQuestion, setInitialQues] = useState([]);
-  // const [questions, setQuestions] = useState([]);
-  // const [specialCare, setSpecialCare] = useState([]);
-  // useEffect(() => {
-  //   fetchMasterQuestion();
-  //   fetchSpecialCare();
-  // }, [locale]);
-
-  // const fetchSpecialCare = () => {
-  //   getSpecialCareDetails((res) => {
-  //     if (res) {
-  //       setSpecialCare(res.data.model.list);
-  //     }
-  //   });
-  // };
-  // const fetchMasterQuestion = () => {
-  //   let payload = {
-  //     filters: {
-  //       start: 0,
-  //       order_by: "asc",
-  //       sort_by: "display_order",
-  //     },
-  //     event_id: 1,
-  //   };
-  //   getIndividualQuestionnaireList(payload, (res) => {
-  //     if (res) {
-  //       let data = res.data.list;
-  //       let sortedData = data
-  //         ? data.sort((a, b) => {
-  //             return parseInt(a.display_order) - parseInt(b.display_order);
-  //           })
-  //         : [];
-  //       setQuestions(sortedData);
-  //       setInitialQues(sortedData);
-  //     }
-  //   });
-  // };
-
-  // const special_care_options = specialCare?.map((item) => ({
-  //   name: locale == "ja" ? item.name : item.name_en,
-  //   value: item.id.toString(), // Convert the ID to string if needed
-  // }));
   const formikRef = useRef();
   const initialValues =
     registerModalAction == "edit"
@@ -271,233 +201,6 @@ export default function UserEventRegModal(props) {
 
     return { years, months };
   }
-  // useEffect(() => {
-  //   if (registerModalAction === "edit" && editObj.individualQuestions) {
-  //     setQuestions(editObj.individualQuestions);
-  //   }
-  // }, [editObj]);
-
-  // useEffect(() => {
-  //   if (editObj) {
-  //     setTimeout(() => {
-  //       editObj.checked == true ? setIsRep(true) : setIsRep(false);
-  //       const topLevelKeysExist = Object.keys(editObj).length > 0;
-  //       const nestedKeysExist = Object.values(editObj).some(
-  //         (value) => typeof value === "object" && Object.keys(value)?.length > 0
-  //       );
-
-  //       if (topLevelKeysExist || nestedKeysExist) {
-  //         formikRef.current.validateForm().then(() => {
-  //           const touchedKeys = Object.keys(formikRef.current.initialValues);
-  //           const newTouched = touchedKeys.reduce(
-  //             (acc, key) => ({ ...acc, [key]: true }),
-  //             {}
-  //           );
-  //           formikRef.current.setTouched(newTouched);
-  //         });
-  //         setIsFormSubmitted(true);
-  //         setCounter(count + 1);
-  //       }
-  //     }, 1000);
-  //     setFetchedZipCode(editObj.postalCode)
-  //   }
-  // }, [editObj]);
-
-  //   useEffect(() => {
-  //     const filteredData = evacuee
-  //       .filter((item) => item.checked === true)
-  //       .map((item) => {
-  //         return {
-  //           address: item.address,
-  //           address2: item.address2,
-  //           prefecture_id: item.prefecture_id,
-  //           postalCode: item.postalCode,
-  //           tel:item.tel,
-  //         };
-  //       });
-  //     setRepAddress(filteredData);
-  //   }, [evacuee]);
-
-  // useEffect(() => {
-  //   // Scroll to the first error on form submission
-  //   if (
-  //     (Object.keys(formikRef.current.errors).length > 0 && open) ||
-  //     hasErrors
-  //   ) {
-  //     const modalContainer = document.querySelector(".p-dialog");
-  //     const firstErrorElement = modalContainer?.querySelector(".scroll-check");
-  //     if (firstErrorElement) {
-  //       firstErrorElement.scrollIntoView({ behavior: "smooth" });
-  //     }
-  //   }
-  // }, [count]);
-
-  // const handleRepAddress = (evacuees, setFieldValue) => {
-  //   if (evacuees) {
-  //     evacuees?.prefecture_id &&
-  //       setFieldValue("prefecture_id", evacuees?.prefecture_id);
-  //     const re = /^[0-9-]+$/;
-  //     let val;
-  //     if (evacuees.postalCode === "" || re.test(evacuees.postalCode)) {
-  //       val = evacuees.postalCode.replace(/-/g, ""); // Remove any existing hyphens
-  //       if (val.length > 3) {
-  //         val = val.slice(0, 3) + val.slice(3);
-  //       }
-  //       setFieldValue("postalCode", val);
-  //       setFetchedZipCode(val.replace(/-/g, ""));
-  //     }
-  //     if (val?.length >= 7) {
-  //       getAddress(val, (response) => {
-  //         if (response) {
-  //           let address = response;
-  //           const selectedPrefecture = prefectures.find(
-  //             (prefecture) => prefecture.value == address.prefcode
-  //           );
-  //           setFieldValue("prefecture_id", selectedPrefecture?.value);
-  //           setFieldValue("address", address.address2 + address.address3 || "");
-  //         } else {
-  //           setFieldValue("prefecture_id", "");
-  //           setFieldValue("address", "");
-  //         }
-  //       });
-  //     }
-  //     setFieldValue("address", evacuees.address);
-  //     setFieldValue("address2", evacuees.address2);
-  //   }
-  // };
-
-  // const [openQrPopup, setOpenQrPopup] = useState(false);
-  // const closeQrPopup = () => {
-  //   setOpenQrPopup(false);
-  // };
-  // const qrResult = (result) => {
-  //   setLoader(true);
-  //   let formData = new FormData();
-  //   formData.append("content", result);
-  //   setOpenQrPopup(false);
-  //   qrScanRegistration(formData, (res) => {
-  //     if (res) {
-  //       setOpenQrPopup(false);
-  //       const evacueeArray = res.data;
-  //       createEvacuee(evacueeArray, formikRef.current.setFieldValue);
-  //       setLoader(false);
-  //     } else {
-  //       setLoader(false);
-  //     }
-  //   });
-  // };
-
-  // const ocrResult = (result) => {
-  //   setLoader(true);
-  //   let formData = new FormData();
-  //   formData.append("content", result);
-  //   setPerspectiveCroppingVisible(false);
-  //   ocrScanRegistration(formData, (res) => {
-  //     if (res) {
-  //       setPerspectiveCroppingVisible(false);
-  //       const evacueeArray = res.data;
-  //       createEvacuee(evacueeArray, formikRef.current.setFieldValue);
-  //       setLoader(false);
-  //     } else {
-  //       setLoader(false);
-  //     }
-  //   });
-  // };
-
-  // function createEvacuee(evacuees, setFieldValue) {
-  //   setFieldValue("name", evacuees.name || "");
-  //   setFieldValue("name_furigana", evacuees.refugeeName || "");
-  //   setFieldValue("age", evacuees.age || "");
-  //   setFieldValue("age_m", evacuees.month || "");
-  //   setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
-  //   setFieldValue("tel", evacuees.tel || "");
-  //   evacuees?.prefecture_id &&
-  //     setFieldValue("prefecture_id", evacuees?.prefecture_id);
-  //   const re = /^[0-9-]+$/;
-  //   let val;
-  //   if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
-  //     val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
-  //     if (val.length > 3) {
-  //       val = val.slice(0, 3) + val.slice(3);
-  //     }
-  //     setFieldValue("postalCode", val);
-  //     setFetchedZipCode(val.replace(/-/g, ""))
-  //   }
-  //   if (val.length >= 7) {
-  //     let payload = val.slice(0, 3) +"-"+val.slice(3);
-  //     getAddress(val, (response) => {
-  //       if (response) {
-  //         let address = response;
-  //         const selectedPrefecture = prefectures.find(
-  //           (prefecture) => prefecture.value == address.prefcode
-  //         );
-  //         setFieldValue("prefecture_id", selectedPrefecture?.value);
-  //         setFieldValue("address", address.address2 + address.address3 || "");
-  //       } else {
-  //         setFieldValue("prefecture_id", "");
-  //         setFieldValue("address", "");
-  //       }
-  //     });
-  //   }
-  //   if (evacuees.dob) {
-  //     const birthDate = new Date(evacuees.dob);
-  //     const convertedObject = {
-  //       year: parseInt(birthDate.getFullYear()),
-  //       month: parseInt((birthDate.getMonth() + 1).toString().padStart(2, "0")), // Adding 1 because months are zero-based
-  //       date: parseInt(birthDate.getDate().toString().padStart(2, "0")),
-  //     };
-  //     let age = calculateAge(birthDate);
-  //     setFieldValue("age", parseInt(age.years));
-  //     setFieldValue("age_m", parseInt(age.months));
-  //     setFieldValue("dob", convertedObject || "");
-  //   }
-  //   setFieldValue("address", evacuees.address);
-  //   setFieldValue("address2", evacuees.address2);
-  //   setFieldValue("connecting_code", evacuees.connecting_code);
-  // }
-  // function calculateAge(birthdate) {
-  //   const birthdateObj = new Date(birthdate);
-  //   const currentDate = new Date();
-
-  //   let years = currentDate.getFullYear() - birthdateObj.getFullYear();
-  //   let months = currentDate.getMonth() - birthdateObj.getMonth();
-
-  //   if (currentDate.getDate() < birthdateObj.getDate()) {
-  //     // Adjust for cases where the birthdate has not occurred yet in the current month
-  //     months--;
-  //   }
-
-  //   if (months < 0) {
-  //     // Adjust for cases where the birthdate month is ahead of the current month
-  //     years--;
-  //     months += 12;
-  //   }
-
-  //   return { years, months };
-  // }
-
-  // const Qr = {
-  //   url: "/layout/images/evacuee-qr.png",
-  // };
-  // const Card = {
-  //   url: "/layout/images/evacuee-card.png",
-  // };
-
-  // const handleConfirmation = () => {
-  //   const message = translate(localeJson, "person_count_error");
-  //   // Use the browser's built-in confirmation dialog
-  //   const isConfirmed = window.confirm(message);
-  //   if (isConfirmed) {
-  //     close();
-  //     setQuestions(initialQuestion);
-  //     setIsFormSubmitted(false);
-  //     setModalCountFlag(false);
-  //     setHaveRepAddress(false);
-  //     setHavetel(false);
-  //     setFetchedZipCode("")
-  //     formikRef.current.resetForm();
-  //   }
-  // };
 
   useEffect(() => {
     let dob = formikRef?.current?.values?.dob;
@@ -513,35 +216,11 @@ export default function UserEventRegModal(props) {
     }
   }, [dobCounter]);
 
-  // useEffect( ()=> {
-  //   let address = formikRef.current.values.address;
-  //   let stateId = formikRef.current.values.prefecture_id;
-  //   let {city,street} = splitJapaneseAddress(address);
-  //   let state = prefectures.find(x => x.value == stateId)?.name;
-  //   if(state && (city && street))
-  //   {
-  //   getZipCode(state,city,street,(res)=>{
-  //     if(res)
-  //     {
-  //       let zipCode = res.result.zipcode;
-  //       setFetchedZipCode(zipCode.replace(/-/g, ""))
-  //       zipCode && formikRef.current.setFieldValue("postalCode",zipCode.replace(/-/g, ""));  
-  //       formikRef.current.validateField("postalCode") 
-  //     }
-  //     else {
-  //       setFetchedZipCode("")
-  //       formikRef.current.validateField("postalCode") 
-
-  //     }
-  //   })
-  // }
-  // },[addressCount])
   const layoutReducer = useSelector((state) => state.layoutReducer);
   const mapObjects = (object1) => {
     const object2 = {
       "event_id": layoutReducer?.user?.event?.id, // Fill this value accordingly
       "zip_code": object1.postalCode ? convertToSingleByte(object1.postalCode) : "",
-      // "family_code": null, // Fill this value accordingly
       "prefecture_id": object1.prefecture_id ? convertToSingleByte(object1.prefecture_id) : "",
       "address": object1.address + ' ' + object1.address2,
       "address_default": null, // Fill this value accordingly
@@ -556,22 +235,8 @@ export default function UserEventRegModal(props) {
     return object2;
   }
 
-  // useEffect(()=> {
-  //   formikRef.current.validateField("postalCode") 
-  // },[fetchZipCode])
-
   return (
     <>
-      {/* <PerspectiveCropping
-        visible={perspectiveCroppingVisible}
-        hide={() => setPerspectiveCroppingVisible(false)}
-        callback={ocrResult}
-      />
-      <QrScannerModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callback={qrResult}
-      ></QrScannerModal> */}
       <Formik
         innerRef={formikRef}
         validationSchema={validationSchema}
@@ -579,20 +244,7 @@ export default function UserEventRegModal(props) {
         enableReinitialize
         onSubmit={(values, actions) => {
           if (!hasErrors) {
-            // setIsFormSubmitted(false);
             setIsRecording(false);
-            // values.individualQuestions = questions;
-            // values.tel = convertToSingleByte(values.tel);
-            // values.postalCode = convertToSingleByte(values.postalCode);
-            // setEvacueeValues(values);
-            // setQuestions(initialQuestion);
-            // setCounter(count + 1);
-
-            // setHaveRepAddress(false);
-            // setHavetel(false);
-            // setIsRep(false);
-            // setFetchedZipCode("")
-            // mapObjects(values);/
             setLoader(true);
             UserEventListServices.createUserEvent(mapObjects(values), (res) => {
               setFetchedZipCode("")
@@ -600,8 +252,6 @@ export default function UserEventRegModal(props) {
               actions.resetForm({ values: initialValues });
               setLoader(false);
             })
-            // close();
-            // actions.resetForm({ values: initialValues });
           }
         }}
       >
@@ -995,14 +645,6 @@ export default function UserEventRegModal(props) {
                             options:
                               locale == "ja" ? prefectures : prefectures_en,
                             optionLabel: "name",
-                            // onChange: (evt)=>{
-                            //   setFieldValue("prefecture_id",evt.target.value);
-                            //   if(values.address)
-                            //   {
-                            //     setAddressCount(addressCount+1)
-                            //   }
-                            // },
-                            // onBlur: handleBlur,
                             onChange: (e) => {
                               setFieldValue("prefecture_id", e.target.value);
                               if (values.postalCode) {
@@ -1015,7 +657,6 @@ export default function UserEventRegModal(props) {
                                   })
                               }
                             },
-                            // onBlur: handleBlur,
                             emptyMessage: translate(
                               localeJson,
                               "data_not_found"
