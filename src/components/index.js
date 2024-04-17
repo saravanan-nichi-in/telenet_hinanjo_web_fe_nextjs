@@ -4,7 +4,6 @@ import { Counter, CounterSupplies } from "@/components/incrementDecrement";
 import { NormalLabel } from "@/components/label";
 import {
   DeleteModal,
-  DynamicModal,
   DetailModal,
   EmailSettings,
   CommonDialog,
@@ -27,7 +26,6 @@ import {
   PlaceEventBulkCheckOut,
   YappleModal,
   BarcodeDialog,
-  ChangePasswordModal,
   EvacueeTempRegModal,
   EventCreateEditModal,
   External,
@@ -70,7 +68,6 @@ export {
   CounterSupplies,
   NormalLabel,
   DeleteModal,
-  DynamicModal,
   DetailModal,
   EmailSettings,
   CommonDialog,
@@ -128,7 +125,6 @@ export {
   PlaceEventBulkCheckOut,
   YappleModal,
   BarcodeDialog,
-  ChangePasswordModal,
   EvacueeTempRegModal,
   EventCreateEditModal,
   External,

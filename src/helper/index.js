@@ -1,8 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
-import _ from 'lodash';
 import toast from "react-hot-toast";
 import { isObject, isArray } from "lodash";
-import axios from "@/utils/api";
 
 /**
  * 
@@ -30,42 +28,6 @@ export const getValueByKeyRecursively = (data, key) => {
 };
 
 /**
- * Total count get from array with specific key
- * @param {*} array 
- * @param {*} key 
- */
-export const getTotalCountFromArray = (array, key, trimKeyLength) => {
-    return _.sumBy(array, (item) => {
-        if (trimKeyLength && item[key]) {
-            let trimKeyData = _.trimEnd(item[key], item[key].slice(-`${trimKeyLength}`));
-            return Number(trimKeyData);
-        } else if (item[key]) {
-            return Number(item[key]);
-        } else {
-            return 0; // Treat invalid as 0
-        }
-    });
-};
-
-/**
- * Get average percentage
- * @param {*} array 
- * @param {*} key 
- * @returns 
- */
-export const getAveragePercentage = (array, key) => {
-    // Extract numeric values and convert them to numbers
-    const values = array.map(item => parseFloat(item[key]));
-    // Calculate the average
-    const sum = values.reduce((acc, val) => acc + val, 0);
-    const average = sum / values.length;
-    // Format the result as a percentage
-    const formattedAverage = `${average.toFixed(2)}%`;
-
-    return formattedAverage;
-};
-
-/**
  * Get japanese date & time with custom format
  * @param {*} dateTime 
  * @returns 
@@ -82,22 +44,6 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
 
     formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ')
     return formattedJPDateTime;
-}
-
-/**
- * Get japanese display format
- * @param {*} dateTime 
- * @returns 
- */
-export const getJapaneseDateDisplayFormat = (dateTime) => {
-    const options = {
-        year: 'numeric',
-        month: '2-digit', // Use '2-digit' to get leading zeros for months
-        day: '2-digit', // Use '2-digit' to get leading zeros for days
-    };
-    const formattedJPDateTime = new Date(dateTime).toLocaleString('ja-JP', options);
-
-    return formattedJPDateTime.replace(/(\d+)年(\d+)月(\d+)日,/, '$1年$2月$3日 ');
 }
 
 /**
@@ -278,77 +224,6 @@ export const zipDownloadWithURL = (zipURL) => {
 }
 
 /**
- * Import fail error status displaying in toast
- * @param {*} response 
- */
-export const importErrorToastDisplay = (response) => {
-    if (response && response.data) {
-        if (!response.data.success && response.data.code == "422") {
-            toast.error(() => (
-                <div>
-                    <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                        {response?.data?.message}
-                    </a>
-                </div>
-            ), {
-                position: "top-right",
-            });
-        } else if (response.data.success) {
-            if (response.data.code == "206") {
-                toast.success(() => (
-                    <div>
-                        <a href={response?.data?.error_path} target="_blank" style={{ textDecoration: "underline" }}>
-                            {response?.data?.message}
-                        </a>
-                    </div>
-                ), {
-                    position: "top-right",
-                });
-            } else {
-                toast.success(response?.data?.message, {
-                    position: "top-right",
-                });
-            }
-        } else {
-            toast.error(response?.data?.message, {
-                position: "top-right",
-            });
-        }
-    }
-}
-
-/**
- * Function help to display 422 error messages on toast
- * @param {*} error 
- */
-export const common422ErrorToastDisplay = (error) => {
-    if (error?.response?.status == 422) {
-        if (isObject(error?.response?.data?.message)) {
-            let errorMessages = Object.values(error.response.data.message);
-            let errorString = errorMessages.join('.')
-            let errorArray = errorString.split(".");
-            errorArray = errorArray.filter(message => message.trim() !== "");
-            let formattedErrorMessage = errorArray
-                .map((message, index) => {
-                    return `${message.trim()}`;
-                })
-                .join("\n");
-            toast.error(formattedErrorMessage, {
-                position: "top-right",
-            });
-        } else {
-            toast.error(error?.response?.data?.message, {
-                position: "top-right",
-            });
-        }
-    } else {
-        toast.error(error?.response?.data?.message, {
-            position: "top-right",
-        });
-    }
-}
-
-/**
  * Function help to display error messages on toast
  * @param {*} error 
  * @param {*} key 
@@ -434,25 +309,6 @@ export const toastDisplay = (response, key, position = "top-right", rawMsgType) 
             });
         }
     }
-}
-
-/**
- * Generate colors
- * @param {*} length 
- * @returns 
- */
-export const generateColors = (length) => {
-    const colors = [];
-    const hueIncrement = 360 / length; // Divide the hue spectrum evenly
-
-    for (let i = 0; i < length; i++) {
-        const hue = i * hueIncrement;
-
-        const color = `hsl(${hue}, 80%, 50%)`;
-        colors.push(color);
-    }
-
-    return colors;
 }
 
 /**
@@ -581,25 +437,6 @@ export const getEnglishDateSlashDisplayFormat = (dateTime) => {
     const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}/${month}/${day}`;
-};
-
-/**
- * Get english slash date time format
- * @param {*} dateTime 
- * @returns 
- */
-export const getEnglishDateTimeSlashDisplayFormat = (dateTime) => {
-    const date = new Date(dateTime);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
-    const second = String(date.getSeconds()).padStart(2, '0');
-
-    return `${year}/${month}/${day} ${hour}:${minute}`;
 };
 
 /**

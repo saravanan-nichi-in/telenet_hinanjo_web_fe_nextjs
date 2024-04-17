@@ -9,7 +9,6 @@ import AppFooter from '@/layout/AppFooter';
 import AppSidebar from '@/layout/AppSidebar';
 import AppTopbar from '@/layout/AppTopbar';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { urlRegister } from '@/utils/constant';
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState, loader } = useContext(LayoutContext);
@@ -17,7 +16,6 @@ const Layout = (props) => {
     const sidebarRef = useRef(null);
     const router = useRouter();
     const windowURL = window.location.pathname;
-    const windowURLSplitted = windowURL.split('/');
     const path = router.asPath.split('?')[0];
 
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
