@@ -27,6 +27,7 @@ const PersonCountScreen = () => {
             dispatch(clearExceptPlaceId());
             // Person count selected, proceed with navigation
             localStorage.setItem("personCountTemp", personCount);
+            localStorage.setItem("showDelete","false");
             router.push('/user/temp-register');
         }
     };
