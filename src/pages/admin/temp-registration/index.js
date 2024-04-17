@@ -60,7 +60,7 @@ export default function TempRegistration() {
     { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
     { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '4rem', maxWidth: '4rem' },
     { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-    { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '4rem', maxWidth: '4rem',display: 'none' },
+    { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '4rem', maxWidth: '4rem', display: 'none' },
   ];
 
   useEffect(() => {
@@ -224,12 +224,30 @@ export default function TempRegistration() {
     <div className="grid">
       <div className="col-12">
         <div className="card">
-          <div className="flex gap-2 align-items-center ">
-            <CustomHeader
-              headerClass={"page-header1"}
-              header={translate(localeJson, "list_of_temp_registrants_title")}
-            />
-            <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+          <div className="flex align-items-center justify-content-between">
+            <div className='flex'>
+              <CustomHeader
+                headerClass={"page-header1"}
+                customParentClassName={"mb-0"}
+                header={translate(localeJson, "list_of_temp_registrants_title")}
+              />
+              <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+            </div>
+            <div className='mb-2 flex align-items-center'>
+              <Button
+                buttonProps={{
+                  type: "submit",
+                  rounded: "true",
+                  buttonClass: "evacuation_button_height export-button",
+                  export: true,
+                  text: translate(localeJson, "export"),
+                  onClick: () => {
+                    alert("downloading");
+                  },
+                }}
+                parentClass={"export-button"}
+              />
+            </div>
           </div>
           <div>
             <div>
@@ -294,6 +312,26 @@ export default function TempRegistration() {
                 </div>
               </form>
             </div>
+            {/* <div style={{ display: "flex", justifyContent: "right" }}>
+              <div
+                className="flex pt-3"
+                style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
+              >
+                <Button
+                  buttonProps={{
+                    type: "submit",
+                    rounded: "true",
+                    buttonClass: "evacuation_button_height export-button",
+                    export: true,
+                    text: translate(localeJson, "export"),
+                    onClick: () => {
+                      alert("downloading");
+                    },
+                  }}
+                  parentClass={"mb-3 export-button"}
+                />
+              </div>
+            </div> */}
           </div>
           <NormalTable
             lazy

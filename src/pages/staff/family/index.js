@@ -400,7 +400,18 @@ function StaffFamily() {
                   "people"
                 )})`}</span>
               </div>
-              <div>
+              <div className='mb-2 flex align-items-center'>
+                <Button buttonProps={{
+                  type: 'submit',
+                  rounded: "true",
+                  export: true,
+                  buttonClass: "evacuation_button_height export-button",
+                  text: translate(localeJson, 'export'),
+                  // onClick: () => downloadEvacueesListCSV()
+                  onClick: () => {
+                    alert("downloading");
+                  },
+                }} parentClass={"mr-1 export-button"} />
                 <Button
                   buttonProps={{
                     type: "submit",
@@ -413,7 +424,7 @@ function StaffFamily() {
                       hideOverFlow();
                     },
                   }}
-                  parentClass={"mr-1 mt-1 primary-button"}
+                  parentClass={"primary-button"}
                 />
               </div>
             </div>

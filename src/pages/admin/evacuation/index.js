@@ -38,7 +38,6 @@ export default function EvacuationPage() {
             refugee_name: ""
         }
     });
-
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
         {
@@ -190,7 +189,7 @@ export default function EvacuationPage() {
     }
 
     /* Services */
-    const { getList } = EvacuationServices;
+    const { getList, exportEvacueesCSVList } = EvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -267,13 +266,43 @@ export default function EvacuationPage() {
         }
     }
 
+    const downloadEvacueesListCSV = () => {
+        exportEvacueesCSVList(getListPayload, exportEvacueesCSV);
+    }
+
+    const exportEvacueesCSV = (response) => {
+        if (response.success) {
+            const downloadLink = document.createElement("a");
+            const fileName = "Evacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+            downloadLink.href = response.result.filePath;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        }
+    }
+
     return (
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <div className="flex gap-2 align-items-center">
-                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "list_of_evacuees")} />
-                        <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                    <div className="flex align-items-center justify-content-between">
+                        <div className='flex'>
+                            <CustomHeader
+                                headerClass={"page-header1"}
+                                customParentClassName={"mb-0"}
+                                header={translate(localeJson, "list_of_evacuees")}
+                            />
+                            <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                        </div>
+                        <div className='mb-2 flex align-items-center'>
+                            <Button buttonProps={{
+                                type: 'submit',
+                                rounded: "true",
+                                export: true,
+                                buttonClass: "evacuation_button_height export-button",
+                                text: translate(localeJson, 'export'),
+                                onClick: () => downloadEvacueesListCSV()
+                            }} parentClass={"export-button"} />
+                        </div>
                     </div>
                     <div>
                         <div>

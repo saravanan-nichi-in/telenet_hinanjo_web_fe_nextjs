@@ -302,10 +302,10 @@ function TemporaryRegistrants() {
     updateCheckInDetail(param, (response) => {
       if (response.success) {
         dispatch(clearExceptPlaceId())
-        localStorage.setItem("personCountTemp",null)
+        localStorage.setItem("personCountTemp", null)
         localStorage.setItem('refreshing', "false");
-        localStorage.setItem('deletedFromStaff',"true")
-        localStorage.setItem("showDelete","false")
+        localStorage.setItem('deletedFromStaff', "true")
+        localStorage.setItem("showDelete", "false")
         getList(getListPayload, onGetTemporaryRegistrantListSuccess);
       }
     });
@@ -361,14 +361,29 @@ function TemporaryRegistrants() {
     <div className="grid">
       <div className="col-12">
         <div className="card">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CustomHeader
-              headerClass={"page-header1"}
-              header={translate(localeJson, "temporary_registrants")}
-            />
-            <span className="pl-2 text-lg pb-2">
-              {"(" + totalCount + translate(localeJson, "people") + ")"}
-            </span>
+          <div className="flex align-items-center justify-content-between">
+            <div className='flex'>
+              <CustomHeader
+                headerClass={"page-header1"}
+                header={translate(localeJson, "temporary_registrants")}
+              />
+              <span className="pl-2 text-lg pb-2">
+                {"(" + totalCount + translate(localeJson, "people") + ")"}
+              </span>
+            </div>
+            <div className='mb-2 flex align-items-center'>
+              <Button buttonProps={{
+                type: 'submit',
+                rounded: "true",
+                export: true,
+                buttonClass: "evacuation_button_height export-button",
+                text: translate(localeJson, 'export'),
+                // onClick: () => downloadEvacueesListCSV()
+                onClick: () => {
+                  alert("downloading");
+                },
+              }} parentClass={"export-button"} />
+            </div>
           </div>
           <div>
             <div>

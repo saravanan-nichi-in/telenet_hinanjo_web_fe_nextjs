@@ -132,8 +132,10 @@ export default function EvacueeFamilyDetail() {
                     let personAnswers = person.person_answers;
                     if (listOfIndividualQuestions.length > 0) {
                         let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
+                        console.log(preparedListOfIndividualQuestions);
                         preparedListOfIndividualQuestions.map((question) => {
                             let indexOfMatchingAnswer = personAnswers.length > 0 && personAnswers.find(answer => answer.question_id == question.id);
+                            console.log(indexOfMatchingAnswer.answer_en);
                             question['answer'] = indexOfMatchingAnswer ? getAnswerData(locale == "ja" ? indexOfMatchingAnswer.answer : indexOfMatchingAnswer.answer_en) : "";
                         })
                         familyData['individualQuestionnaires'] = preparedListOfIndividualQuestions;
