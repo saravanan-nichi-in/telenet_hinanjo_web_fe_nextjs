@@ -350,7 +350,7 @@ export default function StaffManagementEditModal(props) {
                                                 </div>
                                             </div>
                                         </TabPanel>
-                                        {layoutReducer?.config?.ADMIN_STAFF_MANAGAMENT_EVENT_MAP && (
+                                        {layoutReducer?.layout?.config?.ADMIN_STAFF_MANAGAMENT_EVENT_MAP && (
                                             <TabPanel header={translate(localeJson, 'event_information')}>
                                                 <div className="">
                                                     <div className="">

@@ -74,7 +74,7 @@ const AppMenuitem = (props) => {
         }
     };
 
-    const subMenu = item.items && item.visible != false && (
+    const subMenu = item.items && item.visible !== false && (
         <CSSTransition timeout={{ enter: 1000, exit: 450 }} classNames="layout-submenu" in={props.root ? true : active} key={item.label}>
             <ul>
                 {item.items.map((child, i) => {
@@ -92,7 +92,7 @@ const AppMenuitem = (props) => {
                 <Tooltip target={menuRef.current} position="right" className="sidebar-custom-tooltip" />
             )}
             <li className={classNames(item.class, { 'layout-root-menuitem': props.root, 'active-menuitem': active })}>
-                {props.root && item.visible != false && (
+                {props.root && item.visible !== false && (
                     !item.top ? (
                         <div className="layout-menuitem-root-text">
                             <span className='layout-menuitem-root-text-icon'>
@@ -108,7 +108,7 @@ const AppMenuitem = (props) => {
                     )
                 )}
 
-                {!item.top && item.to && !item.items && item.visible != false ? (
+                {!item.top && item.to && !item.items && item.visible !== false ? (
                     <Link ref={menuRef} data-pr-tooltip={item.label} href={item.to} replace={item.replaceUrl} target={item.target} onClick={(e) => itemClick(e)} className={classNames(item.class, 'p-ripple', { 'active-route': isActiveRoute && item.label != translate(localeJson, 'staff_dashboard') }, { 'active-parent-menu': item.label == translate(localeJson, 'staff_dashboard') })} tabIndex={0}>
                         <span className="layout-menuitem-text">{item.label}</span>
                         {item.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
