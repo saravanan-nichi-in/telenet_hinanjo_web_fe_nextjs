@@ -715,7 +715,6 @@ export default function EvacueeTempRegModal(props) {
                             "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
                           text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
-                          disabled:values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                           },
@@ -733,8 +732,6 @@ export default function EvacueeTempRegModal(props) {
                             "back-button w-full h-3rem border-radius-5rem flex justify-content-center",
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={30} height={30} />,
-                          disabled:
-                            values?.family_register_from == "0" ? true : false,
                           onClick: () => {
                             setOpenQrPopup(true);
                           },

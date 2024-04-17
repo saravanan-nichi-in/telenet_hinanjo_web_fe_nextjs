@@ -7,6 +7,7 @@ import { downloadImage, toastDisplay, getValueByKeyRecursively as translate } fr
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId, reset } from "@/redux/tempRegister";
 import { TempRegisterServices } from "@/services"
+import { default_place_id } from "@/utils/constant";
 
 const RegisterSuccess = () => {
   const { localeJson, locale } = useContext(LayoutContext);
@@ -36,6 +37,23 @@ const RegisterSuccess = () => {
     if(!regReducer.successData?.data||localStorage.getItem('deletedFromStaff')=="true")
     {
       router.push('/user/temp-person-count')
+    }
+    if (regReducer.successData?.data?.familyCode) {
+      let payload = {
+        family_code:regReducer.successData?.data?.familyCode
+      }
+      TempRegisterServices.isRegistered(payload,(res)=>
+    {
+      if(res)
+      {
+        let data = res.data;
+        if((data?.isRegistered == "1"|| !data?.isRegistered) && !default_place_id.includes(parseInt(place_id)))
+        {
+          localStorage.setItem("showDelete","false")
+          router.push('/user/temp-person-count')
+        }
+      }
+    })
     }
 
     if (place_id != SuccessPlaceId) {
@@ -93,9 +111,10 @@ const RegisterSuccess = () => {
                       {
                         dispatch(clearExceptPlaceId())
                         localStorage.setItem("personCountTemp",null)
-                        localStorage.setItem('refreshing', false);
+                        localStorage.setItem('refreshing', "false");
                         localStorage.setItem("tempDataDeleted","true");
                         localStorage.setItem("isSuccess","false");
+                        localStorage.setItem("showDelete","false")
                         router.push('/user/temp-person-count')
                       }
                     })

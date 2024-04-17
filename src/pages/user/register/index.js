@@ -100,7 +100,8 @@ export default function Admission() {
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
-    ocrScanRegistration
+    ocrScanRegistration,
+    qrScanRegistration
   } = TempRegisterServices;
 
   useEffect(() => {
@@ -498,6 +499,10 @@ export default function Admission() {
     url: "/layout/images/mapplescan.svg",
   };
 
+  const Qr = {
+    url: "/layout/images/evacuee-qr.png",
+  };
+
   const Card = {
     url: "/layout/images/evacuee-card.png",
   };
@@ -514,208 +519,6 @@ export default function Admission() {
     { name: translate(localeJson, "c_male"), value: 1 },
     { name: translate(localeJson, "c_female"), value: 2 },
     { name: translate(localeJson, "c_not_answer"), value: 3 },
-  ];
-
-  const cols = [
-    {
-      field: "rep_name",
-      header: translate(localeJson, "c_representative"),
-      minWidth: locale === "ja" ? "5rem" : "5rem",
-      maxWidth: locale === "ja" ? "5rem" : "5rem",
-      width: "5rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const handleRadioChange = (evt) => {
-          const isChecked = evt.target.checked;
-          let latest_Data = evacuee.map((row) => {
-            if (isChecked) {
-              let data = rowData;
-              if (row.id !== rowData.id) {
-                return { ...row, checked: false };
-              } else {
-                return { ...row, checked: true };
-              }
-            } else {
-              return { ...row, checked: false }; // Handle the case when isChecked is false
-            }
-          });
-          if (isChecked) {
-            let data = rowData;
-            formikRef.current.setFieldValue("postalCode", data.postalCode);
-            formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-            formikRef.current.setFieldValue("address", data.address);
-            formikRef.current.setFieldValue("address2", data.address2 || "");
-            data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
-            formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-            formikRef.current.setFieldValue("name_kanji", data.name);
-          }
-          formikRef.current.setFieldValue("evacuee", latest_Data)
-          setEvacuee(latest_Data);
-        };
-        return (
-          <a className="flex justify-content-center">
-            <RadioBtn
-              radioBtnProps={{
-                onChange: handleRadioChange,
-                checked: rowData.checked,
-              }}
-            />
-          </a>
-        );
-      },
-    },
-    {
-      field: "name_furigana",
-      header: translate(localeJson, "c_refugee_name"),
-      minWidth: "8rem",
-      maxWidth: "8rem",
-      width: "8rem",
-      body: (rowData) => {
-        return (
-          <div className="flex flex-column">
-            <div className="custom-header">{rowData.name}</div>
-            <div>{rowData.name_furigana}</div>
-          </div>
-        );
-      },
-      headerClassName: "custom-header",
-    },
-    {
-      field: "age",
-      header: translate(localeJson, "c_age"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-    },
-    {
-      field: "gender",
-      header: translate(localeJson, "c_gender"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const gender = genderOptions;
-        const selectedGenderOption = gender.find(
-          (option) => option.value === rowData.gender
-        );
-        const displayedGenderName = selectedGenderOption
-          ? selectedGenderOption.name
-          : "Unknown";
-
-        return <span>{displayedGenderName}</span>;
-      },
-    },
-
-    {
-      field: "actions",
-      header: translate(localeJson, "common_action"),
-      textAlign: "center",
-      alignHeader: "center",
-      minWidth: "9rem",
-      maxWidth: "9rem",
-      className: "action_class",
-      body: (rowData) => (
-        <div>
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              // text: translate(localeJson, "edit"),
-              buttonClass: "back-button",
-              icon: <img src={Edit.url} width={20} height={20} />,
-              onClick: () => {
-                setRegisterModalAction("edit");
-                setSpecialCareEditOpen(true);
-                hideOverFlow();
-                let currentData = {
-                  id: rowData.id,
-                  checked: rowData.checked,
-                  name: rowData.name,
-                  name_furigana: rowData.name_furigana,
-                  dob: rowData.dob,
-                  age: rowData.age,
-                  age_m: rowData.age_m,
-                  gender: rowData.gender,
-                  postalCode: rowData.postalCode,
-                  prefecture_id: rowData.prefecture_id,
-                  address: rowData.address,
-                  address2: rowData.address2,
-                  email: rowData.email,
-                  tel: rowData.tel,
-                  evacuee: rowData.evacuee,
-                  password: rowData.password,
-                  specialCareType: rowData.specialCareType,
-                  connecting_code: rowData.connecting_code,
-                  remarks: rowData.remarks,
-                  individualQuestions: rowData.individualQuestions,
-                  telAsRep: rowData.telAsRep,
-                  addressAsRep: rowData.addressAsRep
-                };
-                setEditObj(currentData);
-              },
-            }}
-            parentClass="back-button"
-          />
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              // text: translate(localeJson, "remove"),
-              buttonClass: "ml-2 delete-button-user",
-              icon: <img src={Delete.url} width={20} height={20} />,
-              onClick: () => {
-                if (rowData.checked === true) {
-                  const message = translate(localeJson, 'rep_del_error');
-                  const isConfirmed = window.confirm(message);
-
-                  if (isConfirmed) {
-                    setEvacuee((prevEvacuee) => {
-                      let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                      // Update the IDs of the remaining items
-                      updated = updated.map((evacuee, index) => ({
-                        ...evacuee,
-                        id: index + 1,
-                      }));
-
-                      if (updated.length > 0) {
-                        updated[0].checked = true;
-                      }
-
-                      formikRef.current?.setFieldValue("evacuee", updated);
-                      return updated;
-                    });
-                  }
-                } else {
-                  setEvacuee((prevEvacuee) => {
-                    let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                    // Update the IDs of the remaining items
-                    updated = updated.map((evacuee, index) => ({
-                      ...evacuee,
-                      id: index + 1,
-                    }));
-
-                    formikRef.current?.setFieldValue("evacuee", updated);
-                    return updated;
-                  });
-                }
-
-              },
-            }}
-            parentClass={"delete-button-user"}
-          />
-        </div>
-      ),
-    },
   ];
 
   const getAnswerData = (answer) => {
@@ -825,14 +628,11 @@ export default function Admission() {
 
   const qrResult = (result) => {
     setLoader(true)
-    let payload = {
-      yapple_id: "",
-      ppid: "",
-      chiica_qr: result,
-    };
+    let formData = new FormData()
+    formData.append('content', result)
     setOpenQrPopup(false)
     showOverFlow();
-    basicInfo(payload, (res) => {
+    qrScanRegistration(formData, (res) => {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);
@@ -1062,18 +862,18 @@ export default function Admission() {
 
   return (
     <>
-      {/* <QrScannerModal
+      <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
-      ></QrScannerModal> */}
-      <YaburuModal
+      ></QrScannerModal>
+      {/* <YaburuModal
         open={openQrPopup}
         close={closeQrPopup}
         callBack={qrResult}
       >
-      </YaburuModal>
+      </YaburuModal> */}
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -1159,13 +959,12 @@ export default function Admission() {
                           custom: "",
                           buttonClass:
                             "back-button h-4rem border-radius-5rem w-full custom-icon-button flex justify-content-center",
-                          text: translate(localeJson, "myNumberCardScan"),
+                          text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
                           onClick: () => {
                             setPerspectiveCroppingVisible(true);
                             hideOverFlow();
                           },
-                          disabled: true,
                         }}
                         parentClass={
                           " back-button  w-full flex justify-content-center  mb-3"
@@ -1178,8 +977,8 @@ export default function Admission() {
                           custom: "",
                           buttonClass:
                             "back-button h-4rem border-radius-5rem  w-full flex justify-content-center",
-                          text: translate(localeJson, "yaburuCardScan"),
-                          icon: <img src={Scanner.url} width={40} height={40} color="green" />,
+                          text: translate(localeJson, "c_qr_reg"),
+                          icon: <img src={Qr.url} width={30} height={30} color="green" />,
                           onClick: () => {
                             setOpenQrPopup(true);
                             hideOverFlow();

@@ -147,11 +147,11 @@ export default function Admission() {
 
   useEffect(() => {
     if (place_id) {
-      MapServices.getPlaceList((res) => {
+      TempRegisterServices.getActiveEvacuationPlaceList((res) => {
         if (res) {
           let placeList = res.data.model.list;
           let placeIsAvail = placeList.find((list) => list.id == place_id)
-          if (placeIsAvail?.active_flg != "1") {
+          if (!placeIsAvail) {
             toastDisplay(translate(localeJson, "temp_inactive_place"), '', '', "error");
             window.location.href = '/'
             return

@@ -577,6 +577,7 @@ const TempRegisterConfirm = () => {
                       localStorage.setItem("tempDataDeleted","false");
                       localStorage.setItem("isSuccess","true");
                       localStorage.setItem('deletedFromStaff',"false");
+                      localStorage.setItem("showDelete","false")
                       setLoader(false);
                       router.push("/user/temp-register/success");
                     } else {
