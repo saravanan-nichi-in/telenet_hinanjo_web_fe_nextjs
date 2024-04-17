@@ -216,17 +216,6 @@ function StaffFamily() {
     router.push("/user/family/register");
   };
 
-  const exportEvacueesCSV = (response) => {
-    if (response.success) {
-      const downloadLink = document.createElement("a");
-      const fileName =
-        "StaffFamily_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
-      downloadLink.href = response.result.filePath;
-      downloadLink.download = fileName;
-      downloadLink.click();
-    }
-  };
-
   const searchListWithCriteria = () => {
     let payload = {
       filters: {
@@ -344,6 +333,21 @@ function StaffFamily() {
     fetchData();
   }, [locale, listPayload]);
 
+  const downloadEvacueesListCSV = () => {
+    StaffEvacuationServices.exportStaffFamilyEvacueesCSVList(listPayload, exportStaffFamilyEvacueesCSV);
+  }
+
+  const exportStaffFamilyEvacueesCSV = (response) => {
+    if (response.success) {
+      const downloadLink = document.createElement("a");
+      const fileName =
+        "StaffFamily_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+      downloadLink.href = response.result.filePath;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    }
+  };
+
   return (
     <>
       <PersonCountModal
@@ -407,10 +411,7 @@ function StaffFamily() {
                   export: true,
                   buttonClass: "evacuation_button_height export-button",
                   text: translate(localeJson, 'export'),
-                  // onClick: () => downloadEvacueesListCSV()
-                  onClick: () => {
-                    alert("downloading");
-                  },
+                  onClick: () => downloadEvacueesListCSV()
                 }} parentClass={"mr-1 export-button"} />
                 <Button
                   buttonProps={{

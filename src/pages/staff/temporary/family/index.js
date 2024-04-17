@@ -9,6 +9,7 @@ import {
   getJapaneseDateDisplayYYYYMMDDFormat,
   getValueByKeyRecursively as translate,
   getSpecialCareName,
+  getYYYYMMDDHHSSSSDateTimeFormat
 } from "@/helper";
 import { setStaffTempFamily } from "@/redux/family";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
@@ -191,7 +192,8 @@ function TemporaryRegistrants() {
   ];
 
   /* Services */
-  const { getList, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+  const { getList, updateCheckInDetail, exportTemporaryEvacueesCSVList } = TemporaryStaffRegistrantServices;
+
   useEffect(() => {
     setTableLoading(true);
     const fetchData = async () => {
@@ -357,6 +359,20 @@ function TemporaryRegistrants() {
     }
   };
 
+  const downloadEvacueesListCSV = () => {
+    exportTemporaryEvacueesCSVList(getListPayload, exportTempFamilyEvacueesCSV);
+  }
+
+  const exportTempFamilyEvacueesCSV = (response) => {
+    if (response.success) {
+      const downloadLink = document.createElement("a");
+      const fileName = "TempFamilyEvacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+      downloadLink.href = response.result.filePath;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    }
+  }
+
   return (
     <div className="grid">
       <div className="col-12">
@@ -378,10 +394,7 @@ function TemporaryRegistrants() {
                 export: true,
                 buttonClass: "evacuation_button_height export-button",
                 text: translate(localeJson, 'export'),
-                // onClick: () => downloadEvacueesListCSV()
-                onClick: () => {
-                  alert("downloading");
-                },
+                onClick: () => downloadEvacueesListCSV()
               }} parentClass={"export-button"} />
             </div>
           </div>

@@ -4,7 +4,8 @@ import axios from "@/utils/api";
 export const AdminEvacueeTempServices = {
     exportData: _exportData,
     getEvacueeTempList: _getEvacueeTempList,
-    getTempFamilyEvacueesDetail: _getTempFamilyEvacueesDetail
+    getTempFamilyEvacueesDetail: _getTempFamilyEvacueesDetail,
+    exportTempFamilyEvacueesCSVList: _exportTempFamilyEvacueesCSVList,
 };
 
 
@@ -62,5 +63,23 @@ function _getTempFamilyEvacueesDetail(payload, callBackFun) {
         .catch((error) => {
             console.error('Error fetching data:', error);
             callBackFun(false);
+        });
+}
+
+/**
+ * Get Evacuees CSV list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _exportTempFamilyEvacueesCSVList(payload, callBackFun) {
+    axios.post('/admin/evacuation/export', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            toastDisplay(error?.response);
         });
 }

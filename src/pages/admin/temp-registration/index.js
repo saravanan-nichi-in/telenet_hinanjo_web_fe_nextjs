@@ -8,7 +8,8 @@ import {
   getEnglishDateDisplayFormat,
   getJapaneseDateDisplayYYYYMMDDFormat,
   getValueByKeyRecursively as translate,
-  getSpecialCareName
+  getSpecialCareName,
+  getYYYYMMDDHHSSSSDateTimeFormat
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
@@ -220,6 +221,20 @@ export default function TempRegistration() {
     }
   }
 
+  const downloadEvacueesListCSV = () => {
+    AdminEvacueeTempServices.exportTempFamilyEvacueesCSVList(getListPayload, exportEvacueesCSV);
+  }
+
+  const exportEvacueesCSV = (response) => {
+    if (response.success) {
+      const downloadLink = document.createElement("a");
+      const fileName = "TempEvacuation_" + getYYYYMMDDHHSSSSDateTimeFormat(new Date()) + ".csv";
+      downloadLink.href = response.result.filePath;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    }
+  }
+
   return (
     <div className="grid">
       <div className="col-12">
@@ -242,7 +257,7 @@ export default function TempRegistration() {
                   export: true,
                   text: translate(localeJson, "export"),
                   onClick: () => {
-                    alert("downloading");
+                    // downloadEvacueesListCSV()
                   },
                 }}
                 parentClass={"export-button"}

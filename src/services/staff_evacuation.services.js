@@ -10,7 +10,8 @@ export const StaffEvacuationServices = {
     getStaffEvecueesList: _getStaffEvecueesList,
     getStaffPermanantEvecueesDetail: _getStaffPermanantEvecueesDetail,
     getStaffAttendeesList: _getStaffAttendeesList,
-    getStaffFamilyEvacueesDetail: _getStaffFamilyEvacueesDetail
+    getStaffFamilyEvacueesDetail: _getStaffFamilyEvacueesDetail,
+    exportStaffFamilyEvacueesCSVList: _exportStaffFamilyEvacueesCSVList,
 };
 
 /**
@@ -158,5 +159,23 @@ function _getStaffAttendeesList(payload, callBackFun) {
         .catch((error) => {
             console.error("Error fetching data:", error);
             callBackFun(false);
+        });
+}
+
+/**
+ * Get Staff Evacuees Data
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _exportStaffFamilyEvacueesCSVList(payload, callBackFun) {
+    axios.post('/staff/evacuees/export', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
