@@ -24,27 +24,28 @@ const AppMenu = () => {
     const url = window.location.pathname;
     // Getting storage data with help of reducers
     const layoutReducer = useAppSelector((state) => state.layoutReducer);
+    
     // Admin side bar information
     const adminModel = [
         {
             label: translate(localeJson, 'event_information_'),
             icon: <MdSettings size={16} />,
             class: "without-top-element",
-            visible: layoutReducer?.config?.ADMIN_EVENT_STATUS_LIST && layoutReducer?.config?.ADMIN_EVENT_ATTENDEES_LIST,
+            visible: layoutReducer?.layout?.config?.ADMIN_EVENT_STATUS_LIST && layoutReducer?.layout?.config?.ADMIN_EVENT_ATTENDEES_LIST,
             items: [
                 {
                     label: translate(localeJson, 'event_status_list'),
                     icon: <BsHouseGearFill size={16} />,
                     to: '/admin/event-status-list',
                     active: router.pathname.startsWith('/admin/event-status-list'),
-                    visible: layoutReducer?.config?.ADMIN_EVENT_STATUS_LIST,
+                    visible: layoutReducer?.layout?.config?.ADMIN_EVENT_STATUS_LIST,
                 },
                 {
                     label: translate(localeJson, 'attendee_list'),
                     icon: <BiSolidAddToQueue size={16} />,
                     to: '/admin/event-attendees-list',
                     active: router.pathname.startsWith('/admin/event-attendees-list'),
-                    visible: layoutReducer?.config?.ADMIN_EVENT_ATTENDEES_LIST,
+                    visible: layoutReducer?.layout?.config?.ADMIN_EVENT_ATTENDEES_LIST,
                 },
             ]
         },
@@ -141,7 +142,7 @@ const AppMenu = () => {
                     icon: <BiSolidAddToQueue size={16} />,
                     to: '/admin/event',
                     active: router.pathname.startsWith('/admin/event'),
-                    visible: layoutReducer?.config?.ADMIN_EVENT,
+                    visible: layoutReducer?.layout?.config?.ADMIN_EVENT,
                 },
                 {
                     label: translate(localeJson, 'interview_management'),
