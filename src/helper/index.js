@@ -1,5 +1,4 @@
 /* eslint-disable no-irregular-whitespace */
-import _ from 'lodash';
 import toast from "react-hot-toast";
 import { isObject, isArray } from "lodash";
 
