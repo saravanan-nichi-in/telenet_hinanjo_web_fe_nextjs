@@ -366,7 +366,8 @@ export default function EventCreateEditModal(props) {
                                             }} />
                                             <ValidationError errorBlock={errors.remarks && touched.remarks && errors.remarks} />
                                         </div>
-                                        <div className="">
+                                        {/* Future */}
+                                        {/* <div className="">
                                             <NormalCheckBox
                                                 checkBoxProps={{
                                                     name: 'auto_checkin_flag',
@@ -379,7 +380,7 @@ export default function EventCreateEditModal(props) {
                                                 }}
                                             />
                                             <ValidationError errorBlock={errors.auto_checkin_flag && touched.auto_checkin_flag && errors.auto_checkin_flag} />
-                                        </div>
+                                        </div> */}
                                         <div className="text-center">
                                             <div className="modal-button-footer-space">
                                                 <Button buttonProps={{

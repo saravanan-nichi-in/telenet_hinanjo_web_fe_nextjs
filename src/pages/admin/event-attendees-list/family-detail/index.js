@@ -27,7 +27,6 @@ export default function EventFamilyDetail() {
     const param = useAppSelector((state) => state.familyReducer.family);
 
     const [tableLoading, setTableLoading] = useState(false);
-    const [yappleID, setYappleID] = useState(null);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [checkoutVisible, setCheckoutVisible] = useState(false);
@@ -70,7 +69,6 @@ export default function EventFamilyDetail() {
         if (response.success && !_.isEmpty(response.data)) {
             const personData = response.data.data;
             const historyData = response.data.history.list;
-            setYappleID(personData[0].yapple_id);
             if (personData.length > 0) {
                 personData.map((person, index) => {
                     let familyData = {
@@ -88,7 +86,6 @@ export default function EventFamilyDetail() {
                         evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDisplayFormat(person.family_join_date) : getGeneralDateTimeDisplayFormat(person.family_join_date),
                         family_code: person.family_code,
                         family_is_registered: person.family_is_registered,
-                        yapple_id: person.yapple_id
                     };
                     familyDataList.push(familyData);
                 })
@@ -111,10 +108,6 @@ export default function EventFamilyDetail() {
     }
 
     const updateEventCheckout = () => {
-        let payload = {
-            event_id: param.event_id,
-            lgwan_family_id: yappleID
-        }
         eventAttendeesCheckout(param, (response) => {
             if (response.success) {
                 router.push('/admin/event-attendees-list')
@@ -223,10 +216,6 @@ export default function EventFamilyDetail() {
                                         <div className='page-header3-sub ml-1'>{familyAdmittedData[0].shelter_place}</div>
                                     </div>
                                 )}
-                                <div className='flex align-items-center details-text-overflow'>
-                                    <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
-                                    <div className='page-header3-sub ml-1'>{familyDetailData[0].yapple_id}</div>
-                                </div>
                             </div>
                         )}
                         <div className='section-space'>

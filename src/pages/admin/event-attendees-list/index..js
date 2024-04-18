@@ -69,7 +69,6 @@ export default function EventAttendeesList() {
         { field: "person_gender", header: translate(localeJson, 'staff_attendees_table_gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "5rem", maxWidth: "5rem" },
         { field: "family_join_date", header: translate(localeJson, 'event_admission_date_time'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "8rem", maxWidth: "8rem" },
         { field: "family_out_date", header: translate(localeJson, 'discharge_date_time_attendees'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "9rem", maxWidth: "9rem" },
-        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "9rem", maxWidth: "9rem" }
     ];
 
     /**
