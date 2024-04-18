@@ -101,8 +101,6 @@ export default function Supplies() {
     },
   ];
 
-
-
   /* Services */
   const { getList, create } = StaffSuppliesServices;
 

@@ -16,8 +16,8 @@ import {
   ValidationError,
   PerspectiveCropping,
   NormalCheckBox,
-  Input, 
-  InputDropdown, 
+  Input,
+  InputDropdown,
   InputNumber,
   QuestionList,
   QrScannerModal,
@@ -45,7 +45,7 @@ export default function EvacueeTempRegModal(props) {
   ];
   const validationSchema = () =>
     Yup.object().shape({
-      checked:Yup.boolean().nullable(),
+      checked: Yup.boolean().nullable(),
       name: Yup.string()
         .nullable()
         .max(100, translate(localeJson, "external_popup_name_kanji")),
@@ -57,19 +57,19 @@ export default function EvacueeTempRegModal(props) {
         year: Yup.string()
           .required(
             translate(localeJson, "c_year") +
-              translate(localeJson, "is_required")
-          ).min(4,translate(localeJson, "c_year") +
-          translate(localeJson, "is_required")),
+            translate(localeJson, "is_required")
+          ).min(4, translate(localeJson, "c_year") +
+            translate(localeJson, "is_required")),
         month: Yup.string().required(
           translate(localeJson, "c_month") +
-            translate(localeJson, "is_required")
+          translate(localeJson, "is_required")
         ),
         date: Yup.string().required(
           translate(localeJson, "c_date") + translate(localeJson, "is_required")
         ),
       }),
       tel: Yup.string()
-      .required(translate(localeJson, "phone_no_required"))
+        .required(translate(localeJson, "phone_no_required"))
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -89,10 +89,9 @@ export default function EvacueeTempRegModal(props) {
           }
         )
         .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-          if(value)
-          {
-          const singleByteValue = convertToSingleByte(value);
-          return /^[0-9]{10,11}$/.test(singleByteValue);
+          if (value) {
+            const singleByteValue = convertToSingleByte(value);
+            return /^[0-9]{10,11}$/.test(singleByteValue);
           }
           else {
             return true;
@@ -102,8 +101,8 @@ export default function EvacueeTempRegModal(props) {
           "at-least-one-checked",
           translate(localeJson, "phone_no_required"),
           (value, parent) => {
-            if (parent.parent.checked === true){
-              return value?true:false;
+            if (parent.parent.checked === true) {
+              return value ? true : false;
             } else {
               return true;
             }
@@ -115,20 +114,20 @@ export default function EvacueeTempRegModal(props) {
       age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
-      .test("is-correct",
-        translate(localeJson,"zip_code_mis_match"),
-        (value)=>{
-          if(value != undefined)
-          return convertToSingleByte(value)==convertToSingleByte(fetchZipCode);
-          else
-          return true
-        })
+        .test("is-correct",
+          translate(localeJson, "zip_code_mis_match"),
+          (value) => {
+            if (value != undefined)
+              return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
+            else
+              return true
+          })
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
         .required(translate(localeJson, "c_address_is_required"))
         .max(190, translate(localeJson, "address_max_length")),
-        address2: Yup.string()
+      address2: Yup.string()
         .nullable()
         .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
@@ -151,7 +150,7 @@ export default function EvacueeTempRegModal(props) {
     isFrom = "user",
   } = props && props;
 
-  const { getText,getZipCode,getAddress,convertToKatakana } = CommonServices;
+  const { getText, getZipCode, getAddress, convertToKatakana } = CommonServices;
   const {
     getIndividualQuestionnaireList,
     getSpecialCareDetails,
@@ -169,8 +168,8 @@ export default function EvacueeTempRegModal(props) {
   const [haveRepTel, setHavetel] = useState(false);
   const [isRep, setIsRep] = useState(false);
   const [dobCounter, setDobCounter] = useState(0);
-  const [addressCount,setAddressCount] = useState(0);
-  const [fetchZipCode,setFetchedZipCode] = useState("");
+  const [addressCount, setAddressCount] = useState(0);
+  const [fetchZipCode, setFetchedZipCode] = useState("");
   const { basicInfo } = CheckInOutServices;
 
   useEffect(() => {
@@ -211,8 +210,8 @@ export default function EvacueeTempRegModal(props) {
         let data = res.data.list;
         let sortedData = data
           ? data.sort((a, b) => {
-              return parseInt(a.display_order) - parseInt(b.display_order);
-            })
+            return parseInt(a.display_order) - parseInt(b.display_order);
+          })
           : [];
         setQuestions(sortedData);
         setInitialQues(sortedData);
@@ -231,31 +230,31 @@ export default function EvacueeTempRegModal(props) {
     registerModalAction == "edit"
       ? editObj
       : {
-          id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
-          checked: evacuee && evacuee.length > 0 ? false : true,
-          name: "",
-          name_furigana: "",
-          dob: {
-            year: "",
-            month: "",
-            date: "",
-          },
-          age: "",
-          age_m: "",
-          gender: null,
-          postalCode: "",
-          prefecture_id: null,
-          address: "",
-          address2: "",
-          email: "",
-          tel: "",
-          specialCareType: null,
-          connecting_code: "",
-          remarks: "",
-          individualQuestions: null,
-          telAsRep:false,
-          addressAsRep:false,
-        };
+        id: evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1,
+        checked: evacuee && evacuee.length > 0 ? false : true,
+        name: "",
+        name_furigana: "",
+        dob: {
+          year: "",
+          month: "",
+          date: "",
+        },
+        age: "",
+        age_m: "",
+        gender: null,
+        postalCode: "",
+        prefecture_id: null,
+        address: "",
+        address2: "",
+        email: "",
+        tel: "",
+        specialCareType: null,
+        connecting_code: "",
+        remarks: "",
+        individualQuestions: null,
+        telAsRep: false,
+        addressAsRep: false,
+      };
 
   useEffect(() => {
     if (registerModalAction === "edit" && editObj.individualQuestions) {
@@ -298,7 +297,7 @@ export default function EvacueeTempRegModal(props) {
           address2: item.address2,
           prefecture_id: item.prefecture_id,
           postalCode: item.postalCode,
-          tel:item.tel,
+          tel: item.tel,
         };
       });
     setRepAddress(filteredData);
@@ -353,13 +352,15 @@ export default function EvacueeTempRegModal(props) {
   };
 
   const [openQrPopup, setOpenQrPopup] = useState(false);
+
   const closeQrPopup = () => {
     setOpenQrPopup(false);
   };
+
   const qrResult = (result) => {
     setLoader(true);
     let formData = new FormData()
-    formData.append('content',result)
+    formData.append('content', result)
     setOpenQrPopup(false);
     qrScanRegistration(formData, (res) => {
       if (res) {
@@ -392,7 +393,7 @@ export default function EvacueeTempRegModal(props) {
 
   function createEvacuee(evacuees, setFieldValue) {
     setFieldValue("name", evacuees.name || "");
-    setFieldValue("name_furigana", (evacuees.refugeeName||evacuees.refugee_name) || "");
+    setFieldValue("name_furigana", (evacuees.refugeeName || evacuees.refugee_name) || "");
     setFieldValue("age", evacuees.age || "");
     setFieldValue("age_m", evacuees.month || "");
     setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
@@ -401,33 +402,32 @@ export default function EvacueeTempRegModal(props) {
       setFieldValue("prefecture_id", evacuees?.prefecture_id);
     const re = /^[0-9-]+$/;
     let val;
-    if(evacuees.postal_code)
-    {
-    if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
-      val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
-      if (val.length > 3) {
-        val = val.slice(0, 3) + val.slice(3);
-      }
-      setFieldValue("postalCode", val);
-      setFetchedZipCode(val.replace(/-/g, ""))
-    }
-    if (val.length >= 7) {
-      let payload = val.slice(0, 3) +"-"+val.slice(3);
-      getAddress(val, (response) => {
-        if (response) {
-          let address = response;
-          const selectedPrefecture = prefectures.find(
-            (prefecture) => prefecture.value == address.prefcode
-          );
-          setFieldValue("prefecture_id", selectedPrefecture?.value);
-          setFieldValue("address", address.address2 + address.address3 || "");
-        } else {
-          setFieldValue("prefecture_id", "");
-          setFieldValue("address", "");
+    if (evacuees.postal_code) {
+      if (evacuees.postal_code === "" || re.test(evacuees.postal_code)) {
+        val = evacuees.postal_code.replace(/-/g, ""); // Remove any existing hyphens
+        if (val.length > 3) {
+          val = val.slice(0, 3) + val.slice(3);
         }
-      });
+        setFieldValue("postalCode", val);
+        setFetchedZipCode(val.replace(/-/g, ""))
+      }
+      if (val.length >= 7) {
+        let payload = val.slice(0, 3) + "-" + val.slice(3);
+        getAddress(val, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            setFieldValue("prefecture_id", selectedPrefecture?.value);
+            setFieldValue("address", address.address2 + address.address3 || "");
+          } else {
+            setFieldValue("prefecture_id", "");
+            setFieldValue("address", "");
+          }
+        });
+      }
     }
-  }
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
@@ -444,30 +444,28 @@ export default function EvacueeTempRegModal(props) {
     setFieldValue("address2", evacuees.address2);
     setFieldValue("connecting_code", evacuees.connecting_code);
   }
+
   function calculateAge(birthdate) {
     const birthdateObj = new Date(birthdate);
     const currentDate = new Date();
-
     let years = currentDate.getFullYear() - birthdateObj.getFullYear();
     let months = currentDate.getMonth() - birthdateObj.getMonth();
-
     if (currentDate.getDate() < birthdateObj.getDate()) {
       // Adjust for cases where the birthdate has not occurred yet in the current month
       months--;
     }
-
     if (months < 0) {
       // Adjust for cases where the birthdate month is ahead of the current month
       years--;
       months += 12;
     }
-
     return { years, months };
   }
 
   const Qr = {
     url: "/layout/images/evacuee-qr.png",
   };
+
   const Card = {
     url: "/layout/images/evacuee-card.png",
   };
@@ -502,51 +500,47 @@ export default function EvacueeTempRegModal(props) {
     }
   }, [dobCounter]);
 
-  useEffect( ()=> {
+  useEffect(() => {
     let address = formikRef.current.values.address;
     let stateId = formikRef.current.values.prefecture_id;
-    let {city,street} = splitJapaneseAddress(address);
+    let { city, street } = splitJapaneseAddress(address);
     let postalCode = formikRef.current.values.postalCode
     let state = prefectures.find(x => x.value == stateId)?.name;
-    if(state && (city && street))
-    {
-    getZipCode(state,city,street,(res)=>{
-      if(res)
-      {
-        let zipCode = res.result.zipcode;
-        setFetchedZipCode(zipCode.replace(/-/g, ""))
-        zipCode && formikRef.current.setFieldValue("postalCode",zipCode.replace(/-/g, ""));  
-        formikRef.current.validateField("postalCode") 
-        return
-      }
-      else {
-        setFetchedZipCode("")
-        return
-      }
-    })
-  }
-    if(postalCode)
-    {
-      getAddress(postalCode,(res)=>{
-        let _address = res;
-        if(stateId != _address.prefcode || address != _address.address2+_address.address3)
-        {
-          setFetchedZipCode("")
-        formikRef.current.validateField("postalCode");
+    if (state && (city && street)) {
+      getZipCode(state, city, street, (res) => {
+        if (res) {
+          let zipCode = res.result.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""))
+          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+          formikRef.current.validateField("postalCode")
+          return
         }
         else {
-          formikRef.current.validateField("address",_address.address2+_address.address3);
-          formikRef.current.validateField("prefecture_id",_address.prefcode);
-          setFetchedZipCode(postalCode)
-          formikRef.current.validateField("postalCode",postalCode);
+          setFetchedZipCode("")
+          return
         }
       })
     }
-  },[addressCount])
+    if (postalCode) {
+      getAddress(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
+          setFetchedZipCode("")
+          formikRef.current.validateField("postalCode");
+        }
+        else {
+          formikRef.current.validateField("address", _address.address2 + _address.address3);
+          formikRef.current.validateField("prefecture_id", _address.prefcode);
+          setFetchedZipCode(postalCode)
+          formikRef.current.validateField("postalCode", postalCode);
+        }
+      })
+    }
+  }, [addressCount])
 
-  useEffect(()=> {
-    fetchZipCode&& formikRef.current.validateField("postalCode") 
-  },[fetchZipCode])
+  useEffect(() => {
+    fetchZipCode && formikRef.current.validateField("postalCode")
+  }, [fetchZipCode])
 
   return (
     <>
@@ -569,21 +563,18 @@ export default function EvacueeTempRegModal(props) {
           if (!hasErrors) {
             setIsFormSubmitted(false);
             setIsRecording(false);
-            if(values.specialCareType)
-            {
+            if (values.specialCareType) {
               const specialCareObjects = values.specialCareType.flatMap(id => {
-                const foundItems = specialCare.filter(item =>
-                  { 
-                    return item.id == id;
-                  })
-                
+                const foundItems = specialCare.filter(item => {
+                  return item.id == id;
+                })
                 return foundItems.length > 0 ? foundItems : [];
-            });
-            // Sort specialCareObjects based on sort_order
-            specialCareObjects.sort((a, b) => a.sort_order - b.sort_order);
-            // Step 3: Map the sorted specialCare objects back to IDs
-            const sortedSpecialCareIds = specialCareObjects.map(item => item.id.toString());
-            values.specialCareType =sortedSpecialCareIds
+              });
+              // Sort specialCareObjects based on sort_order
+              specialCareObjects.sort((a, b) => a.sort_order - b.sort_order);
+              // Step 3: Map the sorted specialCare objects back to IDs
+              const sortedSpecialCareIds = specialCareObjects.map(item => item.id.toString());
+              values.specialCareType = sortedSpecialCareIds
             }
             values.individualQuestions = questions;
             values.tel = convertToSingleByte(values.tel);
@@ -658,9 +649,9 @@ export default function EvacueeTempRegModal(props) {
                         onClick: () => {
                           setCounter(count + 1);
                           setIsFormSubmitted(true);
-                          setFieldValue("dob.year",convertToSingleByte(values.dob.year))
-                          setFieldValue("dob.month",convertToSingleByte(values.dob.month))
-                          setFieldValue("dob.date",convertToSingleByte(values.dob.date))
+                          setFieldValue("dob.year", convertToSingleByte(values.dob.year))
+                          setFieldValue("dob.month", convertToSingleByte(values.dob.month))
+                          setFieldValue("dob.date", convertToSingleByte(values.dob.date))
                           handleSubmit();
                         },
                       }}
@@ -735,7 +726,6 @@ export default function EvacueeTempRegModal(props) {
                           onClick: () => {
                             setOpenQrPopup(true);
                           },
-                          
                         }}
                         parentClass={"back-button w-full"}
                       />
@@ -744,9 +734,8 @@ export default function EvacueeTempRegModal(props) {
                       <div className="mb-2 col-12">
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.name && touched.name && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input ${errors.name && touched.name && "p-invalid"
+                              }`,
                             labelProps: {
                               text: translate(localeJson, "c_name_kanji"),
                               inputLabelClassName: "block font-bold",
@@ -764,13 +753,13 @@ export default function EvacueeTempRegModal(props) {
                             onBlur: handleBlur,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording
+                                isMRecording
                                 ? true
                                 : false,
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -798,11 +787,10 @@ export default function EvacueeTempRegModal(props) {
                         <div className="w-12">
                           <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.name_furigana &&
+                              inputParentClassName: `w-full custom_input ${errors.name_furigana &&
                                 touched.name_furigana &&
                                 "p-invalid"
-                              }`,
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "c_refugee_name"),
                                 spanText: "*",
@@ -816,7 +804,7 @@ export default function EvacueeTempRegModal(props) {
                               value: values.name_furigana,
                               disabled:
                                 values?.family_register_from == "0" ||
-                                isMRecording
+                                  isMRecording
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -828,7 +816,7 @@ export default function EvacueeTempRegModal(props) {
                               inputRightIconProps: {
                                 display: true,
                                 audio: {
-                                  display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                  display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                                 },
                                 icon: "",
                                 isRecording: isMRecording,
@@ -837,14 +825,12 @@ export default function EvacueeTempRegModal(props) {
                                   fromData.append("audio_sample", rec);
                                   getText(fromData, (res) => {
                                     if (res?.data?.content) {
-                                     convertToKatakana(res?.data?.content,(res)=>
-                                      {
-                                        if(res)
-                                        {
-                                        setFieldValue(
-                                          "name_furigana",
-                                          res.converted.replace(/ /g, "")
-                                        );
+                                      convertToKatakana(res?.data?.content, (res) => {
+                                        if (res) {
+                                          setFieldValue(
+                                            "name_furigana",
+                                            res.converted.replace(/ /g, "")
+                                          );
                                         }
                                         else {
                                           setFieldValue(
@@ -853,7 +839,6 @@ export default function EvacueeTempRegModal(props) {
                                           );
                                         }
                                       })
-                                     
                                     }
                                   });
                                 },
@@ -873,37 +858,35 @@ export default function EvacueeTempRegModal(props) {
                       </div>
                       <div className="mb-2  col-12 ">
                         <div className="w-12">
-                        {evacuee?.length > 0 && !values.checked && (
-                          <div className="w-full mb-1 mt-2">
-                            <NormalCheckBox
-                              checkBoxProps={{
-                                checked: values.telAsRep,
-                                value: translate(localeJson, "rep_address"),
-                                labelClass: `pl-2 ${
-                                  locale == "en" ? "pt-1" : ""
-                                }`,
-                                onChange: (e) => {
-                                  setFieldValue("telAsRep",e.checked)
-                                  setHavetel(e.checked);
-                                  if (e.checked == true) {
-                                    setFieldValue("tel",repAddress[0].tel)
-                                  }
-                                  else {
-                                    setFieldValue("tel",'');
-                                  }
-                                },
-                              }}
-                              parentClass={
-                                "flex approve-check align-items-center"
-                              }
-                            />
-                          </div>
-                        )}
+                          {evacuee?.length > 0 && !values.checked && (
+                            <div className="w-full mb-1 mt-2">
+                              <NormalCheckBox
+                                checkBoxProps={{
+                                  checked: values.telAsRep,
+                                  value: translate(localeJson, "rep_address"),
+                                  labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""
+                                    }`,
+                                  onChange: (e) => {
+                                    setFieldValue("telAsRep", e.checked)
+                                    setHavetel(e.checked);
+                                    if (e.checked == true) {
+                                      setFieldValue("tel", repAddress[0].tel)
+                                    }
+                                    else {
+                                      setFieldValue("tel", '');
+                                    }
+                                  },
+                                }}
+                                parentClass={
+                                  "flex approve-check align-items-center"
+                                }
+                              />
+                            </div>
+                          )}
                           <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.tel && touched.tel && "p-invalid"
-                              }`,
+                              inputParentClassName: `w-full custom_input ${errors.tel && touched.tel && "p-invalid"
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "phone_number"),
                                 spanText: "*",
@@ -918,7 +901,7 @@ export default function EvacueeTempRegModal(props) {
                               inputMode: "numeric",
                               disabled:
                                 values?.family_register_from == "0" ||
-                                isMRecording || values.telAsRep
+                                  isMRecording || values.telAsRep
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -940,7 +923,7 @@ export default function EvacueeTempRegModal(props) {
                               inputRightIconProps: {
                                 display: true,
                                 audio: {
-                                  display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                  display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                                 },
                                 icon: "",
                                 isRecording: isMRecording,
@@ -950,9 +933,8 @@ export default function EvacueeTempRegModal(props) {
                                   getText(fromData, (res) => {
                                     const re = /^[0-9-]+$/;
                                     if (res?.data?.content) {
-                                      if(re.test(res?.data?.content))
-                                      {
-                                      setFieldValue("tel", res?.data?.content);
+                                      if (re.test(res?.data?.content)) {
+                                        setFieldValue("tel", res?.data?.content);
                                       }
                                     }
                                   });
@@ -967,19 +949,17 @@ export default function EvacueeTempRegModal(props) {
                           />
                         </div>
                       </div>
-
                       <div className="mb-2  col-12 ">
-                      {evacuee?.length > 0 && !values.checked && (
+                        {evacuee?.length > 0 && !values.checked && (
                           <div className="w-full mb-1 mt-2">
                             <NormalCheckBox
                               checkBoxProps={{
                                 checked: values.addressAsRep,
                                 value: translate(localeJson, "rep_address"),
-                                labelClass: `pl-2 ${
-                                  locale == "en" ? "pt-1" : ""
-                                }`,
+                                labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""
+                                  }`,
                                 onChange: (e) => {
-                                  setFieldValue("addressAsRep",e.checked)
+                                  setFieldValue("addressAsRep", e.checked)
                                   setHaveRepAddress(e.checked);
                                   if (e.checked == true) {
                                     handleRepAddress(
@@ -988,10 +968,10 @@ export default function EvacueeTempRegModal(props) {
                                     );
                                   }
                                   else {
-                                    setFieldValue("postalCode",'');
-                                    setFieldValue("address",'');
-                                    setFieldValue("address2",'');
-                                    setFieldValue("prefecture_id",'');
+                                    setFieldValue("postalCode", '');
+                                    setFieldValue("address", '');
+                                    setFieldValue("address2", '');
+                                    setFieldValue("prefecture_id", '');
                                   }
                                 },
                               }}
@@ -1007,11 +987,10 @@ export default function EvacueeTempRegModal(props) {
                         </div>
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.postalCode &&
+                            inputParentClassName: `w-full custom_input ${errors.postalCode &&
                               touched.postalCode &&
                               "p-invalid"
-                            }`,
+                              }`,
                             labelProps: {
                               text: "",
                               spanText: "*",
@@ -1027,7 +1006,7 @@ export default function EvacueeTempRegModal(props) {
                             value: values.postalCode,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "post_letter"),
@@ -1045,8 +1024,8 @@ export default function EvacueeTempRegModal(props) {
                                   setFieldValue("postalCode", val);
                                   setFetchedZipCode(val.replace(/-/g, ""))
                                 } else {
-                                  setFieldValue("postalCode", val.slice(0,7));
-                                  setFetchedZipCode(val.slice(0,7))
+                                  setFieldValue("postalCode", val.slice(0, 7));
+                                  setFetchedZipCode(val.slice(0, 7))
                                   return;
                                 }
                               }
@@ -1067,7 +1046,7 @@ export default function EvacueeTempRegModal(props) {
                                     setFieldValue(
                                       "address",
                                       address.address2 + address.address3 ||
-                                        ""
+                                      ""
                                     );
                                   } else {
                                     setFieldValue("prefecture_id", "");
@@ -1080,7 +1059,7 @@ export default function EvacueeTempRegModal(props) {
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -1090,12 +1069,11 @@ export default function EvacueeTempRegModal(props) {
                                 getText(fromData, (res) => {
                                   if (res?.data?.content) {
                                     const re = /^[0-9-]+$/;
-                                    if(re.test(res?.data?.content))
-                                    {
-                                    setFieldValue(
-                                      "postalCode",
-                                      res?.data?.content
-                                    );
+                                    if (re.test(res?.data?.content)) {
+                                      setFieldValue(
+                                        "postalCode",
+                                        res?.data?.content
+                                      );
                                     }
                                   }
                                 });
@@ -1114,11 +1092,10 @@ export default function EvacueeTempRegModal(props) {
                         />
                         <InputDropdown
                           inputDropdownProps={{
-                            inputDropdownParentClassName: `custom_input mt-2 ${
-                              errors.prefecture_id &&
+                            inputDropdownParentClassName: `custom_input mt-2 ${errors.prefecture_id &&
                               touched.prefecture_id &&
                               "p-invalid"
-                            }`,
+                              }`,
                             labelProps: {
                               inputDropdownLabelClassName: "block font-bold",
                               spanText: "*",
@@ -1139,11 +1116,10 @@ export default function EvacueeTempRegModal(props) {
                             options:
                               locale == "ja" ? prefectures : prefectures_en,
                             optionLabel: "name",
-                            onChange: (evt)=>{
-                              setFieldValue("prefecture_id",evt.target.value);
-                              if(values.address)
-                              {
-                                setAddressCount(addressCount+1)
+                            onChange: (evt) => {
+                              setFieldValue("prefecture_id", evt.target.value);
+                              if (values.address) {
+                                setAddressCount(addressCount + 1)
                               }
                             },
                             onBlur: handleBlur,
@@ -1162,9 +1138,8 @@ export default function EvacueeTempRegModal(props) {
                         />
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input mt-2 mb-2 ${
-                              errors.address && touched.address && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input mt-2 mb-2 ${errors.address && touched.address && "p-invalid"
+                              }`,
                             labelProps: {
                               spanText: "*",
                               inputLabelClassName: "block font-bold",
@@ -1177,24 +1152,24 @@ export default function EvacueeTempRegModal(props) {
                             value: values.address,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "city_ward"),
-                            onChange: (evt)=>{
-                              setFieldValue("address",evt.target.value)
+                            onChange: (evt) => {
+                              setFieldValue("address", evt.target.value)
                             },
-                            onMouseLeave:(evt)=> {
-                              setAddressCount(addressCount+1)                              
+                            onMouseLeave: (evt) => {
+                              setAddressCount(addressCount + 1)
                             },
-                            onTouchEnd:(evt)=> {
-                              setAddressCount(addressCount+1)                              
+                            onTouchEnd: (evt) => {
+                              setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -1222,9 +1197,8 @@ export default function EvacueeTempRegModal(props) {
                         />
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.address2 && touched.address2 && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input ${errors.address2 && touched.address2 && "p-invalid"
+                              }`,
                             labelProps: {
                               spanText: "*",
                               inputLabelClassName: "block font-bold",
@@ -1237,22 +1211,22 @@ export default function EvacueeTempRegModal(props) {
                             value: values.address2,
                             disabled:
                               values?.family_register_from == "0" ||
-                              isMRecording || values.addressAsRep
+                                isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(
                               localeJson,
                               "house_name_number"
                             ),
-                            onChange: (evt)=>{
-                              setFieldValue("address2",evt.target.value)
-                              setAddressCount(addressCount+1)
+                            onChange: (evt) => {
+                              setFieldValue("address2", evt.target.value)
+                              setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
                               display: true,
                               audio: {
-                                display: props.registerModalAction=='create' ? true : (values?.family_register_from == "0" ? false : true),
+                                display: props.registerModalAction == 'create' ? true : (values?.family_register_from == "0" ? false : true),
                               },
                               icon: "",
                               isRecording: isMRecording,
@@ -1306,7 +1280,7 @@ export default function EvacueeTempRegModal(props) {
                                     name: "dob.year",
                                     inputMode: "numeric",
                                     value: values.dob.year,
-                                    type:"text",
+                                    type: "text",
                                     disabled:
                                       values?.family_register_from == "0"
                                         ? true
@@ -1327,21 +1301,20 @@ export default function EvacueeTempRegModal(props) {
                                         new Date().getFullYear();
                                       if (evt.target.value.length <= 3 && re.test(convertToSingleByte(evt.target.value))) {
                                         setFieldValue(
-                                          "dob.year",evt.target.value
+                                          "dob.year", evt.target.value
                                         );
                                       }
                                       let minYear = 1899;
                                       if (evt.target.value?.length <= 4 && re.test(convertToSingleByte(evt.target.value))) {
                                         if (
                                           evt.target.value.length == 4 &&
-                                          enteredYear > minYear&&
+                                          enteredYear > minYear &&
                                           enteredYear <= currentYear
                                         ) {
-                                          setFieldValue("dob.year",evt.target.value);
+                                          setFieldValue("dob.year", evt.target.value);
                                         }
                                       }
                                     },
-
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1388,7 +1361,7 @@ export default function EvacueeTempRegModal(props) {
                                         return;
                                       }
                                       let Month = (
-                                       convertToSingleByte(evt.target.value)
+                                        convertToSingleByte(evt.target.value)
                                       );
                                       const enteredMonth = parseInt(Month)
                                       const currentMonth =
@@ -1484,8 +1457,8 @@ export default function EvacueeTempRegModal(props) {
                                           // February
                                           maxDays =
                                             year % 4 === 0 &&
-                                            (year % 100 !== 0 ||
-                                              year % 400 === 0)
+                                              (year % 100 !== 0 ||
+                                                year % 400 === 0)
                                               ? 29
                                               : 28;
                                         } else if (
@@ -1503,7 +1476,6 @@ export default function EvacueeTempRegModal(props) {
                                         }
                                       }
                                     },
-
                                     onBlur: handleBlur,
                                   }}
                                 />
@@ -1546,9 +1518,8 @@ export default function EvacueeTempRegModal(props) {
                       <div className="mb-2 col-12 ">
                         <InputNumber
                           inputNumberProps={{
-                            inputNumberParentClassName: `${
-                              errors.age && touched.age && "p-invalid pb-0"
-                            }`,
+                            inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
+                              }`,
                             labelProps: {
                               text: translate(localeJson, "c_age_y"),
                               inputNumberLabelClassName: "block font-bold",
@@ -1577,9 +1548,8 @@ export default function EvacueeTempRegModal(props) {
                       <div className="mb-2 col-12 ">
                         <InputNumber
                           inputNumberProps={{
-                            inputNumberParentClassName: `${
-                              errors.age && touched.age && "p-invalid pb-0"
-                            }`,
+                            inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
+                              }`,
                             labelProps: {
                               text: translate(localeJson, "c_age_m"),
                               inputNumberLabelClassName: "block font-bold",
@@ -1630,7 +1600,7 @@ export default function EvacueeTempRegModal(props) {
                         />
                       </div>
                       <div className="mb-2 col-12 gender-view mt-0">
-                        <div className="w-12 pb-1" style={{fontWeight:"700"}}>
+                        <div className="w-12 pb-1" style={{ fontWeight: "700" }}>
                           <label>
                             {translate(localeJson, "special_Care_type")}
                           </label>
@@ -1656,11 +1626,10 @@ export default function EvacueeTempRegModal(props) {
                         <div className="w-12">
                           <Input
                             inputProps={{
-                              inputParentClassName: `w-full custom_input ${
-                                errors.connecting_code &&
+                              inputParentClassName: `w-full custom_input ${errors.connecting_code &&
                                 touched.connecting_code &&
                                 "p-invalid"
-                              }`,
+                                }`,
                               labelProps: {
                                 text: translate(localeJson, "connecting_code"),
                                 inputLabelClassName: "block  font-bold",
@@ -1709,9 +1678,8 @@ export default function EvacueeTempRegModal(props) {
                       <div className="mb-2  col-12 ">
                         <Input
                           inputProps={{
-                            inputParentClassName: `w-full custom_input ${
-                              errors.remarks && touched.remarks && "p-invalid"
-                            }`,
+                            inputParentClassName: `w-full custom_input ${errors.remarks && touched.remarks && "p-invalid"
+                              }`,
                             labelProps: {
                               text: translate(localeJson, "c_table_remarks"),
                               inputLabelClassName: "block font-bold",

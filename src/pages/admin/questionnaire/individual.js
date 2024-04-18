@@ -55,7 +55,6 @@ export default function IndividualQuestionnaire() {
                 return newQuestionarrie;
             })
         }
-
         const updatedQuestionnaires = questionnaires.filter((_, item) => item !== index);
         setQuestionnaires([]);
         setTimeout(() => {
@@ -117,7 +116,6 @@ export default function IndividualQuestionnaire() {
                 setQuestionnaires(questionList);
                 setLoader(false)
             }, 100);
-
         }
         else {
             setQuestionnaires([

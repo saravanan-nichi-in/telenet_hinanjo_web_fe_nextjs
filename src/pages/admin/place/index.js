@@ -177,7 +177,6 @@ export default function AdminPlacePage() {
   const importFileApi = (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    // importData(formData)
     importData(formData, (file) => {
       if (file) {
         onGetPlaceListOnMounting();
@@ -450,7 +449,6 @@ export default function AdminPlacePage() {
                   }}
                   parentClass={"mr-1 mt-1 export-button"}
                 />
-
                 <Button
                   buttonProps={{
                     rounded: "true",

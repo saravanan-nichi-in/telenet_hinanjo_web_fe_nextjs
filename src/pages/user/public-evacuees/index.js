@@ -75,12 +75,9 @@ export default function PublicEvacuee() {
                             tempHeader['alignHeader'] = 'left';
                         }
                     }
-
                 });
                 setPublicEvacueesColumn(columnHeaders);
-
                 let preparedList = [];
-
                 // Preparing row data for specific column to display
                 let serialIndex = getListPayload.filters.start + 1;
                 data.map((obj, i) => {
@@ -110,7 +107,6 @@ export default function PublicEvacuee() {
                     preparedList.push(preparedObj);
                     serialIndex = serialIndex + 1;
                 })
-
                 setList(preparedList);
                 setTotalCount(response.data.total);
                 setTableLoading(false);
@@ -120,7 +116,6 @@ export default function PublicEvacuee() {
                 setList([]);
                 setTotalCount(0);
             }
-
         });
     }
 

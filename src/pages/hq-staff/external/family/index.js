@@ -11,7 +11,7 @@ import { ExternalEvacuationServices } from '@/services';
 export default function HQExternalEvacuees() {
     const { localeJson, setLoader } = useContext(LayoutContext);
     const router = useRouter();
-    
+
     const [chartData, setChartData] = useState(null);
     const [chartOptions, setChartOptions] = useState({});
     const [pieChartPlaceCategoryData, setPieChartPlaceCategoryData] = useState(null);
@@ -257,14 +257,12 @@ export default function HQExternalEvacuees() {
             setChartOptions(externalEvacueesTallyChartOptions);
             let personCountCategory = response.locale == 'ja' ? personCountCategory_jp : personCountCategory_en;
             let personCountFoodSupport = response.locale == 'ja' ? personCountFoodSupport_jp : personCountFoodSupport_en;
-
             personCountByCategory.map((item, index) => {
                 let foundObject = personCountCategory.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
                 if (foundObject) {
                     personCountCategory[index][`${item[0]}`] = item[1];
                 }
             });
-
             personCountByFoodRequire.map((item, index) => {
                 let foundObject = personCountFoodSupport.filter(obj => Object.prototype.hasOwnProperty.call(obj, item[0]));
                 if (foundObject) {
@@ -277,14 +275,12 @@ export default function HQExternalEvacuees() {
                     getData.push(obj[key])
                 }
             });
-
             let foodData = [];
             personCountFoodSupport.forEach(obj => {
                 for (const key in obj) {
                     foodData.push(obj[key])
                 }
             });
-
             let placeCategoryDataSet = {
                 labels: [translate(localeJson, 'city_in'), translate(localeJson, 'city_out'), translate(localeJson, 'pref_out')],
                 datasets: [
@@ -305,7 +301,6 @@ export default function HQExternalEvacuees() {
             };
             setPieChartPlaceCategoryData(placeCategoryDataSet);
             setPieChartPlaceCategoryOptions(externalEvacueesPieChartOptions);
-
             let personFoodSupportDataSet = {
                 labels: [translate(localeJson, 'yes'), translate(localeJson, 'no')],
                 datasets: [

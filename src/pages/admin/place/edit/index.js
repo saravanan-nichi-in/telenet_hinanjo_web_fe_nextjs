@@ -44,7 +44,6 @@ export default function PlaceUpdatePage() {
   const formikRef = useRef();
 
   const today = new Date();
-
   const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
     const day = index + 1;
     return new Date(today.getFullYear(), today.getMonth(), day);
@@ -64,7 +63,6 @@ export default function PlaceUpdatePage() {
   useEffect(() => {
     formikRef.current.validateForm()
   }, [prefCount])
-
 
   const schema = Yup.object().shape({
     name: Yup.string()
@@ -395,7 +393,7 @@ export default function PlaceUpdatePage() {
           lng: location.lng(),
         });
       } else {
-        toastDisplay(translate(localeJson, 'loc_not_found'),'','',"error");
+        toastDisplay(translate(localeJson, 'loc_not_found'), '', '', "error");
       }
     });
   };
@@ -752,7 +750,6 @@ export default function PlaceUpdatePage() {
                                 setFieldValue("prefecture_id", e.target.value);
                                 if (values.postal_code_1 && values.postal_code_2) {
                                   let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(values.postal_code_2);
-
                                   getAddress(
                                     payload, (res) => {
                                       if (res && res.prefcode) {
@@ -1052,7 +1049,6 @@ export default function PlaceUpdatePage() {
                                 setFieldValue("prefecture_id_default", e.target.value);
                                 if (values.postal_code_default_1 && values.postal_code_default_2) {
                                   let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(values.postal_code_default_2);
-
                                   getAddress(
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
@@ -1379,7 +1375,6 @@ export default function PlaceUpdatePage() {
                               placeholder: "hh-mm",
                               timeOnly: true,
                               hourFormat: "24"
-
                             }}
                             />
                           </div>

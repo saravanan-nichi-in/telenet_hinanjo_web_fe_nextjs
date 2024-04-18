@@ -71,7 +71,6 @@ export default function IndividualQuestionnaire() {
                 return newQuestionarrie;
             })
         }
-
         const updatedQuestionnaires = questionnaires.filter((_, item) => item !== index);
         setQuestionnaires([]);
         setTimeout(() => {
@@ -127,7 +126,6 @@ export default function IndividualQuestionnaire() {
                 setQuestionnaires(questionList);
                 setLoader(false)
             }, 100);
-
         }
         else {
             setQuestionnaires([
@@ -194,7 +192,6 @@ export default function IndividualQuestionnaire() {
             }
             payloadData.push(question);
         });
-
         deletedQuestionnaire.map((item) => {
             let question = {
                 "event_id": param.event_id,
@@ -216,7 +213,6 @@ export default function IndividualQuestionnaire() {
             }
             payloadData.push(question);
         })
-
         if (payloadData.length > 0) {
             registerIndividualQuestionnaire({
                 question: [...payloadData]
@@ -225,13 +221,11 @@ export default function IndividualQuestionnaire() {
                 getIndividualList(getListPayload, getQuestionnaireList)
             }))
         }
-
     }
 
     const handleAddNewItem = () => {
         // Add the new item to the questionnaires state
         let newItem = {
-
             "title": "",
             "questiontitle": "",
             "questiontitle_en": "",
@@ -276,7 +270,6 @@ export default function IndividualQuestionnaire() {
                                 text: translate(localeJson, 'submit'),
                                 onClick: triggerSubmitCall
                             }} parentClass={"mr-1 mt-1 update-button"} />
-
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",

@@ -246,7 +246,6 @@ export default function HQEvacuationPage() {
                     placesList.push(placeData);
             });
             setEvacuationPlaceList(placesList);
-
             data.map((item, i) => {
                 let evacuees = {
                     si_no: i + parseInt(getListPayload.filters.start) + 1,

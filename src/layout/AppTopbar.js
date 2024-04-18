@@ -64,6 +64,12 @@ const AppTopbar = forwardRef((props, ref) => {
         "/user/dashboard/",
         "/user/register/member/",
         "/user/checkout/",
+        "/user/event/dashboard",
+        "/user/event/register/member",
+        "/user/event/checkout",
+        "/user/event/dashboard/",
+        "/user/event/register/member/",
+        "/user/event/checkout/",
     ];
 
     const eventHeaderTextStaticPaths = [
@@ -87,6 +93,12 @@ const AppTopbar = forwardRef((props, ref) => {
         "/staff/event-staff/family/",
         "/staff/event-staff/family/family-detail",
         "/staff/event-staff/family/family-detail/",
+        "/user/event/dashboard",
+        "/user/event/register/member",
+        "/user/event/checkout",
+        "/user/event/dashboard/",
+        "/user/event/register/member/",
+        "/user/event/checkout/",
     ];
 
     const currentPath = window.location.pathname; // Assuming you are in a browser environment

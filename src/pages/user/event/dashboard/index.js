@@ -7,7 +7,7 @@ import { FaArrowRightToBracket, FaArrowRightFromBracket } from "react-icons/fa6"
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { ButtonRounded } from "@/components";
-import { UserDashboardServices, CommonServices, UserPlaceListServices } from '@/services';
+import { UserDashboardServices, CommonServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserDetails } from '@/redux/layout';
 
@@ -17,35 +17,35 @@ export default function PublicDashboard() {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const { getActiveList } = UserPlaceListServices;
 
     /* Services */
-    const { getListByID } = UserDashboardServices;
+    const { getEventListByID } = UserDashboardServices;
     const { decrypt } = CommonServices;
 
     useEffect(() => {
-        updatePlaceDetails();
+        updateEventDetails();
     }, []);
 
     /**
      * Update place details in redux / Place ID
      */
-    const updatePlaceDetails = () => {
+    const updateEventDetails = () => {
         // Get the URLSearchParams object from the window location
         const queryParams = new URLSearchParams(window.location.search);
         let key = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
-        let decryptedData = decrypt(queryParams.get('hinan'), key);
+        let decryptedData = decrypt(queryParams.get('event'), key);
         if (decryptedData) {
             let payload = {
-                id: decryptedData
+                event_id: decryptedData
             }
-            payload.id && setLoader(true)
-            getListByID(payload, (response) => {
+            payload.event_id && setLoader(true)
+            getEventListByID(payload, (response) => {
                 if (response && response.data) {
                     let obj = response.data.model;
-                    obj['type'] = 'place';
+                    obj['type'] = 'event';
                     let payload = Object.assign({}, layoutReducer?.user);
                     payload['place'] = obj;
+                    payload['event'] = obj;
                     dispatch(setUserDetails(payload));
                     setLoader(false)
                 }
@@ -82,21 +82,31 @@ export default function PublicDashboard() {
                                                     rounded: "true",
                                                     custom: "user_Dashboard",
                                                     buttonClass: "flex align-items-center justify-content-center evacuation_button_height primary-button user_Dashboard",
-                                                    text: layoutReducer?.user?.place?.type === "place" ? translate(localeJson, 'admission_user_dashboard') : translate(localeJson, 'admission_user_event_dashboard'),
+                                                    text: translate(localeJson, 'admission_user_event_dashboard'),
                                                     icon: <FaArrowRightToBracket className="icon-dashboard" />,
                                                     onClick: () => {
-                                                        let payload = { id: layoutReducer?.user?.place?.id }
-                                                        getActiveList(payload, async (res) => {
-                                                            if (res?.data?.model?.active_flg == "1") {
-                                                                router.push({
-                                                                    pathname: 'register/member',
-                                                                })
-                                                            }
-                                                            else {
-                                                                router.push({ pathname: '/user/list' })
-                                                            }
-                                                        })
+                                                                    router.push({
+                                                                        pathname: 'register/member',
+                                                                    })
                                                     },
+                                                    //Integration
+                                                    // onClick: () => {
+                                                    //     let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                                    //     layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                    //         if (response && response.data) {
+                                                    //             let obj = response.data.model;
+                                                    //             if (obj.is_q_active == "1") {
+                                                    //                 router.push({
+                                                    //                     pathname: 'user/event/register/member',
+                                                    //                 })
+                                                    //             }
+                                                    //             else {
+                                                    //                 router.push({ pathname: '/user/event-list' })
+                                                    //             }
+                                                    //         }
+                                                    //     }) :
+                                                    //         <></>
+                                                    // },
                                                 }} parentClass={"user_Parent_Dashboard primary-button"} />
                                             </div>
                                             <div className="flex flex-column col-12 lg:col-6 md:col-6">
@@ -105,23 +115,32 @@ export default function PublicDashboard() {
                                                     rounded: "true",
                                                     custom: "user_Dashboard",
                                                     buttonClass: "back-button flex align-items-center justify-content-center user_Dashboard",
-                                                    text: layoutReducer?.user?.place?.type === "place" ? translate(localeJson, 'exit_user_dashboard') : translate(localeJson, 'exit_user_event_dashboard'),
+                                                    text: translate(localeJson, 'exit_user_event_dashboard'),
                                                     icon: <FaArrowRightFromBracket className="icon-dashboard" />,
                                                     onClick: () => {
-                                                        let payload = { id: layoutReducer?.user?.place?.id }
-                                                        getActiveList(payload, async (res) => {
-                                                            if (res?.data?.model?.active_flg == "1") {
-                                                                router.push({
-                                                                    pathname: '/user/checkout',
-                                                                })
-                                                            }
-                                                            else {
-                                                                router.push({ pathname: '/user/list' })
-                                                            }
-                                                        })
+                                                                    router.push({
+                                                                        pathname: '/user/event/checkout',
+                                                                    })
                                                     },
+                                                    //Integration
+                                                    // onClick: () => {
+                                                    //     let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                                    //     layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                    //         if (response && response.data) {
+                                                    //             let obj = response.data.model;
+                                                    //             if (obj.is_q_active == "1") {
+                                                    //                 router.push({
+                                                    //                     pathname: '/user/event/checkout',
+                                                    //                 })
+                                                    //             }
+                                                    //             else {
+                                                    //                 router.push({ pathname: '/user/event-list' })
+                                                    //             }
+                                                    //         }
+                                                    //     }) :<></>
+                                                    // },
                                                 }} parentClass={"flex align-items-center justify-content-center  user_Parent_Dashboard back-button"} />
-                                                <div className={`${layoutReducer?.user?.place?.type === "place" ? '' : 'hidden'}`}>
+                                                <div className={`hidden`}>
                                                     <p className={`mt-3 flex justify-content-center text-xs `}>
                                                         {translate(localeJson, 'user_dashboard_note')}
                                                     </p>
