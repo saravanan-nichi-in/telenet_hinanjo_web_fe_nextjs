@@ -284,11 +284,11 @@ export default function Admission() {
         secondButtonClick={openYappleModal}
         setBarcode={setBarcode}
         isCheckIn={false}
-        successHeader={"checkout_info_event"}
+        successHeader={"checkout_info_place"}
         isEvent={true}
         callable={confirmRegistrationBeforeCheckin}
         dynamicButtonText={true}
-        keyJson={"de_register_event"}
+        keyJson={"de_register"}
         type={layoutReducer?.user?.place?.type}
       />
       <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
