@@ -76,7 +76,6 @@ export default function EventStaffFamilyDetail() {
                         evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDisplayFormat(person.family_join_date) : getGeneralDateTimeDisplayFormat(person.family_join_date),
                         family_code: person.family_code,
                         family_is_registered: person.family_is_registered,
-                        yapple_id: person.yapple_id ? person.yapple_id : ""
                     };
                     familyDataList.push(familyData);
                 })
@@ -156,10 +155,6 @@ export default function EventStaffFamilyDetail() {
                                         <div className='page-header3-sub ml-1'>{familyAdmittedData[0].shelter_place}</div>
                                     </div>
                                 )}
-                                <div className='flex align-items-center details-text-overflow'>
-                                    <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
-                                    <div className='page-header3-sub ml-1'>{familyDetailData[0].yapple_id}</div>
-                                </div>
                             </div>
                         )}
                         <div className='mt-2 flex justify-content-center overflow-x-auto'>

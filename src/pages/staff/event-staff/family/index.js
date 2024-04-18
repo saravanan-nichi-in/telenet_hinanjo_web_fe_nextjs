@@ -86,7 +86,6 @@ function EventStaffFamily() {
         { field: "person_dob", header: translate(localeJson, 'staff_attendees_table_dob'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "person_gender", header: translate(localeJson, 'staff_attendees_table_gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
-        { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem' },
         { field: "family_join_date", header: translate(localeJson, 'event_admission_date_time'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
         { field: "family_out_date", header: translate(localeJson, 'discharge_date_time_attendees'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "3rem" },
     ];
@@ -188,7 +187,6 @@ function EventStaffFamily() {
                     let check_out = element.family_out_date ? (locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(element.family_out_date) : getEnglishDateTimeDisplayActualFormat(element.family_out_date)) : "";
                     let full_address = (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? "")
                     let main_gender = getGenderValueFromInt(element.person_gender);
-                    let yapple_id = element.yapple_id ?? "";
                     let age_gender = element.person_age + "/" + getGenderValueFromInt(element.person_gender)
                     let tempObj = { ...element, age_gender: age_gender, person_gender: main_gender, person_dob: dob, family_join_date: check_in, family_out_date: check_out, event_name: event_name, full_address: full_address, number: index + parseInt(listPayload.filters.start) + 1 };
                     tempList.push(tempObj);
@@ -413,7 +411,8 @@ function EventStaffFamily() {
                         </div>
                         <div>
                             <div>
-                                <div className="flex justify-between">
+                                {/* Future */}
+                                {/* <div className="flex justify-between">
                                     <Button buttonProps={{
                                         buttonClass: "w-full p-4",
                                         text: translate(localeJson, "staff_temp_register_big_btn_one"),
@@ -427,7 +426,7 @@ function EventStaffFamily() {
                                         icon: <img src="/layout/images/Scanner.png" width={'30px'} height={'30px'} alt="scanner" />,
                                         onClick: () => { setImportModalOpen(true) },
                                     }} parentClass="flex-1 p-2" />
-                                </div>
+                                </div> */}
                                 <form>
                                     <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
                                         <Input

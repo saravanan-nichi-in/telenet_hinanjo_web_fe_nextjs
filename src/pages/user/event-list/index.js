@@ -232,8 +232,15 @@ export default function EventList() {
                 tableStyle={{ minWidth: "70rem" }}
                 onPageHandler={(e) => onPaginationChange(e)}
                 selectionMode="single"
-                onSelectionChange={() => {
-                  router.push("/user/event/dashboard");
+                onSelectionChange={(e) => {
+                  if (e.value.is_q_active_value == 1) {
+                    let payload = Object.assign({}, layoutReducer?.user);
+                    payload["place"] = e.value.entireObj;
+                    payload["event"] = e.value.entireObj;
+                    dispatch(setUserDetails(payload));
+                    localStorage.setItem("redirect", "/user/event-list");
+                    router.push("/user/event/dashboard");
+                  }
                 }}
                 //Integration
                 // onSelectionChange={(e) => {
