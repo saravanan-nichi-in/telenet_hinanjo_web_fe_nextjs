@@ -19,6 +19,7 @@ const PersonCountScreen = () => {
     const handleSingleSelectionChange = (selectedName) => {
         setPersonCount(selectedName)
     };
+
     const handleNextButtonClick = () => {
         if (!personCount) {
             // Person count not selected, show alert
@@ -49,7 +50,6 @@ const PersonCountScreen = () => {
                                 <p className='pb-0' style={{ fontSize: "16px" }}>{translate(localeJson, "person_count_evacuated")}
                                 </p>
                             </div>
-
                             <div className=" flex flex-wrap justify-content-center">
                                 <PersonCountButton names={buttonStates}
                                     onSelectionChange={handleSingleSelectionChange}

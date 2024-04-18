@@ -38,10 +38,8 @@ export default function Questionnaire() {
     const copyToClipboard = async (text, rowIndex) => {
         try {
             await navigator.clipboard.writeText(text);
-
             // Update the copiedRows state to mark the specific row as copied
             setCopiedRows((prevCopiedRows) => [...prevCopiedRows, rowIndex]);
-
             // Reset the copied state after a brief delay
             setTimeout(() => {
                 setCopiedRows((prevCopiedRows) => prevCopiedRows.filter((row) => row !== rowIndex));

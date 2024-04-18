@@ -209,7 +209,6 @@ function EventStaffFamily() {
                     setTotalList(response.data.list)
                 }
             })
-
             setColumnValues(tempList);
             setFamilyCount(familyTotalCount);
             setTotalCount(listTotalCount);
@@ -232,7 +231,6 @@ function EventStaffFamily() {
             "yapple_id": "",
             "ppid": id ? id : "00000018"
         };
-
         getBasicDetailsInfo(payload, (response) => {
             if (response.success) {
                 const data = response.data;
@@ -257,7 +255,6 @@ function EventStaffFamily() {
                     <div className='page-header3-sub ml-1'>{basicDataInfo?.refugee_name}</div>
                 </div>
             </div>
-
             <div className='mt-2'>
                 <div className='flex'>
                     <div className='page-header3' style={{ whiteSpace: 'nowrap' }}>{translate(localeJson, "address")}:</div>

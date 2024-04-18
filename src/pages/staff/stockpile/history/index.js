@@ -422,7 +422,6 @@ function StockpileHistory() {
                       parentClass={"search-button"}
                     />
                   </div>
-
                 </div>
               </form>
               <div className="mt-3">

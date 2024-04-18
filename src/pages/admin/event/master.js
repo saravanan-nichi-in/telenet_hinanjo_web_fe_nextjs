@@ -71,7 +71,6 @@ export default function IndividualQuestionnaire() {
                 return newQuestionarrie;
             })
         }
-
         const updatedQuestionnaires = questionnaires.filter((_, item) => item !== index);
         setQuestionnaires([]);
         setTimeout(() => {
@@ -224,7 +223,6 @@ export default function IndividualQuestionnaire() {
                 getList(getListPayload, getQuestionnaireList)
             }))
         }
-
     }
 
     const handleAddNewItem = () => {
@@ -273,7 +271,6 @@ export default function IndividualQuestionnaire() {
                                 text: translate(localeJson, 'submit'),
                                 onClick: triggerSubmitCall
                             }} parentClass={"mr-1 mt-1 update-button"} />
-
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",

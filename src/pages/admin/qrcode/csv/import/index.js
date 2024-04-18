@@ -106,7 +106,6 @@ export default function AdminQrCodeCreatePage() {
         if (status == 'confirm') {
             setLoader(true);
             callDelete(onDeleteSuccess)
-
         }
         setDeleteOpen(false);
     };

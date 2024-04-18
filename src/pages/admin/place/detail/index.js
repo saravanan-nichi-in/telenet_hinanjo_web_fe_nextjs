@@ -6,15 +6,14 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { Button, GoogleMapComponent, CardSpinner, CustomHeader } from "@/components";
 import { PlaceServices, CommonServices } from "@/services";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { prefecturesCombined, default_place_id } from "@/utils/constant";
 
 export default function StaffManagementEditPage() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const Place = useAppSelector((state) => state.placeReducer.place);
-  const tempSuccessData = useAppSelector((state) => state.tempRegisterReducer);
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const id = Place?.id;
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
@@ -36,7 +35,6 @@ export default function StaffManagementEditPage() {
   const [latitude, setLatitude] = useState(0);
   const [totalPerson, setTotalPerson] = useState("");
   const [percent, setPercentage] = useState("");
-  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const [tableLoading, setTableLoading] = useState(false);
   const [prefectureId, setPrefectureId] = useState("");
   const [prefectureDefaultId, setPrefectureDefaultId] = useState("");

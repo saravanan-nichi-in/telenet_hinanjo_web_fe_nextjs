@@ -417,10 +417,8 @@ export default function PublicExternal() {
     const data = res.data.model.list
     const filteredData = data.filter(item => item.active_flg == 1);
     formikRef.current.setFieldValue("togglePlaceSwitches", Array(filteredData.length).fill(false));
-
     setShelterData(filteredData)
     setPlaceButtonStates(Array(filteredData.length).fill(false))
-
   }
 
   const isCreated = (res) => {
@@ -468,7 +466,6 @@ export default function PublicExternal() {
             }
             return 0; // Default value if no true found
           };
-
           let placeCategory = getTrueIndex(data.toggleSwitches);
           let hinan_obj = {};
           if (getTrueIndex(data.toggleFoodSwitches) == 1) {
@@ -801,7 +798,6 @@ export default function PublicExternal() {
                                   value: values.email,
                                   onChange: handleChange,
                                   onBlur: handleBlur,
-
                                 }}
                               />
                               <ValidationError

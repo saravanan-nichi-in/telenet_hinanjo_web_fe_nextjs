@@ -38,6 +38,7 @@ export default function EvacuationPage() {
             refugee_name: ""
         }
     });
+
     const evacuationTableColumns = [
         { field: 'si_no', header: translate(localeJson, 'si_no'), sortable: false, className: "sno_class", textAlign: 'center', alignHeader: "left" },
         {
@@ -133,9 +134,7 @@ export default function EvacuationPage() {
                     placesList.push(placeData);
             });
             setEvacuationPlaceList(placesList);
-
             data.map((item, i) => {
-
                 let evacuees = {
                     "si_no": i + parseInt(getListPayload.filters.start) + 1,
                     "id": item.f_id,
@@ -218,7 +217,6 @@ export default function EvacuationPage() {
             }));
         }
     }
-
 
     const searchListWithCriteria = () => {
         let payload = {

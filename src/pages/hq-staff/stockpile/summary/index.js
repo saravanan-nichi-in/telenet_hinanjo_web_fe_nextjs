@@ -457,7 +457,6 @@ function HQStockpileSummary() {
                                                 </div>
                                             </div>
                                         </div>
-
                                     </form>
                                     <div>
                                         <RowExpansionTable

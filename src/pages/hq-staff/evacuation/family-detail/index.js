@@ -267,7 +267,6 @@ export default function EvacueeFamilyDetail() {
                         },
                         parentClass: "back-button",
                     },
-
                 ]}
                 close={() => {
                     setCheckoutVisible(false);

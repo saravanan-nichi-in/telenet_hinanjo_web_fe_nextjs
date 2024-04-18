@@ -331,7 +331,7 @@ export default function PlaceCreatePage() {
           lng: location.lng(),
         });
       } else {
-        toastDisplay(translate(localeJson, 'loc_not_found'),'','',"error");
+        toastDisplay(translate(localeJson, 'loc_not_found'), '', '', "error");
       }
     });
   };
@@ -516,7 +516,6 @@ export default function PlaceCreatePage() {
                                   }
                                   let val = evt.target.value;
                                   let val2 = values.postal_code_2;
-
                                   if (
                                     val !== undefined &&
                                     val !== null &&
@@ -627,7 +626,6 @@ export default function PlaceCreatePage() {
                                                   prefecture.value ==
                                                   address.prefcode
                                               );
-
                                             setFieldValue(
                                               "prefecture_id",
                                               selectedPrefecture?.value
@@ -684,7 +682,6 @@ export default function PlaceCreatePage() {
                                 setFieldValue("prefecture_id", e.target.value);
                                 if (values.postal_code_1 && values.postal_code_2) {
                                   let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(values.postal_code_2);
-
                                   getAddress(
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
@@ -985,7 +982,6 @@ export default function PlaceCreatePage() {
                                 setFieldValue("prefecture_id_default", e.target.value);
                                 if (values.postal_code_default_1 && values.postal_code_default_2) {
                                   let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(values.postal_code_default_2);
-
                                   getAddress(
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
@@ -1303,7 +1299,6 @@ export default function PlaceCreatePage() {
                               disabled: !values.opening_date,
                               timeOnly: true,
                               hourFormat: "24"
-
                             }}
                             />
                           </div>

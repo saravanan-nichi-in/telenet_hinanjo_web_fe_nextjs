@@ -263,7 +263,6 @@ export default function PublicEvacuees() {
                         getPublicEvacueesList()
                       }
                     })
-
                   }
                 }}
                 onSort={(data) => {

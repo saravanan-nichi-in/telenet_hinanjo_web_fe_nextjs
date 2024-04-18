@@ -187,7 +187,6 @@ export default function HQEvacueeTempFamilyDetail() {
                     ) : familyDetailData && familyDetailData.map((val, i) => (
                         val.is_owner === translate(localeJson, 'representative') && (
                             <div className='custom-card-info my-3' key={i}>
-
                                 <div className='flex align-items-center'>
                                     <div className='details-text-overflow'>
                                         <span className='page-header3'>{translate(localeJson, "name_kanji")}:</span>
@@ -248,8 +247,6 @@ export default function HQEvacueeTempFamilyDetail() {
                                         <span className='page-header3-sub ml-1'>{val.place_name}</span>
                                     </div>
                                 </div>
-
-
                                 <div className='flex align-items-center details-text-overflow'>
                                     <div className='page-header3'>{translate(localeJson, "notes")}:</div>
                                     <div className='page-header3-sub ml-1'>{val.remarks}</div>

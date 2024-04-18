@@ -27,7 +27,7 @@ export default function EventStaffFamilyDetail() {
     const [tableLoading, setTableLoading] = useState(false);
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
-    
+
     const param = {
         event_id: familyReducer?.eventStaffFamily?.event_id ?? 0,
         lgwan_family_id: familyReducer?.eventStaffFamily?.family_id ?? 0
@@ -61,7 +61,6 @@ export default function EventStaffFamilyDetail() {
         if (response.success && !_.isEmpty(response.data)) {
             const personData = response.data.data;
             const historyData = response.data.history.list;
-            // setYappleID(personData[0].yapple_id);
             if (personData.length > 0) {
                 personData.map((person, index) => {
                     let familyData = {
@@ -72,8 +71,6 @@ export default function EventStaffFamilyDetail() {
                         age: person.person_age,
                         age_month: person.person_month ? person.person_month : "",
                         gender: person.person_gender,//getGenderValue(person.person_gender),
-                        // is_owner: person.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
-                        // address: (person.family_zip_code ? (translate(localeJson, 'post_letter') + personData[0].family_zip_code) : "") + " " + personData[0].family_address,
                         address: (person.family_zip_code ? (translate(localeJson, 'post_letter') + personData[0].family_zip_code) : "") + " " + prefecturesCombined[personData[0].family_prefecture_id ?? 0][locale] + " " + personData[0].family_address,
                         tel: person.family_tel,
                         evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDisplayFormat(person.family_join_date) : getGeneralDateTimeDisplayFormat(person.family_join_date),
@@ -163,7 +160,6 @@ export default function EventStaffFamilyDetail() {
                                     <div className='page-header3'>{translate(localeJson, "yapple_id")}:</div>
                                     <div className='page-header3-sub ml-1'>{familyDetailData[0].yapple_id}</div>
                                 </div>
-
                             </div>
                         )}
                         <div className='mt-2 flex justify-content-center overflow-x-auto'>
@@ -183,6 +179,5 @@ export default function EventStaffFamilyDetail() {
                 </div>
             </div>
         </>
-
     )
 }

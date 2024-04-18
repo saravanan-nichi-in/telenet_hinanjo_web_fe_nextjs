@@ -120,7 +120,6 @@ function ExternalFamilyList() {
                                     exportData(getListPayload)
                                 }
                             }} parentClass={"mr-1 mt-1 export-button"} />
-
                         </div>
                         <div className='mt-3'>
                             <NormalTable

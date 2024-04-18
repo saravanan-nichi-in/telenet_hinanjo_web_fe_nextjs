@@ -98,7 +98,6 @@ function HQShortageSupplies() {
           additionalColumnsArrayWithOldData.push(preparedColumnObjToMerge);
         });
       }
-
       let demoCol = {
         field: "demo_note",
         header: translate(localeJson, "others_memo"),

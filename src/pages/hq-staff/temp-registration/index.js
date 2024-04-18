@@ -60,7 +60,7 @@ export default function HQTempRegistration() {
     { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
     { field: "person_gender", header: translate(localeJson, 'gender'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '4rem', maxWidth: '4rem' },
     { field: "special_care_name", header: translate(localeJson, 'c_special_care'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem' },
-    { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem',display: 'none' },
+    { field: "yapple_id", header: translate(localeJson, 'yapple_id'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: '3rem', maxWidth: '3rem', display: 'none' },
   ];
 
   useEffect(() => {
@@ -110,7 +110,6 @@ export default function HQTempRegistration() {
           placesList.push(placeData);
       });
       setPlaceOptions(placesList);
-
       responseData.data.list.map((item, i) => {
         let evacuees = {
           si_no: i + getListPayload.filters.start + 1,
@@ -184,7 +183,7 @@ export default function HQTempRegistration() {
       filters: {
         ...prevState.filters,
         "place_id": selectedPlace.id,
-        "family_code":convertToSingleByte(familyCode),
+        "family_code": convertToSingleByte(familyCode),
         "refugee_name": refugeeName
       }
     }));
@@ -192,34 +191,32 @@ export default function HQTempRegistration() {
 
   const handleFamilyCode = (e) => {
     const re = /^[0-9-]+$/;
-    if(e.target.value.length<=0)
-    {
+    if (e.target.value.length <= 0) {
       setFamilyCode("");
       return;
     }
-    if(re.test(convertToSingleByte(e.target.value)))
-    {
-    if ((e.target.value).length == 4) {
-      const newValue = e.target.value;
-      if (newValue.indexOf("-") !== -1) {
-        setFamilyCode(e.target.value);
+    if (re.test(convertToSingleByte(e.target.value))) {
+      if ((e.target.value).length == 4) {
+        const newValue = e.target.value;
+        if (newValue.indexOf("-") !== -1) {
+          setFamilyCode(e.target.value);
+        }
+        else {
+          setFamilyCode(newValue);
+        }
+      }
+      else if ((e.target.value).length == 3) {
+        const newValue = e.target.value;
+        const formattedValue = newValue.substring(0, 3);
+        setFamilyCode(formattedValue);
       }
       else {
-        setFamilyCode(newValue);
+        setFamilyCode(e.target.value)
       }
     }
-    else if ((e.target.value).length == 3) {
-      const newValue = e.target.value;
-      const formattedValue = newValue.substring(0, 3);
-      setFamilyCode(formattedValue);
-    }
     else {
-      setFamilyCode(e.target.value)
+      setFamilyCode("")
     }
-  }
-  else {
-    setFamilyCode("")
-  }
   }
 
   return (

@@ -199,6 +199,7 @@ export default function HQEvacueesStatistics() {
           },
         },
       };
+
       const chart_second_options = {
         maintainAspectRatio: false,
         indexAxis: "y",
@@ -254,6 +255,7 @@ export default function HQEvacueesStatistics() {
           },
         },
       };
+
       const chart_third_options = {
         maintainAspectRatio: false,
         indexAxis: "y",

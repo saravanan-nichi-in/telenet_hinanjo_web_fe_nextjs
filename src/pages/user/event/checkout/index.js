@@ -256,15 +256,7 @@ export default function Admission() {
         }
       }
     }) :
-      getActiveList(payload, async (res) => {
-        if (res?.data?.model?.active_flg == "1") {
-          setImportModalOpen(true)
-        }
-        else {
-          router.push({ pathname: '/user/list' })
-        }
-      })
-
+      <></>
   };
 
   const handleStaffButtonClick = () => {
@@ -284,11 +276,11 @@ export default function Admission() {
         secondButtonClick={openYappleModal}
         setBarcode={setBarcode}
         isCheckIn={false}
-        successHeader={layoutReducer?.user?.place?.type === "place" ? "checkout_info_place" : "checkout_info_event"}
+        successHeader={"checkout_info_event"}
         isEvent={true}
         callable={confirmRegistrationBeforeCheckin}
         dynamicButtonText={true}
-        keyJson={layoutReducer?.user?.place?.type === "place" ? "de_register" : "de_register_event"}
+        keyJson={"de_register_event"}
         type={layoutReducer?.user?.place?.type}
       />
       <BarcodeDialog header={translate(localeJson, "barcode_dialog_heading")}
@@ -332,9 +324,6 @@ export default function Admission() {
           setOpenBasicDataInfoDialog(false);
         }}
       />
-
-      {layoutReducer?.user?.place?.type === "place" ?
-        (
           <Formik
             innerRef={formikRef}
             validationSchema={schema}
@@ -404,7 +393,7 @@ export default function Admission() {
                           </div>
                         </div>
                         <div className="grid md:gap-6 lg:gap-8">
-                          {/* Feature */}
+                          {/* Future */}
                           {/* <div className="mt-3 col-12  md:col-5 lg:col-5" >
                             <div className="flex flex-column justify-content-start align-items-center h-full" style={{ background: "#E6E6E6" }}>
                               <div className="flex col-12 lg:col-6 w-full mt-2">
@@ -663,19 +652,6 @@ export default function Admission() {
               </div>
             )}
           </Formik>
-        )
-        :
-        (
-          <div className="h-full flex flex-1 justify-content-center align-items-center">
-            <CommonPage
-              firstButtonClick={openMyNumberDialog}
-              secondButtonClick={openYappleModal}
-              staffButtonClick={handleStaffButtonClick}
-              isChecKIn={false}
-              tittle={translate(localeJson, "c_checkout_title_event")}
-            />
-          </div>
-        )}
-    </>
+        </>
   );
 }

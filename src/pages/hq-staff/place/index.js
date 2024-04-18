@@ -245,7 +245,6 @@ export default function AdminPlacePage() {
                 className="flex"
                 style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
               >
-
               </div>
               <div className="mt-3">
                 <NormalTable

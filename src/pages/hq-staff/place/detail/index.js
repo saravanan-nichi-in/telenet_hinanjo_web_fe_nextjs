@@ -38,7 +38,7 @@ export default function StaffManagementEditPage() {
   const [tableLoading, setTableLoading] = useState(false);
   const [prefectureId, setPrefectureId] = useState("");
   const [prefectureDefaultId, setPrefectureDefaultId] = useState("");
-  
+
   /* Services */
   const { details } = PlaceServices;
   const { encrypt } = CommonServices;
