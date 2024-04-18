@@ -10,7 +10,7 @@ import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
-import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal } from "@/components";
+import { Button, ButtonRounded, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal } from "@/components";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -243,7 +243,6 @@ export default function Admission() {
   }
 
   const openYappleModal = () => {
-    let payload = { id: layoutReducer?.user?.place?.id }
     let evt_payload = { event_id: layoutReducer?.user?.place?.id }
     layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
       if (response && response.data) {
@@ -257,11 +256,7 @@ export default function Admission() {
       }
     }) :
       <></>
-  };
-
-  const handleStaffButtonClick = () => {
-    // Logic for the staff button click
-  };
+  }; 
 
   const onImportModalClose = () => {
     setImportModalOpen(false);
@@ -363,7 +358,6 @@ export default function Admission() {
                   open={openQrPopup}
                   close={closeQrPopup}
                   callback={qrResult}>
-
                 </QrScannerModal>
                 <div className="grid">
                   <div className="col-12">

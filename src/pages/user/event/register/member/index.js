@@ -181,21 +181,17 @@ export default function UserEventRegModal(props) {
     function calculateAge(birthdate) {
         const birthdateObj = new Date(birthdate);
         const currentDate = new Date();
-
         let years = currentDate.getFullYear() - birthdateObj.getFullYear();
         let months = currentDate.getMonth() - birthdateObj.getMonth();
-
         if (currentDate.getDate() < birthdateObj.getDate()) {
             // Adjust for cases where the birthdate has not occurred yet in the current month
             months--;
         }
-
         if (months < 0) {
             // Adjust for cases where the birthdate month is ahead of the current month
             years--;
             months += 12;
         }
-
         return { years, months };
     }
 
