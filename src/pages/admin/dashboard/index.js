@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
+import liff from '@line/liff';
 
 import { NormalTable, DeleteModal, CustomHeader } from '@/components';
 import { getValueByKeyRecursively as translate } from '@/helper'
@@ -50,6 +51,31 @@ function AdminDashboard() {
         };
         fetchData();
     }, [locale, getListPayload]);
+
+    useEffect(() => {
+        liffInit();
+    }, []);
+
+    const liffInit = async () => {
+        try {
+            await liff.init({ liffId: "2004690501-b20o7NGR" });
+            const { userAgent } = navigator;
+            let data = {
+                isInClient: liff.isInClient(),
+                isLoggedIn: liff.isLoggedIn(),
+                os: liff.getOS(),
+                isInAppBrowser: !liff.isInClient() && userAgent.includes('Line'),
+            };
+            console.log('LIFF init succeeded.', data);
+
+            if (liff.isLoggedIn()) {
+                const profile = await liff.getProfile();
+                console.log(profile);
+            }
+        } catch (error) {
+            console.log('LIFF init failed.');
+        }
+    };
 
     /**
      * Get dashboard list on mounting
@@ -202,6 +228,11 @@ function AdminDashboard() {
             <div className="col-12">
                 <div className='card'>
                     <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "evacuation_status_list")} />
+                    <button onClick={() => {
+                        liff.login();
+                    }}>
+                        Login
+                    </button>
                     <div>
                         <div className='mt-3'>
                             <NormalTable
