@@ -26,7 +26,7 @@ function EventStaffFamily() {
     const dispatch = useAppDispatch();
     // Getting storage data with help of reducers
     const layoutReducer = useSelector((state) => state.layoutReducer);
-    const [eventID, setEventID] = useState(!_.isNull(layoutReducer?.user?.event?.id) ? layoutReducer?.user?.event?.id : "")
+    const [eventID, setEventID] = useState(!_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "")
 
     const [familyCount, setFamilyCount] = useState(0);
     const [columnValues, setColumnValues] = useState([]);

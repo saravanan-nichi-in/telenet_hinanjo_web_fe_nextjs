@@ -29,7 +29,7 @@ function EventStaffDashboard() {
 
   const getListDataOnMount = async () => {
     setLoader(true);
-    let payload = { event_id: layoutReducer?.user?.event?.id };
+    let payload = { event_id: layoutReducer?.user?.place?.id };
     getEventList(payload, fetchData);
   };
 

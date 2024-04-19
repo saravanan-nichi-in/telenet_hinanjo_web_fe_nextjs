@@ -30,7 +30,7 @@ export default function EventStaffFamilyDetail() {
 
     const param = {
         event_id: familyReducer?.eventStaffFamily?.event_id ?? 0,
-        lgwan_family_id: familyReducer?.eventStaffFamily?.family_id ?? 0
+        family_id: familyReducer?.eventStaffFamily?.family_id ?? 0
     };
 
     const familyAdmissionColumns = [
