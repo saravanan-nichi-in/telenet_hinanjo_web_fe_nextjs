@@ -23,7 +23,10 @@ import { CommonServices, UserEventListServices } from "@/services";
 
 export default function UserEventRegModal(props) {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
-    const router=useRouter();
+    const router = useRouter();
+    const layoutReducer = useSelector((state) => state.layoutReducer);
+    const { editObj, registerModalAction, evacuee } = props && props;
+
     // eslint-disable-next-line no-irregular-whitespace
     const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
     const genderOptions = [
@@ -31,6 +34,14 @@ export default function UserEventRegModal(props) {
         { name: translate(localeJson, "c_female"), value: 2 },
         { name: translate(localeJson, "c_not_answer"), value: 3 },
     ];
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+    const [count, setCounter] = useState(1);
+    const [hasErrors, setHasErrors] = useState(false);
+    const [isMRecording, setMIsRecording] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [dobCounter, setDobCounter] = useState(0);
+    const [addressCount, setAddressCount] = useState(0);
+    const [fetchZipCode, setFetchedZipCode] = useState("");
     const validationSchema = () =>
         Yup.object().shape({
             checked: Yup.boolean().nullable(),
@@ -126,21 +137,30 @@ export default function UserEventRegModal(props) {
                 .required(translate(localeJson, "c_perfacture_is_required")),
         });
 
-    const { editObj, registerModalAction, evacuee } = props && props;
-
+    /** Services */
     const { getText, getAddress } = CommonServices;
-    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [count, setCounter] = useState(1);
-    const [hasErrors, setHasErrors] = useState(false);
-    const [isMRecording, setMIsRecording] = useState(false);
-    const [isRecording, setIsRecording] = useState(false);
-    const [dobCounter, setDobCounter] = useState(0);
-    const [addressCount, setAddressCount] = useState(0);
-    const [fetchZipCode, setFetchedZipCode] = useState("");
 
     useEffect(() => {
         setMIsRecording(isRecording);
     }, [isRecording]);
+
+    useEffect(() => {
+        let dob = formikRef?.current?.values?.dob;
+        if (dob.year && dob.month && dob.date) {
+            const convertedDate = new Date(
+                convertToSingleByte(dob.year),
+                convertToSingleByte(dob.month) - 1,
+                convertToSingleByte(dob.date)
+            );
+            let age = calculateAge(convertedDate);
+            let currentYear = new Date().getFullYear();
+            let minYear = 1900;
+            if (minYear <= parseInt(convertToSingleByte(dob.year))) {
+                formikRef.current.setFieldValue("age", age.years);
+                formikRef.current.setFieldValue("age_m", age.months);
+            }
+        }
+    }, [dobCounter]);
 
     const handleRecordingStateChange = (isRecord) => {
         setMIsRecording(isRecord);
@@ -195,28 +215,9 @@ export default function UserEventRegModal(props) {
         return { years, months };
     }
 
-    useEffect(() => {
-        let dob = formikRef?.current?.values?.dob;
-        if (dob.year && dob.month && dob.date) {
-            const convertedDate = new Date(
-                convertToSingleByte(dob.year),
-                convertToSingleByte(dob.month) - 1,
-                convertToSingleByte(dob.date)
-            );
-            let age = calculateAge(convertedDate);
-            let currentYear = new Date().getFullYear();
-            let minYear = 1900;
-            if (minYear <= parseInt(convertToSingleByte(dob.year))) {
-                formikRef.current.setFieldValue("age", age.years);
-                formikRef.current.setFieldValue("age_m", age.months);
-            }
-        }
-    }, [dobCounter]);
-
-    const layoutReducer = useSelector((state) => state.layoutReducer);
     const mapObjects = (object1) => {
         const object2 = {
-            event_id: layoutReducer?.user?.event?.id, // Fill this value accordingly
+            event_id: layoutReducer?.user?.place?.id, // Fill this value accordingly
             zip_code: object1.postalCode
                 ? convertToSingleByte(object1.postalCode)
                 : "",
@@ -1109,47 +1110,47 @@ export default function UserEventRegModal(props) {
                                         </div>
                                     </div>
                                     <div className="text-center flex flex-column pl-5 pr-5">
-                                    <Button
-                                        buttonProps={{
-                                            buttonClass:
-                                                "w-full primary-button h-3rem border-radius-5rem mb-3",
-                                            type: "submit",
-                                            text: translate(localeJson, "submit"),
-                                            onClick: () => {
-                                                setCounter(count + 1);
-                                                setIsFormSubmitted(true);
-                                                setFieldValue(
-                                                    "dob.year",
-                                                    convertToSingleByte(values.dob.year)
-                                                );
-                                                setFieldValue(
-                                                    "dob.month",
-                                                    convertToSingleByte(values.dob.month)
-                                                );
-                                                setFieldValue(
-                                                    "dob.date",
-                                                    convertToSingleByte(values.dob.date)
-                                                );
-                                                handleSubmit();
-                                            },
-                                        }}
-                                        parentClass={"inline primary-button"}
-                                    />
-                                    <Button
-                                        buttonProps={{
-                                            buttonClass: "w-full back-button h-3rem border-radius-5rem",
-                                            text: translate(localeJson, "cancel"),
-                                            type: "reset",
-                                            onClick: () => {
-                                                router.push({
-                                                    pathname: '/user/event/dashboard',
-                                                })
-                                                resetForm();
-                                            },
-                                        }}
-                                        parentClass={"inline back-button"}
-                                    />
-                                </div>
+                                        <Button
+                                            buttonProps={{
+                                                buttonClass:
+                                                    "w-full primary-button h-3rem border-radius-5rem mb-3",
+                                                type: "submit",
+                                                text: translate(localeJson, "submit"),
+                                                onClick: () => {
+                                                    setCounter(count + 1);
+                                                    setIsFormSubmitted(true);
+                                                    setFieldValue(
+                                                        "dob.year",
+                                                        convertToSingleByte(values.dob.year)
+                                                    );
+                                                    setFieldValue(
+                                                        "dob.month",
+                                                        convertToSingleByte(values.dob.month)
+                                                    );
+                                                    setFieldValue(
+                                                        "dob.date",
+                                                        convertToSingleByte(values.dob.date)
+                                                    );
+                                                    handleSubmit();
+                                                },
+                                            }}
+                                            parentClass={"inline primary-button"}
+                                        />
+                                        <Button
+                                            buttonProps={{
+                                                buttonClass: "w-full back-button h-3rem border-radius-5rem",
+                                                text: translate(localeJson, "cancel"),
+                                                type: "reset",
+                                                onClick: () => {
+                                                    router.push({
+                                                        pathname: '/user/event/dashboard',
+                                                    })
+                                                    resetForm();
+                                                },
+                                            }}
+                                            parentClass={"inline back-button"}
+                                        />
+                                    </div>
                                 </div>
                             </form>
                         </div>

@@ -279,7 +279,7 @@ export default function EventAttendeesList() {
                                 (e) => {
                                     if (e.value.family_id) {
                                         dispatch(setFamily({
-                                            lgwan_family_id: e.value.family_id,
+                                            family_id: e.value.family_id,
                                             event_id: e.value.event_id
                                         }));
                                         router.push({

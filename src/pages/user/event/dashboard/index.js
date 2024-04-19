@@ -85,20 +85,19 @@ export default function PublicDashboard() {
                                                     icon: <FaArrowRightToBracket className="icon-dashboard" />,
                                                     onClick: () => {
                                                         let evt_payload = { event_id: layoutReducer?.user?.place?.id }
-                                                        layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                        layoutReducer?.user?.place?.type === "event" && getEventListByID(evt_payload, (response) => {
                                                             if (response && response.data) {
                                                                 let obj = response.data.model;
                                                                 if (obj.is_q_active == "1") {
                                                                     router.push({
-                                                                        pathname: 'user/event/register/member',
+                                                                        pathname: '/user/event/register/member',
                                                                     })
                                                                 }
                                                                 else {
                                                                     router.push({ pathname: '/user/event-list' })
                                                                 }
                                                             }
-                                                        }) :
-                                                            <></>
+                                                        })
                                                     },
                                                 }} parentClass={"user_Parent_Dashboard primary-button"} />
                                             </div>
@@ -112,7 +111,7 @@ export default function PublicDashboard() {
                                                     icon: <FaArrowRightFromBracket className="icon-dashboard" />,
                                                     onClick: () => {
                                                         let evt_payload = { event_id: layoutReducer?.user?.place?.id }
-                                                        layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                        layoutReducer?.user?.place?.type === "event" && getEventListByID(evt_payload, (response) => {
                                                             if (response && response.data) {
                                                                 let obj = response.data.model;
                                                                 if (obj.is_q_active == "1") {
@@ -124,7 +123,7 @@ export default function PublicDashboard() {
                                                                     router.push({ pathname: '/user/event-list' })
                                                                 }
                                                             }
-                                                        }) : <></>
+                                                        })
                                                     },
                                                 }} parentClass={"flex align-items-center justify-content-center  user_Parent_Dashboard back-button"} />
                                                 <div className={`hidden`}>
@@ -140,7 +139,7 @@ export default function PublicDashboard() {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     )
 }
