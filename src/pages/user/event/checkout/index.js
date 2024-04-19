@@ -116,7 +116,7 @@ export default function Admission() {
                         <div className="grid">
                             <div className="col-12">
                                 <div className="card">
-                                    <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "c_checkout_title")} />
+                                    <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "c_checkout_title_event")} />
                                     <div>
                                         <div className="mt-3">
                                             <div
