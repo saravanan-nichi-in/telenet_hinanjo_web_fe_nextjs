@@ -30,6 +30,7 @@ export default function EvacueeFamilyDetail() {
     const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
+    const [placeCreateData, setPlaceCreateData] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
 
     const evacueeFamilyDetailColumns = [
@@ -57,6 +58,22 @@ export default function EvacueeFamilyDetail() {
         { field: 'discharge_date_time', header: translate(localeJson, 'discharge_date_time'), minWidth: "10rem", textAlign: 'left' },
     ];
 
+    const placeCreatedColumns = [
+        {
+            field: "place_name",
+            header: translate(localeJson, "place_name"),
+            textAlign: "left",
+            minWidth: "12rem",
+            maxWidth: "7rem"
+        },
+        {
+            field: "family_created_at",
+            header: translate(localeJson, "temp_register_date"),
+            textAlign: "left",
+            minWidth: "7rem",
+        },
+    ];
+
     /* Services */
     const { getTempFamilyEvacueesDetail } = AdminEvacueeTempServices;
 
@@ -77,6 +94,7 @@ export default function EvacueeFamilyDetail() {
         var listOfIndividualQuestions = [];
         var listOfOverallQuestions = [];
         var admittedHistory = [];
+        var placeCrt = [];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const individualQuestionArray = response.data?.individualQuestions;
@@ -128,6 +146,11 @@ export default function EvacueeFamilyDetail() {
                         place_id: person.place_id,
                         family_is_registered: person.family_is_registered,
                     };
+                    let newObj1 = {
+                        place_name: locale == 'ja' ? person.place_name : (person.place_name_en ?? person.place_name),
+                        family_created_at: person.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_created_at) : getEnglishDateTimeDisplayActualFormat(person.family_created_at)),
+                    }
+                    placeCrt.push(newObj1);
                     if (listOfIndividualQuestions.length > 0) {
                         let personAnswers = {};
                         if (person.person_answers.length > 0) {
@@ -182,6 +205,7 @@ export default function EvacueeFamilyDetail() {
         setFamilyDetailData(familyDataList);
         setOverallQuestionnaires(listOfOverallQuestions);
         setFamilyAdmittedData(admittedHistory);
+        setPlaceCreateData(placeCrt);
     }
 
     const getGenderValue = (gender) => {
@@ -286,9 +310,9 @@ export default function EvacueeFamilyDetail() {
                     <div className='card'>
                         <Button buttonProps={{
                             buttonClass: "w-auto back-button-transparent mb-2 p-0",
-                        text: translate(localeJson, "list_of_temp_registrants_back_title_admin"),
+                            text: translate(localeJson, "list_of_temp_registrants_back_title_admin"),
                             icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
-                        onClick: () => router.push('/admin/temp-registration/'),
+                            onClick: () => router.push('/admin/temp-registration/'),
                         }} parentClass={"inline back-button-transparent"} />
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "house_hold_information")} />
                         {tableLoading ? (
@@ -346,6 +370,22 @@ export default function EvacueeFamilyDetail() {
                                     ))}
                                 </div>
                             )}
+                        </div>
+                        <div className='flex flex-column mt-3 mb-2 justify-content-center align-items-center' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                            <NormalTable
+                                lazy
+                                id={"evacuation-list"}
+                                className="mt-2 flex justify-content-center"
+                                loading={tableLoading}
+                                size={"small"}
+                                stripedRows={true}
+                                paginator={false}
+                                showGridlines={"true"}
+                                value={placeCreateData}
+                                tableStyle={{ maxWidth: "30rem" }}
+                                columns={placeCreatedColumns}
+                                emptyMessage={translate(localeJson, "data_not_found")}
+                            />
                         </div>
                         {/* <div className='section-space'>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "checkin_checkout_history")} />

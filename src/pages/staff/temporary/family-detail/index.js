@@ -12,6 +12,8 @@ import {
     getSpecialCareName,
     hideOverFlow,
     showOverFlow,
+    getJapaneseDateTimeDayDisplayActualFormat,
+    getEnglishDateTimeDisplayActualFormat,
 } from '@/helper'
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -38,16 +40,17 @@ export default function StaffFamilyDetail() {
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [personList, setPersonList] = useState([]);
     const [editData, setEditData] = useState([]);
+    const [placeCreateData, setPlaceCreateData] = useState([]);
     const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
 
     const param = {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         family_id: familyReducer?.staffTempFamily?.family_id,
     };
-    
+
     /* Services */
     const { getFamilyTemporaryEvacueesDetail, updateCheckInDetail } = TemporaryStaffRegistrantServices;
-    
+
     useEffect(() => {
         setTableLoading(true);
         const fetchData = async () => {
@@ -80,6 +83,22 @@ export default function StaffFamilyDetail() {
         { field: 'is_owner', header: translate(localeJson, 'representative'), textAlign: 'left', alignHeader: "left", minWidth: '3.5rem', maxWidth: '3.5rem' },
     ];
 
+    const placeCreatedColumns = [
+        {
+            field: "place_name",
+            header: translate(localeJson, "place_name"),
+            textAlign: "left",
+            minWidth: "12rem",
+            maxWidth: "7rem"
+        },
+        {
+            field: "family_created_at",
+            header: translate(localeJson, "temp_register_date"),
+            textAlign: "left",
+            minWidth: "7rem",
+        },
+    ];
+
 
     /**
    * Show individual questionnaires dialog
@@ -109,8 +128,8 @@ export default function StaffFamilyDetail() {
         let tempOverallQuestion = [];
         let tempIndividualQuestion = [];
         let overallAnswers = {};
+        var admittedHistory = [];
         if (response) {
-
             if (response.data.data.length > 0) {
                 let data = convertToOriginalFormat(response.data)
                 setEditData(data);
@@ -156,9 +175,15 @@ export default function StaffFamilyDetail() {
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                     }
+                    let newObj1 = {
+                        place_name: locale == 'ja' ? tempObj.place_name : (tempObj.place_name_en ?? tempObj.place_name),
+                        family_created_at: tempObj.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(tempObj.family_created_at) : getEnglishDateTimeDisplayActualFormat(tempObj.family_created_at)),
+                    }
                     tempList.push(newObj);
+                    admittedHistory.push(newObj1);
                 });
                 setPersonList(tempList);
+                setPlaceCreateData(admittedHistory);
                 setFamilyBasicDetail(tempList);
                 if (response.data.data[0].family_answers.length > 0) {
                     response.data.data[0].family_answers.forEach((val, index) => {
@@ -663,6 +688,22 @@ export default function StaffFamilyDetail() {
                                         });
                                     }
                                 }} parentClass={"mt-3 search-button"} />
+                            </div>
+                            <div className='flex flex-column mt-3 mb-2 justify-content-center align-items-center' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                                <NormalTable
+                                    lazy
+                                    id={"evacuation-list"}
+                                    className="mt-2 flex justify-content-center"
+                                    loading={tableLoading}
+                                    size={"small"}
+                                    stripedRows={true}
+                                    paginator={false}
+                                    showGridlines={"true"}
+                                    value={placeCreateData}
+                                    tableStyle={{ maxWidth: "30rem" }}
+                                    columns={placeCreatedColumns}
+                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                />
                             </div>
                         </div>
                     </div>

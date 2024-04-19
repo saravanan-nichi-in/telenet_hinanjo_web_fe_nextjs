@@ -9,7 +9,9 @@ import {
   getJapaneseDateDisplayYYYYMMDDFormat,
   getValueByKeyRecursively as translate,
   getSpecialCareName,
-  getYYYYMMDDHHSSSSDateTimeFormat
+  getYYYYMMDDHHSSSSDateTimeFormat,
+  getEnglishDateTimeDisplayActualFormat,
+  getJapaneseDateTimeDayDisplayActualFormat
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
@@ -55,7 +57,7 @@ export default function TempRegistration() {
         </div>
       },
     },
-    { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+    { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem',display:'none' },
     { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: true, textAlign: "center", alignHeader: "center", minWidth: '4rem', maxWidth: '4rem' },
     { field: 'person_dob', header: translate(localeJson, 'dob'), sortable: true, textAlign: "left", alignHeader: "left", minWidth: '4rem', maxWidth: '4rem' },
     { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
@@ -119,6 +121,7 @@ export default function TempRegistration() {
           place_name: placeIdObj[item.place_id] ?? "",
           family_count: responseData.data.total_family,
           family_code: item.family_code,
+          family_created_at:item.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.family_created_at) : getEnglishDateTimeDisplayActualFormat(item.family_created_at)),
           person_is_owner:
             item.person_is_owner == 0
               ? translate(localeJson, "representative")

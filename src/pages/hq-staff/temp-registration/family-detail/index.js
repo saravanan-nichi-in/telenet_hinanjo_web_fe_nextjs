@@ -12,9 +12,9 @@ import {
     getSpecialCareName
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CardSpinner, CustomHeader } from '@/components';
+import { Button, CardSpinner, CustomHeader, NormalTable } from '@/components';
 import { useAppSelector } from "@/redux/hooks";
-import { AdminEvacueeTempServices , CommonServices } from '@/services';
+import { AdminEvacueeTempServices, CommonServices } from '@/services';
 
 export default function HQEvacueeTempFamilyDetail() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -25,6 +25,7 @@ export default function HQEvacueeTempFamilyDetail() {
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [place, setPlace] = useState([]);
+    const [placeCreateData, setPlaceCreateData] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
 
     /* Services */
@@ -44,7 +45,7 @@ export default function HQEvacueeTempFamilyDetail() {
     }, [locale]);
 
     useEffect(() => {
-        if (place !== null && place?.length>0) {
+        if (place !== null && place?.length > 0) {
             onGetEvacueesFamilyDetailOnMounting();
         }
     }, [place]);
@@ -58,6 +59,7 @@ export default function HQEvacueeTempFamilyDetail() {
         var listOfIndividualQuestions = [];
         var listOfOverallQuestions = [];
         var admittedHistory = [];
+        var placeCrt = [];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const individualQuestionArray = response.data?.individualQuestions;
@@ -101,6 +103,11 @@ export default function HQEvacueeTempFamilyDetail() {
                     yapple_id: person.yapple_id,
                     place_name: locale === "en" && !_.isNull(person.place_name_en) ? person.place_name_en : person.place_name,
                 };
+                let newObj1 = {
+                    place_name: locale == 'ja' ? person.place_name : (person.place_name_en ?? person.place_name),
+                    family_created_at: person.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_created_at) : getEnglishDateTimeDisplayActualFormat(person.family_created_at)),
+                }
+                placeCrt.push(newObj1);
                 let personAnswers = person.person_answers;
                 if (listOfIndividualQuestions.length > 0) {
                     let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
@@ -151,7 +158,24 @@ export default function HQEvacueeTempFamilyDetail() {
         setFamilyDetailData(familyDataList);
         setOverallQuestionnaires(listOfOverallQuestions);
         setFamilyAdmittedData(admittedHistory);
+        setPlaceCreateData(placeCrt);
     }
+
+    const placeCreatedColumns = [
+        {
+            field: "place_name",
+            header: translate(localeJson, "place_name"),
+            textAlign: "left",
+            minWidth: "12rem",
+            maxWidth: "7rem"
+        },
+        {
+            field: "family_created_at",
+            header: translate(localeJson, "temp_register_date"),
+            textAlign: "left",
+            minWidth: "7rem",
+        },
+    ];
 
     const getGenderValue = (gender) => {
         if (gender == 1) {
@@ -302,6 +326,22 @@ export default function HQEvacueeTempFamilyDetail() {
                             text: translate(localeJson, 'back'),
                             onClick: () => router.push('/hq-staff/temp-registration'),
                         }} parentClass={"inline back-button"} />
+                    </div>
+                    <div className='flex flex-column mt-3 mb-2 justify-content-center align-items-center' style={{ justifyContent: "center", flexWrap: "wrap" }}>
+                        <NormalTable
+                            lazy
+                            id={"evacuation-list"}
+                            className="mt-2 flex justify-content-center"
+                            loading={tableLoading}
+                            size={"small"}
+                            stripedRows={true}
+                            paginator={false}
+                            showGridlines={"true"}
+                            value={placeCreateData}
+                            tableStyle={{ maxWidth: "30rem" }}
+                            columns={placeCreatedColumns}
+                            emptyMessage={translate(localeJson, "data_not_found")}
+                        />
                     </div>
                 </div>
             </div>

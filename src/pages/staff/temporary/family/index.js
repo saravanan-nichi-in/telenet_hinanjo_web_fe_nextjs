@@ -9,11 +9,13 @@ import {
   getJapaneseDateDisplayYYYYMMDDFormat,
   getValueByKeyRecursively as translate,
   getSpecialCareName,
-  getYYYYMMDDHHSSSSDateTimeFormat
+  getYYYYMMDDHHSSSSDateTimeFormat,
+  getJapaneseDateTimeDayDisplayActualFormat,
+  getEnglishDateTimeDisplayActualFormat
 } from "@/helper";
 import { setStaffTempFamily } from "@/redux/family";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { clearExceptPlaceId, reset, setSuccessData } from "@/redux/tempRegister";
+import { clearExceptPlaceId } from "@/redux/tempRegister";
 import { TemporaryStaffRegistrantServices } from "@/services";
 
 function TemporaryRegistrants() {
@@ -83,6 +85,15 @@ function TemporaryRegistrants() {
       },
     },
     {
+      field: "place_name",
+      header: translate(localeJson, "place_name"),
+      sortable: true,
+      textAlign: "left",
+      minWidth: "12rem",
+      maxWidth:"7rem",
+      display:'none'
+    },
+    {
       field: "family_code",
       header: translate(localeJson, "family_code"),
       minWidth: "6rem",
@@ -137,6 +148,14 @@ function TemporaryRegistrants() {
       textAlign: "left",
       minWidth: "7rem",
       display: "none",
+    },
+    {
+      field: "family_created_at",
+      header: translate(localeJson, "temp_register_date"),
+      sortable: true,
+      textAlign: "left",
+      minWidth: "7rem",
+      display:'none'
     },
     {
       field: "connecting_code",
@@ -217,16 +236,27 @@ function TemporaryRegistrants() {
     var evacueesList = [];
     var totalFamilyCount = 0;
     var listTotalCount = 0;
-    let placeIdObj = {};
-
-    if (
-      response.success &&
-      !_.isEmpty(response.data) &&
-      response.data.list.length > 0
-    ) {
-      response.places.forEach((place, index) => {
-        placeIdObj[place.id] =
-          locale == "ja" ? place.name : place.name_en ?? place.name;
+    var placesList = [
+      {
+        name: "--",
+        id: 0,
+      },
+    ];
+    if (response && response.data.list) {
+      const places = response.places;
+      let placeIdObj = {};
+      places.map((place) => {
+        let placeData = {
+          name:
+            locale == "ja"
+              ? place.name
+              : place.name_en
+                ? place.name_en
+                : place.name,
+          id: place.id,
+        };
+        placeIdObj[place.id] = locale == 'ja' ? place.name : (place.name_en ?? place.name),
+          placesList.push(placeData);
       });
       const data = response.data.list;
       data.map((item, i) => {
@@ -234,9 +264,10 @@ function TemporaryRegistrants() {
           number: i + getListPayload.filters.start + 1,
           id: item.f_id,
           yapple_id: item.yapple_id,
-          place_name: placeIdObj[item.place_id],
+          place_name: placeIdObj[item.place_id] ?? "",
           family_count: response.data.total_family,
           family_code: item.family_code,
+          family_created_at:item.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(item.family_created_at) : getEnglishDateTimeDisplayActualFormat(item.family_created_at)),
           person_is_owner:
             item.person_is_owner == 0
               ? translate(localeJson, "representative")
