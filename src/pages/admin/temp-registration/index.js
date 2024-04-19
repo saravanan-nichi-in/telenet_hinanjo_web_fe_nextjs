@@ -257,7 +257,7 @@ export default function TempRegistration() {
                   export: true,
                   text: translate(localeJson, "export"),
                   onClick: () => {
-                    // downloadEvacueesListCSV()
+                    downloadEvacueesListCSV()
                   },
                 }}
                 parentClass={"export-button"}
@@ -327,26 +327,6 @@ export default function TempRegistration() {
                 </div>
               </form>
             </div>
-            {/* <div style={{ display: "flex", justifyContent: "right" }}>
-              <div
-                className="flex pt-3"
-                style={{ justifyContent: "flex-end", flexWrap: "wrap" }}
-              >
-                <Button
-                  buttonProps={{
-                    type: "submit",
-                    rounded: "true",
-                    buttonClass: "evacuation_button_height export-button",
-                    export: true,
-                    text: translate(localeJson, "export"),
-                    onClick: () => {
-                      alert("downloading");
-                    },
-                  }}
-                  parentClass={"mb-3 export-button"}
-                />
-              </div>
-            </div> */}
           </div>
           <NormalTable
             lazy

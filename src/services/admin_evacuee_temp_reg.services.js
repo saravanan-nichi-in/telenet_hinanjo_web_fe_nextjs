@@ -72,7 +72,7 @@ function _getTempFamilyEvacueesDetail(payload, callBackFun) {
  * @param {*} callBackFun 
  */
 function _exportTempFamilyEvacueesCSVList(payload, callBackFun) {
-    axios.post('/admin/evacuation/export', payload)
+    axios.post('/admin/temp/evacuation/export', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
