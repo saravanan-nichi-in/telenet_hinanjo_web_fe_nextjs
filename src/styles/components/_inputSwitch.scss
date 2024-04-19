@@ -1,5 +1,4 @@
 .custom-switch {
-
     .p-inputswitch.p-inputswitch-checked:not(.p-disabled) .p-inputswitch-slider {
         background: var(--primary-color);
     }
@@ -21,5 +20,9 @@
         top: 0;
         right: 0rem;
         left: 0.1rem;
+    }
+    
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider{
+        background: var(--primary-color);
     }
 }
