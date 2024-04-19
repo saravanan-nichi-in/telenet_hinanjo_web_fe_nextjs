@@ -54,7 +54,7 @@ export default function HQTempRegistration() {
         </div>
       },
     },
-    { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
+    { field: 'place_name', header: translate(localeJson, 'place_name'), sortable: false, textAlign: "center", alignHeader: "center", minWidth: '3rem', maxWidth: '3rem',display:'none' },
     { field: 'family_code', header: translate(localeJson, 'family_code'), sortable: true, textAlign: "center", alignHeader: "center", minWidth: '4rem', maxWidth: '4rem' },
     { field: 'person_dob', header: translate(localeJson, 'dob'), sortable: true, textAlign: "left", alignHeader: "left", minWidth: '4rem', maxWidth: '4rem' },
     { field: "person_age", header: translate(localeJson, 'age'), sortable: true, textAlign: 'center', alignHeader: "center", minWidth: '3rem', maxWidth: '3rem' },
@@ -325,7 +325,7 @@ export default function HQTempRegistration() {
             selectionMode="single"
             onSelectionChange={
               (e) => {
-                dispatch(setTempFamily({ lgwan_family_id: e.value.id }));
+                dispatch(setTempFamily({ family_id: e.value.id }));
                 router.push({
                   pathname: '/hq-staff/temp-registration/family-detail',
                 });
