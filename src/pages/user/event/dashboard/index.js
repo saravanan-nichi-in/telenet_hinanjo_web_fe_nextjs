@@ -45,7 +45,6 @@ export default function PublicDashboard() {
                     obj['type'] = 'event';
                     let payload = Object.assign({}, layoutReducer?.user);
                     payload['place'] = obj;
-                    payload['event'] = obj;
                     dispatch(setUserDetails(payload));
                     setLoader(false)
                 }
@@ -85,28 +84,22 @@ export default function PublicDashboard() {
                                                     text: translate(localeJson, 'admission_user_event_dashboard'),
                                                     icon: <FaArrowRightToBracket className="icon-dashboard" />,
                                                     onClick: () => {
+                                                        let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                                        layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                            if (response && response.data) {
+                                                                let obj = response.data.model;
+                                                                if (obj.is_q_active == "1") {
                                                                     router.push({
-                                                                        pathname: 'register/member',
+                                                                        pathname: 'user/event/register/member',
                                                                     })
+                                                                }
+                                                                else {
+                                                                    router.push({ pathname: '/user/event-list' })
+                                                                }
+                                                            }
+                                                        }) :
+                                                            <></>
                                                     },
-                                                    //Integration
-                                                    // onClick: () => {
-                                                    //     let evt_payload = { event_id: layoutReducer?.user?.place?.id }
-                                                    //     layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
-                                                    //         if (response && response.data) {
-                                                    //             let obj = response.data.model;
-                                                    //             if (obj.is_q_active == "1") {
-                                                    //                 router.push({
-                                                    //                     pathname: 'user/event/register/member',
-                                                    //                 })
-                                                    //             }
-                                                    //             else {
-                                                    //                 router.push({ pathname: '/user/event-list' })
-                                                    //             }
-                                                    //         }
-                                                    //     }) :
-                                                    //         <></>
-                                                    // },
                                                 }} parentClass={"user_Parent_Dashboard primary-button"} />
                                             </div>
                                             <div className="flex flex-column col-12 lg:col-6 md:col-6">
@@ -118,27 +111,21 @@ export default function PublicDashboard() {
                                                     text: translate(localeJson, 'exit_user_event_dashboard'),
                                                     icon: <FaArrowRightFromBracket className="icon-dashboard" />,
                                                     onClick: () => {
+                                                        let evt_payload = { event_id: layoutReducer?.user?.place?.id }
+                                                        layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
+                                                            if (response && response.data) {
+                                                                let obj = response.data.model;
+                                                                if (obj.is_q_active == "1") {
                                                                     router.push({
                                                                         pathname: '/user/event/checkout',
                                                                     })
+                                                                }
+                                                                else {
+                                                                    router.push({ pathname: '/user/event-list' })
+                                                                }
+                                                            }
+                                                        }) : <></>
                                                     },
-                                                    //Integration
-                                                    // onClick: () => {
-                                                    //     let evt_payload = { event_id: layoutReducer?.user?.place?.id }
-                                                    //     layoutReducer?.user?.place?.type === "event" ? getEventListByID(evt_payload, (response) => {
-                                                    //         if (response && response.data) {
-                                                    //             let obj = response.data.model;
-                                                    //             if (obj.is_q_active == "1") {
-                                                    //                 router.push({
-                                                    //                     pathname: '/user/event/checkout',
-                                                    //                 })
-                                                    //             }
-                                                    //             else {
-                                                    //                 router.push({ pathname: '/user/event-list' })
-                                                    //             }
-                                                    //         }
-                                                    //     }) :<></>
-                                                    // },
                                                 }} parentClass={"flex align-items-center justify-content-center  user_Parent_Dashboard back-button"} />
                                                 <div className={`hidden`}>
                                                     <p className={`mt-3 flex justify-content-center text-xs `}>

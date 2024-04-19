@@ -244,7 +244,6 @@ export default function EventList() {
                           if (obj.is_q_active == "1") {
                             let payload = Object.assign({}, layoutReducer?.user);
                             payload["place"] = e.value.entireObj;
-                            payload["event"] = e.value.entireObj;
                             dispatch(setUserDetails(payload));
                             localStorage.setItem("redirect", "/user/event-list");
                             router.push("/user/event/dashboard");
