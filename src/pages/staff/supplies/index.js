@@ -180,7 +180,6 @@ export default function Supplies() {
           create(payload, isCreated);
           initialValues.comment = values.comment;
           initialValues.remarks = values.remarks;
-          resetForm();
           setList([]);
           setTableLoading(true);
           setSubmitting(false);
