@@ -162,7 +162,7 @@ export default function Questionnaire() {
                         active_status: !item.is_deletable ? "place-status-cell" : "",
                         is_default: item.is_default,
                         is_deletable: item.is_deletable,
-                        url: `${window?.location?.origin}/user/dashboard/?event=${CommonServices.encrypt(item.id, ENCRYPTION_KEY)}`,
+                        url: `${window?.location?.origin}/user/event/dashboard/?event=${CommonServices.encrypt(item.id, ENCRYPTION_KEY)}`,
                         orders: [{
                             id: item.id,
                             name: translate(localeJson, 'master_questionnaire'),
