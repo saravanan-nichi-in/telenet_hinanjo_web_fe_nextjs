@@ -71,7 +71,7 @@ export default function AdminHistoryPlacePage() {
       sortable: false,
     },
     {
-      field: "place_name_en",
+      field: "place_refugee_name",
       header: translate(localeJson, "place_name_furigana"),
       minWidth: "12rem",
       maxWidth: "12rem",
@@ -267,8 +267,9 @@ export default function AdminHistoryPlacePage() {
               : getEnglishDateTimeDisplayActualFormat(obj.created_at)
             : "",
           prefecture_name: obj.prefecture_name,
-          place_name: obj.place_name,
+          place_name: locale === "en" && !_.isNull(obj.place_name_en) ? obj.place_name_en : obj.place_name,
           place_name_en: obj.place_name_en,
+          place_refugee_name: obj.place_refugee_name,
           place_address: obj.place_address,
           place_latitude: obj.place_latitude,
           place_longitude: obj.place_longitude,
