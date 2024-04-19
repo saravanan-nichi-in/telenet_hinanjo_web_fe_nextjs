@@ -19,7 +19,7 @@ import {
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
-import { prefectures, prefecturesCombined } from '@/utils/constant';
+import { prefecturesCombined } from '@/utils/constant';
 import { setOriginalData, setIsEdit } from '@/redux/staff_register';
 import { CommonServices, StaffEvacuationServices } from '@/services';
 
@@ -119,7 +119,6 @@ export default function StaffFamilyDetail() {
         let tempIndividualQuestion = [];
         let overallAnswers = {};
         if (response) {
-
             if (response.data.data.length > 0) {
                 let data = convertToOriginalFormat(response.data)
                 setEditData(data);
@@ -314,7 +313,6 @@ export default function StaffFamilyDetail() {
                 },
             ],
         };
-
         return originalData;
     }
 
@@ -378,7 +376,6 @@ export default function StaffFamilyDetail() {
                         },
                         parentClass: "back-button"
                     },
-
                 ]}
                 close={() => {
                     setStaffFamilyDialogVisible(false);
@@ -386,7 +383,7 @@ export default function StaffFamilyDetail() {
             />
             <CommonDialog
                 open={individualQuestionnairesVisible}
-                dialogClassName={"p-0 family-detail-data"}
+                dialogClassName={"p-0"}
                 dialogBodyClassName="p-0"
                 dialogBodyStyle={{
                     background: "var(--primary-background)"
@@ -415,35 +412,30 @@ export default function StaffFamilyDetail() {
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_name}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "name_phonetic")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_refugee_name}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "dob")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(personList[individualQuestionnairesContentIDX].person_dob) : getEnglishDateDisplayFormat(personList[individualQuestionnairesContentIDX].person_dob)}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "age")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_age}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "age_month")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_month}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "tel")}:</span>
@@ -457,35 +449,30 @@ export default function StaffFamilyDetail() {
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].address}</span>
                                     </div>
                                 </div>
-
                                 <div className='hidden align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "evacuation_date_time")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].evacuation_date_time}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "family_code")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].family_code}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "connecting_code")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].connecting_code}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "remarks")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].remarks}</span>
                                     </div>
                                 </div>
-                                
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "c_special_care")}: </span>
@@ -632,7 +619,6 @@ export default function StaffFamilyDetail() {
                                     emptyMessage={translate(localeJson, "data_not_found")}
                                 />
                             </div>
-
                             <div className="section-space">
                                 <CustomHeader className="mt-2" headerClass={"page-header1"} header={translate(localeJson, "question_and_answer_information_overall")} />
                                 {tableLoading ? (
