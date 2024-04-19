@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import { FaArrowRightToBracket } from 'react-icons/fa6';
 import { FiEdit2 } from "react-icons/fi";
@@ -10,8 +9,6 @@ import {
     getValueByKeyRecursively as translate,
     getEnglishDateDisplayFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
-    getEnglishDateTimeDisplayActualFormat,
-    getJapaneseDateTimeDayDisplayActualFormat,
     getSpecialCareName,
     hideOverFlow,
     showOverFlow,
@@ -19,10 +16,10 @@ import {
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
-import { prefectures, prefecturesCombined } from '@/utils/constant';
+import { prefecturesCombined } from '@/utils/constant';
 import { setOriginalData, setIsEdit } from '@/redux/staff_temp_register';
-import { clearExceptPlaceId, reset, setSuccessData } from '@/redux/tempRegister';
-import { CommonServices,TemporaryStaffRegistrantServices, StaffEvacuationServices } from '@/services';
+import { clearExceptPlaceId } from '@/redux/tempRegister';
+import { CommonServices, TemporaryStaffRegistrantServices } from '@/services';
 
 export default function StaffFamilyDetail() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -39,7 +36,6 @@ export default function StaffFamilyDetail() {
     const [familyBasicDetail, setFamilyBasicDetail] = useState([]);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
-    const [familyAdmittedData, setFamilyAdmittedData] = useState([]);
     const [personList, setPersonList] = useState([]);
     const [editData, setEditData] = useState([]);
     const [individualQuestionnairesVisible, setIndividualQuestionnairesVisible] = useState(false);
@@ -48,10 +44,17 @@ export default function StaffFamilyDetail() {
         place_id: !_.isNull(layoutReducer?.user?.place?.id) ? layoutReducer?.user?.place?.id : "",
         family_id: familyReducer?.staffTempFamily?.family_id,
     };
-
-        /* Services */
-        const { getPlaceList } = CommonServices;
-        const { getFamilyTemporaryEvacueesDetail, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+    
+    /* Services */
+    const { getFamilyTemporaryEvacueesDetail, updateCheckInDetail } = TemporaryStaffRegistrantServices;
+    
+    useEffect(() => {
+        setTableLoading(true);
+        const fetchData = async () => {
+            await onGetEvacueesFamilyDetailOnMounting();
+        };
+        fetchData();
+    }, [locale]);
 
     const columnNames = [
         { field: 'slno', header: translate(localeJson, 'si_no'), sortable: false, textAlign: 'center', minWidth: '1rem', maxWidth: '1rem', alignHeader: "left" },
@@ -78,24 +81,14 @@ export default function StaffFamilyDetail() {
     ];
 
 
-      /**
-     * Show individual questionnaires dialog
-     * @param {*} index 
-     */
-      const displayIndividualQuestionnaires = (data) => {
+    /**
+   * Show individual questionnaires dialog
+   * @param {*} index 
+   */
+    const displayIndividualQuestionnaires = (data) => {
         setIndividualQuestionnairesContentIDX(data.rowIndex);
         setIndividualQuestionnairesVisible(true);
     }
-
-
-
-    useEffect(() => {
-        setTableLoading(true);
-        const fetchData = async () => {
-            await onGetEvacueesFamilyDetailOnMounting();
-        };
-        fetchData();
-    }, [locale]);
 
     const getGenderValue = (gender) => {
         if (gender == 1) {
@@ -146,11 +139,9 @@ export default function StaffFamilyDetail() {
                             personAnswers[val.question_id] = locale == "ja" ? val.answer.join(', ') : val.answer_en.join(', ');
                         });
                     }
-
                     let withIndividualQuestionAnswer = tempIndividualQuestion.map((val, index) => {
                         return { ...val, actual_answer: personAnswers[val.id] }
                     })
-
                     let newObj = {
                         ...tempObj,
                         slno: index + 1,
@@ -319,10 +310,10 @@ export default function StaffFamilyDetail() {
             setStaffFamilyDialogVisible(false);
             if (response.success) {
                 dispatch(clearExceptPlaceId())
-                localStorage.setItem("personCountTemp",null)
+                localStorage.setItem("personCountTemp", null)
                 localStorage.setItem('refreshing', "false");
-                localStorage.setItem('deletedFromStaff',"true");
-                localStorage.setItem("showDelete","false")
+                localStorage.setItem('deletedFromStaff', "true");
+                localStorage.setItem("showDelete", "false")
                 router.push("/staff/temporary/family");
             }
         });
@@ -373,7 +364,7 @@ export default function StaffFamilyDetail() {
             />
             <CommonDialog
                 open={individualQuestionnairesVisible}
-                dialogClassName={"p-0 family-detail-data"}
+                dialogClassName={"p-0"}
                 dialogBodyClassName="p-0"
                 dialogBodyStyle={{
                     background: "var(--primary-background)"
@@ -402,21 +393,18 @@ export default function StaffFamilyDetail() {
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_name}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "name_phonetic")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_refugee_name}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "dob")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(personList[individualQuestionnairesContentIDX].person_dob) : getEnglishDateDisplayFormat(personList[individualQuestionnairesContentIDX].person_dob)}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "age")}:</span>
@@ -472,7 +460,7 @@ export default function StaffFamilyDetail() {
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].remarks}</span>
                                     </div>
                                 </div>
-                                
+
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "c_special_care")}: </span>
@@ -665,10 +653,10 @@ export default function StaffFamilyDetail() {
                                             if (response.success) {
                                                 setLoader(false)
                                                 dispatch(clearExceptPlaceId())
-                                                localStorage.setItem("personCountTemp",null)
+                                                localStorage.setItem("personCountTemp", null)
                                                 localStorage.setItem('refreshing', "false");
-                                                localStorage.setItem('deletedFromStaff',"true");
-                                                localStorage.setItem("showDelete","false")
+                                                localStorage.setItem('deletedFromStaff', "true");
+                                                localStorage.setItem("showDelete", "false")
                                                 router.push("/staff/temporary/family");
                                             }
                                             setLoader(false)
