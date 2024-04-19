@@ -24,7 +24,7 @@ const AppMenu = () => {
     const url = window.location.pathname;
     // Getting storage data with help of reducers
     const layoutReducer = useAppSelector((state) => state.layoutReducer);
-    
+
     // Admin side bar information
     const adminModel = [
         {
@@ -406,7 +406,13 @@ const AppMenu = () => {
                         buttonClass: "w-auto back-button-transparent mb-2 p-0",
                         text: layoutReducer?.user?.place?.type === "place" ? translate(localeJson, "return_to_entrance_exit_screen") : translate(localeJson, "return_to_entrance_exit_screen_event"),
                         icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
-                        onClick: () => router.replace('/user/dashboard'),
+                        onClick: () => {
+                            if (layoutReducer?.user?.place?.type === "place") {
+                                router.replace('/user/dashboard')
+                            } else {
+                                router.replace('/user/event/dashboard')
+                            }
+                        },
                     }} parentClass={"back-button-transparent"} />
                 </div>
             }
