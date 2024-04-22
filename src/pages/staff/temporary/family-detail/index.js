@@ -151,6 +151,12 @@ export default function StaffFamilyDetail() {
                         });
                     }
                 }
+                let firstElement = responseList[0];
+                let newObj1 = {
+                    place_name: locale == 'ja' ? firstElement.place_name : (firstElement.place_name_en ?? firstElement.place_name),
+                    family_created_at: firstElement.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(firstElement.family_created_at) : getEnglishDateTimeDisplayActualFormat(firstElement.family_created_at)),
+                };
+                admittedHistory.push(newObj1);
                 responseList.forEach((tempObj, index) => {
                     let personAnswers = {};
                     if (tempObj.person_answers.length > 0) {
@@ -175,12 +181,7 @@ export default function StaffFamilyDetail() {
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                     }
-                    let newObj1 = {
-                        place_name: locale == 'ja' ? tempObj.place_name : (tempObj.place_name_en ?? tempObj.place_name),
-                        family_created_at: tempObj.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(tempObj.family_created_at) : getEnglishDateTimeDisplayActualFormat(tempObj.family_created_at)),
-                    }
                     tempList.push(newObj);
-                    admittedHistory.push(newObj1);
                 });
                 setPersonList(tempList);
                 setPlaceCreateData(admittedHistory);

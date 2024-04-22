@@ -94,7 +94,6 @@ export default function EvacueeFamilyDetail() {
         var listOfIndividualQuestions = [];
         var listOfOverallQuestions = [];
         var admittedHistory = [];
-        var placeCrt = [];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const individualQuestionArray = response.data?.individualQuestions;
@@ -146,11 +145,15 @@ export default function EvacueeFamilyDetail() {
                         place_id: person.place_id,
                         family_is_registered: person.family_is_registered,
                     };
-                    let newObj1 = {
-                        place_name: locale == 'ja' ? person.place_name : (person.place_name_en ?? person.place_name),
-                        family_created_at: person.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_created_at) : getEnglishDateTimeDisplayActualFormat(person.family_created_at)),
+                    if (data[0].place_id) {
+                        let newObj1 = {
+                            place_name: locale == 'ja' ? data[0].place_name : (data[0].place_name_en ?? data[0].place_name),
+                            family_created_at: data[0].family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(data[0].family_created_at) : getEnglishDateTimeDisplayActualFormat(data[0].family_created_at)),
+                        };
+                        setPlaceCreateData([newObj1]);
+                    } else {
+                        setPlaceCreateData([]);
                     }
-                    placeCrt.push(newObj1);
                     if (listOfIndividualQuestions.length > 0) {
                         let personAnswers = {};
                         if (person.person_answers.length > 0) {
@@ -205,7 +208,6 @@ export default function EvacueeFamilyDetail() {
         setFamilyDetailData(familyDataList);
         setOverallQuestionnaires(listOfOverallQuestions);
         setFamilyAdmittedData(admittedHistory);
-        setPlaceCreateData(placeCrt);
     }
 
     const getGenderValue = (gender) => {

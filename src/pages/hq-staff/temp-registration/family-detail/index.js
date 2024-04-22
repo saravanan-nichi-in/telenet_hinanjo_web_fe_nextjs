@@ -59,7 +59,6 @@ export default function HQEvacueeTempFamilyDetail() {
         var listOfIndividualQuestions = [];
         var listOfOverallQuestions = [];
         var admittedHistory = [];
-        var placeCrt = [];
         if (response.success && !_.isEmpty(response.data)) {
             const data = response.data.data;
             const individualQuestionArray = response.data?.individualQuestions;
@@ -103,11 +102,15 @@ export default function HQEvacueeTempFamilyDetail() {
                     yapple_id: person.yapple_id,
                     place_name: locale === "en" && !_.isNull(person.place_name_en) ? person.place_name_en : person.place_name,
                 };
-                let newObj1 = {
-                    place_name: locale == 'ja' ? person.place_name : (person.place_name_en ?? person.place_name),
-                    family_created_at: person.family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_created_at) : getEnglishDateTimeDisplayActualFormat(person.family_created_at)),
+                if (data[0].place_id) {
+                    let newObj1 = {
+                        place_name: locale == 'ja' ? data[0].place_name : (data[0].place_name_en ?? data[0].place_name),
+                        family_created_at: data[0].family_created_at && (locale === "ja" ? getJapaneseDateTimeDayDisplayActualFormat(data[0].family_created_at) : getEnglishDateTimeDisplayActualFormat(data[0].family_created_at)),
+                    };
+                    setPlaceCreateData([newObj1]);
+                } else {
+                    setPlaceCreateData([]);
                 }
-                placeCrt.push(newObj1);
                 let personAnswers = person.person_answers;
                 if (listOfIndividualQuestions.length > 0) {
                     let preparedListOfIndividualQuestions = [...listOfIndividualQuestions];
@@ -158,7 +161,6 @@ export default function HQEvacueeTempFamilyDetail() {
         setFamilyDetailData(familyDataList);
         setOverallQuestionnaires(listOfOverallQuestions);
         setFamilyAdmittedData(admittedHistory);
-        setPlaceCreateData(placeCrt);
     }
 
     const placeCreatedColumns = [
