@@ -34,7 +34,6 @@ function _createUserEvent(payload, callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);
-                toastDisplay(response);
             }
         })
         .catch((error) => {

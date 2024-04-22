@@ -41,6 +41,8 @@ export default function UserEventRegModal(props) {
     const [isRecording, setIsRecording] = useState(false);
     const [dobCounter, setDobCounter] = useState(0);
     const [addressCount, setAddressCount] = useState(0);
+    const [inputType, setInputType] = useState("password");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [fetchZipCode, setFetchedZipCode] = useState("");
     const validationSchema = () =>
         Yup.object().shape({
@@ -68,6 +70,15 @@ export default function UserEventRegModal(props) {
                     translate(localeJson, "c_date") + translate(localeJson, "is_required")
                 ),
             }),
+            password: Yup.string()
+                .required(translate(localeJson, "family_password_required"))
+                .test(
+                    "is-four-digits",
+                    translate(localeJson, "family_password_min_max"),
+                    (value) => {
+                        return String(value).length === 4;
+                    }
+                ),
             name: Yup.string()
                 .nullable()
                 .max(100, translate(localeJson, "external_popup_name_kanji")),
@@ -196,6 +207,7 @@ export default function UserEventRegModal(props) {
                 individualQuestions: null,
                 telAsRep: false,
                 addressAsRep: false,
+                password: ""
             };
 
     function calculateAge(birthdate) {
@@ -236,6 +248,7 @@ export default function UserEventRegModal(props) {
             age: object1.age,
             month: object1.age_m,
             gender: object1.gender,
+            password:object1.password
         };
         return object2;
     };
@@ -248,13 +261,18 @@ export default function UserEventRegModal(props) {
                 initialValues={initialValues}
                 enableReinitialize
                 onSubmit={(values, actions) => {
-                    if (!hasErrors) {
+                    if (!isSubmitting && !hasErrors) {
                         setIsRecording(false);
                         setLoader(true);
+                        setIsSubmitting(true);
                         UserEventListServices.createUserEvent(mapObjects(values), (res) => {
                             setFetchedZipCode("");
                             actions.resetForm({ values: initialValues });
                             setLoader(false);
+                            setIsSubmitting(false);
+                            if(res){
+                            router.push("/user/event/register/member/success");
+                            }
                         });
                     }
                 }}
@@ -729,6 +747,82 @@ export default function UserEventRegModal(props) {
                                                         errors.address2 && touched.address2 && errors.address2
                                                     }
                                                 />
+                                            </div>
+                                            <div className="mb-2  col-12 ">
+                                                <div className="w-12">
+                                                    <Input
+                                                        inputProps={{
+                                                            inputParentClassName: `w-full custom_input ${errors.password &&
+                                                                touched.password &&
+                                                                "p-invalid"
+                                                                }`,
+                                                            labelProps: {
+                                                                text: translate(localeJson, "shelter_password"),
+                                                                inputLabelClassName: "block font-bold",
+                                                                spanText: "*",
+                                                                inputLabelSpanClassName: "p-error",
+                                                                labelMainClassName: "pb-1 pt-1",
+                                                            },
+                                                            inputClassName: "w-full",
+                                                            id: "password",
+                                                            name: "random-password",
+                                                            value: values.password,
+                                                            autoFocus: false,
+                                                            autoComplete: "new-password",
+                                                            inputMode: "numeric",
+                                                            disabled: isRecording ? true : false,
+                                                            type: inputType,
+                                                            onChange: (evt) => {
+                                                                const re = /^[0-9-]+$/;
+                                                                let val;
+                                                                if (
+                                                                    evt.target.value === "" ||
+                                                                    re.test(convertToSingleByte(evt.target.value))
+                                                                ) {
+                                                                    val = evt.target.value.replace(/-/g, "");
+                                                                    if (evt.target.value?.length <= 4) {
+                                                                        setFieldValue("password", evt.target.value);
+                                                                    }
+                                                                }
+                                                            },
+                                                            onBlur: handleBlur,
+                                                            inputRightIconProps: {
+                                                                display: true,
+                                                                audio: {
+                                                                    display: true,
+                                                                },
+                                                                password: {
+                                                                    display: true,
+                                                                    className: inputType == "text" ? "pi pi-eye-slash" : "pi pi-eye",
+                                                                    onClick: () => {
+                                                                        setInputType(inputType == "text" ? "password" : "text");
+                                                                    }
+                                                                },
+                                                                icon: "",
+                                                                isRecording: isRecording,
+                                                                onRecordValueChange: (rec) => {
+                                                                    const fromData = new FormData();
+                                                                    fromData.append("audio_sample", rec);
+                                                                    getText(fromData, (res) => {
+                                                                        const re = /^[0-9-]+$/;
+                                                                        let newPassword = res?.data?.content;
+                                                                        if (re.test(newPassword)) {
+                                                                            setFieldValue(
+                                                                                "password",
+                                                                                newPassword
+                                                                            );
+                                                                        }
+                                                                    });
+                                                                },
+                                                                onRecordingStateChange:
+                                                                    handleRecordingStateChange,
+                                                            },
+                                                        }}
+                                                    />
+                                                    <ValidationError
+                                                        errorBlock={errors.password && touched.password && errors.password}
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="mb-2 col-12">
                                                 <div className="outer-label pb-1 w-12">

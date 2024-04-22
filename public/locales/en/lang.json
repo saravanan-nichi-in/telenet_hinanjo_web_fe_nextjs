@@ -844,6 +844,7 @@
     "temp_reg_success": "Temporary registration completed",
     "temp_reg_message": "Please show the QR code in the reception of evacuation center",
     "reg_success_message": "Registration to the evacuation center is completed.",
+    "event_reg_success_message": "Event Registration Completed.",
     "tem_reg_success_message": "Temporary Registration to the evacuation center is completed.",
     "your_family_code": "Your registered number",
     "or": "もしくは",
