@@ -7,6 +7,7 @@ export const CheckInOutServices = {
   getEventList: _getEventList,
   checkIn: _checkIn,
   checkOut: _checkOut,
+  eventCheckOutAddOns: _eventCheckOut,
   eventCheckIn: _event_checkIn,
   eventCheckOut: _event_checkOut,
   basicInfo: _basicInfo,
@@ -78,6 +79,26 @@ function _checkIn(payload, callBackFun) {
 function _checkOut(payload, callBackFun) {
   axios
     .put("/user/update/family/checkout", payload)
+    .then((response) => {
+      callBackFun(response.data);
+      if (response && response.data) {
+        toastDisplay(response);
+      }
+    })
+    .catch((error) => {
+      callBackFun(false)
+      toastDisplay(error?.response);
+    });
+}
+
+/**
+ * Create a new place
+ * @param {*} payload
+ * @param {*} callBackFun
+ */
+function _eventCheckOut(payload, callBackFun) {
+  axios
+    .post("/user/event/manual/checkout", payload)
     .then((response) => {
       callBackFun(response.data);
       if (response && response.data) {

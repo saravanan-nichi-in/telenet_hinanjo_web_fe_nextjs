@@ -21,7 +21,7 @@ const CheckOutDetails = () => {
 
   const [familyCode, setFamilyCode] = useState(family_id);
 
-  const { checkOut } = CheckInOutServices;
+  const { eventCheckOutAddOns } = CheckInOutServices;
 
   const isCheckedOut = (res) => {
     setLoader(false)
@@ -37,7 +37,7 @@ const CheckOutDetails = () => {
     }
     if (placeID) {
       setLoader(true)
-      checkOut(payload, isCheckedOut)
+      eventCheckOutAddOns(payload, isCheckedOut);
     }
     else {
       toastDisplay(translate(localeJson, 'already_checked_out'), '', '', "error");
