@@ -4,6 +4,7 @@ import { toastDisplay } from '@/helper';
 /* Identity and Access management (IAM) */
 export const CheckInOutServices = {
   getList: _getList,
+  getEventList: _getEventList,
   checkIn: _checkIn,
   checkOut: _checkOut,
   eventCheckIn: _event_checkIn,
@@ -30,6 +31,23 @@ function _getList(payload, callBackFun) {
     });
 }
 
+/**
+ * Get dashboard list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getEventList(payload, callBackFun) {
+  axios.post('/user/event/manual/search ', payload)
+    .then((response) => {
+      if (response && response.data) {
+        callBackFun(response.data);
+      }
+    })
+    .catch((error) => {
+      callBackFun(false);
+      toastDisplay(error?.response);
+    });
+}
 
 /**
  * Create a new place
