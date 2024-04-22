@@ -228,11 +228,12 @@ function AdminDashboard() {
             <div className="col-12">
                 <div className='card'>
                     <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "evacuation_status_list")} />
-                    <button onClick={() => {
+                    {/* Future */}
+                    {/* <button onClick={() => {
                         liff.login();
                     }}>
                         Login
-                    </button>
+                    </button> */}
                     <div>
                         <div className='mt-3'>
                             <NormalTable

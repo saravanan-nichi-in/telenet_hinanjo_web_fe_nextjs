@@ -20,10 +20,13 @@ import {
 } from "@/components";
 import { prefectures, prefectures_en } from "@/utils/constant";
 import { CommonServices, UserEventListServices } from "@/services";
+import { useAppDispatch } from "@/redux/hooks";
+import { setCheckInData } from "@/redux/check_in";
 
 export default function UserEventRegModal(props) {
     const { localeJson, locale, setLoader } = useContext(LayoutContext);
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const layoutReducer = useSelector((state) => state.layoutReducer);
     const { editObj, registerModalAction, evacuee } = props && props;
 
@@ -248,7 +251,7 @@ export default function UserEventRegModal(props) {
             age: object1.age,
             month: object1.age_m,
             gender: object1.gender,
-            password:object1.password
+            password: object1.password
         };
         return object2;
     };
@@ -270,8 +273,9 @@ export default function UserEventRegModal(props) {
                             actions.resetForm({ values: initialValues });
                             setLoader(false);
                             setIsSubmitting(false);
-                            if(res){
-                            router.push("/user/event/register/member/success");
+                            if (res) {
+                                dispatch(setCheckInData(res?.result));
+                                router.push("/user/event/register/member/success");
                             }
                         });
                     }

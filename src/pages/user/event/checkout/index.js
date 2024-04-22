@@ -49,7 +49,7 @@ export default function Admission() {
 
     const initialValues = { name: "", password: "", familyCode: "" };
 
-    const { getList } = CheckInOutServices;
+    const { getEventList } = CheckInOutServices;
 
     /* Services */
     const { getEventListByID } = UserDashboardServices;
@@ -99,7 +99,7 @@ export default function Admission() {
                     };
                     if (isSearch) {
                         setLoader(true);
-                        getList(payload, getSearchResult);
+                        getEventList(payload, getSearchResult);
                     }
                 }}
             >

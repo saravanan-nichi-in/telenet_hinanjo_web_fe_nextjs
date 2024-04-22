@@ -11,9 +11,9 @@ const RegisterSuccess = () => {
   const { localeJson } = useContext(LayoutContext);
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const regReducer = useAppSelector((state) => state.registerReducer);
+  const checkInReducer = useAppSelector((state) => state.checkInReducer);
 
-  const family_code = regReducer.successData?.data?.familyCode
+  const family_code = checkInReducer?.checkInData?.familyCode;
 
   return (
     <div className='grid flex-1'>

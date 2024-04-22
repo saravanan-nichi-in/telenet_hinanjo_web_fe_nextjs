@@ -21,26 +21,26 @@ const CheckOutDetails = () => {
 
   const [familyCode, setFamilyCode] = useState(family_id);
 
-  const { checkOut } = CheckInOutServices;
-  
+  const { eventCheckOutAddOns } = CheckInOutServices;
+
   const isCheckedOut = (res) => {
     setLoader(false)
     if (res.success) {
-      router.push('/user/dashboard');
+      router.push('/user/event/dashboard');
     }
   }
 
   const doCheckout = (placeID) => {
     let payload = {
       "family_id": familyCode,
-      "place_id": placeID
+      "event_id": placeID
     }
     if (placeID) {
       setLoader(true)
-      checkOut(payload, isCheckedOut)
+      eventCheckOutAddOns(payload, isCheckedOut);
     }
     else {
-      toastDisplay(translate(localeJson, 'already_checked_out'),'','',"error");
+      toastDisplay(translate(localeJson, 'already_checked_out'), '', '', "error");
     }
   }
 
@@ -59,7 +59,7 @@ const CheckOutDetails = () => {
                     rounded: "true",
                     text: translate(localeJson, "exit_Button"),
                     onClick: () => {
-                      doCheckout(data[0].place_id)
+                      doCheckout(data[0].event_id)
                     }
                   }}
                   parentClass={"w-full primary-button"}
