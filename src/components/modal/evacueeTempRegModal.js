@@ -171,6 +171,7 @@ export default function EvacueeTempRegModal(props) {
   const [addressCount, setAddressCount] = useState(0);
   const [fetchZipCode, setFetchedZipCode] = useState("");
   const { basicInfo } = CheckInOutServices;
+  const [zipAddress,setZipAddress] = useState("");
 
   useEffect(() => {
     setMIsRecording(isRecording);
@@ -503,9 +504,11 @@ export default function EvacueeTempRegModal(props) {
   useEffect(() => {
     let address = formikRef.current.values.address;
     let stateId = formikRef.current.values.prefecture_id;
-    let { city, street } = splitJapaneseAddress(address);
+    // let { city, street } = splitJapaneseAddress(address);
     let postalCode = formikRef.current.values.postalCode
     let state = prefectures.find(x => x.value == stateId)?.name;
+    let city = zipAddress.address2;
+    let street = zipAddress.address3;
     if (state && (city && street)) {
       getZipCode(state, city, street, (res) => {
         if (res) {
@@ -1034,6 +1037,7 @@ export default function EvacueeTempRegModal(props) {
                                 getAddress(payload, (response) => {
                                   if (response) {
                                     let address = response;
+                                    setZipAddress(response);
                                     const selectedPrefecture =
                                       prefectures.find(
                                         (prefecture) =>
