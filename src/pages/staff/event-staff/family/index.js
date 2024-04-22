@@ -195,18 +195,19 @@ function EventStaffFamily() {
                 listTotalCount = response.data.total;
             }
             setTableLoading(false);
-            setFullListPayload((prev) => ({
-                ...prev,
-                filters: {
-                    ...prev.filters,
-                    limit: listTotalCount > 0 ? listTotalCount : 10
-                }
-            }))
-            StaffEvacuationServices.getStaffAttendeesList(fullListPayload, (response) => {
-                if (response && response?.success) {
-                    setTotalList(response.data.list)
-                }
-            })
+            // Future
+            // setFullListPayload((prev) => ({
+            //     ...prev,
+            //     filters: {
+            //         ...prev.filters,
+            //         limit: listTotalCount > 0 ? listTotalCount : 10
+            //     }
+            // }))
+            // StaffEvacuationServices.getStaffAttendeesList(fullListPayload, (response) => {
+            //     if (response && response?.success) {
+            //         setTotalList(response.data.list)
+            //     }
+            // })
             setColumnValues(tempList);
             setFamilyCount(familyTotalCount);
             setTotalCount(listTotalCount);
