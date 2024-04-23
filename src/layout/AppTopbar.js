@@ -551,7 +551,7 @@ const AppTopbar = forwardRef((props, ref) => {
                                         width: 220,
                                         height: 45,
                                         alt: "logo",
-                                        text:"Telenet",
+                                        text:"テレネット",
                                         onClick: () => {
                                             if (
                                                 url.startsWith("/staff") &&
