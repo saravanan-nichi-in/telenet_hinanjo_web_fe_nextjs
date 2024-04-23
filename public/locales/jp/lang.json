@@ -1024,6 +1024,7 @@
       "event_exit_procedure": "退場手続き",
       "attendee_info": "入場者情報",
       "checkout_confirm": "退所情報確認",
+      "event_checkout_confirm": "退場情報確認",
       "yapple_id": "やっぷるID",
       "automatic_entry_exit": "自動入退場",
       "myNumberCardScan": "マイナンバーカードで登録",

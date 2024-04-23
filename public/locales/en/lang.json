@@ -1029,6 +1029,7 @@
     "event_exit_procedure": "Exit Procedure",
     "attendee_info": "Attendee Information",
     "checkout_confirm": "Checkout Information",
+    "event_checkout_confirm": "Checkout Information",
     "yapple_id": "YappuruID",
     "automatic_entry_exit": "Automatic Entry/Exit",
     "myNumberCardScan": "Register with My Number Card",

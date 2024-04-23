@@ -117,7 +117,7 @@ const FamilyListComponent = ({ data, header, eventFlag }) => {
         </div>
       ))}
       <div className="household-register">
-        {data?.map((family, index) => (
+        {!eventFlag && data?.map((family, index) => (
           <div key={index}>
             <div
               key={family.f_id}
@@ -273,7 +273,7 @@ const FamilyListComponent = ({ data, header, eventFlag }) => {
                             {family.person_note || "-"}
                           </div>
                         </div>
-                        {!eventFlag && family?.person_answers.map((answer) => (
+                        {family?.person_answers.map((answer) => (
                           <div key={answer.question_id}>
                             <div>
                               <label className="header_table">
