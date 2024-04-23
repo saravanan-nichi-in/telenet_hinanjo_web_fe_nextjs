@@ -49,7 +49,7 @@ const CheckOutDetails = () => {
       <div className="m-2 w-12 xlScreenMaxWidth mdScreenMaxWidth">
         {data?.length > 0 && (
           <>
-            <FamilyListComponent data={data} header={translate(localeJson, "checkout_confirm")} eventFlag={true}/>
+            <FamilyListComponent data={data} header={translate(localeJson, "event_checkout_confirm")} eventFlag={true}/>
             <div className="flex flex-column justify-content-center align-items-center">
               <div className="w-12 lg:w-6">
                 <ButtonRounded
@@ -57,7 +57,7 @@ const CheckOutDetails = () => {
                     buttonClass: "w-full h-3rem primary-button ",
                     type: "submit",
                     rounded: "true",
-                    text: translate(localeJson, "exit_Button"),
+                    text: translate(localeJson, "de_register_event"),
                     onClick: () => {
                       doCheckout(data[0].event_id)
                     }

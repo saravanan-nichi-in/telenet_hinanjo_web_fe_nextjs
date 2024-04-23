@@ -107,7 +107,7 @@ function _update(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      console.error(error);
+      toastDisplay(error.response);
     });
 }
 
