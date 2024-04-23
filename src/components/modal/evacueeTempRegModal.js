@@ -1162,11 +1162,6 @@ export default function EvacueeTempRegModal(props) {
                             placeholder: translate(localeJson, "city_ward"),
                             onChange: (evt) => {
                               setFieldValue("address", evt.target.value)
-                            },
-                            onMouseLeave: (evt) => {
-                              setAddressCount(addressCount + 1)
-                            },
-                            onTouchEnd: (evt) => {
                               setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,

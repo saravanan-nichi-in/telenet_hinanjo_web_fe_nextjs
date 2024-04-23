@@ -100,11 +100,11 @@ export default function PublicExternal() {
   useEffect(() => {
     let address = formikRef.current.values.address;
     let stateId = formikRef.current.values.prefecture_id;
-    // let { city, street } = splitJapaneseAddress(address);
+    let { city, street } = splitJapaneseAddress(address);
     let postalCode = formikRef.current.values.postalCode
     let state = prefectures.find(x => x.value == stateId)?.name;
-    let city = zipAddress.address2;
-    let street = zipAddress.address3;
+    // let city = zipAddress.address2;
+    // let street = zipAddress.address3;
     if (state && (city && street)) {
       getZipCode(state, city, street, (res) => {
         if (res) {
@@ -767,11 +767,6 @@ export default function PublicExternal() {
                                   onBlur: handleBlur,
                                   onChange: (evt) => {
                                     setFieldValue("address", evt.target.value)
-                                  },
-                                  onMouseLeave: (evt) => {
-                                    setAddressCount(addressCount + 1)
-                                  },
-                                  onTouchEnd: (evt) => {
                                     setAddressCount(addressCount + 1)
                                   },
                                 }}
