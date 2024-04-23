@@ -1219,7 +1219,7 @@ export default function EvacueeTempRegModal(props) {
                             ),
                             onChange: (evt) => {
                               setFieldValue("address2", evt.target.value)
-                              // setAddressCount(addressCount + 1)
+                              setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
