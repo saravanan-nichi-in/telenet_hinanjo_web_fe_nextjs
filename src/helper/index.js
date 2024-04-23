@@ -522,8 +522,8 @@ export const calculateAge = (year, month, date) => {
  * @returns 
  */
 export function splitJapaneseAddress(address) {
-    // Define regular expression to match the city part of the address until the first occurrence of "区"
-    const cityRegex = /^(.*?(市|区|町|村|郡|都|道|府|県))/;
+    // Define a regular expression that captures all characters up to the last occurrence of any known city/ward marker
+    const cityRegex = /^([\s\S]*[\u5e02\u533a\u753a\u6751\u90e1\u90fd\u9053\u5e9c\u770c])/;
 
     // Match the city part of the address
     const cityMatch = address.match(cityRegex);
