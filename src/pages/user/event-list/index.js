@@ -127,14 +127,8 @@ export default function EventList() {
           let preparedObj = {
             ...obj,
             number: getEventsListPayload.filters.start + i + 1,
-            start_date:
-              locale === "ja"
-                ? getJapaneseDateTimeDisplayActualFormat(obj.start_date)
-                : getEnglishDateTimeDisplayFormat(obj.start_date),
-            end_date:
-              locale === "ja"
-                ? getJapaneseDateTimeDisplayActualFormat(obj.end_date)
-                : getEnglishDateTimeDisplayFormat(obj.end_date),
+            start_date: obj.start_date ? (locale === "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.start_date) : getEnglishDateTimeDisplayFormat(obj.start_date)) : "",
+            end_date: obj.end_date ? (locale === "ja" ? getJapaneseDateTimeDisplayActualFormat(obj.end_date) : getEnglishDateTimeDisplayFormat(obj.end_date)) : "",
             name: (
               <div
                 className={
