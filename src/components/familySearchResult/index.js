@@ -8,7 +8,7 @@ import {
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CustomHeader } from "@/components";
 
-const FamilyListComponent = ({ data, header }) => {
+const FamilyListComponent = ({ data, header, eventFlag }) => {
   const { locale, localeJson } = useContext(LayoutContext);
 
   const [expandedFamilies, setExpandedFamilies] = useState([]);
@@ -273,7 +273,7 @@ const FamilyListComponent = ({ data, header }) => {
                             {family.person_note || "-"}
                           </div>
                         </div>
-                        {family?.person_answers.map((answer) => (
+                        {!eventFlag && family?.person_answers.map((answer) => (
                           <div key={answer.question_id}>
                             <div>
                               <label className="header_table">
@@ -311,7 +311,7 @@ const FamilyListComponent = ({ data, header }) => {
         ))}
       </div>
       <div>
-        {data?.map((family, index) => (
+        {!eventFlag && data?.map((family, index) => (
           <div key={index}>
             <div>
               {index == 0 && (
