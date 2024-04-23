@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import _ from "lodash";
 import { TabView, TabPanel } from "primereact/tabview";
 
-import { Button, NormalTable } from "@/components"; 
+import { Button, NormalTable } from "@/components";
 import {
   getEnglishDateTimeDisplayActualFormat,
   getJapaneseDateTimeDayDisplayActualFormat,
@@ -11,9 +11,12 @@ import {
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { StaffManagementService } from "@/services";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function StaffManagementDetailModal(props) {
   const { localeJson, locale } = useContext(LayoutContext);
+  // Getting storage data with help of reducers
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const { open, close } = props && props;
 
   const [staffDetail, setStaffDetail] = useState([]);
@@ -261,29 +264,33 @@ export default function StaffManagementDetailModal(props) {
               </div>
               <div>
                 <div>
-                  <TabView>
-                    <TabPanel
-                      header={translate(localeJson, "event_information")}
-                    >
-                      <NormalTable
-                        lazy
-                        totalRecords={totalCount}
-                        loading={tableLoading}
-                        tableStyle={{ maxWidth: "w-full" }}
-                        stripedRows={true}
-                        className={"custom-table-cell"}
-                        showGridlines={"true"}
-                        value={list}
-                        columns={columnsData}
-                        filterDisplay="menu"
-                        emptyMessage={translate(localeJson, "data_not_found")}
-                        first={getListPayload.filters.start}
-                        rows={getListPayload.filters.limit}
-                        scrollable
-                        scrollHeight="400px"
-                        onPageHandler={(e) => onPaginationChange(e)}
-                      />
-                    </TabPanel>
+                  <TabView
+                    activeIndex={layoutReducer?.layout?.config?.ADMIN_STAFF_MANAGAMENT_EVENT_MAP ? 0 : 1}
+                  >
+                    {layoutReducer?.layout?.config?.ADMIN_STAFF_MANAGAMENT_EVENT_MAP && (
+                      <TabPanel
+                        header={translate(localeJson, "event_information")}
+                      >
+                        <NormalTable
+                          lazy
+                          totalRecords={totalCount}
+                          loading={tableLoading}
+                          tableStyle={{ maxWidth: "w-full" }}
+                          stripedRows={true}
+                          className={"custom-table-cell"}
+                          showGridlines={"true"}
+                          value={list}
+                          columns={columnsData}
+                          filterDisplay="menu"
+                          emptyMessage={translate(localeJson, "data_not_found")}
+                          first={getListPayload.filters.start}
+                          rows={getListPayload.filters.limit}
+                          scrollable
+                          scrollHeight="400px"
+                          onPageHandler={(e) => onPaginationChange(e)}
+                        />
+                      </TabPanel>
+                    )}
                     <TabPanel
                       header={translate(localeJson, "place_information")}
                     >
