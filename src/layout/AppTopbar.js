@@ -460,9 +460,9 @@ const AppTopbar = forwardRef((props, ref) => {
             ) {
                 return (
                     <div className="header-details-first text-sm">
-                        {`${locale === "en" && !_.isNull(layoutReducer?.user?.event?.name_en)
-                            ? layoutReducer?.user?.event?.name_en
-                            : layoutReducer?.user?.event?.name
+                        {`${locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en)
+                            ? layoutReducer?.user?.place?.name_en
+                            : layoutReducer?.user?.place?.name
                             }`}
                     </div>
                 );
