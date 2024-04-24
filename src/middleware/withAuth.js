@@ -217,6 +217,8 @@ const withAuth = (WrappedComponent) => {
                 }
             });
             router.events.on('routeChangeComplete', (url) => {
+                console.log("hi",url);
+                loadNewTheme(url);
                 setAuthorized(true);
             })
         }, []);
