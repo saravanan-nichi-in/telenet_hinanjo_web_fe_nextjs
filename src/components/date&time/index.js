@@ -175,7 +175,7 @@ export const DateTimeDisplay = (props) => {
 
     return (
         <div className={`${fontsize} ${bgColor} ${fontWeight} ${parentClass}`} id={id} style={parentStyle}>
-            { locale=="ja" ?  displayDateTime1 : displayDateTime}
+            { locale=="ja" ? displayDateTime1 : displayDateTime}
         </div>
     );
 };
