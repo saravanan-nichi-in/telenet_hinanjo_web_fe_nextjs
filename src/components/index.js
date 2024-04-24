@@ -58,7 +58,7 @@ import PersonCountButton from "@/components/personCountButtons";
 import { BaseTemplate } from "@/components/questionarrie";
 import Doughnut from "@/components/chart";
 import CustomHeader from "@/components/customHeader";
-import { DateTime, Calendar } from "@/components/date&time";
+import { DateTime, Calendar, DateTimeDisplay } from "@/components/date&time";
 
 export {
   NormalTable,
@@ -133,5 +133,6 @@ export {
   QrScannerModal,
   StockpileCreateEditModal,
   UserEventRegModal,
-  YaburuModal
+  YaburuModal,
+  DateTimeDisplay
 }

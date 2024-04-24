@@ -19,7 +19,7 @@ import {
     AuthenticationAuthorizationService,
     TempRegisterServices,
 } from "@/services";
-import { ImageComponent, DropdownSelect } from "@/components";
+import { ImageComponent, DropdownSelect, DateTimeDisplay } from "@/components";
 import { useAppSelector } from "@/redux/hooks";
 import { useAppDispatch } from "@/redux/hooks";
 import { setAdminValue, setStaffValue, setHeadquaterValue } from "@/redux/auth";
@@ -46,7 +46,6 @@ const AppTopbar = forwardRef((props, ref) => {
     const topbarmenubuttonRef = useRef(null);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
     const [userName, setUserName] = useState(null);
-    const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const url = router.pathname;
     const path = router.asPath.split("?")[0];
     const windowURL = window.location.pathname;
@@ -322,16 +321,6 @@ const AppTopbar = forwardRef((props, ref) => {
         }
     }, [settings_data]);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentDateTime(new Date());
-        }, 60000); // Update every minute
-
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
         topbarmenu: topbarmenuRef.current,
@@ -487,6 +476,9 @@ const AppTopbar = forwardRef((props, ref) => {
      */
     const topBarRight = (
         <div ref={topbarmenuRef} className="header-details-second">
+        <div className='header-details-second-date-time-picker mr-2'>
+            <DateTimeDisplay/>
+            </div>
             {userName && (
                 <div title={userName} className="header-dropdown-name">
                     <label className="text-base font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis">
