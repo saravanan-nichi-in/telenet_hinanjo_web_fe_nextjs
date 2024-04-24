@@ -1,5 +1,5 @@
 .header-border {
-    border-left: 0.5rem solid #106540;
+    border-left: 0.5rem solid var(--primary-color);
 }
 
 .multistep-form .p-card-content,
@@ -56,28 +56,29 @@
 }
 
 .multi-form-submit {
-    background-color: #106540;
+    background-color: var(--primary-color);
 }
 
 .multi-form-submit.p-button:enabled:hover {
-    background-color: #168556;
+    background-color: var(--primary-hover-color);
 }
 
 .multi-form-submit.return {
     background: #ffffff;
-    color: #106540;
-    border: 2px solid #106540;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
 }
 
 
 .multi-form-submit.return.p-button:enabled:hover {
     background: #E0F2ED;
-    color: #168556;
-    border: 2px solid #168556;
+    color: var(--primary-hover-color);
+    border-color:var(--primary-hover-color);
+    border: 2px solid;
 }
 
 .multi-form-header .page-header1 {
-    background-color: #106540;
+    background-color: var(--primary-color);
     color: #ffffff;
 }
 
@@ -100,12 +101,12 @@
 }
 
 .approve-check.custom-checkbox .p-checkbox .p-checkbox-box .p-checkbox-icon {
-    color: #106540;
+    color: var(--primary-color);
     font-weight: bold;
 }
 
 .approve-check a {
-    color: #106540;
+    color: var(--primary-color);
 }
 
 .approve-check.custom-checkbox .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
@@ -132,26 +133,27 @@
 }
 
 .gender-view .p-selectbutton .p-button.p-highlight {
-    background: #106540;
+    background: var(--primary-color);
     color: #ffffff;
     border-radius: 5px;
 }
 
 .gender-view .p-selectbutton .p-button:enabled:hover {
-    background: #E0F2ED;
+    background:  var(--edit-hover-color);
     color: #ffffff;
     border-radius: 5px;
 }
 
 .gender-view .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
-    background: #E0F2ED;
-    color: #106540;
+    background: var(--edit-hover-color);
+    color: var(--primary-color);
     border-radius: 5px;
-    border: 1px solid #106540;
+    border-color:var(--primary-color);
+    border: 1px solid ;
 }
 
 .gender-view .p-selectbutton .p-button.p-highlight:hover {
-    background: #168556;
+    background: var(--primary-hover-color);
     color: #ffffff;
     border-radius: 5px;
 }
@@ -167,20 +169,23 @@
 }
 
 .question .p-button.p-button-rounded:hover {
-    border: 1px solid #106540;
-    background-color: #E0F2ED;
-    color: #168556;
+    border: 1px solid;
+    border-color: var(--primary-color);
+    background-color: var(--edit-hover-color);
+    color: var(--edit-hover-text)
 }
 
 .question .p-button.p-button-rounded.p-button-outlined {
-    border: 1px solid #106540;
-    background-color: #106540;
+    border: 1px solid;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
     color: #ffffff;
 }
 
 .question .p-button.p-button-rounded.p-button-outlined:hover {
-    border: 1px solid #106540;
-    background-color: #168556;
+    border: 1px solid ;
+    border-color: var(--primary-hover-color);
+    background-color: var(--primary-color);
     color: #ffffff;
 }
 
@@ -204,15 +209,15 @@
 
 .hitachi-list .p-selectbutton .p-button {
     background: #ffffff;
-    border: 3px solid #106540;
-    color: #106540;
+    border: 3px solid var(--primary-color);
+    color: var(--primary-color);
     border-radius: 5px;
 }
 
 .hitachi-list .p-selectbutton .p-button.p-highlight {
-    background: #106540;
+    background: var(--primary-color);
     color: #ffffff;
-    border: 3px solid #106540;
+    border: 3px solid var(--primary-color);
 }
 
 .hitachi-list .p-buttonset .p-button:not(:first-of-type):not(:last-of-type) {
@@ -221,12 +226,12 @@
 
 .dark-green-btn {
     background: rgb(0, 0, 0);
-    color: #106540;
+    color: var(--primary-color);
 }
 
 .dark-green-btn:hover {
     background: rgb(39, 39, 39);
-    color: #106540;
+    color: var(--primary-color);
 }
 
 .barcode-reader-image-div {
