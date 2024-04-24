@@ -559,3 +559,26 @@
         font-size: 16px !important;
     }
 }
+
+.qr-button {
+    .p-button {
+        background-color: $exportButtonBgColor;
+        color: $exportButtonTextColor;
+        border-color: $exportButtonBgColor;
+    }
+    .p-button-label {
+        padding-left: 5px;
+        text-align: left;
+        font-size: 20px;
+        font-family: 'Noto Sans JP', sans-serif;
+    }
+}
+
+.qr-button {
+    .p-button:enabled:hover,
+    .p-button:not(button):not(a):not(.p-disabled):hover {
+        background-color: $exportButtonHoverBgColor;
+        color: $exportButtonTextColor;
+        border-color: $exportButtonHoverBgColor;
+    }
+}
