@@ -7,12 +7,12 @@
   --surface-f: #ffffff;
   --text-color: #495057;
   --text-color-secondary: #6c757d;
-  --primary-color: #106540;
-  --primary-hover-color:#168556;
+  --primary-color: #2B3D51;
+  --primary-hover-color:#3C5069;
   --back-color:#ffff;
   --back-text:var(--primary-color);
-  --back-hover-color: #E0F2ED;
-  --back-hover-text:#106540;
+  --back-hover-color: #2b3d5117;
+  --back-hover-text:#2B3D51;
   --primary-color-text: #ffffff;
   --search-color: #ffffff;
   --search-text-color: var(--primary-color);
@@ -20,8 +20,8 @@
   --search-hover-text:var(--primary-color);
   --edit-color:#ffffff;
   --edit-text:: var(--primary-color);
-  --edit-hover-color:  #E0F2ED;
-  --edit-hover-text:#106540;
+  --edit-hover-color:  #2b3d5117;
+  --edit-hover-text:#2B3D51;
   --delete-color:#ffff;
   --delete-text:var(--primary-color);
   --delete-hover-color: #DC2626;
