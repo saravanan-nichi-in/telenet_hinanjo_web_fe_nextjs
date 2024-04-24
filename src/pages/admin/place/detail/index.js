@@ -200,7 +200,7 @@ export default function StaffManagementEditPage() {
                       {url}
                     </a>
                   </div>
-                  <div className="mt-2">
+                  <div className="mt-2 hidden">
                     {translate(localeJson, "smart_phone_register_url")} :
                     <a
                       className="text-link-class cursor-pointer"
@@ -221,7 +221,7 @@ export default function StaffManagementEditPage() {
         </div>)
         :
         (
-        <div className="col-12">
+        <div className="col-12 hidden">
           {tableLoading ? (
             <CardSpinner />
           ) : (

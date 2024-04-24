@@ -117,7 +117,7 @@ export default function EvacueeTempRegModal(props) {
         .test("is-correct",
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
-            if (value != undefined)
+            if (value != undefined || fetchZipCode !="")
               return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
             else
               return true
@@ -172,6 +172,7 @@ export default function EvacueeTempRegModal(props) {
   const [fetchZipCode, setFetchedZipCode] = useState("");
   const { basicInfo } = CheckInOutServices;
   const [zipAddress,setZipAddress] = useState("");
+  const [invalidCounter,setInvalidCounter] = useState(100000000)
 
   useEffect(() => {
     setMIsRecording(isRecording);
@@ -519,7 +520,7 @@ export default function EvacueeTempRegModal(props) {
           return
         }
         else {
-          setFetchedZipCode("")
+          setFetchedZipCode(invalidCounter+1)
           return
         }
       })
