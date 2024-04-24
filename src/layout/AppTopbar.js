@@ -476,7 +476,7 @@ const AppTopbar = forwardRef((props, ref) => {
      */
     const topBarRight = (
         <div ref={topbarmenuRef} className="header-details-second">
-        <div className='header-details-second-date-time-picker mr-2'>
+        <div className='header-details-second-date-time-picker mr-3'>
             <DateTimeDisplay/>
             </div>
             {userName && (
