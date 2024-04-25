@@ -176,8 +176,8 @@
 }
 
 .h_custom_white_button {
-    color: #106540;
-    border-color: #106540;
+    color: #2B3D51;
+    border-color: #2B3D51;
 }
 
 .h_custom_white_button {
@@ -185,15 +185,15 @@
     .p-button:enabled:hover,
     .p-button:not(button):not(a):not(.p-disabled):hover {
         background: $customWhiteHoverBgColor !important;
-        border-color: #106540;
-        color: #106540;
+        border-color: #2B3D51;
+        color: #2B3D51;
         border-radius: 1.5rem;
     }
 }
 
 .h_custom_reg_white_button {
-    color: #106540;
-    border-color: #106540;
+    color: #2B3D51;
+    border-color: #2B3D51;
     height: 80px;
     border-radius: 5rem !important;
 }
@@ -203,8 +203,8 @@
     .p-button:enabled:hover,
     .p-button:not(button):not(a):not(.p-disabled):hover {
         background: $customWhiteRegHoverBgColor !important;
-        border-color: #106540;
-        color: #106540;
+        border-color: #2B3D51;
+        color: #2B3D51;
         border-radius: 1.5rem;
     }
 }
@@ -406,9 +406,9 @@
 
     .p-button:enabled:hover,
     .p-button:not(button):not(a):not(.p-disabled):hover {
-        border: 1px solid #106540;
-        background-color: #E0F2ED;
-        color: #168556;
+        border: 1px solid #2B3D51;
+        background-color: #2b3d5117;
+        color:  #3C5069;
     }
 }
 
