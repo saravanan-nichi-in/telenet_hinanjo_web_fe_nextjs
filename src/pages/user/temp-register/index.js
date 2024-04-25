@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { Tooltip } from "primereact/tooltip";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -144,25 +145,22 @@ export default function Admission() {
   useEffect(() => {
     if (successData?.data?.familyCode) {
       let payload = {
-        family_code:successData?.data?.familyCode
+        family_code: successData?.data?.familyCode
       }
-      TempRegisterServices.isRegistered(payload,(res)=>
-    {
-      if(res)
-      {
-        let data = res.data;
-        console.log(data)
-        if(data?.is_registered == "0")
-        {
-          localStorage.setItem("showDelete","true")
-          router.push('/user/temp-register/success')
+      TempRegisterServices.isRegistered(payload, (res) => {
+        if (res) {
+          let data = res.data;
+          console.log(data)
+          if (data?.is_registered == "0") {
+            localStorage.setItem("showDelete", "true")
+            router.push('/user/temp-register/success')
+          }
+          else {
+            localStorage.setItem("showDelete", "false")
+            router.push('/user/temp-person-count')
+          }
         }
-        else {
-          localStorage.setItem("showDelete","false")
-          router.push('/user/temp-person-count')
-        }
-      }
-    })
+      })
     }
     return;
   }, [locale]);
@@ -333,9 +331,9 @@ export default function Admission() {
     }
   }, [count]);
 
-  useEffect(()=>{
+  useEffect(() => {
     window.scrollTo(0, 0);
-  },[isStep1])
+  }, [isStep1])
 
   const agreeTextWithHTML = (
     <div>
@@ -434,7 +432,7 @@ export default function Admission() {
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       name_kanji: Yup.string().max(200, translate(localeJson, "name_max")),
       postalCode: Yup.string()
-      .required(translate(localeJson, "postal_code_required"))
+        .required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -535,7 +533,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name_kanji);
-      formikRef.current.setFieldValue("evacuationPlace", data.evacuationPlace||"");
+      formikRef.current.setFieldValue("evacuationPlace", data.evacuationPlace || "");
       data.evacuee && setEvacuee(data.evacuee);
     }
   };
@@ -1106,29 +1104,35 @@ export default function Admission() {
 
                       <div className="">
                         <div
-                          className="w-full mb-0 gap-3 column-gap-4 row-gap-6 card p-5 pt-3 border-round-3xl footerButtonText"
+                          className="w-full mt-2 gap-3 column-gap-4 row-gap-6 border-round-3xl footerButtonText"
                           style={{ justifyContent: "start" }}
                         >
-                          <ButtonRounded
-                            buttonProps={{
-                              type: "button",
-                              rounded: "true",
-                              custom: "",
-                              buttonClass:
-                                "back-button h-4rem border-radius-5rem w-full custom-icon-button flex justify-content-center",
-                              text: translate(localeJson, "c_card_reg"),
-                              icon: (
-                                <img src={Card.url} width={30} height={30} />
-                              ),
-                              onClick: () => {
-                                setPerspectiveCroppingVisible(true);
-                                hideOverFlow();
-                              },
-                            }}
-                            parentClass={
-                              " back-button  w-full flex justify-content-center  mb-3"
-                            }
-                          />
+                          <div className="flex items-center">
+                            <ButtonRounded
+                              buttonProps={{
+                                type: "button",
+                                rounded: "true",
+                                custom: "",
+                                buttonClass:
+                                  "back-button h-4rem border-radius-5rem w-full custom-icon-button flex justify-content-center",
+                                text: translate(localeJson, "c_card_reg"),
+                                icon: (
+                                  <img src={Card.url} width={30} height={30} />
+                                ),
+                                onClick: () => {
+                                  setPerspectiveCroppingVisible(true);
+                                  hideOverFlow();
+                                },
+                              }}
+                              parentClass={
+                                " back-button  w-full flex justify-content-center p-2 pr-0 mb-2"
+                              }
+                            />
+                            <div>
+                              <Tooltip target=".custom-target-icon" position="bottom" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
+                              <i className="custom-target-icon pi pi-info-circle"></i>
+                            </div>
+                          </div>
                           <ButtonRounded
                             buttonProps={{
                               type: "button",
@@ -1150,7 +1154,7 @@ export default function Admission() {
                                 hideOverFlow();
                               },
                             }}
-                            parentClass={"back-button w-full mb-3 lg:mb-0"}
+                            parentClass={"back-button w-full p-2 pt-0 mb-2"}
                           />
                         </div>
                         <div className="mt-2">
@@ -2304,7 +2308,7 @@ export default function Admission() {
                                 }
 
                                 if (!hasErrors) {
-                                  setIsStep1(false);         
+                                  setIsStep1(false);
                                 }
                                 else {
                                   setCounter(count + 1);
@@ -2319,8 +2323,8 @@ export default function Admission() {
                   ) : (
                     <div>
                       <div className='col-12 pb-3 second-step'>
-                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, 'evacuation_place')} />
-                        </div>
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, 'evacuation_place')} />
+                      </div>
                       <div className="col-12 pb-3 pt-0">
                         <InputDropdown
                           inputDropdownProps={{
@@ -2359,8 +2363,8 @@ export default function Admission() {
                         />
                       </div>
                       <div className='pb-3'>
-                            <CustomHeader headerClass={"page-header1"} header={translate(localeJson, 'individual_agree_note')} />
-                        </div>
+                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, 'individual_agree_note')} />
+                      </div>
                       <div className="w-full flex checkbox-space">
                         <NormalCheckBox
                           checkBoxProps={{
@@ -2375,7 +2379,7 @@ export default function Admission() {
                           }}
                           parentClass={"flex approve-check"}
                         />
-                        <span className="" style={{color:'#e24c4c',fontWeight:'bold'}}>*</span>
+                        <span className="" style={{ color: '#e24c4c', fontWeight: 'bold' }}>*</span>
                       </div>
                       <div className="w-full checkbox-space">
                         <NormalCheckBox

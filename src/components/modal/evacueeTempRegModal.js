@@ -32,6 +32,7 @@ import {
   TempRegisterServices,
   CheckInOutServices
 } from "@/services";
+import { Tooltip } from "primereact/tooltip";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -117,7 +118,7 @@ export default function EvacueeTempRegModal(props) {
         .test("is-correct",
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
-            if (value != undefined || fetchZipCode !="")
+            if (value != undefined || fetchZipCode != "")
               return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
             else
               return true
@@ -171,8 +172,8 @@ export default function EvacueeTempRegModal(props) {
   const [addressCount, setAddressCount] = useState(0);
   const [fetchZipCode, setFetchedZipCode] = useState("");
   const { basicInfo } = CheckInOutServices;
-  const [zipAddress,setZipAddress] = useState("");
-  const [invalidCounter,setInvalidCounter] = useState(100000000)
+  const [zipAddress, setZipAddress] = useState("");
+  const [invalidCounter, setInvalidCounter] = useState(100000000)
 
   useEffect(() => {
     setMIsRecording(isRecording);
@@ -520,7 +521,7 @@ export default function EvacueeTempRegModal(props) {
           return
         }
         else {
-          setFetchedZipCode(invalidCounter+1)
+          setFetchedZipCode(invalidCounter + 1)
           return
         }
       })
@@ -701,23 +702,29 @@ export default function EvacueeTempRegModal(props) {
                       className="w-full gap-3 column-gap-4 row-gap-6 pl-5 pr-5 border-round-3xl bg-white  evacueeFooterButtonText"
                       style={{ justifyContent: "start" }}
                     >
-                      <ButtonRounded
-                        buttonProps={{
-                          type: "button",
-                          rounded: "true",
-                          custom: "",
-                          buttonClass:
-                            "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center p-2",
-                          text: translate(localeJson, "c_card_reg"),
-                          icon: <img src={Card.url} width={30} height={30} />,
-                          onClick: () => {
-                            setPerspectiveCroppingVisible(true);
-                          },
-                        }}
-                        parentClass={
-                          "back-button  w-full flex justify-content-center p-2 mb-2"
-                        }
-                      />
+                      <div className="flex items-center">
+                        <ButtonRounded
+                          buttonProps={{
+                            type: "button",
+                            rounded: "true",
+                            custom: "",
+                            buttonClass:
+                              "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center p-2",
+                            text: translate(localeJson, "c_card_reg"),
+                            icon: <img src={Card.url} width={30} height={30} />,
+                            onClick: () => {
+                              setPerspectiveCroppingVisible(true);
+                            },
+                          }}
+                          parentClass={
+                            "back-button  w-full flex justify-content-center p-2 pr-0 mb-2"
+                          }
+                        />
+                        <div>
+                          <Tooltip target=".custom-target-icon" position="top" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
+                          <i className="custom-target-icon pi pi-info-circle"></i>
+                        </div>
+                      </div>
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
