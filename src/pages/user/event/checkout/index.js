@@ -249,7 +249,6 @@ export default function Admission() {
                                                                                 localeJson,
                                                                                 "placeholder_please_enter_password"
                                                                             ),
-                                                                            value: values.password,
                                                                             onChange: (evt) => {
                                                                                 const re = /^[0-9-]+$/;
                                                                                 if (evt.target.value == "") {

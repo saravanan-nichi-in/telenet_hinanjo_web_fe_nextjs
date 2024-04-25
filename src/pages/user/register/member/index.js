@@ -168,7 +168,7 @@ export default function Admission() {
   //     setAudioPasswordLoader(true);
   //   }
   // };
-  
+
   const handleNameAudioRecorded = async (audioBlob) => {
     const fromData = new FormData();
     fromData.append("audio_sample", audioBlob);
@@ -515,7 +515,6 @@ export default function Admission() {
                                           localeJson,
                                           "placeholder_please_enter_password"
                                         ),
-                                        value: values.password,
                                         onChange: (evt) => {
                                           const re = /^[0-9-]+$/;
                                           if (evt.target.value == "") {
