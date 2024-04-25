@@ -7,7 +7,7 @@ import { Formik } from "formik";
 
 import { convertToSingleByte, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { CheckInOutServices, UserDashboardServices } from "@/services";
+import { CheckInOutServices, CommonServices, UserDashboardServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
 import { Button, ButtonRounded, CustomHeader, Input, ValidationError, Password } from "@/components";
@@ -23,6 +23,9 @@ export default function Admission() {
     const [tableLoading, setTableLoading] = useState(false);
     const [searchResult, setSearchResult] = useState(false);
     const [isSearch, setSearch] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [isMRecording, setMIsRecording] = useState(false);
+    const [inputType, setInputType] = useState("password");
     const formikRef = useRef();
 
     const schema = Yup.object().shape({
@@ -54,12 +57,18 @@ export default function Admission() {
     /* Services */
     const { getEventListByID } = UserDashboardServices;
 
+    const { getText } = CommonServices;
+
     useEffect(() => {
         const fetchData = async () => {
             setLoader(false);
         };
         fetchData();
     }, [locale]);
+
+    useEffect(() => {
+        setMIsRecording(isRecording);
+    }, [isRecording]);
 
     const getSearchResult = (res) => {
         if (res?.success && !_.isEmpty(res?.data)) {
@@ -74,6 +83,11 @@ export default function Admission() {
             setTableLoading(false);
             setLoader(false);
         }
+    };
+
+    const handleRecordingStateChange = (isRecord) => {
+        setMIsRecording(isRecord);
+        setIsRecording(isRecord);
     };
 
     return (
@@ -175,6 +189,25 @@ export default function Admission() {
                                                                             isLoading: audioNameLoader,
                                                                             disabled: audioNameLoader,
                                                                             hasIcon: true,
+                                                                            inputRightIconProps: {
+                                                                                display: true,
+                                                                                audio: {
+                                                                                    display: true,
+                                                                                },
+                                                                                icon: "",
+                                                                                isRecording,
+                                                                                onRecordValueChange: (rec) => {
+                                                                                    const fromData = new FormData();
+                                                                                    fromData.append("audio_sample", rec);
+                                                                                    getText(fromData, (res) => {
+                                                                                        if (res?.data?.content) {
+                                                                                            setFieldValue("name", res?.data?.content);
+                                                                                        }
+                                                                                    });
+                                                                                },
+                                                                                onRecordingStateChange:
+                                                                                    handleRecordingStateChange,
+                                                                            },
                                                                         }}
                                                                     />
                                                                 </div>
@@ -190,18 +223,28 @@ export default function Admission() {
                                                         <div className="mb-3 w-full">
                                                             <div className="flex w-12">
                                                                 <div className="w-12">
-                                                                    <Password
-                                                                        passwordProps={{
-                                                                            passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
+                                                                    <Input
+                                                                        inputProps={{
+                                                                            inputParentClassName: `w-full custom_input ${errors.password &&
+                                                                                touched.password &&
+                                                                                "p-invalid"
+                                                                                }`,
                                                                             labelProps: {
-                                                                                text: translate(localeJson, 'shelter_password'),
+                                                                                text: translate(localeJson, "shelter_password"),
+                                                                                inputLabelClassName: "block font-bold",
                                                                                 spanText: "*",
-                                                                                passwordLabelSpanClassName: "p-error",
-                                                                                passwordLabelClassName: "block",
+                                                                                inputLabelSpanClassName: "p-error",
+                                                                                labelMainClassName: "pb-1 pt-1",
                                                                             },
-                                                                            name: 'password',
+                                                                            inputClassName: "w-full",
+                                                                            id: "password",
+                                                                            name: "password",
+                                                                            value: values.password,
+                                                                            autoFocus: false,
+                                                                            autoComplete: "new-password",
                                                                             inputMode: "numeric",
-                                                                            keyfilter: "int",
+                                                                            disabled: isRecording ? true : false,
+                                                                            type: inputType,
                                                                             placeholder: translate(
                                                                                 localeJson,
                                                                                 "placeholder_please_enter_password"
@@ -217,7 +260,37 @@ export default function Admission() {
                                                                                 }
                                                                             },
                                                                             onBlur: handleBlur,
-                                                                            passwordClass: "w-full"
+                                                                            inputRightIconProps: {
+                                                                                display: true,
+                                                                                audio: {
+                                                                                    display: true,
+                                                                                },
+                                                                                password: {
+                                                                                    display: true,
+                                                                                    className: inputType == "text" ? "pi pi-eye-slash" : "pi pi-eye",
+                                                                                    onClick: () => {
+                                                                                        setInputType(inputType == "text" ? "password" : "text");
+                                                                                    }
+                                                                                },
+                                                                                icon: "",
+                                                                                isRecording: isRecording,
+                                                                                onRecordValueChange: (rec) => {
+                                                                                    const fromData = new FormData();
+                                                                                    fromData.append("audio_sample", rec);
+                                                                                    getText(fromData, (res) => {
+                                                                                        const re = /^[0-9-]+$/;
+                                                                                        let newPassword = res?.data?.content;
+                                                                                        if (re.test(newPassword)) {
+                                                                                            setFieldValue(
+                                                                                                "password",
+                                                                                                newPassword
+                                                                                            );
+                                                                                        }
+                                                                                    });
+                                                                                },
+                                                                                onRecordingStateChange:
+                                                                                    handleRecordingStateChange,
+                                                                            },
                                                                         }}
                                                                     />
                                                                 </div>
@@ -279,6 +352,25 @@ export default function Admission() {
                                                                                 }
                                                                             },
                                                                             onBlur: handleBlur,
+                                                                            inputRightIconProps: {
+                                                                                display: true,
+                                                                                audio: {
+                                                                                    display: true,
+                                                                                },
+                                                                                icon: "",
+                                                                                isRecording,
+                                                                                onRecordValueChange: (rec) => {
+                                                                                    const fromData = new FormData();
+                                                                                    fromData.append("audio_sample", rec);
+                                                                                    getText(fromData, (res) => {
+                                                                                        if (res?.data?.content) {
+                                                                                            setFieldValue("familyCode", res?.data?.content);
+                                                                                        }
+                                                                                    });
+                                                                                },
+                                                                                onRecordingStateChange:
+                                                                                    handleRecordingStateChange,
+                                                                            },
                                                                         }}
                                                                     />
                                                                 </div>
