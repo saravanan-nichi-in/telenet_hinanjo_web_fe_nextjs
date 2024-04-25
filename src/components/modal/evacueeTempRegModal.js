@@ -113,7 +113,7 @@ export default function EvacueeTempRegModal(props) {
         .required(translate(localeJson, "age_required")),
       age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().nullable()
+      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .test("is-correct",
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
