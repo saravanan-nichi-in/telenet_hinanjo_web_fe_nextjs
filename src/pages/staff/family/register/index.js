@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { Tooltip } from "primereact/tooltip";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setRegisterData, setOriginalData, reset } from "@/redux/staff_register";
@@ -1141,28 +1142,34 @@ export default function Admission() {
                     header={translate(localeJson, "house_hold_information")}
                   />
                   <div className="">
-                  <div
+                    <div
                       className="w-full mt-2 gap-3 column-gap-4 row-gap-6 border-round-3xl footerButtonText"
                       style={{ justifyContent: "start" }}
                     >
-                      <ButtonRounded
-                        buttonProps={{
-                          type: "button",
-                          rounded: "true",
-                          custom: "",
-                          buttonClass:
-                            "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
-                          text: translate(localeJson, "c_card_reg"),
-                          icon: <img src={Card.url} width={30} height={30} />,
-                          onClick: () => {
-                            setPerspectiveCroppingVisible(true);
-                            hideOverFlow();
-                          },
-                        }}
-                        parentClass={
-                          "back-button  w-full flex justify-content-center p-2 mb-2"
-                        }
-                      />
+                      <div className="flex items-center">
+                        <ButtonRounded
+                          buttonProps={{
+                            type: "button",
+                            rounded: "true",
+                            custom: "",
+                            buttonClass:
+                              "back-button w-full h-4rem border-radius-5rem flex justify-content-center",
+                            text: translate(localeJson, "c_card_reg"),
+                            icon: <img src={Card.url} width={30} height={30} />,
+                            onClick: () => {
+                              setPerspectiveCroppingVisible(true);
+                              hideOverFlow();
+                            },
+                          }}
+                          parentClass={
+                            "back-button  w-full flex justify-content-center p-2 pr-0 mb-2"
+                          }
+                        />
+                        <div>
+                          <Tooltip target=".custom-target-icon" position="bottom" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
+                          <i className="custom-target-icon pi pi-info-circle"></i>
+                        </div>
+                      </div>
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
