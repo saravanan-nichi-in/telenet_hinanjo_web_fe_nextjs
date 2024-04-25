@@ -698,7 +698,7 @@ export default function EvacueeTempRegModal(props) {
                 <div className={`modal-content`}>
                   <div className="">
                     <div
-                      className="w-full mb-3  gap-3 column-gap-4 row-gap-6 card p-5 border-round-3xl bg-white  evacueeFooterButtonText"
+                      className="w-full gap-3 column-gap-4 row-gap-6 pl-5 pr-5 border-round-3xl bg-white  evacueeFooterButtonText"
                       style={{ justifyContent: "start" }}
                     >
                       <ButtonRounded
@@ -707,7 +707,7 @@ export default function EvacueeTempRegModal(props) {
                           rounded: "true",
                           custom: "",
                           buttonClass:
-                            "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center",
+                            "back-button w-full h-3rem border-radius-5rem custom-icon-button flex justify-content-center p-2",
                           text: translate(localeJson, "c_card_reg"),
                           icon: <img src={Card.url} width={30} height={30} />,
                           onClick: () => {
@@ -715,7 +715,7 @@ export default function EvacueeTempRegModal(props) {
                           },
                         }}
                         parentClass={
-                          "back-button  w-full flex justify-content-center mb-3"
+                          "back-button  w-full flex justify-content-center p-2 mb-2"
                         }
                       />
                       <ButtonRounded
@@ -731,7 +731,7 @@ export default function EvacueeTempRegModal(props) {
                             setOpenQrPopup(true);
                           },
                         }}
-                        parentClass={"back-button w-full"}
+                        parentClass={"back-button w-full p-2 pt-0 pb-0 mb-2"}
                       />
                     </div>
                     <div className="pl-5 pr-5">
