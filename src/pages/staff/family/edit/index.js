@@ -942,7 +942,7 @@ export default function Admission() {
                           }
                         />
                         <div>
-                          <Tooltip target=".custom-target-icon" position="right" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
+                          <Tooltip target=".custom-target-icon" position="bottom" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
