@@ -202,12 +202,12 @@ export default function StaffFamilyDetail() {
 
     function convertToOriginalFormat(convertedData) {
         const getAnswerById = (id, answers) => {
-            const answer = answers.find((ans) => ans.question_id == id);
-            return answer ? answer.answer : [];
+            const answer = answers?.length>0?answers?.find((ans) => ans.question_id == id):[];
+            return answer ? answer?.answer : [];
         };
         const getAnswerByIdEn = (id, answers) => {
-            const answer = answers.find((ans) => ans.question_id == id);
-            return answer ? answer.answer_en || answer.answer : [];
+            const answer =answers?.length>0? answers?.find((ans) => ans.question_id == id):[];
+            return answer ? answer?.answer_en || answer?.answer : [];
         };
         let decryptedData = ""; //convertedData.data[0].family_password ? decryptPassword(convertedData.data[0].family_password, key) : ""
         const originalData = {
