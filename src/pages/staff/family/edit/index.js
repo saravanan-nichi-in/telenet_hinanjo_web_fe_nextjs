@@ -248,7 +248,7 @@ export default function Admission() {
       age_m: Yup.number()
         .required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().nullable()
+      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address2: Yup.string()
@@ -280,7 +280,7 @@ export default function Admission() {
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       name_kanji: Yup.string().nullable()
         .max(200, translate(localeJson, "name_max")),
-      postalCode: Yup.string().nullable()
+      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
