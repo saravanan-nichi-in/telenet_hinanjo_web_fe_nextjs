@@ -45,16 +45,16 @@ export default function App() {
                             close={closeQrPopup}
                             callback={qrResult}>
                         </QrScannerModal>
-
                         <div className="h-full" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <Button buttonProps={{
+                        <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
-                                size: "large",
-                                text: " " + translate(localeJson, 'qr_scanner_popup_btn'),
-                                className: "pi pi-qrcode primary-button",
+                                style:{fontSize:"20px",height:"54px"},
+                                buttonClass: "qr-button",
+                                text:" "+translate(localeJson, 'qr_scanner_popup_btn'),
+                                className:"pi pi-qrcode",   
                                 onClick: () => { setOpenQrPopup(true) },
-                            }} parentClass={"flex primary-button"} ></Button>
+                            }} parentClass={"flex qr-button"} />
                         </div>
                     </div>
                 </div>

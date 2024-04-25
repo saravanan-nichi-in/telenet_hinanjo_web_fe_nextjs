@@ -32,7 +32,7 @@ const PersonCountButton = ({ names, onSelectionChange, isModal, id, SNames, cust
               className={` mt-3 ${selectedName === name ? 'update-button' : 'edit-button'}  ${customClassName}`}
               style={{
                 ...baseStyle,
-                borderColor: url?'#2B3D51':'#106540',
+                borderColor: url?'#2B3D51':'#2B3D51',
               }}
               onClick={() => handleButtonClick(name)}
               type='button'
