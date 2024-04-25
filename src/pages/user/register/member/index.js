@@ -34,6 +34,9 @@ export default function Admission() {
   const [basicDataInfo, setBasicDataInfo] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isSearch, setSearch] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isMRecording, setMIsRecording] = useState(false);
+  const [inputType, setInputType] = useState("password");
 
   const { getActiveList } = UserPlaceListServices;
 
@@ -46,6 +49,10 @@ export default function Admission() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setMIsRecording(isRecording);
+  }, [isRecording]);
 
   const schema = Yup.object().shape({
     name: Yup.string()
@@ -155,12 +162,13 @@ export default function Admission() {
     getText(fromData, fetchFamilyCode);
   };
 
-  const handleRecordingStateChange = (isRecording) => {
-    if (isRecording) {
-      // Start loader
-      setAudioPasswordLoader(true);
-    }
-  };
+  // const handleRecordingStateChange = (isRecording) => {
+  //   if (isRecording) {
+  //     // Start loader
+  //     setAudioPasswordLoader(true);
+  //   }
+  // };
+
   const handleNameAudioRecorded = async (audioBlob) => {
     const fromData = new FormData();
     fromData.append("audio_sample", audioBlob);
@@ -273,6 +281,11 @@ export default function Admission() {
   };
 
   const handleStaffButtonClick = () => {
+  };
+
+  const handleRecordingStateChange = (isRecord) => {
+    setMIsRecording(isRecord);
+    setIsRecording(isRecord);
   };
 
   return (
@@ -442,6 +455,25 @@ export default function Admission() {
                                           "placeholder_please_enter_name"
                                         ),
                                         hasIcon: true,
+                                        inputRightIconProps: {
+                                          display: true,
+                                          audio: {
+                                            display: true,
+                                          },
+                                          icon: "",
+                                          isRecording,
+                                          onRecordValueChange: (rec) => {
+                                            const fromData = new FormData();
+                                            fromData.append("audio_sample", rec);
+                                            getText(fromData, (res) => {
+                                              if (res?.data?.content) {
+                                                setFieldValue("name", res?.data?.content);
+                                              }
+                                            });
+                                          },
+                                          onRecordingStateChange:
+                                            handleRecordingStateChange,
+                                        },
                                       }}
                                     />
                                   </div>
@@ -457,23 +489,32 @@ export default function Admission() {
                               <div className="mb-3 w-full">
                                 <div className="flex w-12">
                                   <div className="w-12">
-                                    <Password
-                                      passwordProps={{
-                                        passwordParentClassName: `w-full password-form-field ${errors.password && touched.password && 'p-invalid'}`,
+                                    <Input
+                                      inputProps={{
+                                        inputParentClassName: `w-full custom_input ${errors.password &&
+                                          touched.password &&
+                                          "p-invalid"
+                                          }`,
                                         labelProps: {
-                                          text: translate(localeJson, 'shelter_password'),
+                                          text: translate(localeJson, "shelter_password"),
+                                          inputLabelClassName: "block font-bold",
                                           spanText: "*",
-                                          passwordLabelSpanClassName: "p-error",
-                                          passwordLabelClassName: "block",
+                                          inputLabelSpanClassName: "p-error",
+                                          labelMainClassName: "pb-1 pt-1",
                                         },
-                                        name: 'password',
+                                        inputClassName: "w-full",
+                                        id: "password",
+                                        name: "password",
+                                        value: values.password,
+                                        autoFocus: false,
+                                        autoComplete: "new-password",
                                         inputMode: "numeric",
-                                        keyfilter: "int",
+                                        disabled: isRecording ? true : false,
+                                        type: inputType,
                                         placeholder: translate(
                                           localeJson,
                                           "placeholder_please_enter_password"
                                         ),
-                                        value: values.password,
                                         onChange: (evt) => {
                                           const re = /^[0-9-]+$/;
                                           if (evt.target.value == "") {
@@ -484,7 +525,37 @@ export default function Admission() {
                                           }
                                         },
                                         onBlur: handleBlur,
-                                        passwordClass: "w-full"
+                                        inputRightIconProps: {
+                                          display: true,
+                                          audio: {
+                                            display: true,
+                                          },
+                                          password: {
+                                            display: true,
+                                            className: inputType == "text" ? "pi pi-eye-slash" : "pi pi-eye",
+                                            onClick: () => {
+                                              setInputType(inputType == "text" ? "password" : "text");
+                                            }
+                                          },
+                                          icon: "",
+                                          isRecording: isRecording,
+                                          onRecordValueChange: (rec) => {
+                                            const fromData = new FormData();
+                                            fromData.append("audio_sample", rec);
+                                            getText(fromData, (res) => {
+                                              const re = /^[0-9-]+$/;
+                                              let newPassword = res?.data?.content;
+                                              if (re.test(newPassword)) {
+                                                setFieldValue(
+                                                  "password",
+                                                  newPassword
+                                                );
+                                              }
+                                            });
+                                          },
+                                          onRecordingStateChange:
+                                            handleRecordingStateChange,
+                                        },
                                       }}
                                     />
                                   </div>
@@ -549,6 +620,25 @@ export default function Admission() {
                                           }
                                         },
                                         onBlur: handleBlur,
+                                        inputRightIconProps: {
+                                          display: true,
+                                          audio: {
+                                            display: true,
+                                          },
+                                          icon: "",
+                                          isRecording,
+                                          onRecordValueChange: (rec) => {
+                                            const fromData = new FormData();
+                                            fromData.append("audio_sample", rec);
+                                            getText(fromData, (res) => {
+                                              if (res?.data?.content) {
+                                                setFieldValue("familyCode", res?.data?.content);
+                                              }
+                                            });
+                                          },
+                                          onRecordingStateChange:
+                                            handleRecordingStateChange,
+                                        },
                                       }}
                                     />
                                   </div>

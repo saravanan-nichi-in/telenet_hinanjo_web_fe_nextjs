@@ -948,10 +948,9 @@ export default function Admission() {
                   />
                   <div className="">
                     <div
-                      className="w-full mb-0 gap-3 column-gap-4 row-gap-6 card p-5 pt-3 border-round-3xl footerButtonText"
+                      className="w-full mt-2 gap-3 column-gap-4 row-gap-6 border-round-3xl footerButtonText"
                       style={{ justifyContent: "start" }}
                     >
-
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -967,7 +966,7 @@ export default function Admission() {
                           },
                         }}
                         parentClass={
-                          " back-button  w-full flex justify-content-center  mb-3"
+                          " back-button  w-full flex justify-content-center p-2 mb-2"
                         }
                       />
                       <ButtonRounded
@@ -984,7 +983,7 @@ export default function Admission() {
                             hideOverFlow();
                           },
                         }}
-                        parentClass={"back-button w-full mb-3 lg:mb-0"}
+                        parentClass={"back-button w-full p-2 pt-0 mb-2"}
                       />
                     </div>
                     <div className="mt-2">
