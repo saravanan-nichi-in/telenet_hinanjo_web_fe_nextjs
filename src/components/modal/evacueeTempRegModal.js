@@ -119,7 +119,9 @@ export default function EvacueeTempRegModal(props) {
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
             if (value != undefined || fetchZipCode != "")
+            {
               return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
+            }
             else
               return true
           })
@@ -151,7 +153,7 @@ export default function EvacueeTempRegModal(props) {
     isFrom = "user",
   } = props && props;
 
-  const { getText, getZipCode, getAddress, convertToKatakana } = CommonServices;
+  const { getText, getZipCode, getAddress, convertToKatakana,getAddressFromZipCode,getZipCodeFromAddress } = CommonServices;
   const {
     getIndividualQuestionnaireList,
     getSpecialCareDetails,
@@ -335,7 +337,7 @@ export default function EvacueeTempRegModal(props) {
         setFetchedZipCode(val.replace(/-/g, ""));
       }
       if (val?.length >= 7) {
-        getAddress(val, (response) => {
+        getAddressFromZipCode(val, (response) => {
           if (response) {
             let address = response;
             const selectedPrefecture = prefectures.find(
@@ -416,7 +418,7 @@ export default function EvacueeTempRegModal(props) {
       }
       if (val.length >= 7) {
         let payload = val.slice(0, 3) + "-" + val.slice(3);
-        getAddress(val, (response) => {
+        getAddressFromZipCode(val, (response) => {
           if (response) {
             let address = response;
             const selectedPrefecture = prefectures.find(
@@ -506,42 +508,45 @@ export default function EvacueeTempRegModal(props) {
   useEffect(() => {
     let address = formikRef.current.values.address;
     let stateId = formikRef.current.values.prefecture_id;
-    let { city, street } = splitJapaneseAddress(address);
-    let postalCode = formikRef.current.values.postalCode
+    let postalCode = formikRef.current.values.postalCode;
     let state = prefectures.find(x => x.value == stateId)?.name;
-    // let city = zipAddress.address2;
-    // let street = zipAddress.address3;
-    if (state && (city && street)) {
-      getZipCode(state, city, street, (res) => {
+    
+    let firstConditionCompleted = "false";
+  
+    // First condition - Handling by address and state
+    if (address && state) {
+      getZipCodeFromAddress((state + address), (res) => {
         if (res) {
-          let zipCode = res.result.zipcode;
-          setFetchedZipCode(zipCode.replace(/-/g, ""))
+          let zipCode = res.data.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""));
           zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
-          formikRef.current.validateField("postalCode")
-          return
-        }
-        else {
-          setFetchedZipCode(invalidCounter + 1)
-          return
-        }
-      })
-    }
-    if (postalCode) {
-      getAddress(postalCode, (res) => {
-        let _address = res;
-        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
-          setFetchedZipCode("")
           formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "true";
+        } else {
+          setFetchedZipCode(invalidCounter+1);
+          formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "false";
         }
-        else {
+      });
+    }
+  
+    // Check to not execute if first condition completed its work
+    else if (postalCode) {
+      getAddressFromZipCode(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
+          setFetchedZipCode("");
+          formikRef.current.validateField("postalCode");
+        } else {
           formikRef.current.validateField("address", _address.address2 + _address.address3);
           formikRef.current.validateField("prefecture_id", _address.prefcode);
-          setFetchedZipCode(postalCode)
+          setFetchedZipCode(postalCode);
           formikRef.current.validateField("postalCode", postalCode);
         }
-      })
+      });
     }
-  }, [addressCount])
+  }, [addressCount]); // Dependency array for the useEffect
+  
 
   useEffect(() => {
     fetchZipCode && formikRef.current.validateField("postalCode")
@@ -1042,7 +1047,7 @@ export default function EvacueeTempRegModal(props) {
                               }
                               if (val?.length == 7) {
                                 let payload = convertToSingleByte(val);
-                                getAddress(payload, (response) => {
+                                getAddressFromZipCode(payload, (response) => {
                                   if (response) {
                                     let address = response;
                                     setZipAddress(response);

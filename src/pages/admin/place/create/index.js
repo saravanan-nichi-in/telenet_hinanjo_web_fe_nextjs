@@ -256,7 +256,7 @@ export default function PlaceCreatePage() {
 
   /* Services */
   const { create } = PlaceServices;
-  const { getAddress } = CommonServices
+  const { getAddressFromZipCode } = CommonServices
 
   useEffect(() => {
     getLocation();
@@ -529,7 +529,7 @@ export default function PlaceCreatePage() {
                                       val2.length == 4
                                     ) {
                                       let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_2);
-                                      getAddress(
+                                      getAddressFromZipCode(
                                         payload,
                                         (response) => {
                                           if (response) {
@@ -615,7 +615,7 @@ export default function PlaceCreatePage() {
                                   ) {
                                     if (val.length == 4 && val2.length == 3) {
                                       let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(evt.target.value);
-                                      getAddress(
+                                      getAddressFromZipCode(
                                         payload,
                                         (response) => {
                                           if (response) {
@@ -682,7 +682,7 @@ export default function PlaceCreatePage() {
                                 setFieldValue("prefecture_id", e.target.value);
                                 if (values.postal_code_1 && values.postal_code_2) {
                                   let payload = convertToSingleByte(values.postal_code_1) + convertToSingleByte(values.postal_code_2);
-                                  getAddress(
+                                  getAddressFromZipCode(
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
                                         setPostalCodePrefectureId(res.prefcode);
@@ -825,7 +825,7 @@ export default function PlaceCreatePage() {
                                       val2.length == 4
                                     ) {
                                       let payload = convertToSingleByte(evt.target.value) + convertToSingleByte(values.postal_code_default_2);
-                                      getAddress(
+                                      getAddressFromZipCode(
                                         payload,
                                         (response) => {
                                           if (response) {
@@ -913,7 +913,7 @@ export default function PlaceCreatePage() {
                                   ) {
                                     if (val.length == 3 && val2.length == 4) {
                                       let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(evt.target.value);
-                                      getAddress(
+                                      getAddressFromZipCode(
                                         payload,
                                         (response) => {
                                           if (response) {
@@ -982,7 +982,7 @@ export default function PlaceCreatePage() {
                                 setFieldValue("prefecture_id_default", e.target.value);
                                 if (values.postal_code_default_1 && values.postal_code_default_2) {
                                   let payload = convertToSingleByte(values.postal_code_default_1) + convertToSingleByte(values.postal_code_default_2);
-                                  getAddress(
+                                  getAddressFromZipCode(
                                     payload, (res) => {
                                       if (res && res.prefcode != e.target.value) {
                                         setPostalCodeDefaultPrefectureId(res.prefcode);
