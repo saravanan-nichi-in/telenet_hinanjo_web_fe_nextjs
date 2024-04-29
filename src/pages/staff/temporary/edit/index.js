@@ -81,11 +81,10 @@ export default function Admission() {
   const { basicInfo } = CheckInOutServices;
 
   /* Services */
-  const { getText, getAddress } = CommonServices;
+  const { getText, getAddressFromZipCode } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
-    getAddressByZipCode,
     ocrScanRegistration,
     qrScanRegistration
   } = TempRegisterServices;
@@ -810,16 +809,16 @@ export default function Admission() {
       }
       if (val.length >= 7) {
         let payload = val;
-        getAddress(payload, (response) => {
-          if (response) {
-            let address = response;
-            const selectedPrefecture = prefectures.find(
-              (prefecture) => prefecture.value == address.prefcode
-            );
-            boundObject.prefecture_id = selectedPrefecture?.value;
-            boundObject.address = address.address2 + address.address3 || "";
-          }
-        });
+        // getAddressFromZipCode(payload, (response) => {
+        //   if (response) {
+        //     let address = response;
+        //     const selectedPrefecture = prefectures.find(
+        //       (prefecture) => prefecture.value == address.prefcode
+        //     );
+        //     boundObject.prefecture_id = selectedPrefecture?.value;
+        //     boundObject.address = address.address2 + address.address3 || "";
+        //   }
+        // });
       }
     }
 
@@ -1161,42 +1160,44 @@ export default function Admission() {
                               value: values.postalCode,
                               onChange: (evt) => {
                                 const re = /^[0-9-]+$/;
-                                let val;
-                                if (
-                                  evt.target.value === "" ||
-                                  re.test(evt.target.value)
-                                ) {
-                                  if (evt.target.value.length <= 8) {
-                                    val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
-                                  }
-                                  else {
-                                    return
-                                  }
-                                  if (val.length > 3 && val.length <= 7) {
-                                    val = val.slice(0, 3) + val.slice(3);
-                                    setFieldValue("postalCode", val);
-                                  }
-
+                                let val = evt.target.value.replace(/-/g, "");
+                                if (evt.target.value === "") {
+                                  setFieldValue("postalCode", evt.target.value);
+                                  return;
                                 }
-                                if (val.length == 8) {
-                                  let payload = val.slice(0, 3) + "-" + val.slice(3);
-                                  getAddressByZipCode(payload.slice(0, 8), (response) => {
+                                if (re.test(convertToSingleByte(val))) {
+                                  if (val?.length <= 7) {
+                                    val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
+                                    setFieldValue("postalCode", val);
+                                  } else {
+                                    setFieldValue("postalCode", val.slice(0, 7));
+                                    return;
+                                  }
+                                }
+                                if (val?.length == 7) {
+                                  let payload = convertToSingleByte(val);
+                                  getAddressFromZipCode(payload, (response) => {
                                     if (response) {
-                                      let address = response[0];
-                                      const selectedPrefecture = prefectures.find(
-                                        (prefecture) =>
-                                          prefecture.value == address.prefcode
-                                      );
+                                      let address = response;
+                                      const selectedPrefecture =
+                                        prefectures.find(
+                                          (prefecture) =>
+                                            prefecture.value == address.prefcode
+                                        );
                                       setFieldValue(
                                         "prefecture_id",
                                         selectedPrefecture?.value
                                       );
-                                      setFieldValue("address", address.address2 + address.address3 || "");
+                                      setFieldValue(
+                                        "address",
+                                        address.address2 + address.address3 ||
+                                        ""
+                                      );
                                     } else {
                                       setFieldValue("prefecture_id", "");
                                       setFieldValue("address", "");
                                     }
-                                  });
+                                  })
                                 }
                               },
                               onBlur: handleBlur,

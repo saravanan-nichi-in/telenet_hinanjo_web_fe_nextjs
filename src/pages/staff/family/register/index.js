@@ -1028,16 +1028,16 @@ export default function Admission() {
       }
       if (val.length >= 7) {
         let payload = val;
-        getAddressFromZipCode(payload, (response) => {
-          if (response) {
-            let address = response;
-            const selectedPrefecture = prefectures.find(
-              (prefecture) => prefecture.value == address.prefcode
-            );
-            boundObject.prefecture_id = selectedPrefecture?.value;
-            boundObject.address = address.address2 + address.address3 || "";
-          }
-        });
+        // getAddressFromZipCode(payload, (response) => {
+        //   if (response) {
+        //     let address = response;
+        //     const selectedPrefecture = prefectures.find(
+        //       (prefecture) => prefecture.value == address.prefcode
+        //     );
+        //     boundObject.prefecture_id = selectedPrefecture?.value;
+        //     boundObject.address = address.address2 + address.address3 || "";
+        //   }
+        // });
       }
     }
 

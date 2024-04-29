@@ -113,7 +113,7 @@ function TemporaryRegistrants() {
         family_id:qrFamilyId,
         place_id: layoutReducer?.user?.place?.id,
       };
-      create(payload, ()=>{
+      updateCheckInDetail(payload, ()=>{
         onClickCancelButton()
       });
     };
