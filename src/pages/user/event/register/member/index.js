@@ -169,7 +169,7 @@ export default function UserEventRegModal(props) {
         });
 
     /** Services */
-    const { getText, getAddressFromZipCode,getZipCodeFromAddress } = CommonServices;
+    const { getText, getAddressFromZipCode, getZipCodeFromAddress } = CommonServices;
     const {
         qrScanRegistration,
         ocrScanRegistration,
@@ -202,42 +202,42 @@ export default function UserEventRegModal(props) {
         let stateId = formikRef.current.values.prefecture_id;
         let postalCode = formikRef.current.values.postalCode;
         let state = prefectures.find(x => x.value == stateId)?.name;
-        
+
         let firstConditionCompleted = "false";
-      
+
         // First condition - Handling by address and state
         if (address && state) {
-          getZipCodeFromAddress((state + address), (res) => {
-            if (res) {
-              let zipCode = res.data.zipcode;
-              setFetchedZipCode(zipCode.replace(/-/g, ""));
-              zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
-              formikRef.current.validateField("postalCode");
-              firstConditionCompleted = "true";
-            } else {
-              setFetchedZipCode(invalidCounter+1);
-              formikRef.current.validateField("postalCode");
-              firstConditionCompleted = "false";
-            }
-          });
+            getZipCodeFromAddress((state + address), (res) => {
+                if (res) {
+                    let zipCode = res.data.zipcode;
+                    setFetchedZipCode(zipCode.replace(/-/g, ""));
+                    zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+                    formikRef.current.validateField("postalCode");
+                    firstConditionCompleted = "true";
+                } else {
+                    setFetchedZipCode(invalidCounter + 1);
+                    formikRef.current.validateField("postalCode");
+                    firstConditionCompleted = "false";
+                }
+            });
         }
-      
+
         // Check to not execute if first condition completed its work
         else if (postalCode) {
-          getAddressFromZipCode(postalCode, (res) => {
-            let _address = res;
-            if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
-              setFetchedZipCode("");
-              formikRef.current.validateField("postalCode");
-            } else {
-              formikRef.current.validateField("address", _address.address2 + _address.address3);
-              formikRef.current.validateField("prefecture_id", _address.prefcode);
-              setFetchedZipCode(postalCode);
-              formikRef.current.validateField("postalCode", postalCode);
-            }
-          });
+            getAddressFromZipCode(postalCode, (res) => {
+                let _address = res;
+                if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
+                    setFetchedZipCode("");
+                    formikRef.current.validateField("postalCode");
+                } else {
+                    formikRef.current.validateField("address", _address.address2 + _address.address3);
+                    formikRef.current.validateField("prefecture_id", _address.prefcode);
+                    setFetchedZipCode(postalCode);
+                    formikRef.current.validateField("postalCode", postalCode);
+                }
+            });
         }
-      }, [addressCount]);
+    }, [addressCount]);
 
     const handleRecordingStateChange = (isRecord) => {
         setMIsRecording(isRecord);
@@ -324,7 +324,7 @@ export default function UserEventRegModal(props) {
         showOverFlow();
     };
 
-    const register=(data)=>{
+    const register = (data) => {
         formikRef.current.setFieldValue("postalCode", data.postal_code);
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
@@ -333,16 +333,16 @@ export default function UserEventRegModal(props) {
         formikRef.current.setFieldValue("name_furigana", data.name_furigana);
         formikRef.current.setFieldValue("name", data.name || "");
         formikRef.current.setFieldValue("gender", data.gender);
-        if(data.dob){
-        let age= calculateAge(data.dob); 
-        const dobc=getEnglishDateDisplayFormat(data.dob)  
-        const dobParts = dobc.split('-');
-        const year = parseInt(dobParts[0]);
-        const month = parseInt(dobParts[1]);
-        const date = parseInt(dobParts[2]);
-        formikRef.current.setFieldValue("dob", { year, month, date });
-        formikRef.current.setFieldValue('age',age.years);
-        formikRef.current.setFieldValue('age_m',age.months);
+        if (data.dob) {
+            let age = calculateAge(data.dob);
+            const dobc = getEnglishDateDisplayFormat(data.dob)
+            const dobParts = dobc.split('-');
+            const year = parseInt(dobParts[0]);
+            const month = parseInt(dobParts[1]);
+            const date = parseInt(dobParts[2]);
+            formikRef.current.setFieldValue("dob", { year, month, date });
+            formikRef.current.setFieldValue('age', age.years);
+            formikRef.current.setFieldValue('age_m', age.months);
         }
     }
     const qrResult = (result) => {
@@ -1103,6 +1103,14 @@ export default function UserEventRegModal(props) {
                                                                         </label>
                                                                     </div>
                                                                 </div>
+                                                                <ValidationError
+                                                                    errorBlock={
+                                                                        errors.dob?.year &&
+                                                                        touched.dob?.year &&
+                                                                        errors.dob?.year
+                                                                    }
+                                                                    parentClass="pr-1"
+                                                                />
                                                             </div>
                                                             <div className="pl-0 col-4 sm:col-3 md:col-3 lg:col-3 xl:col-3 pb-0 pr-0 pl-1">
                                                                 <div className="flex align-items-baseline">
@@ -1176,6 +1184,14 @@ export default function UserEventRegModal(props) {
                                                                         </label>
                                                                     </div>
                                                                 </div>
+                                                                <ValidationError
+                                                                    errorBlock={
+                                                                        errors.dob?.month &&
+                                                                        touched.dob?.month &&
+                                                                        errors.dob?.month
+                                                                    }
+                                                                    parentClass="pr-1"
+                                                                />
                                                             </div>
                                                             <div className="pl-0 col-3 sm:col-3 md:col-3 lg:col-3 xl:col-3 pb-0 pr-0 pl-1">
                                                                 <div className="flex align-items-baseline">
@@ -1275,37 +1291,18 @@ export default function UserEventRegModal(props) {
                                                                         </label>
                                                                     </div>
                                                                 </div>
+                                                                <ValidationError
+                                                                    errorBlock={
+                                                                        errors.dob?.date &&
+                                                                        touched.dob?.date &&
+                                                                        errors.dob?.date
+                                                                    }
+                                                                    parentClass="pr-1"
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-12 p-0  flex">
-                                                        <ValidationError
-                                                            errorBlock={
-                                                                errors.dob?.year &&
-                                                                touched.dob?.year &&
-                                                                errors.dob?.year
-                                                            }
-                                                            parentClass="pr-1"
-                                                        />
-                                                        <ValidationError
-                                                            errorBlock={
-                                                                errors.dob?.month &&
-                                                                touched.dob?.month &&
-                                                                errors.dob?.month
-                                                            }
-                                                            parentClass="pr-1"
-                                                        />
-                                                        <ValidationError
-                                                            errorBlock={
-                                                                errors.dob?.date &&
-                                                                touched.dob?.date &&
-                                                                errors.dob?.date
-                                                            }
-                                                            parentClass="pr-1"
-                                                        />
-                                                    </div>
                                                 </div>
-
                                                 <div className="mb-2 col-12 hidden">
                                                     <InputNumber
                                                         inputNumberProps={{
