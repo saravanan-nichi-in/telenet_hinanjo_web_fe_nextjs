@@ -656,28 +656,28 @@ export default function EvacueeTempRegModal(props) {
                           "w-full primary-button h-3rem border-radius-5rem mb-3",
                         type: "button",
                         text: buttonText,
-                        onClick: () => {
-                          formikRef.current.validateForm().then(() => {
-                            const touchedKeys = Object.keys(formikRef.current.initialValues);
-                            const newTouched = touchedKeys.reduce(
-                              (acc, key) => ({ ...acc, [key]: true }),
-                              {}
-                            );
-                            formikRef.current.setTouched(newTouched);
-                          });
+                        onClick: async () => {
+                          // Setting the form as submitted
                           setIsFormSubmitted(true);
-                          setCounter(count + 1);
-                          setAddressCount(addressCount+1)
+                      
+                          // Incrementing the counter by 2 (combined the two separate increments into one)
+                          setCounter(prevCount => prevCount + 2);
+                      
+                          // Incrementing the address count
+                         await setAddressCount(prevAddressCount => prevAddressCount + 1);
+                      
+                          // Validate the postalCode field specifically
                           formikRef.current.validateField("postalCode");
-                          setCounter(count + 1);
-                          setFieldValue("dob.year", convertToSingleByte(values.dob.year))
-                          setFieldValue("dob.month", convertToSingleByte(values.dob.month))
-                          setFieldValue("dob.date", convertToSingleByte(values.dob.date))
-                          if(!errors)
-                          {
+                      
+                          // Converting the date of birth fields to single byte and setting them
+                          setFieldValue("dob.year", convertToSingleByte(values.dob.year));
+                          setFieldValue("dob.month", convertToSingleByte(values.dob.month));
+                          setFieldValue("dob.date", convertToSingleByte(values.dob.date));
+                      
+                          // Triggering the form submission at the end
                           handleSubmit();
-                          }
-                        },
+                      },
+                      
                       }}
                       parentClass={"inline primary-button"}
                     />
