@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { Button, CustomHeader, NormalTable, Input } from "@/components";
+import { Button, CustomHeader, NormalTable, Input, QrScannerModal, CommonDialog } from "@/components";
 import {
   convertToSingleByte,
   getEnglishDateDisplayFormat,
@@ -11,12 +11,13 @@ import {
   getSpecialCareName,
   getYYYYMMDDHHSSSSDateTimeFormat,
   getJapaneseDateTimeDayDisplayActualFormat,
-  getEnglishDateTimeDisplayActualFormat
+  getEnglishDateTimeDisplayActualFormat,
+  toastDisplay
 } from "@/helper";
 import { setStaffTempFamily } from "@/redux/family";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
-import { TemporaryStaffRegistrantServices } from "@/services";
+import { TemporaryStaffRegistrantServices, UserQrService } from "@/services";
 
 function TemporaryRegistrants() {
   const { locale, localeJson } = useContext(LayoutContext);
@@ -47,6 +48,75 @@ function TemporaryRegistrants() {
     },
     place_id: placeID,
   });
+  const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [staffFamilyDialogVisible, setStaffFamilyDialogVisible] = useState(false);
+  const [qrFamilyId,setQRFamilyId] = useState("")
+  const [qrPlaceId,setQRPlaceId] = useState("")
+
+    const closeQrPopup = () => {
+        setOpenQrPopup(false);
+    }
+    const { register,create } = UserQrService;
+
+    const qrResult = (res) => {
+        let formData = new FormData();
+        formData.append("content", res)
+        register(formData, (result) => {
+            if(result)
+            {
+              closeQrPopup()
+              let data = result.data.data
+              if((data[0].place_id)==placeID && data[0].family_is_registered == "0")
+              {
+              setFamilyCode(data[0].family_code)
+               setGetListPayload((prevState) => ({
+                ...prevState,
+                filters: {
+                  ...prevState.filters,
+                  family_code: data[0].family_code,
+                },
+              }));
+            }
+          
+               else {
+                if(data[0].family_is_registered == "0")
+                {
+               setQRFamilyId((data[0].family_id))
+               setQRPlaceId((data[0].place_id))
+               setStaffFamilyDialogVisible(true)
+               hideOverFlow()
+                }
+                else {
+                  toastDisplay(translate(localeJson, 'already_checked_in'), '', '', "error");
+                }
+               closeQrPopup()
+               }
+            }
+            else {
+                closeQrPopup()
+            }
+        })
+    }
+
+      /**
+     * CommonDialog modal close
+     */
+      const onClickCancelButton = () => {
+        setStaffFamilyDialogVisible(false);
+    };
+
+    /**
+     * CommonDialog modal open
+     */
+    const onClickOkButton = () => {
+      let payload = {
+        family_id:qrFamilyId,
+        place_id: qrPlaceId,
+      };
+      create(payload, ()=>{
+        onClickCancelButton()
+      });
+    };
 
   const temporaryRegistrantsColumns = [
     {
@@ -404,7 +474,62 @@ function TemporaryRegistrants() {
     }
   }
 
+  const hideOverFlow = () => {
+    document.body.style.overflow = 'hidden';
+}
+
+const showOverFlow = () => {
+    document.body.style.overflow = 'auto';
+}
+
   return (
+    <>
+     <CommonDialog
+                open={staffFamilyDialogVisible}
+                dialogBodyClassName="p-3 text-center"
+                header={translate(localeJson, 'confirmation')}
+                content={
+                    <div>
+                        <p>{translate(localeJson, 'qr_staff_check_in_confirm')}</p>
+                    </div>
+                }
+                position={"center"}
+                footerParentClassName={"text-center"}
+                footerButtonsArray={[
+                  {
+                    buttonProps: {
+                        buttonClass: "w-full back-button",
+                        type: "submit",
+                        text: translate(localeJson, 'admission_button'),
+                        onClick: () => {
+                            onClickOkButton();
+                            showOverFlow();
+                        },
+                    },
+                    parentClass: "back-button modal-button-footer-space"
+                },
+                    {
+                        buttonProps: {
+                            buttonClass: "w-full back-button",
+                            text: translate(localeJson, 'cancel'),
+                            onClick: () => {
+                                onClickCancelButton();
+                                showOverFlow();
+                            },
+                        },
+                        parentClass: "back-button"
+                    },
+
+                ]}
+                close={() => {
+                    setStaffFamilyDialogVisible(false);
+                }}
+            />
+    <QrScannerModal
+    open={openQrPopup}
+    close={closeQrPopup}
+    callback={qrResult}>
+    </QrScannerModal>
     <div className="grid">
       <div className="col-12">
         <div className="card">
@@ -419,6 +544,15 @@ function TemporaryRegistrants() {
               </span>
             </div>
             <div className='mb-2 flex align-items-center'>
+            <Button 
+              buttonProps={{  
+              buttonClass: "w-12 search-button mobile-input ",
+              text: translate(localeJson, 'qr_search'),
+              type: "button",
+              onClick: () => {
+              setOpenQrPopup(true); },
+               }} 
+               parentClass="inline  pr-2 search-button" />
               <Button buttonProps={{
                 type: 'submit',
                 rounded: "true",
@@ -523,6 +657,7 @@ function TemporaryRegistrants() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

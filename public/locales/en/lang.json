@@ -1052,5 +1052,6 @@
     "temp_inactive_place":"This shelter is not currently operating",
     "already_register":"Registered in another evacuation center. Please delete and proceed for registration.",
     "temp_register_date":"Temporary registration date",
-    "ocr_tooltip":"Please scan your ID card to enter your details .\n Acceptable forms include My Number Card, driver's license, and alien registration certificate."
+    "ocr_tooltip":"Please scan your ID card to enter your details .\n Acceptable forms include My Number Card, driver's license, and alien registration certificate.",
+    "qr_staff_check_in_confirm":"The evacuation center selected during pre-evacuation registration is different. Is it okay if I change to this evacuation center and proceed with admission?"
 }
