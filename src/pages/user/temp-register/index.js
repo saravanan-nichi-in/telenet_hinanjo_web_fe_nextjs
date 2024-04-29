@@ -150,7 +150,6 @@ export default function Admission() {
       TempRegisterServices.isRegistered(payload, (res) => {
         if (res) {
           let data = res.data;
-          console.log(data)
           if (data?.is_registered == "0") {
             localStorage.setItem("showDelete", "true")
             router.push('/user/temp-register/success')
@@ -499,7 +498,6 @@ export default function Admission() {
         translate(localeJson, "c_required"),
         (value) => {
           if (!isStep1) {
-            console.log("JJJ");
             return value == true;
           } else return true;
         }
@@ -509,7 +507,6 @@ export default function Admission() {
         translate(localeJson, "c_required"),
         (value) => {
           if (!isStep1) {
-            console.log("yyy");
             return value != undefined ? true : false;
           } else true;
         }
@@ -1075,6 +1072,7 @@ export default function Admission() {
             values.questions = questions;
             console.log(values)
             dispatch(setOriginalData(values));
+            dispatch(setPlaceId(values?.evacuationPlace))
             let payload = convertData(values);
             dispatch(setRegisterData(payload));
             router.push("/user/temp-register/confirm");

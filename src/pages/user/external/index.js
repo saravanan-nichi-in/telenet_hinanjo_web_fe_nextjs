@@ -37,11 +37,12 @@ export default function PublicExternal() {
   const [shelterData, setShelterData] = useState([]);
   const [toggleSwitchShelterComponents, setToggleSwitchShelterComponents] = useState([]);
   const [editObj, setEditObj] = useState({});
+  const [invalidCounter, setInvalidCounter] = useState(100000000)
   const formikRef = useRef();
 
   /* Services */
   const { getActivePlaceList, create } = ExternalServices;
-  const { getAddress, getZipCode } = CommonServices;
+  const { getAddressFromZipCode, getZipCodeFromAddress } = CommonServices;
 
   // Getting storage data with help of reducers
   const [buttonStates, setButtonStates] = useState(Array(3).fill(false));
@@ -97,39 +98,48 @@ export default function PublicExternal() {
     setToggleSwitchShelterComponents(newToggleSwitchComponents);
   }, [shelterData, placeButtonStates]); // Include other dependencies as needed
 
+
   useEffect(() => {
     let address = formikRef.current.values.address;
     let stateId = formikRef.current.values.prefecture_id;
-    let { city, street } = splitJapaneseAddress(address);
-    let postalCode = formikRef.current.values.postalCode
+    let postalCode = formikRef.current.values.postalCode;
     let state = prefectures.find(x => x.value == stateId)?.name;
-    // let city = zipAddress.address2;
-    // let street = zipAddress.address3;
-    if (state && (city && street)) {
-      getZipCode(state, city, street, (res) => {
+    
+    let firstConditionCompleted = "false";
+  
+    // First condition - Handling by address and state
+    if (address && state) {
+      getZipCodeFromAddress((state + address), (res) => {
         if (res) {
-          let zipCode = res.result.zipcode;
-          setFetchedZipCode(zipCode.replace(/-/g, ""))
+          let zipCode = res.data.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""));
           zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
-          formikRef.current.validateField("postalCode")
-          return
-        }
-        else {
-          setFetchedZipCode("")
-          return
-        }
-      })
-    }
-    if (postalCode) {
-      getAddress(postalCode, (res) => {
-        let _address = res;
-        if (stateId != _address.prefcode || address != _address.address2 + _address.address3) {
-          setFetchedZipCode("")
           formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "true";
+        } else {
+          setFetchedZipCode(invalidCounter+1);
+          formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "false";
         }
-      })
+      });
     }
-  }, [addressCount])
+  
+    // Check to not execute if first condition completed its work
+    else if (postalCode) {
+      getAddressFromZipCode(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
+          setFetchedZipCode("");
+          formikRef.current.validateField("postalCode");
+        } else {
+          formikRef.current.validateField("address", _address.address2 + _address.address3);
+          formikRef.current.validateField("prefecture_id", _address.prefcode);
+          setFetchedZipCode(postalCode);
+          formikRef.current.validateField("postalCode", postalCode);
+        }
+      });
+    }
+  }, [addressCount]);
 
   useEffect(() => {
     formikRef.current.validateField("postalCode");
@@ -182,7 +192,7 @@ export default function PublicExternal() {
           "required-when-toggleSwitches-true",
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
-            if (value != undefined)
+            if (value != undefined || fetchZipCode != "")
               return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
             else
               return true
@@ -680,7 +690,7 @@ export default function PublicExternal() {
                                     }
                                     if (val.length >= 7) {
                                       let payload = convertToSingleByte(val.slice(0, 3) + val.slice(3));
-                                      getAddress(payload, (response) => {
+                                      getAddressFromZipCode(payload, (response) => {
                                         if (response) {
                                           let address = response;
                                           setZipAddress(response);

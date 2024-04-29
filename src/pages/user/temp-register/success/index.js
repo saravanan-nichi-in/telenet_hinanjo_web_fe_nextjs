@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { Button } from "@/components";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { downloadImage, toastDisplay, getValueByKeyRecursively as translate } from "@/helper";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { clearExceptPlaceId, reset } from "@/redux/tempRegister";
+import { clearExceptPlaceId, clearExceptSuccessData, reset } from "@/redux/tempRegister";
 import { TempRegisterServices } from "@/services"
 import { default_place_id } from "@/utils/constant";
 
@@ -14,6 +14,8 @@ const RegisterSuccess = () => {
   const router = useRouter()
   const dispatch = useAppDispatch();
   const regReducer = useAppSelector((state) => state.tempRegisterReducer);
+  const [showDelete,setShowDelete] = useState(false);
+  const [isTemp,setIsTemp] = useState(false)
 
   const family_code = regReducer.successData?.data?.familyCode
 
@@ -24,14 +26,29 @@ const RegisterSuccess = () => {
   const { deleteTempFamily } = TempRegisterServices
 
   useEffect(() => {
-    const navigationEntries = window.performance.getEntriesByType('navigation');
-    if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
-      localStorage.setItem("refreshing", "true")
-    }
-  }, []);
+    const handlePopstate = () => {
+      // Clear localStorage when the back button is clicked
+      localStorage.setItem('refreshing', "true");
+    };
+
+    const handleBeforeUnload = () => {
+      // Clear localStorage when the page is about to be unloaded
+      localStorage.setItem('refreshing', "true");
+    };
+
+    // Attach the event listeners when the component mounts
+    window.addEventListener("popstate", handlePopstate);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [locale]);
 
   useEffect(() => {
-    let place_id = regReducer.placeId
+    let place_id = regReducer.placeId;
     let SuccessPlaceId = regReducer.successData?.placeId
 
     if(localStorage.getItem('deletedFromStaff')=="true"||localStorage.getItem('tempDataDeleted')=="true"||!regReducer.successData?.data?.familyCode)
@@ -47,10 +64,20 @@ const RegisterSuccess = () => {
       if(res)
       {
         let data = res.data;
-        if(data?.is_registered != "0" && !default_place_id.includes(parseInt(place_id)))
+        if(data?.is_registered != "0" && !(default_place_id.includes(parseInt(place_id))))
         {
           localStorage.setItem("showDelete","false")
           router.push('/user/temp-person-count')
+        }
+        else if(data?.is_registered == "1") {
+          localStorage.setItem("personCountTemp",null)
+          localStorage.setItem('refreshing', "false");
+          localStorage.setItem("tempDataDeleted","true");
+          dispatch(clearExceptSuccessData());
+          setIsTemp(false)
+        }
+        else {
+          setIsTemp(true)
         }
       }
     })
@@ -60,8 +87,12 @@ const RegisterSuccess = () => {
       toastDisplay(translate(localeJson, "already_register"),'','',"error");
     }
     // Dispatch setSuccessData only if the page has been refreshed
-    let show = localStorage.getItem("refreshing");
-    show == "true" && localStorage.setItem("showDelete","true");
+   let show = localStorage.getItem("refreshing");
+   let isTrue = localStorage.getItem("showDelete");
+   if( show == "true" || isTrue == "true") {
+    localStorage.setItem("showDelete","true");
+    setShowDelete(true)
+  }
   }, [locale]);
 
   return (
@@ -81,10 +112,12 @@ const RegisterSuccess = () => {
             <div className="mb-3 text-center">
               <p className="text-5xl font-bold">{family_code}</p>
             </div>
+            {isTemp &&(
             <div className="mb-3 text-center">
               <img src={url} width={300} height={300} />
             </div>
-
+            )}
+             {isTemp &&(
             <div className="mb-3 text-center block grid col-12 successButtonText">
               <Button buttonProps={{
                 type: "button",
@@ -96,7 +129,7 @@ const RegisterSuccess = () => {
               }} parentClass={"back-button"}
               />
               {
-                localStorage.getItem("showDelete") == "true" &&
+                showDelete &&
                 <Button buttonProps={{
                   type: "button",
                   buttonClass: "w-full delete-button-user h-5rem border-radius-5rem mt-3 border-2",
@@ -127,6 +160,7 @@ const RegisterSuccess = () => {
               </div>
 
             </div>
+             )}
           </div>
         </div>
       </div>

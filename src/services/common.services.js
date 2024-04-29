@@ -16,6 +16,8 @@ export const CommonServices = {
     getStaffEventList: _getStaffEventList,
     getZipCode: _getZipCode,
     getAddress: _getAddress,
+    getAddressFromZipCode: _getAddressFromZip,
+    getZipCodeFromAddress: _getZipCodeFromAddress,
     convertToKatakana: _convertToKatakana
 };
 
@@ -225,6 +227,22 @@ async function _getZipCode(state, city, street, callBackFun) {
         });
 }
 
+async function _getZipCodeFromAddress(address, callBackFun) {
+    let payload = {
+        "address":address
+    }
+    axios.post('/user/fetch/zipcode', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            console.error('Error:', error);
+        });
+}
+
 async function _getAddress(zipCode, callBackFun) {
 
     let payload = {
@@ -232,6 +250,23 @@ async function _getAddress(zipCode, callBackFun) {
         "zipcode2": zipCode.slice(3)
     }
     axios.post('/user/get/address', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data.result);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            console.error('Error:', error);
+        });
+}
+
+async function _getAddressFromZip(zipCode, callBackFun) {
+
+    let payload = {
+        "postal_code": zipCode,
+    }
+    axios.post('/user/fetch/address', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data.result);

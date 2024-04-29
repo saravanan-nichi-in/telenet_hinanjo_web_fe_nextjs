@@ -111,7 +111,7 @@ function TemporaryRegistrants() {
     const onClickOkButton = () => {
       let payload = {
         family_id:qrFamilyId,
-        place_id: qrPlaceId,
+        place_id: layoutReducer?.user?.place?.id,
       };
       create(payload, ()=>{
         onClickCancelButton()
@@ -498,7 +498,7 @@ const showOverFlow = () => {
                 footerButtonsArray={[
                   {
                     buttonProps: {
-                        buttonClass: "w-full back-button",
+                        buttonClass: "w-full update-button",
                         type: "submit",
                         text: translate(localeJson, 'admission_button'),
                         onClick: () => {
@@ -506,7 +506,7 @@ const showOverFlow = () => {
                             showOverFlow();
                         },
                     },
-                    parentClass: "back-button modal-button-footer-space"
+                    parentClass: "update-button modal-button-footer-space"
                 },
                     {
                         buttonProps: {
