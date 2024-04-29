@@ -418,19 +418,19 @@ export default function EvacueeTempRegModal(props) {
       }
       if (val.length >= 7) {
         let payload = val.slice(0, 3) + "-" + val.slice(3);
-        getAddressFromZipCode(val, (response) => {
-          if (response) {
-            let address = response;
-            const selectedPrefecture = prefectures.find(
-              (prefecture) => prefecture.value == address.prefcode
-            );
-            setFieldValue("prefecture_id", selectedPrefecture?.value);
-            setFieldValue("address", address.address2 + address.address3 || "");
-          } else {
-            setFieldValue("prefecture_id", "");
-            setFieldValue("address", "");
-          }
-        });
+        // getAddressFromZipCode(val, (response) => {
+        //   if (response) {
+        //     let address = response;
+        //     const selectedPrefecture = prefectures.find(
+        //       (prefecture) => prefecture.value == address.prefcode
+        //     );
+        //     setFieldValue("prefecture_id", selectedPrefecture?.value);
+        //     setFieldValue("address", address.address2 + address.address3 || "");
+        //   } else {
+        //     setFieldValue("prefecture_id", "");
+        //     setFieldValue("address", "");
+        //   }
+        // });
       }
     }
     if (evacuees.dob) {
@@ -445,9 +445,9 @@ export default function EvacueeTempRegModal(props) {
       setFieldValue("age_m", parseInt(age.months));
       setFieldValue("dob", convertedObject || "");
     }
-    setFieldValue("address", evacuees.address);
-    setFieldValue("address2", evacuees.address2);
-    setFieldValue("connecting_code", evacuees.connecting_code);
+    setFieldValue("address", evacuees.address||"");
+    setFieldValue("address2", evacuees.address2||"");
+    setFieldValue("connecting_code", evacuees.connecting_code||"");
   }
 
   function calculateAge(birthdate) {
@@ -654,15 +654,29 @@ export default function EvacueeTempRegModal(props) {
                       buttonProps={{
                         buttonClass:
                           "w-full primary-button h-3rem border-radius-5rem mb-3",
-                        type: "submit",
+                        type: "button",
                         text: buttonText,
                         onClick: () => {
-                          setCounter(count + 1);
+                          formikRef.current.validateForm().then(() => {
+                            const touchedKeys = Object.keys(formikRef.current.initialValues);
+                            const newTouched = touchedKeys.reduce(
+                              (acc, key) => ({ ...acc, [key]: true }),
+                              {}
+                            );
+                            formikRef.current.setTouched(newTouched);
+                          });
                           setIsFormSubmitted(true);
+                          setCounter(count + 1);
+                          setAddressCount(addressCount+1)
+                          formikRef.current.validateField("postalCode");
+                          setCounter(count + 1);
                           setFieldValue("dob.year", convertToSingleByte(values.dob.year))
                           setFieldValue("dob.month", convertToSingleByte(values.dob.month))
                           setFieldValue("dob.date", convertToSingleByte(values.dob.date))
+                          if(!errors)
+                          {
                           handleSubmit();
+                          }
                         },
                       }}
                       parentClass={"inline primary-button"}

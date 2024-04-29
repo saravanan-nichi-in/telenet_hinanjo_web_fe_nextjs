@@ -131,7 +131,7 @@ export default function UserEventRegModal(props) {
     evacuee,
   } = props && props;
 
-  const { getText, getAddress } = CommonServices;
+  const { getText, getAddressFromZipCode,getZipCodeFromAddress } = CommonServices;
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
   const [hasErrors, setHasErrors] = useState(false);
@@ -140,10 +140,52 @@ export default function UserEventRegModal(props) {
   const [dobCounter, setDobCounter] = useState(0);
   const [addressCount, setAddressCount] = useState(0);
   const [fetchZipCode, setFetchedZipCode] = useState("");
+  const [invalidCounter, setInvalidCounter] = useState(100000000)
 
   useEffect(() => {
     setMIsRecording(isRecording);
   }, [isRecording]);
+  useEffect(() => {
+    let address = formikRef.current.values.address;
+    let stateId = formikRef.current.values.prefecture_id;
+    let postalCode = formikRef.current.values.postalCode;
+    let state = prefectures.find(x => x.value == stateId)?.name;
+    
+    let firstConditionCompleted = "false";
+  
+    // First condition - Handling by address and state
+    if (address && state) {
+      getZipCodeFromAddress((state + address), (res) => {
+        if (res) {
+          let zipCode = res.data.zipcode;
+          setFetchedZipCode(zipCode.replace(/-/g, ""));
+          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+          formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "true";
+        } else {
+          setFetchedZipCode(invalidCounter+1);
+          formikRef.current.validateField("postalCode");
+          firstConditionCompleted = "false";
+        }
+      });
+    }
+  
+    // Check to not execute if first condition completed its work
+    else if (postalCode) {
+      getAddressFromZipCode(postalCode, (res) => {
+        let _address = res;
+        if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
+          setFetchedZipCode("");
+          formikRef.current.validateField("postalCode");
+        } else {
+          formikRef.current.validateField("address", _address.address2 + _address.address3);
+          formikRef.current.validateField("prefecture_id", _address.prefcode);
+          setFetchedZipCode(postalCode);
+          formikRef.current.validateField("postalCode", postalCode);
+        }
+      });
+    }
+  }, [addressCount]);
 
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
@@ -346,7 +388,6 @@ export default function UserEventRegModal(props) {
                             onChange: handleChange,
                             onBlur: handleBlur,
                             disabled:
-                              values?.family_register_from == "0" ||
                                 isMRecording
                                 ? true
                                 : false,
@@ -397,7 +438,6 @@ export default function UserEventRegModal(props) {
                               name: "name_furigana",
                               value: values.name_furigana,
                               disabled:
-                                values?.family_register_from == "0" ||
                                   isMRecording
                                   ? true
                                   : false,
@@ -459,7 +499,6 @@ export default function UserEventRegModal(props) {
                               value: values.tel,
                               inputMode: "numeric",
                               disabled:
-                                values?.family_register_from == "0" ||
                                   isMRecording || values.telAsRep
                                   ? true
                                   : false,
@@ -534,7 +573,6 @@ export default function UserEventRegModal(props) {
                             type: "text",
                             value: values.postalCode,
                             disabled:
-                              values?.family_register_from == "0" ||
                                 isMRecording || values.addressAsRep
                                 ? true
                                 : false,
@@ -560,7 +598,7 @@ export default function UserEventRegModal(props) {
                               }
                               if (val?.length == 7) {
                                 let payload = convertToSingleByte(val);
-                                getAddress(payload, (response) => {
+                                getAddressFromZipCode(payload, (response) => {
                                   if (response) {
                                     let address = response;
                                     const selectedPrefecture =
@@ -633,11 +671,6 @@ export default function UserEventRegModal(props) {
                             },
                             inputDropdownClassName: "w-full w-full",
                             name: "prefecture_id",
-                            value: values.prefecture_id,
-                            disabled:
-                              values?.family_register_from == "0" || values.addressAsRep
-                                ? true
-                                : false,
                             placeholder: translate(
                               localeJson,
                               "prefecture_places"
@@ -649,7 +682,7 @@ export default function UserEventRegModal(props) {
                               setFieldValue("prefecture_id", e.target.value);
                               if (values.postalCode) {
                                 let payload = values.postalCode;
-                                getAddress(
+                                getAddressFromZipCode(
                                   payload, (res) => {
                                     if (res && res.prefcode != e.target.value) {
                                       setErrors({ ...errors, postalCode: translate(localeJson, "zip_code_mis_match") });
@@ -685,18 +718,12 @@ export default function UserEventRegModal(props) {
                             name: "address",
                             value: values.address,
                             disabled:
-                              values?.family_register_from == "0" ||
-                                isMRecording || values.addressAsRep
+                                isMRecording 
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "city_ward"),
                             onChange: (evt) => {
                               setFieldValue("address", evt.target.value)
-                            },
-                            onMouseLeave: (evt) => {
-                              setAddressCount(addressCount + 1)
-                            },
-                            onTouchEnd: (evt) => {
                               setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
@@ -744,7 +771,6 @@ export default function UserEventRegModal(props) {
                             name: "address2",
                             value: values.address2,
                             disabled:
-                              values?.family_register_from == "0" ||
                                 isMRecording || values.addressAsRep
                                 ? true
                                 : false,
@@ -818,10 +844,6 @@ export default function UserEventRegModal(props) {
                                     inputMode: "numeric",
                                     value: values.dob.year,
                                     type: "text",
-                                    disabled:
-                                      values?.family_register_from == "0"
-                                        ? true
-                                        : false,
                                     onChange: (evt) => {
                                       setDobCounter(dobCounter + 1);
                                       const re = /^[0-9-]+$/;
@@ -881,10 +903,6 @@ export default function UserEventRegModal(props) {
                                     name: "dob.month",
                                     inputMode: "numeric",
                                     value: values.dob.month,
-                                    disabled:
-                                      values?.family_register_from == "0"
-                                        ? true
-                                        : false,
                                     onChange: (evt) => {
                                       const re = /^[0-9-]+$/;
                                       setDobCounter(dobCounter + 1);
@@ -953,10 +971,6 @@ export default function UserEventRegModal(props) {
                                     name: "dob.date",
                                     inputMode: "numeric",
                                     value: values.dob.date,
-                                    disabled:
-                                      values?.family_register_from == "0"
-                                        ? true
-                                        : false,
                                     onChange: (evt) => {
                                       setDobCounter(dobCounter + 1);
                                       const { value, name } = evt.target;
@@ -1129,9 +1143,6 @@ export default function UserEventRegModal(props) {
                             options={genderOptions}
                             value={values?.gender}
                             optionLabel="name"
-                            disabled={
-                              values?.family_register_from == "0" ? true : false
-                            }
                             onChange={(e) => setFieldValue("gender", e.value)}
                           />
                         </div>
