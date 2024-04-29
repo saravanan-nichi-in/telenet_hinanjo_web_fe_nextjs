@@ -663,9 +663,6 @@ export default function EvacueeTempRegModal(props) {
                           // Incrementing the counter by 2 (combined the two separate increments into one)
                           setCounter(prevCount => prevCount + 2);
                       
-                          // Incrementing the address count
-                         await setAddressCount(prevAddressCount => prevAddressCount + 1);
-                      
                           // Validate the postalCode field specifically
                           formikRef.current.validateField("postalCode");
                       
