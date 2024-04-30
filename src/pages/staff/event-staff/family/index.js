@@ -44,11 +44,11 @@ function EventStaffFamily() {
             start: 0,
             limit: 10,
             sort_by: "",
-            order_by: "desc"
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
         },
         event_id: eventID,
-        family_code: "",
-        refugee_name: ""
 
     });
     const [listPayload, setListPayload] = useState({
@@ -56,11 +56,11 @@ function EventStaffFamily() {
             start: 0,
             limit: 10,
             sort_by: "",
-            order_by: "desc"
+            order_by: "desc",
+            family_code: "",
+            refugee_name: ""
         },
         event_id: eventID,
-        family_code: "",
-        refugee_name: ""
 
     });
     const [barcode, setBarcode] = useState(null);
@@ -144,11 +144,11 @@ function EventStaffFamily() {
                 start: 0,
                 limit: listPayload.filters.limit,
                 sort_by: "",
-                order_by: "desc"
+                order_by: "desc",
+                family_code: familyCode,
+                refugee_name: refugeeName
             },
             event_id: eventID,
-            family_code: familyCode,
-            refugee_name: refugeeName
         }
         setListPayload(payload);
     }
