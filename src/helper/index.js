@@ -604,3 +604,7 @@ export function downloadImage(base64String, fileName) {
     // Revoke the URL to free up memory
     URL.revokeObjectURL(downloadUrl);
 }
+
+export function formatAddress(zipCode, prefecture, familyOrPersonAddress, familyOrPersonAddressDefault) {
+    return `${zipCode ? zipCode : ''} ${prefecture ? prefecture : ''} ${familyOrPersonAddress ? familyOrPersonAddress : ''} ${familyOrPersonAddressDefault ? familyOrPersonAddressDefault : ''}`;
+}
