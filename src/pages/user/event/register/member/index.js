@@ -490,10 +490,10 @@ export default function UserEventRegModal(props) {
                                                                 hideOverFlow();
                                                             },
                                                         }}
-                                                        parentClass={"back-button w-full p-2 pt-0 mb-2"}
+                                                        parentClass={"back-button w-full p-2 mb-2"}
                                                     />
                                                 </div>
-                                                <div className="mb-2 col-12">
+                                                <div className="mb-2 col-12 mt-2">
                                                     <Input
                                                         inputProps={{
                                                             inputParentClassName: `w-full custom_input ${errors.name && touched.name && "p-invalid"

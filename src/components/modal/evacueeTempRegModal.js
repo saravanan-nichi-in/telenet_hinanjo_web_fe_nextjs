@@ -715,7 +715,7 @@ export default function EvacueeTempRegModal(props) {
                 <div className={`modal-content`}>
                   <div className="">
                     <div
-                      className="w-full gap-3 column-gap-4 row-gap-6 pl-5 pr-5 border-round-3xl bg-white  evacueeFooterButtonText"
+                      className="w-full mt-2 gap-3 column-gap-4 row-gap-6 pl-5 pr-5 border-round-3xl bg-white  evacueeFooterButtonText"
                       style={{ justifyContent: "start" }}
                     >
                       <div className="flex items-center">
@@ -754,7 +754,7 @@ export default function EvacueeTempRegModal(props) {
                             setOpenQrPopup(true);
                           },
                         }}
-                        parentClass={"back-button w-full p-2 pt-0 pb-0 mb-2"}
+                        parentClass={"back-button w-full p-2 mb-2"}
                       />
                     </div>
                     <div className="pl-5 pr-5">
