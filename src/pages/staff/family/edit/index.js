@@ -959,10 +959,10 @@ export default function Admission() {
                             hideOverFlow();
                           },
                         }}
-                        parentClass={"back-button w-full p-2 pt-0 mb-2"}
+                        parentClass={"back-button w-full p-2 mb-2"}
                       />
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-3">
                       <div className="grid">
                         <div className="mb-2  col-12 xl:col-12">
                           <div className="w-12">
