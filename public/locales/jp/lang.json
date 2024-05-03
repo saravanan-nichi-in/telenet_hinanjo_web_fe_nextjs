@@ -388,7 +388,7 @@
       "address_public_evacuees": "住所",
       "place_capacity": "収容人数",
       "capacity_limit": "収容率",
-      "accommodation_status_p": "避難者数",
+      "accommodation_status_p": "避難者数(%)",
       "percent": "避難者数",
       "status_public_evacuees": "状態",
       "active": "有効",

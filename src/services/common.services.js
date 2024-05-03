@@ -280,7 +280,7 @@ async function _getAddressFromZip(zipCode, callBackFun) {
 
 async function _convertToKatakana(inputText, callBackFun) {
     const apiUrl = 'https://labs.goo.ne.jp/api/hiragana';
-    const apiKey = '032207343b569cd84abf5af9ff408aa450b3edb048fd71728a05f4ce64e2f76a'; // Replace with your actual API key
+    const apiKey = process.env.NEXT_PUBLIC_GIT_APP_ID; // Replace with your actual API key
 
 
     // Create the request headers
