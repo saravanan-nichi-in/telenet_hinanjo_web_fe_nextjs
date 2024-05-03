@@ -169,7 +169,7 @@ export default function UserEventRegModal(props) {
         });
 
     /** Services */
-    const { getText, getAddressFromZipCode, getZipCodeFromAddress } = CommonServices;
+    const { getText, getAddressFromZipCode, getZipCodeFromAddress,convertToKatakana } = CommonServices;
     const {
         qrScanRegistration,
         ocrScanRegistration,
@@ -583,10 +583,20 @@ export default function UserEventRegModal(props) {
                                                                         fromData.append("audio_sample", rec);
                                                                         getText(fromData, (res) => {
                                                                             if (res?.data?.content) {
-                                                                                setFieldValue(
-                                                                                    "name_furigana",
-                                                                                    res?.data?.content
-                                                                                );
+                                                                                convertToKatakana(res?.data?.content, (res) => {
+                                                                                    if (res) {
+                                                                                      setFieldValue(
+                                                                                        "name_furigana",
+                                                                                        res.converted.replace(/ /g, "")
+                                                                                      );
+                                                                                    }
+                                                                                    else {
+                                                                                      setFieldValue(
+                                                                                        "name_furigana",
+                                                                                        res?.data?.content.replace(/ /g, "")
+                                                                                      );
+                                                                                    }
+                                                                                  })
                                                                             }
                                                                         });
                                                                     },

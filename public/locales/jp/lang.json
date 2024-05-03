@@ -388,7 +388,7 @@
       "address_public_evacuees": "住所",
       "place_capacity": "収容人数",
       "capacity_limit": "収容率",
-      "accommodation_status_p": "避難者数",
+      "accommodation_status_p": "避難者数(%)",
       "percent": "避難者数",
       "status_public_evacuees": "状態",
       "active": "有効",
@@ -1048,6 +1048,6 @@
       "temp_inactive_place":"この避難所は現在運営していません",
       "already_register":"別の避難所で既に仮登録済みです。既存のデータを削除して、再度登録してください。",
       "temp_register_date":"避難前登録日時",
-      "ocr_tooltip":"身分証明書から読み取って入力行います。\n マイナンバーカード、運転免許証、外国人登録証明書などが可能です。",
+      "ocr_tooltip":"身分証明書から読み取って入力を行います。\n マイナンバーカード、運転免許証、外国人登録証明書などが使用可能です。",
       "qr_staff_check_in_confirm":"避難前登録時に選択した避難所が異なります。 この避難所に変えて入所を進めてもよろしいですか？"
 }
