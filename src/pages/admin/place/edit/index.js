@@ -42,6 +42,38 @@ export default function PlaceUpdatePage() {
   const [publicAvailabilityFlagValue, setPublicAvailabilityFlagValue] = useState(false);
   const [prefCount, setPrefCount] = useState(1)
   const formikRef = useRef();
+  const [initialValues, setInitialValues] = useState({
+    place_id: id,
+    name: "",
+    refugee_name: "",
+    name_en: "",
+    postal_code_1: "",
+    postal_code_2: "",
+    prefecture_id: null,
+    address: "",
+    prefecture_en_id: null,
+    address_en: "",
+    postal_code_default_1: "",
+    postal_code_default_2: "",
+    prefecture_id_default: null,
+    address_default: "",
+    prefecture_default_en_id: null,
+    address_default_en: "",
+    total_place: "",
+    tel: "",
+    longitude: "",
+    latitude: "",
+    altitude: "",
+    opening_date_time: "",
+    closing_date_time: "",
+    opening_date: "",
+    opening_time: "",
+    closing_date: "",
+    closing_time: "",
+    public_availability: "",
+    active_flg: "",
+    remarks: "",
+});
 
   const today = new Date();
   const invalidDates = Array.from({ length: today.getDate() - 1 }, (_, index) => {
@@ -291,82 +323,52 @@ export default function PlaceUpdatePage() {
     details(id, fetchData);
   };
 
-  const initialValues = {
-    place_id: id,
-    name: "",
-    refugee_name: "",
-    name_en: "",
-    postal_code_1: "",
-    postal_code_2: "",
-    prefecture_id: null,
-    address: "",
-    prefecture_en_id: null,
-    address_en: "",
-    postal_code_default_1: "",
-    postal_code_default_2: "",
-    prefecture_id_default: null,
-    address_default: "",
-    prefecture_default_en_id: null,
-    address_default_en: "",
-    total_place: "",
-    tel: "",
-    longitude: "",
-    latitude: "",
-    altitude: "",
-    opening_date_time: "",
-    closing_date_time: "",
-    opening_date: "",
-    opening_time: "",
-    closing_date: "",
-    closing_time: "",
-    public_availability: "",
-    active_flg: "",
-    remarks: "",
-  };
-
   function fetchData(response) {
     setLoader(true);
     const model = response.data.model;
+    let initialValuesPayload = {};
+
     let openingDate = model.opening_date_time
       ? new Date(model.opening_date_time)
       : "";
     let closingDate = model.closing_date_time
       ? new Date(model.closing_date_time)
       : "";
-    initialValues.name = model.name || "";
-    initialValues.refugee_name = model.refugee_name || "";
-    initialValues.name_en = model.name_en || "";
-    initialValues.postal_code_1 = model.zip_code
+    initialValuesPayload.name = model.name || "";
+    initialValuesPayload.refugee_name = model.refugee_name || "";
+    initialValuesPayload.name_en = model.name_en || "";
+    initialValuesPayload.postal_code_1 = model.zip_code
       ? model.zip_code.split("-")[0]
       : "";
-    initialValues.postal_code_2 = model.zip_code
+    initialValuesPayload.postal_code_2 = model.zip_code
       ? model.zip_code.split("-")[1]
       : "";
-    initialValues.prefecture_id = model.prefecture_id || null;
-    initialValues.address = model.address || "";
-    initialValues.prefecture_en_id = model.prefecture_en_id || null;
-    initialValues.address_en = model.address_en || "";
-    initialValues.postal_code_default_1 = model.zip_code_default
+    initialValuesPayload.prefecture_id = model.prefecture_id || null;
+    initialValuesPayload.address = model.address || "";
+    initialValuesPayload.prefecture_en_id = model.prefecture_en_id || null;
+    initialValuesPayload.address_en = model.address_en || "";
+    initialValuesPayload.postal_code_default_1 = model.zip_code_default
       ? model.zip_code_default.split("-")[0]
       : "";
-    initialValues.postal_code_default_2 = model.zip_code_default
+    initialValuesPayload.postal_code_default_2 = model.zip_code_default
       ? model.zip_code_default.split("-")[1]
       : "";
-    initialValues.prefecture_id_default = model.prefecture_id_default || null;
-    initialValues.address_default = model.address_default || "";
-    initialValues.prefecture_default_en_id =
+    initialValuesPayload.prefecture_id_default = model.prefecture_id_default || null;
+    initialValuesPayload.address_default = model.address_default || "";
+    initialValuesPayload.prefecture_default_en_id =
       model.prefecture_default_en_id || null;
-    initialValues.address_default_en = model.address_default_en || "";
-    initialValues.total_place = model.total_place || "";
-    initialValues.tel = model.tel || "";
-    initialValues.longitude = model?.map?.longitude || "";
-    initialValues.latitude = model?.map?.latitude || "";
-    initialValues.altitude = model.altitude || "";
-    initialValues.opening_date = openingDate;
-    initialValues.closing_date = closingDate;
-    initialValues.public_availability = model.public_availability == 1;
-    initialValues.active_flg = model.active_flg == 1;
-    initialValues.remarks = model.remarks || "";
+    initialValuesPayload.address_default_en = model.address_default_en || "";
+    initialValuesPayload.total_place = model.total_place || "";
+    initialValuesPayload.tel = model.tel || "";
+    initialValuesPayload.longitude = model?.map?.longitude || "";
+    initialValuesPayload.latitude = model?.map?.latitude || "";
+    initialValuesPayload.altitude = model.altitude || "";
+    initialValuesPayload.opening_date = openingDate;
+    initialValuesPayload.closing_date = closingDate;
+    initialValuesPayload.public_availability = model.public_availability == 1;
+    initialValuesPayload.active_flg = model.active_flg == 1;
+    initialValuesPayload.remarks = model.remarks || "";
+    setInitialValues(initialValuesPayload);
     setLoader(false);
     setApiResponse(model);
     setCurrentlatitude(parseFloat(model?.map?.latitude));
