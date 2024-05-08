@@ -10,7 +10,7 @@ import {
   toastDisplay
 } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
-import { prefectures, prefectures_en } from "@/utils/constant";
+import { prefectures, prefectures_en, default_place_id } from "@/utils/constant";
 import { useAppSelector } from "@/redux/hooks";
 import {
   Button,
@@ -1519,6 +1519,7 @@ export default function PlaceUpdatePage() {
                                 name: "active_flg",
                                 checked: activeFlagValue,
                                 switchClass: "",
+                                disabled: default_place_id.includes(initialValues.place_id),
                                 onChange: (e) => {
                                   setActiveFlagValue(e.target.value);
                                   setFieldValue('active_flg', e.target.value);
