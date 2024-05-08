@@ -305,6 +305,7 @@ export default function Setting() {
       <Formik
         validationSchema={schema}
         initialValues={initialValues}
+        enableReinitialize={true}
         onSubmit={(values, actions) => {
           setLoader(true);
           values.default_shelf_life = convertToSingleByte(values.default_shelf_life);
