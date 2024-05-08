@@ -43,7 +43,7 @@ export default function PlaceUpdatePage() {
   const [prefCount, setPrefCount] = useState(1)
   const formikRef = useRef();
   const [initialValues, setInitialValues] = useState({
-    place_id: id,
+    place_id: "",
     name: "",
     refugee_name: "",
     name_en: "",
@@ -327,7 +327,7 @@ export default function PlaceUpdatePage() {
     setLoader(true);
     const model = response.data.model;
     let initialValuesPayload = {};
-
+    initialValuesPayload.place_id = Place?.id;
     let openingDate = model.opening_date_time
       ? new Date(model.opening_date_time)
       : "";
