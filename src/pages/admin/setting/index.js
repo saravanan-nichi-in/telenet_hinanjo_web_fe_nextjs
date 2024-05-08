@@ -29,6 +29,24 @@ export default function Setting() {
 
   const [response, setResponse] = useState({});
   const [data, setData] = useState([]);
+  const [initialValues, setInitialValues] = useState({
+    map_scale: "",
+    footer: "",
+    type_name_ja: "",
+    system_name_ja: "",
+    disclosure_info_ja: "",
+    type_name_en: "",
+    system_name_en: "",
+    disclosure_info_en: "",
+    latitude: "",
+    longitude: "",
+    initial_load_status: false,
+    default_shelf_life: "",
+    scheduler_option: false,
+    logo: "",
+    logo_name: ""
+  }
+  );
 
   const { getList, update } = systemSettingServices;
 
@@ -173,24 +191,6 @@ export default function Setting() {
       ),
   });
 
-  const initialValues = {
-    map_scale: "",
-    footer: "",
-    type_name_ja: "",
-    system_name_ja: "",
-    disclosure_info_ja: "",
-    type_name_en: "",
-    system_name_en: "",
-    disclosure_info_en: "",
-    latitude: "",
-    longitude: "",
-    initial_load_status: false,
-    default_shelf_life: "",
-    scheduler_option: false,
-    logo: "",
-    logo_name: ""
-  };
-
   const dragProps = {
     onDragEnd(fromIndex, toIndex) {
       const prepareData = [...data];
@@ -217,32 +217,32 @@ export default function Setting() {
       setLoader(true);
       const data = res.data.model;
       let url = data.image_logo_path;
+      let initialValuesPayload = {};
 
       // Check if URL exists
       if (url) {
         const parts = url.split("/");
         const filename = parts[parts.length - 1]; // Extract filename from URL
-
         // Set the filename to initialValues.logo
-        initialValues.logo_name = filename;
+        initialValuesPayload.logo_name = filename;
       }
       dispatch(setLayout(data));
-      initialValues.map_scale = data?.map_scale + "" || "";
-      initialValues.footer = data?.footer || "";
-      initialValues.type_name_ja = data?.type_name_ja || "";
-      initialValues.disclosure_info_ja = data?.disclosure_info_ja || "";
-      initialValues.system_name_ja = data?.system_name_ja || "";
-      initialValues.type_name_en = data?.type_name_en || "";
-      initialValues.disclosure_info_en = data?.disclosure_info_en || "";
-      initialValues.system_name_en = data?.system_name_en || "";
-      initialValues.latitude = data?.latitude || "";
-      initialValues.longitude = data?.longitude || "";
-      initialValues.initial_load_status =
+      initialValuesPayload.map_scale = data?.map_scale + "" || "";
+      initialValuesPayload.footer = data?.footer || "";
+      initialValuesPayload.type_name_ja = data?.type_name_ja || "";
+      initialValuesPayload.disclosure_info_ja = data?.disclosure_info_ja || "";
+      initialValuesPayload.system_name_ja = data?.system_name_ja || "";
+      initialValuesPayload.type_name_en = data?.type_name_en || "";
+      initialValuesPayload.disclosure_info_en = data?.disclosure_info_en || "";
+      initialValuesPayload.system_name_en = data?.system_name_en || "";
+      initialValuesPayload.latitude = data?.latitude || "";
+      initialValuesPayload.longitude = data?.longitude || "";
+      initialValuesPayload.initial_load_status =
         data?.initial_load_status == "1" ? true : false || "";
-      (initialValues.default_shelf_life = data?.default_shelf_life || ""),
-        (initialValues.scheduler_option =
+      (initialValuesPayload.default_shelf_life = data?.default_shelf_life || ""),
+        (initialValuesPayload.scheduler_option =
           data?.scheduler_option == "1" ? true : false || "");
-
+      setInitialValues(initialValuesPayload);
       setLoader(false);
       let public_data = data?.public_display_order || public_display_order_data;
       const PublicData = public_data.map((item) => {
@@ -270,7 +270,6 @@ export default function Setting() {
   const handleChange = (e, index) => {
     const newData = [...data]; // Create a copy of the data array
     newData[index].is_visible = e.checked; // Update the is_visible property in the copy
-
     setData(newData); // Update state with the modified data
   };
 
