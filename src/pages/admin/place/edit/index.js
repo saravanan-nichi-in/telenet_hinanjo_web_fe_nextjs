@@ -412,6 +412,7 @@ export default function PlaceUpdatePage() {
         innerRef={formikRef}
         validationSchema={schema}
         initialValues={initialValues}
+        enableReinitialize={true}
         onSubmit={(values, error) => {
           if (values.opening_date) {
             const openingDate = new Date(values.opening_date);
