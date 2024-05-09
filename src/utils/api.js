@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import toast from "react-hot-toast";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Create an Axios instance
@@ -43,15 +45,33 @@ api.interceptors.response.use((response) => {
 }, (error) => {
   // Handle response error
   if (error?.response?.status == 401 || error?.response?.status == 403) {
+    toast.error(error?.response?.data?.message, {
+      position: "top-right",
+    });
     if (window.location.pathname.startsWith('/admin')) {
       localStorage.removeItem('admin');
-      window.location.href = '/admin/login';
+      setTimeout(function () {
+        window.location.href = '/admin/login';
+      }, 4000);
     } else if (window.location.pathname.startsWith('/hq-staff')) {
       localStorage.removeItem('hq-staff');
-      window.location.href = '/hq-staff/login';
-    } else if (window.location.pathname.startsWith('/staff')) {
-      localStorage.removeItem('staff');
-      window.location.href = '/user/list';
+      setTimeout(function () {
+        window.location.href = '/hq-staff/login';
+      }, 4000);
+    } else {
+      let redirectPath = localStorage.getItem('redirect');
+      if (window.location.pathname.startsWith('/staff/event-staff/')) {
+        localStorage.removeItem('staff');
+        setTimeout(function () {
+          window.location.href = redirectPath;
+        }, 4000);
+      } else {
+        localStorage.removeItem('staff');
+        setTimeout(function () {
+          window.location.href = redirectPath;
+        }, 4000);
+      }
+      localStorage.removeItem('redirect');
     }
   }
   return Promise.reject(error);
