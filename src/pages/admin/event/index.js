@@ -152,7 +152,7 @@ export default function Questionnaire() {
                     let event = {
                         si_no: index + parseInt(getListPayload.filters.start) + 1,
                         id: item.id,
-                        name: item.name,
+                        name: locale === "en" && !_.isNull(item.name_en) ? item.name_en : item.name,
                         name_en: item.name_en,
                         description: item.remarks,
                         remarks: item.remarks,
