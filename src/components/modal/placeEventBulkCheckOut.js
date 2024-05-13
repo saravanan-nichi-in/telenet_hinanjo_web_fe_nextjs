@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from "react"
 import { Dialog } from 'primereact/dialog';
 
-import { Button, NormalTable } from "@/components"; 
+import { Button, NormalTable } from "@/components";
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { BulkCheckoutService } from "@/services";
 
 export default function PlaceEventBulkCheckOut(props) {
-    const { localeJson } = useContext(LayoutContext);
+    const { localeJson, locale } = useContext(LayoutContext);
     const { open, close, modalHeaderText } = props && props;
 
     const [columnValues, setColumnValues] = useState([]);
@@ -31,7 +31,7 @@ export default function PlaceEventBulkCheckOut(props) {
             maxWidth: "4rem",
             className: "action_class",
         },
-        { field: 'name', header: props.type == 'events' ? translate(localeJson, 'event_bulk_checkout_column_name') : translate(localeJson, 'place_event_bulk_checkout_column_name'), headerClassName: "custom-header", minWidth: "12rem", maxWidth: "12rem" },
+        { field: 'definedName', header: props.type == 'events' ? translate(localeJson, 'event_bulk_checkout_column_name') : translate(localeJson, 'place_event_bulk_checkout_column_name'), headerClassName: "custom-header", minWidth: "12rem", maxWidth: "12rem" },
     ]
 
     useEffect(() => {
@@ -46,6 +46,9 @@ export default function PlaceEventBulkCheckOut(props) {
             BulkCheckoutService.getPlacesList((data) => {
                 if (data) {
                     let actualList = data.data.model;
+                    actualList.map((obj, i) => {
+                        return obj.definedName = locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name
+                    })
                     setColumnValues(actualList);
                 }
                 setTableLoading(false);
@@ -54,6 +57,9 @@ export default function PlaceEventBulkCheckOut(props) {
             BulkCheckoutService.getEventsList(listPayload, (data) => {
                 if (data) {
                     let actualList = data.data.model;
+                    actualList.map((obj, i) => {
+                        return obj.definedName = locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name
+                    })
                     setColumnValues(actualList);
                 }
                 setTableLoading(false);

@@ -149,7 +149,7 @@ export default function StaffManagementEditModal(props) {
                     let preparedObj = {
                         index: getPayload.filters.start + i,
                         id: obj.id,
-                        name: obj.name,
+                        name: locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
                     };
                     preparedList.push(preparedObj);
                 });
@@ -175,7 +175,7 @@ export default function StaffManagementEditModal(props) {
                     let preparedObj = {
                         index: getPayload.filters.start + i,
                         id: obj.id,
-                        name: obj.name,
+                        name: locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
                     };
                     preparedList.push(preparedObj);
                 });
