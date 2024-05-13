@@ -200,7 +200,7 @@ export default function AdminPlacePage() {
         let preparedObj = {
           index: getPayload.filters.start + i + 1,
           ID: obj.id,
-          refugee_name: obj.name,
+          refugee_name:locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
           address: "〒" + obj.address_place,
           total_place: obj.total_place,
           tel: obj.tel,
