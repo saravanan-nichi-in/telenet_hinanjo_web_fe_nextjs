@@ -2,10 +2,10 @@ import React from 'react';
 
 const XidCallBack = () => {
     const style = {
-        height: '100vh',          // Full view height
-        display: 'flex',          // Use Flexbox
-        justifyContent: 'center', // Center horizontally
-        alignItems: 'center',      // Center vertically
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         fontSize: '25PX',
     };
 
