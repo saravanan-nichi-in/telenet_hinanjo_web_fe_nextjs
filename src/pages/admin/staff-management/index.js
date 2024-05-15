@@ -199,7 +199,7 @@ export default function StaffManagementPage() {
                         name: obj.name ?? "",
                         username: obj.username ?? "",
                         password: decryptedData,
-                        event_id: obj.events,
+                        event_id: obj.eventsAll,
                         place_id: obj.places,
                         image: obj.image ?? "",
                         tel: obj.tel ?? "",
