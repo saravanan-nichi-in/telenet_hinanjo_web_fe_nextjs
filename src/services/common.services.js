@@ -14,6 +14,7 @@ export const CommonServices = {
     getPlaceList: _getPlaceList,
     getEventList: _getEventList,
     getStaffEventList: _getStaffEventList,
+    getStaffEventListWithActiveStatus: _getStaffEventListWithActiveStatus,
     getZipCode: _getZipCode,
     getAddress: _getAddress,
     getAddressFromZipCode: _getAddressFromZip,
@@ -209,6 +210,24 @@ function _getStaffEventList(payload, callBackFun) {
         });
 }
 
+/**
+ * Get staff event list
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _getStaffEventListWithActiveStatus(payload, callBackFun) {
+    axios.post('/user/event/all/list', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+            }
+        })
+        .catch((error) => {
+            callBackFun()
+            toastDisplay(error?.response);
+        });
+}
+
 async function _getZipCode(state, city, street, callBackFun) {
     let payload = {
         "prefecture": state,
@@ -229,7 +248,7 @@ async function _getZipCode(state, city, street, callBackFun) {
 
 async function _getZipCodeFromAddress(address, callBackFun) {
     let payload = {
-        "address":address
+        "address": address
     }
     axios.post('/user/fetch/zipcode', payload)
         .then((response) => {
