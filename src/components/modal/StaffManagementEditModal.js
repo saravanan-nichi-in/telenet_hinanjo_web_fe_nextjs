@@ -105,8 +105,8 @@ export default function StaffManagementEditModal(props) {
     });
 
     /** Services */
-    const { getStaffEventList } = CommonServices
-    const { getActivePlaceList } = StaffManagementService
+    const { getStaffEventListWithActiveStatus } = CommonServices;
+    const { getActivePlaceList } = StaffManagementService;
 
     useEffect(() => {
         setSelectedEvents(currentEditObj?.event_id)
@@ -140,16 +140,19 @@ export default function StaffManagementEditModal(props) {
     }
 
     const fetchData = () => {
-        getStaffEventList({}, (response) => {
+        getStaffEventListWithActiveStatus({}, (response) => {
             if (response?.success && !_.isEmpty(response.data)) {
                 const data = response.data.model;
                 var additionalColumnsArrayWithOldData = [...columnsData];
                 let preparedList = [];
-                data.map((obj, i) => {
+                // Sort such that active items are on top
+                const sortedData = data.sort((a, b) => b.is_active - a.is_active);
+                sortedData.map((obj, i) => {
                     let preparedObj = {
                         index: getPayload.filters.start + i,
                         id: obj.id,
                         name: locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
+                        is_active: obj.is_active,
                     };
                     preparedList.push(preparedObj);
                 });
@@ -168,14 +171,18 @@ export default function StaffManagementEditModal(props) {
         getActivePlaceList((response) => {
             if (response?.success && !_.isEmpty(response.data)) {
                 const data = response.data.model.list;
-                const filteredData = data.filter(item => item.active_flg == 1);
+                // const filteredData = data.filter(item => item.active_flg == 1);
                 var additionalColumnsArrayWithOldData = [...columnsData2];
                 let preparedList = [];
-                filteredData.map((obj, i) => {
+                // Sort such that active items are on top
+                const sortedData = data.sort((a, b) => b.active_flg - a.active_flg);
+                sortedData.map((obj, i) => {
                     let preparedObj = {
                         index: getPayload.filters.start + i,
                         id: obj.id,
                         name: locale === "en" && !_.isNull(obj.name_en) ? obj.name_en : obj.name,
+                        is_active: obj.is_active,
+                        active_flg: obj.active_flg,
                     };
                     preparedList.push(preparedObj);
                 });
@@ -197,6 +204,19 @@ export default function StaffManagementEditModal(props) {
 
     const findEventById = (id) => {
         return eventList.find(place => place.id === id);
+    };
+
+    const rowClass = (data) => {
+        return {
+            'highlight-row-event': !data.is_active || data.is_active === false || data.is_active == false
+        };
+    };
+
+    const rowClassForClass = (data) => {
+        console.log(data);
+        return {
+            'highlight-row-event': data.active_flg === 0 || data.active_flg == 0
+        };
     };
 
     return (
@@ -364,6 +384,7 @@ export default function StaffManagementEditModal(props) {
                                                             value={eventList}
                                                             columns={columnsData}
                                                             filterDisplay="menu"
+                                                            rowClassName={rowClass}
                                                         />
                                                     </div>
                                                 </div>
@@ -382,6 +403,7 @@ export default function StaffManagementEditModal(props) {
                                                         value={placeList}
                                                         columns={columnsData2}
                                                         filterDisplay="menu"
+                                                        rowClassName={rowClassForClass}
                                                     />
                                                 </div>
                                             </div>
