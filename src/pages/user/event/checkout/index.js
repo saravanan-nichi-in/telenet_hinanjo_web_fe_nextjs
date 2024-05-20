@@ -152,8 +152,14 @@ export default function Admission() {
         setIsRecording(isRecord);
     };
 
-    const doCheckout = (val) => {
+    const isCheckedOut = (res) => {
+        setLoader(false)
+        if (res.success) {
+            router.push('/user/event/dashboard');
+        }
+    }
 
+    const doCheckout = (val) => {
         let payload = {
             "family_id": val?.family_id,
             "event_id": val?.event_id
