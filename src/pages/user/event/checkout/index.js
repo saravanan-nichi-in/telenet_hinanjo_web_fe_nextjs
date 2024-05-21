@@ -17,6 +17,7 @@ import { CheckInOutServices, CommonServices, UserDashboardServices } from "@/ser
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
 import { Button, ButtonRounded, CustomHeader, Input, ValidationError, NormalTable } from "@/components";
+import { prefecturesCombined } from '@/utils/constant';
 
 export default function Admission() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -34,7 +35,7 @@ export default function Admission() {
     const [isMRecording, setMIsRecording] = useState(false);
     const [inputType, setInputType] = useState("password");
     const familyDetailsColumns = [
-        // { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
+        { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
         {
             field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: false, alignHeader: "left", minWidth: "8rem", maxWidth: "8rem",
             body: (rowData) => {
@@ -49,8 +50,10 @@ export default function Admission() {
             },
         },
         { field: "family_code", header: translate(localeJson, 'staff_attendees_table_family_code'), sortable: false, textAlign: 'left', minWidth: "8rem", maxWidth: "8rem", },
+        { field: "full_address", header: translate(localeJson, 'staff_attendees_table_adress'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "8rem", maxWidth: "14rem" },
         { field: "person_dob", header: translate(localeJson, 'staff_attendees_table_dob'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "8rem", maxWidth: "8rem" },
         { field: "person_gender", header: translate(localeJson, 'staff_attendees_table_gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "5rem", maxWidth: "5rem" },
+        { field: "person_tel", header: translate(localeJson, 'phone_number'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "5rem", maxWidth: "5rem" },
         {
             field: 'actions',
             header: translate(localeJson, 'common_action'),
@@ -123,7 +126,8 @@ export default function Admission() {
             data.forEach((element, index) => {
                 let preparedObj = {
                     ...element,
-                    // event_name: locale === "en" && !_.isNull(filteredEvent[0].name_en) ? filteredEvent[0].name_en : filteredEvent[0].name,
+                    full_address: (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? ""),
+                    event_name: locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name,
                     person_dob: element.person_dob ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(element.person_dob) : getEnglishDateDisplayFormat(element.person_dob)) : "",
                     person_gender: getGenderValueFromInt(element.person_gender),
                 }
@@ -161,7 +165,7 @@ export default function Admission() {
 
     const doCheckout = (val) => {
         let payload = {
-            "family_id": val?.family_id,
+            "family_id": [val?.family_id],
             "event_id": val?.event_id
         }
         if (val) {
