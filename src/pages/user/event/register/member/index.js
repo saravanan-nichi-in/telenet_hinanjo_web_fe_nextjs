@@ -102,45 +102,45 @@ export default function UserEventRegModal(props) {
             name: Yup.string()
                 .nullable()
                 .max(100, translate(localeJson, "external_popup_name_kanji")),
-            tel: Yup.string()
-                .required(translate(localeJson, "phone_no_required"))
-                .test(
-                    "starts-with-zero",
-                    translate(localeJson, "phone_num_start"),
-                    (value) => {
-                        if (value) {
-                            value = convertToSingleByte(value);
-                            return value.charAt(0) === "0";
-                        }
-                        return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-                    }
-                )
-                .test(
-                    "is-not-empty",
-                    translate(localeJson, "phone_no_required"),
-                    (value) => {
-                        return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-                    }
-                )
-                .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-                    if (value) {
-                        const singleByteValue = convertToSingleByte(value);
-                        return /^[0-9]{10,11}$/.test(singleByteValue);
-                    } else {
-                        return true;
-                    }
-                })
-                .test(
-                    "at-least-one-checked",
-                    translate(localeJson, "phone_no_required"),
-                    (value, parent) => {
-                        if (parent.parent.checked === true) {
-                            return value ? true : false;
-                        } else {
-                            return true;
-                        }
-                    }
-                ),
+            // tel: Yup.string()
+            //     .required(translate(localeJson, "phone_no_required"))
+            //     .test(
+            //         "starts-with-zero",
+            //         translate(localeJson, "phone_num_start"),
+            //         (value) => {
+            //             if (value) {
+            //                 value = convertToSingleByte(value);
+            //                 return value.charAt(0) === "0";
+            //             }
+            //             return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+            //         }
+            //     )
+            //     .test(
+            //         "is-not-empty",
+            //         translate(localeJson, "phone_no_required"),
+            //         (value) => {
+            //             return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
+            //         }
+            //     )
+            //     .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+            //         if (value) {
+            //             const singleByteValue = convertToSingleByte(value);
+            //             return /^[0-9]{10,11}$/.test(singleByteValue);
+            //         } else {
+            //             return true;
+            //         }
+            //     })
+            //     .test(
+            //         "at-least-one-checked",
+            //         translate(localeJson, "phone_no_required"),
+            //         (value, parent) => {
+            //             if (parent.parent.checked === true) {
+            //                 return value ? true : false;
+            //             } else {
+            //                 return true;
+            //             }
+            //         }
+            //     ),
             gender: Yup.string().required(translate(localeJson, "gender_required")),
             postalCode: Yup.string()
                 .nullable()
@@ -266,7 +266,7 @@ export default function UserEventRegModal(props) {
                 address: "",
                 address2: "",
                 email: "",
-                tel: "",
+                tel: "0000000000",
                 specialCareType: null,
                 connecting_code: "",
                 remarks: "",
@@ -622,7 +622,6 @@ export default function UserEventRegModal(props) {
                                                                     }`,
                                                                 labelProps: {
                                                                     text: translate(localeJson, "phone_number"),
-                                                                    spanText: "*",
                                                                     inputLabelClassName: "block font-bold",
                                                                     inputLabelSpanClassName: "p-error",
                                                                     labelMainClassName: "pb-1",

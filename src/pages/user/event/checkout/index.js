@@ -5,12 +5,19 @@ import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
-import { convertToSingleByte, getValueByKeyRecursively as translate } from '@/helper'
+import {
+    convertToSingleByte,
+    getValueByKeyRecursively as translate,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getEnglishDateDisplayFormat,
+    toastDisplay
+} from '@/helper'
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CheckInOutServices, CommonServices, UserDashboardServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
-import { Button, ButtonRounded, CustomHeader, Input, ValidationError, Password } from "@/components";
+import { Button, ButtonRounded, CustomHeader, Input, ValidationError, NormalTable } from "@/components";
+import { prefecturesCombined } from '@/utils/constant';
 
 export default function Admission() {
     const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -18,6 +25,7 @@ export default function Admission() {
     const dispatch = useAppDispatch();
     const layoutReducer = useSelector((state) => state.layoutReducer);
 
+    const formikRef = useRef();
     const [audioNameLoader, setAudioNameLoader] = useState(false);
     const [audioFamilyCodeLoader, setAudioFamilyCodeLoader] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
@@ -26,7 +34,50 @@ export default function Admission() {
     const [isRecording, setIsRecording] = useState(false);
     const [isMRecording, setMIsRecording] = useState(false);
     const [inputType, setInputType] = useState("password");
-    const formikRef = useRef();
+    const familyDetailsColumns = [
+        { field: "event_name", header: translate(localeJson, 'staff_attendees_table_event_name'), sortable: false, textAlign: 'left', minWidth: "8rem" },
+        {
+            field: 'person_refugee_name', header: translate(localeJson, 'name_public_evacuee'), sortable: false, alignHeader: "left", minWidth: "8rem", maxWidth: "8rem",
+            body: (rowData) => {
+                return <div className="flex flex-column">
+                    <div className={"text-highlighter-user-list clickable-row"}>
+                        {rowData.person_name}
+                    </div>
+                    <div className={"clickable-row"}>
+                        {rowData.person_refugee_name}
+                    </div>
+                </div>
+            },
+        },
+        { field: "family_code", header: translate(localeJson, 'staff_attendees_table_family_code'), sortable: false, textAlign: 'left', minWidth: "8rem", maxWidth: "8rem", },
+        { field: "full_address", header: translate(localeJson, 'staff_attendees_table_adress'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "8rem", maxWidth: "14rem" },
+        { field: "person_dob", header: translate(localeJson, 'staff_attendees_table_dob'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "8rem", maxWidth: "8rem" },
+        { field: "person_gender", header: translate(localeJson, 'staff_attendees_table_gender'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "5rem", maxWidth: "5rem" },
+        { field: "person_tel", header: translate(localeJson, 'phone_number'), sortable: false, textAlign: 'left', alignHeader: "left", minWidth: "5rem", maxWidth: "5rem" },
+        {
+            field: 'actions',
+            header: translate(localeJson, 'common_action'),
+            textAlign: "center",
+            alignHeader: "center",
+            className: "action_class",
+            body: (rowData) => (
+                <div>
+                    <ButtonRounded
+                        buttonProps={{
+                            buttonClass: "w-full h-3rem primary-button ",
+                            type: "submit",
+                            rounded: "true",
+                            text: translate(localeJson, "de_register_event"),
+                            onClick: () => {
+                                doCheckout(rowData);
+                            }
+                        }}
+                        parentClass={"w-full primary-button"}
+                    />
+                </div>
+            )
+        }
+    ];
 
     const schema = Yup.object().shape({
         name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
@@ -52,11 +103,9 @@ export default function Admission() {
 
     const initialValues = { name: "", password: "", familyCode: "" };
 
-    const { getEventList } = CheckInOutServices;
-
     /* Services */
+    const { getEventList, eventCheckOutAddOns } = CheckInOutServices;
     const { getEventListByID } = UserDashboardServices;
-
     const { getText } = CommonServices;
 
     useEffect(() => {
@@ -73,22 +122,60 @@ export default function Admission() {
     const getSearchResult = (res) => {
         if (res?.success && !_.isEmpty(res?.data)) {
             const data = res.data.model;
-            setSearchResult(data);
-            setTableLoading(false);
+            var listOfFamilies = [];
+            data.forEach((element, index) => {
+                let preparedObj = {
+                    ...element,
+                    full_address: (element.family_zip_code ?? "") + " " + prefecturesCombined[element.family_prefecture_id ?? 0][locale] + " " + (element.family_address ?? ""),
+                    event_name: locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name,
+                    person_dob: element.person_dob ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(element.person_dob) : getEnglishDateDisplayFormat(element.person_dob)) : "",
+                    person_gender: getGenderValueFromInt(element.person_gender),
+                }
+                listOfFamilies.push(preparedObj);
+            });
+            setSearchResult(listOfFamilies);
             dispatch(setCheckOutData(data))
-            setLoader(false);
-            router.push("/user/event/checkout/details")
-        } else {
-            setSearchResult([]);
-            setTableLoading(false);
-            setLoader(false);
+            // router.push("/user/event/checkout/details")
         }
+        setTableLoading(false);
+        setLoader(false);
     };
+
+    const getGenderValueFromInt = (gender) => {
+        if (parseInt(gender) == 1) {
+            return translate(localeJson, 'male');
+        } else if (parseInt(gender) == 2) {
+            return translate(localeJson, 'female');
+        } else if (parseInt(gender) == 3) {
+            return translate(localeJson, 'others_count');
+        }
+    }
 
     const handleRecordingStateChange = (isRecord) => {
         setMIsRecording(isRecord);
         setIsRecording(isRecord);
     };
+
+    const isCheckedOut = (res) => {
+        setLoader(false)
+        if (res.success) {
+            router.push('/user/event/dashboard');
+        }
+    }
+
+    const doCheckout = (val) => {
+        let payload = {
+            "family_id": [val?.family_id],
+            "event_id": val?.event_id
+        }
+        if (val) {
+            setLoader(true)
+            eventCheckOutAddOns(payload, isCheckedOut);
+        }
+        else {
+            toastDisplay(translate(localeJson, 'already_checked_out'), '', '', "error");
+        }
+    }
 
     return (
         <>
@@ -425,6 +512,19 @@ export default function Admission() {
                                             </div>
                                         </div>
                                     </div>
+                                    {searchResult && (
+                                        <div className='mt-2 flex overflow-x-auto'>
+                                            <NormalTable
+                                                loading={tableLoading}
+                                                emptyMessage={translate(localeJson, "data_not_found")}
+                                                stripedRows={true}
+                                                paginator={false}
+                                                showGridlines={true}
+                                                value={searchResult}
+                                                columns={familyDetailsColumns}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
