@@ -128,7 +128,7 @@ export default function TempRegister() {
                     join_date: data.join_date,
                     is_public: data.is_public,
                     public_info: data.public_info,
-                    contactNumber: data.is_registered == 0 ? (data.tel ? data.tel : "") : "",
+                    contactNumber: data.is_registered == 0 ? (data.tel && data.tel != "00000000000" ? data.tel : "") : "",
                     is_owner: "1",
                     evacuee_entry_status: 1,
                     register_from: data.register_from,
