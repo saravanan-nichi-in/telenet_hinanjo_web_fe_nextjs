@@ -82,7 +82,7 @@ export default function EventFamilyDetail() {
                         is_owner: person.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
                         // address: (personData[0].family_zip_code ? (translate(localeJson, 'post_letter') + personData[0].family_zip_code) : "") + " " + personData[0].family_address,
                         address: (personData[0].family_zip_code ? (translate(localeJson, 'post_letter') + personData[0].family_zip_code) : "") + " " + prefecturesCombined[personData[0].family_prefecture_id ?? 0][locale] + " " + personData[0].family_address,
-                        tel: person.family_tel,
+                        tel: person?.family_tel && person.family_tel != "00000000000" ? person.family_tel : "",
                         evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDisplayFormat(person.family_join_date) : getGeneralDateTimeDisplayFormat(person.family_join_date),
                         family_code: person.family_code,
                         family_is_registered: person.family_is_registered,

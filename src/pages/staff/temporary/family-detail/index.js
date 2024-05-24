@@ -177,7 +177,7 @@ export default function StaffFamilyDetail() {
                         is_owner: tempObj.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
                         address: translate(localeJson, 'post_letter') + tempObj.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[tempObj.person_prefecture_id].ja : prefecturesCombined[tempObj.person_prefecture_id].en) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
                         evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(tempObj.family_join_date) : getEnglishDateDisplayFormat(tempObj.family_join_date),
-                        tel: tempObj.person_tel,
+                        tel: tempObj?.person_tel && tempObj.person_tel != "00000000000" ? tempObj.person_tel : "",
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                     }

@@ -162,7 +162,7 @@ export default function StaffFamilyDetail() {
                         is_owner: tempObj.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
                         address: translate(localeJson, 'post_letter') + tempObj.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[tempObj.person_prefecture_id].ja : prefecturesCombined[tempObj.person_prefecture_id].en) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
                         evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(tempObj.family_join_date) : getEnglishDateDisplayFormat(tempObj.family_join_date),
-                        tel: tempObj.person_tel,
+                        tel: tempObj?.person_tel && tempObj.person_tel != "00000000000" ? tempObj.person_tel : "",
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                         yapple_id: tempObj.yapple_id,
@@ -202,11 +202,11 @@ export default function StaffFamilyDetail() {
 
     function convertToOriginalFormat(convertedData) {
         const getAnswerById = (id, answers) => {
-            const answer = answers?.length>0?answers?.find((ans) => ans.question_id == id):[];
+            const answer = answers?.length > 0 ? answers?.find((ans) => ans.question_id == id) : [];
             return answer ? answer?.answer : [];
         };
         const getAnswerByIdEn = (id, answers) => {
-            const answer =answers?.length>0? answers?.find((ans) => ans.question_id == id):[];
+            const answer = answers?.length > 0 ? answers?.find((ans) => ans.question_id == id) : [];
             return answer ? answer?.answer_en || answer?.answer : [];
         };
         let decryptedData = ""; //convertedData.data[0].family_password ? decryptPassword(convertedData.data[0].family_password, key) : ""
@@ -309,7 +309,7 @@ export default function StaffFamilyDetail() {
                         convertedData.data[0].family_public_info == 1 ? false : true,
                     name_furigana: convertedData.data[0].person_refugee_name,
                     name_kanji: convertedData.data[0].person_name,
-                    family_id:  convertedData.data[0].family_id,
+                    family_id: convertedData.data[0].family_id,
                 },
             ],
         };

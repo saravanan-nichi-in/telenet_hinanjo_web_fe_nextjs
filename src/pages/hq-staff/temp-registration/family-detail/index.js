@@ -94,7 +94,7 @@ export default function HQEvacueeTempFamilyDetail() {
                     remarks: person.person_note,
                     gender: getGenderValue(person.person_gender),
                     address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + person.prefecture_name + " " + person.person_address,
-                    tel: person.family_tel,
+                    tel: person?.family_tel && person.family_tel != "00000000000" ? person.family_tel : "",
                     created_date: locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.person_created_at) : getEnglishDateTimeDisplayActualFormat(person.person_updated_at),
                     updated_date: locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.person_updated_at) : getEnglishDateTimeDisplayActualFormat(person.person_updated_at),
                     evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date),

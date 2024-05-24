@@ -322,23 +322,24 @@ export default function TempRegister() {
 
     const step1Schema = Yup.object().shape({
         contactNumber: Yup.string()
-            .required(translate(localeJson, 'phone_no_required'))
-            .test('starts-with-zero', translate(localeJson, 'phone_num_start'), value => {
-                if (value) {
-                    value = convertToSingleByte(value);
-                    return value.charAt(0) === '0';
+            .test(
+                "starts-with-zero",
+                translate(localeJson, "phone_num_start"),
+                (value) => {
+                    if (value) {
+                        value = convertToSingleByte(value);
+                        return value.charAt(0) === "0";
+                    }
+                    return true; // Return true for empty values
                 }
-                return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-            })
+            )
             .test("matches-pattern", translate(localeJson, "phone"), (value) => {
                 if (value) {
                     const singleByteValue = convertToSingleByte(value);
                     return /^[0-9]{10,11}$/.test(singleByteValue);
                 }
-                else {
-                    return true;
-                }
-            })
+                return true; // Allow empty values
+            }),
     });
 
     const step2Schema = Yup.object().shape({
@@ -481,7 +482,6 @@ export default function TempRegister() {
                                                 labelProps: {
                                                     text: translate(localeJson, 'phone_number'),
                                                     inputLabelClassName: "font-bold",
-                                                    spanText: "*",
                                                     inputLabelSpanClassName: "p-error",
                                                 },
                                                 inputClassName: "w-12",

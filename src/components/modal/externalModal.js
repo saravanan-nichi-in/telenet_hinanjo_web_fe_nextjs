@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import { gender_en, gender_jp } from "@/utils/constant";
-import { Button, Input, ValidationError, InputDropdown, InputNumber } from "@/components"; 
+import { Button, Input, ValidationError, InputDropdown, InputNumber } from "@/components";
 
 import {
   getValueByKeyRecursively as translate,
@@ -51,12 +51,11 @@ export default function External(props) {
         gender: null,
       };
   const schema = Yup.object().shape({
-    name: Yup.string()
-      .required(translate(localeJson, "name_required"))
-      .max(100, translate(localeJson, "name_max_phonetic"))
-      .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-    name_kanji: Yup.string().nullable()
-      .max(100, translate(localeJson, "external_popup_name_kanji")),
+    name: Yup.string().nullable()
+      .max(200, translate(localeJson, "name_max")),
+    name_kanji: Yup.string()
+      .required(translate(localeJson, "name_required_changed"))
+      .max(200, translate(localeJson, "external_popup_name_kanji")),
     year: Yup.string().required(
       translate(localeJson, "dob_required")
     ).min(4,
@@ -123,6 +122,8 @@ export default function External(props) {
                           labelProps: {
                             text: translate(localeJson, 'name_kanji'),
                             inputLabelClassName: "block",
+                            spanText: "*",
+                            inputLabelSpanClassName: "p-error"
                           },
                           inputClassName: "w-full",
                           name: "name_kanji",
@@ -142,7 +143,6 @@ export default function External(props) {
                           labelProps: {
                             text: translate(localeJson, 'c_refugee_name'),
                             inputLabelClassName: "block",
-                            spanText: "*",
                             inputLabelSpanClassName: "p-error"
                           },
                           inputClassName: "w-full",

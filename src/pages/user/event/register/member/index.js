@@ -266,7 +266,7 @@ export default function UserEventRegModal(props) {
                 address: "",
                 address2: "",
                 email: "",
-                tel: "0000000000",
+                tel: "",
                 specialCareType: null,
                 connecting_code: "",
                 remarks: "",
