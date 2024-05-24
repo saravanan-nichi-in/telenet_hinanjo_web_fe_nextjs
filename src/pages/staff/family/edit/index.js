@@ -98,7 +98,7 @@ export default function Admission() {
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
         formikRef.current.setFieldValue("address2", data.address2 || "");
-        formikRef.current.setFieldValue("tel", data.tel);
+        formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
         formikRef.current.setFieldValue("name_furigana", data.name_furigana);
         formikRef.current.setFieldValue("name_kanji", data.name);
       }
@@ -153,7 +153,7 @@ export default function Admission() {
           formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
           formikRef.current.setFieldValue("address", data.address);
           formikRef.current.setFieldValue("address2", data.address2 || "");
-          formikRef.current.setFieldValue("tel", data.tel);
+          formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
           formikRef.current.setFieldValue("name_furigana", data.name_furigana);
           formikRef.current.setFieldValue("name_kanji", data.name);
         }
@@ -338,7 +338,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("address", data.address);
       formikRef.current.setFieldValue("address2", data.address2 || "");
       formikRef.current.setFieldValue("evacuee", data.evacuee);
-      formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("password", data.password);
       formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
@@ -509,7 +509,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       formikRef.current.setFieldValue("address2", data.address2 || "");
-      formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name);
     }
@@ -1628,7 +1628,7 @@ export default function Admission() {
                                               address: person.address,
                                               address2: person.address2,
                                               email: person.email,
-                                              tel: person.tel,
+                                              tel: person.tel && person.tel != "00000000000" ? person.tel : "",
                                               evacuee: person.evacuee,
                                               password: person.password,
                                               specialCareType: person.specialCareType,

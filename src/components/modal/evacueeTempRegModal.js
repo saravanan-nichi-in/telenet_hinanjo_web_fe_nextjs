@@ -874,7 +874,7 @@ export default function EvacueeTempRegModal(props) {
                                     setFieldValue("telAsRep", e.checked)
                                     setHavetel(e.checked);
                                     if (e.checked == true) {
-                                      setFieldValue("tel", repAddress[0].tel)
+                                      setFieldValue("tel", repAddress[0].tel && repAddress[0].tel != "00000000000" ? repAddress[0].tel : "");
                                     }
                                     else {
                                       setFieldValue("tel", '');

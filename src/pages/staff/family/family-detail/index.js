@@ -439,7 +439,7 @@ export default function StaffFamilyDetail() {
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "tel")}:</span>
-                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_tel}</span>
+                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].tel}</span>
                                     </div>
                                 </div>
 
@@ -558,7 +558,7 @@ export default function StaffFamilyDetail() {
                                         <div className='flex align-items-center'>
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "tel")}:</span>
-                                                <span className='page-header3-sub ml-1'>{person.person_tel}</span>
+                                                <span className='page-header3-sub ml-1'>{person.tel}</span>
                                             </div>
                                         </div>
                                         <div className='flex align-items-center'>
