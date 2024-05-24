@@ -292,9 +292,9 @@ export default function Admission() {
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
       name_kanji: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
+        .max(200, translate(localeJson, "name_max")),
       name_furigana: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
+        .max(200, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
           translate(localeJson, "c_year") + translate(localeJson, "is_required")
@@ -332,9 +332,9 @@ export default function Admission() {
     Yup.object().shape({
       name_kanji: Yup.string()
         .required(translate(localeJson, "name_required_changed"))
-        .max(100, translate(localeJson, "name_max")),
+        .max(200, translate(localeJson, "name_max")),
       name_furigana: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
+        .max(200, translate(localeJson, "name_max")),
       postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),

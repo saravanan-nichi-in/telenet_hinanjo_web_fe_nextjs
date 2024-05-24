@@ -49,9 +49,9 @@ export default function EvacueeTempRegModal(props) {
       checked: Yup.boolean().nullable(),
       name: Yup.string()
         .required(translate(localeJson, "name_required_changed"))
-        .max(100, translate(localeJson, "external_popup_name_kanji")),
+        .max(200, translate(localeJson, "external_popup_name_kanji")),
       name_furigana: Yup.string().nullable()
-        .max(100, translate(localeJson, "name_max_phonetic")),
+        .max(200, translate(localeJson, "name_max_phonetic")),
       dob: Yup.object().shape({
         year: Yup.string()
           .required(

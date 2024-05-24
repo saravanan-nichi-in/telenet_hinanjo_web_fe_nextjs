@@ -15,9 +15,9 @@ export default function MaterialCreateEditModal(props) {
     const schema = Yup.object().shape({
         name: Yup.string()
             .required(translate(localeJson, 'supplies_necessary'))
-            .max(100, translate(localeJson, 'material_page_create_update_name_max')),
+            .max(200, translate(localeJson, 'material_page_create_update_name_max')),
         unit: Yup.string()
-            .max(100, translate(localeJson, 'material_page_create_update_unit_max'))
+            .max(200, translate(localeJson, 'material_page_create_update_unit_max'))
             .nullable()
     });
 

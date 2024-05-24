@@ -377,7 +377,7 @@ export default function Admission() {
       checked: Yup.boolean().nullable(),
       name_furigana: Yup.string()
         .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(100, translate(localeJson, "name_max"))
+        .max(200, translate(localeJson, "name_max"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       dob: Yup.object().shape({
         year: Yup.number().required(
@@ -427,9 +427,9 @@ export default function Admission() {
     Yup.object().shape({
       name_furigana: Yup.string()
         .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(100, translate(localeJson, "name_max"))
+        .max(200, translate(localeJson, "name_max"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
-      name_kanji: Yup.string().max(100, translate(localeJson, "name_max")),
+      name_kanji: Yup.string().max(200, translate(localeJson, "name_max")),
       postalCode: Yup.string()
         .required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))

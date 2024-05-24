@@ -69,7 +69,7 @@ export default function UserEventRegModal(props) {
             checked: Yup.boolean().nullable(),
             name_furigana: Yup.string()
                 .required(translate(localeJson, "c_name_phonetic_is_required"))
-                .max(100, translate(localeJson, "name_max_phonetic"))
+                .max(200, translate(localeJson, "name_max_phonetic"))
                 .matches(katakanaRegex, translate(localeJson, "name_katakana")),
             dob: Yup.object().shape({
                 year: Yup.string()
@@ -101,7 +101,7 @@ export default function UserEventRegModal(props) {
                 ),
             name: Yup.string()
                 .nullable()
-                .max(100, translate(localeJson, "external_popup_name_kanji")),
+                .max(200, translate(localeJson, "external_popup_name_kanji")),
             // tel: Yup.string()
             //     .required(translate(localeJson, "phone_no_required"))
             //     .test(

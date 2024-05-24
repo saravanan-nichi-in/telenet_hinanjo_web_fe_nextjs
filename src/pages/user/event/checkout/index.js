@@ -80,7 +80,7 @@ export default function Admission() {
     ];
 
     const schema = Yup.object().shape({
-        name: Yup.string().max(100, translate(localeJson, "family_name_max")).test({
+        name: Yup.string().max(200, translate(localeJson, "family_name_max")).test({
             test: function (value) {
                 const { familyCode } = this.parent;
                 return Boolean(familyCode) || Boolean(value);

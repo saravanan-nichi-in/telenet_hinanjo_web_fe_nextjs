@@ -21,7 +21,7 @@ const LoginPage = () => {
     const schema = Yup.object().shape({
         username: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
-            .max(100, translate(localeJson, 'user_id_max')),
+            .max(200, translate(localeJson, 'user_id_max')),
         password: Yup.string()
             .required(translate(localeJson, 'password_required'))
             .min(8, translate(localeJson, 'password_atLeast_8_characters'))

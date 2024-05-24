@@ -25,9 +25,9 @@ export default function EventCreateEditModal(props) {
     let validation = {
         name: Yup.string()
             .required(translate(localeJson, 'questionnaire_name_is_required'))
-            .max(100, translate(localeJson, 'questionnaire_name_max')),
+            .max(200, translate(localeJson, 'questionnaire_name_max')),
         name_en: Yup.string()
-            .max(100, translate(localeJson, 'questionnaire_name_en_max')),
+            .max(200, translate(localeJson, 'questionnaire_name_en_max')),
         remarks: Yup.string()
             .max(255, translate(localeJson, 'questionnaire_remarks_is_max_required')),
         closing_date: Yup.date().nullable()

@@ -19,9 +19,9 @@ export default function QuestionnairesCreateEditModal(props) {
     const schema = Yup.object().shape({
         name: Yup.string()
             .required(translate(localeJson, 'questionnaire_master_name_is_required'))
-            .max(100, translate(localeJson, 'questionnaire_master_name_max')),
+            .max(200, translate(localeJson, 'questionnaire_master_name_max')),
         name_en: Yup.string()
-            .max(100, translate(localeJson, 'questionnaire_master_name_en_max')),
+            .max(200, translate(localeJson, 'questionnaire_master_name_en_max')),
         remarks: Yup.string()
             .required(translate(localeJson, 'questionnaire_remarks_is_required'))
             .max(255, translate(localeJson, 'questionnaire_remarks_is_max_required')),
