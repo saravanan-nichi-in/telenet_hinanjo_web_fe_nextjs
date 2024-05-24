@@ -39,10 +39,11 @@ export default function UserEventRegModal(props) {
   const validationSchema = () =>
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(100, translate(localeJson, "name_max_phonetic"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      name: Yup.string()
+        .required(translate(localeJson, "name_required_changed"))
+        .max(100, translate(localeJson, "external_popup_name_kanji")),
+      name_furigana: Yup.string().nullable()
+        .max(100, translate(localeJson, "name_max_phonetic")),
       dob: Yup.object().shape({
         year: Yup.string()
           .required(
@@ -58,9 +59,7 @@ export default function UserEventRegModal(props) {
           translate(localeJson, "c_date") + translate(localeJson, "is_required")
         ),
       }),
-      name: Yup.string().nullable().max(100, translate(localeJson, "external_popup_name_kanji")),
       tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -69,14 +68,7 @@ export default function UserEventRegModal(props) {
               value = convertToSingleByte(value);
               return value.charAt(0) === "0";
             }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-          }
-        )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
+            return true; // Return true for empty values
           }
         )
         .test("matches-pattern", translate(localeJson, "phone"), (value) => {
@@ -84,21 +76,8 @@ export default function UserEventRegModal(props) {
             const singleByteValue = convertToSingleByte(value);
             return /^[0-9]{10,11}$/.test(singleByteValue);
           }
-          else {
-            return true;
-          }
-        }).
-        test(
-          "at-least-one-checked",
-          translate(localeJson, "phone_no_required"),
-          (value, parent) => {
-            if (parent.parent.checked === true) {
-              return value ? true : false;
-            } else {
-              return true;
-            }
-          }
-        ),
+          return true; // Allow empty values
+        }),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
         .test("is-correct",
@@ -131,7 +110,7 @@ export default function UserEventRegModal(props) {
     evacuee,
   } = props && props;
 
-  const { getText, getAddressFromZipCode,getZipCodeFromAddress } = CommonServices;
+  const { getText, getAddressFromZipCode, getZipCodeFromAddress } = CommonServices;
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
   const [hasErrors, setHasErrors] = useState(false);
@@ -150,9 +129,9 @@ export default function UserEventRegModal(props) {
     let stateId = formikRef.current.values.prefecture_id;
     let postalCode = formikRef.current.values.postalCode;
     let state = prefectures.find(x => x.value == stateId)?.name;
-    
+
     let firstConditionCompleted = "false";
-  
+
     // First condition - Handling by address and state
     if (address && state) {
       getZipCodeFromAddress((state + address), (res) => {
@@ -163,13 +142,13 @@ export default function UserEventRegModal(props) {
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "true";
         } else {
-          setFetchedZipCode(invalidCounter+1);
+          setFetchedZipCode(invalidCounter + 1);
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "false";
         }
       });
     }
-  
+
     // Check to not execute if first condition completed its work
     else if (postalCode) {
       getAddressFromZipCode(postalCode, (res) => {
@@ -376,6 +355,8 @@ export default function UserEventRegModal(props) {
                               text: translate(localeJson, "c_name_kanji"),
                               inputLabelClassName: "block font-bold",
                               labelMainClassName: "pb-1",
+                              spanText: "*",
+                              inputLabelSpanClassName: "p-error",
                             },
                             inputClassName: "w-full",
                             id: "name",
@@ -388,7 +369,7 @@ export default function UserEventRegModal(props) {
                             onChange: handleChange,
                             onBlur: handleBlur,
                             disabled:
-                                isMRecording
+                              isMRecording
                                 ? true
                                 : false,
                             inputRightIconProps: {
@@ -428,7 +409,6 @@ export default function UserEventRegModal(props) {
                                 }`,
                               labelProps: {
                                 text: translate(localeJson, "c_refugee_name"),
-                                spanText: "*",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -438,7 +418,7 @@ export default function UserEventRegModal(props) {
                               name: "name_furigana",
                               value: values.name_furigana,
                               disabled:
-                                  isMRecording
+                                isMRecording
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -488,7 +468,6 @@ export default function UserEventRegModal(props) {
                                 }`,
                               labelProps: {
                                 text: translate(localeJson, "phone_number"),
-                                spanText: "*",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -499,7 +478,7 @@ export default function UserEventRegModal(props) {
                               value: values.tel,
                               inputMode: "numeric",
                               disabled:
-                                  isMRecording || values.telAsRep
+                                isMRecording || values.telAsRep
                                   ? true
                                   : false,
                               placeholder: translate(
@@ -573,7 +552,7 @@ export default function UserEventRegModal(props) {
                             type: "text",
                             value: values.postalCode,
                             disabled:
-                                isMRecording || values.addressAsRep
+                              isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "post_letter"),
@@ -718,7 +697,7 @@ export default function UserEventRegModal(props) {
                             name: "address",
                             value: values.address,
                             disabled:
-                                isMRecording 
+                              isMRecording
                                 ? true
                                 : false,
                             placeholder: translate(localeJson, "city_ward"),
@@ -771,7 +750,7 @@ export default function UserEventRegModal(props) {
                             name: "address2",
                             value: values.address2,
                             disabled:
-                                isMRecording || values.addressAsRep
+                              isMRecording || values.addressAsRep
                                 ? true
                                 : false,
                             placeholder: translate(
