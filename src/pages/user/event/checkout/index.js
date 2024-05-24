@@ -165,7 +165,7 @@ export default function Admission() {
 
     const doCheckout = (val) => {
         let payload = {
-            "family_id": [val?.family_id],
+            "family_id": val?.family_id,
             "event_id": val?.event_id
         }
         if (val) {
