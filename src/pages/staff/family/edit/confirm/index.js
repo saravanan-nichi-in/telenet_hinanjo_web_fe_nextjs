@@ -212,7 +212,7 @@ const TempRegisterConfirm = () => {
                 </label>
               </div>
               <div className=" mt-1 body_table" id="phone-number">
-                {person.tel || "-"}
+                {person.tel && person.tel != "00000000000" ? person.tel : "-"}
               </div>
             </div>
             <div className=" mt-3">
