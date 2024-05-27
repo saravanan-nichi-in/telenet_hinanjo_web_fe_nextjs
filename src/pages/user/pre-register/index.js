@@ -199,7 +199,7 @@ export default function TempRegister() {
             "prefecture_id": window.location.origin === "https://hitachi.nichi.in" || window.location.origin === "http://localhost:3000" || window.location.origin === "https://hitachi-dev-delta.vercel.app" ? "1" : getPrefectureID(basicDataInfo.address_full),
             "address": basicDataInfo.address_full,
             "address_default": "",
-            "tel": convertToSingleByte(basicDataInfo.contactNumber.replaceAll("-", "")),
+            "tel": basicDataInfo.contactNumber.replaceAll("-", "") ? convertToSingleByte(basicDataInfo.contactNumber.replaceAll("-", "")) : null,
             "is_owner": 1,
             "is_public": 0,
             "public_info": pageFiveValues.agreeCheckTwo ? 0 : 1,

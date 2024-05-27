@@ -890,7 +890,7 @@ export default function Admission() {
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: inputData.address2,
-      tel: inputData.tel,
+      tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
       password: inputData.password.toString(),
       is_owner:
         inputData.evacuee.find((evacuee) => evacuee.checked)?.id || null,
