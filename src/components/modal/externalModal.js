@@ -52,10 +52,10 @@ export default function External(props) {
       };
   const schema = Yup.object().shape({
     name: Yup.string().nullable()
-      .max(200, translate(localeJson, "name_max")),
+      .max(100, translate(localeJson, "name_max")),
     name_kanji: Yup.string()
       .required(translate(localeJson, "name_required_changed"))
-      .max(200, translate(localeJson, "external_popup_name_kanji")),
+      .max(100, translate(localeJson, "external_popup_name_kanji")),
     year: Yup.string().required(
       translate(localeJson, "dob_required")
     ).min(4,
