@@ -85,7 +85,7 @@ export default function Admission() {
   const { basicInfo } = CheckInOutServices;
 
   /* Services */
-  const { getText, getAddressFromZipCode } = CommonServices;
+  const { getText, getAddressFromZipCode, getAddress } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
