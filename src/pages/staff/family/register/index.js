@@ -17,7 +17,8 @@ import {
   convertToSingleByte,
   hideOverFlow,
   showOverFlow,
-  toastDisplay
+  toastDisplay,
+  compareAddresses,
 } from "@/helper";
 import {
   prefectures,
@@ -92,35 +93,60 @@ export default function Admission() {
     ocrScanRegistration
   } = TempRegisterServices;
 
+
+  // Development
+  // useEffect(() => {
+  //   let postal_code = layoutReducer?.user?.place?.zip_code;
+  //   let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+  //   let placeAddress = layoutReducer?.user?.place?.address;
+  //   const re = /^[0-9-]+$/;
+  //   let val;
+  //   if (postal_code === "" || re.test(postal_code)) {
+  //     val = postal_code.replace(/-/g, ""); // Remove any existing hyphens
+  //     if (val.length > 3) {
+  //       val = val.slice(0, 3) + val.slice(3);
+  //     }
+  //     formikRef.current.setFieldValue("postalCode", val);
+  //   }
+  //   if (val?.length >= 7) {
+  //     getAddressFromZipCode(val, (response) => {
+  //       if (response) {
+  //         let address = response[0];
+  //         const selectedPrefecture = prefectures.find(
+  //           (prefecture) => prefecture.value == address.prefcode
+  //         );
+  //         formikRef.current.setFieldValue("postalCode", val);
+  //         formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+  //         formikRef.current.setFieldValue("address", placeAddress);
+  //       } else {
+  //         formikRef.current.setFieldValue("postalCode", val);
+  //         formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+  //         formikRef.current.setFieldValue("address", placeAddress);
+  //       }
+  //     });
+  //   }
+  // }, [])
+
+  // Fetch details from store & update
   useEffect(() => {
     let postal_code = layoutReducer?.user?.place?.zip_code;
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let placeAddress = layoutReducer?.user?.place?.address;
-    const re = /^[0-9-]+$/;
-    let val;
-    if (postal_code === "" || re.test(postal_code)) {
-      val = postal_code.replace(/-/g, ""); // Remove any existing hyphens
-      if (val.length > 3) {
-        val = val.slice(0, 3) + val.slice(3);
-      }
-      formikRef.current.setFieldValue("postalCode", val);
-    }
-    if (val?.length >= 7) {
-      getAddressFromZipCode(val, (response) => {
-        if (response) {
-          let address = response[0];
-          const selectedPrefecture = prefectures.find(
-            (prefecture) => prefecture.value == address.prefcode
-          );
-          formikRef.current.setFieldValue("postalCode", val);
-          formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-          formikRef.current.setFieldValue("address", placeAddress);
-        } else {
-          formikRef.current.setFieldValue("postalCode", val);
-          formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-          formikRef.current.setFieldValue("address", placeAddress);
+    let address = layoutReducer?.user?.place?.address;
+
+    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          formikRef.current.setFieldValue("address", fetchedAddress);
+          formikRef.current.setFieldValue("address2", unmatchedData);
         }
       });
+    } else {
+      formikRef.current.setFieldValue("address", address);
     }
   }, [])
 

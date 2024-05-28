@@ -18,6 +18,7 @@ import {
   showOverFlow,
   hideOverFlow,
   toastDisplay,
+  compareAddresses,
 } from "@/helper";
 import {
   Button,
@@ -218,6 +219,7 @@ export default function Admission() {
     }
   }, [evacuee]);
 
+  // Fetch details from store & update
   useEffect(() => {
     let postal_code = layoutReducer?.user?.place?.zip_code;
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
@@ -225,7 +227,19 @@ export default function Admission() {
 
     formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
     formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-    formikRef.current.setFieldValue("address", address);
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          formikRef.current.setFieldValue("address", fetchedAddress);
+          formikRef.current.setFieldValue("address2", unmatchedData);
+        }
+      });
+    } else {
+      formikRef.current.setFieldValue("address", address);
+    }
   }, [])
 
   useEffect(() => {

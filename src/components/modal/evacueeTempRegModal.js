@@ -9,6 +9,7 @@ import {
   getValueByKeyRecursively as translate,
   convertToSingleByte,
   splitJapaneseAddress,
+  compareAddresses,
 } from "@/helper";
 import {
   Button,
@@ -33,9 +34,12 @@ import {
   CheckInOutServices
 } from "@/services";
 import { Tooltip } from "primereact/tooltip";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
   const minDOBDate = new Date();
@@ -236,6 +240,32 @@ export default function EvacueeTempRegModal(props) {
         telAsRep: false,
         addressAsRep: false,
       };
+
+  // Fetch details from store & update
+  useEffect(() => {
+    if (props?.registerModalAction === "create") {
+      let postal_code = layoutReducer?.user?.place?.zip_code;
+      let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+      let address = layoutReducer?.user?.place?.address;
+
+      if (postal_code?.replace(/-/g, "")) {
+        getAddress(postal_code?.replace(/-/g, ""), (res) => {
+          if (res) {
+            let fetchedAddress = res?.address2 + res?.address3;
+            const unmatchedData = compareAddresses(fetchedAddress, address);
+            postal_code && formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+            setFetchedZipCode(postal_code?.replace(/-/g, ""));
+            formikRef.current.validateField("postalCode")
+            formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+            formikRef.current.setFieldValue("address", fetchedAddress);
+            formikRef.current.setFieldValue("address2", unmatchedData);
+          }
+        });
+      } else {
+        formikRef.current.setFieldValue("address", address);
+      }
+    }
+  }, [props]);
 
   useEffect(() => {
     if (registerModalAction === "edit" && editObj.individualQuestions) {
