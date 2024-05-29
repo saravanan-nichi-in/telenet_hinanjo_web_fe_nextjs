@@ -109,7 +109,11 @@ export const Input = (props) => {
             )}
           </>
         )}
-        <InputText className={`${inputClassName}`} {...restProps} />
+        <InputText
+          className={`${inputClassName}`}
+          {...restProps}
+          autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE}
+        />
         {inputRightIconProps?.display && (
           <>
             {inputRightIconProps?.audio?.display ? (
@@ -191,6 +195,7 @@ export const TextArea = (props) => {
       <InputTextarea
         className={`custom-textArea ${textAreaClass}`}
         {...restProps}
+        autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE}
       />
       {floatLabelProps?.text && (
         <label
@@ -307,6 +312,7 @@ export const InputNumber = (props) => {
         <InputNum
           className={`custom_input ${inputNumberClassName}`}
           {...restProps}
+          autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE}
         />
         {inputRightIconProps?.display && (
           <>
@@ -352,7 +358,7 @@ export const InputNumber = (props) => {
   );
 };
 
-export const Password=(props)=> {
+export const Password = (props) => {
   const {
     passwordParentClassName,
     passwordParentStyle,
@@ -384,6 +390,7 @@ export const Password=(props)=> {
         toggleMask
         feedback={false}
         {...restProps}
+        autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE_PASSWORD}
       />
       {floatLabelProps?.text && (
         <label
@@ -442,6 +449,7 @@ export const InputGroup = (props) => {
         <InputText
           className={`custom_input ${inputGroupClassName}`}
           {...restProps}
+          autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE}
         />
         {floatLabelProps?.text && (
           <label
@@ -659,6 +667,7 @@ export const InputGroups = (props) => {
         maxLength={maxLength}
         minLength={minLength}
         {...restProps}
+        autoComplete={process?.env?.NEXT_PUBLIC_AUTO_COMPLETE}
       />
       {props.register && (
         <Button
