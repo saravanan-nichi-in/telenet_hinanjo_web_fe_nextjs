@@ -53,6 +53,7 @@ export default function Admission() {
   const [specialCareENOptions, setSpecialCareENOptions] = useState([]);
   const [evacueeValues, setEvacueeValues] = useState("");
   const [shelterData, setShelterData] = useState([]);
+  const [createObj, setCreateObj] = useState({});
   const [editObj, setEditObj] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
@@ -133,19 +134,20 @@ export default function Admission() {
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
     let address = layoutReducer?.user?.place?.address;
 
-    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-
     if (postal_code?.replace(/-/g, "")) {
       getAddress(postal_code?.replace(/-/g, ""), (res) => {
         if (res) {
           let fetchedAddress = res?.address2 + res?.address3;
           const unmatchedData = compareAddresses(fetchedAddress, address);
+          formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+          formikRef.current.setFieldValue("prefecture_id", prefecture_id);
           formikRef.current.setFieldValue("address", fetchedAddress);
           formikRef.current.setFieldValue("address2", unmatchedData);
         }
       });
     } else {
+      formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+      formikRef.current.setFieldValue("prefecture_id", prefecture_id);
       formikRef.current.setFieldValue("address", address);
     }
   }, [])
@@ -158,7 +160,7 @@ export default function Admission() {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
           hideOverFlow();
         }, 1000);
       }
@@ -166,6 +168,32 @@ export default function Admission() {
       router.push("/staff/family");
     }
   }, [locale]);
+
+  // Update evacuee details on creation by selected place
+  const fetchDetailsByPlaceAndUpdateEvacuee = () => {
+    let postal_code = layoutReducer?.user?.place?.zip_code;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+    let address = layoutReducer?.user?.place?.address;
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          let evacueeArray = {
+            postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
+            prefecture_id: prefecture_id,
+            address: fetchedAddress,
+            address2: unmatchedData,
+          };
+          const newEvacuee = createEvacuee(evacueeArray);
+          setCreateObj(newEvacuee)
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -246,7 +274,7 @@ export default function Admission() {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
           hideOverFlow();
         }, 1000);
       }
@@ -534,205 +562,6 @@ export default function Admission() {
     { name: translate(localeJson, "c_not_answer"), value: 3 },
   ];
 
-  const cols = [
-    {
-      field: "rep_name",
-      header: translate(localeJson, "c_representative"),
-      minWidth: locale === "ja" ? "5rem" : "5rem",
-      maxWidth: locale === "ja" ? "5rem" : "5rem",
-      width: "5rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const handleRadioChange = (evt) => {
-          const isChecked = evt.target.checked;
-          let latest_Data = evacuee.map((row) => {
-            if (isChecked) {
-              let data = rowData;
-              if (row.id !== rowData.id) {
-                return { ...row, checked: false };
-              } else {
-                return { ...row, checked: true };
-              }
-            } else {
-              return { ...row, checked: false }; // Handle the case when isChecked is false
-            }
-          });
-          if (isChecked) {
-            let data = rowData
-            formikRef.current.setFieldValue("postalCode", data.postalCode);
-            formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
-            formikRef.current.setFieldValue("address", data.address);
-            formikRef.current.setFieldValue("address2", data.address2 || "");
-            formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
-            formikRef.current.setFieldValue("name_furigana", data.name_furigana);
-            formikRef.current.setFieldValue("name_kanji", data.name);
-          }
-          formikRef.current.setFieldValue("evacuee", latest_Data)
-          setEvacuee(latest_Data);
-        };
-        return (
-          <a className="flex justify-content-center">
-            <RadioBtn
-              radioBtnProps={{
-                onChange: handleRadioChange,
-                checked: rowData.checked,
-              }}
-            />
-          </a>
-        );
-      },
-    },
-    {
-      field: "name_furigana",
-      header: translate(localeJson, "c_refugee_name"),
-      minWidth: "8rem",
-      maxWidth: "8rem",
-      width: "8rem",
-      body: (rowData) => {
-        return (
-          <div className="flex flex-column">
-            <div className="custom-header">{rowData.name}</div>
-            <div>{rowData.name_furigana}</div>
-          </div>
-        );
-      },
-      headerClassName: "custom-header",
-    },
-    {
-      field: "age",
-      header: translate(localeJson, "c_age"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-    },
-    {
-      field: "gender",
-      header: translate(localeJson, "c_gender"),
-      minWidth: "3rem",
-      maxWidth: "3rem",
-      width: "3rem",
-      headerClassName: "custom-header",
-      textAlign: "center",
-      alignHeader: "center",
-      body: (rowData) => {
-        const gender = genderOptions;
-        const selectedGenderOption = gender.find(
-          (option) => option.value === rowData.gender
-        );
-        const displayedGenderName = selectedGenderOption
-          ? selectedGenderOption.name
-          : "Unknown";
-
-        return <span>{displayedGenderName}</span>;
-      },
-    },
-    {
-      field: "actions",
-      header: translate(localeJson, "common_action"),
-      textAlign: "center",
-      alignHeader: "center",
-      minWidth: "9rem",
-      maxWidth: "9rem",
-      className: "action_class",
-      body: (rowData) => (
-        <div>
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              buttonClass: "back-button",
-              icon: <img src={Edit.url} width={20} height={20} />,
-              onClick: () => {
-                setRegisterModalAction("edit");
-                setSpecialCareEditOpen(true);
-                hideOverFlow();
-                let currentData = {
-                  id: rowData.id,
-                  checked: rowData.checked,
-                  name: rowData.name,
-                  name_furigana: rowData.name_furigana,
-                  dob: rowData.dob,
-                  age: rowData.age,
-                  age_m: rowData.age_m,
-                  gender: rowData.gender,
-                  postalCode: rowData.postalCode,
-                  prefecture_id: rowData.prefecture_id,
-                  address: rowData.address,
-                  address2: rowData.address2,
-                  email: rowData.email,
-                  tel: rowData.tel && rowData.tel != "00000000000" ? rowData.tel : "",
-                  evacuee: rowData.evacuee,
-                  password: rowData.password,
-                  specialCareType: rowData.specialCareType,
-                  connecting_code: rowData.connecting_code,
-                  remarks: rowData.remarks,
-                  individualQuestions: rowData.individualQuestions,
-                  telAsRep: rowData.telAsRep,
-                  addressAsRep: rowData.addressAsRep
-                };
-                setEditObj(currentData);
-              },
-            }}
-            parentClass="back-button"
-          />
-          <Button
-            parentStyle={{ display: "inline" }}
-            buttonProps={{
-              type: "button",
-              buttonClass: "ml-2 delete-button-user",
-              icon: <img src={Delete.url} width={20} height={20} />,
-              onClick: () => {
-                if (rowData.checked === true) {
-                  const message = translate(localeJson, 'rep_del_error');
-                  const isConfirmed = window.confirm(message);
-
-                  if (isConfirmed) {
-                    setEvacuee((prevEvacuee) => {
-                      let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                      // Update the IDs of the remaining items
-                      updated = updated.map((evacuee, index) => ({
-                        ...evacuee,
-                        id: index + 1,
-                      }));
-
-                      if (updated.length > 0) {
-                        updated[0].checked = true;
-                      }
-
-                      formikRef.current?.setFieldValue("evacuee", updated);
-                      return updated;
-                    });
-                  }
-                } else {
-                  setEvacuee((prevEvacuee) => {
-                    let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
-
-                    // Update the IDs of the remaining items
-                    updated = updated.map((evacuee, index) => ({
-                      ...evacuee,
-                      id: index + 1,
-                    }));
-
-                    formikRef.current?.setFieldValue("evacuee", updated);
-                    return updated;
-                  });
-                }
-
-              },
-            }}
-            parentClass={"delete-button-user"}
-          />
-        </div>
-      ),
-    },
-  ];
-
   const getAnswerData = (answer) => {
     let answerData = null;
     answer?.map((item) => {
@@ -902,7 +731,6 @@ export default function Admission() {
     });
   }
 
-
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
     setIsRecording(isRecord);
@@ -1039,19 +867,18 @@ export default function Admission() {
       }
       if (val.length >= 7) {
         let payload = val;
-        // getAddressFromZipCode(payload, (response) => {
-        //   if (response) {
-        //     let address = response;
-        //     const selectedPrefecture = prefectures.find(
-        //       (prefecture) => prefecture.value == address.prefcode
-        //     );
-        //     boundObject.prefecture_id = selectedPrefecture?.value;
-        //     boundObject.address = address.address2 + address.address3 || "";
-        //   }
-        // });
+        getAddress(payload, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            boundObject.prefecture_id = selectedPrefecture?.value;
+            boundObject.address = address.address2 + address.address3 || "";
+          }
+        });
       }
     }
-
     return boundObject;
   }
 
@@ -1093,6 +920,7 @@ export default function Admission() {
           setSpecialCareEditOpen(false)
           showOverFlow();
         }}
+        createObj={createObj}
         editObj={editObj}
         buttonText={translate(
           localeJson,
@@ -2017,6 +1845,7 @@ export default function Admission() {
                               setEvacueeCounter(evacueeCount + 1)
                               setRegisterModalAction("create");
                               handleRecordingStateChange(false);
+                              fetchDetailsByPlaceAndUpdateEvacuee();
                               setSpecialCareEditOpen(true);
                               hideOverFlow();
                             },

@@ -66,6 +66,7 @@ export default function Admission() {
   const [specialCareENOptions, setSpecialCareENOptions] = useState([]);
   const [evacueeValues, setEvacueeValues] = useState("");
   const [shelterData, setShelterData] = useState([]);
+  const [createObj, setCreateObj] = useState({});
   const [editObj, setEditObj] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
@@ -136,7 +137,7 @@ export default function Admission() {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
           hideOverFlow();
         }, 1000);
       }
@@ -144,6 +145,32 @@ export default function Admission() {
       window.location.href = '/user/person-count';
     }
   }, [locale]);
+
+  // Update evacuee details on creation by selected place
+  const fetchDetailsByPlaceAndUpdateEvacuee = () => {
+    let postal_code = layoutReducer?.user?.place?.zip_code;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+    let address = layoutReducer?.user?.place?.address;
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          let evacueeArray = {
+            postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
+            prefecture_id: prefecture_id,
+            address: fetchedAddress,
+            address2: unmatchedData,
+          };
+          const newEvacuee = createEvacuee(evacueeArray);
+          setCreateObj(newEvacuee)
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -225,19 +252,20 @@ export default function Admission() {
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
     let address = layoutReducer?.user?.place?.address;
 
-    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-
     if (postal_code?.replace(/-/g, "")) {
       getAddress(postal_code?.replace(/-/g, ""), (res) => {
         if (res) {
           let fetchedAddress = res?.address2 + res?.address3;
           const unmatchedData = compareAddresses(fetchedAddress, address);
+          formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+          formikRef.current.setFieldValue("prefecture_id", prefecture_id);
           formikRef.current.setFieldValue("address", fetchedAddress);
           formikRef.current.setFieldValue("address2", unmatchedData);
         }
       });
     } else {
+      formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+      formikRef.current.setFieldValue("prefecture_id", prefecture_id);
       formikRef.current.setFieldValue("address", address);
     }
   }, [])
@@ -246,7 +274,8 @@ export default function Admission() {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
+          hideOverFlow();
         }, 1000);
       }
     }
@@ -817,16 +846,16 @@ export default function Admission() {
       }
       if (val.length >= 7) {
         let payload = val;
-        // getAddressFromZipCode(payload, (response) => {
-        //   if (response) {
-        //     let address = response;
-        //     const selectedPrefecture = prefectures.find(
-        //       (prefecture) => prefecture.value == address.prefcode
-        //     );
-        //     boundObject.prefecture_id = selectedPrefecture?.value;
-        //     boundObject.address = address.address2 + address.address3 || "";
-        //   }
-        // });
+        getAddress(payload, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            boundObject.prefecture_id = selectedPrefecture?.value;
+            boundObject.address = address.address2 + address.address3 || "";
+          }
+        });
       }
     }
 
@@ -882,6 +911,7 @@ export default function Admission() {
           setSpecialCareEditOpen(false)
           showOverFlow();
         }}
+        createObj={createObj}
         editObj={editObj}
         buttonText={translate(
           localeJson,
@@ -1783,6 +1813,7 @@ export default function Admission() {
                                 setEvacueeCounter(evacueeCount + 1)
                                 setRegisterModalAction("create");
                                 handleRecordingStateChange(false);
+                                fetchDetailsByPlaceAndUpdateEvacuee();
                                 setSpecialCareEditOpen(true);
                                 hideOverFlow();
                               },

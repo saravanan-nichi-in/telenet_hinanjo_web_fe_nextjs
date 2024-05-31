@@ -124,6 +124,7 @@ export default function EvacueeTempRegModal(props) {
     header,
     buttonText,
     setEvacueeValues,
+    createObj,
     editObj,
     registerModalAction,
     evacuee,
@@ -241,31 +242,16 @@ export default function EvacueeTempRegModal(props) {
         addressAsRep: false,
       };
 
-  // Fetch details from store & update
   useEffect(() => {
-    if (props?.registerModalAction === "create") {
-      let postal_code = layoutReducer?.user?.place?.zip_code;
-      let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-      let address = layoutReducer?.user?.place?.address;
-
-      if (postal_code?.replace(/-/g, "")) {
-        getAddress(postal_code?.replace(/-/g, ""), (res) => {
-          if (res) {
-            let fetchedAddress = res?.address2 + res?.address3;
-            const unmatchedData = compareAddresses(fetchedAddress, address);
-            postal_code && formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-            setFetchedZipCode(postal_code?.replace(/-/g, ""));
-            formikRef.current.validateField("postalCode")
-            formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-            formikRef.current.setFieldValue("address", fetchedAddress);
-            formikRef.current.setFieldValue("address2", unmatchedData);
-          }
-        });
-      } else {
-        formikRef.current.setFieldValue("address", address);
-      }
+    if (createObj) {
+      formikRef.current.setFieldValue("postalCode", createObj?.postalCode ? createObj.postalCode : "");
+      formikRef.current.setFieldValue("prefecture_id", createObj?.prefecture_id ? createObj.prefecture_id : null);
+      formikRef.current.setFieldValue("address", createObj?.address ? createObj.address : "");
+      formikRef.current.setFieldValue("address2", createObj?.address2 ? createObj.address2 : "");
+      setFetchedZipCode(createObj?.postalCode ? createObj.postalCode : "");
+      formikRef.current.validateField("postalCode")
     }
-  }, [props]);
+  }, [createObj]);
 
   useEffect(() => {
     if (registerModalAction === "edit" && editObj.individualQuestions) {
@@ -377,6 +363,7 @@ export default function EvacueeTempRegModal(props) {
       if (res) {
         setOpenQrPopup(false);
         const evacueeArray = res.data;
+        formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
         setLoader(false);
       } else {
@@ -394,6 +381,7 @@ export default function EvacueeTempRegModal(props) {
       if (res) {
         setPerspectiveCroppingVisible(false);
         const evacueeArray = res.data;
+        formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
         setLoader(false);
       } else {
@@ -424,20 +412,25 @@ export default function EvacueeTempRegModal(props) {
       }
       if (val.length >= 7) {
         let payload = val.slice(0, 3) + "-" + val.slice(3);
-        // getAddressFromZipCode(val, (response) => {
-        //   if (response) {
-        //     let address = response;
-        //     const selectedPrefecture = prefectures.find(
-        //       (prefecture) => prefecture.value == address.prefcode
-        //     );
-        //     setFieldValue("prefecture_id", selectedPrefecture?.value);
-        //     setFieldValue("address", address.address2 + address.address3 || "");
-        //   } else {
-        //     setFieldValue("prefecture_id", "");
-        //     setFieldValue("address", "");
-        //   }
-        // });
+        getAddress(val, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            setFieldValue("prefecture_id", selectedPrefecture?.value);
+            setFieldValue("address", address.address2 + address.address3 || "");
+            setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
+          } else {
+            setFieldValue("prefecture_id", "");
+            setFieldValue("address", "");
+            setFieldValue("address2", "");
+          }
+        });
       }
+    } else {
+      setFieldValue("address", evacuees?.address ? evacuees.address : "");
+      setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
     }
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
@@ -451,9 +444,7 @@ export default function EvacueeTempRegModal(props) {
       setFieldValue("age_m", parseInt(age.months));
       setFieldValue("dob", convertedObject || "");
     }
-    setFieldValue("address", evacuees.address || "");
-    setFieldValue("address2", evacuees.address2 || "");
-    setFieldValue("connecting_code", evacuees.connecting_code || "");
+    setFieldValue("connecting_code", evacuees.connecting_code);
   }
 
   function calculateAge(birthdate) {

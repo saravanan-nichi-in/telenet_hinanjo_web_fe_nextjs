@@ -17,7 +17,8 @@ import {
   showOverFlow,
   hideOverFlow,
   convertToSingleByte,
-  toastDisplay
+  toastDisplay,
+  compareAddresses,
 } from "@/helper";
 import {
   prefectures,
@@ -51,6 +52,7 @@ export default function Admission() {
   const [specialCareENOptions, setSpecialCareENOptions] = useState([]);
   const [evacueeValues, setEvacueeValues] = useState("");
   const [shelterData, setShelterData] = useState([]);
+  const [createObj, setCreateObj] = useState({});
   const [editObj, setEditObj] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
@@ -81,7 +83,7 @@ export default function Admission() {
   const { basicInfo } = CheckInOutServices;
 
   /* Services */
-  const { getText, getAddressFromZipCode } = CommonServices;
+  const { getText, getAddressFromZipCode, getAddress } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
@@ -168,6 +170,32 @@ export default function Admission() {
       formikRef.current.setFieldValue("name_kanji", "");
     }
   }, [evacuee]);
+
+  // Update evacuee details on creation by selected place
+  const fetchDetailsByPlaceAndUpdateEvacuee = () => {
+    let postal_code = layoutReducer?.user?.place?.zip_code;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+    let address = layoutReducer?.user?.place?.address;
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          let evacueeArray = {
+            postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
+            prefecture_id: prefecture_id,
+            address: fetchedAddress,
+            address2: unmatchedData,
+          };
+          const newEvacuee = createEvacuee(evacueeArray);
+          setCreateObj(newEvacuee)
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     fetchMasterQuestion();
@@ -835,6 +863,7 @@ export default function Admission() {
           setSpecialCareEditOpen(false)
           showOverFlow();
         }}
+        createObj={createObj}
         editObj={editObj}
         buttonText={translate(
           localeJson,
@@ -1719,6 +1748,7 @@ export default function Admission() {
                                 setEvacueeCounter(evacueeCount + 1)
                                 setRegisterModalAction("create");
                                 handleRecordingStateChange(false);
+                                fetchDetailsByPlaceAndUpdateEvacuee();
                                 setSpecialCareEditOpen(true);
                                 hideOverFlow();
                               },
