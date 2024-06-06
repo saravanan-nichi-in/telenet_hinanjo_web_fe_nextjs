@@ -65,7 +65,7 @@ function ExternalFamilyList() {
                     let preparedObj = {
                         ...obj,
                         slno: i + getListPayload.filters.start + 1,
-                        address: translate(localeJson, 'post_letter') + (obj.zipcode ? obj.zipcode : "") + " " + (obj.prefecture_name ? obj.prefecture_name : "") + " " + (obj.address ? obj.address : ""),
+                        address: translate(localeJson, 'post_letter') + (obj.zipcode ? obj.zipcode : "") + " " + (obj.prefecture_name ? obj.prefecture_name : "") + " " + (obj.address ? obj.address : "") + " " + (obj.address_default ? obj.address_default : ""),
                         food_required: obj.food_required ? obj.food_required : translate(localeJson, 'no')
                     }
                     preparedList.push(preparedObj);

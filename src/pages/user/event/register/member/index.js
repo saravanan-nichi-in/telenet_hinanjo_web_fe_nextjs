@@ -68,9 +68,10 @@ export default function UserEventRegModal(props) {
         Yup.object().shape({
             checked: Yup.boolean().nullable(),
             name_furigana: Yup.string()
-                .required(translate(localeJson, "c_name_phonetic_is_required"))
-                .max(100, translate(localeJson, "name_max_phonetic"))
-                .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+                .max(100, translate(localeJson, "name_max")),
+            name: Yup.string()
+                .required(translate(localeJson, "name_required_changed"))
+                .max(100, translate(localeJson, "name_max")),
             dob: Yup.object().shape({
                 year: Yup.string()
                     .required(
@@ -99,48 +100,25 @@ export default function UserEventRegModal(props) {
                         return String(value).length === 4;
                     }
                 ),
-            name: Yup.string()
-                .nullable()
-                .max(100, translate(localeJson, "external_popup_name_kanji")),
-            // tel: Yup.string()
-            //     .required(translate(localeJson, "phone_no_required"))
-            //     .test(
-            //         "starts-with-zero",
-            //         translate(localeJson, "phone_num_start"),
-            //         (value) => {
-            //             if (value) {
-            //                 value = convertToSingleByte(value);
-            //                 return value.charAt(0) === "0";
-            //             }
-            //             return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-            //         }
-            //     )
-            //     .test(
-            //         "is-not-empty",
-            //         translate(localeJson, "phone_no_required"),
-            //         (value) => {
-            //             return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-            //         }
-            //     )
-            //     .test("matches-pattern", translate(localeJson, "phone"), (value) => {
-            //         if (value) {
-            //             const singleByteValue = convertToSingleByte(value);
-            //             return /^[0-9]{10,11}$/.test(singleByteValue);
-            //         } else {
-            //             return true;
-            //         }
-            //     })
-            //     .test(
-            //         "at-least-one-checked",
-            //         translate(localeJson, "phone_no_required"),
-            //         (value, parent) => {
-            //             if (parent.parent.checked === true) {
-            //                 return value ? true : false;
-            //             } else {
-            //                 return true;
-            //             }
-            //         }
-            //     ),
+            tel: Yup.string()
+                .test(
+                    "starts-with-zero",
+                    translate(localeJson, "phone_num_start"),
+                    (value) => {
+                        if (value) {
+                            value = convertToSingleByte(value);
+                            return value.charAt(0) === "0";
+                        }
+                        return true; // Return true for empty values
+                    }
+                )
+                .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+                    if (value) {
+                        const singleByteValue = convertToSingleByte(value);
+                        return /^[0-9]{10,11}$/.test(singleByteValue);
+                    }
+                    return true; // Allow empty values
+                }),
             gender: Yup.string().required(translate(localeJson, "gender_required")),
             postalCode: Yup.string()
                 .nullable()
@@ -169,7 +147,7 @@ export default function UserEventRegModal(props) {
         });
 
     /** Services */
-    const { getText, getAddressFromZipCode, getZipCodeFromAddress,convertToKatakana } = CommonServices;
+    const { getText, getAddressFromZipCode, getZipCodeFromAddress, convertToKatakana } = CommonServices;
     const {
         qrScanRegistration,
         ocrScanRegistration,
@@ -266,7 +244,7 @@ export default function UserEventRegModal(props) {
                 address: "",
                 address2: "",
                 email: "",
-                tel: "0000000000",
+                tel: "",
                 specialCareType: null,
                 connecting_code: "",
                 remarks: "",
@@ -502,6 +480,8 @@ export default function UserEventRegModal(props) {
                                                                 text: translate(localeJson, "c_name_kanji"),
                                                                 inputLabelClassName: "block font-bold",
                                                                 labelMainClassName: "pb-1",
+                                                                spanText: "*",
+                                                                inputLabelSpanClassName: "p-error",
                                                             },
                                                             inputClassName: "w-full",
                                                             id: "name",
@@ -551,7 +531,6 @@ export default function UserEventRegModal(props) {
                                                                     }`,
                                                                 labelProps: {
                                                                     text: translate(localeJson, "c_refugee_name"),
-                                                                    spanText: "*",
                                                                     inputLabelClassName: "block font-bold",
                                                                     inputLabelSpanClassName: "p-error",
                                                                     labelMainClassName: "pb-1",
@@ -585,18 +564,18 @@ export default function UserEventRegModal(props) {
                                                                             if (res?.data?.content) {
                                                                                 convertToKatakana(res?.data?.content, (res) => {
                                                                                     if (res) {
-                                                                                      setFieldValue(
-                                                                                        "name_furigana",
-                                                                                        res.converted.replace(/ /g, "")
-                                                                                      );
+                                                                                        setFieldValue(
+                                                                                            "name_furigana",
+                                                                                            res.converted.replace(/ /g, "")
+                                                                                        );
                                                                                     }
                                                                                     else {
-                                                                                      setFieldValue(
-                                                                                        "name_furigana",
-                                                                                        res?.data?.content.replace(/ /g, "")
-                                                                                      );
+                                                                                        setFieldValue(
+                                                                                            "name_furigana",
+                                                                                            res?.data?.content.replace(/ /g, "")
+                                                                                        );
                                                                                     }
-                                                                                  })
+                                                                                })
                                                                             }
                                                                         });
                                                                     },

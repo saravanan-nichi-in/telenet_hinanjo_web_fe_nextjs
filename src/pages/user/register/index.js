@@ -18,6 +18,7 @@ import {
   showOverFlow,
   hideOverFlow,
   toastDisplay,
+  compareAddresses,
 } from "@/helper";
 import {
   Button,
@@ -65,6 +66,7 @@ export default function Admission() {
   const [specialCareENOptions, setSpecialCareENOptions] = useState([]);
   const [evacueeValues, setEvacueeValues] = useState("");
   const [shelterData, setShelterData] = useState([]);
+  const [createObj, setCreateObj] = useState({});
   const [editObj, setEditObj] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
@@ -97,7 +99,7 @@ export default function Admission() {
   const { basicInfo } = CheckInOutServices;
 
   /* Services */
-  const { getText, getAddress,getAddressFromZipCode } = CommonServices;
+  const { getText, getAddress, getAddressFromZipCode } = CommonServices;
   const {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
@@ -135,7 +137,7 @@ export default function Admission() {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
           hideOverFlow();
         }, 1000);
       }
@@ -143,6 +145,32 @@ export default function Admission() {
       window.location.href = '/user/person-count';
     }
   }, [locale]);
+
+  // Update evacuee details on creation by selected place
+  const fetchDetailsByPlaceAndUpdateEvacuee = () => {
+    let postal_code = layoutReducer?.user?.place?.zip_code;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
+    let address = layoutReducer?.user?.place?.address;
+
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          let evacueeArray = {
+            postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
+            prefecture_id: prefecture_id,
+            address: fetchedAddress,
+            address2: unmatchedData,
+          };
+          const newEvacuee = createEvacuee(evacueeArray);
+          setCreateObj(newEvacuee)
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -153,7 +181,7 @@ export default function Admission() {
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
         formikRef.current.setFieldValue("address2", data.address2 || "");
-        data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
+        formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
         formikRef.current.setFieldValue("name_furigana", data.name_furigana);
         formikRef.current.setFieldValue("name_kanji", data.name);
       }
@@ -202,9 +230,7 @@ export default function Admission() {
           formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
           formikRef.current.setFieldValue("address", data.address);
           formikRef.current.setFieldValue("address2", data.address2 || "");
-          if (data.tel !== "") {
-            formikRef.current.setFieldValue("tel", data.tel);
-          }
+          formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
           formikRef.current.setFieldValue("name_furigana", data.name_furigana);
           formikRef.current.setFieldValue("name_kanji", data.name);
         }
@@ -220,21 +246,36 @@ export default function Admission() {
     }
   }, [evacuee]);
 
+  // Fetch details from store & update
   useEffect(() => {
     let postal_code = layoutReducer?.user?.place?.zip_code;
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
     let address = layoutReducer?.user?.place?.address;
 
-    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-    formikRef.current.setFieldValue("address", address);
+    if (postal_code?.replace(/-/g, "")) {
+      getAddress(postal_code?.replace(/-/g, ""), (res) => {
+        if (res) {
+          let fetchedAddress = res?.address2 + res?.address3;
+          const unmatchedData = compareAddresses(fetchedAddress, address);
+          formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+          formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+          formikRef.current.setFieldValue("address", fetchedAddress);
+          formikRef.current.setFieldValue("address2", unmatchedData);
+        }
+      });
+    } else {
+      formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+      formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+      formikRef.current.setFieldValue("address", address);
+    }
   }, [])
 
   useEffect(() => {
     if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
-          setSpecialCareEditOpen(true);
+          fetchDetailsByPlaceAndUpdateEvacuee();
+          hideOverFlow();
         }, 1000);
       }
     }
@@ -293,10 +334,10 @@ export default function Admission() {
   const evacueeSchema = () =>
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
+      name_kanji: Yup.string()
+        .max(100, translate(localeJson, "name_max")),
       name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+        .max(100, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
           translate(localeJson, "c_year") + translate(localeJson, "is_required")
@@ -327,28 +368,16 @@ export default function Admission() {
       prefecture_id: Yup.string()
         .nullable()
         .required(translate(localeJson, "c_perfacture_is_required")),
-      tel: Yup.string().test(
-        "at-least-one-checked",
-        translate(localeJson, "c_required"),
-        (value, parent) => {
-          if (parent.parent.checked === true) {
-            return value ? true : false;
-          } else {
-            return true;
-          }
-        }
-      ),
     });
   const evacueeItemSchema = evacueeSchema();
 
   const validationSchema = (localeJson) =>
     Yup.object().shape({
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       name_kanji: Yup.string()
-        .max(200, translate(localeJson, "name_max")),
+        .required(translate(localeJson, "name_required_changed"))
+        .max(100, translate(localeJson, "name_max")),
+      name_furigana: Yup.string()
+        .max(100, translate(localeJson, "name_max")),
       postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
@@ -371,7 +400,6 @@ export default function Admission() {
           }
         ),
       tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -380,24 +408,16 @@ export default function Admission() {
               value = convertToSingleByte(value);
               return value.charAt(0) === "0";
             }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+            return true; // Return true for empty values
           }
         )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-          }
-        )
-        .test(
-          "matches-pattern",
-          translate(localeJson, "phone"),
-          (value) => {
+        .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+          if (value) {
             const singleByteValue = convertToSingleByte(value);
             return /^[0-9]{10,11}$/.test(singleByteValue);
           }
-        ),
+          return true; // Allow empty values
+        }),
       evacuee: Yup.array()
         .required(translate(localeJson, "c_required"))
         .test(
@@ -430,7 +450,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("address", data.address);
       formikRef.current.setFieldValue("address2", data.address2 || "");
       formikRef.current.setFieldValue("evacuee", data.evacuee);
-      formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("password", data.password);
       formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
@@ -560,13 +580,13 @@ export default function Admission() {
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       formikRef.current.setFieldValue("address2", data.address2 || "");
-      data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name);
     }
     const updatedEvacue = [...latest_Data]; // Create a copy of evacuee array
     updatedEvacue.forEach((data) => {
-      if (data.checked !== true && data.telAsRep === true && representativeTel !== "") {
+      if (data.checked !== true && data.telAsRep === true) {
         data.tel = representativeTel;
       }
       if (data.checked !== true && data.addressAsRep === true && address !== "") {
@@ -703,7 +723,7 @@ export default function Admission() {
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: inputData.address2,
-      tel: convertToSingleByte(inputData.tel),
+      tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
       password: inputData.password.toString(),
       is_owner:
         inputData.evacuee.find((evacuee) => evacuee.checked)?.id || null,
@@ -826,16 +846,16 @@ export default function Admission() {
       }
       if (val.length >= 7) {
         let payload = val;
-        // getAddressFromZipCode(payload, (response) => {
-        //   if (response) {
-        //     let address = response;
-        //     const selectedPrefecture = prefectures.find(
-        //       (prefecture) => prefecture.value == address.prefcode
-        //     );
-        //     boundObject.prefecture_id = selectedPrefecture?.value;
-        //     boundObject.address = address.address2 + address.address3 || "";
-        //   }
-        // });
+        getAddress(payload, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            boundObject.prefecture_id = selectedPrefecture?.value;
+            boundObject.address = address.address2 + address.address3 || "";
+          }
+        });
       }
     }
 
@@ -891,6 +911,7 @@ export default function Admission() {
           setSpecialCareEditOpen(false)
           showOverFlow();
         }}
+        createObj={createObj}
         editObj={editObj}
         buttonText={translate(
           localeJson,
@@ -1003,7 +1024,7 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
-                                  spanText: "",
+                                  spanText: "*",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1053,7 +1074,6 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_furigana"),
-                                  spanText: "*",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1103,7 +1123,6 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "phone_number"),
-                                  spanText: "*",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1695,7 +1714,7 @@ export default function Admission() {
                                               address: person.address,
                                               address2: person.address2,
                                               email: person.email,
-                                              tel: person.tel,
+                                              tel: person.tel && person.tel != "00000000000" ? person.tel : "",
                                               evacuee: person.evacuee,
                                               password: person.password,
                                               specialCareType: person.specialCareType,
@@ -1794,6 +1813,7 @@ export default function Admission() {
                                 setEvacueeCounter(evacueeCount + 1)
                                 setRegisterModalAction("create");
                                 handleRecordingStateChange(false);
+                                fetchDetailsByPlaceAndUpdateEvacuee();
                                 setSpecialCareEditOpen(true);
                                 hideOverFlow();
                               },

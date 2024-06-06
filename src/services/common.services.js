@@ -263,7 +263,6 @@ async function _getZipCodeFromAddress(address, callBackFun) {
 }
 
 async function _getAddress(zipCode, callBackFun) {
-
     let payload = {
         "zipcode1": zipCode.slice(0, 3),
         "zipcode2": zipCode.slice(3)
@@ -281,7 +280,6 @@ async function _getAddress(zipCode, callBackFun) {
 }
 
 async function _getAddressFromZip(zipCode, callBackFun) {
-
     let payload = {
         "postal_code": zipCode,
     }

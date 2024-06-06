@@ -608,3 +608,28 @@ export function downloadImage(base64String, fileName) {
 export function formatAddress(zipCode, prefecture, familyOrPersonAddress, familyOrPersonAddressDefault) {
     return `${zipCode ? zipCode : ''} ${prefecture ? prefecture : ''} ${familyOrPersonAddress ? familyOrPersonAddress : ''} ${familyOrPersonAddressDefault ? familyOrPersonAddressDefault : ''}`;
 }
+
+/**
+ * Compare address to get unmatched data
+ * @param {*} address1 
+ * @param {*} address2 
+ * @returns 
+ */
+export function compareAddresses(address1, address2) {
+    const minLength = Math.min(address1.length, address2.length);
+    let unmatchedData = '';
+
+    for (let i = 0; i < minLength; i++) {
+        if (address1[i] !== address2[i]) {
+            unmatchedData += address2[i];
+        }
+    }
+
+    if (address1.length > minLength) {
+        unmatchedData += address1.substring(minLength);
+    } else if (address2.length > minLength) {
+        unmatchedData += address2.substring(minLength);
+    }
+
+    return unmatchedData;
+}

@@ -17,10 +17,10 @@ export default function StaffStockpileEdit(props) {
     const schema = Yup.object().shape({
         category: Yup.string()
             .required(translate(localeJson, 'type_required'))
-            .max(100, translate(localeJson, 'stockpile_page_create_update_category_max')),
+            .max(200, translate(localeJson, 'stockpile_page_create_update_category_max')),
         product_name: Yup.string()
             .required(translate(localeJson, 'stockpile_name_required'))
-            .max(100, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
+            .max(200, translate(localeJson, 'stockpile_page_create_update_product_name_max')),
         after_count: Yup.string()
             .min(0, translate(localeJson, 'number_field'))
             .max(5, translate(localeJson, 'quantity_max'))

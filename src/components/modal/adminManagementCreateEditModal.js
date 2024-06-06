@@ -3,7 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Input, Button, Password, ValidationError } from "@/components"; 
+import { Input, Button, Password, ValidationError } from "@/components";
 import { convertToSingleByte, getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { AdminManagementServices } from "@/services";
@@ -19,11 +19,11 @@ export default function AdminManagementCreateEditModal(props) {
     const schema = Yup.object().shape({
         username: Yup.string()
             .required(translate(localeJson, 'user_id_required'))
-            .max(200, translate(localeJson, 'user_id_max'))
+            .max(100, translate(localeJson, 'user_id_max_100'))
             .test('is-email', translate(localeJson, 'user_id_email'), isEmail),
         name: Yup.string()
             .required(translate(localeJson, 'admin_name_required'))
-            .max(200, translate(localeJson, 'staff_name_max_required')),
+            .max(100, translate(localeJson, 'staff_name_max_required')),
         tel: Yup.string()
             .nullable()
             .test(

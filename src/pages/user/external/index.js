@@ -104,9 +104,9 @@ export default function PublicExternal() {
     let stateId = formikRef.current.values.prefecture_id;
     let postalCode = formikRef.current.values.postalCode;
     let state = prefectures.find(x => x.value == stateId)?.name;
-    
+
     let firstConditionCompleted = "false";
-  
+
     // First condition - Handling by address and state
     if (address && state) {
       getZipCodeFromAddress((state + address), (res) => {
@@ -117,13 +117,13 @@ export default function PublicExternal() {
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "true";
         } else {
-          setFetchedZipCode(invalidCounter+1);
+          setFetchedZipCode(invalidCounter + 1);
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "false";
         }
       });
     }
-  
+
     // Check to not execute if first condition completed its work
     else if (postalCode) {
       getAddressFromZipCode(postalCode, (res) => {
@@ -150,6 +150,7 @@ export default function PublicExternal() {
     postalCode: "",
     prefecture_id: null,
     address: "",
+    address2: "",
     email: "",
     toggleSwitches: Array(3).fill(false),
     toggleFoodSwitches: Array(2).fill(false),
@@ -200,6 +201,9 @@ export default function PublicExternal() {
         ).min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string().required(translate(localeJson, "address_required"))
+        .max(190, translate(localeJson, "address_max_length")),
+      address2: Yup.string()
+        .nullable()
         .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string().required(translate(localeJson, "prefecture_required")),
       email: Yup.string()
@@ -490,6 +494,7 @@ export default function PublicExternal() {
             "postal_code": postal_code ? postal_code.replace(/-/g, '') : "",
             "prefecture_id": data.prefecture_id,
             "address": data.address,
+            "address_default": data.address2,
             "email": data.email,
             "person": data.evacuee.map((evacuee) => ({
               "name": evacuee.name,
@@ -786,6 +791,40 @@ export default function PublicExternal() {
                                   errors.address &&
                                   touched.address &&
                                   errors.address
+                                }
+                              />
+                            </div>
+                            <div className="col-12 mb-2">
+                              <Input
+                                inputProps={{
+                                  inputParentClassName: `w-full custom_input ${errors.address2 && touched.address2 && "p-invalid"
+                                    }`,
+                                  labelProps: {
+                                    spanText: "*",
+                                    inputLabelClassName: "block font-bold",
+                                    inputLabelSpanClassName: "p-error",
+                                    labelMainClassName: "pb-2",
+                                  },
+                                  inputClassName: "w-full",
+                                  id: "address2",
+                                  name: "address2",
+                                  value: values.address2,
+                                  placeholder: translate(
+                                    localeJson,
+                                    "house_name_number"
+                                  ),
+                                  onChange: (evt) => {
+                                    setFieldValue("address2", evt.target.value)
+                                    setAddressCount(addressCount + 1)
+                                  },
+                                  onBlur: handleBlur,
+                                }}
+                              />
+                              <ValidationError
+                                errorBlock={
+                                  errors.address2 &&
+                                  touched.address2 &&
+                                  errors.address2
                                 }
                               />
                             </div>

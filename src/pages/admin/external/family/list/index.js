@@ -131,7 +131,7 @@ export default function ExternalEvacuationPage() {
                 let evacuees = {
                     ...item,
                     si_no: index + parseInt(getListPayload.filters.start) + 1,
-                    address: translate(localeJson, 'post_letter') + (item.zipcode ? item.zipcode : "") + " " + (item.prefecture_name ? item.prefecture_name : "") + " " + (item.address ? item.address : ""),
+                    address: translate(localeJson, 'post_letter') + (item.zipcode ? item.zipcode : "") + " " + (item.prefecture_name ? item.prefecture_name : "") + " " + (item.address ? item.address : "") + " " + (item.address_default ? item.address_default : ""),
                     food_required: item.food_required ? item.food_required : translate(localeJson, 'no')
                 };
                 externalEvacueesList.push(evacuees);

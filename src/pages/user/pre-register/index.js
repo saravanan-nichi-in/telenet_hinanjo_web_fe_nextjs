@@ -128,7 +128,7 @@ export default function TempRegister() {
                     join_date: data.join_date,
                     is_public: data.is_public,
                     public_info: data.public_info,
-                    contactNumber: data.is_registered == 0 ? (data.tel ? data.tel : "") : "",
+                    contactNumber: data.is_registered == 0 ? (data.tel && data.tel != "00000000000" ? data.tel : "") : "",
                     is_owner: "1",
                     evacuee_entry_status: 1,
                     register_from: data.register_from,
@@ -199,7 +199,7 @@ export default function TempRegister() {
             "prefecture_id": window.location.origin === "https://hitachi.nichi.in" || window.location.origin === "http://localhost:3000" || window.location.origin === "https://hitachi-dev-delta.vercel.app" ? "1" : getPrefectureID(basicDataInfo.address_full),
             "address": basicDataInfo.address_full,
             "address_default": "",
-            "tel": convertToSingleByte(basicDataInfo.contactNumber.replaceAll("-", "")),
+            "tel": basicDataInfo.contactNumber.replaceAll("-", "") ? convertToSingleByte(basicDataInfo.contactNumber.replaceAll("-", "")) : null,
             "is_owner": 1,
             "is_public": 0,
             "public_info": pageFiveValues.agreeCheckTwo ? 0 : 1,
@@ -322,23 +322,24 @@ export default function TempRegister() {
 
     const step1Schema = Yup.object().shape({
         contactNumber: Yup.string()
-            .required(translate(localeJson, 'phone_no_required'))
-            .test('starts-with-zero', translate(localeJson, 'phone_num_start'), value => {
-                if (value) {
-                    value = convertToSingleByte(value);
-                    return value.charAt(0) === '0';
+            .test(
+                "starts-with-zero",
+                translate(localeJson, "phone_num_start"),
+                (value) => {
+                    if (value) {
+                        value = convertToSingleByte(value);
+                        return value.charAt(0) === "0";
+                    }
+                    return true; // Return true for empty values
                 }
-                return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-            })
+            )
             .test("matches-pattern", translate(localeJson, "phone"), (value) => {
                 if (value) {
                     const singleByteValue = convertToSingleByte(value);
                     return /^[0-9]{10,11}$/.test(singleByteValue);
                 }
-                else {
-                    return true;
-                }
-            })
+                return true; // Allow empty values
+            }),
     });
 
     const step2Schema = Yup.object().shape({
@@ -481,7 +482,6 @@ export default function TempRegister() {
                                                 labelProps: {
                                                     text: translate(localeJson, 'phone_number'),
                                                     inputLabelClassName: "font-bold",
-                                                    spanText: "*",
                                                     inputLabelSpanClassName: "p-error",
                                                 },
                                                 inputClassName: "w-12",

@@ -9,6 +9,7 @@ import {
   getValueByKeyRecursively as translate,
   convertToSingleByte,
   splitJapaneseAddress,
+  compareAddresses,
 } from "@/helper";
 import {
   Button,
@@ -33,9 +34,12 @@ import {
   CheckInOutServices
 } from "@/services";
 import { Tooltip } from "primereact/tooltip";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const layoutReducer = useAppSelector((state) => state.layoutReducer);
+
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
   const minDOBDate = new Date();
@@ -48,12 +52,10 @@ export default function EvacueeTempRegModal(props) {
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
       name: Yup.string()
-        .nullable()
+        .required(translate(localeJson, "name_required_changed"))
         .max(100, translate(localeJson, "external_popup_name_kanji")),
-      name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(100, translate(localeJson, "name_max_phonetic"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      name_furigana: Yup.string().nullable()
+        .max(100, translate(localeJson, "name_max_phonetic")),
       dob: Yup.object().shape({
         year: Yup.string()
           .required(
@@ -70,7 +72,6 @@ export default function EvacueeTempRegModal(props) {
         ),
       }),
       tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -79,14 +80,7 @@ export default function EvacueeTempRegModal(props) {
               value = convertToSingleByte(value);
               return value.charAt(0) === "0";
             }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
-          }
-        )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
+            return true; // Return true for empty values
           }
         )
         .test("matches-pattern", translate(localeJson, "phone"), (value) => {
@@ -94,21 +88,8 @@ export default function EvacueeTempRegModal(props) {
             const singleByteValue = convertToSingleByte(value);
             return /^[0-9]{10,11}$/.test(singleByteValue);
           }
-          else {
-            return true;
-          }
-        }).
-        test(
-          "at-least-one-checked",
-          translate(localeJson, "phone_no_required"),
-          (value, parent) => {
-            if (parent.parent.checked === true) {
-              return value ? true : false;
-            } else {
-              return true;
-            }
-          }
-        ),
+          return true; // Allow empty values
+        }),
       // Add other fields and validations as needed
       age: Yup.number()
         .required(translate(localeJson, "age_required")),
@@ -118,8 +99,7 @@ export default function EvacueeTempRegModal(props) {
         .test("is-correct",
           translate(localeJson, "zip_code_mis_match"),
           (value) => {
-            if (value != undefined || fetchZipCode != "")
-            {
+            if (value != undefined || fetchZipCode != "") {
               return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
             }
             else
@@ -144,6 +124,7 @@ export default function EvacueeTempRegModal(props) {
     header,
     buttonText,
     setEvacueeValues,
+    createObj,
     editObj,
     registerModalAction,
     evacuee,
@@ -153,7 +134,7 @@ export default function EvacueeTempRegModal(props) {
     isFrom = "user",
   } = props && props;
 
-  const { getText, getZipCode, getAddress, convertToKatakana,getAddressFromZipCode,getZipCodeFromAddress } = CommonServices;
+  const { getText, getZipCode, getAddress, convertToKatakana, getAddressFromZipCode, getZipCodeFromAddress } = CommonServices;
   const {
     getIndividualQuestionnaireList,
     getSpecialCareDetails,
@@ -260,6 +241,17 @@ export default function EvacueeTempRegModal(props) {
         telAsRep: false,
         addressAsRep: false,
       };
+
+  useEffect(() => {
+    if (createObj) {
+      formikRef.current.setFieldValue("postalCode", createObj?.postalCode ? createObj.postalCode : "");
+      formikRef.current.setFieldValue("prefecture_id", createObj?.prefecture_id ? createObj.prefecture_id : null);
+      formikRef.current.setFieldValue("address", createObj?.address ? createObj.address : "");
+      formikRef.current.setFieldValue("address2", createObj?.address2 ? createObj.address2 : "");
+      setFetchedZipCode(createObj?.postalCode ? createObj.postalCode : "");
+      formikRef.current.validateField("postalCode")
+    }
+  }, [createObj]);
 
   useEffect(() => {
     if (registerModalAction === "edit" && editObj.individualQuestions) {
@@ -371,6 +363,7 @@ export default function EvacueeTempRegModal(props) {
       if (res) {
         setOpenQrPopup(false);
         const evacueeArray = res.data;
+        formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
         setLoader(false);
       } else {
@@ -388,6 +381,7 @@ export default function EvacueeTempRegModal(props) {
       if (res) {
         setPerspectiveCroppingVisible(false);
         const evacueeArray = res.data;
+        formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
         setLoader(false);
       } else {
@@ -418,20 +412,25 @@ export default function EvacueeTempRegModal(props) {
       }
       if (val.length >= 7) {
         let payload = val.slice(0, 3) + "-" + val.slice(3);
-        // getAddressFromZipCode(val, (response) => {
-        //   if (response) {
-        //     let address = response;
-        //     const selectedPrefecture = prefectures.find(
-        //       (prefecture) => prefecture.value == address.prefcode
-        //     );
-        //     setFieldValue("prefecture_id", selectedPrefecture?.value);
-        //     setFieldValue("address", address.address2 + address.address3 || "");
-        //   } else {
-        //     setFieldValue("prefecture_id", "");
-        //     setFieldValue("address", "");
-        //   }
-        // });
+        getAddress(val, (response) => {
+          if (response) {
+            let address = response;
+            const selectedPrefecture = prefectures.find(
+              (prefecture) => prefecture.value == address.prefcode
+            );
+            setFieldValue("prefecture_id", selectedPrefecture?.value);
+            setFieldValue("address", address.address2 + address.address3 || "");
+            setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
+          } else {
+            setFieldValue("prefecture_id", "");
+            setFieldValue("address", "");
+            setFieldValue("address2", "");
+          }
+        });
       }
+    } else {
+      setFieldValue("address", evacuees?.address ? evacuees.address : "");
+      setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
     }
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
@@ -445,9 +444,7 @@ export default function EvacueeTempRegModal(props) {
       setFieldValue("age_m", parseInt(age.months));
       setFieldValue("dob", convertedObject || "");
     }
-    setFieldValue("address", evacuees.address||"");
-    setFieldValue("address2", evacuees.address2||"");
-    setFieldValue("connecting_code", evacuees.connecting_code||"");
+    setFieldValue("connecting_code", evacuees.connecting_code);
   }
 
   function calculateAge(birthdate) {
@@ -510,9 +507,9 @@ export default function EvacueeTempRegModal(props) {
     let stateId = formikRef.current.values.prefecture_id;
     let postalCode = formikRef.current.values.postalCode;
     let state = prefectures.find(x => x.value == stateId)?.name;
-    
+
     let firstConditionCompleted = "false";
-  
+
     // First condition - Handling by address and state
     if (address && state) {
       getZipCodeFromAddress((state + address), (res) => {
@@ -523,13 +520,13 @@ export default function EvacueeTempRegModal(props) {
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "true";
         } else {
-          setFetchedZipCode(invalidCounter+1);
+          setFetchedZipCode(invalidCounter + 1);
           formikRef.current.validateField("postalCode");
           firstConditionCompleted = "false";
         }
       });
     }
-  
+
     // Check to not execute if first condition completed its work
     else if (postalCode) {
       getAddressFromZipCode(postalCode, (res) => {
@@ -546,7 +543,7 @@ export default function EvacueeTempRegModal(props) {
       });
     }
   }, [addressCount]); // Dependency array for the useEffect
-  
+
 
   useEffect(() => {
     fetchZipCode && formikRef.current.validateField("postalCode")
@@ -659,22 +656,22 @@ export default function EvacueeTempRegModal(props) {
                         onClick: async () => {
                           // Setting the form as submitted
                           setIsFormSubmitted(true);
-                      
+
                           // Incrementing the counter by 2 (combined the two separate increments into one)
                           setCounter(prevCount => prevCount + 2);
-                      
+
                           // Validate the postalCode field specifically
                           formikRef.current.validateField("postalCode");
-                      
+
                           // Converting the date of birth fields to single byte and setting them
                           setFieldValue("dob.year", convertToSingleByte(values.dob.year));
                           setFieldValue("dob.month", convertToSingleByte(values.dob.month));
                           setFieldValue("dob.date", convertToSingleByte(values.dob.date));
-                      
+
                           // Triggering the form submission at the end
                           handleSubmit();
-                      },
-                      
+                        },
+
                       }}
                       parentClass={"inline primary-button"}
                     />
@@ -765,6 +762,8 @@ export default function EvacueeTempRegModal(props) {
                               }`,
                             labelProps: {
                               text: translate(localeJson, "c_name_kanji"),
+                              spanText: "*",
+                              inputLabelSpanClassName: "p-error",
                               inputLabelClassName: "block font-bold",
                               labelMainClassName: "pb-1",
                             },
@@ -820,7 +819,6 @@ export default function EvacueeTempRegModal(props) {
                                 }`,
                               labelProps: {
                                 text: translate(localeJson, "c_refugee_name"),
-                                spanText: "*",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -897,7 +895,7 @@ export default function EvacueeTempRegModal(props) {
                                     setFieldValue("telAsRep", e.checked)
                                     setHavetel(e.checked);
                                     if (e.checked == true) {
-                                      setFieldValue("tel", repAddress[0].tel)
+                                      setFieldValue("tel", repAddress[0].tel && repAddress[0].tel != "00000000000" ? repAddress[0].tel : "");
                                     }
                                     else {
                                       setFieldValue("tel", '');
@@ -916,7 +914,6 @@ export default function EvacueeTempRegModal(props) {
                                 }`,
                               labelProps: {
                                 text: translate(localeJson, "phone_number"),
-                                spanText: "*",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",

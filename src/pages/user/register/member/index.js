@@ -56,7 +56,7 @@ export default function Admission() {
 
   const schema = Yup.object().shape({
     name: Yup.string()
-      .max(100, translate(localeJson, "family_name_max"))
+      .max(200, translate(localeJson, "family_name_max"))
       .test({
         test: function (value) {
           const { familyCode } = this.parent;
