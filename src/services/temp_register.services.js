@@ -160,7 +160,7 @@ function _registerUser(payload, callBackFun) {
     .post("/user/registration", payload)
     .then((response) => {
       callBackFun(response.data);
-      toastDisplay(response);
+      // toastDisplay(response);
     })
     .catch((error) => {
       callBackFun(false);
