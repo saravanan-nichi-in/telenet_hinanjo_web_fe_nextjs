@@ -265,9 +265,9 @@ const QuestionList = ({
                     handleTextTypeQuestion(numberValue, question.id);
                   },
                   inputRightIconProps: {
-                    display: question?.display ? !question.display : true,
+                    display: question?.isVoiceRequired || false,
                     audio: {
-                      display: question?.display ? !question.display : true,
+                      display: question?.isVoiceRequired || false,
                     },
                     icon: "",
                     isRecording: isQRecording,
@@ -314,9 +314,9 @@ const QuestionList = ({
                     handleNumberTypeQuestion(numberValue, question.id);
                   },
                   inputRightIconProps: {
-                    display: question?.display ? !question.display : true,
+                    display: question?.isVoiceRequired || false,
                     audio: {
-                      display: question?.display ? !question.display : true,
+                      display: question?.isVoiceRequired || false,
                     },
                     icon: "",
                     isRecording: isQRecording,
