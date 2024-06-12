@@ -749,10 +749,10 @@
       "inventory_date_is_required": "棚卸日は必須です。",
       "expiry_date_is_required": "有効期限は必須です。",
       "expiry_date_must_be_equal_or_greater_than_today": " 有効期限日付は将来の日付である必要があります。",
-      "family_name_required": "氏名や世帯番号を入力してください。",
+      "family_name_required": "名前や世帯番号を入力ください。",
       "family_name_max": "氏名は200文字以内で入力してください。",
-      "family_code_required": "氏名や世帯番号を入力してください。",
-      "family_password_required": "パスワードが必要です。",
+      "family_code_required": "名前や世帯番号を入力ください。",
+      "family_password_required": "パスワードが必須です。",
       "family_password_min_max": "数字4桁で入力してください。",
       "family_password_min": "パスワードは最小4文字です。",
       "open_dateTime_required": "開設日時は必要です。",
@@ -1051,5 +1051,5 @@
       "temp_register_date": "避難前登録日時",
       "ocr_tooltip": "身分証明書から読み取って入力を行います。\n マイナンバーカード、運転免許証、外国人登録証明書などが使用可能です。",
       "qr_staff_check_in_confirm": "避難前登録時に選択した避難所が異なります。 この避難所に変えて入所を進めてもよろしいですか？",
-      "name_required_changed": "名前は必要です。"
+      "name_required_changed": "名前は必須です 。"
 }
