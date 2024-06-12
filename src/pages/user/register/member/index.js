@@ -435,7 +435,7 @@ export default function Admission() {
                                         labelProps: {
                                           text: translate(
                                             localeJson,
-                                            "shelter_name"
+                                            "name_kanji"
                                           ),
                                           inputLabelClassName: "block",
                                           spanText: "*",
