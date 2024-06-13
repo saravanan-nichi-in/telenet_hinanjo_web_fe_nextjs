@@ -432,7 +432,7 @@
       "admin_login": "システム管理者用ログイン",
       "staff_login": "スタッフ用ログインページ",
       "hq_staff_login": "本部スタッフ用ログインページ",
-      "placeholder_please_enter_name": "氏名を入力ください",
+      "placeholder_please_enter_name": "名前を入力ください",
       "placeholder_please_enter_password": "パスワードを入力ください",
       "placeholder_hyphen_not_required": "ハイフンは不要です",
       "return_to_evacuee_list": "避難者一覧に戻る",
