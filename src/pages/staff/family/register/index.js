@@ -191,6 +191,10 @@ export default function Admission() {
           setRegisterModalAction("create");
           setSpecialCareEditOpen(true);
         }
+        else {
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        }
       });
     }
   };
