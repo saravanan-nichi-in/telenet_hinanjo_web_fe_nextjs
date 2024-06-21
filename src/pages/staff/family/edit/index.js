@@ -192,7 +192,10 @@ export default function Admission() {
           setCreateObj(newEvacuee)
           setRegisterModalAction("create");
           setSpecialCareEditOpen(true);
-        }
+        } else {
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+      }
       });
     }
   };
