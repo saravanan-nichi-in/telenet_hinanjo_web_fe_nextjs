@@ -96,23 +96,34 @@ export default function EvacueeTempRegModal(props) {
       age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
-        .test("is-correct",
-          translate(localeJson, "zip_code_mis_match"),
-          (value) => {
-            if (value != undefined || fetchZipCode != "") {
-              return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
-            }
-            else
-              return true
-          })
+      .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
+        (value, context) => {
+        const { prefecture_id } = context.parent;
+        console.log(prefecture_id,postalCodePrefectureId)
+        if (postalCodePrefectureId != null && prefecture_id != null) {
+          console.log(postalCodePrefectureId == prefecture_id)
+          return postalCodePrefectureId == prefecture_id
+        }
+        else return true
+      
+    })
+        // .test("is-correct",
+        //   translate(localeJson, "zip_code_mis_match"),
+        //   (value) => {
+        //     if (value != undefined || fetchZipCode != "") {
+        //       return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
+        //     }
+        //     else
+        //       return true
+        //   })
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
         .required(translate(localeJson, "c_address_is_required"))
         .max(190, translate(localeJson, "address_max_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
+      // address2: Yup.string()
+      //   .nullable()
+      //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
         .nullable()
         .required(translate(localeJson, "c_perfacture_is_required")),
@@ -157,7 +168,7 @@ export default function EvacueeTempRegModal(props) {
   const { basicInfo } = CheckInOutServices;
   const [zipAddress, setZipAddress] = useState("");
   const [invalidCounter, setInvalidCounter] = useState(100000000)
-
+  const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(null);
   useEffect(() => {
     setMIsRecording(isRecording);
   }, [isRecording]);
@@ -170,10 +181,21 @@ export default function EvacueeTempRegModal(props) {
   const [initialQuestion, setInitialQues] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [specialCare, setSpecialCare] = useState([]);
+  const [prefCount, setPrefCount] = useState(1)
   useEffect(() => {
     fetchMasterQuestion();
     fetchSpecialCare();
   }, [locale]);
+  useEffect(() => {
+    formikRef.current.setFieldValue(
+      "postalCode",
+      formikRef.current.values.postalCode,
+      true
+    );
+    formikRef.current.setFieldTouched("postalCode", true);
+    formikRef.current.validateField("postalCode");
+    console.log(formikRef.current)
+  }, [prefCount])
 
   const fetchSpecialCare = () => {
     getSpecialCareDetails((res) => {
@@ -231,7 +253,7 @@ export default function EvacueeTempRegModal(props) {
         postalCode: "",
         prefecture_id: null,
         address: "",
-        address2: "",
+        // address2: "",
         email: "",
         tel: "",
         specialCareType: null,
@@ -247,8 +269,9 @@ export default function EvacueeTempRegModal(props) {
       formikRef.current.setFieldValue("postalCode", createObj?.postalCode ? createObj.postalCode : "");
       formikRef.current.setFieldValue("prefecture_id", createObj?.prefecture_id ? createObj.prefecture_id : null);
       formikRef.current.setFieldValue("address", createObj?.address ? createObj.address : "");
-      formikRef.current.setFieldValue("address2", createObj?.address2 ? createObj.address2 : "");
+     // formikRef.current.setFieldValue("address2", createObj?.address2 ? createObj.address2 : "");
       setFetchedZipCode(createObj?.postalCode ? createObj.postalCode : "");
+      setPostalCodePrefectureId(createObj?.prefecture_id ? createObj.prefecture_id : null)
       formikRef.current.validateField("postalCode")
     }
   }, [createObj]);
@@ -291,7 +314,7 @@ export default function EvacueeTempRegModal(props) {
       .map((item) => {
         return {
           address: item.address,
-          address2: item.address2,
+          // address2: item.address2,
           prefecture_id: item.prefecture_id,
           postalCode: item.postalCode,
           tel: item.tel,
@@ -316,8 +339,10 @@ export default function EvacueeTempRegModal(props) {
 
   const handleRepAddress = (evacuees, setFieldValue) => {
     if (evacuees) {
-      evacuees?.prefecture_id &&
+      if(evacuees?.prefecture_id ){
         setFieldValue("prefecture_id", evacuees?.prefecture_id);
+        setPostalCodePrefectureId(evacuees?.prefecture_id)
+      }
       const re = /^[0-9-]+$/;
       let val;
       if (evacuees.postalCode === "" || re.test(evacuees.postalCode)) {
@@ -336,6 +361,7 @@ export default function EvacueeTempRegModal(props) {
               (prefecture) => prefecture.value == address.prefcode
             );
             setFieldValue("prefecture_id", selectedPrefecture?.value);
+            setPostalCodePrefectureId(selectedPrefecture?.value)
             setFieldValue("address", address.address2 + address.address3 || "");
           } else {
             setFieldValue("prefecture_id", "");
@@ -344,7 +370,7 @@ export default function EvacueeTempRegModal(props) {
         });
       }
       setFieldValue("address", evacuees.address);
-      setFieldValue("address2", evacuees.address2);
+      // setFieldValue("address2", evacuees.address2);
     }
   };
 
@@ -420,7 +446,7 @@ export default function EvacueeTempRegModal(props) {
             );
             setFieldValue("prefecture_id", selectedPrefecture?.value);
             setFieldValue("address", address.address2 + address.address3 || "");
-            setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
+            // setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
           } else {
             setFieldValue("prefecture_id", "");
             setFieldValue("address", "");
@@ -430,7 +456,7 @@ export default function EvacueeTempRegModal(props) {
       }
     } else {
       setFieldValue("address", evacuees?.address ? evacuees.address : "");
-      setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
+      // setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
     }
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
@@ -502,52 +528,52 @@ export default function EvacueeTempRegModal(props) {
     }
   }, [dobCounter]);
 
-  useEffect(() => {
-    let address = formikRef.current.values.address;
-    let stateId = formikRef.current.values.prefecture_id;
-    let postalCode = formikRef.current.values.postalCode;
-    let state = prefectures.find(x => x.value == stateId)?.name;
+  // useEffect(() => {
+  //   let address = formikRef.current.values.address;
+  //   let stateId = formikRef.current.values.prefecture_id;
+  //   let postalCode = formikRef.current.values.postalCode;
+  //   let state = prefectures.find(x => x.value == stateId)?.name;
 
-    let firstConditionCompleted = "false";
+  //   let firstConditionCompleted = "false";
 
-    // First condition - Handling by address and state
-    if (address && state) {
-      getZipCodeFromAddress((state + address), (res) => {
-        if (res) {
-          let zipCode = res.data.zipcode;
-          setFetchedZipCode(zipCode.replace(/-/g, ""));
-          zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
-          formikRef.current.validateField("postalCode");
-          firstConditionCompleted = "true";
-        } else {
-          setFetchedZipCode(invalidCounter + 1);
-          formikRef.current.validateField("postalCode");
-          firstConditionCompleted = "false";
-        }
-      });
-    }
+  //   // First condition - Handling by address and state
+  //   if (address && state) {
+  //     getZipCodeFromAddress((state + address), (res) => {
+  //       if (res) {
+  //         let zipCode = res.data.zipcode;
+  //         setFetchedZipCode(zipCode.replace(/-/g, ""));
+  //         zipCode && formikRef.current.setFieldValue("postalCode", zipCode.replace(/-/g, ""));
+  //         formikRef.current.validateField("postalCode");
+  //         firstConditionCompleted = "true";
+  //       } else {
+  //         setFetchedZipCode(invalidCounter + 1);
+  //         formikRef.current.validateField("postalCode");
+  //         firstConditionCompleted = "false";
+  //       }
+  //     });
+  //   }
 
-    // Check to not execute if first condition completed its work
-    else if (postalCode) {
-      getAddressFromZipCode(postalCode, (res) => {
-        let _address = res;
-        if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
-          setFetchedZipCode("");
-          formikRef.current.validateField("postalCode");
-        } else {
-          formikRef.current.validateField("address", _address.address2 + _address.address3);
-          formikRef.current.validateField("prefecture_id", _address.prefcode);
-          setFetchedZipCode(postalCode);
-          formikRef.current.validateField("postalCode", postalCode);
-        }
-      });
-    }
-  }, [addressCount]); // Dependency array for the useEffect
+  //   // Check to not execute if first condition completed its work
+  //   else if (postalCode) {
+  //     getAddressFromZipCode(postalCode, (res) => {
+  //       let _address = res;
+  //       if (stateId != _address.prefcode || address != (_address.address2 + _address?.address3)) {
+  //         setFetchedZipCode("");
+  //         formikRef.current.validateField("postalCode");
+  //       } else {
+  //         formikRef.current.validateField("address", _address.address2 + _address.address3);
+  //         formikRef.current.validateField("prefecture_id", _address.prefcode);
+  //         setFetchedZipCode(postalCode);
+  //         formikRef.current.validateField("postalCode", postalCode);
+  //       }
+  //     });
+  //   }
+  // }, [addressCount]); // Dependency array for the useEffect
 
 
-  useEffect(() => {
-    fetchZipCode && formikRef.current.validateField("postalCode")
-  }, [fetchZipCode])
+  // useEffect(() => {
+  //   fetchZipCode && formikRef.current.validateField("postalCode")
+  // }, [fetchZipCode])
 
   return (
     <>
@@ -607,6 +633,8 @@ export default function EvacueeTempRegModal(props) {
           handleSubmit,
           resetForm,
           setFieldValue,
+          validateForm,
+          setErrors
         }) => (
           <div id="permanentRegister">
             <form onSubmit={handleSubmit}>
@@ -994,8 +1022,9 @@ export default function EvacueeTempRegModal(props) {
                                   else {
                                     setFieldValue("postalCode", '');
                                     setFieldValue("address", '');
-                                    setFieldValue("address2", '');
+                                    // setFieldValue("address2", '');
                                     setFieldValue("prefecture_id", '');
+                                    setPostalCodePrefectureId("")
                                   }
                                 },
                               }}
@@ -1068,6 +1097,7 @@ export default function EvacueeTempRegModal(props) {
                                       "prefecture_id",
                                       selectedPrefecture?.value
                                     );
+                                    setPostalCodePrefectureId(selectedPrefecture?.value)
                                     setFieldValue(
                                       "address",
                                       address.address2 + address.address3 ||
@@ -1076,6 +1106,7 @@ export default function EvacueeTempRegModal(props) {
                                   } else {
                                     setFieldValue("prefecture_id", "");
                                     setFieldValue("address", "");
+                                    setPostalCodePrefectureId('')
                                   }
                                 })
                               }
@@ -1143,8 +1174,17 @@ export default function EvacueeTempRegModal(props) {
                             optionLabel: "name",
                             onChange: (evt) => {
                               setFieldValue("prefecture_id", evt.target.value);
-                              if (values.address) {
-                                setAddressCount(addressCount + 1)
+                              if (values.postalCode) {
+                                let payload = convertToSingleByte(values.postalCode);
+                                getAddressFromZipCode(
+                                  payload, (res) => {
+                                    if (res && res.prefcode != evt.target.value) {
+                                      setPostalCodePrefectureId(res.prefcode);
+                                      setPrefCount(prefCount+1)
+                                      setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
+                                    }
+                                    validateForm();
+                                  })
                               }
                             },
                             onBlur: handleBlur,
@@ -1183,7 +1223,7 @@ export default function EvacueeTempRegModal(props) {
                             placeholder: translate(localeJson, "city_ward"),
                             onChange: (evt) => {
                               setFieldValue("address", evt.target.value)
-                              setAddressCount(addressCount + 1)
+                              // setAddressCount(addressCount + 1)
                             },
                             onBlur: handleBlur,
                             inputRightIconProps: {
@@ -1215,7 +1255,7 @@ export default function EvacueeTempRegModal(props) {
                             errors.address && touched.address && errors.address
                           }
                         />
-                        <Input
+                        {/* <Input
                           inputProps={{
                             inputParentClassName: `w-full custom_input ${errors.address2 && touched.address2 && "p-invalid"
                               }`,
@@ -1272,7 +1312,7 @@ export default function EvacueeTempRegModal(props) {
                             touched.address2 &&
                             errors.address2
                           }
-                        />
+                        /> */}
                       </div>
                       <div className="mb-2 col-12">
                         <div className="outer-label pb-1 w-12">
