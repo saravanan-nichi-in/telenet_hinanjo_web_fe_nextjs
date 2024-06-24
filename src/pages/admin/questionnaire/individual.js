@@ -19,7 +19,7 @@ export default function IndividualQuestionnaire() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 10,
+            limit: "",
             order_by: "desc",
             sort_by: "updated_at"
         },
