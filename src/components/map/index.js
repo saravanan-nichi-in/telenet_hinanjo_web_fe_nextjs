@@ -282,7 +282,7 @@ export const GoogleMapMultiMarkerComponent = ({
                   }}
                   icon={
                     marker.active_flg == 1
-                      ? marker.center >= 100
+                      ? marker.center >= 81
                         ? BlueIcon
                         : marker.center > 50 && marker.center <= 80
                           ? RedIcon
