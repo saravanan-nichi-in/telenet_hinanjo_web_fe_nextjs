@@ -33,13 +33,10 @@ import {
   CustomHeader,
   YaburuModal,
   BarcodeDialog,
-  QrScannerModal
+  QrScannerModal,
 } from "@/components";
 import EvacueeTempRegModal from "@/components/modal/evacueeTempRegModal";
-import {
-  prefectures,
-  prefectures_en,
-} from "@/utils/constant";
+import { prefectures, prefectures_en } from "@/utils/constant";
 import {
   CommonServices,
   TempRegisterServices,
@@ -54,7 +51,10 @@ export default function Admission() {
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const regReducer = useAppSelector((state) => state.registerReducer);
   const place_id = layoutReducer?.user?.place?.id;
-  const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
+  const discloseInfo =
+    locale == "ja"
+      ? layoutReducer?.layout?.disclosure_info_ja
+      : layoutReducer?.layout?.disclosure_info_en;
 
   const [evacuee, setEvacuee] = useState([]);
   const [registerModalAction, setRegisterModalAction] = useState("create");
@@ -70,16 +70,18 @@ export default function Admission() {
   const [editObj, setEditObj] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [count, setCounter] = useState(1);
-  const [evacueeCount, setEvacueeCounter] = useState(0)
+  const [evacueeCount, setEvacueeCounter] = useState(0);
   const [hasErrors, setHasErrors] = useState(false);
   const [isMRecording, setMIsRecording] = useState(false);
   const [inputType, setInputType] = useState("password");
   const [showDetails, setShowDetails] = useState(false);
   const [expandedFamilies, setExpandedFamilies] = useState([]);
   const [modalCountFlag, setModalCountFlag] = useState(true);
-  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
+  const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
+    useState(false);
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
-  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
+  const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] =
+    useState(false);
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const formikRef = useRef();
@@ -104,7 +106,7 @@ export default function Admission() {
     getSpecialCareDetails,
     getMasterQuestionnaireList,
     ocrScanRegistration,
-    qrScanRegistration
+    qrScanRegistration,
   } = TempRegisterServices;
 
   useEffect(() => {
@@ -134,7 +136,12 @@ export default function Admission() {
       router.push("/user/list");
       return;
     }
-    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
+    if (
+      personCount > 0 &&
+      personCount > evacueeCount &&
+      evacuee?.length != personCount &&
+      modalCountFlag
+    ) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
           fetchDetailsByPlaceAndUpdateEvacuee();
@@ -142,7 +149,7 @@ export default function Admission() {
         }, 1000);
       }
     } else {
-      window.location.href = '/user/person-count';
+      window.location.href = "/user/person-count";
     }
   }, [locale]);
 
@@ -159,14 +166,13 @@ export default function Admission() {
             address: address,
           };
           const newEvacuee = createEvacuee(evacueeArray);
-          setCreateObj(newEvacuee)
+          setCreateObj(newEvacuee);
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+        } else {
           setRegisterModalAction("create");
           setSpecialCareEditOpen(true);
         }
-    else {
-        setRegisterModalAction("create");
-          setSpecialCareEditOpen(true);
-    }
   };
 
   useEffect(() => {
@@ -188,10 +194,16 @@ export default function Admission() {
             // Update existing evacuee if conditions are met
             return {
               ...evacuee,
-              postalCode: evacuee.addressAsRep ? evacueeValues.postalCode : evacuee.postalCode,
-              prefecture_id: evacuee.addressAsRep ? evacueeValues.prefecture_id : evacuee.prefecture_id,
-              address: evacuee.addressAsRep ? evacueeValues.address : evacuee.address,
-              tel: evacuee.telAsRep ? evacueeValues.tel : evacuee.tel
+              postalCode: evacuee.addressAsRep
+                ? evacueeValues.postalCode
+                : evacuee.postalCode,
+              prefecture_id: evacuee.addressAsRep
+                ? evacueeValues.prefecture_id
+                : evacuee.prefecture_id,
+              address: evacuee.addressAsRep
+                ? evacueeValues.address
+                : evacuee.address,
+              tel: evacuee.telAsRep ? evacueeValues.tel : evacuee.tel,
             };
           } else {
             return evacuee;
@@ -254,7 +266,12 @@ export default function Admission() {
   }, [])
 
   useEffect(() => {
-    if (personCount > 0 && personCount > evacueeCount && evacuee?.length != personCount && modalCountFlag) {
+    if (
+      personCount > 0 &&
+      personCount > evacueeCount &&
+      evacuee?.length != personCount &&
+      modalCountFlag
+    ) {
       if (regReducer.originalData?.length <= 0) {
         setTimeout(() => {
           fetchDetailsByPlaceAndUpdateEvacuee();
@@ -262,7 +279,7 @@ export default function Admission() {
         }, 1000);
       }
     }
-  }, [evacueeCount])
+  }, [evacueeCount]);
 
   useEffect(() => {
     fetchMasterQuestion();
@@ -270,25 +287,32 @@ export default function Admission() {
     fetchData();
   }, [locale]);
 
-
   useEffect(() => {
     setMIsRecording(isRecording);
   }, [isRecording]);
 
   useEffect(() => {
     if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector('.p-error');
+      const firstErrorElement = document.querySelector(".p-error");
       if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
+        firstErrorElement.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, [count]);
 
-
   const agreeTextWithHTML = (
     <div>
       {translate(localeJson, "agree_note_oneA")}
-      <span dangerouslySetInnerHTML={{ __html: `<a href="${window.location.origin}/privacy" target="_blank"><u>${translate(localeJson, 'c_individual_information')}</u></a>` }} />
+      <span
+        dangerouslySetInnerHTML={{
+          __html: `<a href="${
+            window.location.origin
+          }/privacy" target="_blank"><u>${translate(
+            localeJson,
+            "c_individual_information"
+          )}</u></a>`,
+        }}
+      />
       {translate(localeJson, "agree_note_oneB")}
     </div>
   );
@@ -306,7 +330,7 @@ export default function Admission() {
     agreeCheckOne: false,
     agreeCheckTwo: false,
     name_furigana: "",
-    name_kanji: ""
+    name_kanji: "",
   };
 
   const currentDate = new Date();
@@ -317,29 +341,26 @@ export default function Admission() {
   const evacueeSchema = () =>
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
-      name_kanji: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
+      name_kanji: Yup.string().max(100, translate(localeJson, "name_max")),
+      name_furigana: Yup.string().max(100, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
           translate(localeJson, "c_year") + translate(localeJson, "is_required")
         ),
         month: Yup.string().required(
           translate(localeJson, "c_month") +
-          translate(localeJson, "is_required")
+            translate(localeJson, "is_required")
         ),
         date: Yup.string().required(
           translate(localeJson, "c_date") + translate(localeJson, "is_required")
         ),
       }),
       // Add other fields and validations as needed
-      age: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      age_m: Yup.number()
-        .required(translate(localeJson, "age_required")),
+      age: Yup.number().required(translate(localeJson, "age_required")),
+      age_m: Yup.number().required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string()
+        .required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -359,9 +380,9 @@ export default function Admission() {
       name_kanji: Yup.string()
         .required(translate(localeJson, "name_required_changed"))
         .max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string()
-        .max(100, translate(localeJson, "name_max")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      name_furigana: Yup.string().max(100, translate(localeJson, "name_max")),
+      postalCode: Yup.string()
+        .required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -416,24 +437,30 @@ export default function Admission() {
           (value) => {
             return value.length <= 20;
           }
-        ).of(evacueeItemSchema),
-      agreeCheckOne: Yup.boolean().required(translate(localeJson, "c_required"))
-        .test("check_is_true", translate(localeJson, "c_required"),
-          (value) => {
-            return value == true;
-          }
         )
+        .of(evacueeItemSchema),
+      agreeCheckOne: Yup.boolean()
+        .required(translate(localeJson, "c_required"))
+        .test("check_is_true", translate(localeJson, "c_required"), (value) => {
+          return value == true;
+        }),
     });
 
   const fetchData = () => {
-    if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
+    if (
+      regReducer.originalData &&
+      Object.keys(regReducer.originalData).length > 0
+    ) {
       let data = regReducer.originalData;
       formikRef.current.setFieldValue("postalCode", data.postalCode);
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
       formikRef.current.setFieldValue("evacuee", data.evacuee);
-      formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
+      formikRef.current.setFieldValue(
+        "tel",
+        data.tel && data.tel != "00000000000" ? data.tel : ""
+      );
       formikRef.current.setFieldValue("password", data.password);
       formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
       formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
@@ -441,7 +468,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("name_kanji", data.name_kanji);
       data.evacuee && setEvacuee(data.evacuee);
     }
-  }
+  };
 
   const fetchSpecialCare = () => {
     getSpecialCareDetails((res) => {
@@ -460,7 +487,7 @@ export default function Admission() {
           value: item.id.toString(),
         }));
         setSpecialCareJPOptions(options_jp);
-        setSpecialCareENOptions(options_en)
+        setSpecialCareENOptions(options_en);
         setSpecialCareOptions(options);
       }
     });
@@ -477,13 +504,19 @@ export default function Admission() {
     };
     getMasterQuestionnaireList(payload, (res) => {
       if (res) {
-        const updatedList = res.data.list.map(item => {
+        const updatedList = res.data.list.map((item) => {
           if (regReducer?.originalData?.questions) {
-            const matchingQuestion = regReducer?.originalData?.questions?.find(question => question.id === item.id);
+            const matchingQuestion = regReducer?.originalData?.questions?.find(
+              (question) => question.id === item.id
+            );
 
             if (matchingQuestion) {
               // Update the answer property or any other property you need
-              return { ...item, answer: matchingQuestion.answer, answer_en: matchingQuestion.answer_en };
+              return {
+                ...item,
+                answer: matchingQuestion.answer,
+                answer_en: matchingQuestion.answer_en,
+              };
             }
             return item;
           }
@@ -492,7 +525,7 @@ export default function Admission() {
         const sortedUpdatedList = updatedList.sort((a, b) => {
           return parseInt(a.display_order) - parseInt(b.display_order);
         });
-        setCounter(count + 1)
+        setCounter(count + 1);
         // Now, updatedList contains the modified list with updated answers based on matching IDs
         setQuestions(sortedUpdatedList);
       }
@@ -559,7 +592,10 @@ export default function Admission() {
       address = rowData.address ? rowData.address : "";
       // address2 = rowData.address2 ? rowData.address2 : "";
       postalCode = rowData.postalCode ? rowData.postalCode : "";
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue(
+        "postalCode",
+        data.postalCode ? data.postalCode.replace(/-/g, "") : ""
+      );
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -572,14 +608,18 @@ export default function Admission() {
       if (data.checked !== true && data.telAsRep === true) {
         data.tel = representativeTel;
       }
-      if (data.checked !== true && data.addressAsRep === true && address !== "") {
+      if (
+        data.checked !== true &&
+        data.addressAsRep === true &&
+        address !== ""
+      ) {
         data.prefecture_id = prefecture_id;
         data.address = address;
         // data.address2 = address2;
         data.postalCode = postalCode;
       }
     });
-    formikRef.current.setFieldValue("evacuee", updatedEvacue)
+    formikRef.current.setFieldValue("evacuee", updatedEvacue);
     setEvacuee(updatedEvacue);
   };
 
@@ -631,16 +671,16 @@ export default function Admission() {
   };
 
   const qrResult = (result) => {
-    setLoader(true)
-    let formData = new FormData()
-    formData.append('content', result)
-    setOpenQrPopup(false)
+    setLoader(true);
+    let formData = new FormData();
+    formData.append("content", result);
+    setOpenQrPopup(false);
     showOverFlow();
     qrScanRegistration(formData, (res) => {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);
-        setEditObj(newEvacuee)
+        setEditObj(newEvacuee);
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
         setEvacuee((prev) => {
@@ -653,18 +693,17 @@ export default function Admission() {
           ...formikRef.current.values.evacuee,
           newEvacuee,
         ]);
-        setLoader(false)
-      }
-      else {
-        setLoader(false)
+        setLoader(false);
+      } else {
+        setLoader(false);
       }
     });
-    setOpenQrPopup(false)
+    setOpenQrPopup(false);
     showOverFlow();
   };
 
   const ocrResult = (result) => {
-    setLoader(true)
+    setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
@@ -673,7 +712,7 @@ export default function Admission() {
       if (res) {
         const evacueeArray = res.data;
         const newEvacuee = createEvacuee(evacueeArray);
-        setEditObj(newEvacuee)
+        setEditObj(newEvacuee);
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
         setEvacuee((prev) => {
@@ -686,13 +725,12 @@ export default function Admission() {
           ...formikRef.current.values.evacuee,
           newEvacuee,
         ]);
-        setLoader(false)
-      }
-      else {
-        setLoader(false)
+        setLoader(false);
+      } else {
+        setLoader(false);
       }
     });
-  }
+  };
 
   const handleRecordingStateChange = (isRecord) => {
     setMIsRecording(isRecord);
@@ -702,7 +740,9 @@ export default function Admission() {
     const outputData = {
       place_id: layoutReducer?.user?.place?.id,
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(new Date()),
-      zip_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
+      zip_code: inputData.postalCode
+        ? inputData.postalCode.replace(/-/g, "")
+        : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
@@ -722,7 +762,9 @@ export default function Admission() {
           refugee_name: evacuee.name_furigana,
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
-          zip_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
+          zip_code: evacuee.postalCode
+            ? evacuee.postalCode.replace(/-/g, "")
+            : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
@@ -731,8 +773,12 @@ export default function Admission() {
           tel: evacuee.tel ? convertToSingleByte(evacuee.tel) : null,
           gender: evacuee.gender,
           special_cares: evacuee.specialCareType || [],
-          specialCareName: evacuee.specialCareType ? getSpecialCareJPNames(evacuee.specialCareType) : "",
-          specialCareName2: evacuee.specialCareType ? getSpecialCareENNames(evacuee.specialCareType) : "",
+          specialCareName: evacuee.specialCareType
+            ? getSpecialCareJPNames(evacuee.specialCareType)
+            : "",
+          specialCareName2: evacuee.specialCareType
+            ? getSpecialCareENNames(evacuee.specialCareType)
+            : "",
           connecting_code: evacuee.connecting_code,
           note: evacuee.remarks,
           question: evacuee.individualQuestions?.map((question) => {
@@ -741,7 +787,11 @@ export default function Admission() {
               question_type: question.type.toString(),
               question_isRequired: question.isRequired,
               answer: question.answer,
-              answer_en: question.answer_en ? (question.answer_en.length > 0 ? question.answer_en : question.answer) : question.answer,
+              answer_en: question.answer_en
+                ? question.answer_en.length > 0
+                  ? question.answer_en
+                  : question.answer
+                : question.answer,
               title: question.title,
               title_en: question.title_en,
             };
@@ -754,7 +804,11 @@ export default function Admission() {
           question_type: question.type.toString(),
           question_isRequired: question.isRequired,
           answer: question.answer,
-          answer_en: question.answer_en ? (question.answer_en.length > 0 ? question.answer_en : question.answer) : question.answer,
+          answer_en: question.answer_en
+            ? question.answer_en.length > 0
+              ? question.answer_en
+              : question.answer
+            : question.answer,
           title: question.title,
           title_en: question.title_en,
         };
@@ -773,7 +827,10 @@ export default function Admission() {
     };
 
     // Adjust the age if the birth month has not occurred yet
-    if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+    if (
+      today.getMonth() < dob.getMonth() ||
+      (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
+    ) {
       age.years--;
       age.months = 12 - dob.getMonth() + today.getMonth();
     }
@@ -791,19 +848,22 @@ export default function Admission() {
     const checked = evacuee && evacuee.length > 0 ? false : true;
     const birthDate = new Date(evacuees.dob);
     const convertedObject = {
-      "year": birthDate.getFullYear(),
-      "month": (birthDate.getMonth() + 1).toString().padStart(2, '0'), // Adding 1 because months are zero-based
-      "date": birthDate.getDate().toString().padStart(2, '0')
+      year: birthDate.getFullYear(),
+      month: (birthDate.getMonth() + 1).toString().padStart(2, "0"), // Adding 1 because months are zero-based
+      date: birthDate.getDate().toString().padStart(2, "0"),
     };
-    let age = calculateAge(birthDate)
+    let age = calculateAge(birthDate);
     const boundObject = {
       id: id,
       checked: checked,
       name: evacuees ? evacuees.name || "" : "",
-      name_furigana: evacuees ? (evacuees.refugeeName || evacuees.refugee_name) || "" : "",
+      name_furigana: evacuees
+        ? evacuees.refugeeName || evacuees.refugee_name || ""
+        : "",
       dob: evacuees ? convertedObject || "" : "",
       age: evacuees ? age.years || "" : "",
-      age_m: evacuees && evacuees.age && age.months !== undefined ? age.months : "",
+      age_m:
+        evacuees && evacuees.age && age.months !== undefined ? age.months : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -815,7 +875,7 @@ export default function Admission() {
       remarks: "",
       individualQuestions: null,
       telAsRep: false,
-      addressAsRep: false
+      addressAsRep: false,
     };
     if (evacuees.postal_code) {
       const re = /^[0-9-]+$/;
@@ -849,7 +909,7 @@ export default function Admission() {
     errorArray.forEach((errorObject) => {
       if (errorObject) {
         Object.values(errorObject).forEach((message) => {
-          toastDisplay(message, '', '', "error");
+          toastDisplay(message, "", "", "error");
         });
       }
     });
@@ -862,7 +922,6 @@ export default function Admission() {
     }
     return "";
   };
-
 
   return (
     <>
@@ -887,11 +946,22 @@ export default function Admission() {
         open={specialCareEditOpen}
         header={
           registerModalAction == "create"
-            ? `${evacuee.length ? evacuee.length + 1 : "1"}${translate(localeJson, "per_info")} ${evacuee.length == 0 ? "（" + translate(localeJson, "c_representative") + "）" : ""}`
-            : `${editObj.id} ${translate(localeJson, "per_info")} ${editObj.checked ? "（" + translate(localeJson, "c_representative") + "）" : ""}`
+            ? `${evacuee.length ? evacuee.length + 1 : "1"}${translate(
+                localeJson,
+                "per_info"
+              )} ${
+                evacuee.length == 0
+                  ? "（" + translate(localeJson, "c_representative") + "）"
+                  : ""
+              }`
+            : `${editObj.id} ${translate(localeJson, "per_info")} ${
+                editObj.checked
+                  ? "（" + translate(localeJson, "c_representative") + "）"
+                  : ""
+              }`
         }
         close={() => {
-          setSpecialCareEditOpen(false)
+          setSpecialCareEditOpen(false);
           showOverFlow();
         }}
         createObj={createObj}
@@ -911,10 +981,9 @@ export default function Admission() {
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => {
-          setPerspectiveCroppingVisible(false)
+          setPerspectiveCroppingVisible(false);
           showOverFlow();
-        }
-        }
+        }}
         callback={ocrResult}
       />
       <Formik
@@ -976,7 +1045,12 @@ export default function Admission() {
                           }
                         />
                         <div>
-                          <Tooltip target=".custom-target-icon" position="bottom" content={translate(localeJson, "ocr_tooltip")} className="shadow-none" />
+                          <Tooltip
+                            target=".custom-target-icon"
+                            position="bottom"
+                            content={translate(localeJson, "ocr_tooltip")}
+                            className="shadow-none"
+                          />
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
@@ -988,7 +1062,14 @@ export default function Admission() {
                           buttonClass:
                             "back-button h-4rem border-radius-5rem  w-full flex justify-content-center",
                           text: translate(localeJson, "c_qr_reg"),
-                          icon: <img src={Qr.url} width={30} height={30} color="green" />,
+                          icon: (
+                            <img
+                              src={Qr.url}
+                              width={30}
+                              height={30}
+                              color="green"
+                            />
+                          ),
                           onClick: () => {
                             setOpenQrPopup(true);
                             hideOverFlow();
@@ -1003,8 +1084,11 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${errors.name_kanji && touched.name_kanji && "p-invalid"
-                                  }`,
+                                inputParentClassName: `custom_input w-full ${
+                                  errors.name_kanji &&
+                                  touched.name_kanji &&
+                                  "p-invalid"
+                                }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
                                   spanText: "*",
@@ -1014,10 +1098,7 @@ export default function Admission() {
                                 },
                                 inputClassName: "w-full",
                                 value: values.name_kanji,
-                                placeholder: translate(
-                                  localeJson,
-                                  "rep_kanji"
-                                ),
+                                placeholder: translate(localeJson, "rep_kanji"),
                                 onChange: handleChange,
                                 onBlur: handleBlur,
                                 id: "name_kanji",
@@ -1035,7 +1116,10 @@ export default function Admission() {
                                     fromData.append("audio_sample", rec);
                                     getText(fromData, (res) => {
                                       if (res?.data?.content) {
-                                        setFieldValue("name_kanji", res?.data?.content);
+                                        setFieldValue(
+                                          "name_kanji",
+                                          res?.data?.content
+                                        );
                                       }
                                     });
                                   },
@@ -1045,7 +1129,11 @@ export default function Admission() {
                               }}
                             />
                             <ValidationError
-                              errorBlock={errors.name_kanji && touched.name_kanji && errors.name_kanji}
+                              errorBlock={
+                                errors.name_kanji &&
+                                touched.name_kanji &&
+                                errors.name_kanji
+                              }
                             />
                           </div>
                         </div>
@@ -1053,8 +1141,11 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${errors.name_furigana && touched.name_furigana && "p-invalid"
-                                  }`,
+                                inputParentClassName: `custom_input w-full ${
+                                  errors.name_furigana &&
+                                  touched.name_furigana &&
+                                  "p-invalid"
+                                }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_furigana"),
                                   inputLabelClassName: "block font-bold",
@@ -1084,7 +1175,10 @@ export default function Admission() {
                                     fromData.append("audio_sample", rec);
                                     getText(fromData, (res) => {
                                       if (res?.data?.content) {
-                                        setFieldValue("name_furigana", res?.data?.content);
+                                        setFieldValue(
+                                          "name_furigana",
+                                          res?.data?.content
+                                        );
                                       }
                                     });
                                   },
@@ -1094,7 +1188,11 @@ export default function Admission() {
                               }}
                             />
                             <ValidationError
-                              errorBlock={errors.name_furigana && touched.name_furigana && errors.name_furigana}
+                              errorBlock={
+                                errors.name_furigana &&
+                                touched.name_furigana &&
+                                errors.name_furigana
+                              }
                             />
                           </div>
                         </div>
@@ -1102,8 +1200,9 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${errors.tel && touched.tel && "p-invalid"
-                                  }`,
+                                inputParentClassName: `custom_input w-full ${
+                                  errors.tel && touched.tel && "p-invalid"
+                                }`,
                                 labelProps: {
                                   text: translate(localeJson, "phone_number"),
                                   inputLabelClassName: "block font-bold",
@@ -1126,7 +1225,9 @@ export default function Admission() {
                                   let val;
                                   if (
                                     evt.target.value === "" ||
-                                    re.test(convertToSingleByte(evt.target.value))
+                                    re.test(
+                                      convertToSingleByte(evt.target.value)
+                                    )
                                   ) {
                                     val = evt.target.value.replace(/-/g, "");
                                     setFieldValue("tel", val);
@@ -1147,10 +1248,7 @@ export default function Admission() {
                                       const re = /^[0-9-]+$/;
                                       let tel_no = res?.data?.content;
                                       if (re.test(tel_no)) {
-                                        setFieldValue(
-                                          "tel",
-                                          tel_no
-                                        );
+                                        setFieldValue("tel", tel_no);
                                       }
                                     });
                                   },
@@ -1160,7 +1258,9 @@ export default function Admission() {
                               }}
                             />
                             <ValidationError
-                              errorBlock={errors.tel && touched.tel && errors.tel}
+                              errorBlock={
+                                errors.tel && touched.tel && errors.tel
+                              }
                             />
                           </div>
                         </div>
@@ -1172,10 +1272,11 @@ export default function Admission() {
                           </div>
                           <Input
                             inputProps={{
-                              inputParentClassName: `custom_input w-full  ${errors.postalCode &&
+                              inputParentClassName: `custom_input w-full  ${
+                                errors.postalCode &&
                                 touched.postalCode &&
                                 "p-invalid"
-                                }`,
+                              }`,
                               labelProps: {
                                 text: "",
                                 spanText: "*",
@@ -1202,7 +1303,10 @@ export default function Admission() {
                                     val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
                                     setFieldValue("postalCode", val);
                                   } else {
-                                    setFieldValue("postalCode", val.slice(0, 7));
+                                    setFieldValue(
+                                      "postalCode",
+                                      val.slice(0, 7)
+                                    );
                                     return;
                                   }
                                 }
@@ -1223,13 +1327,13 @@ export default function Admission() {
                                       setFieldValue(
                                         "address",
                                         address.address2 + address.address3 ||
-                                        ""
+                                          ""
                                       );
                                     } else {
                                       setFieldValue("prefecture_id", "");
                                       setFieldValue("address", "");
                                     }
-                                  })
+                                  });
                                 }
                               },
                               onBlur: handleBlur,
@@ -1254,7 +1358,6 @@ export default function Admission() {
                                           val.slice(0, 3) + "-" + val.slice(3);
                                         setFieldValue("postalCode", val);
                                       }
-
                                     }
                                   });
                                 },
@@ -1272,10 +1375,11 @@ export default function Admission() {
                           />
                           <InputDropdown
                             inputDropdownProps={{
-                              inputDropdownParentClassName: `custom_input mt-2  ${errors.prefecture_id &&
+                              inputDropdownParentClassName: `custom_input mt-2  ${
+                                errors.prefecture_id &&
                                 touched.prefecture_id &&
                                 "p-invalid pb-0"
-                                }`,
+                              }`,
                               labelProps: {
                                 inputDropdownLabelClassName: "block font-bold",
                                 spanText: "*",
@@ -1310,8 +1414,9 @@ export default function Admission() {
                           />
                           <Input
                             inputProps={{
-                              inputParentClassName: `custom_input w-full mt-2 ${errors.address && touched.address && "p-invalid"
-                                }`,
+                              inputParentClassName: `custom_input w-full mt-2 ${
+                                errors.address && touched.address && "p-invalid"
+                              }`,
                               labelProps: {
                                 spanText: "*",
                                 inputLabelClassName: "block font-bold",
@@ -1353,13 +1458,18 @@ export default function Admission() {
                           />
                           <ValidationError
                             errorBlock={
-                              errors.address && touched.address && errors.address
+                              errors.address &&
+                              touched.address &&
+                              errors.address
                             }
                           />
                           {/* <Input
                             inputProps={{
-                              inputParentClassName: `custom_input w-full mt-2 ${errors.address2 && touched.address2 && "p-invalid"
-                                }`,
+                              inputParentClassName: `custom_input w-full mt-2 ${
+                                errors.address2 &&
+                                touched.address2 &&
+                                "p-invalid"
+                              }`,
                               labelProps: {
                                 spanText: "*",
                                 inputLabelClassName: "block font-bold",
@@ -1413,12 +1523,16 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `w-full custom_input ${errors.password &&
+                                inputParentClassName: `w-full custom_input ${
+                                  errors.password &&
                                   touched.password &&
                                   "p-invalid"
-                                  }`,
+                                }`,
                                 labelProps: {
-                                  text: translate(localeJson, "shelter_password"),
+                                  text: translate(
+                                    localeJson,
+                                    "shelter_password"
+                                  ),
                                   inputLabelClassName: "block font-bold",
                                   spanText: "*",
                                   inputLabelSpanClassName: "p-error",
@@ -1438,13 +1552,17 @@ export default function Admission() {
                                   let val;
                                   if (
                                     evt.target.value === "" ||
-                                    re.test(convertToSingleByte(evt.target.value))
+                                    re.test(
+                                      convertToSingleByte(evt.target.value)
+                                    )
                                   ) {
                                     val = evt.target.value.replace(/-/g, "");
                                     if (evt.target.value?.length <= 4) {
-                                      setFieldValue("password", evt.target.value);
+                                      setFieldValue(
+                                        "password",
+                                        evt.target.value
+                                      );
                                     }
-
                                   }
                                 },
                                 onBlur: handleBlur,
@@ -1455,10 +1573,17 @@ export default function Admission() {
                                   },
                                   password: {
                                     display: true,
-                                    className: inputType == "text" ? "pi pi-eye-slash" : "pi pi-eye",
+                                    className:
+                                      inputType == "text"
+                                        ? "pi pi-eye-slash"
+                                        : "pi pi-eye",
                                     onClick: () => {
-                                      setInputType(inputType == "text" ? "password" : "text");
-                                    }
+                                      setInputType(
+                                        inputType == "text"
+                                          ? "password"
+                                          : "text"
+                                      );
+                                    },
                                   },
                                   icon: "",
 
@@ -1470,10 +1595,7 @@ export default function Admission() {
                                       const re = /^[0-9-]+$/;
                                       let newPassword = res?.data?.content;
                                       if (re.test(newPassword)) {
-                                        setFieldValue(
-                                          "password",
-                                          newPassword
-                                        );
+                                        setFieldValue("password", newPassword);
                                       }
                                     });
                                   },
@@ -1496,36 +1618,58 @@ export default function Admission() {
 
                     <div className="household-register">
                       <div className="mb-3">
-                        <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "evacuee")} />
+                        <CustomHeader
+                          headerClass={"page-header1"}
+                          header={translate(localeJson, "evacuee")}
+                        />
                       </div>
                       <div className="flex">
                         <div className="w-full">
                           {evacuee?.map((person, index) => (
-                            <div
-                              key={person.id}
-                              className=""
-                            >
+                            <div key={person.id} className="">
                               <div className="">
-                                <div className={`flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 pt-2 ${evacuee?.length - 1 != index ? 'mb-3' : ""}   justify-content-center`}>
+                                <div
+                                  className={`flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 pt-2 ${
+                                    evacuee?.length - 1 != index ? "mb-3" : ""
+                                  }   justify-content-center`}
+                                >
                                   <div className="">
-
                                     <div className="">
                                       <div className=" flex_row_space_between flex justify-content-between">
                                         <label className="page-header1 flex">
-                                          {person.id}{translate(localeJson, "per_information")}{person.checked ? "（" + translate(localeJson, "c_representative") + "）" : ""}
+                                          {person.id}
+                                          {translate(
+                                            localeJson,
+                                            "per_information"
+                                          )}
+                                          {person.checked
+                                            ? "（" +
+                                              translate(
+                                                localeJson,
+                                                "c_representative"
+                                              ) +
+                                              "）"
+                                            : ""}
                                         </label>
                                         <span className="page-header1">
-                                          {!person.checked &&
+                                          {!person.checked && (
                                             <div className="ml-2">
                                               <NormalCheckBox
                                                 checkBoxProps={{
                                                   checked: person.checked,
                                                   disabled: person.checked,
-                                                  value: translate(localeJson, "update_rep"),
-                                                  labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""
-                                                    }`,
+                                                  value: translate(
+                                                    localeJson,
+                                                    "update_rep"
+                                                  ),
+                                                  labelClass: `pl-2 ${
+                                                    locale == "en" ? "pt-1" : ""
+                                                  }`,
                                                   onChange: (e) => {
-                                                    handleRadioChange(e, person)
+                                                    handleRadioChange(
+                                                      e,
+                                                      person
+                                                    );
                                                   },
                                                 }}
                                                 parentClass={
@@ -1533,7 +1677,7 @@ export default function Admission() {
                                                 }
                                               />
                                             </div>
-                                          }
+                                          )}
                                         </span>
                                       </div>
                                     </div>
@@ -1543,15 +1687,22 @@ export default function Admission() {
                                           {translate(localeJson, "name_kanji")}
                                         </label>
                                       </div>
-                                      <div className="body_table">{person.name}</div>
+                                      <div className="body_table">
+                                        {person.name}
+                                      </div>
                                     </div>
                                     <div className=" mt-3">
                                       <div className=" flex_row_space_between">
                                         <label className="header_table">
-                                          {translate(localeJson, "c_refugee_name")}
+                                          {translate(
+                                            localeJson,
+                                            "c_refugee_name"
+                                          )}
                                         </label>
                                       </div>
-                                      <div className="body_table">{person.name_furigana}</div>
+                                      <div className="body_table">
+                                        {person.name_furigana}
+                                      </div>
                                     </div>
                                     <div className=" mt-3">
                                       <div className=" flex_row_space_between">
@@ -1561,19 +1712,26 @@ export default function Admission() {
                                       </div>
                                       {locale == "ja"
                                         ? getJapaneseDateDisplayYYYYMMDDFormat(
-                                          `${person.dob.year}-${person.dob.month}-${person.dob.date}`
-                                        )
-                                        : getEnglishDateDisplayFormat(`${person.dob.year}-${person.dob.month}-${person.dob.date}`)
-                                      }
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )
+                                        : getEnglishDateDisplayFormat(
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )}
                                       {/* <div className="body_table">{person.dob}</div> */}
                                     </div>
                                     <div className=" mt-3">
                                       <div className=" flex_row_space_between">
                                         <label className="header_table">
-                                          {translate(localeJson, "phone_number")}
+                                          {translate(
+                                            localeJson,
+                                            "phone_number"
+                                          )}
                                         </label>
                                       </div>
-                                      <div className=" mt-1 body_table" id="phone-number">
+                                      <div
+                                        className=" mt-1 body_table"
+                                        id="phone-number"
+                                      >
                                         {person.tel || "-"}
                                       </div>
                                     </div>
@@ -1583,7 +1741,9 @@ export default function Admission() {
                                           {translate(localeJson, "c_age")}
                                         </label>
                                       </div>
-                                      <div className="body_table">{person.age}</div>
+                                      <div className="body_table">
+                                        {person.age}
+                                      </div>
                                     </div>
                                     <div className=" mt-3">
                                       <div className=" flex_row_space_between">
@@ -1591,7 +1751,9 @@ export default function Admission() {
                                           {translate(localeJson, "age_m")}
                                         </label>
                                       </div>
-                                      <div className="body_table">{person.age_m}</div>
+                                      <div className="body_table">
+                                        {person.age_m}
+                                      </div>
                                     </div>
 
                                     <div className=" mt-3">
@@ -1600,7 +1762,9 @@ export default function Admission() {
                                           {translate(localeJson, "c_gender")}
                                         </label>
                                       </div>
-                                      <div className="body_table">{getGenderValue(person.gender)}</div>
+                                      <div className="body_table">
+                                        {getGenderValue(person.gender)}
+                                      </div>
                                     </div>
                                   </div>
                                   {expandedFamilies?.includes(person.id) && (
@@ -1617,18 +1781,59 @@ export default function Admission() {
                                       <div className=" mt-3">
                                         <div className=" flex_row_space_between">
                                           <label className="header_table">
-                                            {translate(localeJson, "c_special_care_type")}
+                                            {translate(localeJson, "c_address")}
                                           </label>
                                         </div>
-                                        <div className="body_table">{locale == "ja" ? getSpecialCareName(getSpecialCareJPNames(person.specialCareType)) : getSpecialCareName(getSpecialCareENNames(person.specialCareType))}</div>
+                                        <div className="body_table">
+                                          {person.postalCode
+                                            ? translate(
+                                                localeJson,
+                                                "post_letter"
+                                              ) + person.postalCode
+                                            : ""}
+                                        </div>
+                                        <div className="body_table">
+                                          {getPrefectureName(
+                                            parseInt(person?.prefecture_id)
+                                          )}
+                                          {person.address}
+                                        </div>
                                       </div>
                                       <div className=" mt-3">
                                         <div className=" flex_row_space_between">
                                           <label className="header_table">
-                                            {translate(localeJson, "c_connecting_code")}
+                                            {translate(
+                                              localeJson,
+                                              "c_special_care_type"
+                                            )}
                                           </label>
                                         </div>
-                                        <div className="body_table">{person.connecting_code || "-"}</div>
+                                        <div className="body_table">
+                                          {locale == "ja"
+                                            ? getSpecialCareName(
+                                                getSpecialCareJPNames(
+                                                  person.specialCareType
+                                                )
+                                              )
+                                            : getSpecialCareName(
+                                                getSpecialCareENNames(
+                                                  person.specialCareType
+                                                )
+                                              )}
+                                        </div>
+                                      </div>
+                                      <div className=" mt-3">
+                                        <div className=" flex_row_space_between">
+                                          <label className="header_table">
+                                            {translate(
+                                              localeJson,
+                                              "c_connecting_code"
+                                            )}
+                                          </label>
+                                        </div>
+                                        <div className="body_table">
+                                          {person.connecting_code || "-"}
+                                        </div>
                                       </div>
 
                                       <div className=" mt-3">
@@ -1637,39 +1842,60 @@ export default function Admission() {
                                             {translate(localeJson, "c_remarks")}
                                           </label>
                                         </div>
-                                        <div className="body_table">{person.remarks || "-"}</div>
+                                        <div className="body_table">
+                                          {person.remarks || "-"}
+                                        </div>
                                       </div>
 
-                                      {person.individualQuestions?.map((question) =>
-                                      (
-                                        <div key={question?.id}>
-                                          <div className=" mt-3">
-                                            <div className=" flex_row_space_between">
-                                              <label className="header_table">
-                                                {locale == "ja" ? question.title : question.title_en}
-                                              </label>
+                                      {person.individualQuestions?.map(
+                                        (question) => (
+                                          <div key={question?.id}>
+                                            <div className=" mt-3">
+                                              <div className=" flex_row_space_between">
+                                                <label className="header_table">
+                                                  {locale == "ja"
+                                                    ? question.title
+                                                    : question.title_en}
+                                                </label>
+                                              </div>
+                                              <div className="body_table">
+                                                {" "}
+                                                {getAnswerData(
+                                                  locale == "ja"
+                                                    ? question.answer
+                                                    : question.answer_en
+                                                        ?.length > 0
+                                                    ? question.answer_en
+                                                    : question.answer
+                                                )}
+                                              </div>
                                             </div>
-                                            <div className="body_table"> {getAnswerData(locale == "ja" ? question.answer : question.answer_en?.length > 0 ? question.answer_en : question.answer)}</div>
                                           </div>
-                                        </div>
-                                      ))}
+                                        )
+                                      )}
                                     </>
                                   )}
                                   <>
                                     <div className=" flex justify-content-center align-items-center text-custom-color font-bold">
                                       <div
-                                        onClick={() => toggleExpansion(person.id)}
+                                        onClick={() =>
+                                          toggleExpansion(person.id)
+                                        }
                                         className="cursor-pointer flex align-items-center"
                                       >
                                         <i
-                                          className={`pi mr-2 font-bold ${expandedFamilies.includes(person.id)
-                                            ? "pi-chevron-up"
-                                            : "pi-chevron-down"
-                                            }`}
+                                          className={`pi mr-2 font-bold ${
+                                            expandedFamilies.includes(person.id)
+                                              ? "pi-chevron-up"
+                                              : "pi-chevron-down"
+                                          }`}
                                         ></i>
                                         {expandedFamilies.includes(person.id)
                                           ? translate(localeJson, "see_details")
-                                          : translate(localeJson, "see_details")}
+                                          : translate(
+                                              localeJson,
+                                              "see_details"
+                                            )}
                                       </div>
                                     </div>
                                     <div className="block">
@@ -1677,8 +1903,15 @@ export default function Admission() {
                                         buttonProps={{
                                           type: "button",
                                           text: translate(localeJson, "edit"),
-                                          buttonClass: "back-button w-full flex justify-content-center",
-                                          icon: <img src={Edit.url} width={20} height={20} />,
+                                          buttonClass:
+                                            "back-button w-full flex justify-content-center",
+                                          icon: (
+                                            <img
+                                              src={Edit.url}
+                                              width={20}
+                                              height={20}
+                                            />
+                                          ),
                                           onClick: () => {
                                             setRegisterModalAction("edit");
                                             setSpecialCareEditOpen(true);
@@ -1687,26 +1920,41 @@ export default function Admission() {
                                               id: person.id,
                                               checked: person.checked,
                                               name: person.name,
-                                              name_furigana: person.name_furigana,
+                                              name_furigana:
+                                                person.name_furigana,
                                               dob: person.dob,
                                               age: person.age,
                                               age_m: person.age_m,
                                               gender: person.gender,
-                                              postalCode: person.postalCode ? person.postalCode.replace(/-/g, "") : "",
-                                              prefecture_id: person.prefecture_id,
+                                              postalCode: person.postalCode
+                                                ? person.postalCode.replace(
+                                                    /-/g,
+                                                    ""
+                                                  )
+                                                : "",
+                                              prefecture_id:
+                                                person.prefecture_id,
                                               address: person.address,
                                               // address2: person.address2,
                                               email: person.email,
-                                              tel: person.tel && person.tel != "00000000000" ? person.tel : "",
+                                              tel:
+                                                person.tel &&
+                                                person.tel != "00000000000"
+                                                  ? person.tel
+                                                  : "",
                                               evacuee: person.evacuee,
                                               password: person.password,
-                                              specialCareType: person.specialCareType,
-                                              connecting_code: person.connecting_code,
+                                              specialCareType:
+                                                person.specialCareType,
+                                              connecting_code:
+                                                person.connecting_code,
                                               remarks: person.remarks,
-                                              individualQuestions: person.individualQuestions,
-                                              family_register_from: person.family_register_from,
+                                              individualQuestions:
+                                                person.individualQuestions,
+                                              family_register_from:
+                                                person.family_register_from,
                                               telAsRep: person.telAsRep,
-                                              addressAsRep: person.addressAsRep
+                                              addressAsRep: person.addressAsRep,
                                             };
                                             setEditObj(currentData);
                                           },
@@ -1717,61 +1965,88 @@ export default function Admission() {
                                         buttonProps={{
                                           type: "button",
                                           text: translate(localeJson, "remove"),
-                                          buttonClass: "mt-2 w-full delete-button-user flex justify-content-center align-items-center",
-                                          disabled: (evacuee.length <= 1),
-                                          icon: <img src={Delete.url} width={20} height={20} />,
+                                          buttonClass:
+                                            "mt-2 w-full delete-button-user flex justify-content-center align-items-center",
+                                          disabled: evacuee.length <= 1,
+                                          icon: (
+                                            <img
+                                              src={Delete.url}
+                                              width={20}
+                                              height={20}
+                                            />
+                                          ),
                                           onClick: () => {
                                             let rowData = person;
                                             if (rowData.checked === true) {
-                                              const message = translate(localeJson, 'rep_del_error');
-                                              const isConfirmed = window.confirm(message);
+                                              const message = translate(
+                                                localeJson,
+                                                "rep_del_error"
+                                              );
+                                              const isConfirmed =
+                                                window.confirm(message);
 
                                               if (isConfirmed) {
                                                 setEvacuee((prevEvacuee) => {
-                                                  let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
+                                                  let updated =
+                                                    prevEvacuee.filter(
+                                                      (evacuee) =>
+                                                        evacuee.id !==
+                                                        rowData.id
+                                                    );
 
                                                   // Update the IDs of the remaining items
-                                                  updated = updated.map((evacuee, index) => ({
-                                                    ...evacuee,
-                                                    id: index + 1,
-                                                  }));
+                                                  updated = updated.map(
+                                                    (evacuee, index) => ({
+                                                      ...evacuee,
+                                                      id: index + 1,
+                                                    })
+                                                  );
 
                                                   if (updated.length > 0) {
                                                     updated[0].checked = true;
                                                   }
 
-                                                  formikRef.current?.setFieldValue("evacuee", updated);
+                                                  formikRef.current?.setFieldValue(
+                                                    "evacuee",
+                                                    updated
+                                                  );
                                                   return updated;
                                                 });
                                               }
                                             } else {
                                               setEvacuee((prevEvacuee) => {
-                                                let updated = prevEvacuee.filter((evacuee) => evacuee.id !== rowData.id);
+                                                let updated =
+                                                  prevEvacuee.filter(
+                                                    (evacuee) =>
+                                                      evacuee.id !== rowData.id
+                                                  );
 
                                                 // Update the IDs of the remaining items
-                                                updated = updated.map((evacuee, index) => ({
-                                                  ...evacuee,
-                                                  id: index + 1,
-                                                }));
+                                                updated = updated.map(
+                                                  (evacuee, index) => ({
+                                                    ...evacuee,
+                                                    id: index + 1,
+                                                  })
+                                                );
 
-
-
-                                                formikRef.current?.setFieldValue("evacuee", updated);
+                                                formikRef.current?.setFieldValue(
+                                                  "evacuee",
+                                                  updated
+                                                );
                                                 return updated;
                                               });
                                             }
                                           },
                                         }}
-                                        parentClass={" w-full delete-button-user"}
+                                        parentClass={
+                                          " w-full delete-button-user"
+                                        }
                                       />
                                     </div>
                                   </>
                                   {/* Add other details as needed */}
-
                                 </div>
-
                               </div>
-
                             </div>
                           ))}
                         </div>
@@ -1790,10 +2065,11 @@ export default function Admission() {
                               rounded: "true",
                               icon: "pi pi-plus",
                               custom: "",
-                              buttonClass: "back-button w-full flex justify-content-center align-items-center",
+                              buttonClass:
+                                "back-button w-full flex justify-content-center align-items-center",
                               text: translate(localeJson, "c_add_evacuee"),
                               onClick: () => {
-                                setEvacueeCounter(evacueeCount + 1)
+                                setEvacueeCounter(evacueeCount + 1);
                                 setRegisterModalAction("create");
                                 handleRecordingStateChange(false);
                                 fetchDetailsByPlaceAndUpdateEvacuee();
@@ -1840,8 +2116,11 @@ export default function Admission() {
                         checkBoxProps={{
                           checked: values.agreeCheckOne,
                           linkLabel: agreeTextWithHTML,
-                          labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""} ${errors.agreeCheckOne &&
-                            touched.agreeCheckOne ? "p-error" : ""}`,
+                          labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""} ${
+                            errors.agreeCheckOne && touched.agreeCheckOne
+                              ? "p-error"
+                              : ""
+                          }`,
                           onChange: (e) =>
                             setFieldValue("agreeCheckOne", e.checked),
                         }}
@@ -1860,12 +2139,8 @@ export default function Admission() {
                         }}
                         parentClass={"flex approve-check"}
                       />
-                      <div style={{ marginTop: "24px" }}>
-                        {discloseInfo}
-                      </div>
-
+                      <div style={{ marginTop: "24px" }}>{discloseInfo}</div>
                     </div>
-
 
                     <div className="flex justify-content-center">
                       <div className="col-12 md:col-12 lg:col-12 xl:col-5 footerButtonText">
@@ -1880,13 +2155,25 @@ export default function Admission() {
                             onClick: () => {
                               setCounter(count + 1);
                               setIsFormSubmitted(true);
-                              if (errors.agreeCheckOne && !values.agreeCheckOne) {
-                                let message = translate(localeJson, "person_info_valiadation")
-                                toastDisplay(message, '', '', "error");
+                              if (
+                                errors.agreeCheckOne &&
+                                !values.agreeCheckOne
+                              ) {
+                                let message = translate(
+                                  localeJson,
+                                  "person_info_valiadation"
+                                );
+                                toastDisplay(message, "", "", "error");
                               }
-                              if (!Array.isArray(errors.evacuee) && errors.evacuee) {
-                                let message = translate(localeJson, "evacuee_family_required")
-                                toastDisplay(message, '', '', "error");
+                              if (
+                                !Array.isArray(errors.evacuee) &&
+                                errors.evacuee
+                              ) {
+                                let message = translate(
+                                  localeJson,
+                                  "evacuee_family_required"
+                                );
+                                toastDisplay(message, "", "", "error");
                               }
                               if (Array.isArray(errors.evacuee)) {
                                 const indexOfObject = errors.evacuee.findIndex(
@@ -1920,7 +2207,7 @@ export default function Admission() {
                                   individualQuestions:
                                     rowData.individualQuestions,
                                   telAsRep: rowData.telAsRep,
-                                  addressAsRep: rowData.addressAsRep
+                                  addressAsRep: rowData.addressAsRep,
                                 };
                                 setEditObj(currentData);
                               }
@@ -1938,7 +2225,7 @@ export default function Admission() {
                 </div>
               </div>
             </div>
-          )
+          );
         }}
       </Formik>
     </>

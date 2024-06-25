@@ -99,7 +99,7 @@ export default function Admission() {
         formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
-        formikRef.current.setFieldValue("address2", data.address2 || "");
+        // formikRef.current.setFieldValue("address2", data.address2 || "");
         formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
         formikRef.current.setFieldValue("name_furigana", data.name_furigana);
         formikRef.current.setFieldValue("name_kanji", data.name);
@@ -154,7 +154,7 @@ export default function Admission() {
           formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
           formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
           formikRef.current.setFieldValue("address", data.address);
-          formikRef.current.setFieldValue("address2", data.address2 || "");
+          // formikRef.current.setFieldValue("address2", data.address2 || "");
           formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
           formikRef.current.setFieldValue("name_furigana", data.name_furigana);
           formikRef.current.setFieldValue("name_kanji", data.name);
@@ -164,7 +164,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("postalCode", "");
       formikRef.current.setFieldValue("prefecture_id", "");
       formikRef.current.setFieldValue("address", "");
-      formikRef.current.setFieldValue("address2", "");
+      // formikRef.current.setFieldValue("address2", "");
       formikRef.current.setFieldValue("tel", "");
       formikRef.current.setFieldValue("name_furigana", "");
       formikRef.current.setFieldValue("name_kanji", "");
@@ -178,24 +178,21 @@ export default function Admission() {
     let address = layoutReducer?.user?.place?.address;
 
     if (postal_code?.replace(/-/g, "")) {
-      getAddress(postal_code?.replace(/-/g, ""), (res) => {
-        if (res) {
-          let fetchedAddress = res?.address2 + res?.address3;
-          const unmatchedData = compareAddresses(fetchedAddress, address);
           let evacueeArray = {
             postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
             prefecture_id: prefecture_id,
-            address: fetchedAddress,
-            address2: unmatchedData,
+            address: address,
           };
           const newEvacuee = createEvacuee(evacueeArray);
           setCreateObj(newEvacuee)
           setRegisterModalAction("create");
           setSpecialCareEditOpen(true);
         }
-      });
-    }
-  };
+        else {
+          setRegisterModalAction("create");
+          setSpecialCareEditOpen(true);
+      }
+    };
 
   useEffect(() => {
     fetchMasterQuestion();
@@ -230,7 +227,7 @@ export default function Admission() {
     postalCode: "",
     prefecture_id: null,
     address: "",
-    address2: "",
+    // address2: "",
     evacuee: "",
     tel: "",
     doubleByteTel: "",
@@ -275,9 +272,9 @@ export default function Admission() {
       postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
+      // address2: Yup.string()
+      //   .nullable()
+      //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
         .nullable()
         .required(translate(localeJson, "c_perfacture_is_required")),
@@ -298,9 +295,9 @@ export default function Admission() {
       address: Yup.string()
         .required(translate(localeJson, "address_required"))
         .max(190, translate(localeJson, "address_max_length")),
-      address2: Yup.string()
-        .nullable()
-        .max(190, translate(localeJson, "address_max_length")),
+      // address2: Yup.string()
+      //   .nullable()
+      //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
         .nullable()
         .required(translate(localeJson, "prefecture_required")),
@@ -364,7 +361,7 @@ export default function Admission() {
       formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
-      formikRef.current.setFieldValue("address2", data.address2 || "");
+      // formikRef.current.setFieldValue("address2", data.address2 || "");
       formikRef.current.setFieldValue("evacuee", data.evacuee);
       formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("password", data.password);
@@ -391,7 +388,7 @@ export default function Admission() {
       prefecture_id: rowData.prefecture_id,
       address: rowData.address,
       tel: rowData.tel,
-      address2: rowData.address2,
+      // address2: rowData.address2,
       email: rowData.email,
       evacuee: rowData.evacuee,
       password: rowData.password,
@@ -524,19 +521,19 @@ export default function Admission() {
     let representativeTel = "";
     let prefecture_id = "";
     let address = "";
-    let address2 = "";
+    // let address2 = "";
     let postalCode = "";
     if (isChecked) {
       let data = rowData;
       representativeTel = rowData.tel ? rowData.tel : "";
       prefecture_id = rowData.prefecture_id ? rowData.prefecture_id : "";
       address = rowData.address ? rowData.address : "";
-      address2 = rowData.address2 ? rowData.address2 : "";
+      // address2 = rowData.address2 ? rowData.address2 : "";
       postalCode = rowData.postalCode ? rowData.postalCode : "";
       formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
-      formikRef.current.setFieldValue("address2", data.address2 || "");
+      // formikRef.current.setFieldValue("address2", data.address2 || "");
       formikRef.current.setFieldValue("tel", data.tel && data.tel != "00000000000" ? data.tel : "");
       formikRef.current.setFieldValue("name_furigana", data.name_furigana);
       formikRef.current.setFieldValue("name_kanji", data.name);
@@ -549,7 +546,7 @@ export default function Admission() {
       if (data.checked !== true && data.addressAsRep === true && address !== "") {
         data.prefecture_id = prefecture_id;
         data.address = address;
-        data.address2 = address2;
+        // data.address2 = address2;
         data.postalCode = postalCode;
       }
     });
@@ -685,7 +682,7 @@ export default function Admission() {
       postal_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
-      address_default: inputData.address2,
+      address_default: "",//inputData.address2,
       tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
       password: inputData.password.toString(),
       is_owner:
@@ -705,7 +702,7 @@ export default function Admission() {
           postal_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
-          address_default: evacuee.address2,
+          address_default: "",//evacuee.address2,
           age: evacuee.age,
           month: parseInt(evacuee.age_m),
           tel: evacuee.tel ? convertToSingleByte(evacuee.tel) : null,
@@ -789,7 +786,7 @@ export default function Admission() {
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
       address: evacuees ? evacuees.address || "" : "",
-      address2: evacuees ? evacuees.address2 || "" : "",
+      // address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
       remarks: "",
@@ -1322,7 +1319,7 @@ export default function Admission() {
                               errors.address && touched.address && errors.address
                             }
                           />
-                          <Input
+                          {/* <Input
                             inputProps={{
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address2 && touched.address2 && "p-invalid"
                                 }`,
@@ -1373,7 +1370,7 @@ export default function Admission() {
                               touched.address2 &&
                               errors.address2
                             }
-                          />
+                          /> */}
                         </div>
                         <div className="col-12 xl:col-12">
                           <div className="w-12">
@@ -1573,7 +1570,7 @@ export default function Admission() {
                                         </label>
                                       </div>
                                       <div className="body_table">{person.postalCode ? translate(localeJson, "post_letter") + person.postalCode : ""}</div>
-                                      <div className="body_table">{getPrefectureName(parseInt(person?.prefecture_id))}{person.address}{person.address2 || ""}</div>
+                                      <div className="body_table">{getPrefectureName(parseInt(person?.prefecture_id))}{person.address}</div>
                                     </div>
                                       <div className=" mt-3">
                                         <div className=" flex_row_space_between">
@@ -1655,7 +1652,7 @@ export default function Admission() {
                                               postalCode: person.postalCode ? person.postalCode.replace(/-/g, "") : "",
                                               prefecture_id: person.prefecture_id,
                                               address: person.address,
-                                              address2: person.address2,
+                                              // address2: person.address2,
                                               email: person.email,
                                               tel: person.tel && person.tel != "00000000000" ? person.tel : "",
                                               evacuee: person.evacuee,
