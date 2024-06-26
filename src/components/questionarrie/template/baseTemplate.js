@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { SelectButton } from 'primereact/selectbutton';
 
 import { Button, InputSwitch, NormalCheckBox, Input } from '@/components';
@@ -9,7 +9,7 @@ const BaseTemplate = React.forwardRef((props, ref) => {
     const { localeJson, locale } = useContext(LayoutContext);
     const { removeQuestion, handleItemChange, itemIndex } = props;
 
-    const [item, setItem] = useState(props.item);
+    const [item, setItem] = useState();
     const [jpTitleError, setJpTitleError] = useState('');
     const [choiceError, setChoiceError] = useState('');
     const selectionMode = [
@@ -40,6 +40,12 @@ const BaseTemplate = React.forwardRef((props, ref) => {
             "name": translate(localeJson, 'dropdown')
         }
     ];
+
+    useEffect(() => {
+        if (props?.item) {
+            setItem(props?.item);
+        }
+    }, [props?.item])
 
     const updateInputFieldValue = (value, index, field) => {
         let updatedData = { ...item };
@@ -141,10 +147,10 @@ const BaseTemplate = React.forwardRef((props, ref) => {
                     <div>
                         <div>
                             {/* Questionnaires header */}
-                            <div className="flex align-items-center justify-content-between ">
-                                <div className="">
+                            <div className="flex align-items-center justify-content-end">
+                                {/* <div className="">
                                     {translate(localeJson, 'item')} {item.title + (itemIndex + 1)}
-                                </div>
+                                </div> */}
                                 <Button buttonProps={{
                                     text: `${translate(localeJson, 'delete')}`,
                                     buttonClass: "del_ok-button-questionnaire",
@@ -310,7 +316,11 @@ const BaseTemplate = React.forwardRef((props, ref) => {
         <>
             <div className="grid custom_orderlist">
                 <div className="col-12 question-block">
-                    {itemTemplate(item)}
+                    {item && (
+                        <>
+                            {itemTemplate(item)}
+                        </>
+                    )}
                 </div>
             </div>
         </>
