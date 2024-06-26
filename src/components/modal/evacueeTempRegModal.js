@@ -99,9 +99,7 @@ export default function EvacueeTempRegModal(props) {
       .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
         (value, context) => {
         const { prefecture_id } = context.parent;
-        console.log(prefecture_id,postalCodePrefectureId)
         if (postalCodePrefectureId != null && prefecture_id != null) {
-          console.log(postalCodePrefectureId == prefecture_id)
           return postalCodePrefectureId == prefecture_id
         }
         else return true
@@ -194,7 +192,6 @@ export default function EvacueeTempRegModal(props) {
     );
     formikRef.current.setFieldTouched("postalCode", true);
     formikRef.current.validateField("postalCode");
-    console.log(formikRef.current)
   }, [prefCount])
 
   const fetchSpecialCare = () => {
@@ -436,28 +433,9 @@ export default function EvacueeTempRegModal(props) {
         setFieldValue("postalCode", val);
         setFetchedZipCode(val.replace(/-/g, ""))
       }
-      if (val.length >= 7) {
-        let payload = val.slice(0, 3) + "-" + val.slice(3);
-        getAddress(val, (response) => {
-          if (response) {
-            let address = response;
-            const selectedPrefecture = prefectures.find(
-              (prefecture) => prefecture.value == address.prefcode
-            );
-            setFieldValue("prefecture_id", selectedPrefecture?.value);
-            setFieldValue("address", address.address2 + address.address3 || "");
-            // setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
-          } else {
-            setFieldValue("prefecture_id", "");
-            setFieldValue("address", "");
-            setFieldValue("address2", "");
-          }
-        });
-      }
-    } else {
-      setFieldValue("address", evacuees?.address ? evacuees.address : "");
-      // setFieldValue("address2", evacuees?.address2 ? evacuees?.address2 : "");
-    }
+ 
+    } 
+    setFieldValue("address", evacuees?.address ? evacuees.address : "");
     if (evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {

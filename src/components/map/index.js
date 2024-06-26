@@ -360,7 +360,7 @@ export const GoogleMapMultiMarkerComponent = ({
                             style={{
                               backgroundColor:
                                 selectedMarker.active_flg == 1
-                                  ? selectedMarker.center >= 100
+                                  ? selectedMarker.center >= 81
                                     ? "purple"
                                     : selectedMarker.center > 50 &&
                                       selectedMarker.center <= 80
@@ -372,7 +372,7 @@ export const GoogleMapMultiMarkerComponent = ({
                             }}
                           >
                             {selectedMarker.active_flg == 1
-                              ? selectedMarker.center == 100
+                              ? selectedMarker.center >= 81
                                 ? translate(localeJson, "crowded")
                                 : selectedMarker.center > 50 &&
                                   selectedMarker.center <= 80
