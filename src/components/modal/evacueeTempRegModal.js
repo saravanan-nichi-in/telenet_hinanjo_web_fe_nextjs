@@ -185,6 +185,8 @@ export default function EvacueeTempRegModal(props) {
     fetchSpecialCare();
   }, [locale]);
   useEffect(() => {
+    if( formikRef.current.values.postalCode != "" && formikRef.current.values.postalCode != null)
+      {
     formikRef.current.setFieldValue(
       "postalCode",
       formikRef.current.values.postalCode,
@@ -192,6 +194,7 @@ export default function EvacueeTempRegModal(props) {
     );
     formikRef.current.setFieldTouched("postalCode", true);
     formikRef.current.validateField("postalCode");
+  }
   }, [prefCount])
 
   const fetchSpecialCare = () => {

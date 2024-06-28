@@ -53,6 +53,20 @@ export default function PublicExternal() {
   const [addressCount, setAddressCount] = useState(0);
   const [fetchZipCode, setFetchedZipCode] = useState("");
   const [zipAddress, setZipAddress] = useState("");
+  const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(null);
+  const [prefCount, setPrefCount] = useState(1)
+
+  useEffect(() => {
+    if( formikRef.current.values.postalCode != "" && formikRef.current.values.postalCode != null)
+      {
+    formikRef.current.setFieldValue(
+      "postalCode",
+      formikRef.current.values.postalCode
+    );
+    formikRef.current.setFieldTouched("postalCode", true);
+    formikRef.current.validateField("postalCode");
+  }
+  }, [prefCount])
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -189,16 +203,16 @@ export default function PublicExternal() {
         }
       ),
       postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
-        .test(
-          "required-when-toggleSwitches-true",
-          translate(localeJson, "zip_code_mis_match"),
-          (value) => {
-            if (value != undefined || fetchZipCode != "")
-              return convertToSingleByte(value) == convertToSingleByte(fetchZipCode);
-            else
-              return true
-          }
-        ).min(7, translate(localeJson, "postal_code_length"))
+      .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
+      (value, context) => {
+      const { prefecture_id } = context.parent;
+      if (postalCodePrefectureId != null && prefecture_id != null) {
+        return postalCodePrefectureId == prefecture_id
+      }
+      else return true
+    
+  })
+        .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string().required(translate(localeJson, "address_required"))
         .max(190, translate(localeJson, "address_max_length")),
@@ -709,6 +723,7 @@ export default function PublicExternal() {
                                             "prefecture_id",
                                             selectedPrefecture?.value
                                           );
+                                          setPostalCodePrefectureId(selectedPrefecture?.value);
                                           setFieldValue(
                                             "address",
                                             address.address2 +
@@ -717,6 +732,7 @@ export default function PublicExternal() {
                                         } else {
                                           setFieldValue("prefecture_id", "");
                                           setFieldValue("address", "");
+                                          setPostalCodePrefectureId("");
                                         }
                                       });
                                     }
@@ -751,10 +767,26 @@ export default function PublicExternal() {
                                 emptyMessage: translate(localeJson, "data_not_found"),
                                 onChange: (evt) => {
                                   setFieldValue("prefecture_id", evt.target.value);
-                                  if (values.address) {
-                                    setAddressCount(addressCount + 1)
+                                  if (values.postalCode) {
+                                    let payload = convertToSingleByte(values.postalCode);
+                                    getAddressFromZipCode(
+                                      payload, (res) => {
+                                        if (res && res.prefcode != evt.target.value) {
+                                          setPostalCodePrefectureId(res.prefcode);
+                                          setFieldValue("prefecture_id", res.prefcode);
+                                          // setPrefCount(prefCount+1)
+                                          // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
+                                        }
+                                        // validateForm();
+                                      })
                                   }
                                 },
+                                // onChange: (evt) => {
+                                //   setFieldValue("prefecture_id", evt.target.value);
+                                //   if (values.address) {
+                                //     setAddressCount(addressCount + 1)
+                                //   }
+                                // },
                               }}
                               />
                               <ValidationError
@@ -782,7 +814,7 @@ export default function PublicExternal() {
                                   onBlur: handleBlur,
                                   onChange: (evt) => {
                                     setFieldValue("address", evt.target.value)
-                                    setAddressCount(addressCount + 1)
+                                    // setAddressCount(addressCount + 1)
                                   },
                                 }}
                               />
@@ -815,7 +847,7 @@ export default function PublicExternal() {
                                   ),
                                   onChange: (evt) => {
                                     setFieldValue("address2", evt.target.value)
-                                    setAddressCount(addressCount + 1)
+                                    // setAddressCount(addressCount + 1)
                                   },
                                   onBlur: handleBlur,
                                 }}
