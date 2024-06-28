@@ -1158,10 +1158,11 @@ export default function EvacueeTempRegModal(props) {
                                   payload, (res) => {
                                     if (res && res.prefcode != evt.target.value) {
                                       setPostalCodePrefectureId(res.prefcode);
-                                      setPrefCount(prefCount+1)
-                                      setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
+                                      setFieldValue("prefecture_id", res.prefcode);
+                                      // setPrefCount(prefCount+1)
+                                      // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
                                     }
-                                    validateForm();
+                                    // validateForm();
                                   })
                               }
                             },
