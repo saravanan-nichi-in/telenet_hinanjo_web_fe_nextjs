@@ -224,7 +224,8 @@ export default function IndividualQuestionnaire() {
                                 </div>
                                 {/* Panel title */}
                                 <div className="panel-title">
-                                    {translate(localeJson, 'item')} {item?.title + (index + 1)}
+                                    {/* {translate(localeJson, 'item')} {item?.title + (index + 1)} */}
+                                    {translate(localeJson, 'item')} {locale === "en" && !_.isNull(item.questiontitle_en) ? item.questiontitle_en : item.questiontitle}
                                 </div>
                                 {/* Toggle button */}
                                 <button

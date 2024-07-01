@@ -12,7 +12,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { QuestionnaireServices } from '@/services';
 
 export default function IndividualQuestionnaire() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader, locale } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.eventReducer.event);
 
@@ -228,7 +228,7 @@ export default function IndividualQuestionnaire() {
                                 </div>
                                 {/* Panel title */}
                                 <div className="panel-title">
-                                    {translate(localeJson, 'item')} {item?.title + (index + 1)}
+                                    {translate(localeJson, 'item')} {locale === "en" && !_.isNull(item.questiontitle_en) ? item.questiontitle_en : item.questiontitle}
                                 </div>
                                 {/* Toggle button */}
                                 <button
