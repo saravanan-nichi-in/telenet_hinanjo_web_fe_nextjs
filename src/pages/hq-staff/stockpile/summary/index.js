@@ -64,10 +64,10 @@ function HQStockpileSummary() {
     const stockPileRowExpansionColumn = [
         { field: "type", header: translate(localeJson, 'product_type'), minWidth: "7rem", maxWidth: "7rem" },
         { field: "stock_pile_name", header: translate(localeJson, 'product_name'), minWidth: "10rem", maxWidth: "10rem" },
-        { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center" },
+        { field: "quantity", header: translate(localeJson, 'quantity'), textAlign: "center", alignHeader: "center", minWidth: "10rem", maxWidth: "10rem" },
         { field: "expiry_date", header: translate(localeJson, 'expiration_date'), display: 'none' },
-        { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left" },
-        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem" }
+        { field: "expiration_date", header: translate(localeJson, 'expiration_date'), sortable: true, textAlign: 'left', alignHeader: "left", minWidth: "10rem", maxWidth: "10rem" },
+        { field: "stock_pile_image", header: '', textAlign: "center", alignHeader: "center", minWidth: "5rem", maxWidth: "5rem" },
     ];
 
     const bindImageModalData = (image) => {
