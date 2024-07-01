@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { IoIosArrowBack } from 'react-icons/io';
 import _ from 'lodash';
+import ReactDragListView from 'react-drag-listview';
+import { Panel } from 'primereact/panel';
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
@@ -10,7 +12,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { QuestionnaireServices } from '@/services';
 
 export default function IndividualQuestionnaire() {
-    const { localeJson, setLoader } = useContext(LayoutContext);
+    const { localeJson, setLoader, locale } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.eventReducer.event);
 
@@ -19,7 +21,7 @@ export default function IndividualQuestionnaire() {
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
-            limit: 10,
+            limit: "",
             order_by: "desc",
             sort_by: "updated_at"
         },
@@ -27,6 +29,7 @@ export default function IndividualQuestionnaire() {
         event_id: param.event_id
     });
     const baseTemplateRefs = useRef([]);
+    const [expandedPanels, setExpandedPanels] = useState([]);
 
     const triggerSubmitCall = () => {
         let validationFlag = true;
@@ -138,37 +141,121 @@ export default function IndividualQuestionnaire() {
         }
     }
 
+    // const bindQuestion = () => {
+    //     return (
+    //         <ol>
+    //             {questionnaires.map((item, index) => (
+    //                 <li key={index} style={{ display: 'block', flexDirection: 'column' }}>
+    //                     <div className='list-border'>
+    //                         <div className='ml-1 mr-1 p-3'>
+    //                             <BaseTemplate
+    //                                 ref={(el) => baseTemplateRefs.current[index] = el}
+    //                                 item={item}
+    //                                 itemIndex={index}
+    //                                 removeQuestion={() => removeQuestionData(item, index)}
+    //                                 handleItemChange={handleItemChange}
+    //                             />
+    //                         </div>
+    //                     </div>
+    //                     {questionnaires.length - 1 != index &&
+    //                         <div className='flex align-items-center justify-content-center'>
+    //                             <a className='ml-2 pt-2 pb-2 flex align-items-center justify-content-center cursor-pointer' onClick={() => { handleClick(index) }}>
+    //                                 <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //                                     <path d="M8.5 13V5.825L5.925 8.4L4.5 7L9.5 2L14.5 7L13.075 8.4L10.5 5.825V13H8.5ZM15.5 22L10.5 17L11.925 15.6L14.5 18.175V11H16.5V18.175L19.075 15.6L20.5 17L15.5 22Z" fill="#D31720" />
+    //                                 </svg>
+    //                                 <span className=''>{translate(localeJson, 'swap_question')}</span>
+    //                             </a>
+    //                         </div>
+    //                     }
+    //                 </li>
+    //             ))}
+    //         </ol>
+    //     )
+    // }
+
+    const dragProps = {
+        onDragEnd(fromIndex, toIndex) {
+            console.log(`Drag ended, moving item from ${fromIndex} to ${toIndex}`);
+            const newQuestionnaires = [...questionnaires];
+            const item = newQuestionnaires.splice(fromIndex, 1)[0];
+            newQuestionnaires.splice(toIndex, 0, item);
+            setQuestionnaires(newQuestionnaires);
+
+            // Preserve expanded state after reordering
+            const newExpanded = [...expandedPanels];
+            const movedItem = newExpanded.splice(fromIndex, 1)[0];
+            newExpanded.splice(toIndex, 0, movedItem);
+            setExpandedPanels(newExpanded);
+        },
+        nodeSelector: '.panel',
+        handleSelector: '.panel-header .drag-handle',
+    };
+
+    const togglePanel = (index) => {
+        const newExpandedPanels = [...expandedPanels];
+        newExpandedPanels[index] = !newExpandedPanels[index];
+        setExpandedPanels(newExpandedPanels);
+    };
+
     const bindQuestion = () => {
         return (
-            <ol>
-                {questionnaires.map((item, index) => (
-                    <li key={index} style={{ display: 'block', flexDirection: 'column' }}>
-                        <div className='list-border'>
-                            <div className='ml-1 mr-1 p-3'>
-                                <BaseTemplate
-                                    ref={(el) => baseTemplateRefs.current[index] = el}
-                                    item={item}
-                                    itemIndex={index}
-                                    removeQuestion={() => removeQuestionData(item, index)}
-                                    handleItemChange={handleItemChange}
-                                />
-                            </div>
-                        </div>
-                        {questionnaires.length - 1 != index &&
-                            <div className='flex align-items-center justify-content-center'>
-                                <a className='ml-2 pt-2 pb-2 flex align-items-center justify-content-center cursor-pointer' onClick={() => { handleClick(index) }}>
+            <div className="questionnarie_panel">
+                <ReactDragListView {...dragProps}>
+                    {questionnaires.map((item, index) => (
+                        <Panel key={index}
+                            className="mb-3 panel"
+                        >
+                            {/* Panel Header */}
+                            <div className="panel-header">
+                                {/* Drag handle (icon) */}
+                                <div className="drag-handle"
+                                    onTouchStart={() => {
+                                        setExpandedPanels(prevExpandedPanels => {
+                                            console.log('Previous expanded panels:', prevExpandedPanels);
+                                            return [];
+                                        });
+                                    }}
+                                    onMouseDown={() => {
+                                        setExpandedPanels(prevExpandedPanels => {
+                                            console.log('Previous expanded panels:', prevExpandedPanels);
+                                            return [];
+                                        });
+                                    }}
+                                >
                                     <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.5 13V5.825L5.925 8.4L4.5 7L9.5 2L14.5 7L13.075 8.4L10.5 5.825V13H8.5ZM15.5 22L10.5 17L11.925 15.6L14.5 18.175V11H16.5V18.175L19.075 15.6L20.5 17L15.5 22Z" fill="#D31720" />
                                     </svg>
-                                    <span className=''>{translate(localeJson, 'swap_question')}</span>
-                                </a>
+                                </div>
+                                {/* Panel title */}
+                                <div className="panel-title">
+                                    {locale === "en" && !_.isNull(item.questiontitle_en) ? item.questiontitle_en : item.questiontitle}
+                                </div>
+                                {/* Toggle button */}
+                                <button
+                                    className="toggle-button"
+                                    onClick={() => togglePanel(index)}
+                                >
+                                    {/* {expandedPanels[index] ? '-' : '+'} */}
+                                    <i className={`pi ${expandedPanels[index] ? 'pi-minus' : 'pi-plus'}`} />
+                                </button>
                             </div>
-                        }
-                    </li>
-                ))}
-            </ol>
-        )
-    }
+                            <div className={`panel-body ${expandedPanels[index] ? 'expanded' : 'collapsed'}`}>
+                                <div className='p-3'>
+                                    <BaseTemplate
+                                        ref={(el) => baseTemplateRefs.current[index] = el}
+                                        item={item}
+                                        itemIndex={index}
+                                        removeQuestion={() => removeQuestionData(item, index)}
+                                        handleItemChange={handleItemChange}
+                                    />
+                                </div>
+                            </div>
+                        </Panel>
+                    ))}
+                </ReactDragListView>
+            </div >
+        );
+    };
 
     const registerQuestionnaireList = () => {
         let payloadData = [];

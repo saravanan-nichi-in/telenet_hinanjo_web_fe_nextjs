@@ -282,7 +282,7 @@ export const GoogleMapMultiMarkerComponent = ({
                   }}
                   icon={
                     marker.active_flg == 1
-                      ? marker.center >= 100
+                      ? marker.center >= 81
                         ? BlueIcon
                         : marker.center > 50 && marker.center <= 80
                           ? RedIcon
@@ -360,7 +360,7 @@ export const GoogleMapMultiMarkerComponent = ({
                             style={{
                               backgroundColor:
                                 selectedMarker.active_flg == 1
-                                  ? selectedMarker.center >= 100
+                                  ? selectedMarker.center >= 81
                                     ? "purple"
                                     : selectedMarker.center > 50 &&
                                       selectedMarker.center <= 80
@@ -372,7 +372,7 @@ export const GoogleMapMultiMarkerComponent = ({
                             }}
                           >
                             {selectedMarker.active_flg == 1
-                              ? selectedMarker.center == 100
+                              ? selectedMarker.center >= 81
                                 ? translate(localeJson, "crowded")
                                 : selectedMarker.center > 50 &&
                                   selectedMarker.center <= 80

@@ -140,7 +140,6 @@ const withAuth = (WrappedComponent) => {
                 const isAuthenticated = checkIfAuthenticated(router);
                 const path = router?.asPath.split('?')[0];
                 const queryString = router?.asPath.split('?')[1];
-                console.log(hasAccess);
                 if (!hasAccess) {
                     router.push('/404');
                 } else if (isAuthenticated) {
@@ -217,7 +216,6 @@ const withAuth = (WrappedComponent) => {
                 }
             });
             router.events.on('routeChangeComplete', (url) => {
-                console.log("hi",url);
                 loadNewTheme(url);
                 setAuthorized(true);
             })
