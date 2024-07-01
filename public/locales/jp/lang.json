@@ -963,7 +963,7 @@
       "c_zip_code_is_required": "郵便番号は必須です。",
       "c_perfacture_is_required": "都道府県は必須です。",
       "c_address_is_required": "住所は必須です。",
-      "city_ward": "市区町村",
+      "city_ward": "市区町村、丁目、番地、号、マンション・号室",
       "house_name_number": "丁目、番地、号、マンション・号室",
       "or": "もしくは",
       "scan_my_card": "マイナンバーカード で受付",

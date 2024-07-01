@@ -57,6 +57,8 @@ export default function UserEventRegModal(props) {
     const [openQrPopup, setOpenQrPopup] = useState(false);
     const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
     const [invalidCounter, setInvalidCounter] = useState(100000000)
+    const [postalCodePrefectureId, setPostalCodePrefectureId] = useState(null);
+    const [prefCount, setPrefCount] = useState(1)
     const Qr = {
         url: "/layout/images/evacuee-qr.png",
     };
@@ -120,27 +122,35 @@ export default function UserEventRegModal(props) {
                     return true; // Allow empty values
                 }),
             gender: Yup.string().required(translate(localeJson, "gender_required")),
-            postalCode: Yup.string()
-                .nullable()
-                .test(
-                    "is-correct",
-                    translate(localeJson, "zip_code_mis_match"),
-                    (value) => {
-                        if (value != undefined)
-                            return (
-                                convertToSingleByte(value) == convertToSingleByte(fetchZipCode)
-                            );
-                        else return true;
-                    }
-                )
+            postalCode: Yup.string().nullable().required(translate(localeJson, "postal_code_required"))
+                .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
+                (value, context) => {
+                const { prefecture_id } = context.parent;
+                if (postalCodePrefectureId != null && prefecture_id != null) {
+                  return postalCodePrefectureId == prefecture_id
+                }
+                else return true
+              
+            })
+                // .test(
+                //     "is-correct",
+                //     translate(localeJson, "zip_code_mis_match"),
+                //     (value) => {
+                //         if (value != undefined)
+                //             return (
+                //                 convertToSingleByte(value) == convertToSingleByte(fetchZipCode)
+                //             );
+                //         else return true;
+                //     }
+                // )
                 .min(7, translate(localeJson, "postal_code_length"))
                 .max(7, translate(localeJson, "postal_code_length")),
             address: Yup.string()
                 .required(translate(localeJson, "c_address_is_required"))
                 .max(190, translate(localeJson, "address_max_length")),
-            address2: Yup.string()
-                .nullable()
-                .max(190, translate(localeJson, "address_max_length")),
+            // address2: Yup.string()
+            //     .nullable()
+            //     .max(190, translate(localeJson, "address_max_length")),
             prefecture_id: Yup.string()
                 .nullable()
                 .required(translate(localeJson, "c_perfacture_is_required")),
@@ -174,6 +184,19 @@ export default function UserEventRegModal(props) {
             }
         }
     }, [dobCounter]);
+
+    useEffect(() => {
+        if( formikRef.current.values.postalCode != "" && formikRef.current.values.postalCode != null)
+          {
+        formikRef.current.setFieldValue(
+          "postalCode",
+          formikRef.current.values.postalCode,
+          true
+        );
+        formikRef.current.setFieldTouched("postalCode", true);
+        formikRef.current.validateField("postalCode");
+      }
+      }, [prefCount])
 
     useEffect(() => {
         let address = formikRef.current.values.address;
@@ -242,7 +265,7 @@ export default function UserEventRegModal(props) {
                 postalCode: "",
                 prefecture_id: null,
                 address: "",
-                address2: "",
+                // address2: "",
                 email: "",
                 tel: "",
                 specialCareType: null,
@@ -280,7 +303,7 @@ export default function UserEventRegModal(props) {
             prefecture_id: object1.prefecture_id
                 ? convertToSingleByte(object1.prefecture_id)
                 : "",
-            address: object1.address + " " + object1.address2,
+            address: object1.address + " " + object1?.address2,
             address_default: null, // Fill this value accordingly
             tel: object1.tel ? convertToSingleByte(object1.tel) : "",
             refugee_name: object1.name_furigana,
@@ -306,7 +329,8 @@ export default function UserEventRegModal(props) {
         formikRef.current.setFieldValue("postalCode", data.postal_code);
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
-        formikRef.current.setFieldValue("address2", data.address2 || "");
+        setPostalCodePrefectureId( data.prefecture_id)
+        // formikRef.current.setFieldValue("address2", data.address2 || "");
         data.tel != "" && formikRef.current.setFieldValue("tel", data.tel);
         formikRef.current.setFieldValue("name_furigana", data.name_furigana);
         formikRef.current.setFieldValue("name", data.name || "");
@@ -332,7 +356,6 @@ export default function UserEventRegModal(props) {
         qrScanRegistration(formData, (res) => {
             if (res) {
                 const data = res.data;
-                console.log(data)
                 register(data);
                 setLoader(false)
             }
@@ -353,7 +376,6 @@ export default function UserEventRegModal(props) {
         ocrScanRegistration(formData, (res) => {
             if (res) {
                 const data = res.data;
-                console.log(data);
                 register(data);
                 setLoader(false)
             }
@@ -393,6 +415,7 @@ export default function UserEventRegModal(props) {
                         setIsSubmitting(true);
                         UserEventListServices.createUserEvent(mapObjects(values), (res) => {
                             setFetchedZipCode("");
+                            setPostalCodePrefectureId("")
                             actions.resetForm({ values: initialValues });
                             setLoader(false);
                             setIsSubmitting(false);
@@ -702,6 +725,7 @@ export default function UserEventRegModal(props) {
                                                                         val = evt.target.value.replace(/-/g, ""); // Remove any existing hyphens
                                                                         setFieldValue("postalCode", val);
                                                                         setFetchedZipCode(val.replace(/-/g, ""));
+
                                                                     } else {
                                                                         setFieldValue("postalCode", val.slice(0, 7));
                                                                         setFetchedZipCode(val.slice(0, 7));
@@ -721,6 +745,7 @@ export default function UserEventRegModal(props) {
                                                                                 "prefecture_id",
                                                                                 selectedPrefecture?.value
                                                                             );
+                                                                            setPostalCodePrefectureId(selectedPrefecture?.value)
                                                                             setFieldValue(
                                                                                 "address",
                                                                                 address.address2 + address.address3 || ""
@@ -728,6 +753,8 @@ export default function UserEventRegModal(props) {
                                                                         } else {
                                                                             setFieldValue("prefecture_id", "");
                                                                             setFieldValue("address", "");
+                                                                            setPostalCodePrefectureId("")
+                                                                            
                                                                         }
                                                                     });
                                                                 }
@@ -799,13 +826,8 @@ export default function UserEventRegModal(props) {
                                                                     let payload = values.postalCode;
                                                                     getAddressFromZipCode(payload, (res) => {
                                                                         if (res && res.prefcode != e.target.value) {
-                                                                            setErrors({
-                                                                                ...errors,
-                                                                                postalCode: translate(
-                                                                                    localeJson,
-                                                                                    "zip_code_mis_match"
-                                                                                ),
-                                                                            });
+                                                                            setPostalCodePrefectureId(res.prefcode);
+                                                                            setFieldValue("prefecture_id", res.prefcode);
                                                                         }
                                                                     });
                                                                 }
@@ -843,7 +865,7 @@ export default function UserEventRegModal(props) {
                                                             placeholder: translate(localeJson, "city_ward"),
                                                             onChange: (evt) => {
                                                                 setFieldValue("address", evt.target.value);
-                                                                setAddressCount(addressCount + 1);
+                                                                // setAddressCount(addressCount + 1);
                                                             },
                                                             onBlur: handleBlur,
                                                             inputRightIconProps: {
@@ -871,7 +893,7 @@ export default function UserEventRegModal(props) {
                                                             errors.address && touched.address && errors.address
                                                         }
                                                     />
-                                                    <Input
+                                                  {/*  <Input
                                                         inputProps={{
                                                             inputParentClassName: `w-full custom_input ${errors.address2 && touched.address2 && "p-invalid"
                                                                 }`,
@@ -920,11 +942,10 @@ export default function UserEventRegModal(props) {
                                                             },
                                                         }}
                                                     />
-                                                    <ValidationError
+                                                     <ValidationError
                                                         errorBlock={
                                                             errors.address2 && touched.address2 && errors.address2
-                                                        }
-                                                    />
+                                                        }/> */}
                                                 </div>
                                                 <div className="mb-2  col-12 ">
                                                     <div className="w-12">
