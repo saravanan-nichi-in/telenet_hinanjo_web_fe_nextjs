@@ -115,6 +115,7 @@ export default function IndividualQuestionnaire() {
                 });
             }
             setQuestionnaires([]);
+            setExpandedPanels(Array(data?.length).fill(""));
             setTimeout(() => {
                 setQuestionnaires(questionList);
                 setLoader(false)
@@ -304,7 +305,11 @@ export default function IndividualQuestionnaire() {
                 question: [...payloadData]
             }, (() => {
                 setLoader(true);
-                getIndividualList(getListPayload, getQuestionnaireList)
+                getIndividualList(getListPayload, getQuestionnaireList);
+                setExpandedPanels(prevExpandedPanels => {
+                    console.log('Previous expanded panels:', prevExpandedPanels);
+                    return [];
+                });
             }))
         }
 
@@ -326,7 +331,14 @@ export default function IndividualQuestionnaire() {
             "db_data": false
         }
         setQuestionnaires([...questionnaires, newItem]);
-        // Clear the newItem state for the next addition
+        setExpandedPanels(prevExpandedPanels => {
+            // Ensure prevExpandedPanels is an array
+            if (!Array.isArray(prevExpandedPanels)) {
+                console.error("prevExpandedPanels is not an array:", prevExpandedPanels);
+                return prevExpandedPanels; // Return current state if it's not an array
+            }
+            return [...prevExpandedPanels, true];
+        });
     };
 
     const handleClick = (index) => {
