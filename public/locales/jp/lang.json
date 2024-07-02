@@ -478,7 +478,7 @@
       "material_page_create_update_unit_max": "単位は200文字以下で指定してください。",
       "stockpile_page_create_update_category_max": "種別は200文字以下で指定してください。",
       "stockpile_page_create_update_product_name_max": "備蓄品名は200文字以下で指定してください。",
-      "data_not_found": "データが見つ かりません。",
+      "data_not_found": "データが見つかれいません。",
       "map_scale_required": "全体MAP縮尺率は必須です。",
       "footer_required": "フッター表示は必須です。",
       "type_name_jp_required": "通称は必須です。",
