@@ -2,13 +2,23 @@ import React, { useState, useContext, useEffect } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router'
 
-import { convertToSingleByte, getEnglishDateDisplayFormat, getGeneralDateTimeSlashDisplayFormat, getJapaneseDateDisplayYYYYMMDDFormat, getYYYYMMDDHHSSSSDateTimeFormat, getValueByKeyRecursively as translate } from '@/helper'
+import {
+    convertToSingleByte,
+    getEnglishDateDisplayFormat,
+    getGeneralDateTimeSlashDisplayFormat,
+    getJapaneseDateDisplayYYYYMMDDFormat,
+    getYYYYMMDDHHSSSSDateTimeFormat,
+    getValueByKeyRecursively as translate,
+    hideOverFlow,
+    showOverFlow
+} from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, Input, InputDropdown, NormalTable } from '@/components';
+import { Button, CustomHeader, Input, InputDropdown, NormalTable, InputSwitch } from '@/components';
 import { setFamily } from '@/redux/family';
 import { useAppDispatch } from '@/redux/hooks';
 import { getSpecialCareName } from "@/helper";
 import { EvacuationServices } from '@/services';
+import { AdminManagementDeleteModal } from '@/components/modal';
 
 export default function EvacuationPage() {
     const { locale, localeJson } = useContext(LayoutContext);
@@ -27,6 +37,8 @@ export default function EvacuationPage() {
     const [familyCode, setFamilyCode] = useState(null);
     const [refugeeName, setRefugeeName] = useState(null);
     const [evacuationTableFields, setEvacuationTableFields] = useState([]);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [showRegisteredEvacuees, setShowRegisteredEvacuees] = useState(false);
     const [getListPayload, setGetListPayload] = useState({
         filters: {
             start: 0,
@@ -35,7 +47,8 @@ export default function EvacuationPage() {
             order_by: "desc",
             place_id: "",
             family_code: "",
-            refugee_name: ""
+            refugee_name: "",
+            checkout_flg: 0
         }
     });
 
@@ -72,6 +85,7 @@ export default function EvacuationPage() {
                 place_id: getListPayload.filters.place_id,
                 family_code: getListPayload.filters.family_code,
                 refugee_name: getListPayload.filters.refugee_name,
+                checkout_flg: getListPayload.filters.checkout_flg,
             }
         }
         getList(payload, onGetEvacueesList);
@@ -188,7 +202,7 @@ export default function EvacuationPage() {
     }
 
     /* Services */
-    const { getList, exportEvacueesCSVList } = EvacuationServices;
+    const { getList, exportEvacueesCSVList, bulkDelete } = EvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -227,7 +241,8 @@ export default function EvacuationPage() {
                 order_by: "desc",
                 place_id: selectedOption && selectedOption.id != 0 ? selectedOption.id : "",
                 family_code: convertToSingleByte(familyCode),
-                refugee_name: refugeeName
+                refugee_name: refugeeName,
+                checkout_flg: getListPayload.filters.checkout_flg,
             }
         }
         getList(payload, onGetEvacueesList);
@@ -278,131 +293,211 @@ export default function EvacuationPage() {
         }
     }
 
+    /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+    const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    /**
+     * On confirmation delete api call and close modal functionality handler
+     * @param {*} status 
+     */
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
+    /**
+     * Delete registered evacuees
+     */
+    const onConfirmDeleteRegisteredEvacuees = async () => {
+        setTableLoading(true);
+        await bulkDelete(getListPayload, () => {
+            setGetListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    checkout_flg: 0
+                }
+            }));
+            setShowRegisteredEvacuees(!showRegisteredEvacuees);
+        });
+    }
+
+    /**
+     * Show only registered evacuees
+     */
+    const showOnlyRegisteredEvacuees = async () => {
+        setShowRegisteredEvacuees(!showRegisteredEvacuees);
+        setTableLoading(true);
+        await setGetListPayload(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                checkout_flg: showRegisteredEvacuees ? 0 : 1,
+            }
+        }));
+    }
+
     return (
-        <div className="grid">
-            <div className="col-12">
-                <div className='card'>
-                    <div className="flex align-items-center justify-content-between">
-                        <div className='flex'>
-                            <CustomHeader
-                                headerClass={"page-header1"}
-                                customParentClassName={"mb-0"}
-                                header={translate(localeJson, "list_of_evacuees")}
-                            />
-                            <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
-                        </div>
-                        <div className='mb-2 flex align-items-center'>
-                            <Button buttonProps={{
-                                type: 'submit',
-                                rounded: "true",
-                                export: true,
-                                buttonClass: "evacuation_button_height export-button",
-                                text: translate(localeJson, 'export'),
-                                onClick: () => downloadEvacueesListCSV()
-                            }} parentClass={"export-button"} />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <form>
-                                <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
-                                    <InputDropdown inputDropdownProps={{
-                                        inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
-                                        labelProps: {
-                                            text: translate(localeJson, 'evacuation_site'),
-                                            inputDropdownLabelClassName: "block"
-                                        },
-                                        inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
-                                        customPanelDropdownClassName: "w-10rem",
-                                        value: selectedOption,
-                                        options: evacuationPlaceList,
-                                        optionLabel: "name",
-                                        onChange: (e) => setSelectedOption(e.value),
-                                        emptyMessage: translate(localeJson, "data_not_found"),
-                                    }}
-                                    />
-                                    <Input
-                                        inputProps={{
-                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                            labelProps: {
-                                                text: translate(localeJson, 'household_number'),
-                                                inputLabelClassName: "block",
-                                            },
-                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                            value: familyCode,
-                                            onChange: (e) => handleFamilyCode(e)
+        <React.Fragment>
+            <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
+            <div className="grid">
+                <div className="col-12">
+                    <div className='card'>
+                        <div className="flex align-items-center justify-content-between">
+                            <div className='flex align-items-center gap-2 mb-2'>
+                                <CustomHeader
+                                    headerClass={"page-header1"}
+                                    customParentClassName={"mb-0"}
+                                    header={translate(localeJson, "list_of_evacuees")}
+                                />
+                                <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                            </div>
+                            <div className='flex align-items-center gap-2'>
+                                <div className='flex flex-wrap justify-content-end align-items-end gap-4 mb-2'>
+                                    <div class="flex gap-2 align-items-center justify-content-center mb-2">
+                                        <span className='text-sm'>{translate(localeJson, 'show_checked_out_evacuees')}</span><InputSwitch inputSwitchProps={{
+                                            checked: showRegisteredEvacuees,
+                                            onChange: () => showOnlyRegisteredEvacuees()
                                         }}
-                                    />
-                                    <Input
-                                        inputProps={{
-                                            inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                            labelProps: {
-                                                text: translate(localeJson, 'name'),
-                                                inputLabelClassName: "block",
-                                            },
-                                            inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
-                                            value: refugeeName,
-                                            onChange: (e) => setRefugeeName(e.target.value)
-                                        }}
-                                    />
-                                    <div className="flex align-items-end">
+                                            parentClass={"custom-switch"} />
+                                    </div>
+                                    <div>
                                         <Button buttonProps={{
-                                            buttonClass: "w-12 search-button",
-                                            text: translate(localeJson, "search_text"),
-                                            icon: "pi pi-search",
                                             type: "button",
-                                            onClick: () => searchListWithCriteria()
-                                        }} parentClass={"search-button"} />
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "export-button",
+                                            text: translate(localeJson, 'bulk_delete'),
+                                            severity: "primary",
+                                            disabled: !showRegisteredEvacuees,
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"export-button"} />
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div className='hidden' style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div>
-                                <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
+                                <Button buttonProps={{
+                                    type: 'submit',
+                                    rounded: "true",
+                                    export: true,
+                                    buttonClass: "evacuation_button_height export-button",
+                                    text: translate(localeJson, 'export'),
+                                    onClick: () => downloadEvacueesListCSV()
+                                }} parentClass={"export-button mb-2"} />
                             </div>
                         </div>
-                    </div>
-                    <NormalTable
-                        lazy
-                        id={"evacuation-list"}
-                        className="evacuation-list"
-                        totalRecords={totalCount}
-                        loading={tableLoading}
-                        size={"small"}
-                        stripedRows={true}
-                        paginator={"true"}
-                        showGridlines={"true"}
-                        value={evacueesDataList}
-                        columns={evacuationTableFields}
-                        emptyMessage={translate(localeJson, "data_not_found")}
-                        first={getListPayload.filters.start}
-                        rows={getListPayload.filters.limit}
-                        paginatorLeft={true}
-                        onPageHandler={(e) => onPaginationChange(e)}
-                        onSort={(data) => {
-                            setGetListPayload({
-                                ...getListPayload,
-                                filters: {
-                                    ...getListPayload.filters,
-                                    sort_by: data.sortField,
-                                    order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                        <div>
+                            <div>
+                                <form>
+                                    <div className='modal-field-top-space modal-field-bottom-space flex flex-wrap float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input'>
+                                        <InputDropdown inputDropdownProps={{
+                                            inputDropdownParentClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                            labelProps: {
+                                                text: translate(localeJson, 'evacuation_site'),
+                                                inputDropdownLabelClassName: "block"
+                                            },
+                                            inputDropdownClassName: "w-full lg:w-14rem md:w-14rem sm:w-10rem",
+                                            customPanelDropdownClassName: "w-10rem",
+                                            value: selectedOption,
+                                            options: evacuationPlaceList,
+                                            optionLabel: "name",
+                                            onChange: (e) => setSelectedOption(e.value),
+                                            emptyMessage: translate(localeJson, "data_not_found"),
+                                        }}
+                                        />
+                                        <Input
+                                            inputProps={{
+                                                inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                                labelProps: {
+                                                    text: translate(localeJson, 'household_number'),
+                                                    inputLabelClassName: "block",
+                                                },
+                                                inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                                value: familyCode,
+                                                onChange: (e) => handleFamilyCode(e)
+                                            }}
+                                        />
+                                        <Input
+                                            inputProps={{
+                                                inputParentClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                                labelProps: {
+                                                    text: translate(localeJson, 'name'),
+                                                    inputLabelClassName: "block",
+                                                },
+                                                inputClassName: "w-full lg:w-13rem md:w-14rem sm:w-10rem",
+                                                value: refugeeName,
+                                                onChange: (e) => setRefugeeName(e.target.value)
+                                            }}
+                                        />
+                                        <div className="flex align-items-end">
+                                            <Button buttonProps={{
+                                                buttonClass: "w-12 search-button",
+                                                text: translate(localeJson, "search_text"),
+                                                icon: "pi pi-search",
+                                                type: "button",
+                                                onClick: () => searchListWithCriteria()
+                                            }} parentClass={"search-button"} />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className='hidden' style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>
+                                    <p className='pt-4 page-header2 font-bold'>{translate(localeJson, "totalSummary")}: {familyCount}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <NormalTable
+                            lazy
+                            id={"evacuation-list"}
+                            className="evacuation-list"
+                            totalRecords={totalCount}
+                            loading={tableLoading}
+                            size={"small"}
+                            stripedRows={true}
+                            paginator={"true"}
+                            showGridlines={"true"}
+                            value={evacueesDataList}
+                            columns={evacuationTableFields}
+                            emptyMessage={translate(localeJson, "data_not_found")}
+                            first={getListPayload.filters.start}
+                            rows={getListPayload.filters.limit}
+                            paginatorLeft={true}
+                            onPageHandler={(e) => onPaginationChange(e)}
+                            onSort={(data) => {
+                                setGetListPayload({
+                                    ...getListPayload,
+                                    filters: {
+                                        ...getListPayload.filters,
+                                        sort_by: data.sortField,
+                                        order_by: getListPayload.filters.order_by === 'desc' ? 'asc' : 'desc'
+                                    }
+                                }
+                                )
+                            }}
+                            selectionMode="single"
+                            onSelectionChange={
+                                (e) => {
+                                    dispatch(setFamily({ family_id: e.value.id }));
+                                    router.push({
+                                        pathname: '/admin/evacuation/family-detail',
+                                    });
                                 }
                             }
-                            )
-                        }}
-                        selectionMode="single"
-                        onSelectionChange={
-                            (e) => {
-                                dispatch(setFamily({ family_id: e.value.id }));
-                                router.push({
-                                    pathname: '/admin/evacuation/family-detail',
-                                });
-                            }
-                        }
-                    />
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </React.Fragment>
     )
 }

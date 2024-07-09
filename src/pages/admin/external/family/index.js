@@ -333,17 +333,15 @@ export default function ExternalEvacuees() {
             <div className="col-12">
                 <div className="card">
                     <div className="flex align-items-center justify-content-between pb-2">
-                        <div className='flex'>
+                        <div className='flex align-items-center gap-2 mb-2'>
                             <CustomHeader
                                 headerClass={"page-header1"}
                                 customParentClassName={"mb-0"}
                                 header={translate(localeJson, "external_evacuees_tally")}
                             />
-                            <div className={`flex gap-2 align-items-center mb-2 ml-2`}>
-                                <div className="hitachi_header_container">
-                                    <div className="hitachi_header_bg hidden"></div>
-                                    <div> {foodSupportCount ? "(" + foodSupportCount + translate(localeJson, "people") + ")" : ""}</div>
-                                </div>
+                            <div className="hitachi_header_container mb-2">
+                                <div className="hitachi_header_bg hidden"></div>
+                                <div className="page-header1-sub"> {foodSupportCount ? "(" + foodSupportCount + translate(localeJson, "people") + ")" : ""}</div>
                             </div>
                         </div>
                         <div className='mb-2 flex align-items-center'>
