@@ -227,7 +227,6 @@ export default function Admission() {
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
       name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
         .max(200, translate(localeJson, "name_max"))
         .matches(katakanaRegex, translate(localeJson, "name_katakana")),
       dob: Yup.object().shape({

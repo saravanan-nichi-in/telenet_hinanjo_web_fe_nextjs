@@ -130,6 +130,7 @@ export default function Admission() {
                     event_name: locale === "en" && !_.isNull(layoutReducer?.user?.place?.name_en) ? layoutReducer?.user?.place?.name_en : layoutReducer?.user?.place?.name,
                     person_dob: element.person_dob ? (locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(element.person_dob) : getEnglishDateDisplayFormat(element.person_dob)) : "",
                     person_gender: getGenderValueFromInt(element.person_gender),
+                    person_tel: element.person_tel != "00000000000" ? element.person_tel : "-"
                 }
                 listOfFamilies.push(preparedObj);
             });

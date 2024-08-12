@@ -303,7 +303,7 @@ export default function UserEventRegModal(props) {
             prefecture_id: object1.prefecture_id
                 ? convertToSingleByte(object1.prefecture_id)
                 : "",
-            address: object1.address + " " + object1?.address2,
+            address: object1.address,
             address_default: null, // Fill this value accordingly
             tel: object1.tel ? convertToSingleByte(object1.tel) : "",
             refugee_name: object1.name_furigana,
@@ -413,6 +413,7 @@ export default function UserEventRegModal(props) {
                         setIsRecording(false);
                         setLoader(true);
                         setIsSubmitting(true);
+                        console.log(values)
                         UserEventListServices.createUserEvent(mapObjects(values), (res) => {
                             setFetchedZipCode("");
                             setPostalCodePrefectureId("")
@@ -748,7 +749,7 @@ export default function UserEventRegModal(props) {
                                                                             setPostalCodePrefectureId(selectedPrefecture?.value)
                                                                             setFieldValue(
                                                                                 "address",
-                                                                                address.address2 + address.address3 || ""
+                                                                                address.address2||"" + address.address3 || ""
                                                                             );
                                                                         } else {
                                                                             setFieldValue("prefecture_id", "");
