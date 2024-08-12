@@ -55,6 +55,16 @@ export default function EventStaffFamilyDetail() {
         getStaffFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
     }
 
+    const getGenderValue = (gender) => {
+        if (gender == 1) {
+            return translate(localeJson, 'male');
+        } else if (gender == 2) {
+            return translate(localeJson, 'female');
+        } else {
+            return translate(localeJson, 'others_count');
+        }
+    }
+
     const getEvacueesFamilyDetail = (response) => {
         var familyDataList = [];
         var admittedHistory = [];
@@ -70,7 +80,7 @@ export default function EventStaffFamilyDetail() {
                         dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
                         age: person.person_age,
                         age_month: person.person_month ? person.person_month : "",
-                        gender: person.person_gender,//getGenderValue(person.person_gender),
+                        gender:  getGenderValue(person.person_gender),
                         address: (person.family_zip_code ? (translate(localeJson, 'post_letter') + personData[0].family_zip_code) : "") + " " + prefecturesCombined[personData[0].family_prefecture_id ?? 0][locale] + " " + personData[0].family_address,
                         tel: person.family_tel,
                         evacuation_date_time: locale == "ja" ? getJapaneseDateTimeDisplayFormat(person.family_join_date) : getGeneralDateTimeDisplayFormat(person.family_join_date),
@@ -132,6 +142,10 @@ export default function EventStaffFamilyDetail() {
                                 <div className='flex align-items-center details-text-overflow'>
                                     <div className='page-header3'>{translate(localeJson, "age_month")}:</div>
                                     <div className='page-header3-sub ml-1'>{familyDetailData[0].age_month}</div>
+                                </div>
+                                <div className='flex align-items-center details-text-overflow'>
+                                    <div className='page-header3'>{translate(localeJson, "gender")}:</div>
+                                    <div className='page-header3-sub ml-1'>{familyDetailData[0].gender}</div>
                                 </div>
                                 <div className='flex align-items-center details-text-overflow'>
                                     <div className='page-header3'>{translate(localeJson, "tel")}:</div>

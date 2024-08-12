@@ -971,7 +971,7 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
-                                  spanText: "*",
+                                  spanText: "",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1142,7 +1142,7 @@ export default function Admission() {
                                 }`,
                               labelProps: {
                                 text: "",
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1242,7 +1242,7 @@ export default function Admission() {
                                 }`,
                               labelProps: {
                                 inputDropdownLabelClassName: "block font-bold",
-                                spanText: "*",
+                                spanText: "",
                                 inputDropdownLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
                               },
@@ -1277,7 +1277,7 @@ export default function Admission() {
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address && touched.address && "p-invalid"
                                 }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1324,7 +1324,7 @@ export default function Admission() {
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address2 && touched.address2 && "p-invalid"
                                 }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",

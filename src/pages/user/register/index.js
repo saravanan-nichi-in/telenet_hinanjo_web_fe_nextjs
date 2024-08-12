@@ -1091,7 +1091,7 @@ export default function Admission() {
                                 }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
-                                  spanText: "*",
+                                  spanText: "",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1279,7 +1279,7 @@ export default function Admission() {
                               }`,
                               labelProps: {
                                 text: "",
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1382,7 +1382,7 @@ export default function Admission() {
                               }`,
                               labelProps: {
                                 inputDropdownLabelClassName: "block font-bold",
-                                spanText: "*",
+                                spanText: "",
                                 inputDropdownLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
                               },
@@ -1418,7 +1418,7 @@ export default function Admission() {
                                 errors.address && touched.address && "p-invalid"
                               }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1471,7 +1471,7 @@ export default function Admission() {
                                 "p-invalid"
                               }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",

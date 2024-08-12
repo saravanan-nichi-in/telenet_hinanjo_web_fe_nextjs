@@ -243,6 +243,7 @@ export default function EvacueeFamilyDetail() {
         "dob",
         "age",
         "age_month",
+        "gender",
         "tel",
         "address",
         "family_code",
