@@ -78,7 +78,7 @@ const TempRegisterConfirm = () => {
           }}
         />
       ),
-      tel: data.tel,
+      tel: data.tel != "00000000000"? data.tel:"-",
       password: data.password,
       rep_kanji: ownerPerson?.name || "", // Assuming 'name' is the rep_kanji field
       rep_furigana: ownerPerson?.refugee_name || "", // Assuming 'refugee_name' is the rep_furigana field
@@ -102,7 +102,7 @@ const TempRegisterConfirm = () => {
         age_month: person.month + "" || "-",
         gender: getGenderValue(person.gender) || "-",
         created_date: person.createdDate || "-",
-        tel: person.tel,
+        tel: person.tel != "00000000000"? person.tel:"-",
         orders: [
           {
             address: (
