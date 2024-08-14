@@ -664,7 +664,7 @@ export default function Admission() {
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: inputData.address2,
-      tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
+      tel: inputData.tel ? convertToSingleByte(inputData.tel) : "00000000000",
       password: inputData.password.toString(),
       is_owner:
         inputData.evacuee.find((evacuee) => evacuee.checked)?.id || null,
@@ -686,7 +686,7 @@ export default function Admission() {
           address_default: evacuee.address2,
           age: evacuee.age,
           month: parseInt(evacuee.age_m),
-          tel: evacuee.tel ? convertToSingleByte(evacuee.tel) : null,
+          tel: evacuee.tel ? convertToSingleByte(evacuee.tel) : "00000000000",
           gender: evacuee.gender,
           special_cares: evacuee.specialCareType || [],
           connecting_code: evacuee.connecting_code,
