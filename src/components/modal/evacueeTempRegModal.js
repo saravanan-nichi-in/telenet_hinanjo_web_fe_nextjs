@@ -95,7 +95,7 @@ export default function EvacueeTempRegModal(props) {
         .required(translate(localeJson, "age_required")),
       age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string().nullable()
       .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
         (value, context) => {
         const { prefecture_id } = context.parent;
@@ -123,8 +123,7 @@ export default function EvacueeTempRegModal(props) {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
+        .nullable(),
     });
   const {
     open,

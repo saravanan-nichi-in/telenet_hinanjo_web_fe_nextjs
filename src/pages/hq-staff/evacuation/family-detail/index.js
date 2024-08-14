@@ -110,7 +110,7 @@ export default function EvacueeFamilyDetail() {
                         refugee_name: <div className={"clickable-row"} onClick={() => {
                             displayIndividualQuestionnaires(index);
                             hideOverFlow();
-                        }}>{person.person_refugee_name}</div>,
+                        }}>{person.person_refugee_name||""}</div>,
                         gender: getGenderValue(person.person_gender),
                         dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
                         age: person.person_age,

@@ -342,7 +342,7 @@ export default function Admission() {
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
       name_kanji: Yup.string().max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string().max(100, translate(localeJson, "name_max")),
+      name_furigana: Yup.string().nullable().max(100, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
           translate(localeJson, "c_year") + translate(localeJson, "is_required")
@@ -360,7 +360,7 @@ export default function Admission() {
       age_m: Yup.number().required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -370,8 +370,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
+        .nullable(),
     });
   const evacueeItemSchema = evacueeSchema();
 
@@ -380,9 +379,10 @@ export default function Admission() {
       name_kanji: Yup.string()
         .required(translate(localeJson, "name_required_changed"))
         .max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string().max(100, translate(localeJson, "name_max")),
+      name_furigana: Yup.string().nullable().
+      max(100, translate(localeJson, "name_max")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -392,8 +392,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
+        .nullable(),
       password: Yup.string()
         .required(translate(localeJson, "family_password_required"))
         .test(

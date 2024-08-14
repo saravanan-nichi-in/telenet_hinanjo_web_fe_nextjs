@@ -398,7 +398,7 @@ export default function Admission() {
       age_m: Yup.number().required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -408,8 +408,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
+        .nullable(),
     });
 
   const evacueeItemSchema = evacueeSchema();
@@ -422,7 +421,7 @@ export default function Admission() {
       name_furigana: Yup.string()
         .max(100, translate(localeJson, "name_max")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -432,8 +431,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
+        .nullable(),
       password: Yup.string()
         .required(translate(localeJson, "family_password_required"))
         .test(

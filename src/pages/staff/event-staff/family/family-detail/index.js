@@ -75,7 +75,7 @@ export default function EventStaffFamilyDetail() {
                 personData.map((person, index) => {
                     let familyData = {
                         id: index + 1,
-                        refugee_name: person.person_refugee_name,
+                        refugee_name: person.person_refugee_name||"",
                         name: person.person_name ?? "",
                         dob: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(person.person_dob) : getEnglishDateDisplayFormat(person.person_dob),
                         age: person.person_age,

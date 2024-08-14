@@ -226,9 +226,8 @@ export default function Admission() {
   const evacueeSchema = () =>
     Yup.object().shape({
       checked: Yup.boolean().nullable(),
-      name_furigana: Yup.string()
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+      name_furigana: Yup.string().nullable()
+        .max(200, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
           translate(localeJson, "c_year") + translate(localeJson, "is_required")
@@ -256,17 +255,6 @@ export default function Admission() {
       prefecture_id: Yup.string()
         .nullable()
         .required(translate(localeJson, "c_perfacture_is_required")),
-      tel: Yup.string().test(
-        "at-least-one-checked",
-        translate(localeJson, "c_required"),
-        (value, parent) => {
-          if (parent.parent.checked === true) {
-            return value ? true : false;
-          } else {
-            return true;
-          }
-        }
-      ),
     });
 
   const evacueeItemSchema = evacueeSchema();
@@ -274,12 +262,11 @@ export default function Admission() {
   const validationSchema = (localeJson) =>
     Yup.object().shape({
       name_furigana: Yup.string()
-        .required(translate(localeJson, "c_name_phonetic_is_required"))
-        .max(200, translate(localeJson, "name_max"))
-        .matches(katakanaRegex, translate(localeJson, "name_katakana")),
+        .nullable()
+        .max(200, translate(localeJson, "name_max")),
       name_kanji: Yup.string().nullable()
         .max(200, translate(localeJson, "name_max")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string().nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -301,7 +288,7 @@ export default function Admission() {
           }
         ),
       tel: Yup.string()
-        .required(translate(localeJson, "phone_no_required"))
+        .nullable()
         .test(
           "starts-with-zero",
           translate(localeJson, "phone_num_start"),
@@ -310,24 +297,16 @@ export default function Admission() {
               value = convertToSingleByte(value);
               return value.charAt(0) === "0";
             }
-            return true; // Return true for empty values or use .required() in schema to enforce non-empty strings
+            return true; // Return true for empty values
           }
         )
-        .test(
-          "is-not-empty",
-          translate(localeJson, "phone_no_required"),
-          (value) => {
-            return value.trim() !== ""; // Check if the string is not empty after trimming whitespace
-          }
-        )
-        .test(
-          "matches-pattern",
-          translate(localeJson, "phone"),
-          (value) => {
+        .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+          if (value) {
             const singleByteValue = convertToSingleByte(value);
             return /^[0-9]{10,11}$/.test(singleByteValue);
           }
-        ),
+          return true; // Allow empty values
+        }),
 
       evacuee: Yup.array()
         .required(translate(localeJson, "c_required"))
@@ -1022,7 +1001,7 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_furigana"),
-                                  spanText: "*",
+                                  spanText: "",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1072,7 +1051,7 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "phone_number"),
-                                  spanText: "*",
+                                  spanText: "",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
