@@ -96,7 +96,7 @@ export default function Admission() {
       setEvacueeCounter((prevCount) => prevCount + 1);
       let data = evacueeValues;
       if (data.checked == true) {
-        formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+        formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
         formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
         formikRef.current.setFieldValue("address", data.address);
         // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -151,7 +151,7 @@ export default function Admission() {
     if (evacuee?.length > 0) {
       evacuee.forEach((data) => {
         if (data.checked === true) {
-          formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+          formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
           formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
           formikRef.current.setFieldValue("address", data.address);
           // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -356,7 +356,7 @@ export default function Admission() {
       let data = regReducer.originalData;
       setIsHitachi(data.evacuee[0].family_register_from == "0" ? true : false)
       formikRef.current.setFieldValue("evacuee_date", new Date(data.evacuee_date));
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -528,7 +528,7 @@ export default function Admission() {
       address = rowData.address ? rowData.address : "";
       // address2 = rowData.address2 ? rowData.address2 : "";
       postalCode = rowData.postalCode ? rowData.postalCode : "";
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
