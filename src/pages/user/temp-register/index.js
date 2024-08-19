@@ -812,7 +812,7 @@ export default function Admission() {
       zip_code: inputData.postalCode
         ? inputData.postalCode?.replace(/-/g, "")
         : null,
-      prefecture_id: inputData.prefecture_id.toString(),
+      prefecture_id: inputData.prefecture_id?.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
       tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
@@ -834,7 +834,7 @@ export default function Admission() {
           zip_code: evacuee.postalCode
             ? evacuee.postalCode?.replace(/-/g, "")
             : null,
-          prefecture_id: evacuee.prefecture_id.toString(),
+          prefecture_id: evacuee.prefecture_id?.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
           age: evacuee.age,
