@@ -578,7 +578,7 @@ export default function Admission() {
       address = rowData.address ? rowData.address : "";
       // address2 = rowData.address2 ? rowData.address2 : "";
       postalCode = rowData.postalCode ? rowData.postalCode : "";
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -722,7 +722,7 @@ export default function Admission() {
     const outputData = {
       place_id: layoutReducer?.user?.place?.id,
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(new Date()),
-      zip_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
+      zip_code: inputData.postalCode ? inputData.postalCode?.replace(/-/g, "") : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
@@ -742,7 +742,7 @@ export default function Admission() {
           refugee_name: evacuee.name_furigana,
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
-          zip_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
+          zip_code: evacuee.postalCode ? evacuee.postalCode?.replace(/-/g, "") : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
@@ -1255,7 +1255,7 @@ export default function Admission() {
                                     let postalCode = res?.data?.content;
                                     const re = /^[0-9-]+$/;
                                     if (postalCode && re.test(postalCode)) {
-                                      let val = postalCode.replace(/-/g, ""); // Remove any existing hyphens
+                                      let val = postalCode?.replace(/-/g, ""); // Remove any existing hyphens
                                       // Insert hyphen after the first three characters
                                       if (val.length > 3 && val.length <= 7) {
                                         val =
@@ -1721,7 +1721,7 @@ export default function Admission() {
                                             age: person.age,
                                             age_m: person.age_m,
                                             gender: person.gender,
-                                            postalCode: person.postalCode ? person.postalCode.replace(/-/g, "") : "",
+                                            postalCode: person.postalCode ? person.postalCode?.replace(/-/g, "") : "",
                                             prefecture_id: person.prefecture_id,
                                             address: person.address,
                                             //address2: person.address2,
