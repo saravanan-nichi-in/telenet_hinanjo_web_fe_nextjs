@@ -661,7 +661,7 @@ export default function Admission() {
       postalCode = rowData.postalCode ? rowData.postalCode : "";
       formikRef.current.setFieldValue(
         "postalCode",
-        data.postalCode ? data.postalCode.replace(/-/g, "") : ""
+        data.postalCode ? data.postalCode?.replace(/-/g, "") : ""
       );
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
@@ -810,7 +810,7 @@ export default function Admission() {
       place_id: inputData.evacuationPlace,
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(new Date()),
       zip_code: inputData.postalCode
-        ? inputData.postalCode.replace(/-/g, "")
+        ? inputData.postalCode?.replace(/-/g, "")
         : null,
       prefecture_id: inputData.prefecture_id.toString(),
       address: inputData.address,
@@ -832,7 +832,7 @@ export default function Admission() {
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
           zip_code: evacuee.postalCode
-            ? evacuee.postalCode.replace(/-/g, "")
+            ? evacuee.postalCode?.replace(/-/g, "")
             : null,
           prefecture_id: evacuee.prefecture_id.toString(),
           address: evacuee.address,
@@ -1424,7 +1424,7 @@ export default function Admission() {
                                         let postalCode = res?.data?.content;
                                         const re = /^[0-9-]+$/;
                                         if (postalCode && re.test(postalCode)) {
-                                          let val = postalCode.replace(
+                                          let val = postalCode?.replace(
                                             /-/g,
                                             ""
                                           ); // Remove any existing hyphens
@@ -2035,7 +2035,7 @@ export default function Admission() {
                                                   age_m: person.age_m,
                                                   gender: person.gender,
                                                   postalCode: person.postalCode
-                                                    ? person.postalCode.replace(
+                                                    ? person.postalCode?.replace(
                                                       /-/g,
                                                       ""
                                                     )

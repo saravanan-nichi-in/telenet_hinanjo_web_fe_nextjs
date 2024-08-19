@@ -345,7 +345,7 @@ export default function EvacueeTempRegModal(props) {
       const re = /^[0-9-]+$/;
       let val;
       if (evacuees.postalCode === "" || re.test(evacuees.postalCode)) {
-        val = evacuees.postalCode.replace(/-/g, ""); // Remove any existing hyphens
+        val = evacuees.postalCode?.replace(/-/g, ""); // Remove any existing hyphens
         if (val.length > 3) {
           val = val.slice(0, 3) + val.slice(3);
         }
