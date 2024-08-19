@@ -296,33 +296,45 @@ async function _getAddressFromZip(zipCode, callBackFun) {
 }
 
 async function _convertToKatakana(inputText, callBackFun) {
-    const apiUrl = 'https://labs.goo.ne.jp/api/hiragana';
-    const apiKey = process.env.NEXT_PUBLIC_GIT_APP_ID; // Replace with your actual API key
-
-
-    // Create the request headers
-    const headers = new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded',
-    });
-
-    // Make the Fetch API request
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: headers,
-        body: new URLSearchParams({
-            app_id: apiKey,
-            sentence: inputText,
-            request_id: "",
-            "output_type": "katakana"
-        }),
+    let payload = {
+        text: inputText
+    }
+    axios.post('/user/convert/text/furigana', payload)
+    .then((response) => {
+        if (response && response.data) {
+            callBackFun(response.data?.data);
+        }
     })
-        .then(response => response.json())
-        .then(data => {
-            callBackFun(data)
-        })
-        .catch(error => {
-            callBackFun(false);
-            // Handle errors
-            console.error('Error:', error);
-        })
+    .catch((error) => {
+        callBackFun()
+    });
+    // const apiUrl = 'https://labs.goo.ne.jp/api/hiragana';
+    // const apiKey = process.env.NEXT_PUBLIC_GIT_APP_ID; // Replace with your actual API key
+
+
+    // // Create the request headers
+    // const headers = new Headers({
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    // });
+
+    // // Make the Fetch API request
+    // fetch(apiUrl, {
+    //     method: 'POST',
+    //     headers: headers,
+    //     body: new URLSearchParams({
+    //         app_id: apiKey,
+    //         sentence: inputText,
+    //         request_id: "",
+    //         "output_type": "katakana"
+    //     }),
+    // })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         callBackFun(data)
+    //     })
+    //     .catch(error => {
+    //         callBackFun(false);
+    //         // Handle errors
+    //         console.error('Error:', error);
+    //     })
 }
