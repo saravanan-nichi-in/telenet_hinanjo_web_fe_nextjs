@@ -678,7 +678,7 @@ export default function Admission() {
       ),
       "family_id": inputData.family_id,
       postal_code: inputData.postalCode ? inputData.postalCode?.replace(/-/g, "") : null,
-      prefecture_id: inputData.prefecture_id.toString(),
+      prefecture_id: inputData.prefecture_id?.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
       tel: inputData.tel ? convertToSingleByte(inputData.tel) : "00000000000",
@@ -698,7 +698,7 @@ export default function Admission() {
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
           postal_code: evacuee.postalCode ? evacuee.postalCode?.replace(/-/g, "") : null,
-          prefecture_id: evacuee.prefecture_id.toString(),
+          prefecture_id: evacuee.prefecture_id?.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
           age: evacuee.age,
@@ -723,7 +723,7 @@ export default function Admission() {
           }),
         };
       }),
-      master_question: inputData.questions.map((question) => {
+      master_question: inputData.questions?.map((question) => {
         return {
           question_id: question.id.toString(),
           question_type: question.type.toString(),
@@ -887,11 +887,16 @@ export default function Admission() {
         enableReinitialize={true}
         onSubmit={(values) => {
           if (!hasErrors) {
+            try{
             values.questions = questions;
             dispatch(setOriginalData(values));
             let payload = convertData(values);
             dispatch(setRegisterData(payload));
             router.push("/staff/family/edit/confirm");
+            }
+            catch(error){
+              console.log("Error in submitting form", error);
+            }
           }
         }}
       >
