@@ -1841,7 +1841,7 @@ export default function Admission() {
                                 hideOverFlow();
                               }
                               const evacueesWithNullAnswer = values.evacuee.filter((evacuee, index) => {
-                                const hasNullAnswer = evacuee.individualQuestions.some(
+                                const hasNullAnswer = evacuee?.individualQuestions?.some(
                                   (question) =>
                                     question.isRequired == "1" && (question.answer == null || question.answer.length == 0)
                                 );
