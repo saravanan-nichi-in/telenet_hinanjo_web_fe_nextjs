@@ -177,7 +177,7 @@ export default function StaffFamilyDetail() {
                         is_owner: tempObj.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
                         address: (tempObj.person_postal_code?translate(localeJson, 'post_letter') + tempObj.person_postal_code:"") + " " + (locale == 'ja' ?(tempObj.person_prefecture_id? prefecturesCombined[tempObj.person_prefecture_id].ja:"") : (tempObj.person_prefecture_id?prefecturesCombined[tempObj.person_prefecture_id].en:"")) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
                         evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(tempObj.family_join_date) : getEnglishDateDisplayFormat(tempObj.family_join_date),
-                        tel: tempObj?.person_tel && tempObj.person_tel != "00000000000" ? tempObj.person_tel : "",
+                        tel: (tempObj?.person_tel && tempObj.person_tel != "00000000000") ? tempObj.person_tel : "",
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                     }
@@ -455,7 +455,7 @@ export default function StaffFamilyDetail() {
                                 <div className='flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "tel")}:</span>
-                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_tel}</span>
+                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_tel!= "00000000000" ?personList[individualQuestionnairesContentIDX].person_tel:""}</span>
                                     </div>
                                 </div>
 

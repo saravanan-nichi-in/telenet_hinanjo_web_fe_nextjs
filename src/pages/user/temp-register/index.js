@@ -169,7 +169,7 @@ export default function Admission() {
       TempRegisterServices.getActiveEvacuationPlaceList((res) => {
         console.log(res);
         if (res) {
-          let placeList = res?.data?.model?.list;
+          let placeList = res?.data?.model;
           let placeIsAvail = placeList?.find((list) => list.id == place_id);
           if (!placeIsAvail) {
             toastDisplay(
@@ -360,7 +360,7 @@ export default function Admission() {
     // address2: "",
     evacuee: "",
     tel: "",
-    password: "",
+    password: "1234",
     questions: null,
     agreeCheckOne: false,
     agreeCheckTwo: false,

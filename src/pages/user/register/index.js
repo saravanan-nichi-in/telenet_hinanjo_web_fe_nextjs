@@ -325,7 +325,7 @@ export default function Admission() {
     // address2: "",
     evacuee: "",
     tel: "",
-    password: "",
+    password: "1234",
     questions: null,
     agreeCheckOne: false,
     agreeCheckTwo: false,

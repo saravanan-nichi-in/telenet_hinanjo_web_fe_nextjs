@@ -160,7 +160,7 @@ export default function EvacueeFamilyDetail() {
                         family_code: person.family_code,
                         name_phonetic: person.person_refugee_name,
                         name_kanji: person.person_name,
-                        address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.person_prefecture_id].ja : prefecturesCombined[person.person_prefecture_id].en) + " " + person.person_address + " " + (person.person_address_default ? person.person_address_default : ""),
+                        address: (person.person_postal_code?translate(localeJson, 'post_letter') + person.person_postal_code:"") + " " + (locale == 'ja' ?(person.person_prefecture_id? prefecturesCombined[person.person_prefecture_id].ja:"") : (person.person_prefecture_id?prefecturesCombined[person.person_prefecture_id].en:"")) + " " + person.person_address + (person.person_address_default ? person.person_address_default : ""),
                         tel: person?.person_tel && person.person_tel != "00000000000" ? person.person_tel : "",
                         evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
                         place_id: person.place_id,
