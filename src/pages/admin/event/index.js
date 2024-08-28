@@ -60,20 +60,21 @@ export default function Questionnaire() {
             headerClassName: "custom-header",
             body: (rowData) => {
                 let rowIndex = rowData.si_no;
-                let current = new Date();
-                let isDisabled = rowData.closing_date ? new Date(rowData.closing_date) < current : false
+                let isDisabled = checkEventStatusOfTimings(rowData);
+                console.log(isDisabled, rowData.name);
                 const isRowCopied = copiedRows.includes(rowIndex);
                 return (
-                    <span style={{ pointerEvents: (rowData.is_default == "1" || isDisabled || rowData.active_flg == '0') ? 'none' : 'auto' }}>
+                    <span style={{ pointerEvents: (isDisabled) ? 'none' : 'auto', color: isDisabled && '#dadee3' }}>
                         <a
                             href={rowData.url}
                             target="_blank"
+                            style={{ color: isDisabled && '#556376' }}
                         >
                             {translate(localeJson, 'event_visit')}
                         </a>
                         <i
                             className="pi pi-copy"
-                            style={{ cursor: 'pointer', marginLeft: '5px', color: isRowCopied ? 'green' : '#D31720' }}
+                            style={{ cursor: 'pointer', marginLeft: '5px', color: isRowCopied ? 'green' : isDisabled ? '#556376' : '#D31720' }}
                             title="Copy to Clipboard"
                             onClick={() => copyToClipboard(rowData.url, rowIndex)}
                         />
@@ -186,6 +187,22 @@ export default function Questionnaire() {
             setTotalCount(listTotalCount);
         })
     }
+
+    const checkEventStatusOfTimings = (rowData) => {
+        const currentDate = new Date();
+        const start = rowData?.opening_date ? new Date(rowData?.opening_date) : null;
+        const end = rowData?.closing_date ? new Date(rowData?.closing_date) : null;
+
+        if (rowData.active_flg == '1') {
+            if (!start && !end) {
+                return false;
+            } else {
+                return !(start <= currentDate && (!end || end >= currentDate));
+            }
+        } else {
+            return true
+        }
+    };
 
     const formatEditObject = (rowData) => {
         rowData.opening_date = rowData.opening_date ? new Date(rowData.opening_date) : "";
@@ -400,8 +417,8 @@ export default function Questionnaire() {
                                     }
                                     )
                                 }}
-                                cellClassName={cellClassName}
-                                isDataSelectable={isCellSelectable}
+                                // cellClassName={cellClassName}
+                                // isDataSelectable={isCellSelectable}
                                 onPageHandler={(e) => onPaginationChange(e)}
                                 className={"custom-table-cell"}
                                 lazy
