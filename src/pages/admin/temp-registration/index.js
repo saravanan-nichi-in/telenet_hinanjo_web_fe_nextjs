@@ -243,7 +243,7 @@ export default function TempRegistration() {
       <div className="col-12">
         <div className="card">
           <div className="flex align-items-center justify-content-between">
-            <div className='flex'>
+            <div className='flex align-items-center gap-2 mb-2'>
               <CustomHeader
                 headerClass={"page-header1"}
                 customParentClassName={"mb-0"}

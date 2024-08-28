@@ -202,7 +202,7 @@ export default function PublicExternal() {
           }
         }
       ),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string().nullable()
       .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
       (value, context) => {
       const { prefecture_id } = context.parent;
@@ -219,7 +219,7 @@ export default function PublicExternal() {
       address2: Yup.string()
         .nullable()
         .max(190, translate(localeJson, "address_max_length")),
-      prefecture_id: Yup.string().required(translate(localeJson, "prefecture_required")),
+      prefecture_id: Yup.string().nullable(),
       email: Yup.string()
         .test(
           "required-when-toggleSwitches-true",

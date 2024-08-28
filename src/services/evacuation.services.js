@@ -9,7 +9,8 @@ export const EvacuationServices = {
     getFamilyEvacueesDetail: _getFamilyEvacueesDetail,
     evacuationCheckout: _evacuationCheckout,
     eventAttendeesCheckout: _eventAttendeesCheckout,
-    getFamilyEvacueesAttendeesDetail: _getFamilyEvacueesAttendeesDetail
+    getFamilyEvacueesAttendeesDetail: _getFamilyEvacueesAttendeesDetail,
+    bulkDelete: _bulkDelete
 };
 
 /**
@@ -127,6 +128,25 @@ function _evacuationCheckout(payload, callBackFun) {
  */
 function _eventAttendeesCheckout(payload, callBackFun) {
     axios.post('/user/event/manual/checkout', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toastDisplay(error?.response);
+        });
+}
+
+/**
+ * Get Event Attendees checkout
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _bulkDelete(payload, callBackFun) {
+    axios.post('/admin/evacuations/bulk/delete', payload)
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response.data);

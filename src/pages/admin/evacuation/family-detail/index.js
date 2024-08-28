@@ -16,12 +16,12 @@ import {
     hideOverFlow,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader } from '@/components';
+import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader, AdminManagementDeleteModal } from '@/components';
 import { prefecturesCombined } from '@/utils/constant';
 import { EvacuationServices } from '@/services';
 
 export default function EvacueeFamilyDetail() {
-    const { locale, localeJson } = useContext(LayoutContext);
+    const { locale, localeJson,setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
 
@@ -32,6 +32,15 @@ export default function EvacueeFamilyDetail() {
     const [individualQuestionnairesContentIDX, setIndividualQuestionnairesContentIDX] = useState(null);
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
+    const [isReg,setIsReg] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+        filters: {
+            family_code: "",
+            refugee_name: "",
+            family_id: param?.family_id
+        }
+    });
+	const [deleteOpen, setDeleteOpen] = useState(false);
 
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
@@ -59,7 +68,7 @@ export default function EvacueeFamilyDetail() {
     ];
 
     /* Services */
-    const { getFamilyEvacueesDetail } = EvacuationServices;
+    const { getFamilyEvacueesDetail,bulkDelete } = EvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -68,6 +77,33 @@ export default function EvacueeFamilyDetail() {
         };
         fetchData();
     }, [locale]);
+
+    const onConfirmDeleteRegisteredEvacuees = async () => {
+        setTableLoading(true);
+        bulkDelete(getListPayload, (res) => {
+            if (res) {
+                setLoader(false);
+                router.push('/admin/evacuation');
+            }
+            else {
+                setLoader(false);
+            }
+
+        });
+    }
+	
+	const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
 
     const onGetEvacueesFamilyDetailOnMounting = () => {
         getFamilyEvacueesDetail(param, getEvacueesFamilyDetail)
@@ -100,6 +136,7 @@ export default function EvacueeFamilyDetail() {
                 }
             }
             if (data.length > 0) {
+                setIsReg(data[0].family_is_registered == 1 ? true : false);
                 data.map((person, index) => {
                     let familyData = {
                         id: index + 1,
@@ -123,7 +160,7 @@ export default function EvacueeFamilyDetail() {
                         family_code: person.family_code,
                         name_phonetic: person.person_refugee_name,
                         name_kanji: person.person_name,
-                        address: translate(localeJson, 'post_letter') + person.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[person.person_prefecture_id].ja : prefecturesCombined[person.person_prefecture_id].en) + " " + person.person_address + " " + (person.person_address_default ? person.person_address_default : ""),
+                        address: (person.person_postal_code?translate(localeJson, 'post_letter') + person.person_postal_code:"") + " " + (locale == 'ja' ?(person.person_prefecture_id? prefecturesCombined[person.person_prefecture_id].ja:"") : (person.person_prefecture_id?prefecturesCombined[person.person_prefecture_id].en:"")) + " " + person.person_address + (person.person_address_default ? person.person_address_default : ""),
                         tel: person?.person_tel && person.person_tel != "00000000000" ? person.person_tel : "",
                         evacuation_date_time: person.family_join_date ? ((locale == "ja" ? getJapaneseDateTimeDayDisplayActualFormat(person.family_join_date) : getEnglishDateTimeDisplayActualFormat(person.family_join_date))) : "",
                         place_id: person.place_id,
@@ -218,6 +255,7 @@ export default function EvacueeFamilyDetail() {
         "dob",
         "age",
         "age_month",
+        "gender",
         "tel",
         "address",
         "family_code",
@@ -228,6 +266,10 @@ export default function EvacueeFamilyDetail() {
 
     return (
         <>
+         <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
             <CommonDialog
                 open={checkoutVisible}
                 dialogBodyClassName=""
@@ -410,12 +452,12 @@ export default function EvacueeFamilyDetail() {
                                 />
                             </div>
                         </div>
-                        <div className="flex mt-3 gap-2 justify-content-center">
+                        <div className='flex flex-column mt-3 mb-2 justify-content-center align-items-center' style={{ justifyContent: "center", flexWrap: "wrap" }}>
                             <Button buttonProps={{
                                 buttonClass: "w-10rem exit-procedure-button ",
                                 text: translate(localeJson, 'exit_procedures'),
                                 icon: <FaArrowRightFromBracket className='mr-1' />,
-                                disabled: (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) ? false : true,
+                                disabled: !isReg,
                                 onClick: () => {
                                     if (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) {
                                         setCheckoutVisible(true)
@@ -425,6 +467,16 @@ export default function EvacueeFamilyDetail() {
                                     }
                                 }
                             }} parentClass={"inline exit-procedure-button "} />
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "w-10rem export-button",
+                                            disabled:isReg,
+                                            text: translate(localeJson, 'delete_confirm'),
+                                            severity: "primary",
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"mt-3 export-button"} />
                         </div>
                     </div>
                 </div>

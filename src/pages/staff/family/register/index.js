@@ -325,7 +325,7 @@ export default function Admission() {
     // address2: "",
     evacuee: "",
     tel: "",
-    password: "",
+    password: "1234",
     questions: null,
     agreeCheckOne: false,
     agreeCheckTwo: false,
@@ -343,7 +343,7 @@ export default function Admission() {
       checked: Yup.boolean().nullable(),
       name_kanji: Yup.string()
         .max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string()
+      name_furigana: Yup.string().nullable()
         .max(100, translate(localeJson, "name_max")),
       dob: Yup.object().shape({
         year: Yup.number().required(
@@ -363,7 +363,7 @@ export default function Admission() {
       age_m: Yup.number()
         .required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string().nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -373,8 +373,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
+        .nullable(),
     });
 
   const evacueeItemSchema = evacueeSchema();
@@ -384,9 +383,9 @@ export default function Admission() {
       name_kanji: Yup.string()
         .required(translate(localeJson, "name_required_changed"))
         .max(100, translate(localeJson, "name_max")),
-      name_furigana: Yup.string()
+      name_furigana: Yup.string().nullable()
         .max(100, translate(localeJson, "name_max")),
-      postalCode: Yup.string().required(translate(localeJson, "postal_code_required"))
+      postalCode: Yup.string().nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -396,8 +395,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
+        .nullable(),
       password: Yup.string()
         .required(translate(localeJson, "family_password_required"))
         .test(
@@ -580,7 +578,7 @@ export default function Admission() {
       address = rowData.address ? rowData.address : "";
       // address2 = rowData.address2 ? rowData.address2 : "";
       postalCode = rowData.postalCode ? rowData.postalCode : "";
-      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
       // formikRef.current.setFieldValue("address2", data.address2 || "");
@@ -724,8 +722,8 @@ export default function Admission() {
     const outputData = {
       place_id: layoutReducer?.user?.place?.id,
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(new Date()),
-      zip_code: inputData.postalCode ? inputData.postalCode.replace(/-/g, "") : null,
-      prefecture_id: inputData.prefecture_id.toString(),
+      zip_code: inputData.postalCode ? inputData.postalCode?.replace(/-/g, "") : null,
+      prefecture_id: inputData.prefecture_id?.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
       tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
@@ -744,8 +742,8 @@ export default function Admission() {
           refugee_name: evacuee.name_furigana,
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
-          zip_code: evacuee.postalCode ? evacuee.postalCode.replace(/-/g, "") : null,
-          prefecture_id: evacuee.prefecture_id.toString(),
+          zip_code: evacuee.postalCode ? evacuee.postalCode?.replace(/-/g, "") : null,
+          prefecture_id: evacuee.prefecture_id?.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
           age: evacuee.age,
@@ -1017,7 +1015,7 @@ export default function Admission() {
                                   }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
-                                  spanText: "*",
+                                  spanText: "",
                                   inputLabelClassName: "block font-bold",
                                   inputLabelSpanClassName: "p-error",
                                   labelMainClassName: "pb-1",
@@ -1189,7 +1187,7 @@ export default function Admission() {
                                 }`,
                               labelProps: {
                                 text: "",
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1257,7 +1255,7 @@ export default function Admission() {
                                     let postalCode = res?.data?.content;
                                     const re = /^[0-9-]+$/;
                                     if (postalCode && re.test(postalCode)) {
-                                      let val = postalCode.replace(/-/g, ""); // Remove any existing hyphens
+                                      let val = postalCode?.replace(/-/g, ""); // Remove any existing hyphens
                                       // Insert hyphen after the first three characters
                                       if (val.length > 3 && val.length <= 7) {
                                         val =
@@ -1288,7 +1286,7 @@ export default function Admission() {
                                 }`,
                               labelProps: {
                                 inputDropdownLabelClassName: "block font-bold",
-                                spanText: "*",
+                                spanText: "",
                                 inputDropdownLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
                               },
@@ -1323,7 +1321,7 @@ export default function Admission() {
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address && touched.address && "p-invalid"
                                 }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1371,7 +1369,7 @@ export default function Admission() {
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address2 && touched.address2 && "p-invalid"
                                 }`,
                               labelProps: {
-                                spanText: "*",
+                                spanText: "",
                                 inputLabelClassName: "block font-bold",
                                 inputLabelSpanClassName: "p-error",
                                 labelMainClassName: "pb-1",
@@ -1723,7 +1721,7 @@ export default function Admission() {
                                             age: person.age,
                                             age_m: person.age_m,
                                             gender: person.gender,
-                                            postalCode: person.postalCode ? person.postalCode.replace(/-/g, "") : "",
+                                            postalCode: person.postalCode ? person.postalCode?.replace(/-/g, "") : "",
                                             prefecture_id: person.prefecture_id,
                                             address: person.address,
                                             //address2: person.address2,

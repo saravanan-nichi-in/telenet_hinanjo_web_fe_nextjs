@@ -195,6 +195,10 @@ export default function EventFamilyDetail() {
                                     <div className='page-header3-sub ml-1'>{familyDetailData[0].age_month}</div>
                                 </div>
                                 <div className='flex align-items-center details-text-overflow'>
+                                    <div className='page-header3'>{translate(localeJson, "gender")}:</div>
+                                    <div className='page-header3-sub ml-1'>{familyDetailData[0].gender}</div>
+                                </div>
+                                <div className='flex align-items-center details-text-overflow'>
                                     <div className='page-header3'>{translate(localeJson, "tel")}:</div>
                                     <div className='page-header3-sub ml-1'>{familyDetailData[0].tel}</div>
                                 </div>

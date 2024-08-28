@@ -160,7 +160,7 @@ export default function StaffFamilyDetail() {
                         special_care_name: tempObj.person_special_cares ? getSpecialCareName(tempObj.person_special_cares, locale) : "",
                         connecting_code: tempObj.person_connecting_code,
                         is_owner: tempObj.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
-                        address: translate(localeJson, 'post_letter') + tempObj.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[tempObj.person_prefecture_id].ja : prefecturesCombined[tempObj.person_prefecture_id].en) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
+                        address: (tempObj.person_postal_code?translate(localeJson, 'post_letter') + tempObj.person_postal_code:"") + " " + (locale == 'ja' ?(tempObj.person_prefecture_id? prefecturesCombined[tempObj.person_prefecture_id].ja:"") : (tempObj.person_prefecture_id?prefecturesCombined[tempObj.person_prefecture_id].en:"")) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
                         evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(tempObj.family_join_date) : getEnglishDateDisplayFormat(tempObj.family_join_date),
                         tel: tempObj?.person_tel && tempObj.person_tel != "00000000000" ? tempObj.person_tel : "",
                         remarks: tempObj.person_note,
@@ -259,7 +259,7 @@ export default function StaffFamilyDetail() {
                             id: index + 1, //evacueeData.family_id,
                             checked: evacueeData.person_is_owner == "0" ? true : false,
                             name: evacueeData.person_name,
-                            name_furigana: evacueeData.person_refugee_name,
+                            name_furigana: evacueeData.person_refugee_name||"",
                             dob: convertedObject,
                             age: evacueeData.person_age,
                             age_m: evacueeData.person_month,
@@ -438,6 +438,12 @@ export default function StaffFamilyDetail() {
                                 </div>
                                 <div className='flex align-items-center'>
                                     <div >
+                                        <span className='page-header3'>{translate(localeJson, "gender")}:</span>
+                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].gender}</span>
+                                    </div>
+                                </div>
+                                <div className='flex align-items-center'>
+                                    <div >
                                         <span className='page-header3'>{translate(localeJson, "tel")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].tel}</span>
                                     </div>
@@ -553,6 +559,12 @@ export default function StaffFamilyDetail() {
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "age_month")}:</span>
                                                 <span className='page-header3-sub ml-1'>{person.person_month}</span>
+                                            </div>
+                                        </div>
+                                        <div className='flex align-items-center'>
+                                            <div className='details-text-overflow'>
+                                                <span className='page-header3'>{translate(localeJson, "gender")}:</span>
+                                                <span className='page-header3-sub ml-1'>{person.gender}</span>
                                             </div>
                                         </div>
                                         <div className='flex align-items-center'>

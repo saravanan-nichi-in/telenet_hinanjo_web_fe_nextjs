@@ -175,9 +175,9 @@ export default function StaffFamilyDetail() {
                         special_care_name: tempObj.person_special_cares ? getSpecialCareName(tempObj.person_special_cares, locale) : "",
                         connecting_code: tempObj.person_connecting_code,
                         is_owner: tempObj.person_is_owner == 0 ? translate(localeJson, 'representative') : "",
-                        address: translate(localeJson, 'post_letter') + tempObj.person_postal_code + " " + (locale == 'ja' ? prefecturesCombined[tempObj.person_prefecture_id].ja : prefecturesCombined[tempObj.person_prefecture_id].en) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
+                        address: (tempObj.person_postal_code?translate(localeJson, 'post_letter') + tempObj.person_postal_code:"") + " " + (locale == 'ja' ?(tempObj.person_prefecture_id? prefecturesCombined[tempObj.person_prefecture_id].ja:"") : (tempObj.person_prefecture_id?prefecturesCombined[tempObj.person_prefecture_id].en:"")) + " " + tempObj.person_address + (tempObj.person_address_default ? tempObj.person_address_default : ""),
                         evacuation_date_time: locale == "ja" ? getJapaneseDateDisplayYYYYMMDDFormat(tempObj.family_join_date) : getEnglishDateDisplayFormat(tempObj.family_join_date),
-                        tel: tempObj?.person_tel && tempObj.person_tel != "00000000000" ? tempObj.person_tel : "",
+                        tel: (tempObj?.person_tel && tempObj.person_tel != "00000000000") ? tempObj.person_tel : "",
                         remarks: tempObj.person_note,
                         withIndividualQuestionAnswer: withIndividualQuestionAnswer,
                     }
@@ -268,14 +268,14 @@ export default function StaffFamilyDetail() {
                             prefecture_id: evacueeData.person_prefecture_id,
                             address: evacueeData.person_address,
                             address2: evacueeData.person_address_default,
-                            tel: evacueeData.person_tel,
+                            tel: evacueeData.person_tel != "00000000000" ? evacueeData.person_tel : "",
                             specialCareType: evacueeData.person_special_cares.map(item => String(item.id)), //evacueeData.person_special_cares,
                             connecting_code: evacueeData.person_connecting_code,
                             remarks: evacueeData.person_note,
                             individualQuestions: individualQuestions,
                         };
                     }),
-                    tel: convertedData.data[0].person_tel,
+                    tel: convertedData.data[0].person_tel != "00000000000" ? convertedData.data[0].person_tel :"",
                     password: decryptedData || "",
                     questions: convertedData.overallQuestions.map((question) => {
                         return {
@@ -447,8 +447,15 @@ export default function StaffFamilyDetail() {
 
                                 <div className='flex align-items-center'>
                                     <div >
+                                        <span className='page-header3'>{translate(localeJson, "gender")}:</span>
+                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].gender}</span>
+                                    </div>
+                                </div>
+
+                                <div className='flex align-items-center'>
+                                    <div >
                                         <span className='page-header3'>{translate(localeJson, "tel")}:</span>
-                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_tel}</span>
+                                        <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].person_tel!= "00000000000" ?personList[individualQuestionnairesContentIDX].person_tel:""}</span>
                                     </div>
                                 </div>
 
@@ -571,8 +578,14 @@ export default function StaffFamilyDetail() {
                                         </div>
                                         <div className='flex align-items-center'>
                                             <div className='details-text-overflow'>
+                                                <span className='page-header3'>{translate(localeJson, "gender")}:</span>
+                                                <span className='page-header3-sub ml-1'>{person.gender}</span>
+                                            </div>
+                                        </div>
+                                        <div className='flex align-items-center'>
+                                            <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "tel")}:</span>
-                                                <span className='page-header3-sub ml-1'>{person.person_tel}</span>
+                                                <span className='page-header3-sub ml-1'>{person.person_tel != "00000000000" ? person.person_tel : ""}</span>
                                             </div>
                                         </div>
                                         <div className='flex align-items-center'>

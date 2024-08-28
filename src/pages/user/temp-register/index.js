@@ -169,7 +169,7 @@ export default function Admission() {
       TempRegisterServices.getActiveEvacuationPlaceList((res) => {
         console.log(res);
         if (res) {
-          let placeList = res?.data?.model?.list;
+          let placeList = res?.data?.model;
           let placeIsAvail = placeList?.find((list) => list.id == place_id);
           if (!placeIsAvail) {
             toastDisplay(
@@ -360,7 +360,7 @@ export default function Admission() {
     // address2: "",
     evacuee: "",
     tel: "",
-    password: "",
+    password: "1234",
     questions: null,
     agreeCheckOne: false,
     agreeCheckTwo: false,
@@ -398,7 +398,7 @@ export default function Admission() {
       age_m: Yup.number().required(translate(localeJson, "age_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -408,8 +408,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "c_perfacture_is_required")),
+        .nullable(),
     });
 
   const evacueeItemSchema = evacueeSchema();
@@ -422,7 +421,7 @@ export default function Admission() {
       name_furigana: Yup.string()
         .max(100, translate(localeJson, "name_max")),
       postalCode: Yup.string()
-        .required(translate(localeJson, "postal_code_required"))
+        .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
         .max(7, translate(localeJson, "postal_code_length")),
       address: Yup.string()
@@ -432,8 +431,7 @@ export default function Admission() {
       //   .nullable()
       //   .max(190, translate(localeJson, "address_max_length")),
       prefecture_id: Yup.string()
-        .nullable()
-        .required(translate(localeJson, "prefecture_required")),
+        .nullable(),
       password: Yup.string()
         .required(translate(localeJson, "family_password_required"))
         .test(
@@ -663,7 +661,7 @@ export default function Admission() {
       postalCode = rowData.postalCode ? rowData.postalCode : "";
       formikRef.current.setFieldValue(
         "postalCode",
-        data.postalCode ? data.postalCode.replace(/-/g, "") : ""
+        data.postalCode ? data.postalCode?.replace(/-/g, "") : ""
       );
       formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
       formikRef.current.setFieldValue("address", data.address);
@@ -812,9 +810,9 @@ export default function Admission() {
       place_id: inputData.evacuationPlace,
       join_date: getGeneralDateTimeSecondSlashDisplayFormat(new Date()),
       zip_code: inputData.postalCode
-        ? inputData.postalCode.replace(/-/g, "")
+        ? inputData.postalCode?.replace(/-/g, "")
         : null,
-      prefecture_id: inputData.prefecture_id.toString(),
+      prefecture_id: inputData.prefecture_id?.toString(),
       address: inputData.address,
       address_default: "",//inputData.address2,
       tel: inputData.tel ? convertToSingleByte(inputData.tel) : null,
@@ -834,9 +832,9 @@ export default function Admission() {
           name: evacuee.name,
           dob: getEnglishDateSlashDisplayFormat(convertedDate),
           zip_code: evacuee.postalCode
-            ? evacuee.postalCode.replace(/-/g, "")
+            ? evacuee.postalCode?.replace(/-/g, "")
             : null,
-          prefecture_id: evacuee.prefecture_id.toString(),
+          prefecture_id: evacuee.prefecture_id?.toString(),
           address: evacuee.address,
           address_default: "",//evacuee.address2,
           age: evacuee.age,
@@ -1215,7 +1213,7 @@ export default function Admission() {
                                         localeJson,
                                         "rep_furigana"
                                       ),
-                                      spanText: "*",
+                                      spanText: "",
                                       inputLabelClassName: "block font-bold",
                                       inputLabelSpanClassName: "p-error",
                                       labelMainClassName: "pb-1",
@@ -1275,7 +1273,7 @@ export default function Admission() {
                                         localeJson,
                                         "phone_number"
                                       ),
-                                      spanText: "*",
+                                      spanText: "",
                                       inputLabelClassName: "block font-bold",
                                       inputLabelSpanClassName: "p-error",
                                       labelMainClassName: "pb-1",
@@ -1354,7 +1352,7 @@ export default function Admission() {
                                     }`,
                                   labelProps: {
                                     text: "",
-                                    spanText: "*",
+                                    spanText: "",
                                     inputLabelClassName: "block font-bold",
                                     inputLabelSpanClassName: "p-error",
                                     labelMainClassName: "pb-1",
@@ -1426,7 +1424,7 @@ export default function Admission() {
                                         let postalCode = res?.data?.content;
                                         const re = /^[0-9-]+$/;
                                         if (postalCode && re.test(postalCode)) {
-                                          let val = postalCode.replace(
+                                          let val = postalCode?.replace(
                                             /-/g,
                                             ""
                                           ); // Remove any existing hyphens
@@ -1465,7 +1463,7 @@ export default function Admission() {
                                   labelProps: {
                                     inputDropdownLabelClassName:
                                       "block font-bold",
-                                    spanText: "*",
+                                    spanText: "",
                                     inputDropdownLabelSpanClassName: "p-error",
                                     labelMainClassName: "pb-1",
                                   },
@@ -1504,7 +1502,7 @@ export default function Admission() {
                                     "p-invalid"
                                     }`,
                                   labelProps: {
-                                    spanText: "*",
+                                    spanText: "",
                                     inputLabelClassName: "block font-bold",
                                     inputLabelSpanClassName: "p-error",
                                     labelMainClassName: "pb-1",
@@ -1559,7 +1557,7 @@ export default function Admission() {
                                     "p-invalid"
                                     }`,
                                   labelProps: {
-                                    spanText: "*",
+                                    spanText: "",
                                     inputLabelClassName: "block font-bold",
                                     inputLabelSpanClassName: "p-error",
                                     labelMainClassName: "pb-1",
@@ -2037,7 +2035,7 @@ export default function Admission() {
                                                   age_m: person.age_m,
                                                   gender: person.gender,
                                                   postalCode: person.postalCode
-                                                    ? person.postalCode.replace(
+                                                    ? person.postalCode?.replace(
                                                       /-/g,
                                                       ""
                                                     )

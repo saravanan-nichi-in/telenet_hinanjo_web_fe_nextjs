@@ -109,7 +109,7 @@ const FamilyListComponent = ({ data, header, eventFlag }) => {
                   {translate(localeJson, "phone_number")}
                 </label>
                 <div className="mt-1 body_table">
-                  {family.family_tel || "-"}
+                  {family.family_tel!= "00000000000" ? family.family_tel : "-"}
                 </div>
               </div>
             </div>
@@ -192,7 +192,7 @@ const FamilyListComponent = ({ data, header, eventFlag }) => {
                           {translate(localeJson, "phone_number")}
                         </label>
                         <div className="mt-1 body_table">
-                          {family.person_tel || "-"}
+                          {family.person_tel != "00000000000" ?family.person_tel: "-"}
                         </div>
                       </div>
                     </div>
