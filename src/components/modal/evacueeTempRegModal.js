@@ -1106,10 +1106,40 @@ export default function EvacueeTempRegModal(props) {
                                   if (res?.data?.content) {
                                     const re = /^[0-9-]+$/;
                                     if (re.test(res?.data?.content)) {
+                                      let val = res?.data?.content?.substring(0, 7)
                                       setFieldValue(
                                         "postalCode",
-                                        res?.data?.content
+                                        val
                                       );
+
+                                      if (val?.length == 7) {
+                                        let payload = convertToSingleByte(val);
+                                        getAddressFromZipCode(payload, (response) => {
+                                          if (response) {
+                                            let address = response;
+                                            setZipAddress(response);
+                                            const selectedPrefecture =
+                                              prefectures.find(
+                                                (prefecture) =>
+                                                  prefecture.value == address.prefcode
+                                              );
+                                            setFieldValue(
+                                              "prefecture_id",
+                                              selectedPrefecture?.value
+                                            );
+                                            setPostalCodePrefectureId(selectedPrefecture?.value)
+                                            setFieldValue(
+                                              "address",
+                                              address.address2 + address.address3 ||
+                                              ""
+                                            );
+                                          } else {
+                                            setFieldValue("prefecture_id", "");
+                                            setFieldValue("address", "");
+                                            setPostalCodePrefectureId('')
+                                          }
+                                        })
+                                      }
                                     }
                                   }
                                 });
