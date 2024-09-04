@@ -33,6 +33,7 @@ import {
   Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping,
   QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
 } from "@/components";
+import _ from "lodash";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -1588,12 +1589,15 @@ export default function Admission() {
                                         {translate(localeJson, "c_dob")}
                                       </label>
                                     </div>
-                                    {locale == "ja"
-                                      ? getJapaneseDateDisplayYYYYMMDDFormat(
-                                        `${person.dob.year}-${person.dob.month}-${person.dob.date}`
-                                      )
-                                      : getEnglishDateDisplayFormat(`${person.dob.year}-${person.dob.month}-${person.dob.date}`)
-                                    }
+                                    {!_.isEmpty(person.dob) ? (
+                                      locale == "ja"
+                                        ? getJapaneseDateDisplayYYYYMMDDFormat(
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )
+                                        : getEnglishDateDisplayFormat(
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )
+                                        ) : "-"}
                                     {/* <div className="body_table">{person.dob}</div> */}
                                   </div>
                                   <div className=" mt-3">
