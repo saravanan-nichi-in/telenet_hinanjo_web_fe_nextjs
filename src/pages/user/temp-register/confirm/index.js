@@ -104,9 +104,9 @@ const TempRegisterConfirm = () => {
         refugee_name: person.refugee_name || "-",
         name: person.name || "-",
         dob:
-          locale == "ja"
+        person.dob? locale == "ja"
             ? getJapaneseDateDisplayYYYYMMDDFormat(person.dob)
-            : getEnglishDateDisplayFormat(person.dob),
+            : getEnglishDateDisplayFormat(person.dob):"-",
         age: person.age + "" || "-",
         age_month: person.month + "" || "-",
         gender: getGenderValue(person.gender) || "-",

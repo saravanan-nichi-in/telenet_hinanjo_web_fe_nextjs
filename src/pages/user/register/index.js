@@ -42,6 +42,7 @@ import {
   TempRegisterServices,
   CheckInOutServices,
 } from "@/services";
+import _ from "lodash";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -845,13 +846,13 @@ export default function Admission() {
   function createEvacuee(evacuees) {
     const id = evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1;
     const checked = evacuee && evacuee.length > 0 ? false : true;
-    const birthDate = new Date(evacuees.dob);
-    const convertedObject = {
+   let birthDate = new Date(evacuees.dob);
+   let convertedObject = {
       year: birthDate.getFullYear(),
       month: (birthDate.getMonth() + 1).toString().padStart(2, "0"), // Adding 1 because months are zero-based
       date: birthDate.getDate().toString().padStart(2, "0"),
     };
-    let age = calculateAge(birthDate);
+   let age = calculateAge(birthDate);
     const boundObject = {
       id: id,
       checked: checked,
@@ -862,7 +863,7 @@ export default function Admission() {
       dob: evacuees ? convertedObject || "" : "",
       age: evacuees ? age.years || "" : "",
       age_m:
-        evacuees && evacuees.age && age.months !== undefined ? age.months : "",
+        evacuees && age.months !== undefined ? age.months : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -1709,13 +1710,15 @@ export default function Admission() {
                                           {translate(localeJson, "c_dob")}
                                         </label>
                                       </div>
-                                      {locale == "ja"
+                                      {!_.isEmpty(person.dob) ? (
+                                      locale == "ja"
                                         ? getJapaneseDateDisplayYYYYMMDDFormat(
                                             `${person.dob.year}-${person.dob.month}-${person.dob.date}`
                                           )
                                         : getEnglishDateDisplayFormat(
                                             `${person.dob.year}-${person.dob.month}-${person.dob.date}`
-                                          )}
+                                          )
+                                        ) : "-"}
                                       {/* <div className="body_table">{person.dob}</div> */}
                                     </div>
                                     <div className=" mt-3">
@@ -1767,16 +1770,7 @@ export default function Admission() {
                                     </div>
                                   </div>
                                   {expandedFamilies?.includes(person.id) && (
-
-                                    <><div className=" mt-3">
-                                      <div className=" flex_row_space_between">
-                                        <label className="header_table">
-                                          {translate(localeJson, "c_address")}
-                                        </label>
-                                      </div>
-                                      <div className="body_table">{person.postalCode ? translate(localeJson, "post_letter") + person.postalCode : ""}</div>
-                                      <div className="body_table">{getPrefectureName(parseInt(person?.prefecture_id))}{person.address}</div>
-                                    </div>
+                                    <>
                                       <div className=" mt-3">
                                         <div className=" flex_row_space_between">
                                           <label className="header_table">
