@@ -934,7 +934,7 @@ export default function Admission() {
       dob: evacuees ? convertedObject || "" : "",
       age: evacuees ? age.years || "" : "",
       age_m:
-        evacuees && evacuees.age && age.months !== undefined ? age.months : "",
+        evacuees && age.months !== undefined ? age.months : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
