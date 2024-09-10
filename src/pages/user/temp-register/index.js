@@ -47,6 +47,8 @@ import {
   CheckInOutServices,
   MapServices,
 } from "@/services";
+import _ from "lodash";
+
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -932,7 +934,7 @@ export default function Admission() {
       dob: evacuees ? convertedObject || "" : "",
       age: evacuees ? age.years || "" : "",
       age_m:
-        evacuees && evacuees.age && age.months !== undefined ? age.months : "",
+        evacuees && age.months !== undefined ? age.months : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -1806,13 +1808,15 @@ export default function Admission() {
                                               {translate(localeJson, "c_dob")}
                                             </label>
                                           </div>
-                                          {locale == "ja"
-                                            ? getJapaneseDateDisplayYYYYMMDDFormat(
-                                              `${person.dob.year}-${person.dob.month}-${person.dob.date}`
-                                            )
-                                            : getEnglishDateDisplayFormat(
-                                              `${person.dob.year}-${person.dob.month}-${person.dob.date}`
-                                            )}
+                                          {!_.isEmpty(person.dob) ? (
+                                      locale == "ja"
+                                        ? getJapaneseDateDisplayYYYYMMDDFormat(
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )
+                                        : getEnglishDateDisplayFormat(
+                                            `${person.dob.year}-${person.dob.month}-${person.dob.date}`
+                                          )
+                                        ) : "-"}
                                           {/* <div className="body_table">{person.dob}</div> */}
                                         </div>
                                         <div className=" mt-3">
