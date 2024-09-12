@@ -222,28 +222,64 @@ const Canvas = ({
     }
   }, [image, previewCanvasRef.current, cvLoaded, mode, rotateAngel])
 
+  // Featured
+  // const onDrag = useCallback((position, area) => {
+  //   const { x, y } = position
+
+  //   const magnCtx = magnifierCanvasRef.current.getContext('2d')
+  //   clearMagnifier()
+
+  //   // TODO we should make those 5, 10 and 20 values proportionate
+  //   // To the point size
+  //   magnCtx.drawImage(
+  //     previewCanvasRef.current,
+  //     x - (pointSize - 10),
+  //     y - (pointSize - 10),
+  //     pointSize + 5,
+  //     pointSize + 5,
+  //     x + 10,
+  //     y - 90,
+  //     pointSize + 20,
+  //     pointSize + 20
+  //   )
+
+  //   setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }))
+  // }, [])
+
   const onDrag = useCallback((position, area) => {
-    const { x, y } = position
+    const { x, y } = position;
+    const magnCtx = magnifierCanvasRef.current.getContext('2d');
+    clearMagnifier();
 
-    const magnCtx = magnifierCanvasRef.current.getContext('2d')
-    clearMagnifier()
+    const magnifierPadding = pointSize * 0.3; // Increase padding for a larger magnifier
+    const magnifierOffsetX = pointSize * 1.8; // Increase offset to position larger magnifier
+    const magnifierOffsetY = pointSize * -1.8; // Adjust for larger magnifier
 
-    // TODO we should make those 5, 10 and 20 values proportionate
-    // To the point size
+    // Canvas boundary
+    const canvasWidth = previewCanvasRef.current.width;
+    const canvasHeight = previewCanvasRef.current.height;
+
+    // Clamp the drawing positions within the canvas boundaries
+    const startX = Math.max(0, Math.min(x - (pointSize - magnifierPadding), canvasWidth - pointSize));
+    const startY = Math.max(0, Math.min(y - (pointSize - magnifierPadding), canvasHeight - pointSize));
+
+    const targetX = Math.max(0, Math.min(x + magnifierOffsetX, canvasWidth - pointSize - magnifierOffsetX));
+    const targetY = Math.max(0, Math.min(y + magnifierOffsetY, canvasHeight - pointSize - magnifierOffsetY));
+
     magnCtx.drawImage(
       previewCanvasRef.current,
-      x - (pointSize - 10),
-      y - (pointSize - 10),
-      pointSize + 5,
-      pointSize + 5,
-      x + 10,
-      y - 90,
-      pointSize + 20,
-      pointSize + 20
-    )
+      startX,
+      startY,
+      pointSize + magnifierPadding,
+      pointSize + magnifierPadding,
+      targetX,
+      targetY,
+      pointSize + magnifierPadding * 1.5, // Slightly larger size for magnifier
+      pointSize + magnifierPadding * 1.5
+    );
 
-    setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }))
-  }, [])
+    setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }));
+  }, [pointSize]);
 
   const onStop = useCallback((position, area, cropPoints) => {
     const { x, y } = position
