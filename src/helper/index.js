@@ -60,7 +60,7 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
             day: '2-digit',
         });
         const [year, month, day] = formattedDate.split('/');
-        return `${year}年${parseInt(month)}月${parseInt(day)}日`;
+        return `${year}年${(month)}月${(day)}日`;
     }
     return "";
 }
