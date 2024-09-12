@@ -53,17 +53,36 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
  */
 export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
     if (dateTime) {
-        const date = new Date(dateTime);
-        const formattedDate = date.toLocaleDateString('ja-JP', {
+        // Determine whether the date format uses '-' or '/'
+        let dateParts;
+        if (dateTime.includes('-')) {
+            dateParts = dateTime.split('-'); // Handle format with '-'
+        } else if (dateTime.includes('/')) {
+            dateParts = dateTime.split('/'); // Handle format with '/'
+        } else {
+            return ""; // Invalid format
+        }
+
+        const year = dateParts[0];
+        const month = dateParts[1].padStart(2, '0'); // Ensure two digits for month
+        const day = dateParts[2].padStart(2, '0'); // Ensure two digits for day
+
+        const formattedDate = new Date(`${year}-${month}-${day}`);
+        if (isNaN(formattedDate.getTime())) {
+            return ""; // Invalid date
+        }
+
+        const displayDate = formattedDate.toLocaleDateString('ja-JP', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
         });
-        const [year, month, day] = formattedDate.split('/');
-        return `${year}年${parseInt(month)}月${parseInt(day)}日`;
+        const [displayYear, displayMonth, displayDay] = displayDate.split('/');
+        return `${displayYear}年${displayMonth}月${displayDay}日`;
     }
     return "";
 }
+
 
 /**
  * Get English display format
@@ -72,13 +91,40 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
  */
 export const getEnglishDateDisplayFormat = (dateTime) => {
     if (dateTime) {
+        // Safari and other browsers should use the same format
+        // Detect if the date is a string and needs reformatting
+        if (typeof dateTime === 'string') {
+            // Replace '/' with '-' for cross-browser compatibility
+            dateTime = dateTime.replace(/\//g, '-');
+
+            // Split the date into parts
+            const dateParts = dateTime.split('-');
+
+            // Ensure that month and day are two digits
+            if (dateParts[1] && dateParts[1].length === 1) {
+                dateParts[1] = '0' + dateParts[1]; // Pad month
+            }
+            if (dateParts[2] && dateParts[2].length === 1) {
+                dateParts[2] = '0' + dateParts[2]; // Pad day
+            }
+
+            // Reconstruct the date in the format YYYY-MM-DD
+            dateTime = dateParts.join('-');
+        }
+
+        // Now create the date object
         const date = new Date(dateTime);
 
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
+        // Check if the date is valid
+        if (!isNaN(date.getTime())) {
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2); // Ensure two digits for month
+            const day = ('0' + date.getDate()).slice(-2); // Ensure two digits for day
 
-        return `${year}-${month}-${day}`;
+            return `${year}-${month}-${day}`;
+        } else {
+            return ""; // Invalid date
+        }
     }
     return "";
 }
