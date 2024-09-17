@@ -59,6 +59,7 @@ import { BaseTemplate } from "@/components/questionarrie";
 import Doughnut from "@/components/chart";
 import CustomHeader from "@/components/customHeader";
 import { DateTime, Calendar, DateTimeDisplay } from "@/components/date&time";
+import { DocumentScanner } from "@/components/scanner";
 
 export {
   NormalTable,
@@ -134,5 +135,6 @@ export {
   StockpileCreateEditModal,
   UserEventRegModal,
   YaburuModal,
-  DateTimeDisplay
+  DateTimeDisplay,
+  DocumentScanner
 }
