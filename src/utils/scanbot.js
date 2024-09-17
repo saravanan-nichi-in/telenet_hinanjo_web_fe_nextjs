@@ -29,7 +29,7 @@ class ScanbotSDKService {
                 const ScanbotSDKModule = await import('scanbot-web-sdk');
                 this.sdk = await ScanbotSDKModule.default.initialize({
                     licenseKey: this.LICENSE_KEY,
-                    engine: '/scanbot-sdk-wasm/', // Path to WASM files
+                    engine: 'wasm', // Path to WASM files
                 });
             }
         } catch (error) {
