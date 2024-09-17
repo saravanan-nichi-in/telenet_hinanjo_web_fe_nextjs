@@ -9,16 +9,17 @@ const DocumentScanner = () => {
     useEffect(() => {
         async function initScanner() {
             try {
-                const ScanbotSDKModule = (await import('scanbot-web-sdk')).default;
+                const ScanbotSDKModule = await import('scanbot-web-sdk');
+                const ScanbotSDK = ScanbotSDKModule.default || ScanbotSDKModule;
 
-                const scanbotSDK = await ScanbotSDKModule.initialize({
+                const scanbotSDK = await ScanbotSDK.initialize({
                     licenseKey: process.env.NEXT_PUBLIC_SCANBOT_LICENSE_KEY,
-                    engine: '/scanbot-sdk-wasm/', // WASM engine path
+                    // engine: '/scanbot-sdk-wasm/', // Ensure this path is correct
                 });
 
-                console.log(scanbotSDK); // Log to inspect the SDK object
+                console.log('Scanbot SDK initialized:', scanbotSDK); // Inspect the SDK object
 
-                if (scanbotSDK.UI) {
+                // if (scanbotSDK.UI) {
                     scanbotSDK.UI.startDocumentScanner({
                         containerId: scannerContainerRef.current.id,
                         onDocumentDetected: (result) => {
@@ -28,9 +29,9 @@ const DocumentScanner = () => {
                             console.error('Scanner error:', error);
                         },
                     });
-                } else {
-                    console.error('Scanbot SDK UI component is unavailable');
-                }
+                // } else {
+                //     console.error('Scanbot SDK UI component is unavailable');
+                // }
             } catch (error) {
                 console.error('Error initializing Scanbot SDK:', error);
             }
