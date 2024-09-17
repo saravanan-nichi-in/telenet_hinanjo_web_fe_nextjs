@@ -1,14 +1,24 @@
-'use client';
+"use client";
 
-import { DocumentScanner } from '@/components';
+import { useEffect } from "react";
+import { ScanbotSDKService } from "@/utils/scanbot"
 
-const ScannerPage = () => {
+export default function DocumentScanner() {
+    useEffect(() => {
+        const scannerService = ScanbotSDKService.getInstance();
+
+        // Initialize the document scanner
+        scannerService.createDocumentScanner("document-scanner");
+
+        // Cleanup function to dispose of the scanner
+        return () => {
+            scannerService.disposeDocumentScanner();
+        };
+    }, []);
+
     return (
         <div>
-            <h1>Scan Documents</h1>
-            <DocumentScanner />
+            <div id="document-scanner" style={{ width: "100%", height: "calc(100vh - 60px)" }} />
         </div>
     );
-};
-
-export default ScannerPage;
+}
