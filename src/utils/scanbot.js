@@ -14,21 +14,7 @@ export default class ScanbotSDKService {
         this.barcodeScanner = undefined;
         this.croppingView = undefined;
         this.documents = [];
-        this.LICENSE_KEY = "UjaU0WHQNZE5LO9+19rYLirNhwqnFT" +
-            "CZn5GbPFtnCLD0Mk4AJEk8UuIfFyvT" +
-            "R5Yzt/ukx4pXJivhJPZ7y/wVZQxhh3" +
-            "J8gfpUNmr8qJau0bTniVnM7ow+JVwK" +
-            "FP3m3P5BWLdbQEUninhP3s39clahz8" +
-            "Zq7ZS92lnwyAQZGj/oubyWyt7dRMlj" +
-            "c5WDIqsZjbDLH4tYwPl1C7FQTKfTwo" +
-            "HAVeph5luqKBfoANlX6R4TtqCQxfEo" +
-            "Il8dMD7r4kI1uyVuvWoiwNRhFrAyNa" +
-            "fUGvJtUbfQcAlDL5P+GcidLe2acsuY" +
-            "8PDqD/BmvL5f5xspwVKbjF3Xskjhfh" +
-            "H9jxT2dJpq/A==\nU2NhbmJvdFNESw" +
-            "podHRwczovL3NjYW5ib3QtdGVsZW5l" +
-            "dC52ZXJjZWwuYXBwLwoxNzI3MzA4Nz" +
-            "k5CjgzODg2MDcKMTk=\n";
+        this.LICENSE_KEY = "dKyz+1oEEfFy6jDktgyAns+wzgbaa5" +"PdCLVA/gJHP0QcmeEgO3zkOsx9wTxp" +"3XhZwFtr39noJrEznToTNtnTdAzsi4" +"7pyKQTzLLBMEmPcgP0otlUjues2ymL" +"6ro54cMa8CSkwh1WFfjbNoapEXRcRx" +"+RKDdCfYmt1kxfbPD8LcQjtI7t9sDE" +"8/smWrSDw0RCA2UePuHgBjNEBnv7Sl" +"o8Kq6i0DXtUmsDWfb+lw94dRVMxES0" +"2NUYlR/OB9SHYg4IXrRdhwAMM0Okud" +"8Sg2zDG7LQMGd8UiqdEtT1/Mls223v" +"cbOlSMk7mhH5nANmNfGft1UODZNbB9" +"pzmOw69GXV3g==\nU2NhbmJvdFNESw" +"psb2NhbGhvc3R8c2NhbmJvdC10ZWxl" +"bmV0LnZlcmNlbC5hcHAKMTcyNzMwOD" +"c5OQo4Mzg4NjA3Cjg=\n";
     }
 
     async initialize() {
