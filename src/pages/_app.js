@@ -8,7 +8,7 @@ import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
 import withAuth from '@/middleware/withAuth';
-// import ScanbotSDKService from "@/utils/scanbot";
+import ScanbotSDKService from "@/utils/scanbot";
 
 /**
  * Import global CSS for entire application
@@ -28,12 +28,12 @@ function MyApp({ Component, pageProps, authorizedStatus }) {
         borderRadius: '5px',
     };
 
-    // useEffect(() => {
-    //     async function loadSDK() {
-    //         await ScanbotSDKService.instance.initialize();
-    //     }
-    //     loadSDK();
-    // }, [])
+    useEffect(() => {
+        async function loadSDK() {
+            await ScanbotSDKService.instance.initialize();
+        }
+        loadSDK();
+    }, [])
 
     return (
         <OpenCvProvider>
