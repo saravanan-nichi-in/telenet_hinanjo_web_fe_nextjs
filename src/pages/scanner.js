@@ -29,8 +29,10 @@ export default function DocumentScanner() {
                             console.log("Document detected with id:", id);
                             console.log("Document result:", document);
 
+                            router.push(`/document/?id=${id}`);
+
                             // Step 3: After detecting the document, navigate or perform other actions
-                            await ScanbotSDKService.instance.openCroppingView('document-scanner', id);
+                            // await ScanbotSDKService.instance.openCroppingView('document-scanner', id);
                             // Optionally, handle additional actions like fetching documents
                             // await ScanbotSDKService.instance.getDocuments();
                         }
