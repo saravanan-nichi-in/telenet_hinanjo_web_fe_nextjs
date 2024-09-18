@@ -14,22 +14,21 @@ export default class ScanbotSDKService {
         this.barcodeScanner = undefined;
         this.croppingView = undefined;
         this.documents = [];
-        // this.LICENSE_KEY = "gKi8cGara9K5hS1ybtLQpG9DK3Dp3s" +
-        //     "xHF0nTGISWCtkWmYGVg8y8ICv8Fzpm" +
-        //     "Jwc5Q8r0F2wVKUA6aJUdc7Pc8QhPjq" +
-        //     "JXpaEzfdzvK4gMkpDdxkKFmN7vGhZ6" +
-        //     "EW9UG/Ymb92u7hXyqP9eDdWiuipcHR" +
-        //     "hmUv4c0/3djJVR/A1m6bfT67dCAzMu" +
-        //     "QFHPuqoRydODM7Pg355cUuvo1SVTtt" +
-        //     "0uBjcVEfuzr6VK94eUse5WjIzbBH4P" +
-        //     "j7yWq4OwIURhJ5ggXeuoAD2jhUIV/8" +
-        //     "2wpZtlJEkmFAqPgZcw9yNkQJOu/kHj" +
-        //     "sZCKX4FlITOQHQMbTZnLCFk+kzCNe4" +
-        //     "dBDwUSpPkh9g==\nU2NhbmJvdFNESw" +
-        //     "psb2NhbGhvc3R8cmFrdXJha3Uubmlj" +
-        //     "aGkuaW4KMTcyNzEzNTk5OQo4Mzg4Nj" +
-        //     "A3Cjg=\n";
-        this.LICENSE_KEY = "AcmKWw3Vjwo32+xbMIsC0lGJZ4TxBM" +"do7EHqSoqQEAV1Cv9xxUSwFqhOVwMD" +"aATIrxZUBpPG2qyb0IdOeANdxXozqN" +"qoFqBwIJbqDXW+cxi3REUJMgAxNUaa" +"E/8u/gNsPJHleHUH99GwqPbwv+jYIC" +"7ElUt4zp9+MrGQoc29P8KBBC4yAzpZ" +"ouF/+wxGsJmSKBdX29HxsJTgcgYol9" +"OcFQ8mfEA6tHgrKFS6fg4aTyCtGPif" +"SbGBWZHlNNgLWt3GCtC+jEbc9rkmsJ" +"TQKWjG6EejN2Cj71ueehv8CkR+TW1r" +"O5MoGFozQ08deiOBruCZwGnHp0erUC" +"VVk1y7a3PN2w==\nU2NhbmJvdFNESw" +"psb2NhbGhvc3R8c2NhbmJvdC1uZW9u" +"LnZlcmNlbC5hcHAKMTcyNzMwODc5OQ" +"o4Mzg4NjA3Cjg=\n";
+        this.LICENSE_KEY = "UjaU0WHQNZE5LO9+19rYLirNhwqnFT" +
+            "CZn5GbPFtnCLD0Mk4AJEk8UuIfFyvT" +
+            "R5Yzt/ukx4pXJivhJPZ7y/wVZQxhh3" +
+            "J8gfpUNmr8qJau0bTniVnM7ow+JVwK" +
+            "FP3m3P5BWLdbQEUninhP3s39clahz8" +
+            "Zq7ZS92lnwyAQZGj/oubyWyt7dRMlj" +
+            "c5WDIqsZjbDLH4tYwPl1C7FQTKfTwo" +
+            "HAVeph5luqKBfoANlX6R4TtqCQxfEo" +
+            "Il8dMD7r4kI1uyVuvWoiwNRhFrAyNa" +
+            "fUGvJtUbfQcAlDL5P+GcidLe2acsuY" +
+            "8PDqD/BmvL5f5xspwVKbjF3Xskjhfh" +
+            "H9jxT2dJpq/A==\nU2NhbmJvdFNESw" +
+            "podHRwczovL3NjYW5ib3QtdGVsZW5l" +
+            "dC52ZXJjZWwuYXBwLwoxNzI3MzA4Nz" +
+            "k5CjgzODg2MDcKMTk=\n";
     }
 
     async initialize() {
