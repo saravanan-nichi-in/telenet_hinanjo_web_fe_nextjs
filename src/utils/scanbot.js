@@ -29,7 +29,7 @@ export default class ScanbotSDKService {
         //     "psb2NhbGhvc3R8cmFrdXJha3Uubmlj" +
         //     "aGkuaW4KMTcyNzEzNTk5OQo4Mzg4Nj" +
         //     "A3Cjg=\n";
-        this.LICENSE_KEY = "AcmKWw3Vjwo32+xbMIsC0lGJZ4TxBM" + "do7EHqSoqQEAV1Cv9xxUSwFqhOVwMD" + "aATIrxZUBpPG2qyb0IdOeANdxXozqN" + "qoFqBwIJbqDXW+cxi3REUJMgAxNUaa" + "E/8u/gNsPJHleHUH99GwqPbwv+jYIC" + "7ElUt4zp9+MrGQoc29P8KBBC4yAzpZ" + "ouF/+wxGsJmSKBdX29HxsJTgcgYol9" + "OcFQ8mfEA6tHgrKFS6fg4aTyCtGPif" + "SbGBWZHlNNgLWt3GCtC+jEbc9rkmsJ" + "TQKWjG6EejN2Cj71ueehv8CkR+TW1r" + "O5MoGFozQ08deiOBruCZwGnHp0erUC" + "VVk1y7a3PN2w==\nU2NhbmJvdFNESw" + "psb2NhbGhvc3R8c2NhbmJvdC1uZW9u" + "LnZlcmNlbC5hcHAKMTcyNzMwODc5OQ" + "o4Mzg4NjA3Cjg=\n";
+        this.LICENSE_KEY = "AcmKWw3Vjwo32+xbMIsC0lGJZ4TxBM" +"do7EHqSoqQEAV1Cv9xxUSwFqhOVwMD" +"aATIrxZUBpPG2qyb0IdOeANdxXozqN" +"qoFqBwIJbqDXW+cxi3REUJMgAxNUaa" +"E/8u/gNsPJHleHUH99GwqPbwv+jYIC" +"7ElUt4zp9+MrGQoc29P8KBBC4yAzpZ" +"ouF/+wxGsJmSKBdX29HxsJTgcgYol9" +"OcFQ8mfEA6tHgrKFS6fg4aTyCtGPif" +"SbGBWZHlNNgLWt3GCtC+jEbc9rkmsJ" +"TQKWjG6EejN2Cj71ueehv8CkR+TW1r" +"O5MoGFozQ08deiOBruCZwGnHp0erUC" +"VVk1y7a3PN2w==\nU2NhbmJvdFNESw" +"psb2NhbGhvc3R8c2NhbmJvdC1uZW9u" +"LnZlcmNlbC5hcHAKMTcyNzMwODc5OQ" +"o4Mzg4NjA3Cjg=\n";
     }
 
     async initialize() {
