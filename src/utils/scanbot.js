@@ -1,22 +1,34 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
-class ScanbotSDKService {
+// Dynamically import ScanbotSDK
+const ScanbotSDK = dynamic(() => import('scanbot-web-sdk'), { ssr: false });
+
+export default class ScanbotSDKService {
+    static instance = new ScanbotSDKService();
+
     constructor() {
         this.sdk = undefined;
         this.documentScanner = undefined;
         this.barcodeScanner = undefined;
         this.croppingView = undefined;
         this.documents = [];
-        this.LICENSE_KEY = process.env.NEXT_PUBLIC_SCANBOT_LICENSE_KEY;
-    }
-
-    static getInstance() {
-        if (!ScanbotSDKService.instance) {
-            ScanbotSDKService.instance = new ScanbotSDKService();
-        }
-        return ScanbotSDKService.instance;
+        this.LICENSE_KEY = "gKi8cGara9K5hS1ybtLQpG9DK3Dp3s" +
+            "xHF0nTGISWCtkWmYGVg8y8ICv8Fzpm" +
+            "Jwc5Q8r0F2wVKUA6aJUdc7Pc8QhPjq" +
+            "JXpaEzfdzvK4gMkpDdxkKFmN7vGhZ6" +
+            "EW9UG/Ymb92u7hXyqP9eDdWiuipcHR" +
+            "hmUv4c0/3djJVR/A1m6bfT67dCAzMu" +
+            "QFHPuqoRydODM7Pg355cUuvo1SVTtt" +
+            "0uBjcVEfuzr6VK94eUse5WjIzbBH4P" +
+            "j7yWq4OwIURhJ5ggXeuoAD2jhUIV/8" +
+            "2wpZtlJEkmFAqPgZcw9yNkQJOu/kHj" +
+            "sZCKX4FlITOQHQMbTZnLCFk+kzCNe4" +
+            "dBDwUSpPkh9g==\nU2NhbmJvdFNESw" +
+            "psb2NhbGhvc3R8cmFrdXJha3Uubmlj" +
+            "aGkuaW4KMTcyNzEzNTk5OQo4Mzg4Nj" +
+            "A3Cjg=\n";
     }
 
     async initialize() {
@@ -26,10 +38,10 @@ class ScanbotSDKService {
 
         try {
             if (typeof window !== 'undefined') {
-                const ScanbotSDKModule = await import('scanbot-web-sdk');
-                this.sdk = await ScanbotSDKModule.default.initialize({
+                const reference = (await import('scanbot-web-sdk')).default;
+                this.sdk = await reference.initialize({
                     licenseKey: this.LICENSE_KEY,
-                    engine: 'wasm', // Path to WASM files
+                    engine: 'wasm',
                 });
             }
         } catch (error) {
@@ -37,16 +49,22 @@ class ScanbotSDKService {
         }
     }
 
-    async createDocumentScanner(containerId) {
+    async createDocumentScanner(containerId, onDocumentDetected) {
         await this.initialize();
+
+        if (!this.sdk) {
+            console.error('SDK not initialized');
+            return;
+        }
 
         const config = {
             containerId: containerId,
             onDocumentDetected: async (e) => {
                 const id = (Math.random() + 1).toString(36).substring(7);
                 const base64 = await this.sdk.toDataUrl(e.cropped || e.original);
-                this.documents.push({ id: id, image: base64, result: e });
-                this.sdk.utils.flash();
+                await this.documents.push({ id, image: base64, result: e });
+                await this.sdk.utils.flash();
+                onDocumentDetected(id, e);
             },
             onError: (error) => {
                 console.log('Encountered error scanning documents:', error);
@@ -66,6 +84,11 @@ class ScanbotSDKService {
 
     async createBarcodeScanner(containerId, onBarcodeFound) {
         await this.initialize();
+
+        if (!this.sdk) {
+            console.error('SDK not initialized');
+            return;
+        }
 
         const config = {
             containerId: containerId,
@@ -118,6 +141,8 @@ class ScanbotSDKService {
     }
 
     async openCroppingView(containerId, id) {
+        console.log(this.documents);
+
         if (!id) {
             console.log('No document id provided');
             return;
@@ -170,12 +195,10 @@ class ScanbotSDKService {
     }
 }
 
-class ScanbotDocument {
+export class ScanbotDocument {
     constructor() {
         this.id = undefined;
         this.image = undefined;
         this.result = undefined;
     }
 }
-
-export { ScanbotSDKService, ScanbotDocument };
