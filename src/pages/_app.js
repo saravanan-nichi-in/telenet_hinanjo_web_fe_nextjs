@@ -1,4 +1,4 @@
-import React, { useEffect   } from 'react';
+import React, { useEffect } from 'react';
 import { OpenCvProvider } from 'opencv-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
