@@ -89,7 +89,8 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
  * @param {*} dateTime 
  * @returns 
  */
-export const getEnglishDateDisplayFormat = (dateTime) => {
+export const getEnglishDateDisplayFormat = (dateTimes) => {
+    let dateTime = getGeneralDateTimeDisplayFormat(dateTimes);
     if (dateTime) {
         // Safari and other browsers should use the same format
         // Detect if the date is a string and needs reformatting
