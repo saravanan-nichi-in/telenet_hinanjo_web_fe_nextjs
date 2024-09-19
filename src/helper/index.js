@@ -51,7 +51,8 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
  * @param {*} dateTime 
  * @returns 
  */
-export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
+export function getJapaneseDateDisplayYYYYMMDDFormat(dateTimes) {
+    let dateTime = getGeneralDateTimeDisplayFormat(dateTimes)
     if (dateTime) {
         // Determine whether the date format uses '-' or '/'
         let dateParts;
@@ -89,8 +90,7 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
  * @param {*} dateTime 
  * @returns 
  */
-export const getEnglishDateDisplayFormat = (dateTimes) => {
-    let dateTime = getGeneralDateTimeDisplayFormat(dateTimes);
+export const getEnglishDateDisplayFormat = (dateTime) => {
     if (dateTime) {
         // Safari and other browsers should use the same format
         // Detect if the date is a string and needs reformatting
