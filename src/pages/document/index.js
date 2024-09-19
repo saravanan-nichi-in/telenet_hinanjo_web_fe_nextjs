@@ -4,24 +4,22 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 
 import ScanbotSDKService from "@/utils/scanbot";
-import Header from "@/subviews/header";
 import FloatingActionButton from "@/subviews/floating-action-button";
 import DocumentFetch from "@/utils/DocumentFetch";
 
-export default function Document() {
+function Document() {
     const router = useRouter();
     const [document, setDocument] = useState(null);
 
-    useEffect(() => {
-        ScanbotSDKService.instance.onCropApplied = () => {
-            setDocument(document);
-            router.refresh();
-        };
-    }, [router, document]);
+    // useEffect(() => {
+    //     ScanbotSDKService.instance.onCropApplied = () => {
+    //         setDocument(document);
+    //         router.refresh();
+    //     };
+    // }, [router, document]);
 
     return (
         <div>
-            <Header backPath={"/pages/document-list"} />
             <div style={{
                 width: "100%",
                 height: "calc(100vh - 60px)",
@@ -51,3 +49,9 @@ export default function Document() {
         </div>
     );
 }
+
+Document.getLayout = function getLayout(page) {
+    return page;
+};
+
+export default Document;

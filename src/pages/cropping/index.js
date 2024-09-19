@@ -4,17 +4,15 @@ import { Suspense, useState } from "react";
 import { useRouter } from 'next/navigation';
 
 import ScanbotSDKService from "@/utils/scanbot";
-import Header from "@/subviews/header";
 import FloatingActionButton from "@/subviews/floating-action-button";
 import DocumentFetch from "@/utils/DocumentFetch";
 
-export default function Cropping() {
+function Cropping() {
     const router = useRouter();
     const [document, setDocument] = useState(null);
 
     return (
         <div>
-            <Header backPath={`/pages/document?id=${document?.id}`} />
             <div style={{
                 display: "flex",
                 padding: 10,
@@ -33,15 +31,29 @@ export default function Cropping() {
                     height: "calc(100vh - 200px)",
                     borderRadius: 5
                 }} />
-                <FloatingActionButton
-                    href={{ pathname: `/document`, query: { id: document?.id } }}
+                {/* <FloatingActionButton
+                    // href={{ pathname: `/document`, query: { id: document?.id } }}
                     icon={'icon_check.png'}
                     onClick={() => {
                         ScanbotSDKService.instance.applyCrop(document?.id);
-                        router.back();
+                        // router.back();
                     }}
-                />
+                /> */}
+
+                <div
+                    onClick={() => {
+                        ScanbotSDKService.instance.applyCrop(document?.id);
+                        // router.back();
+                    }}>
+                    Crop
+                </div>
             </div>
         </div>
     );
 }
+
+Cropping.getLayout = function getLayout(page) {
+    return page;
+};
+
+export default Cropping;

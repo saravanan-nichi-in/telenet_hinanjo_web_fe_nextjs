@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ScanbotSDKService from "@/utils/scanbot";
 
-export default function DocumentScanner() {
+function DocumentScanner() {
     const router = useRouter(); // Use router hook to programmatically navigate
 
     const [documentId, setDocumentId] = useState(null);
@@ -57,3 +57,9 @@ export default function DocumentScanner() {
         </div>
     );
 }
+
+DocumentScanner.getLayout = function getLayout(page) {
+    return page;
+};
+
+export default DocumentScanner;

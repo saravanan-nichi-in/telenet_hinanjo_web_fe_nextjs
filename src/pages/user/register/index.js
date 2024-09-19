@@ -161,19 +161,19 @@ export default function Admission() {
     let address = layoutReducer?.user?.place?.address;
 
     if (postal_code?.replace(/-/g, "")) {
-          let evacueeArray = {
-            postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
-            prefecture_id: prefecture_id,
-            address: address,
-          };
-          const newEvacuee = createEvacuee(evacueeArray);
-          setCreateObj(newEvacuee);
-          setRegisterModalAction("create");
-          setSpecialCareEditOpen(true);
-        } else {
-          setRegisterModalAction("create");
-          setSpecialCareEditOpen(true);
-        }
+      let evacueeArray = {
+        postal_code: postal_code ? postal_code.replace(/-/g, "") : null,
+        prefecture_id: prefecture_id,
+        address: address,
+      };
+      const newEvacuee = createEvacuee(evacueeArray);
+      setCreateObj(newEvacuee);
+      setRegisterModalAction("create");
+      setSpecialCareEditOpen(true);
+    } else {
+      setRegisterModalAction("create");
+      setSpecialCareEditOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -261,9 +261,9 @@ export default function Admission() {
     let postal_code = layoutReducer?.user?.place?.zip_code;
     let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
     let address = layoutReducer?.user?.place?.address;
-      formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
-      formikRef.current.setFieldValue("prefecture_id", prefecture_id);
-      formikRef.current.setFieldValue("address", address);
+    formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
+    formikRef.current.setFieldValue("prefecture_id", prefecture_id);
+    formikRef.current.setFieldValue("address", address);
   }, [])
 
   useEffect(() => {
@@ -306,12 +306,11 @@ export default function Admission() {
       {translate(localeJson, "agree_note_oneA")}
       <span
         dangerouslySetInnerHTML={{
-          __html: `<a href="${
-            window.location.origin
-          }/privacy" target="_blank"><u>${translate(
-            localeJson,
-            "c_individual_information"
-          )}</u></a>`,
+          __html: `<a href="${window.location.origin
+            }/privacy" target="_blank"><u>${translate(
+              localeJson,
+              "c_individual_information"
+            )}</u></a>`,
         }}
       />
       {translate(localeJson, "agree_note_oneB")}
@@ -350,7 +349,7 @@ export default function Admission() {
         ),
         month: Yup.string().required(
           translate(localeJson, "c_month") +
-            translate(localeJson, "is_required")
+          translate(localeJson, "is_required")
         ),
         date: Yup.string().required(
           translate(localeJson, "c_date") + translate(localeJson, "is_required")
@@ -381,7 +380,7 @@ export default function Admission() {
         .required(translate(localeJson, "name_required_changed"))
         .max(100, translate(localeJson, "name_max")),
       name_furigana: Yup.string().nullable().
-      max(100, translate(localeJson, "name_max")),
+        max(100, translate(localeJson, "name_max")),
       postalCode: Yup.string()
         .nullable()
         .min(7, translate(localeJson, "postal_code_length"))
@@ -703,6 +702,7 @@ export default function Admission() {
   };
 
   const ocrResult = (result) => {
+    console.log(result);
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
@@ -846,13 +846,13 @@ export default function Admission() {
   function createEvacuee(evacuees) {
     const id = evacuee && evacuee.length > 0 ? evacuee.length + 1 : 1;
     const checked = evacuee && evacuee.length > 0 ? false : true;
-   let birthDate = new Date(evacuees.dob);
-   let convertedObject = {
+    let birthDate = new Date(evacuees.dob);
+    let convertedObject = {
       year: birthDate.getFullYear(),
       month: (birthDate.getMonth() + 1).toString().padStart(2, "0"), // Adding 1 because months are zero-based
       date: birthDate.getDate().toString().padStart(2, "0"),
     };
-   let age = calculateAge(birthDate);
+    let age = calculateAge(birthDate);
     const boundObject = {
       id: id,
       checked: checked,
@@ -947,18 +947,16 @@ export default function Admission() {
         header={
           registerModalAction == "create"
             ? `${evacuee.length ? evacuee.length + 1 : "1"}${translate(
-                localeJson,
-                "per_info"
-              )} ${
-                evacuee.length == 0
-                  ? "（" + translate(localeJson, "c_representative") + "）"
-                  : ""
-              }`
-            : `${editObj.id} ${translate(localeJson, "per_info")} ${
-                editObj.checked
-                  ? "（" + translate(localeJson, "c_representative") + "）"
-                  : ""
-              }`
+              localeJson,
+              "per_info"
+            )} ${evacuee.length == 0
+              ? "（" + translate(localeJson, "c_representative") + "）"
+              : ""
+            }`
+            : `${editObj.id} ${translate(localeJson, "per_info")} ${editObj.checked
+              ? "（" + translate(localeJson, "c_representative") + "）"
+              : ""
+            }`
         }
         close={() => {
           setSpecialCareEditOpen(false);
@@ -1036,10 +1034,57 @@ export default function Admission() {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
-                              setPerspectiveCroppingVisible(true);
-                              hideOverFlow();
+                              // setPerspectiveCroppingVisible(true);
+                              // hideOverFlow();
+                              const features = 'width=600,height=400,scrollbars=yes,resizable=yes,toolbar=no,menubar=no,status=no';
+                              const popupWindow = window.open(`${window.origin}/scanner`, 'popupWindow', features);
+
+                              // Define the message handler
+                              const handleMessage = (event) => {
+                                if (event.origin === window.origin && event.data) {
+                                  console.log('Message from popup:', event?.data?.scannedData?.image); // Process the data from popup
+
+                                  // Optionally, close the popup window after receiving the message
+                                  if (popupWindow) {
+                                    popupWindow.close();
+                                    // ocrResult(event?.data?.scannedData?.image);
+                                    setLoader(true);
+                                    let formData = new FormData();
+                                    formData.append("content", event?.data?.scannedData?.image);
+
+                                    ocrScanRegistration(formData, (res) => {
+                                      if (res) {
+                                        const evacueeArray = res.data;
+                                        const newEvacuee = createEvacuee(evacueeArray);
+                                        setEditObj(newEvacuee);
+                                        setRegisterModalAction("edit");
+                                        setSpecialCareEditOpen(true);
+                                        setEvacuee((prev) => [
+                                          ...prev, // Use spread operator to include previous items in the array
+                                          newEvacuee, // Add the newEvacuee to the array
+                                        ]);
+                                        formikRef.current.setFieldValue("evacuee", [
+                                          ...formikRef.current.values.evacuee,
+                                          newEvacuee,
+                                        ]);
+                                        setLoader(false);
+                                      } else {
+                                        setLoader(false);
+                                      }
+                                    });
+                                  }
+
+                                  // Remove the event listener after processing the message
+                                  window.removeEventListener('message', handleMessage);
+                                }
+                              };
+
+                              // Add the event listener
+                              window.addEventListener('message', handleMessage);
                             },
-                          }}
+
+                          }
+                          }
                           parentClass={
                             " back-button  w-full flex justify-content-center p-2 pr-0 mb-2"
                           }
@@ -1084,11 +1129,10 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${
-                                  errors.name_kanji &&
+                                inputParentClassName: `custom_input w-full ${errors.name_kanji &&
                                   touched.name_kanji &&
                                   "p-invalid"
-                                }`,
+                                  }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_kanji"),
                                   spanText: "",
@@ -1141,11 +1185,10 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${
-                                  errors.name_furigana &&
+                                inputParentClassName: `custom_input w-full ${errors.name_furigana &&
                                   touched.name_furigana &&
                                   "p-invalid"
-                                }`,
+                                  }`,
                                 labelProps: {
                                   text: translate(localeJson, "rep_furigana"),
                                   inputLabelClassName: "block font-bold",
@@ -1200,9 +1243,8 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `custom_input w-full ${
-                                  errors.tel && touched.tel && "p-invalid"
-                                }`,
+                                inputParentClassName: `custom_input w-full ${errors.tel && touched.tel && "p-invalid"
+                                  }`,
                                 labelProps: {
                                   text: translate(localeJson, "phone_number"),
                                   inputLabelClassName: "block font-bold",
@@ -1272,11 +1314,10 @@ export default function Admission() {
                           </div>
                           <Input
                             inputProps={{
-                              inputParentClassName: `custom_input w-full  ${
-                                errors.postalCode &&
+                              inputParentClassName: `custom_input w-full  ${errors.postalCode &&
                                 touched.postalCode &&
                                 "p-invalid"
-                              }`,
+                                }`,
                               labelProps: {
                                 text: "",
                                 spanText: "",
@@ -1327,7 +1368,7 @@ export default function Admission() {
                                       setFieldValue(
                                         "address",
                                         address.address2 + address.address3 ||
-                                          ""
+                                        ""
                                       );
                                     } else {
                                       setFieldValue("prefecture_id", "");
@@ -1375,11 +1416,10 @@ export default function Admission() {
                           />
                           <InputDropdown
                             inputDropdownProps={{
-                              inputDropdownParentClassName: `custom_input mt-2  ${
-                                errors.prefecture_id &&
+                              inputDropdownParentClassName: `custom_input mt-2  ${errors.prefecture_id &&
                                 touched.prefecture_id &&
                                 "p-invalid pb-0"
-                              }`,
+                                }`,
                               labelProps: {
                                 inputDropdownLabelClassName: "block font-bold",
                                 spanText: "",
@@ -1414,9 +1454,8 @@ export default function Admission() {
                           />
                           <Input
                             inputProps={{
-                              inputParentClassName: `custom_input w-full mt-2 ${
-                                errors.address && touched.address && "p-invalid"
-                              }`,
+                              inputParentClassName: `custom_input w-full mt-2 ${errors.address && touched.address && "p-invalid"
+                                }`,
                               labelProps: {
                                 spanText: "",
                                 inputLabelClassName: "block font-bold",
@@ -1523,11 +1562,10 @@ export default function Admission() {
                           <div className="w-12">
                             <Input
                               inputProps={{
-                                inputParentClassName: `w-full custom_input ${
-                                  errors.password &&
+                                inputParentClassName: `w-full custom_input ${errors.password &&
                                   touched.password &&
                                   "p-invalid"
-                                }`,
+                                  }`,
                                 labelProps: {
                                   text: translate(
                                     localeJson,
@@ -1629,9 +1667,8 @@ export default function Admission() {
                             <div key={person.id} className="">
                               <div className="">
                                 <div
-                                  className={`flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 pt-2 ${
-                                    evacuee?.length - 1 != index ? "mb-3" : ""
-                                  }   justify-content-center`}
+                                  className={`flex flex-column bg-gray-300 border-round-2xl p-3 pl-3 pt-2 ${evacuee?.length - 1 != index ? "mb-3" : ""
+                                    }   justify-content-center`}
                                 >
                                   <div className="">
                                     <div className="">
@@ -1644,11 +1681,11 @@ export default function Admission() {
                                           )}
                                           {person.checked
                                             ? "（" +
-                                              translate(
-                                                localeJson,
-                                                "c_representative"
-                                              ) +
-                                              "）"
+                                            translate(
+                                              localeJson,
+                                              "c_representative"
+                                            ) +
+                                            "）"
                                             : ""}
                                         </label>
                                         <span className="page-header1">
@@ -1662,9 +1699,8 @@ export default function Admission() {
                                                     localeJson,
                                                     "update_rep"
                                                   ),
-                                                  labelClass: `pl-2 ${
-                                                    locale == "en" ? "pt-1" : ""
-                                                  }`,
+                                                  labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""
+                                                    }`,
                                                   onChange: (e) => {
                                                     handleRadioChange(
                                                       e,
@@ -1711,14 +1747,14 @@ export default function Admission() {
                                         </label>
                                       </div>
                                       {!_.isEmpty(person.dob) ? (
-                                      locale == "ja"
-                                        ? getJapaneseDateDisplayYYYYMMDDFormat(
+                                        locale == "ja"
+                                          ? getJapaneseDateDisplayYYYYMMDDFormat(
                                             `${person.dob.year}-${person.dob.month}-${person.dob.date}`
                                           )
-                                        : getEnglishDateDisplayFormat(
+                                          : getEnglishDateDisplayFormat(
                                             `${person.dob.year}-${person.dob.month}-${person.dob.date}`
                                           )
-                                        ) : "-"}
+                                      ) : "-"}
                                       {/* <div className="body_table">{person.dob}</div> */}
                                     </div>
                                     <div className=" mt-3">
@@ -1780,9 +1816,9 @@ export default function Admission() {
                                         <div className="body_table">
                                           {person.postalCode
                                             ? translate(
-                                                localeJson,
-                                                "post_letter"
-                                              ) + person.postalCode
+                                              localeJson,
+                                              "post_letter"
+                                            ) + person.postalCode
                                             : ""}
                                         </div>
                                         <div className="body_table">
@@ -1804,15 +1840,15 @@ export default function Admission() {
                                         <div className="body_table">
                                           {locale == "ja"
                                             ? getSpecialCareName(
-                                                getSpecialCareJPNames(
-                                                  person.specialCareType
-                                                )
+                                              getSpecialCareJPNames(
+                                                person.specialCareType
                                               )
+                                            )
                                             : getSpecialCareName(
-                                                getSpecialCareENNames(
-                                                  person.specialCareType
-                                                )
-                                              )}
+                                              getSpecialCareENNames(
+                                                person.specialCareType
+                                              )
+                                            )}
                                         </div>
                                       </div>
                                       <div className=" mt-3">
@@ -1857,9 +1893,9 @@ export default function Admission() {
                                                   locale == "ja"
                                                     ? question.answer
                                                     : question.answer_en
-                                                        ?.length > 0
-                                                    ? question.answer_en
-                                                    : question.answer
+                                                      ?.length > 0
+                                                      ? question.answer_en
+                                                      : question.answer
                                                 )}
                                               </div>
                                             </div>
@@ -1877,18 +1913,17 @@ export default function Admission() {
                                         className="cursor-pointer flex align-items-center"
                                       >
                                         <i
-                                          className={`pi mr-2 font-bold ${
-                                            expandedFamilies.includes(person.id)
-                                              ? "pi-chevron-up"
-                                              : "pi-chevron-down"
-                                          }`}
+                                          className={`pi mr-2 font-bold ${expandedFamilies.includes(person.id)
+                                            ? "pi-chevron-up"
+                                            : "pi-chevron-down"
+                                            }`}
                                         ></i>
                                         {expandedFamilies.includes(person.id)
                                           ? translate(localeJson, "see_details")
                                           : translate(
-                                              localeJson,
-                                              "see_details"
-                                            )}
+                                            localeJson,
+                                            "see_details"
+                                          )}
                                       </div>
                                     </div>
                                     <div className="block">
@@ -1921,9 +1956,9 @@ export default function Admission() {
                                               gender: person.gender,
                                               postalCode: person.postalCode
                                                 ? person.postalCode?.replace(
-                                                    /-/g,
-                                                    ""
-                                                  )
+                                                  /-/g,
+                                                  ""
+                                                )
                                                 : "",
                                               prefecture_id:
                                                 person.prefecture_id,
@@ -1932,7 +1967,7 @@ export default function Admission() {
                                               email: person.email,
                                               tel:
                                                 person.tel &&
-                                                person.tel != "00000000000"
+                                                  person.tel != "00000000000"
                                                   ? person.tel
                                                   : "",
                                               evacuee: person.evacuee,
@@ -2109,11 +2144,10 @@ export default function Admission() {
                         checkBoxProps={{
                           checked: values.agreeCheckOne,
                           linkLabel: agreeTextWithHTML,
-                          labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""} ${
-                            errors.agreeCheckOne && touched.agreeCheckOne
-                              ? "p-error"
-                              : ""
-                          }`,
+                          labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""} ${errors.agreeCheckOne && touched.agreeCheckOne
+                            ? "p-error"
+                            : ""
+                            }`,
                           onChange: (e) =>
                             setFieldValue("agreeCheckOne", e.checked),
                         }}

@@ -156,16 +156,21 @@ export default class ScanbotSDKService {
                         border: '1px solid lightgray',
                     },
                 },
-                magneticLines: {
-                    color: 'red',
-                },
+                // magneticLines: {
+                //     color: 'red',
+                // },
             },
         };
 
         this.croppingView = await this.sdk.openCroppingView(configuration);
     }
 
-    onCropApplied() { }
+    onCropApplied(document) {
+        console.log(document);
+        const dataToSend = { scannedData: document }; // Replace with actual data
+        window.opener.postMessage(dataToSend, window.origin); // Send message to the parent window
+        window.close(); // Optionally close the popup after sending the data
+    }
 
     async applyCrop(id) {
         const result = await this.croppingView?.apply();
@@ -177,7 +182,7 @@ export default class ScanbotSDKService {
         document.result.polygon = result?.polygon;
 
         document.image = await this.sdk.toDataUrl(result?.image);
-        this.onCropApplied();
+        this.onCropApplied(document);
     }
 }
 
