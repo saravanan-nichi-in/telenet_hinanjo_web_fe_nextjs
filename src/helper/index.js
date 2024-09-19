@@ -51,7 +51,8 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
  * @param {*} dateTime 
  * @returns 
  */
-export function getJapaneseDateDisplayYYYYMMDDFormat(dateTime) {
+export function getJapaneseDateDisplayYYYYMMDDFormat(dateTimes) {
+    let dateTime = getGeneralDateTimeDisplayFormat(dateTimes)
     if (dateTime) {
         // Determine whether the date format uses '-' or '/'
         let dateParts;
