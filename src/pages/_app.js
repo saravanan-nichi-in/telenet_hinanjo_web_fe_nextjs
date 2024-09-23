@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { OpenCvProvider } from 'opencv-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
@@ -8,7 +8,6 @@ import { Providers } from "@/redux/provider";
 import { LayoutProvider } from '../layout/context/layoutcontext';
 import Layout from '../layout/layout';
 import withAuth from '@/middleware/withAuth';
-import ScanbotSDKService from "@/utils/scanbot";
 
 /**
  * Import global CSS for entire application
@@ -27,13 +26,6 @@ function MyApp({ Component, pageProps, authorizedStatus }) {
         color: '#2b3d51',
         borderRadius: '5px',
     };
-
-    useEffect(() => {
-        async function loadSDK() {
-            await ScanbotSDKService.instance.initialize();
-        }
-        loadSDK();
-    }, [])
 
     return (
         <OpenCvProvider>

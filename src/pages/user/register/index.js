@@ -43,8 +43,6 @@ import {
   CheckInOutServices,
 } from "@/services";
 import _ from "lodash";
-import ScanbotSDKService from "@/utils/scanbot";
-import { ImageUtils } from "@/utils/ImageUtils";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);

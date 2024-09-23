@@ -46,78 +46,29 @@ export default class ScanbotSDKService {
 
         console.log('Document quality analysis:', contourDetectionResult);
 
-        // const config = {
-        //     containerId: containerId,
-        //     onDocumentDetected: async (e) => {
-        //         const id = (Math.random() + 1).toString(36).substring(7);
-        //         const base64 = await this.sdk.toDataUrl(e.cropped || e.original);
-        //         await this.documents.push({ id, image: base64, result: e });
-        //         await this.sdk.utils.flash();
-        //         onDocumentDetected(id, e);
-        //     },
-        //     onError: (error) => {
-        //         console.log('Encountered error scanning documents:', error);
-        //     },
-        //     style: {
-        //         outline: {
-        //             polygon: {
-        //                 strokeCapturing: 'green',
-        //                 strokeWidth: 4,
-        //             },
-        //         },
-        //     },
-        // };
-
-        // this.documentScanner = await this.sdk.createDocumentScanner(config);
-    }
-
-    async uploadDocument(file, onDocumentUploaded) {
-        await this.initialize();
-
-        if (!this.sdk) {
-            console.error('SDK not initialized');
-            return;
-        }
-
-        const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
-        console.log(image);
-        const base64 = await this.sdk.toDataUrl(image.original);
-        console.log(base64);
-
-        const analyzer = await this.sdk.createDocumentQualityAnalyzer();
-        console.log('Document quality analysis:', await analyzer?.analyze(image.original));
-
-        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, [
-            {
-                "x": 0.028517110266159697,
-                "y": 0.04504504504504504
+        const config = {
+            containerId: containerId,
+            onDocumentDetected: async (e) => {
+                const id = (Math.random() + 1).toString(36).substring(7);
+                const base64 = await this.sdk.toDataUrl(e.cropped || e.original);
+                await this.documents.push({ id, image: base64, result: e });
+                await this.sdk.utils.flash();
+                onDocumentDetected(id, e);
             },
-            {
-                "x": 0.9771863117870723,
-                "y": 0.036036036036036036
+            onError: (error) => {
+                console.log('Encountered error scanning documents:', error);
             },
-            {
-                "x": 0.973384030418251,
-                "y": 0.9519519519519519
+            style: {
+                outline: {
+                    polygon: {
+                        strokeCapturing: 'green',
+                        strokeWidth: 4,
+                    },
+                },
             },
-            {
-                "x": 0.028517110266159697,
-                "y": 0.9519519519519519
-            }
-        ], 0);
-        console.log(cropped);
+        };
 
-        // const contourDetectionResult = await this.sdk?.detectDocument(image.original);
-
-        if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
-            const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
-            const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
-            console.log(documentDetectionResult);
-            //   this.documents.add(documentDetectionResult);
-            console.log("Detection successful");
-        } else {
-            console.log("Detection failed");
-        }
+        this.documentScanner = await this.sdk.createDocumentScanner(config);
     }
 
     async disposeDocumentScanner() {
