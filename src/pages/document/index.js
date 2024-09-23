@@ -33,6 +33,8 @@ function Document() {
             }}>
                 <Suspense fallback={<div>Loading...</div>}>
                     <DocumentFetch onDocumentFound={async (document) => {
+                        console.log(document);
+                        
                         setDocument(document);
                     }} />
                 </Suspense>

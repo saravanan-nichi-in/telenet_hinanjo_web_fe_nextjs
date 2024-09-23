@@ -17,10 +17,10 @@ export default function DocumentFetch(props) {
     useEffect(() => {
         const document = ScanbotSDKService.instance.findDocument(params.get("id"));
 
-        if (!document) {
-            router.push('/', { scroll: false });
-            return;
-        }
+        // if (!document) {
+        //     router.push('/', { scroll: false });
+        //     return;
+        // }
         props.onDocumentFound(document);
     }, [router, params, props]);
 

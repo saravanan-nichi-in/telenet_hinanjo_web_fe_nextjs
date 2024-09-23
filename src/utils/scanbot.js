@@ -1,9 +1,5 @@
 "use client";
-
-import dynamic from 'next/dynamic';
-
-// Dynamically import ScanbotSDK
-const ScanbotSDK = dynamic(() => import('scanbot-web-sdk'), { ssr: false });
+import { ImageUtils } from "@/utils/ImageUtils";
 
 export default class ScanbotSDKService {
     static instance = new ScanbotSDKService();
@@ -11,7 +7,6 @@ export default class ScanbotSDKService {
     constructor() {
         this.sdk = undefined;
         this.documentScanner = undefined;
-        this.barcodeScanner = undefined;
         this.croppingView = undefined;
         this.documents = [];
         this.LICENSE_KEY = "bdiYoNXngaD8625uPxn2EDLdY5zJC6" + "reFhFzaoUnM/XCT0V5iVM0Lpjq0/ec" + "BrqOROfhZOdE7bvIwMOfeWCYrQYHtH" + "/klGtmm//+cfux2PGI1gju0TXf/ATj" + "skDFBmT5CWDtGuohAr6zIKK95FtfTW" + "Qqhja0DnOcAl3KTG8yKfS1BOCA2j75" + "/BWTyyP9ITLshE15MPFjK7Sz0HjXA7" + "qzA4+J7NhbsrUq5WvEvbfFjJBx6332" + "ON30GEn/ViEtbbM2XJJe3P0eIOsS3k" + "PwkWP4BG18vWhVG9ip6JDuCczsQSGt" + "0qlbHVpSU/6xf7yUiVWmoih1xfVoAp" + "xnKn4K8fhLjQ==\nU2NhbmJvdFNESw" + "psb2NhbGhvc3R8dGVsZW5ldC52ZXJj" + "ZWwuYXBwCjE3MjczMDg3OTkKODM4OD" + "YwNwo4\n";
@@ -43,32 +38,40 @@ export default class ScanbotSDKService {
             return;
         }
 
-        const config = {
-            containerId: containerId,
-            onDocumentDetected: async (e) => {
-                const id = (Math.random() + 1).toString(36).substring(7);
-                const base64 = await this.sdk.toDataUrl(e.cropped || e.original);
-                await this.documents.push({ id, image: base64, result: e });
-                await this.sdk.utils.flash();
-                onDocumentDetected(id, e);
-            },
-            onError: (error) => {
-                console.log('Encountered error scanning documents:', error);
-            },
-            style: {
-                outline: {
-                    polygon: {
-                        strokeCapturing: 'green',
-                        strokeWidth: 4,
-                    },
-                },
-            },
-        };
+        const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+        console.log(image);
+        const base64 = await this.sdk?.toDataUrl(image.original);
+        console.log(base64);
+        const contourDetectionResult = await this.sdk?.detectDocument(image.original);
 
-        this.documentScanner = await this.sdk.createDocumentScanner(config);
+        console.log('Document quality analysis:', contourDetectionResult);
+
+        // const config = {
+        //     containerId: containerId,
+        //     onDocumentDetected: async (e) => {
+        //         const id = (Math.random() + 1).toString(36).substring(7);
+        //         const base64 = await this.sdk.toDataUrl(e.cropped || e.original);
+        //         await this.documents.push({ id, image: base64, result: e });
+        //         await this.sdk.utils.flash();
+        //         onDocumentDetected(id, e);
+        //     },
+        //     onError: (error) => {
+        //         console.log('Encountered error scanning documents:', error);
+        //     },
+        //     style: {
+        //         outline: {
+        //             polygon: {
+        //                 strokeCapturing: 'green',
+        //                 strokeWidth: 4,
+        //             },
+        //         },
+        //     },
+        // };
+
+        // this.documentScanner = await this.sdk.createDocumentScanner(config);
     }
 
-    async createBarcodeScanner(containerId, onBarcodeFound) {
+    async uploadDocument(file, onDocumentUploaded) {
         await this.initialize();
 
         if (!this.sdk) {
@@ -76,41 +79,50 @@ export default class ScanbotSDKService {
             return;
         }
 
-        const config = {
-            containerId: containerId,
-            overlay: {
-                visible: true,
-                textFormat: 'TextAndFormat',
-                automaticSelectionEnabled: false,
-                style: {
-                    highlightedTextColor: '#EC3D67',
-                    highlightedPolygonStrokeColor: '#3DEC4A',
-                },
-                onBarcodeFound: (code, polygon, label) => {
-                    onBarcodeFound(code);
-                },
-            },
-            returnBarcodeImage: true,
-            onBarcodesDetected: (e) => {
-                console.log('Detected barcodes:', e.barcodes);
-            },
-            onError: (error) => {
-                console.log('Encountered error scanning barcodes:', error);
-            },
-        };
+        const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+        console.log(image);
+        const base64 = await this.sdk.toDataUrl(image.original);
+        console.log(base64);
 
-        this.barcodeScanner = await this.sdk.createBarcodeScanner(config);
+        const analyzer = await this.sdk.createDocumentQualityAnalyzer();
+        console.log('Document quality analysis:', await analyzer?.analyze(image.original));
+
+        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, [
+            {
+                "x": 0.028517110266159697,
+                "y": 0.04504504504504504
+            },
+            {
+                "x": 0.9771863117870723,
+                "y": 0.036036036036036036
+            },
+            {
+                "x": 0.973384030418251,
+                "y": 0.9519519519519519
+            },
+            {
+                "x": 0.028517110266159697,
+                "y": 0.9519519519519519
+            }
+        ], 0);
+        console.log(cropped);
+
+        // const contourDetectionResult = await this.sdk?.detectDocument(image.original);
+
+        if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
+            const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
+            const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
+            console.log(documentDetectionResult);
+            //   this.documents.add(documentDetectionResult);
+            console.log("Detection successful");
+        } else {
+            console.log("Detection failed");
+        }
     }
 
     async disposeDocumentScanner() {
         if (this.documentScanner) {
             await this.documentScanner.dispose();
-        }
-    }
-
-    disposeBarcodeScanner() {
-        if (this.barcodeScanner) {
-            this.barcodeScanner.dispose();
         }
     }
 

@@ -43,6 +43,8 @@ import {
   CheckInOutServices,
 } from "@/services";
 import _ from "lodash";
+import ScanbotSDKService from "@/utils/scanbot";
+import { ImageUtils } from "@/utils/ImageUtils";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -975,7 +977,6 @@ export default function Admission() {
         isRecording={isRecording}
         setIsRecording={setIsRecording}
       />
-      {/* Perspective cropping */}
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => {
@@ -1034,57 +1035,10 @@ export default function Admission() {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
-                              // setPerspectiveCroppingVisible(true);
-                              // hideOverFlow();
-                              const features = 'width=600,height=400,scrollbars=yes,resizable=yes,toolbar=no,menubar=no,status=no';
-                              const popupWindow = window.open(`${window.origin}/scanner`, 'popupWindow', features);
-
-                              // Define the message handler
-                              const handleMessage = (event) => {
-                                if (event.origin === window.origin && event.data) {
-                                  console.log('Message from popup:', event?.data?.scannedData?.image); // Process the data from popup
-
-                                  // Optionally, close the popup window after receiving the message
-                                  if (popupWindow) {
-                                    popupWindow.close();
-                                    // ocrResult(event?.data?.scannedData?.image);
-                                    setLoader(true);
-                                    let formData = new FormData();
-                                    formData.append("content", event?.data?.scannedData?.image);
-
-                                    ocrScanRegistration(formData, (res) => {
-                                      if (res) {
-                                        const evacueeArray = res.data;
-                                        const newEvacuee = createEvacuee(evacueeArray);
-                                        setEditObj(newEvacuee);
-                                        setRegisterModalAction("edit");
-                                        setSpecialCareEditOpen(true);
-                                        setEvacuee((prev) => [
-                                          ...prev, // Use spread operator to include previous items in the array
-                                          newEvacuee, // Add the newEvacuee to the array
-                                        ]);
-                                        formikRef.current.setFieldValue("evacuee", [
-                                          ...formikRef.current.values.evacuee,
-                                          newEvacuee,
-                                        ]);
-                                        setLoader(false);
-                                      } else {
-                                        setLoader(false);
-                                      }
-                                    });
-                                  }
-
-                                  // Remove the event listener after processing the message
-                                  window.removeEventListener('message', handleMessage);
-                                }
-                              };
-
-                              // Add the event listener
-                              window.addEventListener('message', handleMessage);
+                              setPerspectiveCroppingVisible(true);
+                              hideOverFlow();
                             },
-
-                          }
-                          }
+                          }}
                           parentClass={
                             " back-button  w-full flex justify-content-center p-2 pr-0 mb-2"
                           }
