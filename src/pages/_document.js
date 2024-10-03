@@ -15,6 +15,7 @@ class MyDocument extends Document {
                     <meta name="description" content="The ultimate collection of design-agnostic, flexible and accessible React UI Components." />
                     <meta name="robots" content="index, follow" />
                     <meta name="viewport" content="initial-scale=1, width=device-width" />
+                    <link rel="icon" href="data:," />
                     {/* <meta property="og:type" content="website"></meta>
                     <meta property="og:title" content="Sakai by PrimeReact | Free Admin Template for NextJS"></meta>
                     <meta property="og:url" content="https://www.primefaces.org/sakai-react"></meta>
