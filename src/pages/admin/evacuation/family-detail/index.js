@@ -45,7 +45,7 @@ export default function EvacueeFamilyDetail() {
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
         {
-            field: 'name', header: translate(localeJson, 'name_public_evacuee'), sortable: false, alignHeader: "left",
+            field: 'name', header: translate(localeJson, 'name_public_evacuee'), sortable: false, alignHeader: "left",maxWidth: '4rem',
             body: (rowData) => {
                 return <div className="flex flex-column">
                     <div className="custom-header">{rowData.name}</div>
