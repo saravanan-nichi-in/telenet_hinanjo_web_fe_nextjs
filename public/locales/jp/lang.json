@@ -1051,5 +1051,6 @@
       "temp_register_date": "避難前登録日時",
       "ocr_tooltip": "身分証明書から読み取って入力を行います。\n マイナンバーカード、運転免許証、外国人登録証明書などが使用可能です。",
       "qr_staff_check_in_confirm": "避難前登録時に選択した避難所が異なります。 この避難所に変えて入所を進めてもよろしいですか？",
-      "name_required_changed": "名前は必須です 。"
+      "name_required_changed": "名前は必須です 。",
+      "show_checked_out_evacuees": "退所した避難者のみ表示"
 }
