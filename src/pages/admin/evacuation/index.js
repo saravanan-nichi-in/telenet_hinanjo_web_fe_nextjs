@@ -365,8 +365,8 @@ export default function EvacuationPage() {
                                 <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
                             </div>
                             <div className='flex flex-wrap align-items-center gap-2'>
-                                <div className='flex  justify-content-end align-items-end gap-4 mb-2'>
-                                    <div class="flex gap-2 align-items-center justify-content-center mb-2">
+                                <div className='flex flex-wrap  md:justify-content-end md:align-items-end md:gap-4 gap-2 mb-2'>
+                                    <div class="flex gap-2 align-items-center justify-content-center mt-2 md:mt-0 md:mb-2">
                                         <span className='text-sm'>{translate(localeJson, 'show_checked_out_evacuees')}</span><InputSwitch inputSwitchProps={{
                                             checked: showRegisteredEvacuees,
                                             onChange: () => showOnlyRegisteredEvacuees()
