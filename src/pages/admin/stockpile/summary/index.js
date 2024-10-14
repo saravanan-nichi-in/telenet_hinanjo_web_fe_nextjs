@@ -474,9 +474,9 @@ function AdminStockpileSummary() {
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
-                        <div className='flex justify-content-between align-items-center sm:flex md:flex lg:flex'>
+                        <div className='flex flex-wrap justify-content-between align-items-center sm:flex md:flex lg:flex'>
                             <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "stockpile_summary")} />
-                            <div className="flex w-full flex-wrap flex-grow float-right lg:gap-2 md:gap-2 sm:gap-2" style={{ justifyContent: "end" }} >
+                            <div className="flex w-full flex-wrap flex-grow float-right gap-2" style={{ justifyContent: "end" }} >
                                 <Button buttonProps={{
                                     type: 'button',
                                     rounded: "true",
