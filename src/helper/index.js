@@ -52,7 +52,7 @@ export const getJapaneseDateTimeDisplayFormat = (dateTime) => {
  * @returns 
  */
 export function getJapaneseDateDisplayYYYYMMDDFormat(dateTimes) {
-    let dateTime = getGeneralDateTimeDisplayFormat(dateTimes)
+    let dateTime = getGeneralDateTimeDisplayFormats(dateTimes)
     if (dateTime) {
         // Determine whether the date format uses '-' or '/'
         let dateParts;
@@ -82,6 +82,24 @@ export function getJapaneseDateDisplayYYYYMMDDFormat(dateTimes) {
         return `${displayYear}年${displayMonth}月${displayDay}日`;
     }
     return "";
+}
+
+export const getGeneralDateTimeDisplayFormats = (dateTime) => {
+    if(dateTime) {
+        const options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+        };
+        let formattedJPDateTime = new Date(dateTime).toLocaleDateString("ja-jp", options);
+        return formattedJPDateTime.replaceAll("/", "-"); 
+    }
+    else {
+        return '';
+    }
+    
 }
 
 
