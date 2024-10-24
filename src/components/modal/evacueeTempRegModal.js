@@ -1692,7 +1692,7 @@ export default function EvacueeTempRegModal(props) {
                           }
                         />
                       </div>
-                      <div className="mb-2 col-12 ">
+                      <div className="mb-2 col-12 hidden">
                         <div className="w-12">
                           <Input
                             inputProps={{

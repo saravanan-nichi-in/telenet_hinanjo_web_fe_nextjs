@@ -480,7 +480,7 @@ export default function StaffFamilyDetail() {
                                     </div>
                                 </div>
 
-                                <div className='flex align-items-center'>
+                                <div className='hidden flex align-items-center'>
                                     <div >
                                         <span className='page-header3'>{translate(localeJson, "connecting_code")}:</span>
                                         <span className='page-header3-sub ml-1 details-text-overflow'>{personList[individualQuestionnairesContentIDX].connecting_code}</span>
@@ -606,7 +606,7 @@ export default function StaffFamilyDetail() {
                                                 <span className='page-header3-sub ml-1'>{person.family_code}</span>
                                             </div>
                                         </div>
-                                        <div className='flex align-items-center'>
+                                        <div className='hidden flex align-items-center '>
                                             <div className='details-text-overflow'>
                                                 <span className='page-header3'>{translate(localeJson, "connecting_code")}:</span>
                                                 <span className='page-header3-sub ml-1'>{person.connecting_code}</span>
