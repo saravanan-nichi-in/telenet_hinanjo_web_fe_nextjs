@@ -855,7 +855,7 @@ export default function UserEventRegModal(props) {
                                                                     getAddressFromZipCode(payload, (res) => {
                                                                         if (res && res.prefcode != e.target.value) {
                                                                             setPostalCodePrefectureId(res.prefcode);
-                                                                            setFieldValue("prefecture_id", res.prefcode);
+                                                                            // setFieldValue("prefecture_id", res.prefcode);
                                                                         }
                                                                     });
                                                                 }
