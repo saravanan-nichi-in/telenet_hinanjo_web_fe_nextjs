@@ -220,7 +220,7 @@ export default function EvacueeFamilyDetail() {
         "tel",
         "address",
         "family_code",
-        "connecting_code",
+        // "connecting_code",
         "remarks",
         "c_special_care",
         "yapple_id"

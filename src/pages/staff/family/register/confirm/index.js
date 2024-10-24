@@ -315,7 +315,7 @@ const TempRegisterConfirm = () => {
                 </div>
                 <div className="body_table">{question.special_care_name}</div>
               </div>
-              <div className=" mt-3">
+              <div className=" mt-3 hidden">
                 <div className=" flex_row_space_between">
                   <label className="header_table">
                     {translate(localeJson, "c_connecting_code")}
