@@ -552,8 +552,9 @@ export default function EvacueeTempRegModal(props) {
 
 
   // useEffect(() => {
-  //   fetchZipCode && formikRef.current.validateField("postalCode")
-  // }, [fetchZipCode])
+  //   console.log("PP")
+  //   formikRef.current.validateField("postalCode")
+  // }, [postalCodePrefectureId])
 
   return (
     <>
@@ -614,6 +615,7 @@ export default function EvacueeTempRegModal(props) {
           resetForm,
           setFieldValue,
           validateForm,
+          validateField,
           setErrors
         }) => (
           <div id="permanentRegister">
@@ -1083,6 +1085,7 @@ export default function EvacueeTempRegModal(props) {
                                       address.address2 + address.address3 ||
                                       ""
                                     );
+                                    validateField("postalCode");
                                   } else {
                                     setFieldValue("prefecture_id", "");
                                     setFieldValue("address", "");
@@ -1133,6 +1136,7 @@ export default function EvacueeTempRegModal(props) {
                                               address.address2 + address.address3 ||
                                               ""
                                             );
+                                            formikRef.current.validateField("postalCode")
                                           } else {
                                             setFieldValue("prefecture_id", "");
                                             setFieldValue("address", "");
@@ -1188,10 +1192,11 @@ export default function EvacueeTempRegModal(props) {
                                 let payload = convertToSingleByte(values.postalCode);
                                 getAddressFromZipCode(
                                   payload, (res) => {
+                                    
                                     if (res && res.prefcode != evt.target.value) {
                                       setPostalCodePrefectureId(res.prefcode);
-                                      setFieldValue("prefecture_id", res.prefcode);
-                                      // setPrefCount(prefCount+1)
+                                      // setFieldValue("prefecture_id", res.prefcode);
+                                      setPrefCount(prefCount+1)
                                       // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
                                     }
                                     // validateForm();
