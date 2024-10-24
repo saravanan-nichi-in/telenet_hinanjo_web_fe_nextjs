@@ -10,7 +10,7 @@ const Map = () => {
   const { loader } = useContext(LayoutContext);
   const dispatch = useAppDispatch();
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
-
+  const settings_data = useAppSelector((state) => state?.layoutReducer?.layout);
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const [maps, setMaps] = useState([]);
@@ -97,7 +97,7 @@ const Map = () => {
               <GoogleMapMultiMarkerComponent
                 markers={layoutReducer?.places}
                 searchResult={result}
-                mapScale={20}
+                mapScale={settings_data?.map_scale}
                 height={"100%"}
               />
             )}
