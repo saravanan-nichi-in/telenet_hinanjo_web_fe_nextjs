@@ -134,7 +134,12 @@ export const GoogleMapMultiMarkerComponent = ({
   const [isMarker, setIsMarker] = useState(false);
   const [onMouseHoverValue, setOnMouseHoverValue] = useState(false);
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
-
+  const [mapOptions, setMapOptions] = useState({
+    minZoom: 2,
+    maxZoom: 25,
+    zoom: mapScale || 10, // Initial zoom level
+    gestureHandling: "greedy",
+  });
   useEffect(() => {
     setMapOptions((prevOptions) => ({
       ...prevOptions,
@@ -154,21 +159,14 @@ export const GoogleMapMultiMarkerComponent = ({
     setCenter(searchResult);
   }, [searchResult]);
 
-  useEffect(() => {
-    mapOptions.zoom = 10;
-  }, []);
+
 
   const onMarkerClick = (marker) => {
     setIsMarker(true);
     setSelectedMarker(marker);
   };
 
-  const [mapOptions, setMapOptions] = useState({
-    minZoom: 2,
-    maxZoom: 25,
-    zoom: 10, // Initial zoom level
-    gestureHandling: "greedy",
-  });
+
 
   const containerStyle = {
     width: "100%",
