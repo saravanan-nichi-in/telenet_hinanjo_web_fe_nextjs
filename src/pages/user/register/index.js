@@ -19,6 +19,7 @@ import {
   hideOverFlow,
   toastDisplay,
   compareAddresses,
+  geocodeAddressAndExtractData,
 } from "@/helper";
 import {
   Button,
@@ -669,17 +670,36 @@ export default function Admission() {
     showOverFlow();
   };
 
-  const qrResult = (result) => {
+  const qrResult = async(result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
     showOverFlow();
-    qrScanRegistration(formData, (res) => {
+    qrScanRegistration(formData, async(res) => {
       if (res) {
         const evacueeArray = res.data;
-        const newEvacuee = createEvacuee(evacueeArray);
-        setEditObj(newEvacuee);
+        let newEvacuee = createEvacuee(evacueeArray);
+        newEvacuee = {
+          ...newEvacuee,
+          isFromFormReader: true
+        };
+        if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
+          const address = evacueeArray.address;
+          try {
+            const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
+
+            // Update newEvacuee with geocoding data
+            newEvacuee = {
+              ...newEvacuee,
+              postalCode: postalCode,
+              prefecture_id: prefecture_id
+            };
+          } catch (error) {
+            console.error("Error fetching geolocation data:", error);
+          }
+        }
+        setEditObj(newEvacuee)
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
         setEvacuee((prev) => {
@@ -701,18 +721,37 @@ export default function Admission() {
     showOverFlow();
   };
 
-  const ocrResult = (result) => {
+  const ocrResult = async (result) => {
     console.log(result);
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
     showOverFlow();
-    ocrScanRegistration(formData, (res) => {
+    ocrScanRegistration(formData,async (res) => {
       if (res) {
         const evacueeArray = res.data;
-        const newEvacuee = createEvacuee(evacueeArray);
-        setEditObj(newEvacuee);
+        let newEvacuee = createEvacuee(evacueeArray);
+        newEvacuee = {
+          ...newEvacuee,
+          isFromFormReader: true
+        };
+        if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
+          const address = evacueeArray.address;
+          try {
+            const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
+
+            // Update newEvacuee with geocoding data
+            newEvacuee = {
+              ...newEvacuee,
+              postalCode: postalCode,
+              prefecture_id: prefecture_id
+            };
+          } catch (error) {
+            console.error("Error fetching geolocation data:", error);
+          }
+        }
+        setEditObj(newEvacuee)
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
         setEvacuee((prev) => {

@@ -10,6 +10,7 @@ import {
   convertToSingleByte,
   splitJapaneseAddress,
   compareAddresses,
+  geocodeAddressAndExtractData,
 } from "@/helper";
 import {
   Button,
@@ -304,6 +305,7 @@ export default function EvacueeTempRegModal(props) {
         }
       }, 1000);
       setFetchedZipCode(editObj.postalCode)
+      setPostalCodePrefectureId(editObj?.prefecture_id ? editObj.prefecture_id : '');
     }
   }, [editObj]);
 
@@ -415,7 +417,19 @@ export default function EvacueeTempRegModal(props) {
     });
   };
 
-  function createEvacuee(evacuees, setFieldValue) {
+  async function createEvacuee(evacuees, setFieldValue) {
+    if (!evacuees.prefecture_id || !evacuees.postal_code) {
+      let address = evacuees.address || evacuees.address;
+
+      try {
+        const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
+
+        evacuees['postal_code'] = postalCode;
+        evacuees['prefecture_id'] = prefecture_id;
+      } catch (error) {
+        console.error("Error processing address:", error);
+      }
+    }
     setFieldValue("name", evacuees.name || "");
     setFieldValue("name_furigana", (evacuees.refugeeName || evacuees.refugee_name) || "");
     setFieldValue("age", evacuees.age || "");

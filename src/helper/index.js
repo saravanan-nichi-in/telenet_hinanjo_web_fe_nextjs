@@ -1,6 +1,12 @@
 /* eslint-disable no-irregular-whitespace */
 import toast from "react-hot-toast";
 import { isObject, isArray } from "lodash";
+import { Button } from "@/components";
+// import _ from 'lodash';
+import { prefectures, prefecturesCombined, prefectures_en } from '@/utils/constant';
+
+
+const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 /**
  * 
@@ -697,4 +703,181 @@ export function compareAddresses(address1, address2) {
     }
 
     return unmatchedData;
+}
+
+
+export async function geocodeAddressAndExtractData(address,localeJson,locale,setLoader) {
+
+    const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&language=ja&key=${apiKey}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.results.length === 0) {
+            console.log("No results found for the address.");
+            return { prefecture: "", postalCode: "", prefecture_id: "" };
+        }
+
+        const prefectureOptions = data.results
+            .map((result, index) => {
+                const prefectureObj = result.address_components.find(component => component.types.includes("administrative_area_level_1"));
+                 const postalCodeObj = result.address_components.find(component => component.types.includes("postal_code"));
+                const postalCode = postalCodeObj ? postalCodeObj.long_name.replace(/-/g, "") : "";
+                let prefecture = '';
+                if (prefectureObj) {
+                    const prefectureEntry = Object.values(prefecturesCombined).find(pref =>
+                        pref.en === prefectureObj.long_name || pref.ja === prefectureObj.long_name
+                    );
+                
+                    // Choose the name based on the locale
+                    prefecture = locale == 'ja'
+                        ? (prefectureEntry ? prefectureEntry.ja : prefectureObj.long_name) // Use Japanese name if locale is 'ja'
+                        : (prefectureEntry ? prefectureEntry.en : prefectureObj.long_name); // Use English name otherwise
+                }
+                
+                return prefectureObj ? { index, prefecture,postalCode } : null;
+            })
+            .filter(option => option !== null);
+
+        if (prefectureOptions.length === 0) {
+            console.log("No prefecture information found in the results.");
+            return { prefecture: "", postalCode: "", prefecture_id: "" };
+        }
+
+        if (prefectureOptions.length > 1) {
+            return new Promise((resolve, reject) => {
+                let selectedIndex = null;
+
+                const handleSelect = () => {
+                    if (selectedIndex === null) {
+                        console.log("No prefecture selected.");
+                        return;
+                    }
+                    const selectedOption = prefectureOptions[selectedIndex];
+                    const result = data.results[selectedOption.index];
+                    const prefecture = selectedOption.prefecture;
+                    const postalCodeObj = result.address_components.find(component => component.types.includes("postal_code"));
+                    const postalCode = postalCodeObj ? postalCodeObj.long_name.replace(/-/g, "") : "";
+
+                    // Assuming you have predefined `prefectures` and `prefectures_en` arrays
+                    const selectedPref = prefectures.find(pref => pref.name === prefecture) ||
+                                         prefectures_en.find(pref => pref.name === prefecture);
+                    const prefecture_id = selectedPref ? selectedPref.value : "";
+                    resolve({ prefecture, postalCode, prefecture_id });
+                };
+
+                const handleClose = () => {
+                    setLoader(true);
+                    toast.dismiss(toastId);
+                    setLoader(false);
+                    reject("User canceled");
+                };
+                setLoader(false);
+                const toastId = toast.custom(t => (
+                    <div className='pl-5 pr-5 pl-3 pt-3 pb-3' style={{
+                        textAlign: 'center',
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        minWidth: '400px',
+                        maxWidth:'400px',
+                        height:"auto",
+                        overflow:"auto",
+                        maxHeight:"80vh"
+                    }}>
+                        <span className='font-semibold'>{ getValueByKeyRecursively(localeJson, "select_prefecture")}</span>
+                        <div className='mt-5'>
+                        {prefectureOptions.map((option, i) => (
+                            <div key={i} className='flex justify-content-start  pl-5 pr-5' style={{ margin: '5px 0' }}>
+                                <input
+                                    type="radio"
+                                    id={`prefecture-${i}`}
+                                    name="prefecture"
+                                    className='mb-1'
+                                    onChange={() => {
+                                        selectedIndex = i;
+                                    }}
+                                />
+                                <label htmlFor={`prefecture-${i}`}>{option.postalCode?"〒":""}{option.postalCode}{" "}{option.prefecture} </label>
+                            </div>
+                        ))}
+                        </div>
+                         <div className="text-center flex flex-column pl-5 pr-5 evacueeFooterButtonText">
+                    <Button
+                      buttonProps={{
+                        buttonClass:
+                          "w-full primary-button h-3rem border-radius-5rem mb-3 mt-5",
+                        type: "submit",
+                        text: getValueByKeyRecursively(localeJson, "hitachi_list_choice_btn"),
+                        onClick: () => {
+                            setLoader(true);
+                            handleSelect();
+                            toast.dismiss();
+                            setLoader(false);
+                        },
+                      }}
+                      parentClass={"inline primary-button"}
+                    />
+                    <Button
+                      buttonProps={{
+                        buttonClass:
+                          "w-full back-button h-3rem border-radius-5rem",
+                        text:  getValueByKeyRecursively(localeJson, "cancel"),
+                        type: "reset",
+                        onClick: () => {
+                            handleClose()
+                        },
+                      }}
+                      parentClass={"inline back-button"}
+                    />
+                  </div>
+                        {/* <button
+                            onClick={handleSelect}
+                            style={{ display: 'block', margin: '10px auto' }}
+                        >
+                            Select
+                        </button>
+                        <button
+                            onClick={handleClose}
+                            style={{ display: 'block', margin: '10px auto' }}
+                        >
+                            Cancel
+                        </button> */}
+                    </div>
+                ), {
+                    duration: Infinity,
+                    style: {
+                        minWidth: '400px',
+                    },
+                    action: (
+                        <button
+                            onClick={handleClose}
+                            style={{ display: 'block', marginTop: '10px' }}
+                        >
+                            Close
+                        </button>
+                    )
+                });
+            });
+        } else {
+            // Only one option available, proceed without showing the toast
+            const selectedOption = prefectureOptions[0];
+            const result = data.results[selectedOption.index];
+            const prefecture = selectedOption.prefecture;
+            const postalCodeObj = result.address_components.find(component => component.types.includes("postal_code"));
+            const postalCode = postalCodeObj ? postalCodeObj.long_name.replace(/-/g, "") : "";
+
+            // Assuming you have predefined `prefectures` and `prefectures_en` arrays
+            const selectedPref = prefectures.find(pref => pref.name === prefecture) ||
+                                 prefectures_en.find(pref => pref.name === prefecture);
+            const prefecture_id = selectedPref ? selectedPref.value : "";
+
+            return { prefecture, postalCode, prefecture_id };
+        }
+    } catch (error) {
+        // Only log the error
+        console.error("Error fetching data from Google Maps API:", error);
+        return { prefecture: "", postalCode: "", prefecture_id: "" };
+    }
 }
