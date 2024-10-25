@@ -419,7 +419,7 @@ export default function EvacueeTempRegModal(props) {
 
   async function createEvacuee(evacuees, setFieldValue) {
     if (!evacuees.prefecture_id || !evacuees.postal_code) {
-      let address = evacuees.address || evacuees.address;
+      let address = evacuees.fullAddress || evacuees.address;
 
       try {
         const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);

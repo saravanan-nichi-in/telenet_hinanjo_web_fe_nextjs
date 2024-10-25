@@ -616,7 +616,7 @@ export default function Admission() {
           isFromFormReader: true
         };
         if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
-          const address = evacueeArray.address;
+          const address = evacueeArray.fullAddress||evacueeArray.address;
           try {
             const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
 
@@ -669,7 +669,7 @@ export default function Admission() {
           isFromFormReader: true
         };
         if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
-          const address = evacueeArray.address;
+          const address = evacueeArray.fullAddress||evacueeArray.address;
           try {
             const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
 
