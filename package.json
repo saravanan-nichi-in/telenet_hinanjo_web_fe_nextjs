@@ -31,6 +31,7 @@
     "crypto-js": "^4.2.0",
     "eslint": "8.41.0",
     "formik": "^2.4.2",
+    "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "next": "13.4.3",
     "nprogress": "^0.2.0",

@@ -20,7 +20,8 @@ export default function PublicEvacuee() {
             sort_by: "",
             order_by: "desc",
             refugee_name: ""
-        }
+        },
+        "search" : 0,
     });
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -55,7 +56,9 @@ export default function PublicEvacuee() {
                 sort_by: "",
                 order_by: "desc",
                 refugee_name: getListPayload.filters.refugee_name
-            }
+            },
+            "search" : getListPayload.search,
+
         }
         getList(payload, (response) => {
             if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
@@ -182,7 +185,8 @@ export default function PublicEvacuee() {
                                                     filters: {
                                                         ...prevState.filters,
                                                         refugee_name: searchName
-                                                    }
+                                                    },
+                                                    search:1
                                                 }));
                                             }
                                         }} parentClass={"back-button"} />
@@ -200,7 +204,7 @@ export default function PublicEvacuee() {
                                     value={list}
                                     columns={publicEvacueesColumn}
                                     filterDisplay="menu"
-                                    emptyMessage={translate(localeJson, "data_not_found")}
+                                    emptyMessage={getListPayload.search == 1 ? translate(localeJson, "data_not_found") : <></>}
                                     paginator={true}
                                     first={getListPayload.filters.start}
                                     rows={getListPayload.filters.limit}
