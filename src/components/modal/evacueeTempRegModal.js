@@ -438,6 +438,7 @@ export default function EvacueeTempRegModal(props) {
     setFieldValue("tel", evacuees.tel || "");
     evacuees?.prefecture_id &&
       setFieldValue("prefecture_id", evacuees?.prefecture_id);
+      evacuees?.prefecture_id && setPostalCodePrefectureId(evacuees?.prefecture_id)
     const re = /^[0-9-]+$/;
     let val;
     if (evacuees.postal_code) {
