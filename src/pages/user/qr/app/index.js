@@ -107,7 +107,7 @@ export default function App() {
                                 <h5 className="text-center  user-dashboard-header"> {translate(localeJson, "user_dashboard_1")}</h5>
                                 <div className="flex justify-content-center">
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
-                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis md:w-full sm:max-w-25rem">
+                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis md:max-w-full sm:max-w-25rem">
                                         {locale == 'ja' ? placeName : !_.isNull(placeName_En)?placeName_En:placeName}
                                     </h5>
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
