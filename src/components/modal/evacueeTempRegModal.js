@@ -305,7 +305,27 @@ export default function EvacueeTempRegModal(props) {
         }
       }, 1000);
       setFetchedZipCode(editObj.postalCode)
-      setPostalCodePrefectureId(editObj?.prefecture_id ? editObj.prefecture_id : '');
+      
+      if(editObj?.postalCode)
+      {
+      let payload = editObj.postalCode;
+      getAddressFromZipCode(
+        payload, (res) => {
+          
+          if (res && res.prefcode != editObj?.prefecture_id) {
+            setPostalCodePrefectureId(res.prefcode);
+            // setFieldValue("prefecture_id", res.prefcode);
+            setPrefCount(prefCount+1)
+            // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
+          }
+          else {
+            setPostalCodePrefectureId(editObj?.prefecture_id ? editObj.prefecture_id : '');
+          }
+          // validateForm();
+        })
+      } else {
+        setPostalCodePrefectureId(editObj?.prefecture_id ? editObj.prefecture_id : '');
+      }
     }
   }, [editObj]);
 

@@ -414,6 +414,9 @@ const AppTopbar = forwardRef((props, ref) => {
         ];
         let dashboardUrl = '/user/dashboard'
         let registerUrl = "/user/register";
+        let qrUrl = '/user/qr/app';
+        let qrUrl_ = '/user/qr/app/';
+        console.log(windowURL,qrUrl)
         if (confirmUrl.includes(windowURL)) {
             router.push("/user/dashboard");
         } else if (windowURL == registerUrl) {
@@ -425,7 +428,12 @@ const AppTopbar = forwardRef((props, ref) => {
             }
         }
         else if (windowURL == dashboardUrl) {
+            console.log('dashboardUrl',dashboardUrl)
             layoutReducer?.user?.place?.type == "place" ? router.push("/user/list") : router.push("/user/event-list")
+        }
+        else if (windowURL == qrUrl||windowURL == qrUrl_) {
+            console.log('qrUrlddd',qrUrl)
+            router.push("/user/qr/app/place-list");
         }
     };
 
