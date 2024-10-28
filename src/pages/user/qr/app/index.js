@@ -8,6 +8,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { UserQrService } from "@/services"
 import { setCheckInData } from "@/redux/qr_app"
 import QrAppConfirmDialog from "@/components/modal/qrAppConfirmationModal";
+import _ from "lodash";
 
 export default function App() {
     const { localeJson,locale } = useContext(LayoutContext);
@@ -15,6 +16,7 @@ export default function App() {
     const dispatch = useDispatch();
     const placeId = localStorage.getItem("evacuationPlace");
     const placeName = localStorage.getItem("evacuationPlaceName");
+    const placeName_En = localStorage.getItem("evacuationPlaceNameEnglish");
     const [openQrPopup, setOpenQrPopup] = useState(false);
     const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
     const [regData, setRegData] = useState([]);
@@ -60,12 +62,15 @@ export default function App() {
           // Clear localStorage when the back button is clicked
           localStorage.removeItem("evacuationPlace");
           localStorage.removeItem("evacuationPlaceName");
+          localStorage.removeItem("evacuationPlaceNameEnglish");
+          
         };
     
         const handleBeforeUnload = () => {
           // Clear localStorage when the page is about to be unloaded
           localStorage.removeItem("evacuationPlace");
           localStorage.removeItem("evacuationPlaceName");
+          localStorage.removeItem("evacuationPlaceNameEnglish");
         };
     
         // Attach the event listeners when the component mounts
@@ -83,7 +88,7 @@ export default function App() {
         <div className='grid flex-1'>
             <div className='col-12 flex-1'>
                 <div className='card flex flex-column h-full align-items-center justify-content-center'>
-                    <div className="mdScreenMaxWidth xlScreenMaxWidth">
+                    <div className="">
                         <QrScannerModal
                             open={openQrPopup}
                             close={closeQrPopup}
@@ -102,8 +107,8 @@ export default function App() {
                                 <h5 className="text-center  user-dashboard-header"> {translate(localeJson, "user_dashboard_1")}</h5>
                                 <div className="flex justify-content-center">
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
-                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis">
-                                        {placeName}
+                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis md:w-full sm:max-w-25rem">
+                                        {locale == 'ja' ? placeName : !_.isNull(placeName_En)?placeName_En:placeName}
                                     </h5>
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
                                 </div>

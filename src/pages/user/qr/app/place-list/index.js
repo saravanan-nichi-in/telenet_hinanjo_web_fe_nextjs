@@ -255,6 +255,7 @@ export default function PlaceList() {
                       if (res?.data?.model?.active_flg == "1") {
                         localStorage.setItem("evacuationPlace", res?.data?.model?.id);
                         localStorage.setItem("evacuationPlaceName", res?.data?.model?.name);
+                        localStorage.setItem("evacuationPlaceNameEnglish",res?.data?.model?.name_en||res?.data?.model?.name);
                         router.push('/user/qr/app/')
                       }
                       else {
