@@ -7,6 +7,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { getValueByKeyRecursively as translate } from '@/helper'
 import { Button, CustomHeader, NotFound } from '@/components';
 import { ExternalEvacuationServices } from '@/services';
+import { IoIosArrowBack } from 'react-icons/io';
 
 export default function ExternalEvacuees() {
     const { localeJson, setLoader } = useContext(LayoutContext);
@@ -332,6 +333,12 @@ export default function ExternalEvacuees() {
         <div className="grid">
             <div className="col-12">
                 <div className="card">
+                <Button buttonProps={{
+                            buttonClass: "w-auto back-button-transparent mb-2 p-0",
+                            text: translate(localeJson, "external_evacuees_list_detail_back"),
+                            icon: <div className='mt-1'><i><IoIosArrowBack size={25} /></i></div>,
+                            onClick: () => router.push('/admin/external/family/list'),
+                        }} parentClass={"inline back-button-transparent"} />
                     <div className="flex align-items-center justify-content-between pb-2">
                         <div className='flex align-items-center gap-2 mb-2'>
                             <CustomHeader
@@ -344,14 +351,14 @@ export default function ExternalEvacuees() {
                                 <div className="page-header1-sub"> {foodSupportCount ? "(" + foodSupportCount + translate(localeJson, "people") + ")" : ""}</div>
                             </div>
                         </div>
-                        <div className='mb-2 flex align-items-center'>
+                        {/* <div className='mb-2 flex align-items-center'>
                             <Button
                                 buttonProps={{
                                     text: translate(localeJson, "external_evacuee_details"),
                                     onClick: () => router.push("/admin/external/family/list"),
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
                     {chartDataFound ? (
                         <div className="bg-white p-3">

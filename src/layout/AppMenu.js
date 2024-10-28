@@ -78,10 +78,10 @@ const AppMenu = () => {
                     active: router.pathname.startsWith('/admin/temp-registration')
                 },
                 {
-                    label: translate(localeJson, 'external_evacuees_tally'),
+                    label: translate(localeJson, 'external_evecuee_list_header'),
                     icon: <FaPeopleGroup size={16} />,
-                    to: '/admin/external/family',
-                    active: router.pathname.startsWith('/admin/external/family')
+                    to: '/admin/external/family/list',
+                    active: router.pathname.startsWith('/admin/external/family/list')
                 },
                 {
                     label: translate(localeJson, 'shortage_supplies_list'),
@@ -306,10 +306,10 @@ const AppMenu = () => {
                     active: router.pathname.startsWith('/hq-staff/temp-registration')
                 },
                 {
-                    label: translate(localeJson, 'external_evacuees_tally'),
+                    label: translate(localeJson, 'external_evecuee_list_header'),
                     icon: <FaPeopleGroup size={16} />,
-                    to: '/hq-staff/external/family',
-                    active: router.pathname.startsWith('/hq-staff/external/family')
+                    to: '/hq-staff/external/family/list',
+                    active: router.pathname.startsWith('/hq-staff/external/family/list')
                 },
                 {
                     label: translate(localeJson, 'shortage_supplies_list'),
