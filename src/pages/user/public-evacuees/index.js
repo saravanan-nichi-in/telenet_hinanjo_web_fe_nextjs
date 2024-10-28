@@ -6,6 +6,7 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/services";
 import { Button, CustomHeader, NormalTable, Input } from "@/components";
 import { prefectures } from "@/utils/constant";
+import { useSelector } from "react-redux";
 
 export default function PublicEvacuee() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
@@ -28,6 +29,7 @@ export default function PublicEvacuee() {
 
     /* Services */
     const { getList } = PublicEvacueeService;
+    const layoutReducer = useSelector((state) => state.layoutReducer);
 
     useEffect(() => {
         setTableLoading(true);
@@ -203,16 +205,16 @@ export default function PublicEvacuee() {
                                     totalRecords={totalCount}
                                     loading={tableLoading}
                                     stripedRows={true}
-                                    className={`custom-table-cell ${getListPayload.search == 1 ? "" : "hideEmptyMessage"}`}
+                                    className={`custom-table-cell ${getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1 ? "" : "hideEmptyMessage"}`}
                                     showGridlines={"true"}
                                     value={list}
                                     columns={publicEvacueesColumn}
                                     filterDisplay="menu"
-                                    emptyMessage={getListPayload.search == 1 ? translate(localeJson, "data_not_found") : <span className="hidden"></span>}
-                                    paginator={getListPayload.search == 1?true:false}
+                                    emptyMessage={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1? translate(localeJson, "data_not_found") : <span className="hidden"></span>}
+                                    paginator={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1?true:false}
                                     first={getListPayload.filters.start}
                                     rows={getListPayload.filters.limit}
-                                    paginatorLeft={getListPayload.search == 1?true:false}
+                                    paginatorLeft={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1?true:false}
                                     onPageHandler={(e) => onPaginationChange(e)}
                                     parentClass={"custom-table"}
                                 />
