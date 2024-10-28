@@ -173,7 +173,18 @@ export default function HQExternalEvacuationPage() {
                     <div className="flex gap-2 align-items-center ">
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "external_evacuee_details")} />
                         <div className='page-header1-sub mb-2'>{`(${totalPersonCount ?? "0"}${translate(localeJson, "people")})`}</div>
+                        </div>
+                        <div className='flex justify-content-end'>
+                        <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        <Button
+                                buttonProps={{
+                                    text: translate(localeJson, "external_evacuees_tally"),
+                                    onClick: () => router.push("/hq-staff/external/family"),
+                                }}
+                            />
+                        </div>
                     </div>
+                   
                     <div>
                         <div>
                             <form>

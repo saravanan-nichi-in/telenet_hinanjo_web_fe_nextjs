@@ -192,11 +192,17 @@ export default function ExternalEvacuationPage() {
                     </div>
                     <div className='flex justify-content-end'>
                         <div className='flex' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        <Button
+                                buttonProps={{
+                                    text: translate(localeJson, "external_evacuees_tally"),
+                                    onClick: () => router.push("/admin/external/family"),
+                                }}
+                            />
                             <Button buttonProps={{
                                 type: 'submit',
                                 rounded: "true",
                                 export: true,
-                                buttonClass: "evacuation_button_height export-button",
+                                buttonClass: "ml-2 evacuation_button_height export-button",
                                 text: translate(localeJson, 'export'),
                                 onClick: () => downloadExternalEvacueesListCSV()
                             }} parentClass={"mb-0 export-button"} />
