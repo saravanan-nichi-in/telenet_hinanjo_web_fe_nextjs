@@ -7757,3 +7757,6 @@
 .p-datatable .p-datatable-tbody>tr.p-datatable-dragpoint-bottom>td {
   box-shadow: inset 0 -2px 0 0 #6366F1;
 }
+.hideEmptyMessage .p-datatable-emptymessage {
+  display: none !important;
+}

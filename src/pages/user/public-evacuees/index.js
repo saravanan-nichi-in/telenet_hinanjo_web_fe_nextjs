@@ -61,7 +61,7 @@ export default function PublicEvacuee() {
 
         }
         getList(payload, (response) => {
-            if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
+            if (response.success && !_.isEmpty(response.data)) {
                 const data = response.data.list;
                 const dynamicColumns = response.data.public_display_order;
                 const places = response.data.places;
@@ -80,6 +80,8 @@ export default function PublicEvacuee() {
                     }
                 });
                 setPublicEvacueesColumn(columnHeaders);
+                if(response.data.total > 0)
+                {
                 let preparedList = [];
                 // Preparing row data for specific column to display
                 let serialIndex = getListPayload.filters.start + 1;
@@ -111,7 +113,9 @@ export default function PublicEvacuee() {
                     serialIndex = serialIndex + 1;
                 })
                 setList(preparedList);
+             }
                 setTotalCount(response.data.total);
+                
                 setTableLoading(false);
             } else {
                 setTableLoading(false);
@@ -199,16 +203,16 @@ export default function PublicEvacuee() {
                                     totalRecords={totalCount}
                                     loading={tableLoading}
                                     stripedRows={true}
-                                    className={"custom-table-cell"}
+                                    className={`custom-table-cell ${getListPayload.search == 1 ? "" : "hideEmptyMessage"}`}
                                     showGridlines={"true"}
                                     value={list}
                                     columns={publicEvacueesColumn}
                                     filterDisplay="menu"
-                                    emptyMessage={getListPayload.search == 1 ? translate(localeJson, "data_not_found") : <></>}
-                                    paginator={true}
+                                    emptyMessage={getListPayload.search == 1 ? translate(localeJson, "data_not_found") : <span className="hidden"></span>}
+                                    paginator={getListPayload.search == 1?true:false}
                                     first={getListPayload.filters.start}
                                     rows={getListPayload.filters.limit}
-                                    paginatorLeft={true}
+                                    paginatorLeft={getListPayload.search == 1?true:false}
                                     onPageHandler={(e) => onPaginationChange(e)}
                                     parentClass={"custom-table"}
                                 />

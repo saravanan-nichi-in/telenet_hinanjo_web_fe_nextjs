@@ -449,6 +449,18 @@ export default function EvacueeTempRegModal(props) {
         }
         setFieldValue("postalCode", val);
         setFetchedZipCode(val.replace(/-/g, ""))
+        let payload = evacuees.postal_code;
+        getAddressFromZipCode(
+          payload, (res) => {
+            
+            if (res && res.prefcode != evacuees?.prefecture_id) {
+              setPostalCodePrefectureId(res.prefcode);
+              // setFieldValue("prefecture_id", res.prefcode);
+              setPrefCount(prefCount+1)
+              // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
+            }
+            // validateForm();
+          })
       }
  
     } 
