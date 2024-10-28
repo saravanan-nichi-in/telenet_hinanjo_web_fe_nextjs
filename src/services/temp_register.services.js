@@ -163,8 +163,14 @@ function _registerUser(payload, callBackFun) {
       // toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun(false);
-      toastDisplay(error?.response)
+      if(error.response?.status != 409)
+      {
+      callBackFun();
+      toastDisplay(error.response);
+      }
+      else {
+        callBackFun(error.response.data);
+      }
     });
 }
 
@@ -202,8 +208,14 @@ function _staffRegisterUser(payload, callBackFun) {
       toastDisplay(response);
     })
     .catch((error) => {
-      callBackFun(false);
-      toastDisplay(error?.response)
+      if(error.response?.status != 409)
+        {
+        callBackFun();
+        toastDisplay(error.response);
+        }
+        else {
+          callBackFun(error.response.data);
+        }
     });
 }
 function _staffEditUser(payload, callBackFun) {

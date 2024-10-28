@@ -154,7 +154,7 @@ export const gender_jp = [
     { value: "", name: '--' },
     { value: "1", name: '男' },
     { value: "2", name: '女' },
-    { value: "3", name: '答えたくない' },
+    { value: "3", name: '回答しない' },
   ];
   
 export const gender_en = [

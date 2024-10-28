@@ -6,6 +6,7 @@ import { getValueByKeyRecursively as translate } from "@/helper";
 import { PublicEvacueeService } from "@/services";
 import { Button, CustomHeader, NormalTable, Input } from "@/components";
 import { prefectures } from "@/utils/constant";
+import { useSelector } from "react-redux";
 
 export default function PublicEvacuee() {
     const { localeJson, setLoader, locale } = useContext(LayoutContext);
@@ -20,13 +21,15 @@ export default function PublicEvacuee() {
             sort_by: "",
             order_by: "desc",
             refugee_name: ""
-        }
+        },
+        "search" : 0,
     });
     const [list, setList] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
 
     /* Services */
     const { getList } = PublicEvacueeService;
+    const layoutReducer = useSelector((state) => state.layoutReducer);
 
     useEffect(() => {
         setTableLoading(true);
@@ -55,10 +58,12 @@ export default function PublicEvacuee() {
                 sort_by: "",
                 order_by: "desc",
                 refugee_name: getListPayload.filters.refugee_name
-            }
+            },
+            "search" : getListPayload.search,
+
         }
         getList(payload, (response) => {
-            if (response.success && !_.isEmpty(response.data) && response.data.total > 0) {
+            if (response.success && !_.isEmpty(response.data)) {
                 const data = response.data.list;
                 const dynamicColumns = response.data.public_display_order;
                 const places = response.data.places;
@@ -77,6 +82,8 @@ export default function PublicEvacuee() {
                     }
                 });
                 setPublicEvacueesColumn(columnHeaders);
+                if(response.data.total > 0)
+                {
                 let preparedList = [];
                 // Preparing row data for specific column to display
                 let serialIndex = getListPayload.filters.start + 1;
@@ -108,7 +115,9 @@ export default function PublicEvacuee() {
                     serialIndex = serialIndex + 1;
                 })
                 setList(preparedList);
+             }
                 setTotalCount(response.data.total);
+                
                 setTableLoading(false);
             } else {
                 setTableLoading(false);
@@ -182,7 +191,8 @@ export default function PublicEvacuee() {
                                                     filters: {
                                                         ...prevState.filters,
                                                         refugee_name: searchName
-                                                    }
+                                                    },
+                                                    search:1
                                                 }));
                                             }
                                         }} parentClass={"back-button"} />
@@ -195,16 +205,16 @@ export default function PublicEvacuee() {
                                     totalRecords={totalCount}
                                     loading={tableLoading}
                                     stripedRows={true}
-                                    className={"custom-table-cell"}
+                                    className={`custom-table-cell ${getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1 ? "" : "hideEmptyMessage"}`}
                                     showGridlines={"true"}
                                     value={list}
                                     columns={publicEvacueesColumn}
                                     filterDisplay="menu"
-                                    emptyMessage={translate(localeJson, "data_not_found")}
-                                    paginator={true}
+                                    emptyMessage={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1? translate(localeJson, "data_not_found") : <span className="hidden"></span>}
+                                    paginator={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1?true:false}
                                     first={getListPayload.filters.start}
                                     rows={getListPayload.filters.limit}
-                                    paginatorLeft={true}
+                                    paginatorLeft={getListPayload.search == 1||layoutReducer?.layout?.initial_load_status==1?true:false}
                                     onPageHandler={(e) => onPaginationChange(e)}
                                     parentClass={"custom-table"}
                                 />

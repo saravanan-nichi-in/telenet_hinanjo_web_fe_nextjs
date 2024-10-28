@@ -227,14 +227,14 @@ function TemporaryRegistrants() {
       minWidth: "7rem",
       display:'none'
     },
-    {
-      field: "connecting_code",
-      header: translate(localeJson, "connecting_code"),
-      minWidth: "7rem",
-      sortable: true,
-      textAlign: "left",
-      display: "none",
-    },
+    // {
+    //   field: "connecting_code",
+    //   header: translate(localeJson, "connecting_code"),
+    //   minWidth: "7rem",
+    //   sortable: true,
+    //   textAlign: "left",
+    //   display: "none",
+    // },
     {
       field: "remarks",
       header: translate(localeJson, "remarks"),

@@ -236,7 +236,7 @@ const FamilyListComponent = ({ data, header, eventFlag }) => {
                               : "-"}
                           </div>
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2 hidden">
                           <label className="header_table">
                             {translate(localeJson, "c_connecting_code")}
                           </label>

@@ -6,6 +6,9 @@ import {
   InfoWindow,
   OverlayView,
   OverlayViewF,
+  DirectionsRenderer,
+  DirectionsService,
+  LoadScript,
 } from "@react-google-maps/api";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
@@ -134,7 +137,12 @@ export const GoogleMapMultiMarkerComponent = ({
   const [isMarker, setIsMarker] = useState(false);
   const [onMouseHoverValue, setOnMouseHoverValue] = useState(false);
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
-
+  const [mapOptions, setMapOptions] = useState({
+    minZoom: 2,
+    maxZoom: 25,
+    zoom: mapScale || 10, // Initial zoom level
+    gestureHandling: "greedy",
+  });
   useEffect(() => {
     setMapOptions((prevOptions) => ({
       ...prevOptions,
@@ -154,21 +162,14 @@ export const GoogleMapMultiMarkerComponent = ({
     setCenter(searchResult);
   }, [searchResult]);
 
-  useEffect(() => {
-    mapOptions.zoom = 10;
-  }, []);
+
 
   const onMarkerClick = (marker) => {
     setIsMarker(true);
     setSelectedMarker(marker);
   };
 
-  const [mapOptions, setMapOptions] = useState({
-    minZoom: 2,
-    maxZoom: 25,
-    zoom: 10, // Initial zoom level
-    gestureHandling: "greedy",
-  });
+
 
   const containerStyle = {
     width: "100%",
@@ -415,3 +416,62 @@ export const GoogleMapMultiMarkerComponent = ({
     <></>
   );
 };
+
+
+
+export const MapComponent = ({ destination }) => {
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [directions, setDirections] = useState(null);
+  const { locale, localeJson, setLoader, loader } = useContext(LayoutContext);
+  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: GOOGLE_API_KEY,
+    language: locale,
+  });
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded && currentLocation && destination) {
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: currentLocation,
+          destination,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirections(result);
+          } else {
+            console.error(`Error fetching directions: ${status}`);
+          }
+        }
+      );
+    }
+  }, [isLoaded, currentLocation, destination]);
+
+  return isLoaded ? (
+    <GoogleMap
+      center={currentLocation || destination}
+      zoom={12}
+      mapContainerStyle={{ height: "400px", width: "100%" }}
+    >
+      {directions && <DirectionsRenderer directions={directions} />}
+    </GoogleMap>
+  ) : (
+    <></>
+  );
+};
+
