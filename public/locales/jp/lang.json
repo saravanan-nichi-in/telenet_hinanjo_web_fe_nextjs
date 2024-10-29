@@ -207,7 +207,7 @@
       "header_stockpile_image": "画像",
       "header_action": "削除",
       "sno": "番号",
-      "qr_scanner_popup_btn": "QR コード",
+      "qr_scanner_popup_btn": "QR コード スキャン",
       "qr_scanner_details_back": "キャンセル",
       "qr_scanner_details_shelter": "避難所に入所する",
       "qr_scanner_popup_dialog": "QRコードスキャンします",

@@ -108,9 +108,6 @@ const RegisterSuccess = () => {
     textContainer.classList.add('hidden');
     svgContainer.classList.add('hidden');
     svgContainer.classList.remove('flex');
-
-      
-    console.log(buttonContainer)
     // Convert base64 to Blob and set it as the image source
     if (imgElement && baseUrl) {
       const blob = base64ToBlob(baseUrl);
@@ -132,7 +129,7 @@ const RegisterSuccess = () => {
     
   
       const link = document.createElement("a");
-      link.download = "qr.png";
+      link.download = "qr-hinanjo-"+family_code+".png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     });

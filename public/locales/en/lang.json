@@ -209,7 +209,7 @@
     "header_stockpile_image": "Image",
     "header_action": "Delete",
     "sno": "S No",
-    "qr_scanner_popup_btn": "QR code",
+    "qr_scanner_popup_btn": "QR Code Scan",
     "qr_scanner_details_back": "Cancel",
     "qr_scanner_details_shelter": "Enter the shelter",
     "qr_scanner_popup_dialog": "Scan QR code",
