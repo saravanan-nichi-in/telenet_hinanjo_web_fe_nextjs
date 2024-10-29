@@ -88,7 +88,7 @@ export default function App() {
         <div className='grid flex-1'>
             <div className='col-12 flex-1'>
                 <div className='card flex flex-column h-full align-items-center justify-content-center'>
-                    <div className="">
+                    <div className=" w-9">
                         <QrScannerModal
                             open={openQrPopup}
                             close={closeQrPopup}
@@ -107,7 +107,7 @@ export default function App() {
                                 <h5 className="text-center  user-dashboard-header"> {translate(localeJson, "user_dashboard_1")}</h5>
                                 <div className="flex justify-content-center">
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>
-                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis md:max-w-full sm:max-w-25rem">
+                                    <h5 className="text-center header_clr user-dashboard-header white-space-nowrap overflow-hidden text-overflow-ellipsis">
                                         {locale == 'ja' ? placeName : !_.isNull(placeName_En)?placeName_En:placeName}
                                     </h5>
                                     <h5 className="user-dashboard-header" style={{ lineHeight: "32px" }}></h5>

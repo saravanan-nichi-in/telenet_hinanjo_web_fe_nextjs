@@ -683,7 +683,7 @@ export default function EvacueeTempRegModal(props) {
                 blockScroll={true}
                 onHide={() => {
                   const personCount = localStorage.getItem(
-                    isFrom == "user" ? "personCount" : "personCountStaff"
+                    isFrom == "user" ? "personCount" : isFrom =="temp"?"personCountTemp":"personCountStaff"
                   );
                   setIsRecording(false);
                   if (
@@ -743,7 +743,7 @@ export default function EvacueeTempRegModal(props) {
                           const personCount = localStorage.getItem(
                             isFrom == "user"
                               ? "personCount"
-                              : "personCountStaff"
+                              : isFrom =="temp"?"personCountTemp":"personCountStaff"
                           );
                           if (
                             personCount > evacuee.length &&
