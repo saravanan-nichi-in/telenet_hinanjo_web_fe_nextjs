@@ -53,9 +53,11 @@ export default function AdminQrCodeCreatePage() {
     const handleFormSubmit = async (values, { resetForm, setFieldValue }) => {
         if (importFileData) {
             setLoader(true);
-            await callImport(importFileData, onImportSuccess);
+            callImport(importFileData,(res)=>{
+                onImportSuccess(res);
             // Reset the form after submission
             resetForm({ values: initialValues });
+            } );
         }
     }
 

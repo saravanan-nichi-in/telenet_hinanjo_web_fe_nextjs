@@ -1,7 +1,7 @@
-import React, { useRef, useState, useContext } from 'react';
-
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { getValueByKeyRecursively as translate } from "@/helper";
 import { LayoutContext } from "@/layout/context/layoutcontext";
+import _ from 'lodash';
 
 export const InputFile = (props) => {
     const {
@@ -46,6 +46,13 @@ export const InputFile = (props) => {
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
+
+    useEffect(()=>{
+        if(_.isNull(value)){
+            setSelectedFileName('');
+            fileInputRef.current.value = null;
+        }
+    },[value])
 
     return (
         <div className={`input-parent-file-border bg-white ${parentClass}`} style={divStyle}>
