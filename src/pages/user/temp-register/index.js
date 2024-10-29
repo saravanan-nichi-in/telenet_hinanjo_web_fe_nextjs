@@ -1077,6 +1077,7 @@ export default function Admission() {
         registerModalAction={registerModalAction}
         isRecording={isRecording}
         setIsRecording={setIsRecording}
+        isFrom={"temp"}
       />
       {/* Perspective cropping */}
       <PerspectiveCropping
