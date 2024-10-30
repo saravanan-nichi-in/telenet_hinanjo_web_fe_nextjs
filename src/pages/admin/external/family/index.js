@@ -139,7 +139,7 @@ export default function ExternalEvacuees() {
                         const index = context.dataIndex;
                         const value = dataset.data[index];
                         const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                        const percentage = ((value / total) * 100).toFixed(1) + '%';
+                        const percentage = (Math.round((value / total) * 100)).toFixed(1) + '%';
                         return " " + context.label + ': ' + percentage;
                     },
                 },
@@ -170,7 +170,7 @@ export default function ExternalEvacuees() {
                         const index = context.dataIndex;
                         const value = dataset.data[index];
                         const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                        const percentage = ((value / total) * 100).toFixed(1) + '%';
+                        const percentage = (Math.round((value / total) * 100)).toFixed(1) + '%';
                         return " " + context.label + ': ' + percentage;
                     },
                 },
@@ -281,6 +281,7 @@ export default function ExternalEvacuees() {
                     foodData.push(obj[key])
                 }
             });
+            console.log(getData);
             let placeCategoryDataSet = {
                 labels: [translate(localeJson, 'city_in'), translate(localeJson, 'city_out'), translate(localeJson, 'pref_out')],
                 datasets: [
