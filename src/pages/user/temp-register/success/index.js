@@ -121,12 +121,10 @@ const RegisterSuccess = () => {
       imgElement.src = objectUrl;
       await new Promise((resolve) => (imgElement.onload = resolve));
     }
-
     document.body.appendChild(element);
   
     // Capture the canvas with hidden buttons
     html2canvas(element, { scale: 2, useCORS: true, allowTaint: true }).then((canvas) => {
-
       // Restore buttons after capture
       element.style.width = originalWidth;
       buttonContainer.classList.add('block');
