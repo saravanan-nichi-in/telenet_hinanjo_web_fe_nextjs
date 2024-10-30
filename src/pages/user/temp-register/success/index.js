@@ -98,7 +98,9 @@ const RegisterSuccess = () => {
   }, [locale]);
 
   const handleDownload = async () => {
-    const element = pageRef.current;
+    const mainElement = pageRef.current;
+    const element = mainElement.cloneNode(true);
+    element.style.width = "400px"; // Set mobile width, adjust as needed
     const buttonContainer = element.querySelector("#capture");
     const textContainer = element.querySelector("#textCapture");
     const svgContainer = element.querySelector("#svgCapture");
@@ -108,6 +110,8 @@ const RegisterSuccess = () => {
     textContainer.classList.add('hidden');
     svgContainer.classList.add('hidden');
     svgContainer.classList.remove('flex');
+    const originalWidth = element.style.width; // Store original width
+    element.style.width = "400px"; // Set mobile width, adjust as needed
     // Convert base64 to Blob and set it as the image source
     if (imgElement && baseUrl) {
       const blob = base64ToBlob(baseUrl);
@@ -117,16 +121,18 @@ const RegisterSuccess = () => {
       imgElement.src = objectUrl;
       await new Promise((resolve) => (imgElement.onload = resolve));
     }
+    document.body.appendChild(element);
   
     // Capture the canvas with hidden buttons
     html2canvas(element, { scale: 2, useCORS: true, allowTaint: true }).then((canvas) => {
       // Restore buttons after capture
+      element.style.width = originalWidth;
       buttonContainer.classList.add('block');
       buttonContainer?.classList?.remove('hidden');
       textContainer.classList.remove('hidden');
       svgContainer.classList.add('flex');
       svgContainer.classList.remove('hidden');
-    
+      document.body.removeChild(element);
   
       const link = document.createElement("a");
       link.download = "qr-hinanjo-"+family_code+".png";
@@ -168,7 +174,7 @@ const RegisterSuccess = () => {
 
   return (
     <div className='grid flex-1' ref={pageRef}>
-      <div className='col-12 flex-1'>
+      <div className='col-12 flex-1 p-0'>
         <div className='card flex flex-column h-full align-items-center justify-content-center'>
           <div className="mdScreenMaxWidth xlScreenMaxWidth">
             <div id="svgCapture" className='col-12 flex justify-content-center'>

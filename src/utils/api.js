@@ -74,6 +74,15 @@ api.interceptors.response.use((response) => {
       localStorage.removeItem('redirect');
     }
   }
+  if(!error.response)
+    {
+      const locale = localStorage.getItem('locale');
+         let message = locale === 'ja' ? 'サーバーの応答に時間が掛かっています。しばらくしてからもう一度お試しください。' : 'The server is taking too long to respond and may be busy.Please try after sometime'
+        toast.error(message, {
+          position: "top-right",
+        });
+      return Promise.reject(error);
+    }
   return Promise.reject(error);
 });
 
