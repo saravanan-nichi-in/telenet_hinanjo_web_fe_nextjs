@@ -125,3 +125,20 @@
         }
     }
 }
+
+.header-container {
+    position: fixed;
+    height: 4rem;
+    z-index: 997;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .hover-content {
+    display: none !important;
+  }
+  
+  .header-container:hover .hover-content {
+    display: flex !important;
+  }

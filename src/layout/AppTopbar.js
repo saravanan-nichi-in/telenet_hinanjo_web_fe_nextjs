@@ -99,6 +99,9 @@ const AppTopbar = forwardRef((props, ref) => {
         "/user/event/register/member/",
         "/user/event/checkout/",
     ];
+    const QrUrls = [
+        "/user/qr/app",
+        "/user/qr/app/",]
 
     const currentPath = window.location.pathname; // Assuming you are in a browser environment
     const [layoutInformation, setLayoutInformation] = useState(settings_data);
@@ -524,9 +527,11 @@ const AppTopbar = forwardRef((props, ref) => {
         </div>
     );
 
+
     return (
         <React.Fragment>
-            <div className="layout-topbar">
+            <div className="header-container">
+            <div className={`layout-topbar ${QrUrls.includes(currentPath)?"hover-content":""}`}>
                 {layoutConfig.menuMode === "static" &&
                     !windowURL.startsWith("/user/map") && (
                         <div className="logo-details">
@@ -575,7 +580,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         </div>
                     )}
                 <div
-                    className="header-details"
+                    className={`header-details`}
                     style={{
                         width:
                             (layoutConfig.menuMode === "overlay" ||
@@ -649,6 +654,7 @@ const AppTopbar = forwardRef((props, ref) => {
                         {topBarRight}
                     </div>
                 </div>
+            </div>
             </div>
         </React.Fragment>
     );
