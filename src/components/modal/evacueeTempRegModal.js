@@ -1460,7 +1460,7 @@ export default function EvacueeTempRegModal(props) {
                                       labelMainClassName: "pb-1 pt-1",
                                       parentStyle: { lineHeight: "18px" },
                                     },
-                                    inputClassName: "w-full",
+                                    inputClassName: "w-full md:p-2 p-1",
                                     id: "dob.month",
                                     name: "dob.month",
                                     inputMode: "numeric",
@@ -1523,7 +1523,7 @@ export default function EvacueeTempRegModal(props) {
                               <div className="flex align-items-baseline">
                                 <Input
                                   inputProps={{
-                                    inputParentClassName: `w-12 pr-2`,
+                                    inputParentClassName: `w-12 pr-1`,
                                     labelProps: {
                                       text: "",
                                       inputLabelClassName: "block font-bold",
@@ -1532,7 +1532,7 @@ export default function EvacueeTempRegModal(props) {
                                       labelMainClassName: "pb-1 pt-1",
                                       parentStyle: { lineHeight: "18px" },
                                     },
-                                    inputClassName: "w-full",
+                                    inputClassName: "w-full md:p-2 p-1",
                                     id: "dob.date",
                                     name: "dob.date",
                                     inputMode: "numeric",
