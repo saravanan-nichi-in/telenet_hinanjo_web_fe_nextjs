@@ -4,9 +4,9 @@ export const MailSettingsOption1 = [
     { name: '2時間毎', value: 2 },
     { name: '3時間毎', value: 3 },
     { name: '4時間毎', value: 4 },
-    { name: '6時間毎', value: 6 },
-    { name: '毎日', value: 8 },
-    { name: '毎日2回', value: 16 },
+    { name: '6時間毎', value: 5 },
+    { name: '毎日', value: 6 },
+    { name: '毎日2回', value: 7 },
 ];
 
 export const mapScaleRateOptions = [
