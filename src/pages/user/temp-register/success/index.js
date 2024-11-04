@@ -184,10 +184,10 @@ const RegisterSuccess = () => {
             </div>
             <p id="textCapture" className="text-2xl text-center">{translate(localeJson, "tem_reg_success_message")}</p>
             <div className="text-center">
-              <p className="text-5xl font-bold">{translate(localeJson, "your_family_code")}</p>
+              <p className="text-3xl font-bold">{translate(localeJson, "your_family_code")}</p>
             </div>
             <div className="mb-3 text-center">
-              <p className="text-5xl font-bold">{family_code}</p>
+              <p className="text-3xl font-bold">{family_code}</p>
             </div>
             {isTemp &&(
             <div className="mb-3 text-center">
@@ -233,7 +233,7 @@ const RegisterSuccess = () => {
                 }} parentClass={"delete-button-user"}
                 />
               }
-              <div className="p-error mt-3">
+              <div className="p-error text-sm mt-3">
                 {translate(localeJson, "qr_notification_message")}
               </div>
 
