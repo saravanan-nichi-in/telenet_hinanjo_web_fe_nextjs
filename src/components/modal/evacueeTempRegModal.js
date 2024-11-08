@@ -100,7 +100,7 @@ export default function EvacueeTempRegModal(props) {
       .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
         (value, context) => {
         const { prefecture_id } = context.parent;
-        if (postalCodePrefectureId != null && prefecture_id != null) {
+        if (postalCodePrefectureId && prefecture_id && postalCodePrefectureId != null && prefecture_id != null) {
           return postalCodePrefectureId == prefecture_id
         }
         else return true
@@ -1246,8 +1246,14 @@ export default function EvacueeTempRegModal(props) {
                                       setPrefCount(prefCount+1)
                                       // setErrors({ ...errors, postal_code: translate(localeJson, "zip_code_mis_match"), });
                                     }
+                                    else {
+                                      setPostalCodePrefectureId(evt.target.value);
+                                    }
                                     // validateForm();
                                   })
+                              }
+                              else {
+                                setPostalCodePrefectureId(evt.target.value);
                               }
                             },
                             onBlur: handleBlur,
