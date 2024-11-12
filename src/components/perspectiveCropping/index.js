@@ -412,7 +412,7 @@ export const PerspectiveCropping = (props) => {
                                         screenshotFormat="image/jpeg"
                                         screenshotQuality={1}
                                         className={`webcam-element`}
-                                        mirrored={toggleCameraMode=="user"?true:false}
+                                        // mirrored={toggleCameraMode=="user"?true:false}
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
                                         }}
