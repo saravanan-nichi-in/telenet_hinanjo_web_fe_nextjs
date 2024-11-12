@@ -122,6 +122,7 @@ export const PerspectiveCropping = (props) => {
                                 setCompleted(false);
                                 setImg(undefined);
                                 setCropState();
+                                setRotateAngel(0);                          
                             },
                         }}
                     />
