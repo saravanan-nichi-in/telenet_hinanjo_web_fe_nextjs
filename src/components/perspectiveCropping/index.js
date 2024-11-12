@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback,useEffect } from 'react';
 import Webcam from "react-webcam";
 import { Dialog } from 'primereact/dialog';
 import { Spin, Upload } from 'antd'
@@ -29,6 +29,20 @@ export const PerspectiveCropping = (props) => {
     const [toggleCameraMode, setToggleCameraMode] = useState("environment");
     const [rotateAngel, setRotateAngel] = useState(0);
 
+    // Detect whether the user is on a mobile device
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  // Set the camera mode on initial render based on the device type
+  useEffect(() => {
+    console.log(/Mobi|Android/i.test(navigator.userAgent));
+    console.log((navigator.userAgent));
+    if (isMobile) {
+      setToggleCameraMode("environment"); // Use front camera for mobile by default
+    } else {
+      setToggleCameraMode("user"); // Use rear camera for desktop by default
+    }
+  }, []);
+
     const onCameraBtnClick = (name) => {
         setLoader(true);
         setSelectUtil('camera');
@@ -52,10 +66,10 @@ export const PerspectiveCropping = (props) => {
           // Set canvas dimensions
           canvas.width = image.width;
           canvas.height = image.height;
-
-            context.translate(canvas.width, 0); // Move the origin to top-right
+            if(toggleCameraMode=='user')
+          { context.translate(canvas.width, 0); // Move the origin to top-right
             context.scale(-1, 1); // Flip horizontally for the front camera
-    
+          }
           // Draw the image onto the canvas (flipped or not based on camera mode)
           context.drawImage(image, 0, 0);
     
@@ -402,7 +416,7 @@ export const PerspectiveCropping = (props) => {
                                             facingMode: toggleCameraMode
                                         }}
                                         style={{
-                                            transform: 'scaleX(-1)', // Flip only for front camera
+                                            transform: toggleCameraMode == "user" ? 'scaleX(-1)':'inherit', // Flip only for front camera
                                           }}
                                     />
                                     <div className="overlay"></div>
