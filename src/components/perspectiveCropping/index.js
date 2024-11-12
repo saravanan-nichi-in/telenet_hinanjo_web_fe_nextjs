@@ -370,6 +370,9 @@ export const PerspectiveCropping = (props) => {
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
                                         }}
+                                        style={{
+                                            transform: toggleCameraMode === 'user' ? 'scaleX(-1)' : 'scaleX(1)', // Flip only for front camera
+                                          }}
                                     />
                                     <div className="overlay"></div>
                                     <div className="overlay-text">
