@@ -435,6 +435,7 @@
       "placeholder_please_enter_name": "名前を入力ください",
       "placeholder_please_enter_password": "パスワードを入力ください",
       "placeholder_hyphen_not_required": "ハイフンは不要です",
+      "placeholder_family_required": "世帯番号を入力ください",
       "return_to_evacuee_list": "避難者一覧に戻る",
       "return_to_evacuee_list_admin": "避難者一覧に戻る",
       "admission_date_time_temp_register": "避難前登録日時",

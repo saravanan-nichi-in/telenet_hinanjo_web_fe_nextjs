@@ -594,7 +594,7 @@ export default function Admission() {
                                         name: "familyCode",
                                         placeholder: translate(
                                           localeJson,
-                                          "placeholder_hyphen_not_required"
+                                          "placeholder_family_required"
                                         ),
                                         value: values.familyCode,
                                         isLoading: audioFamilyCodeLoader,
