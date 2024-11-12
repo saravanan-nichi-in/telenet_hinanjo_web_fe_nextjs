@@ -253,7 +253,8 @@ export const PerspectiveCropping = (props) => {
                         canvas.height = img.height;
 
                         if (toggleCameraMode === 'user') {
-                            ctx.scale(-1, 1); // Flip horizontally for front camera
+                            console.log("LLL")
+                            ctx.scale(-1, -1); // Flip horizontally for front camera
                             }
 
 
