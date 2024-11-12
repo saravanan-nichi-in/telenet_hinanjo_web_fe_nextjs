@@ -52,12 +52,9 @@ export const PerspectiveCropping = (props) => {
           // Set canvas dimensions
           canvas.width = image.width;
           canvas.height = image.height;
-    
-          // If the front camera is being used, flip the image
-          if (toggleCameraMode === 'environment') {
+
             context.translate(canvas.width, 0); // Move the origin to top-right
             context.scale(-1, 1); // Flip horizontally for the front camera
-          }
     
           // Draw the image onto the canvas (flipped or not based on camera mode)
           context.drawImage(image, 0, 0);
@@ -415,7 +412,7 @@ export const PerspectiveCropping = (props) => {
                                             facingMode: toggleCameraMode
                                         }}
                                         style={{
-                                            transform: toggleCameraMode === 'environment' ? 'scaleX(-1)' : 'inherit', // Flip only for front camera
+                                            transform: 'scaleX(-1)', // Flip only for front camera
                                           }}
                                     />
                                     <div className="overlay"></div>
