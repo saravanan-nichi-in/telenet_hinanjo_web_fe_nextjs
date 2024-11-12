@@ -34,11 +34,44 @@ export const PerspectiveCropping = (props) => {
         setSelectUtil('camera');
     }
 
+    // const onCapture = (name) => {
+    //     const imageSrc = webcamRef.current.getScreenshot();
+    //     setImg(imageSrc);
+    //     setCompleted(false)
+    // }
     const onCapture = (name) => {
+        // Capture the screenshot from the webcam
         const imageSrc = webcamRef.current.getScreenshot();
-        setImg(imageSrc);
-        setCompleted(false)
-    }
+    
+        // Flip image if using the front-facing camera
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const image = new Image();
+        
+        image.onload = () => {
+          // Set canvas dimensions
+          canvas.width = image.width;
+          canvas.height = image.height;
+    
+          // If the front camera is being used, flip the image
+          if (toggleCameraMode === 'environment') {
+            context.translate(canvas.width, 0); // Move the origin to top-right
+            context.scale(-1, 1); // Flip horizontally for the front camera
+          }
+    
+          // Draw the image onto the canvas (flipped or not based on camera mode)
+          context.drawImage(image, 0, 0);
+    
+          // Get the flipped (or original) image as a data URL
+          const correctedImageSrc = canvas.toDataURL("image/jpeg");
+    
+          // Set the corrected image to the state
+          setImg(correctedImageSrc);
+          setCompleted(false);
+        };
+    
+        image.src = imageSrc; // Load the captured image
+      };
 
     const onFileSelectionBtnClick = (name) => {
         setSelectUtil('file');
@@ -252,7 +285,7 @@ export const PerspectiveCropping = (props) => {
                         canvas.width = img.width;
                         canvas.height = img.height;
                         console.log(toggleCameraMode)
-                        if (toggleCameraMode == 'user') {
+                        if (toggleCameraMode == 'environment') {
                             console.log("LLL")
                             ctx.scale(-1, 1); // Flip horizontally for front camera
                             ctx.drawImage(img, 0, 0);
@@ -377,13 +410,13 @@ export const PerspectiveCropping = (props) => {
                                         ref={webcamRef && webcamRef}
                                         screenshotFormat="image/jpeg"
                                         screenshotQuality={1}
-                                        className={`webcam-element ${toggleCameraMode=='user' && '-translate-x-100 xl:translate-x-100'}`}
+                                        className={`webcam-element`}
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
                                         }}
-                                        // style={{
-                                        //     transform: toggleCameraMode === 'user' ? 'scaleX(-1)' : 'inherit', // Flip only for front camera
-                                        //   }}
+                                        style={{
+                                            transform: toggleCameraMode === 'environment' ? 'scaleX(-1)' : 'inherit', // Flip only for front camera
+                                          }}
                                     />
                                     <div className="overlay"></div>
                                     <div className="overlay-text">
