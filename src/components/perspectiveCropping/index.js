@@ -251,15 +251,20 @@ export const PerspectiveCropping = (props) => {
                         // Set the canvas dimensions to the image dimensions
                         canvas.width = img.width;
                         canvas.height = img.height;
-
-                        if (toggleCameraMode === 'user') {
+                        console.log(toggleCameraMode)
+                        if (toggleCameraMode == 'user') {
                             console.log("LLL")
-                            ctx.scale(-1, -1); // Flip horizontally for front camera
+                            ctx.scale(-1, 1); // Flip horizontally for front camera
+                            ctx.drawImage(img, 0, 0);
+                            }
+                            else {
+                                console.log("MMM")
+                                ctx.drawImage(img, 0, 0);
                             }
 
 
                         // Draw the image on the canvas
-                        ctx.drawImage(img, 0, 0);
+
 
                         // Convert the canvas content to a data URL (PNG format)
                         const pngDataUrl = canvas.toDataURL('image/png');
@@ -372,13 +377,13 @@ export const PerspectiveCropping = (props) => {
                                         ref={webcamRef && webcamRef}
                                         screenshotFormat="image/jpeg"
                                         screenshotQuality={1}
-                                        className="webcam-element"
+                                        className={`webcam-element ${toggleCameraMode=='user' && '-translate-x-100 xl:translate-x-100'}`}
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
                                         }}
-                                        style={{
-                                            transform: toggleCameraMode === 'user' ? 'scaleX(-1)' : 'scaleX(1)', // Flip only for front camera
-                                          }}
+                                        // style={{
+                                        //     transform: toggleCameraMode === 'user' ? 'scaleX(-1)' : 'inherit', // Flip only for front camera
+                                        //   }}
                                     />
                                     <div className="overlay"></div>
                                     <div className="overlay-text">
