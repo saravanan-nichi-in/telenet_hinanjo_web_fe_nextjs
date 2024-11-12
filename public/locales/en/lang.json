@@ -437,6 +437,7 @@
     "placeholder_please_enter_name": "Please enter your name",
     "placeholder_please_enter_password": "Please enter your password",
     "placeholder_hyphen_not_required": "Hyphen is not required",
+    "placeholder_family_required": "Please enter your family code",
     "return_to_evacuee_list": "Return to Evacuees List",
     "return_to_evacuee_list_admin": "Return to Evacuees List",
     "admission_date_time_temp_register": "Check In",
