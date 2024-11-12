@@ -342,6 +342,7 @@ export default function EvacuationPage() {
             filters: {
                 ...prevState.filters,
                 checkout_flg: showRegisteredEvacuees ? 0 : 1,
+                start: 0
             }
         }));
     }
