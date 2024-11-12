@@ -631,7 +631,7 @@ export default function Admission() {
                                       inputMode: "numeric",
                                       placeholder: translate(
                                         localeJson,
-                                        "placeholder_hyphen_not_required"
+                                        "placeholder_family_required"
                                       ),
                                       value: values.familyCode,
                                       isLoading: audioFamilyCodeLoader,
