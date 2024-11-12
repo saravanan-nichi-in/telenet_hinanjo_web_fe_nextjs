@@ -281,18 +281,8 @@ export const PerspectiveCropping = (props) => {
                         // Set the canvas dimensions to the image dimensions
                         canvas.width = img.width;
                         canvas.height = img.height;
-                        console.log(toggleCameraMode)
-                        if (toggleCameraMode == 'environment') {
-                            console.log("LLL")
-                            ctx.scale(-1, 1); // Flip horizontally for front camera
+
                             ctx.drawImage(img, 0, 0);
-                            }
-                            else {
-                                console.log("MMM")
-                                ctx.drawImage(img, 0, 0);
-                            }
-
-
                         // Draw the image on the canvas
 
 
