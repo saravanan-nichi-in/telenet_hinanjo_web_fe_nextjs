@@ -32,7 +32,10 @@ export const GoogleMapComponent = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if(initialPosition)
+    {
     setCenter(initialPosition);
+    }
   }, [initialPosition]);
 
   useEffect(() => {
@@ -81,7 +84,7 @@ export const GoogleMapComponent = ({
   );
 
   const onUnmount = React.useCallback(function callback() {
-    setCenter(null);
+    setCenter(initialPosition);
   }, []);
 
   return isLoaded ? (
@@ -150,17 +153,21 @@ export const GoogleMapMultiMarkerComponent = ({
     }));
   }, [searchResult]);
 
-  useEffect(() => {
-    setCenter(initialPosition);
-  }, [initialPosition]);
+
 
   useEffect(() => {
     setWindowHeight(height);
   }, [height]);
 
   useEffect(() => {
+    if(searchResult)
+    {
     setCenter(searchResult);
+    }
   }, [searchResult]);
+  useEffect(() => {
+    setCenter(initialPosition);
+  }, [initialPosition]);
 
 
 
@@ -181,11 +188,17 @@ export const GoogleMapMultiMarkerComponent = ({
     function callback(map) {
       if (markers.length > 0) {
         // Fit the map to the bounds of all markers
-        const bounds = new window.google.maps.LatLngBounds();
-        markers.forEach((marker) => {
-          bounds.extend(marker.position);
-        });
-        map.fitBounds(bounds);
+        if (!mapOptions.zoom) {
+          const bounds = new window.google.maps.LatLngBounds();
+          markers.forEach((marker) => {
+            bounds.extend(marker.position);
+          });
+          map.fitBounds(bounds);
+        } else {
+          // If zoom level is set in mapOptions, apply center and zoom manually
+          map.setCenter(initialPosition);
+          map.setZoom(mapOptions.zoom);
+        }
         // Check if the custom control has already been added
         if (!map.customControlAdded) {
           const customControlDiv = document.createElement("div");
@@ -236,12 +249,13 @@ export const GoogleMapMultiMarkerComponent = ({
         }
       }
     },
-    [markers]
+    [markers,initialPosition]
   );
 
-  const onUnmount = React.useCallback(function callback() {
-    setCenter(null);
-  }, []);
+  // const onUnmount = React.useCallback(function callback() {
+  //   console.log(initialPosition)
+  //   setCenter(initialPosition);
+  // }, []);
 
   const RedIcon = {
     url: "/layout/images/map/map_active_red.png",
@@ -262,7 +276,7 @@ export const GoogleMapMultiMarkerComponent = ({
         <GoogleMap
           mapContainerStyle={containerStyle}
           onLoad={onLoad}
-          onUnmount={onUnmount}
+          // onUnmount={onUnmount}
           center={center}
           options={mapOptions}
         >
