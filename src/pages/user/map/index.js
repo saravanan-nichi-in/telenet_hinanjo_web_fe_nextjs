@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { GoogleMapMultiMarkerComponent } from "@/components";
+import { GoogleMapComponent, GoogleMapMultiMarkerComponent } from "@/components";
 import { MapServices } from "@/services";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setPlaceDetails } from "@/redux/layout";
@@ -17,6 +17,7 @@ const Map = () => {
   const [markers, setMarkers] = useState([]);
   const [result, setResult] = useState();
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [position, setPosition] = useState();
 
   const payload = {
     "filters": {
@@ -45,6 +46,17 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
+    const lat = Number(Number(settings_data?.latitude).toFixed(6));
+    const lng = Number(Number(settings_data?.longitude).toFixed(6));
+
+  let pos = {
+    lat: lat,
+    lng: lng,
+  };
+    setPosition(pos);
+  },[]);
+
+  useEffect(() => {
     setResult(layoutReducer?.position)
   }, [layoutReducer?.position]);
 
@@ -65,7 +77,7 @@ const Map = () => {
               : place.percent
           : 0,
     }));
-    dispatch(setPlaceDetails(marker))
+   dispatch(setPlaceDetails(marker))
     setMarkers(marker);
   };
 
@@ -94,12 +106,21 @@ const Map = () => {
             className="w-full h-full info-window selectedMarker overflow-auto"
           >
             {!loader && (
+              layoutReducer?.places.length>0?
               <GoogleMapMultiMarkerComponent
                 markers={layoutReducer?.places}
                 searchResult={result}
                 mapScale={settings_data?.map_scale}
                 height={"100%"}
+                initialPosition={position}
               />
+              :
+              <GoogleMapComponent
+        initialPosition={{
+          lat: position?.lat,
+          lng: position?.lng,
+        }}
+      />
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback,useEffect } from 'react';
 import Webcam from "react-webcam";
 import { Dialog } from 'primereact/dialog';
 import { Spin, Upload } from 'antd'
@@ -29,6 +29,20 @@ export const PerspectiveCropping = (props) => {
     const [toggleCameraMode, setToggleCameraMode] = useState("environment");
     const [rotateAngel, setRotateAngel] = useState(0);
 
+    // Detect whether the user is on a mobile device
+//   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  // Set the camera mode on initial render based on the device type
+//   useEffect(() => {
+//     console.log(/Mobi|Android/i.test(navigator.userAgent));
+//     console.log((navigator.userAgent));
+//     if (isMobile) {
+//       setToggleCameraMode("environment"); // Use front camera for mobile by default
+//     } else {
+//       setToggleCameraMode("user"); // Use rear camera for desktop by default
+//     }
+//   }, []);
+
     const onCameraBtnClick = (name) => {
         setLoader(true);
         setSelectUtil('camera');
@@ -39,6 +53,36 @@ export const PerspectiveCropping = (props) => {
         setImg(imageSrc);
         setCompleted(false)
     }
+    // const onCapture = (name) => {
+    //     // Capture the screenshot from the webcam
+    //     const imageSrc = webcamRef.current.getScreenshot();
+    
+    //     // Flip image if using the front-facing camera
+    //     const canvas = document.createElement("canvas");
+    //     const context = canvas.getContext("2d");
+    //     const image = new Image();
+        
+    //     image.onload = () => {
+    //       // Set canvas dimensions
+    //       canvas.width = image.width;
+    //       canvas.height = image.height;
+    //         if(toggleCameraMode=='user')
+    //       { context.translate(canvas.width, 0); // Move the origin to top-right
+    //         context.scale(-1, 1); // Flip horizontally for the front camera
+    //       }
+    //       // Draw the image onto the canvas (flipped or not based on camera mode)
+    //       context.drawImage(image, 0, 0);
+    
+    //       // Get the flipped (or original) image as a data URL
+    //       const correctedImageSrc = canvas.toDataURL("image/jpeg");
+    
+    //       // Set the corrected image to the state
+    //       setImg(correctedImageSrc);
+    //       setCompleted(false);
+    //     };
+    
+    //     image.src = imageSrc; // Load the captured image
+    //   };
 
     const onFileSelectionBtnClick = (name) => {
         setSelectUtil('file');
@@ -252,8 +296,9 @@ export const PerspectiveCropping = (props) => {
                         canvas.width = img.width;
                         canvas.height = img.height;
 
+                            ctx.drawImage(img, 0, 0);
                         // Draw the image on the canvas
-                        ctx.drawImage(img, 0, 0);
+
 
                         // Convert the canvas content to a data URL (PNG format)
                         const pngDataUrl = canvas.toDataURL('image/png');
@@ -366,10 +411,14 @@ export const PerspectiveCropping = (props) => {
                                         ref={webcamRef && webcamRef}
                                         screenshotFormat="image/jpeg"
                                         screenshotQuality={1}
-                                        className="webcam-element"
+                                        className={`webcam-element`}
+                                        // mirrored={toggleCameraMode=="user"?true:false}
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
                                         }}
+                                        // style={{
+                                        //     transform: toggleCameraMode == "user" ? 'scaleX(-1)':'inherit', // Flip only for front camera
+                                        //   }}
                                     />
                                     <div className="overlay"></div>
                                     <div className="overlay-text">
