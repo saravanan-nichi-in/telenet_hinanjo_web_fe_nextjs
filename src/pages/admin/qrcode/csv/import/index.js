@@ -22,6 +22,7 @@ export default function AdminQrCodeCreatePage() {
     const [disableBtn,setDisableBtn] = useState(false);
     const fileInputRef = useRef(null);
     const formRef = useRef(null);
+    const [batchId, setBatchId] = useState(localStorage.getItem("batch_id") || "");
 
     const schema = Yup.object().shape({
         file: Yup.mixed()
@@ -159,15 +160,17 @@ export default function AdminQrCodeCreatePage() {
        }
     },[uploadFile]);
 
-    useEffect(()=>{
-        let currentValue = localStorage.getItem("batch_id") || "";
-        if(currentValue){
-           setDisableBtn(true);
-        }
-        else {
-            setDisableBtn(false);
-        }
-    },[localStorage.getItem("batch_id")])
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentBatchId = localStorage.getItem("batch_id");
+            if (batchId !== currentBatchId) {
+                setBatchId(currentBatchId);
+                setDisableBtn(!!currentBatchId);
+            }
+        }, 500);
+    
+        return () => clearInterval(interval);
+    }, [batchId]);
 
     return (
         <>
