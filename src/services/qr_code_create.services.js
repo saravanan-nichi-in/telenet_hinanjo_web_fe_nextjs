@@ -6,6 +6,7 @@ export const QRCodeCreateServices = {
     callImport: _callImport,
     callDelete: _callDelete,
     callZipDownload: _callZipDownload,
+    callBatchDownload: _callBatchDownload
 };
 
 /**
@@ -78,5 +79,22 @@ function _callZipDownload(callBackFun) {
         .catch((error) => {
             callBackFun(false);
             toastDisplay(error?.response);
+        });
+}
+
+function _callBatchDownload(payload,callBackFun) {
+    axios.post('/admin/qrcreate/check-batch-status',payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response);
+                // toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            if(error.response?.status != 400)
+            {
+            callBackFun(false);
+            toastDisplay(error?.response);
+            }     
         });
 }

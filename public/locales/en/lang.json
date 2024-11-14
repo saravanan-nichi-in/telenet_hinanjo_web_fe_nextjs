@@ -1064,5 +1064,6 @@
     "already_all_admitted":"The following users are already registered.",
     "all_admitted":"The following users are already registered.",
     "dup_check":"Duplicate Confirmation",
-    "proceed":"Continue"
+    "proceed":"Continue",
+    "file_max_records_check":"The maximum number of QR codes that can be created is 1000."
 }
