@@ -18,7 +18,8 @@ export default function AdminQrCodeCreatePage() {
     const [importFileData, setImportFileData] = useState("");
     const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
     const [deleteObj, setDeleteObj] = useState(null);
-    const [uploadFile,setUploadFile] = useState(null)
+    const [uploadFile,setUploadFile] = useState(null);
+    const [disableBtn,setDisableBtn] = useState(false);
     const fileInputRef = useRef(null);
     const formRef = useRef(null);
 
@@ -158,6 +159,16 @@ export default function AdminQrCodeCreatePage() {
        }
     },[uploadFile]);
 
+    useEffect(()=>{
+        let currentValue = localStorage.getItem("batch_id") || "";
+        if(currentValue){
+           setDisableBtn(true);
+        }
+        else {
+            setDisableBtn(false);
+        }
+    },[localStorage.getItem("batch_id")])
+
     return (
         <>
             {/* QR code create success modal */}
@@ -270,6 +281,7 @@ export default function AdminQrCodeCreatePage() {
                                                         buttonClass: "evacuation_button_height import-button",
                                                         type: 'submit',
                                                         import: true,
+                                                        disabled:disableBtn,
                                                         text: translate(localeJson, 'import'),
                                                         rounded: "true",
                                                         onClick: handleSubmit
