@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useEventListener, useMountEffect, useUnmountEffect } from 'primereact/hooks';
 import { classNames, DomHandler } from 'primereact/utils';
@@ -9,6 +9,8 @@ import AppFooter from '@/layout/AppFooter';
 import AppSidebar from '@/layout/AppSidebar';
 import AppTopbar from '@/layout/AppTopbar';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { zipDownloadWithURL } from '@/helper';
+import { QRCodeCreateServices } from '@/services';
 
 const Layout = (props) => {
     const { layoutConfig, layoutState, setLayoutState, loader } = useContext(LayoutContext);
@@ -87,11 +89,37 @@ const Layout = (props) => {
             hideProfileMenu();
         });
     }, []);
+    useEffect(() => {
+        if (window.location.origin === "https://rakuraku.nichi.in" || window.location.origin === "http://localhost:3000") {
+        const interval = setInterval(() => {
+          const currentValue = localStorage.getItem("batch_id") || "";
+          
+          if (currentValue) {
+            const payload = { batch_id: currentValue };
+    
+            // Call the service to download the zip file
+            QRCodeCreateServices.callBatchDownload(payload, onZipDownloadSuccess);
+          }
+        }, 15000); // 15000 ms = 15 seconds
+    
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+    }
+      }, [localStorage.getItem("batch_id")]);
+
+
 
     useUnmountEffect(() => {
         unbindMenuOutsideClickListener();
         unbindProfileMenuOutsideClickListener();
     });
+
+    const onZipDownloadSuccess = async (response) => {
+        if (response && response.data.data.download_link) {
+            await zipDownloadWithURL(response.data.data.download_link);
+            localStorage.setItem('batch_id','')
+        }
+    };
 
     const containerClass = classNames('layout-wrapper', {
         'layout-overlay': layoutConfig.menuMode === 'overlay',
