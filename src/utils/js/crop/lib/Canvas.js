@@ -210,8 +210,20 @@ const Canvas = ({
     const bootstrap = async () => {
       const src = await readFile(image)
       await createCanvas(src)
-      showPreview()
-      detectContours()
+      const initialCropPoints = {
+        'left-top': { x: 15, y: 15 },
+        'right-top': { x: previewCanvasRef.current.width - 15, y: 15 },
+        'right-bottom': {
+            x: previewCanvasRef.current.width - 15,
+            y: previewCanvasRef.current.height - 15,
+        },
+        'left-bottom': { x: 15, y: previewCanvasRef.current.height - 15 },
+    };
+
+    setCropPoints(initialCropPoints); // Set the initial fixed crop points
+    showPreview();
+      // showPreview()
+      // detectContours()
       setLoading(false)
     }
 
