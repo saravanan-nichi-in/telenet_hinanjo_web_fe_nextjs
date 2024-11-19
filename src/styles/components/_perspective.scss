@@ -35,6 +35,9 @@
     position: relative;
     background: white;
 
+    .video-transform {
+        transform: scaleX(-1);
+    }
     // Style the video element as the camera feed
     .webcam-element {
         width: var(--width-ocr-master);

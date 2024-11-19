@@ -1060,5 +1060,6 @@
       "already_all_admitted":"以下のユーザーが既に登録されています。",
       "all_admitted":"ユーザーが既に登録されています。",
       "dup_check":"重複確認",
-      "proceed":"継続"
+      "proceed":"継続",
+      "file_max_records_check":"QRコードの作成最大数は1000件です。"
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -11,13 +11,18 @@ export default function AdminQrCodeCreatePage() {
     const { localeJson, setLoader } = useContext(LayoutContext);
 
     const [initialValues, setInitialValues] = useState({
-        file: null
+        file: null,
+        updateFile:null,
     })
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [importFileData, setImportFileData] = useState("");
     const [qrCodeCreateDialogVisible, setQrCodeCreateDialogVisible] = useState(false);
     const [deleteObj, setDeleteObj] = useState(null);
+    const [uploadFile,setUploadFile] = useState(null);
+    const [disableBtn,setDisableBtn] = useState(false);
     const fileInputRef = useRef(null);
+    const formRef = useRef(null);
+    const [batchId, setBatchId] = useState(localStorage.getItem("batch_id") || "");
 
     const schema = Yup.object().shape({
         file: Yup.mixed()
@@ -28,7 +33,35 @@ export default function AdminQrCodeCreatePage() {
                 const fileExtension = value.split('.').pop(); // Get the file extension from the file name.
                 // Check if the file extension is in the list of allowed extensions.
                 return allowedExtensions.includes(fileExtension.toLowerCase());
+            })
+            .test('record-limit', translate(localeJson,'file_max_records_check'), async (value) => {
+                if (!value) return true; // If no file is selected, the validation passes.
+            
+                let updateFile = uploadFile;
+                if (!updateFile) return true; // If no file is selected, the validation passes.
+            
+                if (!(updateFile instanceof File)) {
+                    return false; // Reject if the value is not a file
+                }
+            
+                const fileReader = new FileReader();
+                return new Promise((resolve, reject) => {
+                    fileReader.onload = (e) => {
+                        const content = e.target.result;
+                        const rows = content.split('\n').filter(row => row.trim() !== ''); // Ignore empty rows
+                        if (rows.length > 1000) {
+                            resolve(false)
+                            reject('The file contains more than 1000 records.'); // Reject with error message
+                        } else {
+                            console.log('The file contains')
+                            resolve(true); // Resolve the promise when the validation passes
+                        }
+                    };
+                    fileReader.onerror = () => reject('File reading failed'); // In case of read error
+                    fileReader.readAsText(updateFile);
+                });
             }),
+            
     });
 
     /* Services */
@@ -38,11 +71,14 @@ export default function AdminQrCodeCreatePage() {
      * Import file
      * @param {*} e 
      */
-    const onImportFile = (e) => {
+    const onImportFile = (e,setFieldValue) => {
+        
         if (e.currentTarget.files[0]) {
             const payload = new FormData();
             payload.append('csv_file', e.currentTarget.files[0]);
             setImportFileData(payload);
+            setUploadFile(e.currentTarget.files[0])
+            
         }
     }
 
@@ -67,7 +103,12 @@ export default function AdminQrCodeCreatePage() {
      */
     const onImportSuccess = (response) => {
         if (response) {
+            if (window.location.origin === "https://rakuraku.nichi.in" || window.location.origin === "http://localhost:3000") {
+            localStorage.setItem('batch_id', response.data.data.batch_id);
+            }
+            else {         
             setQrCodeCreateDialogVisible(true);
+            }
         }
         setImportFileData("");
         if (fileInputRef.current) {
@@ -111,6 +152,25 @@ export default function AdminQrCodeCreatePage() {
         }
         setDeleteOpen(false);
     };
+
+    useEffect(()=>{
+       if(uploadFile) { 
+        formRef.current.setTouched({ file: true });
+        formRef.current.validateField("file");
+       }
+    },[uploadFile]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentBatchId = localStorage.getItem("batch_id");
+            if (batchId !== currentBatchId) {
+                setBatchId(currentBatchId);
+                setDisableBtn(!!currentBatchId);
+            }
+        }, 500);
+    
+        return () => clearInterval(interval);
+    }, [batchId]);
 
     return (
         <>
@@ -166,6 +226,7 @@ export default function AdminQrCodeCreatePage() {
                 deleteObj={deleteObj}
             />
             <Formik
+                innerRef={formRef}
                 validationSchema={schema}
                 initialValues={initialValues}
                 onSubmit={handleFormSubmit}
@@ -176,6 +237,8 @@ export default function AdminQrCodeCreatePage() {
                     touched,
                     handleChange,
                     handleSubmit,
+                    handleBlur,
+                    setFieldValue
                 }) => (
                     <div className="grid">
                         <div className="col-12">
@@ -185,7 +248,7 @@ export default function AdminQrCodeCreatePage() {
                                 </div>
                                 <div>
                                     <div>
-                                        <form onSubmit={handleSubmit}>
+                                        <div>
                                             <div>
                                                 <div className='flex pb-2' style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
                                                     <Button buttonProps={{
@@ -203,12 +266,13 @@ export default function AdminQrCodeCreatePage() {
                                                     inputFileStyle: { fontSize: "12px" },
                                                     onChange: (e) => {
                                                         handleChange(e);
-                                                        onImportFile(e);
+                                                        onImportFile(e,setFieldValue);
                                                     },
                                                     value: values.file,
                                                     accept: '.csv',
                                                     ref: fileInputRef,
-                                                    placeholder: translate(localeJson, 'default_csv_file_placeholder')
+                                                    placeholder: translate(localeJson, 'default_csv_file_placeholder'),
+                                                    handleBlur:handleBlur
                                                 }} parentClass={`w-full bg-white ${errors.file && touched.file && 'p-invalid '}`} />
                                                 <div className=''>
                                                     <ValidationError errorBlock={errors.file && touched.file && errors.file} />
@@ -220,12 +284,14 @@ export default function AdminQrCodeCreatePage() {
                                                         buttonClass: "evacuation_button_height import-button",
                                                         type: 'submit',
                                                         import: true,
+                                                        disabled:disableBtn,
                                                         text: translate(localeJson, 'import'),
                                                         rounded: "true",
+                                                        onClick: handleSubmit
                                                     }} parentClass={"import-button"} />
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

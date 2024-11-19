@@ -30,18 +30,18 @@ export const PerspectiveCropping = (props) => {
     const [rotateAngel, setRotateAngel] = useState(0);
 
     // Detect whether the user is on a mobile device
-//   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
   // Set the camera mode on initial render based on the device type
-//   useEffect(() => {
-//     console.log(/Mobi|Android/i.test(navigator.userAgent));
-//     console.log((navigator.userAgent));
-//     if (isMobile) {
-//       setToggleCameraMode("environment"); // Use front camera for mobile by default
-//     } else {
-//       setToggleCameraMode("user"); // Use rear camera for desktop by default
-//     }
-//   }, []);
+  useEffect(() => {
+    console.log(/Mobi|Android/i.test(navigator.userAgent));
+    console.log((navigator.userAgent));
+    if (isMobile) {
+      setToggleCameraMode("environment"); // Use front camera for mobile by default
+    } else {
+      setToggleCameraMode("user"); // Use rear camera for desktop by default
+    }
+  }, []);
 
     const onCameraBtnClick = (name) => {
         setLoader(true);
@@ -411,7 +411,7 @@ export const PerspectiveCropping = (props) => {
                                         ref={webcamRef && webcamRef}
                                         screenshotFormat="image/jpeg"
                                         screenshotQuality={1}
-                                        className={`webcam-element`}
+                                        className={`webcam-element ${toggleCameraMode=="user"?"video-transform":""}`}
                                         // mirrored={toggleCameraMode=="user"?true:false}
                                         videoConstraints={{
                                             facingMode: toggleCameraMode
