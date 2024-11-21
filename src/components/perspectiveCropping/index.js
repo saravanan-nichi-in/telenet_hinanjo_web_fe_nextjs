@@ -44,7 +44,7 @@ export const PerspectiveCropping = (props) => {
   }, []);
 
     const onCameraBtnClick = (name) => {
-        setLoader(true);
+        // setLoader(true);
         setSelectUtil('camera');
     }
 
