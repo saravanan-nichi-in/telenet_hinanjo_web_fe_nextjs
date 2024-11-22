@@ -6,6 +6,7 @@ export const AdminEvacueeTempServices = {
     getEvacueeTempList: _getEvacueeTempList,
     getTempFamilyEvacueesDetail: _getTempFamilyEvacueesDetail,
     exportTempFamilyEvacueesCSVList: _exportTempFamilyEvacueesCSVList,
+    bulkDelete: _bulkDelete
 };
 
 
@@ -80,6 +81,25 @@ function _exportTempFamilyEvacueesCSVList(payload, callBackFun) {
             }
         })
         .catch((error) => {
+            toastDisplay(error?.response);
+        });
+}
+
+/**
+ * Get Event Attendees checkout
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _bulkDelete(payload, callBackFun) {
+    axios.post('/admin/temp/evacuations/delete', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
             toastDisplay(error?.response);
         });
 }

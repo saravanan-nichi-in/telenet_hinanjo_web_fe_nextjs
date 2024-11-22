@@ -15,12 +15,12 @@ import {
     hideOverFlow,
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader } from '@/components';
+import { Button, NormalTable, CommonDialog, CardSpinner, CustomHeader, AdminManagementDeleteModal } from '@/components';
 import { prefecturesCombined } from '@/utils/constant';
 import { AdminEvacueeTempServices, CommonServices } from '@/services';
 
 export default function EvacueeFamilyDetail() {
-    const { locale, localeJson } = useContext(LayoutContext);
+    const { locale, localeJson,setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.tempFamily);
 
@@ -32,6 +32,10 @@ export default function EvacueeFamilyDetail() {
     const [overallQuestionnaires, setOverallQuestionnaires] = useState([]);
     const [placeCreateData, setPlaceCreateData] = useState([]);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [getListPayload, setGetListPayload] = useState({
+            family_id: [param?.family_id]
+    });
 
     const evacueeFamilyDetailColumns = [
         { field: "id", header: translate(localeJson, 'number'), sortable: false, className: "sno_class", textAlign: "left", alignHeader: "left" },
@@ -75,7 +79,7 @@ export default function EvacueeFamilyDetail() {
     ];
 
     /* Services */
-    const { getTempFamilyEvacueesDetail } = AdminEvacueeTempServices;
+    const { getTempFamilyEvacueesDetail,bulkDelete } = AdminEvacueeTempServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -252,8 +256,36 @@ export default function EvacueeFamilyDetail() {
         "c_special_care",
     ];
 
+    const onConfirmDeleteRegisteredEvacuees = async () => {
+        bulkDelete(getListPayload, (res) => {
+            if (res) {
+                setLoader(false);
+                router.push('/admin/temp-registration');
+            }
+            else {
+                setLoader(false);
+            }
+
+        });
+    }
+    const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
     return (
         <>
+          <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
             {/* Individual questionnaires dialog */}
             <CommonDialog
                 open={individualQuestionnairesVisible}
@@ -406,8 +438,8 @@ export default function EvacueeFamilyDetail() {
                                 />
                             </div>
                         </div> */}
-                        {/* <div className="flex mt-3 gap-2 justify-content-center">
-                            <Button buttonProps={{
+                        <div className="flex mt-3 gap-2 justify-content-center">
+                            {/* <Button buttonProps={{
                                 buttonClass: "w-10rem exit-procedure-button ",
                                 text: translate(localeJson, 'exit_procedures'),
                                 icon: <FaArrowRightFromBracket className='mr-1' />,
@@ -420,8 +452,19 @@ export default function EvacueeFamilyDetail() {
                                         return null
                                     }
                                 }
-                            }} parentClass={"inline exit-procedure-button "} />
-                        </div> */}
+                            }} parentClass={"inline exit-procedure-button "} /> */}
+                                                                    <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "w-10rem export-button",
+                                            // disabled:isReg,
+                                            text: translate(localeJson, 'delete_confirm'),
+                                            severity: "primary",
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"mt-3 export-button"} />
+
+                        </div>
                     </div>
                 </div>
             </div>
