@@ -87,7 +87,7 @@ function _callBatchDownload(payload,callBackFun) {
         .then((response) => {
             if (response && response.data) {
                 callBackFun(response);
-                // toastDisplay(response);
+                response.data.data?.download_link && toastDisplay(response);
             }
         })
         .catch((error) => {
