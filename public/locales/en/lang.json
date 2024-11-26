@@ -1065,5 +1065,6 @@
     "all_admitted":"The following users are already registered.",
     "dup_check":"Duplicate Confirmation",
     "proceed":"Continue",
-    "file_max_records_check":"The maximum number of QR codes that can be created is 1000."
+    "file_max_records_check":"The maximum number of QR codes that can be created is 1000.",
+    "qr_success":"QR code has been generated successfully."
 }
