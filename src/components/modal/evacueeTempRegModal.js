@@ -452,8 +452,8 @@ export default function EvacueeTempRegModal(props) {
     }
     setFieldValue("name", evacuees.name || "");
     setFieldValue("name_furigana", (evacuees.refugeeName || evacuees.refugee_name) || "");
-    setFieldValue("age", evacuees.age || "");
-    setFieldValue("age_m", evacuees.month || "");
+    // setFieldValue("age", evacuees.age || "");
+    // setFieldValue("age_m", evacuees.month || "");
     setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
     setFieldValue("tel", evacuees.tel || "");
     evacuees?.prefecture_id &&
@@ -485,7 +485,7 @@ export default function EvacueeTempRegModal(props) {
  
     } 
     setFieldValue("address", evacuees?.address ? evacuees.address : "");
-    if (evacuees.dob) {
+    if (evacuees.dob != "1900/01/01" && evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
         year: parseInt(birthDate.getFullYear()),
@@ -540,6 +540,44 @@ export default function EvacueeTempRegModal(props) {
       formikRef.current.resetForm();
     }
   };
+
+  
+  // const requestUsbDevice = async () => {
+  //   try {
+  //     const device = await navigator.usb.requestDevice({ filters: [] });
+  //     console.log('USB device granted:', device);
+  //   } catch (error) {
+  //     console.error('USB device access denied:', error);
+  //   }
+  // };
+  
+  // const checkDeviceConnection = async () => {
+  //   try {
+  //     requestUsbDevice();
+  //     // Check for connected and previously authorized serial devices
+  //     const ports = await navigator.serial.getPorts();
+  //     const devices = await navigator.usb.getDevices();
+  //     console.log(ports)
+  //     console.log(devices)
+  
+  //     if (ports.length > 0) {
+  //       console.log('Connected device(s):', ports);
+  //       // Here, you can filter by specific device properties if needed
+  //       return true; // Device is connected
+  //     } else {
+  //       console.log('No devices connected.');
+  //       return false; // No device connected
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking device connection:', error);
+  //     return false;
+  //   }
+  // };
+  
+
+  // useEffect(()=>{
+  //   checkDeviceConnection();
+  // },[])
 
   useEffect(() => {
     let dob = formikRef?.current?.values?.dob;
@@ -805,6 +843,7 @@ export default function EvacueeTempRegModal(props) {
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={30} height={30} />,
                           onClick: () => {
+                            // checkDeviceConnection()
                             setOpenQrPopup(true);
                           },
                         }}

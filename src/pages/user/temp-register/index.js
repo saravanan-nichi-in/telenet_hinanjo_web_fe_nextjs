@@ -970,10 +970,10 @@ export default function Admission() {
       name_furigana: evacuees
         ? evacuees.refugeeName || evacuees.refugee_name || ""
         : "",
-      dob: evacuees ? convertedObject || "" : "",
-      age: evacuees ? age.years || "" : "",
-      age_m:
-        evacuees && age.months !== undefined ? age.months : "",
+        dob: evacuees ? evacuees.dob !="1900/01/01"?convertedObject || "" :"" :"",
+        age: evacuees ? evacuees.dob !="1900/01/01"? age.years || "" :"" :"",
+        age_m:
+          evacuees && evacuees.dob !="1900/01/01"?age.months !== undefined ? age.months : "":"",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
