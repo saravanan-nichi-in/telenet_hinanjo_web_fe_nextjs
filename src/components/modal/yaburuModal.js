@@ -11,7 +11,15 @@ export default function YaburuModal(props) {
   const { open, close,callBack } = props;
 
   const handleBarcode = (data) => {
-    callBack(data)
+    setLoader(true);
+    if(data)
+    {
+        callBack(data)
+    }
+    else {
+        setLoader(false);
+    }
+    
   };
 
 
