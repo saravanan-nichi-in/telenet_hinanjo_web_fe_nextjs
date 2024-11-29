@@ -36,6 +36,8 @@ import {
 } from "@/services";
 import { Tooltip } from "primereact/tooltip";
 import { useAppSelector } from "@/redux/hooks";
+import YaburuModal from "./yaburuModal";
+import QrConfirmDialog from "./QrConfirmDialog";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -396,9 +398,15 @@ export default function EvacueeTempRegModal(props) {
   };
 
   const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
 
   const closeQrPopup = () => {
     setOpenQrPopup(false);
+  };
+
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
   };
 
   const qrResult = (result) => {
@@ -406,9 +414,11 @@ export default function EvacueeTempRegModal(props) {
     let formData = new FormData()
     formData.append('content', result)
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     qrScanRegistration(formData, (res) => {
       if (res) {
         setOpenQrPopup(false);
+        setQrScanPopupModalOpen(false);
         const evacueeArray = res.data;
         formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
@@ -643,6 +653,17 @@ export default function EvacueeTempRegModal(props) {
 
   return (
     <>
+      <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+        ></YaburuModal>
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => setPerspectiveCroppingVisible(false)}
@@ -843,8 +864,12 @@ export default function EvacueeTempRegModal(props) {
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={30} height={30} />,
                           onClick: () => {
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
                             // checkDeviceConnection()
-                            setOpenQrPopup(true);
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                           },
                         }}
                         parentClass={"back-button w-full p-2 mb-2"}

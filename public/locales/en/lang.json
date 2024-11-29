@@ -423,7 +423,7 @@
     "place_information": "Place Information",
     "event_information": "Event Information",
     "bulk_checkout": "Bulk Checkout",
-    "yapple_modal_start_icon_div": "Please scan your Yapple ID",
+    "yapple_modal_start_icon_div": "Please Scan your Card",
     "yapple_modal_end_icon_div_part_1": "Not Found",
     "yapple_modal_end_icon_div_part_2": "Please scan again",
     "yapple_modal_success_div_header": "Temporary registration information",
@@ -1066,5 +1066,8 @@
     "dup_check":"Duplicate Confirmation",
     "proceed":"Continue",
     "file_max_records_check":"The maximum number of QR codes that can be created is 1000.",
-    "qr_success":"QR code has been generated successfully."
+    "qr_success":"QR code has been generated successfully.",
+    "choose_Option":"Select the device you want to scan",
+    "cam_button":"Webcam",
+    "scanner_button":"Barcode scanner"
 }
