@@ -663,6 +663,7 @@ export default function EvacueeTempRegModal(props) {
           open={QrScanPopupModalOpen}
           close={closeQrScanPopup}
           callBack={qrResult}
+          setQrScanPopupModalOpen={setQrScanPopupModalOpen}
         ></YaburuModal>
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}

@@ -44,6 +44,7 @@ import {
   CheckInOutServices,
 } from "@/services";
 import _ from "lodash";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -87,6 +88,8 @@ export default function Admission() {
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const formikRef = useRef();
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
 
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
@@ -669,12 +672,17 @@ export default function Admission() {
     setOpenQrPopup(false);
     showOverFlow();
   };
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+    showOverFlow();
+  };	
 
   const qrResult = async(result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, async(res) => {
       if (res) {
@@ -718,6 +726,7 @@ export default function Admission() {
       }
     });
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -970,12 +979,18 @@ export default function Admission() {
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
       ></QrScannerModal>
-      {/* <YaburuModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callBack={qrResult}
-      >
-      </YaburuModal> */}
+       <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+          callBack={qrResult}
+        ></YaburuModal>
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -1107,7 +1122,13 @@ export default function Admission() {
                             />
                           ),
                           onClick: () => {
-                            setOpenQrPopup(true);
+                            // setOpenQrPopup(true);
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
+                            // checkDeviceConnection()
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                             hideOverFlow();
                           },
                         }}
