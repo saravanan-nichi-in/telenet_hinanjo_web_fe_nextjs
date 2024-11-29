@@ -28,6 +28,8 @@ const PersonCountScreen = () => {
             dispatch(reset());
             // Person count selected, proceed with navigation
             localStorage.setItem("personCount", personCount);
+            localStorage.setItem("isCamera", "false");
+            localStorage.setItem("isScanner", "false");
             router.push('/user/register');
         }
     };

@@ -421,7 +421,7 @@
       "place_information": "避難所情報",
       "event_information": "イベント情報",
       "bulk_checkout": "一括退所",
-      "yapple_modal_start_icon_div": "やっぷるカードをスキャンしてください",
+      "yapple_modal_start_icon_div": "カードをスキャンしてください",
       "yapple_modal_end_icon_div_part_1": "見つかりませんでした",
       "yapple_modal_end_icon_div_part_2": "再度スキャンしてください",
       "yapple_modal_success_div_header": "仮登録情報",
@@ -1062,5 +1062,8 @@
       "dup_check":"重複確認",
       "proceed":"継続",
       "file_max_records_check":"QRコードの作成最大数は1000件です。",
-      "qr_success":"QRコードが正常に生成されました。"
+      "qr_success":"QRコードが正常に生成されました。",
+      "choose_Option":"スキャンするデバイスを選択してください。",
+      "cam_button":"ウェブカメラ",
+      "scanner_button":"バーコードスキャナ"
 }
