@@ -41,7 +41,7 @@ export default function YaburuModal(props) {
       >
         <div className="flex justify-content-center">
           <StartIconDiv />
-          {open && <BarcodeReader onScan={handleBarcode} />}
+          {open && <BarcodeReader onScan={handleBarcode} onReceive={()=>{setLoader(true)}} />}
         </div>
       </Dialog>
     </div>
