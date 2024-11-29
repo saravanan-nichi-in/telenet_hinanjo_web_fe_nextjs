@@ -673,6 +673,8 @@ export default function StaffFamilyDetail() {
                                     onClick: () => {
                                         dispatch(setOriginalData(editData.data[0]));
                                         dispatch(setIsEdit(true))
+                                        localStorage.setItem("isCamera", "false");
+                                        localStorage.setItem("isScanner", "false");
                                         router.push("/staff/family/edit")
                                     }
                                 }} parentClass={"mr-1 update-button "} />

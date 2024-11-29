@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { Dialog } from "primereact/dialog";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
@@ -7,22 +7,27 @@ import BarcodeReader from "react-barcode-reader";
 
 export default function YaburuModal(props) {
   const { localeJson, setLoader } = useContext(LayoutContext);
+  const { open, close, callBack } = props;
 
-  const { open, close,callBack } = props;
+  const [scanning, setScanning] = useState(false);
 
-  const handleBarcode = (data) => {
-    setLoader(true);
-    if(data)
-    {
-        callBack(data)
-    }
-    else {
+  const handleBarcode = useCallback(
+    (data) => {
+      if (scanning) return; // Ignore if a scan is already being processed
+
+      setScanning(true);
+      if (data) {
+        setLoader(true);
+        callBack(data);
+      } else {
         setLoader(false);
-    }
-    
-  };
+      }
 
-
+      // Reset scanning state after a delay
+      setTimeout(() => setScanning(false), 1000);
+    },
+    [scanning, setLoader, callBack]
+  );
 
   return (
     <div>
@@ -32,13 +37,11 @@ export default function YaburuModal(props) {
         header={translate(localeJson, "yapple_modal_start_icon_div")}
         draggable={false}
         blockScroll={true}
-        onHide={() => {
-          close();
-        }}
+        onHide={close}
       >
         <div className="flex justify-content-center">
           <StartIconDiv />
-          <BarcodeReader onScan={handleBarcode} />
+          {open && <BarcodeReader onScan={handleBarcode} />}
         </div>
       </Dialog>
     </div>
@@ -61,4 +64,3 @@ function StartIconDiv() {
     </div>
   );
 }
-

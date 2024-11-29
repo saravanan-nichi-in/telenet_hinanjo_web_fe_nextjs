@@ -63,6 +63,8 @@ const PersonCountModal = (props) => {
             dispatch(reset())
             // Person count selected, proceed with navigation
             localStorage.setItem("personCountStaff", personCount)
+            localStorage.setItem("isCamera", "false");
+            localStorage.setItem("isScanner", "false");
             router.push('/staff/family/register')
         }
     };
