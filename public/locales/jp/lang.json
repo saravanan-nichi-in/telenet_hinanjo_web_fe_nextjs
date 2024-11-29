@@ -421,7 +421,7 @@
       "place_information": "避難所情報",
       "event_information": "イベント情報",
       "bulk_checkout": "一括退所",
-      "yapple_modal_start_icon_div": "カードをスキャンしてください",
+      "yapple_modal_start_icon_div": "QRコードをスキャンしてください",
       "yapple_modal_end_icon_div_part_1": "見つかりませんでした",
       "yapple_modal_end_icon_div_part_2": "再度スキャンしてください",
       "yapple_modal_success_div_header": "仮登録情報",
