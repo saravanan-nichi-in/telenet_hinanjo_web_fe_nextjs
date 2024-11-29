@@ -32,7 +32,6 @@ import {
   InputDropdown,
   QuestionList,
   CustomHeader,
-  YaburuModal,
   BarcodeDialog,
   QrScannerModal,
 } from "@/components";
@@ -45,6 +44,7 @@ import {
 } from "@/services";
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -296,14 +296,14 @@ export default function Admission() {
     setMIsRecording(isRecording);
   }, [isRecording]);
 
-  useEffect(() => {
-    if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector(".p-error");
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [count]);
+  // useEffect(() => {
+  //   if (Object.keys(formikRef.current.errors).length > 0) {
+  //     const firstErrorElement = document.querySelector(".p-error");
+  //     if (firstErrorElement) {
+  //       firstErrorElement.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   }
+  // }, [count]);
 
   const agreeTextWithHTML = (
     <div>
