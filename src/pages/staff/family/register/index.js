@@ -32,9 +32,11 @@ import {
 } from "@/services";
 import {
   Button, ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping,
-  QuestionList, RadioBtn, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
+  QuestionList, RadioBtn, ValidationError, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
 } from "@/components";
 import _ from "lodash";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -71,6 +73,8 @@ export default function Admission() {
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
   const [openBarcodeConfirmDialog, setOpenBarcodeConfirmDialog] = useState(false);
   const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const formikRef = useRef();
 
@@ -649,12 +653,17 @@ export default function Admission() {
     setOpenQrPopup(false);
     showOverFlow();
   };
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+    showOverFlow();
+  };
 
   const qrResult = async (result) => {
     setLoader(true)
     let formData = new FormData()
     formData.append('content', result)
-    setOpenQrPopup(false)
+    setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, async(res) => {
       if (res) {
@@ -698,7 +707,8 @@ export default function Admission() {
         setLoader(false)
       }
     });
-    setOpenQrPopup(false)
+    setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -921,6 +931,17 @@ export default function Admission() {
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
       ></QrScannerModal>
+       <QrConfirmDialog
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+        ></YaburuModal>
       {/* <YaburuModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -1039,7 +1060,12 @@ export default function Admission() {
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={30} height={30} />,
                           onClick: () => {
-                            setOpenQrPopup(true);
+                            // setOpenQrPopup(true);
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                             hideOverFlow();
                           },
                         }}

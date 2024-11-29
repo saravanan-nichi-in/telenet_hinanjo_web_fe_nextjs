@@ -49,6 +49,8 @@ import {
   MapServices,
 } from "@/services";
 import _ from "lodash";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 
 export default function Admission() {
@@ -93,6 +95,10 @@ export default function Admission() {
   const formikRef = useRef();
   const [isStep1, setIsStep1] = useState(true);
   const [activeEvacuationOptions, setActiveEvacutaionOptions] = useState([]);
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
+
+
 
   const place_id = regReducer.placeId;
 
@@ -742,11 +748,16 @@ export default function Admission() {
     setOpenQrPopup(false);
     showOverFlow();
   };
+
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+  };	
   const qrResult = async(result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, async(res) => {
       if (res) {
@@ -790,6 +801,7 @@ export default function Admission() {
       }
     });
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -1035,6 +1047,17 @@ export default function Admission() {
 
   return (
     <>
+     <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+        ></YaburuModal>
       <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -1174,7 +1197,11 @@ export default function Admission() {
                                 />
                               ),
                               onClick: () => {
-                                setOpenQrPopup(true);
+                                let isCamera = localStorage.getItem("isCamera")=="true";
+                                let isScanner = localStorage.getItem("isScanner")=="true";
+                                isCamera &&setOpenQrPopup(true);
+                                isScanner && setQrScanPopupModalOpen(true);
+                                !isCamera && !isScanner && setVisible(true)
                                 hideOverFlow();
                               },
                             }}

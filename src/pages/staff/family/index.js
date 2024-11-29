@@ -212,6 +212,8 @@ function StaffFamily() {
    * CommonDialog modal open
    */
   const onClickOkButton = () => {
+    localStorage.setItem("isCamera", "false");
+    localStorage.setItem("isScanner", "false");
     // Once both dispatch actions have completed, navigate to the next page
     router.push("/user/family/register");
   };
