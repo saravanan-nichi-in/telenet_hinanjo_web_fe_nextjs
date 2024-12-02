@@ -1065,5 +1065,20 @@
       "qr_success":"QRコードが正常に生成されました。",
       "choose_Option":"スキャンするデバイスを選択してください。",
       "cam_button":"ウェブカメラ",
-      "scanner_button":"バーコードスキャナ"
+      "scanner_button":"バーコードスキャナ",
+      "fullName_header": "氏名",
+      "fullName_message": "氏名を入力してください。姓と名の間は全角スペースを入れてください。",
+      "postalCode1_header": "郵便番号1",
+      "postalCode1_message": "郵便番号の最初の3桁の半角数字を入力してください。",
+      "postalCode2_header": "郵便番号2",
+      "postalCode2_message": "郵便番号の後ろの4桁の半角数字を入力してください。",
+      "address_notes_header": "住所",
+      "address_notes_message": "都道府県から住所を入力してください。",
+      "phoneNumber_header": "電話番号",
+      "phoneNumber_message": "電話番号を入力してください。ハイフンの有無は問いません。",
+      "birthDate_header": "生年月日",
+      "birthDate_message": "西暦で生年月日を入力してください。（例：1988/7/12）",
+      "gender_notes_header": "性別",
+      "gender_notes_message": "女性はF、男性はMで入力してください。",
+      "imp_notes":"注意項目"
 }
