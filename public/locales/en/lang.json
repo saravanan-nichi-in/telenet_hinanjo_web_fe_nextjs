@@ -1084,5 +1084,8 @@
     "birthDate_message": "Enter your birthdate in Gregorian calendar (e.g., 1988/7/12).",
     "gender_notes_header": "Gender",
     "gender_notes_message": "Enter F for female and M for male.",
-    "imp_notes":"Important points"
+    "imp_notes":"Notes",
+    "qr_scan":"QR Scan",
+    "qr_scan_message":"Please scan the QR code.",
+    "qr_scan_message2":"Webcam and external barcode scanners can be used."
 }

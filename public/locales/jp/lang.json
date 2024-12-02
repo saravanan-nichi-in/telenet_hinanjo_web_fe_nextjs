@@ -1080,5 +1080,8 @@
       "birthDate_message": "西暦で生年月日を入力してください。（例：1988/7/12）",
       "gender_notes_header": "性別",
       "gender_notes_message": "女性はF、男性はMで入力してください。",
-      "imp_notes":"注意項目"
+      "imp_notes":"注意事項",
+      "qr_scan":"QRスキャナ",
+      "qr_scan_message":"QRコードから読み取って入力を行います。",
+      "qr_scan_message2":"ウェブカメラや外部バーコードスキャンが使用可能です。"
 }

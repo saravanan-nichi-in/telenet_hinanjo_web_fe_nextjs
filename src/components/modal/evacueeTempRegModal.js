@@ -855,6 +855,7 @@ export default function EvacueeTempRegModal(props) {
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
+                      <div className="flex items-center">
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -875,6 +876,20 @@ export default function EvacueeTempRegModal(props) {
                         }}
                         parentClass={"back-button w-full p-2 mb-2"}
                       />
+                      <div>
+                          <Tooltip
+                            target=".custom-target-icon-2"
+                            position="bottom"
+                            className="shadow-none"
+                          >
+                          <>
+    <div>{translate(localeJson, "qr_scan_message")}</div>
+    <div>{translate(localeJson, "qr_scan_message2")}</div>
+  </></Tooltip>
+  <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                        </div>
+                        
+                        </div>
                     </div>
                     <div className="pl-5 pr-5">
                       <div className="mb-2 col-12">

@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { useRouter } from "next/router";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { Button } from "@/components";
+import { Button, CustomHeader } from "@/components";
 
 const QrConfirmDialog = (props) => {
   const { localeJson } = useContext(LayoutContext);
@@ -11,7 +11,13 @@ const QrConfirmDialog = (props) => {
   return (
     <Dialog
       className="custom-modal w-10 sm:w-8 md:w-6 lg:w-5"
-      header={props?.header}
+      header={<div>
+        <CustomHeader
+          headerClass={"page-header1"}
+          customParentClassName={"mb-0"}
+          header={translate(localeJson,"qr_scan")}
+        />
+      </div>}
       visible={props.visible}
       draggable={false}
       blockScroll={true}

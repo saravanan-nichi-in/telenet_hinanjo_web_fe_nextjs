@@ -299,43 +299,43 @@ export default function AdminQrCodeCreatePage() {
                                 <div className="">
         {/* Full Name */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "fullName_header")}:</strong>
+          <strong>{translate(localeJson, "fullName_header")}：</strong>
           <p>{translate(localeJson, "fullName_message")}</p>
         </div>
 
         {/* Postal Code 1 */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "postalCode1_header")}:</strong>
+          <strong>{translate(localeJson, "postalCode1_header")}：</strong>
           <p>{translate(localeJson, "postalCode1_message")}</p>
         </div>
 
         {/* Postal Code 2 */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "postalCode2_header")}:</strong>
+          <strong>{translate(localeJson, "postalCode2_header")}：</strong>
           <p>{translate(localeJson, "postalCode2_message")}</p>
         </div>
 
         {/* Address */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "address_notes_header")}:</strong>
+          <strong>{translate(localeJson, "address_notes_header")}：</strong>
           <p>{translate(localeJson, "address_notes_message")}</p>
         </div>
 
         {/* Phone Number */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "phoneNumber_header")}:</strong>
+          <strong>{translate(localeJson, "phoneNumber_header")}：</strong>
           <p>{translate(localeJson, "phoneNumber_message")}</p>
         </div>
 
         {/* Date of Birth */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "birthDate_header")}:</strong>
+          <strong>{translate(localeJson, "birthDate_header")}：</strong>
           <p>{translate(localeJson, "birthDate_message")}</p>
         </div>
 
         {/* Gender */}
         <div className="col-12 flex flex-wrap align-items-baseline">
-          <strong>{translate(localeJson, "gender_notes_header")}:</strong>
+          <strong>{translate(localeJson, "gender_notes_header")}：</strong>
           <p>{translate(localeJson, "gender_notes_message")}</p>
         </div>
       </div>
