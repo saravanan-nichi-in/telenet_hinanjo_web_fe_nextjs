@@ -1069,5 +1069,20 @@
     "qr_success":"QR code has been generated successfully.",
     "choose_Option":"Select the device you want to scan",
     "cam_button":"Webcam",
-    "scanner_button":"Barcode scanner"
+    "scanner_button":"Barcode scanner",
+    "fullName_header": "Full Name",
+    "fullName_message": "Please enter your full name. Insert a full-width space between the first and last name.",
+    "postalCode1_header": "Postal Code 1",
+    "postalCode1_message": "Enter the first 3 digits of the postal code in half-width numbers.",
+    "postalCode2_header": "Postal Code 2",
+    "postalCode2_message": "Enter the last 4 digits of the postal code in half-width numbers.",
+    "address_notes_header": "Address",
+    "address_notes_message": "Enter the address starting from the prefecture.",
+    "phoneNumber_header": "Phone Number",
+    "phoneNumber_message": "Enter your phone number. Hyphens are optional.",
+    "birthDate_header": "Date of Birth",
+    "birthDate_message": "Enter your birthdate in Gregorian calendar (e.g., 1988/7/12).",
+    "gender_notes_header": "Gender",
+    "gender_notes_message": "Enter F for female and M for male.",
+    "imp_notes":"Important points"
 }
