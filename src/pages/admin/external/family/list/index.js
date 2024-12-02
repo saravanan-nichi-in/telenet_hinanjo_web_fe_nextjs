@@ -303,7 +303,7 @@ export default function ExternalEvacuationPage() {
                         onSelectionChange={
                             (e) => {
                                 if (e.value.external_person_count != 0) {
-                                    dispatch(setExternalFamily({ evacuee_id: e.value.id }));
+                                    dispatch(setExternalFamily({ evacuee_id: e.value.id, external_place:e.value.hinan_id}));
                                     router.push({
                                         pathname: '/admin/external/family/list/family-detail',
                                     });
