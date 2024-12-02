@@ -680,6 +680,27 @@ export function formatAddress(zipCode, prefecture, familyOrPersonAddress, family
     return `${zipCode ? zipCode : ''} ${prefecture ? prefecture : ''} ${familyOrPersonAddress ? familyOrPersonAddress : ''} ${familyOrPersonAddressDefault ? familyOrPersonAddressDefault : ''}`;
 }
 
+export const mobileAndTabletCheck = () => {
+    let check = false;
+    (function(a) {
+      if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)/i.test(a.substr(0, 4))) check = true;
+    })(navigator.userAgent || navigator.vendor || window.opera);
+    return check;
+  };
+
+  export const tabletCheck = () => {
+    let check = false;
+    (function(a) {
+      // Check for common tablet user agents (iPad, Android tablet, etc.)
+      if (
+        /(ipad|tablet|(android(?!.*mobile)))/i.test(a) // Matches iPad or Android tablets (without mobile)
+      ) {
+        check = true;
+      }
+    })(navigator.userAgent || navigator.vendor || window.opera);
+    return check;
+  };
+
 /**
  * Compare address to get unmatched data
  * @param {*} address1 
