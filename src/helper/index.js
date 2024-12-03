@@ -688,17 +688,11 @@ export const mobileAndTabletCheck = () => {
     return check;
   };
 
-  export const tabletCheck = () => {
-    let check = false;
-    (function(a) {
-      // Check for common tablet user agents (iPad, Android tablet, etc.)
-      if (
-        /(ipad|tablet|(android(?!.*mobile)))/i.test(a) // Matches iPad or Android tablets (without mobile)
-      ) {
-        check = true;
-      }
-    })(navigator.userAgent || navigator.vendor || window.opera);
-    return check;
+  export const mobileCheck = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    console.log(userAgent);
+    // Check for iPad, Android tablets, and exclude phones
+    return /mobile|iphone|ipod|android.*mobile|blackberry|iemobile|opera mini/i.test(userAgent);
   };
 
 /**
