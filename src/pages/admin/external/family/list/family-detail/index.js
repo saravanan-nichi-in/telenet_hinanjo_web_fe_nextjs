@@ -6,19 +6,21 @@ import { IoIosArrowBack } from "react-icons/io";
 import {
     getValueByKeyRecursively as translate,
     getJapaneseDateDisplayYYYYMMDDFormat,
-    getEnglishDateDisplayFormat
+    getEnglishDateDisplayFormat,
+    showOverFlow,
+    hideOverFlow
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable } from '@/components';
+import { AdminManagementDeleteModal, Button, CustomHeader, NormalTable } from '@/components';
 import { useAppSelector } from "@/redux/hooks";
 import { ExternalEvacuationServices } from '@/services';
 import { prefectures } from '@/utils/constant';
 
 export default function EventFamilyDetail() {
-    const { locale, localeJson } = useContext(LayoutContext);
+    const { locale, localeJson,setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.externalFamily);
-
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [tableLoading, setTableLoading] = useState(false);
     const [externalDataset, setExternalDataset] = useState(null);
     const [externalEvacuee,setExternalEvacuee] = useState(null);
@@ -40,7 +42,7 @@ export default function EventFamilyDetail() {
     ];
 
     /* Services */
-    const { getExternalEvacueesDetail } = ExternalEvacuationServices;
+    const { getExternalEvacueesDetail,bulkDelete} = ExternalEvacuationServices;
 
     useEffect(() => {
         setTableLoading(true);
@@ -81,8 +83,40 @@ export default function EventFamilyDetail() {
         return "";
       };
 
+      const onConfirmDeleteRegisteredEvacuees = async () => {
+        let payload = {
+          evacuee_id:param.evacuee_id,
+        }
+        bulkDelete(payload, (res) => {
+            if (res) {
+                setLoader(false);
+                router.push('/admin/external/family/list');
+            }
+            else {
+                setLoader(false);
+            }
+
+        });
+    }
+    const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
     return (
         <>
+         <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
             <div className="grid">
                 <div className="col-12">
                     <div className='card'>
@@ -192,6 +226,19 @@ export default function EventFamilyDetail() {
                             value={externalDataset}
                             columns={externalColumns}
                         />
+                         <div className="flex mt-3 gap-2 justify-content-center">
+                                                                    <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "w-10rem export-button",
+                                            // disabled:isReg,
+                                            text: translate(localeJson, 'delete_confirm'),
+                                            severity: "primary",
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"mt-3 export-button"} />
+
+                        </div>
                     </div>
                 </div>
             </div>
