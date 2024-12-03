@@ -302,7 +302,7 @@ export default function TempRegistration() {
                                             buttonClass: "export-button",
                                             text: translate(localeJson, 'bulk_delete'),
                                             severity: "primary",
-                                            // disabled: !showRegisteredEvacuees,
+                                            disabled: tempFamilyData.length<=0,
                                             onClick: () => openDeleteDialog()
                                         }} parentClass={"export-button"} />
                                     
