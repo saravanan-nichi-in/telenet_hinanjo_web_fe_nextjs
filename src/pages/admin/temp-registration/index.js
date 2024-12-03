@@ -11,10 +11,12 @@ import {
   getSpecialCareName,
   getYYYYMMDDHHSSSSDateTimeFormat,
   getEnglishDateTimeDisplayActualFormat,
-  getJapaneseDateTimeDayDisplayActualFormat
+  getJapaneseDateTimeDayDisplayActualFormat,
+  showOverFlow,
+  hideOverFlow
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown, AdminManagementDeleteModal } from '@/components';
 import { AdminEvacueeTempServices } from '@/services';
 import { setTempFamily } from '@/redux/family';
 
@@ -33,6 +35,8 @@ export default function TempRegistration() {
   const [tableLoading, setTableLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [familyCode, setFamilyCode] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteCount,setDeleteCount] = useState(0)
   const [getListPayload, setGetListPayload] = useState({
     filters: {
       start: 0,
@@ -84,7 +88,7 @@ export default function TempRegistration() {
       AdminEvacueeTempServices.getEvacueeTempList(payload, fetchData)
     };
     fetchTempData();
-  }, [locale, getListPayload]);
+  }, [locale, getListPayload,deleteCount]);
 
   const fetchData = (responseData) => {
     var tempList = [];
@@ -238,11 +242,49 @@ export default function TempRegistration() {
     }
   }
 
+      /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+      const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    /**
+     * On confirmation delete api call and close modal functionality handler
+     * @param {*} status 
+     */
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
+    /**
+     * Delete registered evacuees
+     */
+    const onConfirmDeleteRegisteredEvacuees = async () => {
+        setTableLoading(true);
+        let payload = {family_id:[]}
+        await AdminEvacueeTempServices.bulkDelete(payload, () => {
+          setTableLoading(false);
+          setDeleteCount(deleteCount+1);
+        });
+    }
+
   return (
+    <>
+    <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
     <div className="grid">
       <div className="col-12">
         <div className="card">
-          <div className="flex align-items-center justify-content-between">
+          <div className="flex flex-wrap align-items-center justify-content-between">
             <div className='flex align-items-center gap-2 mb-2'>
               <CustomHeader
                 headerClass={"page-header1"}
@@ -251,7 +293,19 @@ export default function TempRegistration() {
               />
               <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
             </div>
-            <div className='mb-2 flex align-items-center'>
+            <div className='mb-2 flex flex-wrap align-items-center'>
+            <div className='flex flex-wrap gap-2'>
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "export-button",
+                                            text: translate(localeJson, 'bulk_delete'),
+                                            severity: "primary",
+                                            disabled: tempFamilyData.length<=0,
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"export-button"} />
+                                    
               <Button
                 buttonProps={{
                   type: "submit",
@@ -265,6 +319,7 @@ export default function TempRegistration() {
                 }}
                 parentClass={"export-button"}
               />
+              </div>
             </div>
           </div>
           <div>
@@ -372,5 +427,6 @@ export default function TempRegistration() {
         </div>
       </div>
     </div>
+    </>
   );
 }

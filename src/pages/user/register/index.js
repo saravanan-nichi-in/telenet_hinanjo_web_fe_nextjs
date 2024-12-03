@@ -32,7 +32,6 @@ import {
   InputDropdown,
   QuestionList,
   CustomHeader,
-  YaburuModal,
   BarcodeDialog,
   QrScannerModal,
 } from "@/components";
@@ -44,6 +43,8 @@ import {
   CheckInOutServices,
 } from "@/services";
 import _ from "lodash";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -87,6 +88,8 @@ export default function Admission() {
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const formikRef = useRef();
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
 
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
@@ -293,14 +296,14 @@ export default function Admission() {
     setMIsRecording(isRecording);
   }, [isRecording]);
 
-  useEffect(() => {
-    if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector(".p-error");
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [count]);
+  // useEffect(() => {
+  //   if (Object.keys(formikRef.current.errors).length > 0) {
+  //     const firstErrorElement = document.querySelector(".p-error");
+  //     if (firstErrorElement) {
+  //       firstErrorElement.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   }
+  // }, [count]);
 
   const agreeTextWithHTML = (
     <div>
@@ -669,12 +672,17 @@ export default function Admission() {
     setOpenQrPopup(false);
     showOverFlow();
   };
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+    showOverFlow();
+  };	
 
   const qrResult = async(result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, async(res) => {
       if (res) {
@@ -718,6 +726,7 @@ export default function Admission() {
       }
     });
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -899,10 +908,10 @@ export default function Admission() {
       name_furigana: evacuees
         ? evacuees.refugeeName || evacuees.refugee_name || ""
         : "",
-      dob: evacuees ? convertedObject || "" : "",
-      age: evacuees ? age.years || "" : "",
+      dob: evacuees ? evacuees.dob !="1900/01/01"?convertedObject || "" :"" :"",
+      age: evacuees ? evacuees.dob !="1900/01/01"? age.years || "" :"" :"",
       age_m:
-        evacuees && age.months !== undefined ? age.months : "",
+        evacuees && evacuees.dob !="1900/01/01"?age.months !== undefined ? age.months : "":"",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -970,12 +979,18 @@ export default function Admission() {
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
       ></QrScannerModal>
-      {/* <YaburuModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callBack={qrResult}
-      >
-      </YaburuModal> */}
+       <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+          callBack={qrResult}
+        ></YaburuModal>
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -1090,6 +1105,7 @@ export default function Admission() {
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
+                      <div className="flex items-center">
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -1107,12 +1123,31 @@ export default function Admission() {
                             />
                           ),
                           onClick: () => {
-                            setOpenQrPopup(true);
+                            // setOpenQrPopup(true);
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
+                            // checkDeviceConnection()
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                             hideOverFlow();
                           },
                         }}
                         parentClass={"back-button w-full p-2 mb-2"}
                       />
+                        <div>
+                          <Tooltip
+                            target=".custom-target-icon-2"
+                            position="bottom"
+                            className="shadow-none"
+                          >
+                          <>
+                        <div>{translate(localeJson, "qr_scan_message")}</div>
+                        <div>{translate(localeJson, "qr_scan_message2")}</div>
+                        </></Tooltip>
+                        <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                        </div>
+                        </div>
                     </div>
                     <div className="mt-3">
                       <div className="grid">

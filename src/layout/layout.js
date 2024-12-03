@@ -9,11 +9,12 @@ import AppFooter from '@/layout/AppFooter';
 import AppSidebar from '@/layout/AppSidebar';
 import AppTopbar from '@/layout/AppTopbar';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { zipDownloadWithURL } from '@/helper';
+import { zipDownloadWithURL, getValueByKeyRecursively as translate, } from '@/helper';
 import { QRCodeCreateServices } from '@/services';
+import toast from 'react-hot-toast';
 
 const Layout = (props) => {
-    const { layoutConfig, layoutState, setLayoutState, loader } = useContext(LayoutContext);
+    const { layoutConfig, layoutState, setLayoutState, loader, localeJson, } = useContext(LayoutContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
     const router = useRouter();
@@ -116,8 +117,11 @@ const Layout = (props) => {
 
     const onZipDownloadSuccess = async (response) => {
         if (response && response.data.data.download_link) {
+            toast.success(translate(localeJson,'qr_success'), {
+                position: "top-right",
+            });
             await zipDownloadWithURL(response.data.data.download_link);
-            localStorage.setItem('batch_id','')
+            localStorage.setItem('batch_id','');
         }
     };
 

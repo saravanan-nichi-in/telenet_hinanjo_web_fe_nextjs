@@ -49,6 +49,8 @@ import {
   MapServices,
 } from "@/services";
 import _ from "lodash";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 
 export default function Admission() {
@@ -93,6 +95,10 @@ export default function Admission() {
   const formikRef = useRef();
   const [isStep1, setIsStep1] = useState(true);
   const [activeEvacuationOptions, setActiveEvacutaionOptions] = useState([]);
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
+
+
 
   const place_id = regReducer.placeId;
 
@@ -742,11 +748,16 @@ export default function Admission() {
     setOpenQrPopup(false);
     showOverFlow();
   };
+
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+  };	
   const qrResult = async(result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, async(res) => {
       if (res) {
@@ -790,6 +801,7 @@ export default function Admission() {
       }
     });
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -970,10 +982,10 @@ export default function Admission() {
       name_furigana: evacuees
         ? evacuees.refugeeName || evacuees.refugee_name || ""
         : "",
-      dob: evacuees ? convertedObject || "" : "",
-      age: evacuees ? age.years || "" : "",
-      age_m:
-        evacuees && age.months !== undefined ? age.months : "",
+        dob: evacuees ? evacuees.dob !="1900/01/01"?convertedObject || "" :"" :"",
+        age: evacuees ? evacuees.dob !="1900/01/01"? age.years || "" :"" :"",
+        age_m:
+          evacuees && evacuees.dob !="1900/01/01"?age.months !== undefined ? age.months : "":"",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -1035,6 +1047,17 @@ export default function Admission() {
 
   return (
     <>
+     <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+        ></YaburuModal>
       <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -1157,6 +1180,7 @@ export default function Admission() {
                               <i className="custom-target-icon pi pi-info-circle"></i>
                             </div>
                           </div>
+                          <div className="flex items-center">
                           <ButtonRounded
                             buttonProps={{
                               type: "button",
@@ -1174,12 +1198,29 @@ export default function Admission() {
                                 />
                               ),
                               onClick: () => {
-                                setOpenQrPopup(true);
+                                let isCamera = localStorage.getItem("isCamera")=="true";
+                                let isScanner = localStorage.getItem("isScanner")=="true";
+                                isCamera &&setOpenQrPopup(true);
+                                isScanner && setQrScanPopupModalOpen(true);
+                                !isCamera && !isScanner && setVisible(true)
                                 hideOverFlow();
                               },
                             }}
                             parentClass={"back-button w-full p-2 mb-2"}
                           />
+                           <div>
+                          <Tooltip
+                            target=".custom-target-icon-2"
+                            position="bottom"
+                            className="shadow-none"
+                          >
+                          <>
+                        <div>{translate(localeJson, "qr_scan_message")}</div>
+                        <div>{translate(localeJson, "qr_scan_message2")}</div>
+                        </></Tooltip>
+                        <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                        </div>
+                        </div>
                         </div>
                         <div className="mt-3">
                           <div className="grid">

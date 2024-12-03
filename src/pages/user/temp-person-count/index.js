@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { mobileCheck, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, CustomHeader, PersonCountButton } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
@@ -28,6 +28,9 @@ const PersonCountScreen = () => {
             // Person count selected, proceed with navigation
             localStorage.setItem("personCountTemp", personCount);
             localStorage.setItem("showDelete","false");
+            let isMobile = mobileCheck();
+            localStorage.setItem("isCamera",isMobile?"true":"false");
+            localStorage.setItem("isScanner", "false");
             router.push('/user/temp-register');
         }
     };

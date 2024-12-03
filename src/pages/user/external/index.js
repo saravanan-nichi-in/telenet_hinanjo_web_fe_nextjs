@@ -507,7 +507,7 @@ export default function PublicExternal() {
             "place_category": placeCategory,
             "postal_code": postal_code ? postal_code.replace(/-/g, '') : "",
             "prefecture_id": data.prefecture_id,
-            "address": data.address,
+            "address": data.address+data?.address2,
             "address_default": data.address2,
             "email": data.email,
             "person": data.evacuee.map((evacuee) => ({

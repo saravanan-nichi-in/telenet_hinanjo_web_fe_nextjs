@@ -30,8 +30,10 @@ import {
 } from "@/services";
 import {
   ButtonRounded, CustomHeader, Input, InputDropdown, NormalCheckBox, PerspectiveCropping,
-  QuestionList, ValidationError, YaburuModal, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
+  QuestionList, ValidationError, BarcodeDialog, EvacueeTempRegModal, QrScannerModal
 } from "@/components";
+import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
+import YaburuModal from "@/components/modal/yaburuModal";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -69,6 +71,8 @@ export default function Admission() {
   const [isRecording, setIsRecording] = useState(false);
   const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
   const formikRef = useRef();
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
 
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
@@ -581,11 +585,17 @@ export default function Admission() {
     showOverFlow();
   };
 
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
+    showOverFlow();
+  };	
+
   const qrResult = (result) => {
     setLoader(true)
     let formData = new FormData()
     formData.append('content', result)
-    setOpenQrPopup(false)
+    setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
     qrScanRegistration(formData, (res) => {
       if (res) {
@@ -611,7 +621,8 @@ export default function Admission() {
         setLoader(false)
       }
     });
-    setOpenQrPopup(false)
+    setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     showOverFlow();
   };
 
@@ -759,9 +770,10 @@ export default function Admission() {
       checked: checked,
       name: evacuees ? evacuees.name || "" : "",
       name_furigana: evacuees ? (evacuees.refugeeName || evacuees.refugee_name) || "" : "",
-      dob: evacuees ? convertedObject || "" : "",
-      age: evacuees ? age.years || "" : "",
-      age_m: evacuees && evacuees.age && age.months !== undefined ? age.months : "",
+      dob: evacuees ? evacuees.dob !="1900/01/01"?convertedObject || "" :"" :"",
+      age: evacuees ? evacuees.dob !="1900/01/01"? age.years || "" :"" :"",
+      age_m:
+        evacuees && evacuees.dob !="1900/01/01"?age.months !== undefined ? age.months : "":"",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -813,12 +825,17 @@ export default function Admission() {
 
   return (
     <>
-      {/* <YaburuModal
-        open={openQrPopup}
-        close={closeQrPopup}
-        callBack={qrResult}
-      >
-      </YaburuModal> */}
+     <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+        ></YaburuModal>
       <QrScannerModal
         open={openQrPopup}
         close={closeQrPopup}
@@ -924,6 +941,7 @@ export default function Admission() {
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
+                      <div className="flex items-center">
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -934,12 +952,30 @@ export default function Admission() {
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={40} height={40} />,
                           onClick: () => {
-                            setOpenQrPopup(true);
+                            // setOpenQrPopup(true);
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                             hideOverFlow();
                           },
                         }}
                         parentClass={"back-button w-full p-2 mb-2"}
                       />
+                       <div>
+                          <Tooltip
+                            target=".custom-target-icon-2"
+                            position="bottom"
+                            className="shadow-none"
+                          >
+                          <>
+                        <div>{translate(localeJson, "qr_scan_message")}</div>
+                        <div>{translate(localeJson, "qr_scan_message2")}</div>
+                        </></Tooltip>
+                        <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                        </div>
+                        </div>
                     </div>
                     <div className="mt-3">
                       <div className="grid">

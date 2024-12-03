@@ -39,7 +39,9 @@ const RegisterSuccess = () => {
                 buttonClass: "w-full back-button h-5rem border-radius-5rem",
                 text: translate(localeJson, 'return_home'),
                 onClick: () => {
-                  localStorage.setItem("personCount", null)
+                  localStorage.setItem("personCount", null);
+                  localStorage.setItem("isCamera", "false");
+                  localStorage.setItem("isScanner", "false");
                   dispatch(reset())
                   router.push('/user/register/member')
                 },

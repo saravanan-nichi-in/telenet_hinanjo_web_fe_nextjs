@@ -36,6 +36,8 @@ import {
 } from "@/services";
 import { Tooltip } from "primereact/tooltip";
 import { useAppSelector } from "@/redux/hooks";
+import YaburuModal from "./yaburuModal";
+import QrConfirmDialog from "./QrConfirmDialog";
 
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
@@ -396,9 +398,15 @@ export default function EvacueeTempRegModal(props) {
   };
 
   const [openQrPopup, setOpenQrPopup] = useState(false);
+  const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
+  const [visible,setVisible] = useState(false);
 
   const closeQrPopup = () => {
     setOpenQrPopup(false);
+  };
+
+  const closeQrScanPopup = () => {
+    setQrScanPopupModalOpen(false);
   };
 
   const qrResult = (result) => {
@@ -406,9 +414,11 @@ export default function EvacueeTempRegModal(props) {
     let formData = new FormData()
     formData.append('content', result)
     setOpenQrPopup(false);
+    setQrScanPopupModalOpen(false);
     qrScanRegistration(formData, (res) => {
       if (res) {
         setOpenQrPopup(false);
+        setQrScanPopupModalOpen(false);
         const evacueeArray = res.data;
         formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
@@ -452,8 +462,8 @@ export default function EvacueeTempRegModal(props) {
     }
     setFieldValue("name", evacuees.name || "");
     setFieldValue("name_furigana", (evacuees.refugeeName || evacuees.refugee_name) || "");
-    setFieldValue("age", evacuees.age || "");
-    setFieldValue("age_m", evacuees.month || "");
+    // setFieldValue("age", evacuees.age || "");
+    // setFieldValue("age_m", evacuees.month || "");
     setFieldValue("gender", evacuees.gender ? parseInt(evacuees.gender) : "");
     setFieldValue("tel", evacuees.tel || "");
     evacuees?.prefecture_id &&
@@ -485,7 +495,7 @@ export default function EvacueeTempRegModal(props) {
  
     } 
     setFieldValue("address", evacuees?.address ? evacuees.address : "");
-    if (evacuees.dob) {
+    if (evacuees.dob != "1900/01/01" && evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
         year: parseInt(birthDate.getFullYear()),
@@ -540,6 +550,44 @@ export default function EvacueeTempRegModal(props) {
       formikRef.current.resetForm();
     }
   };
+
+  
+  // const requestUsbDevice = async () => {
+  //   try {
+  //     const device = await navigator.usb.requestDevice({ filters: [] });
+  //     console.log('USB device granted:', device);
+  //   } catch (error) {
+  //     console.error('USB device access denied:', error);
+  //   }
+  // };
+  
+  // const checkDeviceConnection = async () => {
+  //   try {
+  //     requestUsbDevice();
+  //     // Check for connected and previously authorized serial devices
+  //     const ports = await navigator.serial.getPorts();
+  //     const devices = await navigator.usb.getDevices();
+  //     console.log(ports)
+  //     console.log(devices)
+  
+  //     if (ports.length > 0) {
+  //       console.log('Connected device(s):', ports);
+  //       // Here, you can filter by specific device properties if needed
+  //       return true; // Device is connected
+  //     } else {
+  //       console.log('No devices connected.');
+  //       return false; // No device connected
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking device connection:', error);
+  //     return false;
+  //   }
+  // };
+  
+
+  // useEffect(()=>{
+  //   checkDeviceConnection();
+  // },[])
 
   useEffect(() => {
     let dob = formikRef?.current?.values?.dob;
@@ -605,6 +653,18 @@ export default function EvacueeTempRegModal(props) {
 
   return (
     <>
+      <QrConfirmDialog 
+       visible={visible}
+       setVisible={setVisible}
+       setOpenQrPopup={setOpenQrPopup}
+       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      ></QrConfirmDialog>
+       <YaburuModal
+          open={QrScanPopupModalOpen}
+          close={closeQrScanPopup}
+          callBack={qrResult}
+          setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+        ></YaburuModal>
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => setPerspectiveCroppingVisible(false)}
@@ -795,6 +855,7 @@ export default function EvacueeTempRegModal(props) {
                           <i className="custom-target-icon pi pi-info-circle"></i>
                         </div>
                       </div>
+                      <div className="flex items-center">
                       <ButtonRounded
                         buttonProps={{
                           type: "button",
@@ -805,11 +866,30 @@ export default function EvacueeTempRegModal(props) {
                           text: translate(localeJson, "c_qr_reg"),
                           icon: <img src={Qr.url} width={30} height={30} />,
                           onClick: () => {
-                            setOpenQrPopup(true);
+                            let isCamera = localStorage.getItem("isCamera")=="true";
+                            let isScanner = localStorage.getItem("isScanner")=="true";
+                            // checkDeviceConnection()
+                            isCamera &&setOpenQrPopup(true);
+                            isScanner && setQrScanPopupModalOpen(true);
+                            !isCamera && !isScanner && setVisible(true)
                           },
                         }}
                         parentClass={"back-button w-full p-2 mb-2"}
                       />
+                      <div>
+                          <Tooltip
+                            target=".custom-target-icon-2"
+                            position="bottom"
+                            className="shadow-none"
+                          >
+                          <>
+    <div>{translate(localeJson, "qr_scan_message")}</div>
+    <div>{translate(localeJson, "qr_scan_message2")}</div>
+  </></Tooltip>
+  <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                        </div>
+                        
+                        </div>
                     </div>
                     <div className="pl-5 pr-5">
                       <div className="mb-2 col-12">

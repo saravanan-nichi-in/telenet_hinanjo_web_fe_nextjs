@@ -14,6 +14,7 @@ import {
   showOverFlow,
   getSpecialCareName,
   convertToSingleByte,
+  mobileCheck,
 } from "@/helper";
 import {
   Button,
@@ -212,6 +213,9 @@ function StaffFamily() {
    * CommonDialog modal open
    */
   const onClickOkButton = () => {
+    let isMobile = mobileCheck();
+    localStorage.setItem("isCamera",isMobile?"true":"false");
+    localStorage.setItem("isScanner", "false");
     // Once both dispatch actions have completed, navigate to the next page
     router.push("/user/family/register");
   };

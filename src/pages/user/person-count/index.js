@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { getValueByKeyRecursively as translate } from "@/helper";
+import { mobileCheck, getValueByKeyRecursively as translate } from "@/helper";
 import { Button, PersonCountButton, CustomHeader } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { reset } from "@/redux/register";
@@ -19,6 +19,7 @@ const PersonCountScreen = () => {
     const handleSingleSelectionChange = (selectedName) => {
         setPersonCount(selectedName)
     };
+   
 
     const handleNextButtonClick = () => {
         if (!personCount) {
@@ -28,6 +29,10 @@ const PersonCountScreen = () => {
             dispatch(reset());
             // Person count selected, proceed with navigation
             localStorage.setItem("personCount", personCount);
+            let isMobile = mobileCheck();
+            console.log(isMobile)
+            localStorage.setItem("isCamera",isMobile?"true":"false");
+            localStorage.setItem("isScanner", "false");
             router.push('/user/register');
         }
     };
