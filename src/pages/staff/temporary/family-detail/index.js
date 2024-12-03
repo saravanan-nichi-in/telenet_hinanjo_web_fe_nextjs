@@ -14,6 +14,7 @@ import {
     showOverFlow,
     getJapaneseDateTimeDayDisplayActualFormat,
     getEnglishDateTimeDisplayActualFormat,
+    mobileCheck,
 } from '@/helper'
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -673,7 +674,8 @@ export default function StaffFamilyDetail() {
                                     onClick: () => {
                                         dispatch(setOriginalData(editData.data[0]));
                                         dispatch(setIsEdit(true))
-                                        localStorage.setItem("isCamera", "false");
+                                        let isMobile = mobileCheck();
+                                        localStorage.setItem("isCamera",isMobile?"true":"false");
                                         localStorage.setItem("isScanner", "false");
                                         router.push("/staff/temporary/edit")
                                     }
