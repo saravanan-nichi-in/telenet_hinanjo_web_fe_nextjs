@@ -268,7 +268,7 @@ export default function TempRegistration() {
      */
     const onConfirmDeleteRegisteredEvacuees = async () => {
         setTableLoading(true);
-        let payload = {family_id:tempFamilyData.filter((family) => family.id).map((family) => family.id)}
+        let payload = {family_id:[]}
         await AdminEvacueeTempServices.bulkDelete(payload, () => {
           setTableLoading(false);
           setDeleteCount(deleteCount+1);

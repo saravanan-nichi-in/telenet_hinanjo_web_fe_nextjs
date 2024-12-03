@@ -7,7 +7,8 @@ export const ExternalEvacuationServices = {
     getPlaceDropdownList: _getPlaceDropdownList,
     getList: _getList,
     getExternalEvacueesDetail: _getExternalEvacueesDetail,
-    getChartScreenData: _getChartScreenData
+    getChartScreenData: _getChartScreenData,
+    bulkDelete:_bulkDelete
 };
 
 /**
@@ -96,5 +97,19 @@ function _getChartScreenData(payload, callBackFun) {
         .catch((error) => {
             toastDisplay(error?.response);
             callBackFun(false);
+        });
+}
+
+function _bulkDelete(payload, callBackFun) {
+    axios.post('/admin/external/family/delete', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
