@@ -382,7 +382,7 @@ export default function EvacuationPage() {
                                             buttonClass: "export-button",
                                             text: translate(localeJson, 'bulk_delete'),
                                             severity: "primary",
-                                            disabled: !showRegisteredEvacuees,
+                                            disabled: !showRegisteredEvacuees||evacueesDataList.length <= 0,
                                             onClick: () => openDeleteDialog()
                                         }} parentClass={"export-button"} />
                                     </div>
