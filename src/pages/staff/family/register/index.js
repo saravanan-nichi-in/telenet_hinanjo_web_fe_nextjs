@@ -284,7 +284,7 @@ export default function Admission() {
 
   useEffect(() => {
     if (Object.keys(formikRef.current.errors).length > 0) {
-      const firstErrorElement = document.querySelector('.p-error');
+      const firstErrorElement = document.querySelector('.scroll-check');
       if (firstErrorElement) {
         firstErrorElement.scrollIntoView({ behavior: 'smooth' });
       }
@@ -1955,7 +1955,7 @@ export default function Admission() {
                           checked: values.agreeCheckOne,
                           linkLabel: agreeTextWithHTML,
                           labelClass: `pl-2 ${locale == "en" ? "pt-1" : ""} ${errors.agreeCheckOne &&
-                            touched.agreeCheckOne ? "p-error" : ""}`,
+                            touched.agreeCheckOne ? "p-error scroll-check" : ""}`,
                           onChange: (e) =>
                             setFieldValue("agreeCheckOne", e.checked),
                         }}

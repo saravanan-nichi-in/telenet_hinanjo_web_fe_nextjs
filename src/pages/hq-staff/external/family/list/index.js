@@ -60,7 +60,7 @@ export default function HQExternalEvacuationPage() {
         { field: "si_no", header: translate(localeJson, 'si_no'), className: "sno_class", textAlign: "center", sortable: false },
         { field: "place_category", header: translate(localeJson, 'shelter_site_type'), minWidth: "10rem", sortable: false },
         { field: "external_person_count", header: translate(localeJson, 'people_count'), minWidth: "10rem", sortable: false },
-        { field: "place_detail", header: translate(localeJson, 'evacuation_site_type'), minWidth: "10rem", sortable: false },
+        // { field: "place_detail", header: translate(localeJson, 'evacuation_site_type'), minWidth: "10rem", sortable: false },
         { field: "hinan_id", header: translate(localeJson, 'receiving_shelter'), minWidth: "10rem", sortable: false },
         { field: "food_required", header: translate(localeJson, 'need_food_support'), minWidth: "10rem", sortable: false },
         { field: "email", header: translate(localeJson, 'mail_address'), minWidth: "10rem", sortable: false },
@@ -280,7 +280,7 @@ export default function HQExternalEvacuationPage() {
                         onSelectionChange={
                             (e) => {
                                 if (e.value.external_person_count != 0) {
-                                    dispatch(setExternalFamily({ evacuee_id: e.value.id }));
+                                    dispatch(setExternalFamily({ evacuee_id: e.value.id,external_place:e.value.hinan_id }));
                                     router.push({
                                         pathname: '/hq-staff/external/family/list/family-detail',
                                     });
