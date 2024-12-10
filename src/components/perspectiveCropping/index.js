@@ -34,8 +34,6 @@ export const PerspectiveCropping = (props) => {
 
   // Set the camera mode on initial render based on the device type
   useEffect(() => {
-    console.log(/Mobi|Android/i.test(navigator.userAgent));
-    console.log((navigator.userAgent));
     if (isMobile) {
       setToggleCameraMode("environment"); // Use front camera for mobile by default
     } else {
