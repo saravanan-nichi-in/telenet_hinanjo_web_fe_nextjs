@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Dialog } from 'primereact/dialog';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 
@@ -11,6 +11,10 @@ export default function QrScannerModal(props) {
     const { open, close } = props;
 
     const [toggleCameraMode, setToggleCameraMode] = useState("environment");
+
+    useEffect(()=>{
+        if (window.innerWidth >= 1024) { setToggleCameraMode("user"); }
+    },[window.innerWidth])
 
     return (
         <div>
@@ -34,6 +38,9 @@ export default function QrScannerModal(props) {
                                 }, 1000)
                             }
                         }}
+                        videoStyle={{
+                                     transform: toggleCameraMode == "user" ? 'scaleX(-1)':'inherit', // Flip only for front camera
+                                    }}
                         scanDelay={1000}
                         constraints={{
                             facingMode: toggleCameraMode
@@ -53,7 +60,7 @@ export default function QrScannerModal(props) {
                                 }
                             },
                             icon: "pi pi-camera",
-                            buttonClass: "mt-3 mb-2"
+                            buttonClass: "mt-3 mb-2",
                         }
                     }></Button>
 
