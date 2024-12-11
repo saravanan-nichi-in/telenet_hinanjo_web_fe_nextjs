@@ -287,6 +287,7 @@ export default function EventFamilyDetail() {
                                             rounded: "true",
                                             delete: true,
                                             buttonClass: "w-10rem export-button",
+                                            disabled: (familyDetailData?.length > 0 && familyDetailData[0].family_is_registered == 1) ? true : false,
                                             // disabled:isReg,
                                             text: translate(localeJson, 'delete_confirm'),
                                             severity: "primary",
