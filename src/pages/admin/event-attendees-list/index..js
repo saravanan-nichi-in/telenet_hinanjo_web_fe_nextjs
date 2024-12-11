@@ -9,10 +9,12 @@ import {
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
+    hideOverFlow,
+    showOverFlow,
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown, AdminManagementDeleteModal } from '@/components';
 import { AdminEventStatusServices, CommonServices } from '@/services';
 import { prefecturesCombined } from '@/utils/constant';
 
@@ -32,6 +34,8 @@ export default function EventAttendeesList() {
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [familyCount, setFamilyCount] = useState(0);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteCount,setDeleteCount] = useState(0)
     const [listPayload, setListPayload] = useState(
         {
             "filters": {
@@ -172,7 +176,7 @@ export default function EventAttendeesList() {
             await listApiCall();
         };
         fetchData();
-    }, [locale, listPayload]);
+    }, [locale, listPayload,deleteCount]);
 
     const searchListWithCriteria = () => {
         setListPayload({
@@ -187,14 +191,70 @@ export default function EventAttendeesList() {
             },
         })
     }
+        /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+        const openDeleteDialog = () => {
+            setDeleteOpen(true);
+            hideOverFlow();
+        }
+    
+        /**
+         * On confirmation delete api call and close modal functionality handler
+         * @param {*} status 
+         */
+        const onDeleteClose = (status = '') => {
+            if (status == 'confirm') {
+                onConfirmDeleteRegisteredEvacuees();
+            }
+            setDeleteOpen(false);
+            showOverFlow();
+        };
+    
+        /**
+         * Delete registered evacuees
+         */
+        const onConfirmDeleteRegisteredEvacuees = async () => {
+            setTableLoading(true);
+            let payload = {"event_id" :"", // for single record delete both event id and family id mandatory
+                         "family_id" :""}
+            await AdminEventStatusServices.bulkDelete(payload, () => {
+              setTableLoading(false);
+              setDeleteCount(deleteCount+1);
+            });
+        }
+
 
     return (
+        <> <AdminManagementDeleteModal
+        open={deleteOpen}
+        close={onDeleteClose}
+    />
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <div className="flex gap-2 align-items-center ">
+                <div className="flex flex-wrap align-items-center justify-content-between">
+                <div className='flex align-items-center gap-2 mb-2'>
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "attendee_list")} />
                         <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                        </div>
+                        <div className='flex flex-wrap align-items-center gap-2'>
+                                <div className='flex flex-wrap  md:justify-content-end md:align-items-end md:gap-4 gap-2 mb-2'>
+                                    <div>
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "export-button",
+                                            text: translate(localeJson, 'bulk_delete'),
+                                            severity: "primary",
+                                            disabled: columnValues.length <= 0,
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"export-button"} />
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <div>
                         <div>
@@ -293,5 +353,6 @@ export default function EventAttendeesList() {
                 </div>
             </div>
         </div>
+        </>
     )
 }

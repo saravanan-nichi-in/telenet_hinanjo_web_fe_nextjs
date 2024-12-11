@@ -16,13 +16,13 @@ import {
     hideOverFlow
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader } from '@/components';
+import { Button, CommonDialog, NormalTable, CardSpinner, CustomHeader, AdminManagementDeleteModal } from '@/components';
 import { useAppSelector } from "@/redux/hooks";
 import { prefecturesCombined } from '@/utils/constant';
-import { EvacuationServices } from '@/services';
+import { EvacuationServices,AdminEventStatusServices } from '@/services';
 
 export default function EventFamilyDetail() {
-    const { locale, localeJson } = useContext(LayoutContext);
+    const { locale, localeJson,setLoader } = useContext(LayoutContext);
     const router = useRouter();
     const param = useAppSelector((state) => state.familyReducer.family);
 
@@ -30,6 +30,7 @@ export default function EventFamilyDetail() {
     const [familyDetailData, setFamilyDetailData] = useState(null);
     const [familyAdmittedData, setFamilyAdmittedData] = useState(null);
     const [checkoutVisible, setCheckoutVisible] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const familyAdmissionColumns = [
         { field: 'shelter_place', header: translate(localeJson, 'staff_attendees_table_event_name'), minWidth: "10rem", maxWidth: "12rem" },
@@ -117,8 +118,37 @@ export default function EventFamilyDetail() {
         })
     }
 
+    const onConfirmDeleteRegisteredEvacuees = async () => {
+        AdminEventStatusServices.bulkDelete(param, (res) => {
+            if (res) {
+                setLoader(false);
+                router.push('/admin/event-attendees-list/');
+            }
+            else {
+                setLoader(false);
+            }
+
+        });
+    }
+    const openDeleteDialog = () => {
+        setDeleteOpen(true);
+        hideOverFlow();
+    }
+
+    const onDeleteClose = (status = '') => {
+        if (status == 'confirm') {
+            onConfirmDeleteRegisteredEvacuees();
+        }
+        setDeleteOpen(false);
+        showOverFlow();
+    };
+
     return (
         <>
+        <AdminManagementDeleteModal
+                open={deleteOpen}
+                close={onDeleteClose}
+            />
             <CommonDialog
                 open={checkoutVisible}
                 dialogBodyClassName="p-3"
@@ -236,7 +266,7 @@ export default function EventFamilyDetail() {
                                 />
                             </div>
                         </div>
-                        <div className="flex mt-2 gap-2 justify-content-center">
+                        <div className='flex flex-column mt-3 mb-2 justify-content-center align-items-center flex-wrap'>
                             <Button buttonProps={{
                                 buttonClass: "w-10rem exit-procedure-button ",
                                 text: translate(localeJson, 'exit_procedures_attendees'),
@@ -252,6 +282,16 @@ export default function EventFamilyDetail() {
                                 }
                             }
                             } parentClass={"inline exit-procedure-button "} />
+                            <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "w-10rem export-button",
+                                            // disabled:isReg,
+                                            text: translate(localeJson, 'delete_confirm'),
+                                            severity: "primary",
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"mt-3 export-button"} />
                         </div>
                     </div>
                 </div>
