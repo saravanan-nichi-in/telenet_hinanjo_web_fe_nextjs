@@ -14,7 +14,7 @@ import {
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, Input, InputDropdown, AdminManagementDeleteModal } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown, AdminManagementDeleteModal, InputSwitch } from '@/components';
 import { AdminEventStatusServices, CommonServices } from '@/services';
 import { prefecturesCombined } from '@/utils/constant';
 
@@ -36,6 +36,7 @@ export default function EventAttendeesList() {
     const [familyCount, setFamilyCount] = useState(0);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteCount,setDeleteCount] = useState(0)
+    const [showRegisteredEvacuees, setShowRegisteredEvacuees] = useState(false);
     const [listPayload, setListPayload] = useState(
         {
             "filters": {
@@ -45,7 +46,8 @@ export default function EventAttendeesList() {
                 "order_by": "desc",
                 "event_id": "",
                 "family_code": "",
-                "refugee_name": ""
+                "refugee_name": "",
+                "checkout_flg": "0"
             },
         }
     );
@@ -115,6 +117,7 @@ export default function EventAttendeesList() {
                 event_id: listPayload.filters.event_id,
                 family_code: listPayload.filters.family_code,
                 refugee_name: listPayload.filters.refugee_name,
+                checkout_flg: listPayload.filters.checkout_flg
             },
         }
         await AdminEventStatusServices.getAttendeesList(payload, (response) => {
@@ -187,10 +190,25 @@ export default function EventAttendeesList() {
                 "order_by": "desc",
                 "event_id": selectedOption.id ? selectedOption.id : "",
                 "family_code": "",
-                "refugee_name": searchFieldName
+                "refugee_name": searchFieldName,
+                "checkout_flg": listPayload.filters.checkout_flg
             },
         })
     }
+
+    const showOnlyRegisteredEvacuees = async () => {
+        setShowRegisteredEvacuees(!showRegisteredEvacuees);
+        setTableLoading(true);
+        await setListPayload(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                checkout_flg: showRegisteredEvacuees ? 0 : 1,
+                start: 0
+            }
+        }));
+    }
+
         /**
      * Delete modal open handler
      * @param {*} rowdata 
@@ -221,7 +239,14 @@ export default function EventAttendeesList() {
                          "family_id" :""}
             await AdminEventStatusServices.bulkDelete(payload, () => {
               setTableLoading(false);
-              setDeleteCount(deleteCount+1);
+              setListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    checkout_flg: 0
+                }
+            }));
+            setShowRegisteredEvacuees(!showRegisteredEvacuees);
             });
         }
 
@@ -238,9 +263,17 @@ export default function EventAttendeesList() {
                 <div className='flex align-items-center gap-2 mb-2'>
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "attendee_list")} />
                         <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                        
                         </div>
                         <div className='flex flex-wrap align-items-center gap-2'>
-                                <div className='flex flex-wrap  md:justify-content-end md:align-items-end md:gap-4 gap-2 mb-2'>
+                        <div className='flex flex-wrap  md:justify-content-end md:align-items-end md:gap-4 gap-2 mb-2'>
+                                    <div class="flex gap-2 align-items-center justify-content-center mt-2 md:mt-0 md:mb-2">
+                                        <span className='text-sm'>{translate(localeJson, 'show_checked_out_event_evacuees')}</span><InputSwitch inputSwitchProps={{
+                                            checked: showRegisteredEvacuees,
+                                            onChange: () => showOnlyRegisteredEvacuees()
+                                        }}
+                                            parentClass={"custom-switch"} />
+                                    </div>
                                     <div>
                                         <Button buttonProps={{
                                             type: "button",
@@ -249,7 +282,7 @@ export default function EventAttendeesList() {
                                             buttonClass: "export-button",
                                             text: translate(localeJson, 'bulk_delete'),
                                             severity: "primary",
-                                            disabled: columnValues.length <= 0,
+                                            disabled: !showRegisteredEvacuees||columnValues.length <= 0,
                                             onClick: () => openDeleteDialog()
                                         }} parentClass={"export-button"} />
                                     </div>
