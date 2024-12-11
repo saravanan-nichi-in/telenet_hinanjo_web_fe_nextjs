@@ -1054,6 +1054,7 @@
       "qr_staff_check_in_confirm": "避難前登録時に選択した避難所が異なります。 この避難所に変えて入所を進めてもよろしいですか？",
       "name_required_changed": "名前は必須です 。",
       "show_checked_out_evacuees": "退所した避難者のみ表示",
+      "show_checked_out_event_evacuees": "退場した出席者のみ表示",
       "already_per_admitted":"以下の避難者が既に登録済みであるため、それ以外の避難者の登録のみを行います。",
       "already_per_admitted2":"登録済みの避難者を除いて残りの避難者を登録する場合は、「継続」を行ってください。",
       "already_per_admitted3":"前の画面に戻って避難者情報を訂正する場合は、「戻る」を行ってください。",
