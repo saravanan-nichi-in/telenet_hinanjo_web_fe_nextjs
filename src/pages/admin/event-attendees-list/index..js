@@ -9,10 +9,12 @@ import {
     getEnglishDateTimeDisplayActualFormat,
     getJapaneseDateDisplayYYYYMMDDFormat,
     getJapaneseDateTimeDayDisplayActualFormat,
+    hideOverFlow,
+    showOverFlow,
     getValueByKeyRecursively as translate
 } from '@/helper'
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Button, CustomHeader, NormalTable, Input, InputDropdown } from '@/components';
+import { Button, CustomHeader, NormalTable, Input, InputDropdown, AdminManagementDeleteModal, InputSwitch } from '@/components';
 import { AdminEventStatusServices, CommonServices } from '@/services';
 import { prefecturesCombined } from '@/utils/constant';
 
@@ -32,6 +34,9 @@ export default function EventAttendeesList() {
     const [tableLoading, setTableLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
     const [familyCount, setFamilyCount] = useState(0);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteCount,setDeleteCount] = useState(0)
+    const [showRegisteredEvacuees, setShowRegisteredEvacuees] = useState(false);
     const [listPayload, setListPayload] = useState(
         {
             "filters": {
@@ -41,7 +46,8 @@ export default function EventAttendeesList() {
                 "order_by": "desc",
                 "event_id": "",
                 "family_code": "",
-                "refugee_name": ""
+                "refugee_name": "",
+                "checkout_flg": "0"
             },
         }
     );
@@ -111,6 +117,7 @@ export default function EventAttendeesList() {
                 event_id: listPayload.filters.event_id,
                 family_code: listPayload.filters.family_code,
                 refugee_name: listPayload.filters.refugee_name,
+                checkout_flg: listPayload.filters.checkout_flg
             },
         }
         await AdminEventStatusServices.getAttendeesList(payload, (response) => {
@@ -172,7 +179,7 @@ export default function EventAttendeesList() {
             await listApiCall();
         };
         fetchData();
-    }, [locale, listPayload]);
+    }, [locale, listPayload,deleteCount]);
 
     const searchListWithCriteria = () => {
         setListPayload({
@@ -183,18 +190,104 @@ export default function EventAttendeesList() {
                 "order_by": "desc",
                 "event_id": selectedOption.id ? selectedOption.id : "",
                 "family_code": "",
-                "refugee_name": searchFieldName
+                "refugee_name": searchFieldName,
+                "checkout_flg": listPayload.filters.checkout_flg
             },
         })
     }
 
+    const showOnlyRegisteredEvacuees = async () => {
+        setShowRegisteredEvacuees(!showRegisteredEvacuees);
+        setTableLoading(true);
+        await setListPayload(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                checkout_flg: showRegisteredEvacuees ? 0 : 1,
+                start: 0
+            }
+        }));
+    }
+
+        /**
+     * Delete modal open handler
+     * @param {*} rowdata 
+     */
+        const openDeleteDialog = () => {
+            setDeleteOpen(true);
+            hideOverFlow();
+        }
+    
+        /**
+         * On confirmation delete api call and close modal functionality handler
+         * @param {*} status 
+         */
+        const onDeleteClose = (status = '') => {
+            if (status == 'confirm') {
+                onConfirmDeleteRegisteredEvacuees();
+            }
+            setDeleteOpen(false);
+            showOverFlow();
+        };
+    
+        /**
+         * Delete registered evacuees
+         */
+        const onConfirmDeleteRegisteredEvacuees = async () => {
+            setTableLoading(true);
+            let payload = {"event_id" :"", // for single record delete both event id and family id mandatory
+                         "family_id" :""}
+            await AdminEventStatusServices.bulkDelete(payload, () => {
+              setTableLoading(false);
+              setListPayload(prevState => ({
+                ...prevState,
+                filters: {
+                    ...prevState.filters,
+                    checkout_flg: 0
+                }
+            }));
+            setShowRegisteredEvacuees(!showRegisteredEvacuees);
+            });
+        }
+
+
     return (
+        <> <AdminManagementDeleteModal
+        open={deleteOpen}
+        close={onDeleteClose}
+    />
         <div className="grid">
             <div className="col-12">
                 <div className='card'>
-                    <div className="flex gap-2 align-items-center ">
+                <div className="flex flex-wrap align-items-center justify-content-between">
+                <div className='flex align-items-center gap-2 mb-2'>
                         <CustomHeader headerClass={"page-header1"} header={translate(localeJson, "attendee_list")} />
                         <div className='page-header1-sub mb-2'>{`(${totalCount}${translate(localeJson, "people")})`}</div>
+                        
+                        </div>
+                        <div className='flex flex-wrap align-items-center gap-2'>
+                        <div className='flex flex-wrap  md:justify-content-end md:align-items-end md:gap-4 gap-2 mb-2'>
+                                    <div class="flex gap-2 align-items-center justify-content-center mt-2 md:mt-0 md:mb-2">
+                                        <span className='text-sm'>{translate(localeJson, 'show_checked_out_event_evacuees')}</span><InputSwitch inputSwitchProps={{
+                                            checked: showRegisteredEvacuees,
+                                            onChange: () => showOnlyRegisteredEvacuees()
+                                        }}
+                                            parentClass={"custom-switch"} />
+                                    </div>
+                                    <div>
+                                        <Button buttonProps={{
+                                            type: "button",
+                                            rounded: "true",
+                                            delete: true,
+                                            buttonClass: "export-button",
+                                            text: translate(localeJson, 'bulk_delete'),
+                                            severity: "primary",
+                                            disabled: !showRegisteredEvacuees||columnValues.length <= 0,
+                                            onClick: () => openDeleteDialog()
+                                        }} parentClass={"export-button"} />
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <div>
                         <div>
@@ -293,5 +386,6 @@ export default function EventAttendeesList() {
                 </div>
             </div>
         </div>
+        </>
     )
 }

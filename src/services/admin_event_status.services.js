@@ -4,7 +4,8 @@ import axios from "@/utils/api";
 export const AdminEventStatusServices = {
     exportData: _exportData,
     getAttendeesList: _getAttendeesList,
-    getEventStatusList: _getEventStatusList
+    getEventStatusList: _getEventStatusList,
+    bulkDelete: _bulkDelete,
 };
 
 /**
@@ -61,5 +62,24 @@ function _getEventStatusList(payload, callBackFun) {
         .catch((error) => {
             console.error("Error fetching data:", error);
             callBackFun(false);
+        });
+}
+
+/**
+ * Get Event Attendees checkout
+ * @param {*} payload 
+ * @param {*} callBackFun 
+ */
+function _bulkDelete(payload, callBackFun) {
+    axios.post('/admin/attendees/delete', payload)
+        .then((response) => {
+            if (response && response.data) {
+                callBackFun(response.data);
+                toastDisplay(response);
+            }
+        })
+        .catch((error) => {
+            callBackFun(false);
+            toastDisplay(error?.response);
         });
 }
