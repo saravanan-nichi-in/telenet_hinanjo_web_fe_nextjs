@@ -89,7 +89,7 @@ export default function Admission() {
   const [isRecording, setIsRecording] = useState(false);
   const formikRef = useRef();
   const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
-  const [visible,setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
@@ -675,16 +675,16 @@ export default function Admission() {
   const closeQrScanPopup = () => {
     setQrScanPopupModalOpen(false);
     showOverFlow();
-  };	
+  };
 
-  const qrResult = async(result) => {
+  const qrResult = async (result) => {
     setLoader(true);
     let formData = new FormData();
     formData.append("content", result);
     setOpenQrPopup(false);
     setQrScanPopupModalOpen(false);
     showOverFlow();
-    qrScanRegistration(formData, async(res) => {
+    qrScanRegistration(formData, async (res) => {
       if (res) {
         const evacueeArray = res.data;
         let newEvacuee = createEvacuee(evacueeArray);
@@ -693,7 +693,7 @@ export default function Admission() {
           isFromFormReader: true
         };
         if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
-          const address = evacueeArray.fullAddress||evacueeArray.address;
+          const address = evacueeArray.fullAddress || evacueeArray.address;
           try {
             const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
 
@@ -737,7 +737,7 @@ export default function Admission() {
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
     showOverFlow();
-    ocrScanRegistration(formData,async (res) => {
+    ocrScanRegistration(formData, async (res) => {
       if (res) {
         const evacueeArray = res.data;
         let newEvacuee = createEvacuee(evacueeArray);
@@ -746,7 +746,7 @@ export default function Admission() {
           isFromFormReader: true
         };
         if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
-          const address = evacueeArray.fullAddress||evacueeArray.address;
+          const address = evacueeArray.fullAddress || evacueeArray.address;
           try {
             const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
 
@@ -908,10 +908,10 @@ export default function Admission() {
       name_furigana: evacuees
         ? evacuees.refugeeName || evacuees.refugee_name || ""
         : "",
-      dob: evacuees ? evacuees.dob !="1900/01/01"?convertedObject || "" :"" :"",
-      age: evacuees ? evacuees.dob !="1900/01/01"? age.years || "" :"" :"",
+      dob: evacuees ? evacuees.dob != "1900/01/01" ? convertedObject || "" : "" : "",
+      age: evacuees ? evacuees.dob != "1900/01/01" ? age.years || "" : "" : "",
       age_m:
-        evacuees && evacuees.dob !="1900/01/01"?age.months !== undefined ? age.months : "":"",
+        evacuees && evacuees.dob != "1900/01/01" ? age.months !== undefined ? age.months : "" : "",
       gender: evacuees ? parseInt(evacuees.gender) || null : null,
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
@@ -979,18 +979,18 @@ export default function Admission() {
         callback={qrResult}
         setOpenQrPopup={setOpenQrPopup}
       ></QrScannerModal>
-       <QrConfirmDialog 
-       visible={visible}
-       setVisible={setVisible}
-       setOpenQrPopup={setOpenQrPopup}
-       setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+      <QrConfirmDialog
+        visible={visible}
+        setVisible={setVisible}
+        setOpenQrPopup={setOpenQrPopup}
+        setQrScanPopupModalOpen={setQrScanPopupModalOpen}
       ></QrConfirmDialog>
-       <YaburuModal
-          open={QrScanPopupModalOpen}
-          close={closeQrScanPopup}
-          setQrScanPopupModalOpen={setQrScanPopupModalOpen}
-          callBack={qrResult}
-        ></YaburuModal>
+      <YaburuModal
+        open={QrScanPopupModalOpen}
+        close={closeQrScanPopup}
+        setQrScanPopupModalOpen={setQrScanPopupModalOpen}
+        callBack={qrResult}
+      ></YaburuModal>
       <BarcodeDialog
         header={translate(localeJson, "barcode_dialog_heading")}
         visible={openBarcodeDialog}
@@ -1106,54 +1106,55 @@ export default function Admission() {
                         </div>
                       </div>
                       <div className="flex items-center">
-                      <ButtonRounded
-                        buttonProps={{
-                          type: "button",
-                          rounded: "true",
-                          custom: "",
-                          buttonClass:
-                            "back-button h-4rem border-radius-5rem  w-full flex justify-content-center",
-                          text: translate(localeJson, "c_qr_reg"),
-                          icon: (
-                            <img
-                              src={Qr.url}
-                              width={30}
-                              height={30}
-                              color="green"
-                            />
-                          ),
-                          onClick: () => {
-                            // setOpenQrPopup(true);
-                            let isCamera = localStorage.getItem("isCamera")=="true";
-                            let isScanner = localStorage.getItem("isScanner")=="true";
-                            // checkDeviceConnection()
-                            isCamera &&setOpenQrPopup(true);
-                            isScanner && setQrScanPopupModalOpen(true);
-                            !isCamera && !isScanner && setVisible(true)
-                            hideOverFlow();
-                          },
-                        }}
-                        parentClass={"back-button w-full p-2 mb-2"}
-                      />
+                        <ButtonRounded
+                          buttonProps={{
+                            type: "button",
+                            rounded: "true",
+                            custom: "",
+                            buttonClass:
+                              "back-button h-4rem border-radius-5rem  w-full flex justify-content-center",
+                            text: translate(localeJson, "c_qr_reg"),
+                            icon: (
+                              <img
+                                src={Qr.url}
+                                width={30}
+                                height={30}
+                                color="green"
+                              />
+                            ),
+                            onClick: () => {
+                              // setOpenQrPopup(true);
+                              let isCamera = localStorage.getItem("isCamera") == "true";
+                              let isScanner = localStorage.getItem("isScanner") == "true";
+                              // checkDeviceConnection()
+                              isCamera && setOpenQrPopup(true);
+                              isScanner && setQrScanPopupModalOpen(true);
+                              !isCamera && !isScanner && setVisible(true)
+                              hideOverFlow();
+                            },
+                          }}
+                          parentClass={"back-button w-full p-2 mb-2"}
+                        />
                         <div>
                           <Tooltip
                             target=".custom-target-icon-2"
                             position="bottom"
                             className="shadow-none"
                           >
-                          <>
-                        <div>{translate(localeJson, "qr_scan_message")}</div>
-                        <div>{translate(localeJson, "qr_scan_message2")}</div>
-                        </></Tooltip>
-                        <i className="custom-target-icon-2 pi pi-info-circle"></i>  
+                            <>
+                              <div>{translate(localeJson, "qr_scan_message")}</div>
+                              <div>{translate(localeJson, "qr_scan_message2")}</div>
+                            </></Tooltip>
+                          <i className="custom-target-icon-2 pi pi-info-circle"></i>
                         </div>
-                        </div>
+                      </div>
                     </div>
                     <div className="mt-3">
                       <div className="grid">
                         <div className="mb-2 col-12 xl:col-12">
                           <div className="w-12">
-                            <Input
+                            {/*Featured
+                             <Input
                               inputProps={{
                                 inputParentClassName: `custom_input w-full ${errors.name_kanji &&
                                   touched.name_kanji &&
@@ -1204,12 +1205,19 @@ export default function Admission() {
                                 touched.name_kanji &&
                                 errors.name_kanji
                               }
-                            />
+                            /> */}
+                            <div className="pb-1">
+                              <label className="custom-label">
+                                {translate(localeJson, "rep_kanji")}
+                              </label>
+                            </div>
+                            <div className="body_table">{values?.name_kanji ? values.name_kanji : "-"}</div>
                           </div>
                         </div>
                         <div className="mb-2  col-12 xl:col-12">
                           <div className="w-12">
-                            <Input
+                            {/* Featured
+                             <Input
                               inputProps={{
                                 inputParentClassName: `custom_input w-full ${errors.name_furigana &&
                                   touched.name_furigana &&
@@ -1262,11 +1270,18 @@ export default function Admission() {
                                 touched.name_furigana &&
                                 errors.name_furigana
                               }
-                            />
+                            /> */}
+                            <div className="pb-1">
+                              <label className="custom-label">
+                                {translate(localeJson, "rep_furigana")}
+                              </label>
+                            </div>
+                            <div className="body_table">{values?.name_furigana ? values.name_furigana : "-"}</div>
                           </div>
                         </div>
                         <div className="mb-2  col-12 xl:col-12">
                           <div className="w-12">
+                            {/* Featured 
                             <Input
                               inputProps={{
                                 inputParentClassName: `custom_input w-full ${errors.tel && touched.tel && "p-invalid"
@@ -1329,16 +1344,22 @@ export default function Admission() {
                               errorBlock={
                                 errors.tel && touched.tel && errors.tel
                               }
-                            />
+                            /> */}
+                            <div className="pb-1">
+                              <label className="custom-label">
+                                {translate(localeJson, "phone_number")}
+                              </label>
+                            </div>
+                            <div className="body_table">{values?.tel ? values.tel : "-"}</div>
                           </div>
                         </div>
-
                         <div className="mb-2 xl:mb-0 col-12 xl:col-12">
                           <div className="outer-label pb-1 custom-label w-12">
                             <label>{translate(localeJson, "address")}</label>
                             <span className="p-error">*</span>
                           </div>
-                          <Input
+                          {/*Featured
+                           <Input
                             inputProps={{
                               inputParentClassName: `custom_input w-full  ${errors.postalCode &&
                                 touched.postalCode &&
@@ -1439,8 +1460,18 @@ export default function Admission() {
                               touched.postalCode &&
                               errors.postalCode
                             }
-                          />
-                          <InputDropdown
+                          /> */}
+                          <div className="body_table">{values?.postalCode ? values.postalCode : "-"}</div>
+                          <div className="body_table">
+                            {
+                              locale === "ja"
+                                ? prefectures.find(pref => pref.value == values?.prefecture_id)?.name || "-"
+                                : prefectures_en.find(pref => pref.value == values?.prefecture_id)?.name || "-"
+                            }
+                            {values?.address ?? ""}
+                          </div>                            
+                          {/*Featured
+                           <InputDropdown
                             inputDropdownProps={{
                               inputDropdownParentClassName: `custom_input mt-2  ${errors.prefecture_id &&
                                 touched.prefecture_id &&
@@ -1477,7 +1508,8 @@ export default function Admission() {
                               touched.prefecture_id &&
                               errors.prefecture_id
                             }
-                          />
+                          /> */}
+                          {/*Featured 
                           <Input
                             inputProps={{
                               inputParentClassName: `custom_input w-full mt-2 ${errors.address && touched.address && "p-invalid"
@@ -1527,7 +1559,7 @@ export default function Admission() {
                               touched.address &&
                               errors.address
                             }
-                          />
+                          /> */}
                           {/* <Input
                             inputProps={{
                               inputParentClassName: `custom_input w-full mt-2 ${
