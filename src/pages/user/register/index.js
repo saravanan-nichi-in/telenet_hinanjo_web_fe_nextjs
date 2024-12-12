@@ -1211,7 +1211,7 @@ export default function Admission() {
                                 {translate(localeJson, "rep_kanji")}
                               </label>
                             </div>
-                            <div className="body_table">{values?.name_kanji ? values.name_kanji : "-"}</div>
+                            <div className="body_table">{values?.name_kanji ? values.name_kanji : "--"}</div>
                           </div>
                         </div>
                         <div className="mb-2  col-12 xl:col-12">
@@ -1276,7 +1276,7 @@ export default function Admission() {
                                 {translate(localeJson, "rep_furigana")}
                               </label>
                             </div>
-                            <div className="body_table">{values?.name_furigana ? values.name_furigana : "-"}</div>
+                            <div className="body_table">{values?.name_furigana ? values.name_furigana : "--"}</div>
                           </div>
                         </div>
                         <div className="mb-2  col-12 xl:col-12">
@@ -1350,7 +1350,7 @@ export default function Admission() {
                                 {translate(localeJson, "phone_number")}
                               </label>
                             </div>
-                            <div className="body_table">{values?.tel ? values.tel : "-"}</div>
+                            <div className="body_table">{values?.tel ? values.tel : "--"}</div>
                           </div>
                         </div>
                         <div className="mb-2 xl:mb-0 col-12 xl:col-12">
@@ -1461,15 +1461,6 @@ export default function Admission() {
                               errors.postalCode
                             }
                           /> */}
-                          <div className="body_table">{values?.postalCode ? values.postalCode : "-"}</div>
-                          <div className="body_table">
-                            {
-                              locale === "ja"
-                                ? prefectures.find(pref => pref.value == values?.prefecture_id)?.name || "-"
-                                : prefectures_en.find(pref => pref.value == values?.prefecture_id)?.name || "-"
-                            }
-                            {values?.address ?? ""}
-                          </div>                            
                           {/*Featured
                            <InputDropdown
                             inputDropdownProps={{
@@ -1560,6 +1551,15 @@ export default function Admission() {
                               errors.address
                             }
                           /> */}
+                          <div className="body_table">{values?.postalCode ? values.postalCode : "--"}</div>
+                          <div className="body_table">
+                            {
+                              locale === "ja"
+                                ? prefectures.find(pref => pref.value == values?.prefecture_id)?.name || ""
+                                : prefectures_en.find(pref => pref.value == values?.prefecture_id)?.name || ""
+                            }
+                            {values?.address ? values.address : ""}
+                          </div>
                           {/* <Input
                             inputProps={{
                               inputParentClassName: `custom_input w-full mt-2 ${
