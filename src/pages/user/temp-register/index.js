@@ -1044,6 +1044,14 @@ export default function Admission() {
     }
     return "";
   };
+  useEffect(()=>{
+
+    if(!visible)
+    {
+      showOverFlow();
+    }
+
+  },[visible])
 
   return (
     <>
@@ -1287,7 +1295,7 @@ export default function Admission() {
                                     {translate(localeJson, "rep_kanji")}
                                   </label>
                                 </div>
-                                <div className="body_table">{values?.name_kanji ? values.name_kanji : "--"}</div>
+                                <div className="body_table">{values?.name_kanji ? values.name_kanji : "-"}</div>
                               </div>
                             </div>
                             <div className="mb-2  col-12 xl:col-12">
@@ -1356,7 +1364,7 @@ export default function Admission() {
                                     {translate(localeJson, "rep_furigana")}
                                   </label>
                                 </div>
-                                <div className="body_table">{values?.name_furigana ? values.name_furigana : "--"}</div>
+                                <div className="body_table">{values?.name_furigana ? values.name_furigana : "-"}</div>
                               </div>
                             </div>
                             <div className="mb-2  col-12 xl:col-12">
@@ -1437,7 +1445,7 @@ export default function Admission() {
                                     {translate(localeJson, "phone_number")}
                                   </label>
                                 </div>
-                                <div className="body_table">{values?.tel ? values.tel : "--"}</div>
+                                <div className="body_table">{values?.tel ? values.tel : "-"}</div>
                               </div>
                             </div>
 
@@ -1446,7 +1454,7 @@ export default function Admission() {
                                 <label>
                                   {translate(localeJson, "address")}
                                 </label>
-                                <span className="p-error">*</span>
+                                {/* <span className="p-error">*</span> */}
                               </div>
                               {/* Featured
                                <Input
@@ -1657,7 +1665,7 @@ export default function Admission() {
                                   errors.address
                                 }
                               /> */}
-                              <div className="body_table">{values?.postalCode ? values.postalCode : "--"}</div>
+                              <div className="body_table">{values?.postalCode ? values.postalCode : "-"}</div>
                               <div className="body_table">
                                 {
                                   locale === "ja"
