@@ -6,6 +6,7 @@
 .body_table {
     font-size: $detailsBodyFontSize;
     font-weight: $commonFontWeight;
+    overflow-wrap: anywhere;
 }
 
 @media (min-width: 1181px) {
