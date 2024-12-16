@@ -947,6 +947,7 @@
     "month_length": "Month must be 2 characters long.",
     "date_length": "Date must be 2 characters long.",
     "address_max_length": "Address must be at most 190 characters.",
+    "remarks_max_length": "Remarks must be at most 200 characters.",
     "email_max_length": "Email must be at most 200 characters.",
     "postal_code_required": "Postal code is required.",
     "address_required": "Address is required.",
