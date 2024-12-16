@@ -122,9 +122,9 @@ export default function EvacueeTempRegModal(props) {
       address: Yup.string()
         .required(translate(localeJson, "c_address_is_required"))
         .max(190, translate(localeJson, "address_max_length")),
-      // address2: Yup.string()
-      //   .nullable()
-      //   .max(190, translate(localeJson, "address_max_length")),
+      remarks: Yup.string()
+        .nullable()
+        .max(200, translate(localeJson, "remarks_max_length")),
       prefecture_id: Yup.string()
         .nullable(),
     });

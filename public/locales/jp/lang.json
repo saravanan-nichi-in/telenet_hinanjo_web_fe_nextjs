@@ -942,6 +942,7 @@
       "month_length": "月は２文字である必要があります。",
       "date_length": "日は２文字である必要があります。",
       "address_max_length": "住所は最大190文字までです。",
+      "remarks_max_length": "注意点・備考は最大200文字までです。",
       "email_max_length": "メールアドレスは最大200文字までです。",
       "postal_code_required": "郵便番号は必須です。",
       "address_required": "住所は必須です。",
