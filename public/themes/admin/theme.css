@@ -1494,14 +1494,14 @@
 }
 
 .p-multiselect:not(.p-disabled):hover {
-  border-color: #6366F1;
+  border-color: var(--primary-color);;
 }
 
 .p-multiselect:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #C7D2FE;
-  border-color: #6366F1;
+  border-color:var(--primary-color);
 }
 
 .p-multiselect.p-multiselect-clearable .p-multiselect-label {
