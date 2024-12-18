@@ -597,7 +597,6 @@ export const MultiSelect = (props) => {
         className={multiSelectClassName}
         value={selectedValues}
         onChange={(e)=>{
-          console.log("KKK")
           handleSelectionChange(e);
         }}
         panelHeaderTemplate={panelHeaderTemplate} // Custom panel header with "Select All" checkbox
