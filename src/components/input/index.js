@@ -538,19 +538,34 @@ export const MultiSelect = (props) => {
     multiSelectClassName,
     float,
     floatLabelProps,
+    onChange,
     selectAllLabel="Select All", // Default label for "Select All"
     ...restProps
   } = props && props.multiSelectProps;
 
   const [selectedValues, setSelectedValues] = useState(restProps.value || []);
-  const allValues = restProps.options?.map(option => option.value) || [];
-  const allSelected = selectedValues.length === allValues.length;
+  // State for allValues, updated dynamically
+  const [allValues, setAllValues] = useState(
+    restProps.options?.map((option) => option.value) || []
+  );
+  const [allSelected, setAllSelected] = useState(false);
+    useEffect(() => {
+      setAllSelected(selectedValues.length === allValues.length && allValues.length > 0);
+    }, [selectedValues, allValues]);
 
   // Toggle Select All functionality
   const toggleSelectAll = () => {
     setSelectedValues(allSelected ? [] : allValues);
-    if (restProps.onChange) {
-      restProps.onChange({ value: allSelected ? [] : allValues });
+    if (onChange) {
+      onChange({ value: allSelected ? [] : allValues });
+    }
+  };
+
+  const handleSelectionChange = (e) => {
+    const updatedValues = e.value;
+    setSelectedValues(updatedValues);
+    if (onChange) {
+        onChange(e);
     }
   };
 
@@ -581,7 +596,10 @@ export const MultiSelect = (props) => {
       <MulSel
         className={multiSelectClassName}
         value={selectedValues}
-        onChange={(e) => setSelectedValues(e.value)}
+        onChange={(e)=>{
+          console.log("KKK")
+          handleSelectionChange(e);
+        }}
         panelHeaderTemplate={panelHeaderTemplate} // Custom panel header with "Select All" checkbox
         {...restProps}
       />
