@@ -22,7 +22,8 @@ export const TempRegisterServices = {
   staffTempEditUser: _staffTempEditUser,
   getPPID: _getppID,
   deleteTempFamily: _deleteTempFamily,
-  isRegistered: _isRegistered
+  isRegistered: _isRegistered,
+  tempDetails: _tempDetails,
 };
 
 function _getDefaultEventData(callBackFun) {
@@ -100,7 +101,7 @@ function _getBasicDetailsUsingUUID(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(error);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 
@@ -112,7 +113,7 @@ function _tempRegister(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 
@@ -163,12 +164,10 @@ function _registerUser(payload, callBackFun) {
       // toastDisplay(response);
     })
     .catch((error) => {
-      if(error.response?.status != 409)
-      {
-      callBackFun();
-      toastDisplay(error.response);
-      }
-      else {
+      if (error.response?.status != 409) {
+        callBackFun();
+        toastDisplay(error.response);
+      } else {
         callBackFun(error.response.data);
       }
     });
@@ -183,7 +182,7 @@ function _qrScanRegistration(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 
@@ -196,7 +195,7 @@ function _ocrScanRegistration(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 
@@ -208,14 +207,12 @@ function _staffRegisterUser(payload, callBackFun) {
       toastDisplay(response);
     })
     .catch((error) => {
-      if(error.response?.status != 409)
-        {
+      if (error.response?.status != 409) {
         callBackFun();
         toastDisplay(error.response);
-        }
-        else {
-          callBackFun(error.response.data);
-        }
+      } else {
+        callBackFun(error.response.data);
+      }
     });
 }
 function _staffEditUser(payload, callBackFun) {
@@ -227,7 +224,7 @@ function _staffEditUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 function _staffTempEditUser(payload, callBackFun) {
@@ -239,7 +236,7 @@ function _staffTempEditUser(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 //_staffEditUser
@@ -260,7 +257,6 @@ async function _getAddressByZipCode(zipCode, callBackFun) {
   }
 }
 
-
 function _getppID(payload, callBackFun) {
   let env = process.env.NEXT_PUBLIC_CLIENT_ENV;
   let url =
@@ -269,46 +265,58 @@ function _getppID(payload, callBackFun) {
       : "https://login-portal-api.biz.linkage.city.yabu.hyogo.jp/get_applinkage";
 
   fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       if (data.resultCode === "00") {
         callBackFun(data);
       } else {
         callBackFun();
-        toastDisplay("PPIDが空です。",'','',"success");
+        toastDisplay("PPIDが空です。", "", "", "success");
       }
     })
-    .catch(error => {
+    .catch((error) => {
       callBackFun();
-      toastDisplay(error?.message || "An error occurred", '', '', "error");
+      toastDisplay(error?.message || "An error occurred", "", "", "error");
     });
 }
 
 function _deleteTempFamily(payload, callBackFun) {
-  axios.post('/user/registration/delete/family', payload)
+  axios
+    .post("/user/registration/delete/family", payload)
     .then((response) => {
       callBackFun(response.data);
       toastDisplay(response);
     })
     .catch((error) => {
       callBackFun(false);
-      toastDisplay(error?.response)
+      toastDisplay(error?.response);
     });
 }
 
-function _isRegistered(payload,callBackFun) {
-  axios.post('/user/registration/status', payload)
+function _isRegistered(payload, callBackFun) {
+  axios
+    .post("/user/registration/status", payload)
+    .then((response) => {
+      callBackFun(response.data);
+    })
+    .catch((error) => {
+      callBackFun();
+    });
+}
+function _tempDetails(payload, callBackFun) {
+  axios
+    .post(`/user/registration/qr/app/fetch/temp/evacuee`, payload)
     .then((response) => {
       callBackFun(response.data);
     })

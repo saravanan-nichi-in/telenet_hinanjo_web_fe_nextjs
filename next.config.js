@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  compiler: { styledComponents: true, },
+  compiler: { styledComponents: true },
   reactStrictMode: true,
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  output: 'export',
+  output: "export",
   swcMinify: true,
   images: {
     unoptimized: true,
@@ -14,6 +14,6 @@ const nextConfig = {
   //   // your project has ESLint errors.
   //   ignoreDuringBuilds: true,
   // },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
