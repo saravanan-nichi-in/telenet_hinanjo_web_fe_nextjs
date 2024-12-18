@@ -7,7 +7,7 @@ import { Dropdown as Drp } from "antd";
 import { MultiSelect as MulSel } from "primereact/multiselect";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-
+import { Checkbox } from 'primereact/checkbox';
 import { AudioRecorder, NormalLabel } from "@/components";
 
 export const Input = (props) => {
@@ -525,6 +525,11 @@ export const InputDropdown = (props) => {
   );
 };
 
+/**
+ *
+ * @param {*} props
+ * @returns Multi select dropdown component
+ */
 export const MultiSelect = (props) => {
   const {
     multiSelectParentClassName,
@@ -533,13 +538,48 @@ export const MultiSelect = (props) => {
     multiSelectClassName,
     float,
     floatLabelProps,
+    onChange,
+    selectAllLabel="Select All", // Default label for "Select All"
     ...restProps
   } = props && props.multiSelectProps;
 
+  const [selectedValues, setSelectedValues] = useState(restProps.value || []);
+  // State for allValues, updated dynamically
+  const [allValues, setAllValues] = useState(
+    restProps.options?.map((option) => option.value) || []
+  );
+  const [allSelected, setAllSelected] = useState(false);
+    useEffect(() => {
+      setAllSelected(selectedValues.length === allValues.length && allValues.length > 0);
+    }, [selectedValues, allValues]);
+
+  // Toggle Select All functionality
+  const toggleSelectAll = () => {
+    setSelectedValues(allSelected ? [] : allValues);
+    if (onChange) {
+      onChange({ value: allSelected ? [] : allValues });
+    }
+  };
+
+  const handleSelectionChange = (e) => {
+    const updatedValues = e.value;
+    setSelectedValues(updatedValues);
+    if (onChange) {
+        onChange(e);
+    }
+  };
+
+  // Custom panel header with a "Select All" checkbox and label
+  const panelHeaderTemplate = () => (
+    <div className="flex justify-content-start p-multiselect-header">
+      <Checkbox inputId="selectAll" checked={allSelected} onChange={toggleSelectAll} />
+      <label htmlFor="selectAll" className="ml-2">{selectAllLabel}</label>
+    </div>
+  );
+
   return (
     <div
-      className={`custom-select ${multiSelectParentClassName} ${float ? "p-float-label" : ""
-        }`}
+      className={`custom-select ${multiSelectParentClassName} ${float ? "p-float-label" : ""}`}
       style={multiSelectParentStyle}
     >
       {labelProps?.text && (
@@ -553,7 +593,15 @@ export const MultiSelect = (props) => {
           />
         </div>
       )}
-      <MulSel className={`${multiSelectClassName}`} {...restProps} />
+      <MulSel
+        className={multiSelectClassName}
+        value={selectedValues}
+        onChange={(e)=>{
+          handleSelectionChange(e);
+        }}
+        panelHeaderTemplate={panelHeaderTemplate} // Custom panel header with "Select All" checkbox
+        {...restProps}
+      />
       {floatLabelProps?.text && (
         <label
           className={`custom-label ${floatLabelProps.inputMultiSelectLabelClassName}`}
