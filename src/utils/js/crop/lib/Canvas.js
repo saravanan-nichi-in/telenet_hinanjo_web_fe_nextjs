@@ -1,0 +1,380 @@
+/*eslint no-undef: 0*/
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  Fragment
+} from 'react'
+import T from 'prop-types'
+
+import { calcDims, readFile, isCrossOriginURL } from './utils'
+import CropPoints from './CropPoints'
+import { applyFilter, transform } from './imgManipulation'
+import CropPointsDelimiters from './CropPointsDelimiters'
+
+const buildImgContainerStyle = (previewDims) => ({
+  width: previewDims.width,
+  height: previewDims.height
+})
+
+const imageDimensions = { width: 0, height: 0 }
+let imageResizeRatio
+
+const Canvas = ({
+  image,
+  onDragStop,
+  onChange,
+  cropperRef,
+  pointSize = 30,
+  lineWidth,
+  pointBgColor,
+  pointBorder,
+  lineColor,
+  maxWidth,
+  maxHeight,
+  rotateAngel
+}) => {
+
+  var newCv = window.cv;
+  var cvLoaded = true;
+
+  const canvasRef = useRef()
+  const previewCanvasRef = useRef()
+  const magnifierCanvasRef = useRef()
+  const [previewDims, setPreviewDims] = useState()
+  const [cropPoints, setCropPoints] = useState()
+  const [loading, setLoading] = useState(false)
+  const [mode, setMode] = useState('crop')
+
+  useImperativeHandle(cropperRef, () => ({
+    backToCrop: () => {
+      setMode('crop')
+    },
+    done: async (opts = {}) => {
+      return new Promise((resolve) => {
+        setLoading(true)
+        transform(
+          newCv,
+          canvasRef.current,
+          cropPoints,
+          imageResizeRatio,
+          setPreviewPaneDimensions
+        )
+        applyFilter(newCv, canvasRef.current, opts.filterCvParams)
+        if (opts.preview) {
+          setMode('preview')
+        }
+        canvasRef.current.toBlob((blob) => {
+          blob.name = image.name
+          resolve(blob)
+          setLoading(false)
+        }, image.type)
+      })
+    }
+  }))
+
+  useEffect(() => {
+    if (mode === 'preview') {
+      showPreview()
+    }
+  }, [mode])
+
+  const setPreviewPaneDimensions = () => {
+    // Set preview pane dimensions
+    const newPreviewDims = calcDims(
+      canvasRef.current.width,
+      canvasRef.current.height,
+      maxWidth,
+      maxHeight
+    )
+    setPreviewDims(newPreviewDims)
+
+    previewCanvasRef.current.width = newPreviewDims.width
+    previewCanvasRef.current.height = newPreviewDims.height
+
+    imageResizeRatio = newPreviewDims.width / canvasRef.current.width
+  }
+
+  const createCanvas = (src) => {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img')
+      img.onload = async () => {
+        // Set edited image canvas and dimensions
+        canvasRef.current = document.createElement('canvas')
+        canvasRef.current.width = img.width
+        canvasRef.current.height = img.height
+        const ctx = canvasRef.current.getContext('2d')
+        ctx.drawImage(img, 0, 0)
+        imageDimensions.width = canvasRef.current.width
+        imageDimensions.height = canvasRef.current.height
+        setPreviewPaneDimensions()
+        resolve()
+      }
+      if (isCrossOriginURL(src)) img.crossOrigin = "anonymous"
+      img.src = src
+    })
+  }
+
+  const showPreview = (image) => {
+    const src = image || newCv.imread(canvasRef.current)
+    const dst = new newCv.Mat()
+    const dsize = new newCv.Size(0, 0)
+    newCv.resize(
+      src,
+      dst,
+      dsize,
+      imageResizeRatio,
+      imageResizeRatio,
+      newCv.INTER_AREA
+    )
+    // newCv.imshow(previewCanvasRef.current, dst)
+    // src.delete()
+    // dst.delete()
+
+    // Rotate the image
+    const rotatedDst = new newCv.Mat();
+    const center = new newCv.Point(dst.cols / 2, dst.rows / 2);
+    const angle = rotateAngel; // Rotate by 45 degrees
+    const scale = 1.0;
+    const rotationMatrix = newCv.getRotationMatrix2D(center, angle, scale);
+    newCv.warpAffine(dst, rotatedDst, rotationMatrix, new newCv.Size(dst.cols, dst.rows));
+
+    // Display the rotated image on the preview canvas
+    newCv.imshow(previewCanvasRef.current, rotatedDst);
+
+    // Clean up
+    src.delete();
+    dst.delete();
+    rotatedDst.delete();
+  }
+
+  const detectContours = () => {
+    const dst = newCv.imread(canvasRef.current)
+    const ksize = new newCv.Size(5, 5)
+    // Convert the image to grayscale, blur it, and find edges in the image
+    newCv.cvtColor(dst, dst, newCv.COLOR_RGBA2GRAY, 0)
+    newCv.GaussianBlur(dst, dst, ksize, 0, 0, newCv.BORDER_DEFAULT)
+    newCv.Canny(dst, dst, 75, 200)
+    // Find contours
+    newCv.threshold(dst, dst, 120, 200, newCv.THRESH_BINARY)
+    const contours = new newCv.MatVector()
+    const hierarchy = new newCv.Mat()
+    newCv.findContours(
+      dst,
+      contours,
+      hierarchy,
+      newCv.RETR_CCOMP,
+      newCv.CHAIN_APPROX_SIMPLE
+    )
+    const rect = newCv.boundingRect(dst)
+    dst.delete()
+    hierarchy.delete()
+    contours.delete()
+    // Transform the rectangle into a set of points
+    Object.keys(rect).forEach((key) => {
+      rect[key] = rect[key] * imageResizeRatio
+    })
+
+    const contourCoordinates = {
+      'left-top': { x: rect.x, y: rect.y },
+      'right-top': { x: rect.x + rect.width, y: rect.y },
+      'right-bottom': {
+        x: rect.x + rect.width,
+        y: rect.y + rect.height
+      },
+      'left-bottom': { x: rect.x, y: rect.y + rect.height }
+    }
+
+    setCropPoints(contourCoordinates)
+  }
+
+  const clearMagnifier = () => {
+    const magnCtx = magnifierCanvasRef.current.getContext('2d')
+    magnCtx.clearRect(
+      0,
+      0,
+      magnifierCanvasRef.current.width,
+      magnifierCanvasRef.current.height
+    )
+  }
+
+  useEffect(() => {
+    if (onChange) {
+      onChange({ ...cropPoints, loading })
+    }
+  }, [cropPoints, loading])
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      const src = await readFile(image)
+      await createCanvas(src)
+      const initialCropPoints = {
+        'left-top': { x: 15, y: 15 },
+        'right-top': { x: previewCanvasRef.current.width - 15, y: 15 },
+        'right-bottom': {
+            x: previewCanvasRef.current.width - 15,
+            y: previewCanvasRef.current.height - 15,
+        },
+        'left-bottom': { x: 15, y: previewCanvasRef.current.height - 15 },
+    };
+
+    setCropPoints(initialCropPoints); // Set the initial fixed crop points
+    showPreview();
+      // showPreview()
+      // detectContours()
+      setLoading(false)
+    }
+
+    if (image && previewCanvasRef.current && cvLoaded && mode === 'crop') {
+      bootstrap()
+    } else {
+      setLoading(true)
+    }
+  }, [image, previewCanvasRef.current, cvLoaded, mode, rotateAngel])
+
+  // Featured
+  // const onDrag = useCallback((position, area) => {
+  //   const { x, y } = position
+
+  //   const magnCtx = magnifierCanvasRef.current.getContext('2d')
+  //   clearMagnifier()
+
+  //   // TODO we should make those 5, 10 and 20 values proportionate
+  //   // To the point size
+  //   magnCtx.drawImage(
+  //     previewCanvasRef.current,
+  //     x - (pointSize - 10),
+  //     y - (pointSize - 10),
+  //     pointSize + 5,
+  //     pointSize + 5,
+  //     x + 10,
+  //     y - 90,
+  //     pointSize + 20,
+  //     pointSize + 20
+  //   )
+
+  //   setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }))
+  // }, [])
+
+  const onDrag = useCallback((position, area) => {
+    const { x, y } = position;
+    const magnCtx = magnifierCanvasRef.current.getContext('2d');
+    clearMagnifier();
+
+    const magnifierPadding = pointSize * 0.3; // Increase padding for a larger magnifier
+    const magnifierOffsetX = pointSize * 1.8; // Increase offset to position larger magnifier
+    const magnifierOffsetY = pointSize * -1.8; // Adjust for larger magnifier
+
+    // Canvas boundary
+    const canvasWidth = previewCanvasRef.current.width;
+    const canvasHeight = previewCanvasRef.current.height;
+
+    // Clamp the drawing positions within the canvas boundaries
+    const startX = Math.max(0, Math.min(x - (pointSize - magnifierPadding), canvasWidth - pointSize));
+    const startY = Math.max(0, Math.min(y - (pointSize - magnifierPadding), canvasHeight - pointSize));
+
+    const targetX = Math.max(0, Math.min(x + magnifierOffsetX, canvasWidth - pointSize - magnifierOffsetX));
+    const targetY = Math.max(0, Math.min(y + magnifierOffsetY, canvasHeight - pointSize - magnifierOffsetY));
+
+    magnCtx.drawImage(
+      previewCanvasRef.current,
+      startX,
+      startY,
+      pointSize + magnifierPadding,
+      pointSize + magnifierPadding,
+      targetX,
+      targetY,
+      pointSize + magnifierPadding * 1.5, // Slightly larger size for magnifier
+      pointSize + magnifierPadding * 1.5
+    );
+
+    setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }));
+  }, [pointSize]);
+
+  const onStop = useCallback((position, area, cropPoints) => {
+    const { x, y } = position
+    clearMagnifier()
+    setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }))
+    if (onDragStop) {
+      onDragStop({ ...cropPoints, [area]: { x, y } })
+    }
+  }, [])
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        ...(previewDims && buildImgContainerStyle(previewDims))
+      }}
+    >
+      {previewDims && mode === 'crop' && cropPoints && (
+        <Fragment>
+          <CropPoints
+            pointSize={pointSize}
+            pointBgColor={pointBgColor}
+            pointBorder={pointBorder}
+            cropPoints={cropPoints}
+            previewDims={previewDims}
+            onDrag={onDrag}
+            onStop={onStop}
+            bounds={{
+              left: previewCanvasRef?.current?.offsetLeft - pointSize / 2,
+              top: previewCanvasRef?.current?.offsetTop - pointSize / 2,
+              right:
+                previewCanvasRef?.current?.offsetLeft -
+                pointSize / 2 +
+                previewCanvasRef?.current?.offsetWidth,
+              bottom:
+                previewCanvasRef?.current?.offsetTop -
+                pointSize / 2 +
+                previewCanvasRef?.current?.offsetHeight
+            }}
+          />
+          <CropPointsDelimiters
+            previewDims={previewDims}
+            cropPoints={cropPoints}
+            lineWidth={lineWidth}
+            lineColor={lineColor}
+            pointSize={pointSize}
+          />
+          <canvas
+            style={{
+              position: 'absolute',
+              zIndex: 5,
+              pointerEvents: 'none'
+            }}
+            width={previewDims.width}
+            height={previewDims.height}
+            ref={magnifierCanvasRef}
+          />
+        </Fragment>
+      )}
+
+      <canvas
+        style={{ zIndex: 5, pointerEvents: 'none' }}
+        ref={previewCanvasRef}
+      />
+    </div>
+  )
+}
+
+export default Canvas
+
+Canvas.propTypes = {
+  image: T.object.isRequired,
+  onDragStop: T.func,
+  onChange: T.func,
+  cropperRef: T.shape({
+    current: T.shape({
+      done: T.func.isRequired,
+      backToCrop: T.func.isRequired
+    })
+  }),
+  pointSize: T.number,
+  lineWidth: T.number,
+  pointBgColor: T.string,
+  pointBorder: T.string,
+  lineColor: T.string
+}

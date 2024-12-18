@@ -3,9 +3,12 @@
     "next/core-web-vitals",
     "eslint:recommended"
   ],
-  "ignorePatterns": ["src/__test__"],
+  "ignorePatterns": [
+    "src/__test__"
+  ],
   "rules": {
-    "no-console": "error",
+    // "no-console": "error",
+    "no-useless-escape": "off",
     "no-multi-spaces": "error",
     "no-unused-vars": [
       "error",
@@ -18,7 +21,16 @@
     ],
     "no-warning-comments": [
       "warn",
-      { "terms": ["TODO", "FIXME"], "location": "anywhere" }
+      {
+        "terms": [
+          "TODO",
+          "FIXME"
+        ],
+        "location": "anywhere"
+      }
     ]
+  },
+  "env": {
+    "es6": true
   }
 }
