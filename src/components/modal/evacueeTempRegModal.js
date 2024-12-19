@@ -665,7 +665,7 @@ export default function EvacueeTempRegModal(props) {
       try {
         const scan = new WebFxScan();
         await scan.connect({
-          ip: '192.168.20.37',
+          ip: '127.0.0.1',
           port: '17778',
           errorCallback: (e) => console.error('Connection error:', e),
           closeCallback: () => console.log('Connection closed'),
