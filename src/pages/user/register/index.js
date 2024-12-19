@@ -45,9 +45,8 @@ import {
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
-import WebFxScan from '../../../../public/scan';
 export default function Admission() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCount");
   const [webFxScan, setWebFxScan] = useState(null);
   const [selectedScanner, setSelectedScanner] = useState(null);
@@ -117,39 +116,10 @@ export default function Admission() {
     qrScanRegistration,
   } = TempRegisterServices;
 
-     // Load the script and initialize the scanner
-   useEffect(() => {
-    if(webFxScan) return;
-    const script = document.createElement('script');
-    script.src = '/scan.js';
-    script.async = true;
 
-    script.onload = async () => {
-      try {
-        const scan = new WebFxScan();
-        await scan.connect({
-          ip: '127.0.0.1',
-          port: '17778',
-          errorCallback: (e) => console.error('Connection error:', e),
-          closeCallback: () => console.log('Connection closed'),
-        });
-        await scan.init();
-        setWebFxScan(scan);
-      } catch (err) {
-        console.error('Failed to initialize scanner:', err);
-      }
-    };
-
-    script.onerror = () => {
-      console.error('Failed to load scanner SDK');
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  useEffect(()=>{
+    setWebFxScan(webFxScaner)
+  },[])
 
   //Fetch the device list and set the first scanner
   const initializeFirstScanner = useCallback(async () => {
@@ -1128,7 +1098,6 @@ export default function Admission() {
         }}
         createObj={createObj}
         editObj={editObj}
-        webFxScan={webFxScan}
         buttonText={translate(
           localeJson,
           registerModalAction == "create" ? "submit" : "update"
