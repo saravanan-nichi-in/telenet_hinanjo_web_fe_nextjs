@@ -123,7 +123,7 @@ export default function Admission() {
 
   //Fetch the device list and set the first scanner
   const initializeFirstScanner = useCallback(async () => {
-    if (!webFxScan) return;
+    if (!webFxScan || specialCareEditOpen) return;
 
     try {
       const result = await webFxScan.getDeviceList();
@@ -148,7 +148,7 @@ export default function Admission() {
     } catch (err) {
       console.error('Failed to initialize first scanner:', err);
     }
-  }, [webFxScan]);
+  }, [webFxScan,specialCareEditOpen]);
 
   useEffect(() => {
     if (webFxScan) {
