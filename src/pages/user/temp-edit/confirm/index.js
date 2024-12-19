@@ -12,13 +12,13 @@ import {
 import { TempRegisterServices } from "@/services";
 import { Button, CustomHeader } from "@/components";
 import { prefectures } from "@/utils/constant";
-import { reset } from "@/redux/staff_temp_register";
+import { reset } from "@/redux/userTempEdit";
 import { clearExceptPlaceId } from "@/redux/tempRegister";
 
 const TempRegisterConfirm = () => {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const router = useRouter();
-  const registerReducer = useAppSelector((state) => state.staffTempRegisterReducer);
+  const registerReducer = useAppSelector((state) => state.userTempEditReducer);
   const dispatch = useAppDispatch();
 
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
@@ -30,6 +30,7 @@ const TempRegisterConfirm = () => {
   const { staffTempEditUser } = TempRegisterServices
 
   useEffect(() => {
+    console.log(registerReducer?.registerData)
     fetchConfirmData();
     fetchMasterQuestionConfirmData();
   }, [locale]);
@@ -509,7 +510,7 @@ const TempRegisterConfirm = () => {
                   </label>
                 </div>
                 <div className=" mt-1 body_table" id="phone-number">
-                  {confirmData.is_public == 0 ? translate(localeJson, 'agree') : translate(localeJson, 'disagree')}
+                  {confirmData?.is_public == 0 ? translate(localeJson, 'agree') : translate(localeJson, 'disagree')}
                 </div>
               </div>
               <div className=" mt-3">

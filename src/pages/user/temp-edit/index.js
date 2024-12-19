@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Tooltip } from "primereact/tooltip";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setRegisterData, setOriginalData, reset } from "@/redux/staff_temp_register";
+import { setRegisterData, setOriginalData, reset } from "@/redux/userTempEdit";
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import {
   getValueByKeyRecursively as translate,
@@ -39,7 +39,7 @@ export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
-  const regReducer = useAppSelector((state) => state.staffTempRegisterReducer);
+  const regReducer = useAppSelector((state) => state.userTempEditReducer);
   const place_id = layoutReducer?.user?.place?.id;
   const discloseInfo = locale == "ja" ? layoutReducer?.layout?.disclosure_info_ja : layoutReducer?.layout?.disclosure_info_en
 
@@ -73,7 +73,7 @@ export default function Admission() {
   const formikRef = useRef();
   const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
   const [visible, setVisible] = useState(false);
-
+  const [editData,setEditData] = useState([]);
   const toggleExpansion = (personId) => {
     setExpandedFamilies((prevExpanded) =>
       prevExpanded.includes(personId)
@@ -178,9 +178,11 @@ export default function Admission() {
   }, [evacuee]);
 
   useEffect(() => {
-    fetchMasterQuestion();
+ 
     fetchSpecialCare();
-    fetchData();
+    onGetEvacueesFamilyDetailOnMounting();
+    fetchData()
+    
   }, [locale]);
 
 
@@ -336,6 +338,29 @@ export default function Admission() {
         )
     });
 
+  const fetchOrginalData = (originalData) => {
+    console.log("KK",originalData)
+    if (originalData && (originalData).length > 0) {
+      let data = originalData[0];
+      console.log(data)
+      setIsHitachi(data.evacuee[0].family_register_from == "0" ? true : false)
+      formikRef.current.setFieldValue("evacuee_date", new Date(data.evacuee_date));
+      formikRef.current.setFieldValue("postalCode", data.postalCode ? data.postalCode?.replace(/-/g, "") : "");
+      formikRef.current.setFieldValue("prefecture_id", data.prefecture_id);
+      formikRef.current.setFieldValue("address", data.address);
+      formikRef.current.setFieldValue("address2", data.address2 || "");
+      formikRef.current.setFieldValue("evacuee", data.evacuee);
+      formikRef.current.setFieldValue("tel", data.tel);
+      formikRef.current.setFieldValue("password", data.password);
+      formikRef.current.setFieldValue("agreeCheckOne", data.agreeCheckOne);
+      formikRef.current.setFieldValue("agreeCheckTwo", data.agreeCheckTwo);
+      formikRef.current.setFieldValue("name_furigana", data.name_furigana);
+      formikRef.current.setFieldValue("name_kanji", data.name_kanji);
+      formikRef.current.setFieldValue("family_id", data.family_id)
+      data.evacuee && setEvacuee(data.evacuee);
+    }
+  }
+
   const fetchData = () => {
     if (regReducer.originalData && Object.keys(regReducer.originalData).length > 0) {
       let data = regReducer.originalData;
@@ -419,7 +444,7 @@ export default function Admission() {
     });
   };
 
-  const fetchMasterQuestion = () => {
+  const fetchMasterQuestion = (originalData) => {
     let payload = {
       filters: {
         start: 0,
@@ -431,8 +456,8 @@ export default function Admission() {
     getMasterQuestionnaireList(payload, (res) => {
       if (res) {
         const updatedList = res.data.list.map(item => {
-          if (regReducer?.originalData?.questions) {
-            const matchingQuestion = regReducer?.originalData?.questions?.find(question => question.id === item.id);
+          if (originalData?.questions) {
+            const matchingQuestion = originalData?.questions?.find(question => question.id === item.id);
 
             if (matchingQuestion) {
               // Update the answer property or any other property you need
@@ -831,6 +856,164 @@ export default function Admission() {
     }
 
   },[visible])
+
+  const onGetEvacueesFamilyDetailOnMounting = () => {
+    let familyCode = localStorage.getItem("familyCode") || "";
+    if (familyCode) {
+      let param = {
+        family_code: familyCode,
+      };
+      TempRegisterServices.tempDetails(param, getEvacueesFamilyDetail);
+    } else {
+      router.push("/user/temp-register");
+    }
+  };
+
+  const getEvacueesFamilyDetail = (response) => {
+    if (response) {
+      if (response.data.data.length > 0) {
+        let data = convertToOriginalFormat(response.data);
+        setEditData(data.data);
+        fetchOrginalData(data.data);
+        fetchMasterQuestion(data.data);
+      }
+    }
+  };
+
+  function convertToOriginalFormat(convertedData) {
+    const getAnswerById = (id, answers) => {
+      const answer = answers.find((ans) => ans.question_id == id);
+      return answer ? answer.answer : [];
+    };
+    const getAnswerByIdEn = (id, answers) => {
+      const answer = answers.find((ans) => ans.question_id == id);
+      return answer ? answer.answer_en || answer.answer : [];
+    };
+    let decryptedData = ""; //convertedData.data[0].family_password ? decryptPassword(convertedData.data[0].family_password, key) : ""
+    const originalData = {
+      data: [
+        {
+          evacuee_date: convertedData.data[0].family_join_date,
+          postalCode: convertedData.data[0].family_zip_code
+            ? convertedData.data[0].family_zip_code.replace(/-/g, "")
+            : "",
+          prefecture_id: convertedData.data[0].family_prefecture_id,
+          address: convertedData.data[0].family_address,
+          address2: convertedData.data[0].family_address_default,
+          evacuee: convertedData.data.map((evacueeData, index) => {
+            const individualQuestions = convertedData.individualQuestions
+              .map((question) => {
+                return {
+                  id: question.id,
+                  event_id: question.event_id,
+                  type: question.type,
+                  title: question.title,
+                  title_en: question.title_en,
+                  options: question.options,
+                  options_en: question.options_en,
+                  display_order: question.display_order,
+                  isRequired: question.isRequired,
+                  isVoiceRequired: question.isVoiceRequired,
+                  isVisible: question.isVisible,
+                  created_at: question.created_at,
+                  updated_at: question.updated_at,
+                  deleted_at: question.deleted_at,
+                  answer: getAnswerById(
+                    question.id,
+                    evacueeData.person_answers
+                  ),
+                  answer_en: getAnswerByIdEn(
+                    question.id,
+                    evacueeData.person_answers
+                  ),
+                };
+              })
+              .sort(
+                (a, b) => parseInt(a.display_order) - parseInt(b.display_order)
+              );
+            const birthDate = new Date(evacueeData.person_dob);
+            const convertedObject = {
+              year: birthDate.getFullYear(),
+              month: (birthDate.getMonth() + 1).toString().padStart(2, ""), // Adding 1 because months are zero-based
+              date: birthDate.getDate().toString().padStart(2, ""),
+            };
+            return {
+              person_id: evacueeData.person_id,
+              family_register_from: evacueeData.family_register_from,
+              id: index + 1, //evacueeData.family_id,
+              checked: evacueeData.person_is_owner == "0" ? true : false,
+              name: evacueeData.person_name,
+              name_furigana: evacueeData.person_refugee_name,
+              dob: convertedObject,
+              age: evacueeData.person_age,
+              age_m: evacueeData.person_month,
+              gender: evacueeData.person_gender,
+              postalCode: evacueeData.person_postal_code
+                ? evacueeData.person_postal_code.replace(/-/g, "")
+                : "",
+              prefecture_id: evacueeData.person_prefecture_id,
+              address: evacueeData.person_address,
+              address2: evacueeData.person_address_default,
+              tel:
+                evacueeData.person_tel != "00000000000"
+                  ? evacueeData.person_tel
+                  : "",
+              specialCareType: evacueeData.person_special_cares.map((item) =>
+                String(item.id)
+              ), //evacueeData.person_special_cares,
+              connecting_code: evacueeData.person_connecting_code,
+              remarks: evacueeData.person_note,
+              individualQuestions: individualQuestions,
+            };
+          }),
+          tel:
+            convertedData.data[0].person_tel != "00000000000"
+              ? convertedData.data[0].person_tel
+              : "",
+          password: decryptedData || "",
+          questions: convertedData.overallQuestions
+            .map((question) => {
+              return {
+                id: question.id,
+                event_id: question.event_id,
+                type: question.type,
+                title: question.title,
+                title_en: question.title_en,
+                options: question.options,
+                options_en: question.options_en,
+                display_order: question.display_order,
+                isRequired: question.isRequired,
+                isVoiceRequired: question.isVoiceRequired,
+                isVisible: question.isVisible,
+                created_at: question.created_at,
+                updated_at: question.updated_at,
+                deleted_at: question.deleted_at,
+                answer: getAnswerById(
+                  question.id,
+                  convertedData.data[0].family_answers
+                ),
+                answer_en: getAnswerByIdEn(
+                  question.id,
+                  convertedData.data[0].family_answers
+                ),
+              };
+            })
+            .sort(
+              (a, b) => parseInt(a.display_order) - parseInt(b.display_order)
+            ),
+          agreeCheckOne:
+            convertedData.data[0].family_is_public == 1 ? false : true,
+          agreeCheckTwo:
+            convertedData.data[0].family_public_info == 1 ? false : true,
+          name_furigana: convertedData.data[0].person_refugee_name,
+          name_kanji: convertedData.data[0].person_name,
+          family_id: convertedData.data[0].family_id,
+        },
+      ],
+    };
+
+    return originalData;
+  }
   return (
     <>
       <QrConfirmDialog
@@ -898,7 +1081,7 @@ export default function Admission() {
             dispatch(setOriginalData(values));
             let payload = convertData(values);
             dispatch(setRegisterData(payload));
-            router.push("/staff/temporary/edit/confirm");
+            router.push("/user/temp-edit/confirm");
           }
         }}
       >

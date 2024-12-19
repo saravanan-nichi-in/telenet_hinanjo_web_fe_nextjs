@@ -236,6 +236,8 @@ const RegisterSuccess = () => {
                       "w-full edit-button h-5rem border-radius-5rem mt-3 border-2",
                     text: "編集",
                     onClick: () => {
+                      localStorage.setItem("familyCode",family_code);
+                      router.push("/user/temp-edit");
                       // Implement the desired behavior for the Edit button
                       // Example: Navigate to an edit page
                     },
