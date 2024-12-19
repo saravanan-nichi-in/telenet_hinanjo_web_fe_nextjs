@@ -735,7 +735,8 @@ export default function EvacueeTempRegModal(props) {
 
       if (result.result && result.data?.[0]?.base64) {
         setScanResult(result.data[0].base64);
-        console.log('First scanned image base64:', result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
       } else {
         console.error('No scan result received');
       }
