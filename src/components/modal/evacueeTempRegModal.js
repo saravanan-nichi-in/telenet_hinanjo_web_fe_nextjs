@@ -38,7 +38,6 @@ import { Tooltip } from "primereact/tooltip";
 import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
-import WebFxScan from '../../../public/scan';
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
@@ -656,38 +655,42 @@ export default function EvacueeTempRegModal(props) {
   // }, [postalCodePrefectureId])
 
    // Load the script and initialize the scanner
-   useEffect(() => {
-    if(props?.webFxScan) return
-    const script = document.createElement('script');
-    script.src = '/scan.js';
-    script.async = true;
+  //  useEffect(() => {
+  //   if(props?.webFxScan) return
+  //   const script = document.createElement('script');
+  //   script.src = '/scan.js';
+  //   script.async = true;
 
-    script.onload = async () => {
-      try {
-        const scan = new WebFxScan();
-        await scan.connect({
-          ip: '127.0.0.1',
-          port: '17778',
-          errorCallback: (e) => console.error('Connection error:', e),
-          closeCallback: () => console.log('Connection closed'),
-        });
-        await scan.init();
-        setWebFxScan(scan);
-      } catch (err) {
-        console.error('Failed to initialize scanner:', err);
-      }
-    };
+  //   script.onload = async () => {
+  //     try {
+  //       const scan = new WebFxScan();
+  //       await scan.connect({
+  //         ip: '127.0.0.1',
+  //         port: '17778',
+  //         errorCallback: (e) => console.error('Connection error:', e),
+  //         closeCallback: () => console.log('Connection closed'),
+  //       });
+  //       await scan.init();
+  //       setWebFxScan(scan);
+  //     } catch (err) {
+  //       console.error('Failed to initialize scanner:', err);
+  //     }
+  //   };
 
-    script.onerror = () => {
-      console.error('Failed to load scanner SDK');
-    };
+  //   script.onerror = () => {
+  //     console.error('Failed to load scanner SDK');
+  //   };
 
-    document.body.appendChild(script);
+  //   document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
+
+  useEffect(()=>{
+    setWebFxScan(props.webFxScan);
+  },[])
 
   // Fetch the device list and set the first scanner
   const initializeFirstScanner = useCallback(async () => {
