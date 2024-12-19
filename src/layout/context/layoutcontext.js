@@ -136,6 +136,10 @@ export const LayoutProvider = (props) => {
           }
         }, [webFxScaner]);
 
+        useEffect(()=>{
+            initializeFirstScanner()
+        },[webFxScaner])
+
     useEffect(() => {
         if (locale && locale == 'en') {
             localStorage.setItem('locale', 'en');
