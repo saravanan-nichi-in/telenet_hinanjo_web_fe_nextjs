@@ -45,7 +45,7 @@ import {
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
-// import WebFxScan from '../../../public/scan';
+import WebFxScan from '../../../../public/scan';
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCount");
@@ -117,6 +117,100 @@ export default function Admission() {
     qrScanRegistration,
   } = TempRegisterServices;
 
+     // Load the script and initialize the scanner
+   useEffect(() => {
+    if(webFxScan) return;
+    const script = document.createElement('script');
+    script.src = '/scan.js';
+    script.async = true;
+
+    script.onload = async () => {
+      try {
+        const scan = new WebFxScan();
+        await scan.connect({
+          ip: '127.0.0.1',
+          port: '17778',
+          errorCallback: (e) => console.error('Connection error:', e),
+          closeCallback: () => console.log('Connection closed'),
+        });
+        await scan.init();
+        setWebFxScan(scan);
+      } catch (err) {
+        console.error('Failed to initialize scanner:', err);
+      }
+    };
+
+    script.onerror = () => {
+      console.error('Failed to load scanner SDK');
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  //Fetch the device list and set the first scanner
+  const initializeFirstScanner = useCallback(async () => {
+    if (!webFxScan) return;
+
+    try {
+      const result = await webFxScan.getDeviceList();
+      if (result.result && result.data?.options.length > 0) {
+        const firstScanner = result.data.options[0];
+        setSelectedScanner(firstScanner.deviceName);
+
+        await webFxScan.setScanner({
+          deviceName: firstScanner.deviceName,
+          source: 'Camera',
+          resolution: 150,
+          mode: 'color',
+          brightness: 0,
+          contrast: 0,
+          quality: 100,
+        });
+
+        console.log('First scanner initialized:', firstScanner.deviceName);
+      } else {
+        console.error('No scanners available');
+      }
+    } catch (err) {
+      console.error('Failed to initialize first scanner:', err);
+    }
+  }, [webFxScan]);
+
+  useEffect(() => {
+    if (webFxScan) {
+      initializeFirstScanner();
+    }
+  }, [webFxScan, initializeFirstScanner]);
+
+  //Trigger a scan and save the first image base64
+  const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+        console.error('No scan result received');
+      }
+    } catch (err) {
+      setLoader(false)
+      console.error('Scanning failed:', err);
+    }
+  };
+
   useEffect(() => {
     const handlePopstate = () => {
       // Clear localStorage when the back button is clicked
@@ -138,6 +232,8 @@ export default function Admission() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [locale]);
+
+
 
   useEffect(() => {
     if (place_id == "" || !place_id) {
@@ -983,99 +1079,7 @@ export default function Admission() {
 
   },[visible])
 
-   // Load the script and initialize the scanner
-  //  useEffect(() => {
-  //   if(webFxScan) return;
-  //   const script = document.createElement('script');
-  //   script.src = '/scan.js';
-  //   script.async = true;
 
-  //   script.onload = async () => {
-  //     try {
-  //       const scan = new WebFxScan();
-  //       await scan.connect({
-  //         ip: '127.0.0.1',
-  //         port: '17778',
-  //         errorCallback: (e) => console.error('Connection error:', e),
-  //         closeCallback: () => console.log('Connection closed'),
-  //       });
-  //       await scan.init();
-  //       setWebFxScan(scan);
-  //     } catch (err) {
-  //       console.error('Failed to initialize scanner:', err);
-  //     }
-  //   };
-
-  //   script.onerror = () => {
-  //     console.error('Failed to load scanner SDK');
-  //   };
-
-  //   document.body.appendChild(script);
-
-  //   return () => {
-  //     document.body.removeChild(script);
-  //   };
-  // }, []);
-
-  // Fetch the device list and set the first scanner
-  // const initializeFirstScanner = useCallback(async () => {
-  //   if (!webFxScan) return;
-
-  //   try {
-  //     const result = await webFxScan.getDeviceList();
-  //     if (result.result && result.data?.options.length > 0) {
-  //       const firstScanner = result.data.options[0];
-  //       setSelectedScanner(firstScanner.deviceName);
-
-  //       await webFxScan.setScanner({
-  //         deviceName: firstScanner.deviceName,
-  //         source: 'Camera',
-  //         resolution: 150,
-  //         mode: 'color',
-  //         brightness: 0,
-  //         contrast: 0,
-  //         quality: 100,
-  //       });
-
-  //       console.log('First scanner initialized:', firstScanner.deviceName);
-  //     } else {
-  //       console.error('No scanners available');
-  //     }
-  //   } catch (err) {
-  //     console.error('Failed to initialize first scanner:', err);
-  //   }
-  // }, [webFxScan]);
-
-  // useEffect(() => {
-  //   if (webFxScan) {
-  //     initializeFirstScanner();
-  //   }
-  // }, [webFxScan, initializeFirstScanner]);
-
-  // Trigger a scan and save the first image base64
-  // const handleScan = async () => {
-  //   if (!selectedScanner || !webFxScan) return;
-
-  //   try {
-  //     setLoader(true);
-  //     await webFxScan.calibrate();
-  //     const result = await webFxScan.scan({
-  //       callback: (progress) => console.log('Scan progress:', progress),
-  //     });
-
-  //     if (result.result && result.data?.[0]?.base64) {
-  //       setScanResult(result.data[0].base64);
-  //       ocrResult(result.data[0].base64)
-  //       // console.log('First scanned image base64:', result.data[0].base64);
-  //     } else {
-  //       setLoader(false)
-  //       console.error('No scan result received');
-  //     }
-  //   } catch (err) {
-  //     setLoader(false)
-  //     console.error('Scanning failed:', err);
-  //   }
-  // };
 
   return (
     <>
@@ -1124,6 +1128,7 @@ export default function Admission() {
         }}
         createObj={createObj}
         editObj={editObj}
+        webFxScan={webFxScan}
         buttonText={translate(
           localeJson,
           registerModalAction == "create" ? "submit" : "update"
@@ -1194,14 +1199,14 @@ export default function Admission() {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
-                              // if(selectedScanner)
-                              //   {
-                              //     handleScan()
-                              //   }
-                              //   else {
+                              if(selectedScanner)
+                                {
+                                  handleScan()
+                                }
+                                else {
                                 setPerspectiveCroppingVisible(true);
                                 hideOverFlow();
-                                // }
+                                }
                              
                             },
                           }}
