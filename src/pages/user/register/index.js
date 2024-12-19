@@ -46,7 +46,7 @@ import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
 export default function Admission() {
-  const { locale, localeJson, setLoader ,webFxScaner } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCount");
   const [webFxScan, setWebFxScan] = useState(null);
   const [selectedScanner, setSelectedScanner] = useState(null);
@@ -119,42 +119,9 @@ export default function Admission() {
 
   useEffect(()=>{
     setWebFxScan(webFxScaner)
+    setSelectedScanner(selectedScannerName)
   },[])
 
-  //Fetch the device list and set the first scanner
-  const initializeFirstScanner = useCallback(async () => {
-    if (!webFxScan || specialCareEditOpen) return;
-
-    try {
-      const result = await webFxScan.getDeviceList();
-      if (result.result && result.data?.options.length > 0) {
-        const firstScanner = result.data.options[0];
-        setSelectedScanner(firstScanner.deviceName);
-
-        await webFxScan.setScanner({
-          deviceName: firstScanner.deviceName,
-          source: 'Camera',
-          resolution: 150,
-          mode: 'color',
-          brightness: 0,
-          contrast: 0,
-          quality: 100,
-        });
-
-        console.log('First scanner initialized:', firstScanner.deviceName);
-      } else {
-        console.error('No scanners available');
-      }
-    } catch (err) {
-      console.error('Failed to initialize first scanner:', err);
-    }
-  }, [webFxScan,specialCareEditOpen]);
-
-  useEffect(() => {
-    if (webFxScan) {
-      initializeFirstScanner();
-    }
-  }, [webFxScan, initializeFirstScanner]);
 
   //Trigger a scan and save the first image base64
   const handleScan = async () => {
