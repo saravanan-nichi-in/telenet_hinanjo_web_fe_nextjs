@@ -39,7 +39,7 @@ import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
 export default function EvacueeTempRegModal(props) {
-  const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const { localeJson, locale, setLoader,webFxScaner } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const [webFxScan, setWebFxScan] = useState(null);
   const [selectedScanner, setSelectedScanner] = useState(null);
@@ -688,9 +688,9 @@ export default function EvacueeTempRegModal(props) {
   //   };
   // }, []);
 
-  useEffect(()=>{
-    setWebFxScan(props.webFxScan);
-  },[])
+   useEffect(()=>{
+      setWebFxScan(webFxScaner)
+    },[])
 
   // Fetch the device list and set the first scanner
   const initializeFirstScanner = useCallback(async () => {

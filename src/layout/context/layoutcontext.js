@@ -6,6 +6,7 @@ import enJson from '../../../public/locales/en/lang.json'
 import { CommonServices } from '@/services';
 import { useAppDispatch } from '@/redux/hooks';
 import { setLayout } from "@/redux/layout";
+import WebFxScan from '../../../public/scan';
 
 const URLS = [
     '/admin/login',
@@ -33,6 +34,7 @@ export const LayoutContext = React.createContext();
 export const LayoutProvider = (props) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const [webFxScaner, setWebFxScan] = useState(null);
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
@@ -71,6 +73,39 @@ export const LayoutProvider = (props) => {
             menuMode: window.location.pathname.startsWith('/user') || URLS.includes(window.location.pathname) ? window.location.pathname.startsWith('/user/map') ? 'static' : 'overlay' : 'static',
         }));
     }
+
+    useEffect(() => {
+        if(webFxScaner) return;
+        const script = document.createElement('script');
+        script.src = '/scan.js';
+        script.async = true;
+    
+        script.onload = async () => {
+          try {
+            const scan = new WebFxScan();
+            await scan.connect({
+              ip: '127.0.0.1',
+              port: '17778',
+              errorCallback: (e) => console.error('Connection error:', e),
+              closeCallback: () => console.log('Connection closed'),
+            });
+            await scan.init();
+            setWebFxScan(scan);
+          } catch (err) {
+            console.error('Failed to initialize scanner:', err);
+          }
+        };
+    
+        script.onerror = () => {
+          console.error('Failed to load scanner SDK');
+        };
+    
+        document.body.appendChild(script);
+    
+        return () => {
+          document.body.removeChild(script);
+        };
+      }, []);
 
     useEffect(() => {
         if (locale && locale == 'en') {
@@ -152,6 +187,7 @@ export const LayoutProvider = (props) => {
         localeJson,
         loader,
         setLoader,
+        webFxScaner
     };
 
     return <LayoutContext.Provider value={value}>{props.children}</LayoutContext.Provider>;
