@@ -16,6 +16,7 @@ import forgetPasswordReducer from './fwd_password';
 import qrAppReducer from './qr_app';
 import tempRegisterReducer from './tempRegister';
 import staffTempRegisterReducer from './staff_temp_register';
+import userTempEditReducer from './userTempEdit';
 
 // Define separate persist configs for each reducer
 const authPersistConfig = {
@@ -108,6 +109,12 @@ const staffTempRegisterPersistConfig = {
   // whitelist: ['/* specify which parts of the state you want to persist */'],
 };
 
+const userTempEditPersistConfig = {
+  key: 'UserTempEdit',
+  storage: storage,
+  // whitelist: ['/* specify which parts of the state you want to persist */'],
+};
+
 
 // Wrap each reducer with persistReducer using the corresponding config
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
@@ -125,6 +132,7 @@ const persistForgetPasswordReducer = persistReducer(forgetPasswordPersistConfig,
 const persistQrAppReducer = persistReducer(qrAppPersistConfig, qrAppReducer);
 const persistTempRegisterReducer = persistReducer(tempRegisterPersistConfig, tempRegisterReducer);
 const persistStaffTempRegisterReducer = persistReducer(staffRegisterPersistConfig, staffTempRegisterReducer);
+const persistUserTempEditReducer = persistReducer(userTempEditPersistConfig, userTempEditReducer);
 
 let rootReducer = {
   authReducer: persistedAuthReducer,
@@ -142,6 +150,7 @@ let rootReducer = {
   qrAppReducer:persistQrAppReducer,
   tempRegisterReducer:persistTempRegisterReducer,
   staffTempRegisterReducer:persistStaffTempRegisterReducer,
+  userTempEditReducer:persistUserTempEditReducer
 };
 
 export default rootReducer;
