@@ -657,6 +657,7 @@ export default function EvacueeTempRegModal(props) {
 
    // Load the script and initialize the scanner
    useEffect(() => {
+    if(props?.webFxScan) return
     const script = document.createElement('script');
     script.src = '/scan.js';
     script.async = true;
