@@ -39,7 +39,7 @@ import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
 export default function EvacueeTempRegModal(props) {
-  const { localeJson, locale, setLoader,webFxScaner } = useContext(LayoutContext);
+  const { localeJson, locale, setLoader,webFxScaner,selectedScannerName } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const [webFxScan, setWebFxScan] = useState(null);
   const [selectedScanner, setSelectedScanner] = useState(null);
@@ -689,43 +689,10 @@ export default function EvacueeTempRegModal(props) {
   // }, []);
 
    useEffect(()=>{
-      setWebFxScan(webFxScaner)
-    },[])
+       setWebFxScan(webFxScaner)
+       setSelectedScanner(selectedScannerName)
+     },[])
 
-  // Fetch the device list and set the first scanner
-  const initializeFirstScanner = useCallback(async () => {
-    if (!webFxScan) return;
-
-    try {
-      const result = await webFxScan.getDeviceList();
-      if (result.result && result.data?.options.length > 0) {
-        const firstScanner = result.data.options[0];
-        setSelectedScanner(firstScanner.deviceName);
-
-        await webFxScan.setScanner({
-          deviceName: firstScanner.deviceName,
-          source: 'Camera',
-          resolution: 150,
-          mode: 'color',
-          brightness: 0,
-          contrast: 0,
-          quality: 100,
-        });
-
-        console.log('First scanner initialized:', firstScanner.deviceName);
-      } else {
-        console.error('No scanners available');
-      }
-    } catch (err) {
-      console.error('Failed to initialize first scanner:', err);
-    }
-  }, [webFxScan]);
-
-  useEffect(() => {
-    if (webFxScan) {
-      initializeFirstScanner();
-    }
-  }, [webFxScan, initializeFirstScanner]);
 
   // Trigger a scan and save the first image base64
   const handleScan = async () => {

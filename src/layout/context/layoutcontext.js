@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 import jpJson from '../../../public/locales/jp/lang.json'
@@ -35,6 +35,7 @@ export const LayoutProvider = (props) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const [webFxScaner, setWebFxScan] = useState(null);
+    const [selectedScannerName, setSelectedScanner] = useState(null);
     const [layoutConfig, setLayoutConfig] = useState({
         ripple: false,
         inputStyle: 'outlined',
@@ -106,6 +107,34 @@ export const LayoutProvider = (props) => {
           document.body.removeChild(script);
         };
       }, []);
+
+        const initializeFirstScanner = useCallback(async () => {
+          if (!webFxScaner) return;
+      
+          try {
+            const result = await webFxScaner.getDeviceList();
+            if (result.result && result.data?.options.length > 0) {
+              const firstScanner = result.data.options[0];
+              setSelectedScanner(firstScanner.deviceName);
+      
+              await webFxScaner.setScanner({
+                deviceName: firstScanner.deviceName,
+                source: 'Camera',
+                resolution: 150,
+                mode: 'color',
+                brightness: 0,
+                contrast: 0,
+                quality: 100,
+              });
+      
+              console.log('First scanner initialized:', firstScanner.deviceName);
+            } else {
+              console.error('No scanners available');
+            }
+          } catch (err) {
+            console.error('Failed to initialize first scanner:', err);
+          }
+        }, [webFxScaner]);
 
     useEffect(() => {
         if (locale && locale == 'en') {
@@ -187,7 +216,8 @@ export const LayoutProvider = (props) => {
         localeJson,
         loader,
         setLoader,
-        webFxScaner
+        webFxScaner,
+        selectedScannerName
     };
 
     return <LayoutContext.Provider value={value}>{props.children}</LayoutContext.Provider>;
