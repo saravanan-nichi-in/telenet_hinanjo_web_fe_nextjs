@@ -728,6 +728,7 @@ export default function EvacueeTempRegModal(props) {
     if (!selectedScanner || !webFxScan) return;
 
     try {
+      setLoader(true);
       await webFxScan.calibrate();
       const result = await webFxScan.scan({
         callback: (progress) => console.log('Scan progress:', progress),
@@ -738,9 +739,11 @@ export default function EvacueeTempRegModal(props) {
         ocrResult(result.data[0].base64)
         // console.log('First scanned image base64:', result.data[0].base64);
       } else {
+        setLoader(false)
         console.error('No scan result received');
       }
     } catch (err) {
+      setLoader(false)
       console.error('Scanning failed:', err);
     }
   };
