@@ -20,6 +20,7 @@ import {
   toastDisplay,
   compareAddresses,
   geocodeAddressAndExtractData,
+  extractAddress,
 } from "@/helper";
 import {
   Button,
@@ -952,7 +953,7 @@ export default function Admission() {
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
-      address: evacuees ? evacuees.address || "" : "",
+      address: evacuees ? extractAddress(evacuees.address) || "" : "",
       // address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
