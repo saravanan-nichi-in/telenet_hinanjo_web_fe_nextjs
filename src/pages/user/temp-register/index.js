@@ -54,7 +54,10 @@ import YaburuModal from "@/components/modal/yaburuModal";
 
 
 export default function Admission() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
+  const [webFxScan, setWebFxScan] = useState(null);
+  const [selectedScanner, setSelectedScanner] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
   const personCount = localStorage.getItem("personCountTemp");
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -128,6 +131,35 @@ export default function Admission() {
     ocrScanRegistration,
     getActiveEvacuationPlaceList,
   } = TempRegisterServices;
+
+  useEffect(()=>{
+    setWebFxScan(webFxScaner)
+    setSelectedScanner(selectedScannerName)
+  },[])
+
+  const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+        console.error('No scan result received');
+      }
+    } catch (err) {
+      setLoader(false)
+      console.error('Scanning failed:', err);
+    }
+  };
 
   useEffect(() => {
     const handlePopstate = () => {
@@ -1175,8 +1207,14 @@ export default function Admission() {
                                   <img src={Card.url} width={30} height={30} />
                                 ),
                                 onClick: () => {
-                                  setPerspectiveCroppingVisible(true);
-                                  hideOverFlow();
+                                  if(selectedScanner)
+                                    {
+                                      handleScan()
+                                    }
+                                    else {
+                                    setPerspectiveCroppingVisible(true);
+                                    hideOverFlow();
+                                    }
                                 },
                               }}
                               parentClass={
