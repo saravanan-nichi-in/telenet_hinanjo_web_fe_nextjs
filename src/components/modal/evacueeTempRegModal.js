@@ -11,6 +11,7 @@ import {
   splitJapaneseAddress,
   compareAddresses,
   geocodeAddressAndExtractData,
+  extractAddress,
 } from "@/helper";
 import {
   Button,
@@ -452,7 +453,7 @@ export default function EvacueeTempRegModal(props) {
 
   async function createEvacuee(evacuees, setFieldValue) {
     if (!evacuees.prefecture_id || !evacuees.postal_code) {
-      let address = evacuees.fullAddress || evacuees.address;
+      let address = extractAddress(evacuees.fullAddress) || extractAddress(evacuees.address);
 
       try {
         const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
@@ -497,7 +498,7 @@ export default function EvacueeTempRegModal(props) {
       }
  
     } 
-    setFieldValue("address", evacuees?.address ? evacuees.address : "");
+    setFieldValue("address", extractAddress(evacuees?.address) ? extractAddress(evacuees.address) : "");
     if (evacuees.dob != "1900/01/01" && evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
