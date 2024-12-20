@@ -39,6 +39,7 @@ import { Tooltip } from "primereact/tooltip";
 import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
+import toast from "react-hot-toast";
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader,webFxScaner,selectedScannerName } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
@@ -712,11 +713,11 @@ export default function EvacueeTempRegModal(props) {
         // console.log('First scanned image base64:', result.data[0].base64);
       } else {
         setLoader(false)
-        console.error('No scan result received');
+          toast.error(locale=="en"?'No result received. Please keep the card properly and try again. ':'結果がありません。カードを正しく置いて、もう一度お試しください。');
       }
     } catch (err) {
       setLoader(false)
-      console.error('Scanning failed:', err);
+       toast.error(locale=="en"?'Scanning failed. Please try again and ensure the card is placed correctly.':' スキャンに失敗しました。もう一度お試しください。カードが正しく配置されていることを確認してください。');
     }
   };
 
