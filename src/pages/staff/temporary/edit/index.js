@@ -17,7 +17,8 @@ import {
   showOverFlow,
   hideOverFlow,
   convertToSingleByte,
-  toastDisplay
+  toastDisplay,
+  extractAddress
 } from "@/helper";
 import {
   prefectures,
@@ -810,7 +811,7 @@ export default function Admission() {
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
-      address: evacuees ? evacuees.address || "" : "",
+      address: evacuees ? evacuees.address?extractAddress(evacuees.address):"" || "" : "",
       address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
