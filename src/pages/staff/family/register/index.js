@@ -38,6 +38,7 @@ import {
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
+import toast from "react-hot-toast";
 
 export default function Admission() {
   const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
@@ -159,11 +160,11 @@ export default function Admission() {
         // console.log('First scanned image base64:', result.data[0].base64);
       } else {
         setLoader(false)
-        console.error('No scan result received');
+          toast.error(locale=="en"?'No result received. Please keep the card properly and try again. ':'結果がありません。カードを正しく置いて、もう一度お試しください。');
       }
     } catch (err) {
       setLoader(false)
-      console.error('Scanning failed:', err);
+       toast.error(locale=="en"?'Scanning failed. Please try again and ensure the card is placed correctly.':' スキャンに失敗しました。もう一度お試しください。カードが正しく配置されていることを確認してください。');
     }
   };
 
