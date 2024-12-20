@@ -160,11 +160,11 @@ export default function Admission() {
         // console.log('First scanned image base64:', result.data[0].base64);
       } else {
         setLoader(false)
-          toast.error(locale=="en"?'No result received. Please keep the card properly and try again. ':'結果がありません。カードを正しく置いて、もう一度お試しください。');
+          toast.error(locale=="en"?'Please make sure your card is positioned correctly and try again. ':'スキャンに失敗しました。カードが正しく配置されてもう一度お試しください。');
       }
     } catch (err) {
       setLoader(false)
-       toast.error(locale=="en"?'Scanning failed. Please try again and ensure the card is placed correctly.':' スキャンに失敗しました。もう一度お試しください。カードが正しく配置されていることを確認してください。');
+       toast.error(locale=="en"?'Please make sure your card is positioned correctly and try again.':' スキャンに失敗しました。カードが正しく配置されてもう一度お試しください。');
     }
   };
 
