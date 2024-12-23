@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef,useCallback } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -20,6 +20,7 @@ import {
   toastDisplay,
   compareAddresses,
   geocodeAddressAndExtractData,
+  extractAddress,
 } from "@/helper";
 import {
   Button,
@@ -45,10 +46,13 @@ import {
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
-
+import toast from "react-hot-toast";
 export default function Admission() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
   const personCount = localStorage.getItem("personCount");
+  const [webFxScan, setWebFxScan] = useState(null);
+  const [selectedScanner, setSelectedScanner] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
@@ -114,6 +118,42 @@ export default function Admission() {
     qrScanRegistration,
   } = TempRegisterServices;
 
+
+  useEffect(()=>{
+    setWebFxScan(webFxScaner)
+    setSelectedScanner(selectedScannerName)
+  },[])
+
+
+  //Trigger a scan and save the first image base64
+  const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+        toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+          position: "top-right",
+        });
+      }
+    } catch (err) {
+      setLoader(false)
+      toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+        position: "top-right",
+      });
+    }
+  };
+
   useEffect(() => {
     const handlePopstate = () => {
       // Clear localStorage when the back button is clicked
@@ -135,6 +175,8 @@ export default function Admission() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [locale]);
+
+
 
   useEffect(() => {
     if (place_id == "" || !place_id) {
@@ -916,7 +958,7 @@ export default function Admission() {
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
-      address: evacuees ? evacuees.address || "" : "",
+      address: evacuees ? evacuees.address?extractAddress(evacuees.address):"" || "" : "",
       // address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
@@ -980,6 +1022,8 @@ export default function Admission() {
 
   },[visible])
 
+
+
   return (
     <>
       <QrScannerModal
@@ -1037,6 +1081,7 @@ export default function Admission() {
         registerModalAction={registerModalAction}
         isRecording={isRecording}
         setIsRecording={setIsRecording}
+        
       />
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
@@ -1096,8 +1141,15 @@ export default function Admission() {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
-                              setPerspectiveCroppingVisible(true);
-                              hideOverFlow();
+                              if(selectedScanner)
+                                {
+                                  handleScan()
+                                }
+                                else {
+                                setPerspectiveCroppingVisible(true);
+                                hideOverFlow();
+                                }
+                             
                             },
                           }}
                           parentClass={

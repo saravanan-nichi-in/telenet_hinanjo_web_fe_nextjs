@@ -720,6 +720,21 @@ export function compareAddresses(address1, address2) {
     return unmatchedData;
 }
 
+export function extractAddress(ocrText) {
+    // Define a pattern to match up to the address, excluding anything starting with 令, 令和, or 和
+    if(ocrText)
+    {
+    const addressPattern = /^.*?(?=令|令和|和)/;
+
+    // Match the address using the pattern
+    const match = ocrText.match(addressPattern);
+
+    // If no match is found, return the original OCR text
+    return match ? match[0].trim() : ocrText.trim();
+    }
+    else return ""
+}
+
 
 export async function geocodeAddressAndExtractData(address,localeJson,locale,setLoader) {
 

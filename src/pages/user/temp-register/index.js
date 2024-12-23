@@ -24,6 +24,7 @@ import {
   hideOverFlow,
   toastDisplay,
   geocodeAddressAndExtractData,
+  extractAddress,
 } from "@/helper";
 import {
   Button,
@@ -51,10 +52,14 @@ import {
 import _ from "lodash";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
+import toast from "react-hot-toast";
 
 
 export default function Admission() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
+  const [webFxScan, setWebFxScan] = useState(null);
+  const [selectedScanner, setSelectedScanner] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
   const personCount = localStorage.getItem("personCountTemp");
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -128,6 +133,39 @@ export default function Admission() {
     ocrScanRegistration,
     getActiveEvacuationPlaceList,
   } = TempRegisterServices;
+
+  useEffect(()=>{
+    setWebFxScan(webFxScaner)
+    setSelectedScanner(selectedScannerName)
+  },[])
+
+  const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+            position: "top-right",
+          });
+      }
+    } catch (err) {
+      setLoader(false)
+       toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+        position: "top-right",
+      });
+    }
+  };
 
   useEffect(() => {
     const handlePopstate = () => {
@@ -990,7 +1028,7 @@ export default function Admission() {
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
-      address: evacuees ? evacuees.address || "" : "",
+      address: evacuees ? evacuees.address?extractAddress(evacuees.address):"" || "" : "",
       // address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
@@ -1175,8 +1213,14 @@ export default function Admission() {
                                   <img src={Card.url} width={30} height={30} />
                                 ),
                                 onClick: () => {
-                                  setPerspectiveCroppingVisible(true);
-                                  hideOverFlow();
+                                  if(selectedScanner)
+                                    {
+                                      handleScan()
+                                    }
+                                    else {
+                                    setPerspectiveCroppingVisible(true);
+                                    hideOverFlow();
+                                    }
                                 },
                               }}
                               parentClass={

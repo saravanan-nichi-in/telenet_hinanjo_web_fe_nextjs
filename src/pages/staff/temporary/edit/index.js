@@ -17,7 +17,9 @@ import {
   showOverFlow,
   hideOverFlow,
   convertToSingleByte,
-  toastDisplay
+  toastDisplay,
+  extractAddress,
+  geocodeAddressAndExtractData
 } from "@/helper";
 import {
   prefectures,
@@ -34,9 +36,13 @@ import {
 } from "@/components";
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
+import toast from "react-hot-toast";
 
 export default function Admission() {
-  const { locale, localeJson, setLoader } = useContext(LayoutContext);
+  const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
+  const [webFxScan, setWebFxScan] = useState(null);
+  const [selectedScanner, setSelectedScanner] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
   const router = useRouter();
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
   const regReducer = useAppSelector((state) => state.staffTempRegisterReducer);
@@ -92,6 +98,39 @@ export default function Admission() {
     ocrScanRegistration,
     qrScanRegistration
   } = TempRegisterServices;
+
+  useEffect(()=>{
+    setWebFxScan(webFxScaner)
+    setSelectedScanner(selectedScannerName)
+  },[])
+  
+    const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+            position: "top-right",
+          });
+      }
+    } catch (err) {
+      setLoader(false)
+       toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+        position: "top-right",
+      });
+    }
+  };
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -597,10 +636,29 @@ export default function Admission() {
     setOpenQrPopup(false);
     setQrScanPopupModalOpen(false);
     showOverFlow();
-    qrScanRegistration(formData, (res) => {
+    qrScanRegistration(formData, async(res) => {
       if (res) {
         const evacueeArray = res.data;
-        const newEvacuee = createEvacuee(evacueeArray);
+       let newEvacuee = createEvacuee(evacueeArray);
+               newEvacuee = {
+                 ...newEvacuee,
+                 isFromFormReader: true
+               };
+               if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
+                 const address = evacueeArray.fullAddress || evacueeArray.address;
+                 try {
+                   const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
+       
+                   // Update newEvacuee with geocoding data
+                   newEvacuee = {
+                     ...newEvacuee,
+                     postalCode: postalCode,
+                     prefecture_id: prefecture_id
+                   };
+                 } catch (error) {
+                   console.error("Error fetching geolocation data:", error);
+                 }
+               }
         setEditObj(newEvacuee)
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
@@ -632,10 +690,29 @@ export default function Admission() {
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
     showOverFlow();
-    ocrScanRegistration(formData, (res) => {
+    ocrScanRegistration(formData, async(res) => {
       if (res) {
         const evacueeArray = res.data;
-        const newEvacuee = createEvacuee(evacueeArray);
+         let newEvacuee = createEvacuee(evacueeArray);
+                newEvacuee = {
+                  ...newEvacuee,
+                  isFromFormReader: true
+                };
+                if (!newEvacuee.postalCode || !evacueeArray.prefecture_id) {
+                  const address = evacueeArray.fullAddress || evacueeArray.address;
+                  try {
+                    const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
+        
+                    // Update newEvacuee with geocoding data
+                    newEvacuee = {
+                      ...newEvacuee,
+                      postalCode: postalCode,
+                      prefecture_id: prefecture_id
+                    };
+                  } catch (error) {
+                    console.error("Error fetching geolocation data:", error);
+                  }
+                }
         setEditObj(newEvacuee)
         setRegisterModalAction("edit");
         setSpecialCareEditOpen(true);
@@ -778,7 +855,7 @@ export default function Admission() {
       postalCode: evacuees ? evacuees.postal_code || "" : "",
       tel: evacuees ? evacuees.tel || "" : "",
       prefecture_id: evacuees ? evacuees.prefecture_id || "" : "",
-      address: evacuees ? evacuees.address || "" : "",
+      address: evacuees ? evacuees.address?extractAddress(evacuees.address):"" || "" : "",
       address2: evacuees ? evacuees.address2 || "" : "",
       specialCareType: null,
       connecting_code: evacuees ? evacuees.connecting_code || "" : "",
@@ -936,8 +1013,14 @@ export default function Admission() {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
-                              setPerspectiveCroppingVisible(true);
-                              hideOverFlow();
+                              if(selectedScanner)
+                                {
+                                  handleScan()
+                                }
+                                else {
+                                setPerspectiveCroppingVisible(true);
+                                hideOverFlow();
+                                }
                             },
                           }}
                           parentClass={

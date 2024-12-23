@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef,useCallback } from "react";
 import { Dialog } from "primereact/dialog";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -11,6 +11,7 @@ import {
   splitJapaneseAddress,
   compareAddresses,
   geocodeAddressAndExtractData,
+  extractAddress,
 } from "@/helper";
 import {
   Button,
@@ -38,10 +39,14 @@ import { Tooltip } from "primereact/tooltip";
 import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
-
+import toast from "react-hot-toast";
 export default function EvacueeTempRegModal(props) {
-  const { localeJson, locale, setLoader } = useContext(LayoutContext);
+  const { localeJson, locale, setLoader,webFxScaner,selectedScannerName } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
+  const [webFxScan, setWebFxScan] = useState(null);
+  const [selectedScanner, setSelectedScanner] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
+
 
   // eslint-disable-next-line no-irregular-whitespace
   const katakanaRegex = /^[\u30A1-\u30F6ー　\u0020]*$/;
@@ -449,7 +454,7 @@ export default function EvacueeTempRegModal(props) {
 
   async function createEvacuee(evacuees, setFieldValue) {
     if (!evacuees.prefecture_id || !evacuees.postal_code) {
-      let address = evacuees.fullAddress || evacuees.address;
+      let address = extractAddress(evacuees.fullAddress) || extractAddress(evacuees.address);
 
       try {
         const { prefecture, postalCode, prefecture_id } = await geocodeAddressAndExtractData(address, localeJson, locale, setLoader);
@@ -494,7 +499,7 @@ export default function EvacueeTempRegModal(props) {
       }
  
     } 
-    setFieldValue("address", evacuees?.address ? evacuees.address : "");
+    setFieldValue("address", extractAddress(evacuees?.address) ? extractAddress(evacuees.address) : "");
     if (evacuees.dob != "1900/01/01" && evacuees.dob) {
       const birthDate = new Date(evacuees.dob);
       const convertedObject = {
@@ -650,6 +655,76 @@ export default function EvacueeTempRegModal(props) {
   //   console.log("PP")
   //   formikRef.current.validateField("postalCode")
   // }, [postalCodePrefectureId])
+
+   // Load the script and initialize the scanner
+  //  useEffect(() => {
+  //   if(props?.webFxScan) return
+  //   const script = document.createElement('script');
+  //   script.src = '/scan.js';
+  //   script.async = true;
+
+  //   script.onload = async () => {
+  //     try {
+  //       const scan = new WebFxScan();
+  //       await scan.connect({
+  //         ip: '127.0.0.1',
+  //         port: '17778',
+  //         errorCallback: (e) => console.error('Connection error:', e),
+  //         closeCallback: () => console.log('Connection closed'),
+  //       });
+  //       await scan.init();
+  //       setWebFxScan(scan);
+  //     } catch (err) {
+  //       console.error('Failed to initialize scanner:', err);
+  //     }
+  //   };
+
+  //   script.onerror = () => {
+  //     console.error('Failed to load scanner SDK');
+  //   };
+
+  //   document.body.appendChild(script);
+
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
+
+   useEffect(()=>{
+       setWebFxScan(webFxScaner)
+       setSelectedScanner(selectedScannerName)
+     },[])
+
+
+  // Trigger a scan and save the first image base64
+  const handleScan = async () => {
+    if (!selectedScanner || !webFxScan) return;
+
+    try {
+      setLoader(true);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) => console.log('Scan progress:', progress),
+      });
+
+      if (result.result && result.data?.[0]?.base64) {
+        setScanResult(result.data[0].base64);
+        ocrResult(result.data[0].base64)
+        // console.log('First scanned image base64:', result.data[0].base64);
+      } else {
+        setLoader(false)
+          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+            position: "top-right",
+          });
+      }
+    } catch (err) {
+      setLoader(false)
+       toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+        position: "top-right",
+      });
+    }
+  };
+
 
   return (
     <>
@@ -843,7 +918,13 @@ export default function EvacueeTempRegModal(props) {
                             text: translate(localeJson, "c_card_reg"),
                             icon: <img src={Card.url} width={30} height={30} />,
                             onClick: () => {
+                              if(selectedScanner)
+                              {
+                                handleScan()
+                              }
+                              else {
                               setPerspectiveCroppingVisible(true);
+                              }
                             },
                           }}
                           parentClass={
