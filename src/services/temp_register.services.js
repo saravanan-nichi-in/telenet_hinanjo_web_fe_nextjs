@@ -112,8 +112,12 @@ function _tempRegister(payload, callBackFun) {
       callBackFun(response.data);
     })
     .catch((error) => {
-      callBackFun(false);
-      toastDisplay(error?.response);
+      if (error.response?.status != 409) {
+        callBackFun();
+        toastDisplay(error.response);
+      } else {
+        callBackFun(error.response.data);
+      }
     });
 }
 

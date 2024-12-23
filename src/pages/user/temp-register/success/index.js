@@ -229,7 +229,7 @@ const RegisterSuccess = () => {
                   }}
                   parentClass={"back-button"}
                 />
-                <Button
+                {/* <Button
                   buttonProps={{
                     type: "button",
                     buttonClass:
@@ -243,7 +243,7 @@ const RegisterSuccess = () => {
                     },
                   }}
                   parentClass={""}
-                />
+                /> */}
                 {showDelete && (
                   <Button
                     buttonProps={{

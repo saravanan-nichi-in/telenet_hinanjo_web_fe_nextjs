@@ -13,11 +13,14 @@ import { TempRegisterServices } from "@/services";
 import { Button, CustomHeader } from "@/components";
 import { prefectures } from "@/utils/constant";
 import { setSuccessData } from "@/redux/tempRegister";
+import RegisterConfirmDialog from "@/components/modal/registerConfirmModal";
 
 const TempRegisterConfirm = () => {
   const { localeJson, locale, setLoader } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isDialogVisible, setDialogVisible] = useState(false);
+  const [duplicatePersons, setDuplicatePersons] = useState([]);
   const registerReducer = useAppSelector((state) => state.tempRegisterReducer);
 
   const [basicFamilyDetail, setBasicFamilyDetail] = useState([]);
@@ -399,7 +402,112 @@ const TempRegisterConfirm = () => {
     setShowPassword(false);
   };
 
+    const handleRegister = () => {
+      // Clone the confirmData object to avoid direct mutation
+  const data = JSON.parse(JSON.stringify(confirmData));
+  
+  const duplicatePersonIds = duplicatePersons.map(person => person.id);
+  // Assuming `data.persons` is the array that holds the person data
+  // and `duplicatePersonIds` holds the IDs of persons to be removed
+  const filteredPersons = data.person.filter(person => 
+           !duplicatePersonIds.includes(person.id)
+  );
+  
+  // Now update the data with the filtered persons
+  data.person = filteredPersons;
+  confirmData = data;
+  setDialogVisible(false);
+  registerUsers();
+  };
+  
+  function registerUsers() {
+  // Parse the JSON data
+  const data = JSON.parse(JSON.stringify(confirmData));
+  // Remove "title" and "title_en" fields from each "question" object
+  // Function to remove "title" and "title_en" fields
+  
+  const isOwnerId = data.is_owner; // Get the current `is_owner` value
+  const personArray = data.person; // Assuming this refers to the person array in your case
+  
+  // Function to show a toast error (assumed you have a toast system)
+  
+  
+  // Find if there is a match for `is_owner` in the person array
+  const matchingPerson = personArray.find(person => person.id === isOwnerId);
+  
+  if (!matchingPerson) {
+  // No match found, update `is_owner` to the first person's id (or your desired logic)
+  data.is_owner = personArray[0].id;
+  }
+  const removeTitles = (questions) => {
+    questions?.forEach((question) => {
+      delete question.title;
+      delete question.title_en;
+    });
+  };
+  // Remove "title" and "title_en" fields from each "question" object in "person" array
+  data.person.forEach((person) => {
+  
+  
+    removeTitles(person.question);
+  
+    delete person.specialCareName;
+    delete person.specialCareName2;
+    if(!person.dob) {
+      person['dob'] = "1900/01/01";
+      person['age'] = "124";
+      person['month'] = "6";
+    }
+  });
+  
+  
+  removeTitles(data.master_question);
+  
+  // Convert the modified data back to JSON
+  const modifiedJson = data;
+  
+  console.log(modifiedJson);
+  setLoader(true);
+  tempRegister(modifiedJson, (res) => {
+    if (res) {
+      if(res?.data?.duplicatePersons)
+        {
+          setLoader(false)
+          setDuplicatePersons(res?.data?.duplicatePersons);
+          setTimeout(() => {
+            setDialogVisible(true);
+          }, 1000);
+          return;
+        }
+      dispatch(setSuccessData(res));
+      dispatch(setSuccessData({ placeId: registerReducer?.placeId }))
+      localStorage.setItem("tempDataDeleted","false");
+      localStorage.setItem("isSuccess","true");
+      localStorage.setItem('deletedFromStaff',"false");
+      localStorage.setItem("showDelete","false");
+      localStorage.setItem('refreshing', "false");
+      setLoader(false);
+      router.push("/user/temp-register/success");
+    } else {
+      setLoader(false);
+    }
+  });
+  }
+
   return (
+    <><RegisterConfirmDialog
+    visible={isDialogVisible}
+    setVisible={setDialogVisible}
+    duplicatePersons={duplicatePersons} // Data passed to child
+    register={handleRegister} // Function passed to child
+    return={() => 
+      {
+        setDialogVisible(false)
+        router.push("/user/temp-register")
+  
+      }}
+    confirmData={registerReducer?.registerData}
+/> 
     <div className="grid justify-content-center bg-white">
       <div className="col-12  sm:col-12 md:col-10 lg:col-12 xl:col-12 xlScreenMaxWidth mdScreenMaxWidth">
         <div className="card bg-white h-full">
@@ -548,43 +656,7 @@ const TempRegisterConfirm = () => {
                 text: translate(localeJson, "register"),
                 severity: "primary",
                 onClick: () => {
-                  // Parse the JSON data
-                  const data = JSON.parse(JSON.stringify(confirmData));
-                  // Remove "title" and "title_en" fields from each "question" object
-                  // Function to remove "title" and "title_en" fields
-                  const removeTitles = (questions) => {
-                    questions.forEach((question) => {
-                      delete question.title;
-                      delete question.title_en;
-                    });
-                  };
-                  // Remove "title" and "title_en" fields from each "question" object in "person" array
-                  data.person.forEach((person) => {
-                    removeTitles(person.question);
-                    delete person.specialCareName;
-                    delete person.specialCareName2;
-                  });
-                  // Remove "title" and "title_en" fields from each "question" object in "master_question" array
-                  removeTitles(data.master_question);
-
-                  // Convert the modified data back to JSON
-                  const modifiedJson = data;
-                  setLoader(true);
-                  tempRegister(modifiedJson, (res) => {
-                    if (res) {
-                      dispatch(setSuccessData(res));
-                      dispatch(setSuccessData({ placeId: registerReducer?.placeId }))
-                      localStorage.setItem("tempDataDeleted","false");
-                      localStorage.setItem("isSuccess","true");
-                      localStorage.setItem('deletedFromStaff',"false");
-                      localStorage.setItem("showDelete","false");
-                      localStorage.setItem('refreshing', "false");
-                      setLoader(false);
-                      router.push("/user/temp-register/success");
-                    } else {
-                      setLoader(false);
-                    }
-                  });
+                  registerUsers();
                 },
               }}
               parentClass="block w-full  mb-3 primary-button"
@@ -605,6 +677,7 @@ const TempRegisterConfirm = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
