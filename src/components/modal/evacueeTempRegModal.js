@@ -710,8 +710,9 @@ export default function EvacueeTempRegModal(props) {
       await webFxScan.calibrate();
       const result = await webFxScan.scan({
         callback: (progress) =>{ setScanResult(progress.base64);
-          ocrResult(progress.base64);
-          setPerspectiveImageCroppingVisible(true)
+          // ocrResult(progress.base64);
+          setPerspectiveImageCroppingVisible(true);
+          setLoader(false);
           console.log(progress)},
       });
 
