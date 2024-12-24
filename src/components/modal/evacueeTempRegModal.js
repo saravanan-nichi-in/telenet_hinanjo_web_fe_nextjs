@@ -700,6 +700,10 @@ export default function EvacueeTempRegModal(props) {
        setSelectedScanner(selectedScannerName)
      },[])
 
+     async function scan() {
+      return await webFxScan.scan();
+    }
+
 
   // Trigger a scan and save the first image base64
   const handleScan = async () => {
@@ -707,14 +711,25 @@ export default function EvacueeTempRegModal(props) {
 
     try {
       setLoader(true);
-      await webFxScan.calibrate();
-      const result = await webFxScan.scan({
-        callback: (progress) =>{ setScanResult(progress.base64);
+      const {result,data,file}= await scan();
+      if(result)
+      {
+        setScanResult(data[0].base64);
           // ocrResult(progress.base64);
           setPerspectiveImageCroppingVisible(true);
           setLoader(false);
-          console.log(progress)},
-      });
+      }
+      else {
+        setLoader(false)
+        toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+          position: "top-right",
+        });
+      }
+
+      // const result = await webFxScan.scan({
+      //   callback: (progress) =>{ 
+      //     console.log(progress)},
+      // });
       setLoader(false);
       // if (result.result && result.data?.[0]?.base64) {
        
