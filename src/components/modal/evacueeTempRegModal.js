@@ -711,7 +711,7 @@ export default function EvacueeTempRegModal(props) {
 
     try {
       setLoader(true);
-      const {result,data,file}= await scan();
+      const {result,data}= await scan();
       if(result)
       {
         setScanResult(data[0].base64);
