@@ -112,7 +112,7 @@ export default function Admission() {
 
     try {
       setLoader(true);
-      await webFxScan.calibrate();
+     
       const result = await webFxScan.scan({
         callback: (progress) => console.log('Scan progress:', progress),
       });
