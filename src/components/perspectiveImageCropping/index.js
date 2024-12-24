@@ -21,7 +21,7 @@ export const PerspectiveImageCropping = (props) => {
     const [displayPosition, setDisplayPosition] = useState(false);
     const [position, setPosition] = useState('center');
     const webcamContainerRef = useRef(null);
-    const [cropState, setCropState] = useState();
+    const [cropState, setCropState] = useState(false);
     const [img, setImg] = useState(props.base64Image);
     const [loader, setLoader] = useState(false);
     const [selectUtil, setSelectUtil] = useState('camera');
@@ -42,7 +42,8 @@ export const PerspectiveImageCropping = (props) => {
   }, []);
 
   useEffect(()=>{
-    setImg(props.base64Image)
+    setImg(props.base64Image);
+    setCompleted(false);
   },[props.base64Image]);
 
     const onCameraBtnClick = (name) => {
@@ -93,110 +94,12 @@ export const PerspectiveImageCropping = (props) => {
     const renderFooter = (name) => {
         return (
             <div className={`${!cropState && selectUtil == "camera" ? 'footer-view' : 'footer-view1'} `}>
-                <div className='mt-2'>
-                    {!cropState &&
-                        <>
-                            {selectUtil == "camera" ? (
-                                <>
-                                    <Button
-                                        parentStyle={{ display: "inline" }}
-                                        buttonProps={{
-                                            type: "button",
-                                            icon: <IoMdReverseCamera className='text-4xl' />,
-                                            buttonClass: "px-3",
-                                            style: {
-                                                backgroundColor: "var(--blue-700)",
-                                                borderColor: "var(--blue-700)"
-                                            },
-                                            onClick: () => {
-                                                if (toggleCameraMode == "user") {
-
-                                                    setToggleCameraMode("environment");
-                                                } else {
-                                                    setToggleCameraMode("user");
-                                                }
-                                            },
-                                        }}
-
-                                    />
-                                    <Button
-                                        parentStyle={{ display: "inline" }}
-                                        buttonProps={{
-                                            type: "button",
-                                            icon: <FaFileUpload className='text-2xl' />,
-                                            buttonClass: "px-3",
-                                            style: {
-                                                backgroundColor: "var(--yellow-500)",
-                                                borderColor: "var(--yellow-500)"
-                                            },
-                                            onClick: () => onFileSelectionBtnClick(),
-                                        }}
-                                    />
-                                </>
-                            ) : (
-                                <Button
-                                    parentStyle={{ display: "inline" }}
-                                    buttonProps={{
-                                        type: "button",
-                                        icon: <AiOutlineCamera className='text-3xl' />,
-                                        buttonClass: "px-3",
-                                        style: {
-                                            backgroundColor: "var(--orange-500)",
-                                            borderColor: "var(--orange-500)"
-                                        },
-                                        onClick: () => {
-                                            onCameraBtnClick()
-                                        },
-                                    }}
-                                />
-                            )}
-                        </>
-                    }
-                    <Button
-                        parentStyle={{ display: "inline" }}
-                        buttonProps={{
-                            type: "button",
-                            style: {
-                                backgroundColor: "var(--red-500)",
-                                borderColor: "var(--red-500)"
-                            },
-                            icon: <MdSettingsBackupRestore className='text-3xl' />,
-                            iconPos: 'left',
-                            buttonClass: "px-3",
-                            onClick: () => {
-                                setSelectUtil('camera');
-                                setCompleted(false);
-                                setImg(undefined);
-                                setCropState();
-                                setRotateAngel(0);                          
-                            },
-                        }}
-                    />
-                </div>
                 <div>
-                    {!cropState ? (
-                        <>
-                            <Button
-                                parentStyle={{ display: "inline" }}
-                                buttonProps={{
-                                    type: "button",
-                                    text: "撮影する",
-                                    buttonClass: "px-3 mt-2",
-                                    style: {
-                                        backgroundColor: "var(--gray-700)",
-                                        borderColor: "var(--gray-700)"
-                                    },
-                                    onClick: () => {
-                                        onCapture()
-                                    },
-                                }}
-                            />
-                        </>
-                    ) : (
+                    {(
                         <>
                             {!completed ? (
                                 <div>
-                                    <Button
+                                    {/* <Button
                                         parentStyle={{ display: "inline" }}
                                         buttonProps={{
                                             type: "button",
@@ -219,7 +122,7 @@ export const PerspectiveImageCropping = (props) => {
                                                 }
                                             },
                                         }}
-                                    />
+                                    /> */}
                                     <Button
                                         parentStyle={{ display: "inline" }}
                                         buttonProps={{
@@ -350,9 +253,9 @@ export const PerspectiveImageCropping = (props) => {
                 draggable={false}
                 blockScroll={true}
                 onHide={() => {
-                    props.hide();
-                    setSelectUtil("camera");
                     setCompleted(false);
+                    props.hide();
+                    // setSelectUtil("camera");
                     setImg(undefined);
                     setCropState();
                     setResult("");
