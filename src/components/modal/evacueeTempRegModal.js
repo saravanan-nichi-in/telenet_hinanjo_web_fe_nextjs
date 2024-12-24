@@ -40,6 +40,7 @@ import { useAppSelector } from "@/redux/hooks";
 import YaburuModal from "./yaburuModal";
 import QrConfirmDialog from "./QrConfirmDialog";
 import toast from "react-hot-toast";
+import { PerspectiveImageCropping } from "../perspectiveImageCropping";
 export default function EvacueeTempRegModal(props) {
   const { localeJson, locale, setLoader,webFxScaner,selectedScannerName } = useContext(LayoutContext);
   const layoutReducer = useAppSelector((state) => state.layoutReducer);
@@ -162,6 +163,8 @@ export default function EvacueeTempRegModal(props) {
   const [hasErrors, setHasErrors] = useState(false);
   const [isMRecording, setMIsRecording] = useState(false);
   const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] =
+    useState(false);
+    const [perspectiveImageCroppingVisible, setPerspectiveImageCroppingVisible] =
     useState(false);
   const [repAddress, setRepAddress] = useState({});
   const [haveRepAddress, setHaveRepAddress] = useState(false);
@@ -439,9 +442,11 @@ export default function EvacueeTempRegModal(props) {
     let formData = new FormData();
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
+    setPerspectiveImageCroppingVisible(false);
     ocrScanRegistration(formData, (res) => {
       if (res) {
         setPerspectiveCroppingVisible(false);
+        setPerspectiveImageCroppingVisible(false);
         const evacueeArray = res.data;
         formikRef.current.resetForm();
         createEvacuee(evacueeArray, formikRef.current.setFieldValue);
@@ -704,19 +709,21 @@ export default function EvacueeTempRegModal(props) {
       setLoader(true);
       await webFxScan.calibrate();
       const result = await webFxScan.scan({
-        callback: (progress) => console.log('Scan progress:', progress),
+        callback: (progress) =>{ setScanResult(progress.base64);
+          ocrResult(progress.base64);
+          setPerspectiveImageCroppingVisible(true)
+          console.log(progress)},
       });
 
-      if (result.result && result.data?.[0]?.base64) {
-        setScanResult(result.data[0].base64);
-        ocrResult(result.data[0].base64)
-        // console.log('First scanned image base64:', result.data[0].base64);
-      } else {
-        setLoader(false)
-          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
-            position: "top-right",
-          });
-      }
+      // if (result.result && result.data?.[0]?.base64) {
+       
+      //   // console.log('First scanned image base64:', result.data[0].base64);
+      // } else {
+      //   setLoader(false)
+      //     toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+      //       position: "top-right",
+      //     });
+      // }
     } catch (err) {
       setLoader(false)
        toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
@@ -743,6 +750,13 @@ export default function EvacueeTempRegModal(props) {
       <PerspectiveCropping
         visible={perspectiveCroppingVisible}
         hide={() => setPerspectiveCroppingVisible(false)}
+        callback={ocrResult}
+      />
+
+      <PerspectiveImageCropping
+        visible={perspectiveImageCroppingVisible}
+        base64Image={scanResult}
+        hide={() => setPerspectiveImageCroppingVisible(false)}
         callback={ocrResult}
       />
       <QrScannerModal
