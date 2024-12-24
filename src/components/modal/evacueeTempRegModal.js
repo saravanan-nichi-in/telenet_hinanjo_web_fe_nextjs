@@ -707,21 +707,15 @@ export default function EvacueeTempRegModal(props) {
 
     try {
       setLoader(true);
-      const { result, message, data, error } = scan();
-      if(result) {
-        data.map((file)=> {
-          const { fileName, base64, ocrText } = file;
-          setScanResult(base64);
+      await webFxScan.calibrate();
+      const result = await webFxScan.scan({
+        callback: (progress) =>{ setScanResult(progress.base64);
           // ocrResult(progress.base64);
           setPerspectiveImageCroppingVisible(true);
           setLoader(false);
-        })
-      } else {
-        setLoader(false);
-        console.log(error);
-      }
+          console.log(progress)},
+      });
       setLoader(false);
-
       // if (result.result && result.data?.[0]?.base64) {
        
       //   // console.log('First scanned image base64:', result.data[0].base64);
@@ -738,12 +732,6 @@ export default function EvacueeTempRegModal(props) {
       });
     }
   };
-
-
-
-async function scan() {
-  return await webFxScan.scan();
-}
 
 
   return (
