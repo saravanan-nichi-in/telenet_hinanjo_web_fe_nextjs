@@ -707,13 +707,19 @@ export default function EvacueeTempRegModal(props) {
 
     try {
       setLoader(true);
-      const result = await webFxScan.scan({
-        callback: (progress) =>{ setScanResult(progress.base64);
+      const { result, message, data, error } = scan();
+      if(result) {
+        data.map((file)=> {
+          const { fileName, base64, ocrText } = file;
+          setScanResult(base64);
           // ocrResult(progress.base64);
           setPerspectiveImageCroppingVisible(true);
           setLoader(false);
-          console.log(progress)},
-      });
+        })
+      } else {
+        setLoader(false);
+        console.log(error);
+      }
       setLoader(false);
 
       // if (result.result && result.data?.[0]?.base64) {
@@ -732,6 +738,12 @@ export default function EvacueeTempRegModal(props) {
       });
     }
   };
+
+
+
+async function scan() {
+  return await webFxScan.scan();
+}
 
 
   return (
