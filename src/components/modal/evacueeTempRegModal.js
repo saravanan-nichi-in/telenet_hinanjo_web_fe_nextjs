@@ -707,7 +707,6 @@ export default function EvacueeTempRegModal(props) {
 
     try {
       setLoader(true);
-      await webFxScan.calibrate();
       const result = await webFxScan.scan({
         callback: (progress) =>{ setScanResult(progress.base64);
           // ocrResult(progress.base64);
@@ -715,6 +714,7 @@ export default function EvacueeTempRegModal(props) {
           setLoader(false);
           console.log(progress)},
       });
+      setLoader(false);
 
       // if (result.result && result.data?.[0]?.base64) {
        

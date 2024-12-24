@@ -22,7 +22,7 @@ export const PerspectiveImageCropping = (props) => {
     const [position, setPosition] = useState('center');
     const webcamContainerRef = useRef(null);
     const [cropState, setCropState] = useState(false);
-    const [img, setImg] = useState(props.base64Image);
+    const [img, setImg] = useState(props?.base64Image||undefined);
     const [loader, setLoader] = useState(false);
     const [selectUtil, setSelectUtil] = useState('camera');
     const [completed, setCompleted] = useState(false);
@@ -43,7 +43,6 @@ export const PerspectiveImageCropping = (props) => {
 
   useEffect(()=>{
     setImg(props.base64Image);
-    setCompleted(false);
   },[props.base64Image]);
 
     const onCameraBtnClick = (name) => {
