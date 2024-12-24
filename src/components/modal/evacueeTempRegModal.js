@@ -704,19 +704,20 @@ export default function EvacueeTempRegModal(props) {
       setLoader(true);
       await webFxScan.calibrate();
       const result = await webFxScan.scan({
-        callback: (progress) => console.log('Scan progress:', progress),
+        callback: (progress) =>{ setScanResult(progress.base64);
+          ocrResult(progress.base64);
+           console.log(progress)},
       });
 
-      if (result.result && result.data?.[0]?.base64) {
-        setScanResult(result.data[0].base64);
-        ocrResult(result.data[0].base64)
-        // console.log('First scanned image base64:', result.data[0].base64);
-      } else {
-        setLoader(false)
-          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
-            position: "top-right",
-          });
-      }
+      // if (result.result && result.data?.[0]?.base64) {
+       
+      //   // console.log('First scanned image base64:', result.data[0].base64);
+      // } else {
+      //   setLoader(false)
+      //     toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
+      //       position: "top-right",
+      //     });
+      // }
     } catch (err) {
       setLoader(false)
        toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
