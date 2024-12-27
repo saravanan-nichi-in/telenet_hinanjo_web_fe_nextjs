@@ -715,6 +715,7 @@ const handleScan = async () => {
     let formData = new FormData();
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
+    setPerspectiveImageCroppingVisible(false);
     showOverFlow();
     ocrScanRegistration(formData, async (res) => {
       if (res) {
