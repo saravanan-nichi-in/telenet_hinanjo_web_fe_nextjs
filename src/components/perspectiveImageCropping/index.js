@@ -92,7 +92,7 @@ export const PerspectiveImageCropping = (props) => {
 
     const renderFooter = (name) => {
         return (
-            <div className={`${!cropState && selectUtil == "camera" ? 'footer-view' : 'footer-view1'} `}>
+            <div className={`${!cropState && selectUtil == "camera" ? 'footer-view' : 'flex justify-content-end'} `}>
                 <div>
                     {(
                         <>
@@ -151,7 +151,7 @@ export const PerspectiveImageCropping = (props) => {
                                         buttonClass: "mt-2",
                                         onClick: () => {
                                             setSelectUtil('camera');
-                                            setCompleted(true)
+                                            setCompleted(false)
                                             setImg(undefined);
                                             setCropState();
                                             props.callback(result);
