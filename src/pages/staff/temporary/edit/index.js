@@ -37,6 +37,7 @@ import {
 import QrConfirmDialog from "@/components/modal/QrConfirmDialog";
 import YaburuModal from "@/components/modal/yaburuModal";
 import toast from "react-hot-toast";
+import { PerspectiveImageCropping } from "@/components/perspectiveImageCropping";
 
 export default function Admission() {
   const { locale, localeJson, setLoader ,webFxScaner, selectedScannerName } = useContext(LayoutContext);
@@ -76,6 +77,7 @@ export default function Admission() {
   const [openQrPopup, setOpenQrPopup] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [perspectiveCroppingVisible, setPerspectiveCroppingVisible] = useState(false);
+  const [perspectiveImageCroppingVisible, setPerspectiveImageCroppingVisible] = useState(false);
   const formikRef = useRef();
   const [QrScanPopupModalOpen, setQrScanPopupModalOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -104,33 +106,38 @@ export default function Admission() {
     setSelectedScanner(selectedScannerName)
   },[])
   
-    const handleScan = async () => {
-    if (!selectedScanner || !webFxScan) return;
+  async function scan() {
+    return await webFxScan.scan();
+  }
 
-    try {
-      setLoader(true);
-      await webFxScan.calibrate();
-      const result = await webFxScan.scan({
-        callback: (progress) => console.log('Scan progress:', progress),
-      });
 
-      if (result.result && result.data?.[0]?.base64) {
-        setScanResult(result.data[0].base64);
-        ocrResult(result.data[0].base64)
-        // console.log('First scanned image base64:', result.data[0].base64);
-      } else {
-        setLoader(false)
-          toast.error(locale=="en"?'Try again after making sure your card is positioned correctly. ':'カードが正しく配置されていることを確認して、もう一度お試しください。', {
-            position: "top-right",
-          });
-      }
-    } catch (err) {
+// Trigger a scan and save the first image base64
+const handleScan = async () => {
+  if (!selectedScanner || !webFxScan) return;
+
+  try {
+    setLoader(true);
+    const {result,data}= await scan();
+    if(result)
+    {
+      setScanResult(data[0].base64);
+        setPerspectiveImageCroppingVisible(true);
+        setLoader(false);
+    }
+    else {
       setLoader(false)
-       toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+      toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
         position: "top-right",
       });
     }
-  };
+    setLoader(false);
+  } catch (err) {
+    setLoader(false)
+     toast.error(locale=="en"?'Try again after making sure your card is positioned correctly.':' カードが正しく配置されていることを確認して、もう一度お試しください。', {
+      position: "top-right",
+    });
+  }
+};
 
   useEffect(() => {
     if (evacueeValues !== "") {
@@ -689,6 +696,7 @@ export default function Admission() {
     let formData = new FormData();
     formData.append("content", result);
     setPerspectiveCroppingVisible(false);
+    setPerspectiveImageCroppingVisible(false);
     showOverFlow();
     ocrScanRegistration(formData, async(res) => {
       if (res) {
@@ -962,6 +970,12 @@ export default function Admission() {
           setPerspectiveCroppingVisible(false)
           showOverFlow();
         }}
+        callback={ocrResult}
+      />
+      <PerspectiveImageCropping
+        visible={perspectiveImageCroppingVisible}
+        base64Image={scanResult}
+        hide={() => setPerspectiveImageCroppingVisible(false)}
         callback={ocrResult}
       />
       <Formik
