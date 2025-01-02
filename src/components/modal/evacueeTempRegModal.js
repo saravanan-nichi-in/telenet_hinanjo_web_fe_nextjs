@@ -100,9 +100,9 @@ export default function EvacueeTempRegModal(props) {
           return true; // Allow empty values
         }),
       // Add other fields and validations as needed
-      age: Yup.number()
-        .required(translate(localeJson, "age_required")),
-      age_m: Yup.number().required(translate(localeJson, "age_month_required")),
+      // age: Yup.number()
+      //   .required(translate(localeJson, "age_required")),
+      // age_m: Yup.number().required(translate(localeJson, "age_month_required")),
       gender: Yup.string().required(translate(localeJson, "gender_required")),
       postalCode: Yup.string().nullable()
       .test("testPostalCode", translate(localeJson, "zip_code_mis_match"), 
@@ -1834,7 +1834,7 @@ export default function EvacueeTempRegModal(props) {
                           />
                         </div>
                       </div>
-                      <div className="mb-2 col-12 ">
+                      <div className="mb-2 col-12 hidden">
                         <InputNumber
                           inputNumberProps={{
                             inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
@@ -1864,7 +1864,7 @@ export default function EvacueeTempRegModal(props) {
                           errorBlock={errors.age && touched.age && errors.age}
                         />
                       </div>
-                      <div className="mb-2 col-12 ">
+                      <div className="mb-2 col-12 hidden">
                         <InputNumber
                           inputNumberProps={{
                             inputNumberParentClassName: `${errors.age && touched.age && "p-invalid pb-0"
