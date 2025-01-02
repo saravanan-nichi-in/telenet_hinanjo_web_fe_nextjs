@@ -1597,7 +1597,7 @@ const handleScan = async () => {
                               errors.address2
                             } /> */}
                         </div>
-                        <div className="mb-2 col-12 xl:col-12">
+                        <div className="mb-2 col-12 xl:col-12 hidden">
                           <div className="w-12">
                             <Input
                               inputProps={{

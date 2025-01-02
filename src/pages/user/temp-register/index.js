@@ -1787,7 +1787,7 @@ const handleScan = async () => {
                                 }
                               /> */}
                             </div>
-                            <div className="col-12 xl:col-12">
+                            <div className="col-12 xl:col-12 hidden">
                               <div className="w-12">
                                 <Input
                                   inputProps={{
