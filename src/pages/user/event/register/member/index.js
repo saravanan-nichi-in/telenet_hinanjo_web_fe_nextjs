@@ -975,7 +975,7 @@ export default function UserEventRegModal(props) {
                                                             errors.address2 && touched.address2 && errors.address2
                                                         }/> */}
                                                 </div>
-                                                <div className="mb-2  col-12 ">
+                                                <div className="mb-2  col-12 hidden">
                                                     <div className="w-12">
                                                         <Input
                                                             inputProps={{
