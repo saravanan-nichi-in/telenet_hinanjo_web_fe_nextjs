@@ -326,5 +326,6 @@ function _tempDetails(payload, callBackFun) {
     })
     .catch((error) => {
       callBackFun();
+      toastDisplay(error?.response);
     });
 }

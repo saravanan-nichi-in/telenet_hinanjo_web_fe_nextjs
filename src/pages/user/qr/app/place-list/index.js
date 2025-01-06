@@ -5,10 +5,11 @@ import _ from "lodash";
 
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { getValueByKeyRecursively as translate } from "@/helper";
-import { CustomHeader, NormalTable } from "@/components";
+import { Button, CustomHeader, Input, MultiSelect, NormalTable } from "@/components";
 import { UserPlaceListServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUserDetails } from "@/redux/layout";
+import { prefectures, prefectures_en } from "@/utils/constant";
 
 export default function PlaceList() {
   const { locale, localeJson } = useContext(LayoutContext);
@@ -21,6 +22,16 @@ export default function PlaceList() {
   const [columns, setColumns] = useState([]);
   const [list, setList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [pref, setPref] = useState([]);
+  const [address, setAddress] = useState("");
+    const prefOptions =
+      locale === "ja"
+        ? prefectures
+            .filter((val) => val.value !== "")
+            .map((val) => ({ value: val.value, label: val.name }))
+        : prefectures_en
+            .filter((val) => val.value !== "")
+            .map((val) => ({ value: val.value, label: val.name }));
   const [getListPayload, setGetListPayload] = useState({
     filters: {
       start: 0,
@@ -29,6 +40,7 @@ export default function PlaceList() {
       order_by: "asc",
     },
     search: "",
+    prefecture: [],
   });
 
   const columnsData = [
@@ -112,7 +124,8 @@ export default function PlaceList() {
         sort_by: getListPayload.filters.sort_by,
         order_by: getListPayload.filters.order_by,
       },
-      search: "",
+      search: address,
+      prefecture: pref || [],
     };
     getList(payload, onGetPublicEvacueesList);
   };
@@ -210,7 +223,6 @@ export default function PlaceList() {
           start: newStartValue,
           limit: newLimitValue,
         },
-        search: "",
       }));
     }
   };
@@ -227,6 +239,69 @@ export default function PlaceList() {
                 "evacuation_place_list"
               )}
             />
+                <div className="sm:flex md:flex lg:flex align-items-center justify-content-end mt-2">
+                          <div className="modal-field-top-space modal-field-bottom-space flex sm:flex-no-wrap md:w-auto flex-wrap flex-grow float-right justify-content-end gap-3 lg:gap-2 md:gap-2 sm:gap-2 mobile-input ">
+                            <MultiSelect
+                              multiSelectProps={{
+                                labelProps: {
+                                  text: translate(localeJson, "prefecture_places"),
+                                  inputMultiSelectLabelClassName: "block",
+                                  labelMainClassName: "pb-1",
+                                  spanText: "",
+                                  inputMultiSelectLabelSpanClassName: " p-error",
+                                },
+                                multiSelectClassName: "lg:w-14rem md:w-14rem w-10rem h-40",
+                                float: false,
+                                floatLabelProps: {},
+                                value: pref,
+                                options: prefOptions,
+                                selectAllLabel: translate(
+                                  localeJson,
+                                  "place_event_bulk_checkout_column_name"
+                                ),
+                                onChange: (e) => {
+                                  setPref(e.value);
+                                },
+                                placeholder: "",
+                              }}
+                            />
+                            <Input
+                              inputProps={{
+                                inputParentClassName:
+                                  "w-full lg:w-15rem md:w-14rem sm:w-10rem",
+                                labelProps: {
+                                  text: translate(localeJson, "address"),
+                                  inputLabelClassName: "block",
+                                },
+                                inputClassName: "w-full lg:w-15rem md:w-14rem sm:w-10rem",
+                                value: address,
+                                onChange: (e) => setAddress(e.target.value),
+                              }}
+                            />
+            
+                            <div className="flex flex-wrap justify-content-end align-items-end gap-2">
+                              <Button
+                                buttonProps={{
+                                  buttonClass: "w-12 search-button",
+                                  text: translate(localeJson, "search_text"),
+                                  icon: "pi pi-search",
+                                  type: "button",
+                                  onClick: () => {
+                                    setGetListPayload((prevState) => ({
+                                      ...prevState,
+                                      filters: {
+                                        ...prevState.filters,
+                                      },
+                                      search: address,
+                                      prefecture: pref,
+                                    }));
+                                  },
+                                }}
+                                parentClass={"search-button"}
+                              />
+                            </div>
+                          </div>
+                        </div>
             <div className="mt-3">
               <NormalTable
                 lazy
