@@ -12,6 +12,7 @@ import {
   compareAddresses,
   geocodeAddressAndExtractData,
   extractAddress,
+  transformData,
 } from "@/helper";
 import {
   Button,
@@ -715,9 +716,19 @@ export default function EvacueeTempRegModal(props) {
       if(result)
       {
         setScanResult(data[0].base64);
+        if(data[0].ocrText)
+        {
+            let data = data[0].ocrText;
+            let ocrText = transformData(data);
+            formikRef.current.resetForm();
+            createEvacuee(ocrText, formikRef.current.setFieldValue);
+            setLoader(false);
+        }
+        else {
           // ocrResult(progress.base64);
           setPerspectiveImageCroppingVisible(true);
           setLoader(false);
+        }
       }
       else {
         setLoader(false)
