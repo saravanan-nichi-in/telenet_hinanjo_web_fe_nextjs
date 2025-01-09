@@ -125,6 +125,7 @@ export const LayoutProvider = (props) => {
                 brightness: 0,
                 contrast: 0,
                 quality: 100,
+                recognizeType: "JPDL"
               });
       
               console.log('First scanner initialized:', firstScanner.deviceName);

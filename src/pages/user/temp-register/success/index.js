@@ -17,12 +17,14 @@ import {
 import { TempRegisterServices } from "@/services";
 import { default_place_id } from "@/utils/constant";
 import html2canvas from "html2canvas";
+import { reset as clear } from "@/redux/userTempEdit";
 
 const RegisterSuccess = () => {
   const { localeJson, locale } = useContext(LayoutContext);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const regReducer = useAppSelector((state) => state.tempRegisterReducer);
+  const editReducer = useAppSelector((state) => state.userTempEditReducer);
   const [showDelete, setShowDelete] = useState(false);
   const [isTemp, setIsTemp] = useState(false);
   const pageRef = useRef(null);
@@ -229,21 +231,22 @@ const RegisterSuccess = () => {
                   }}
                   parentClass={"back-button"}
                 />
-                {/* <Button
+                <Button
                   buttonProps={{
                     type: "button",
                     buttonClass:
                       "w-full edit-button h-5rem border-radius-5rem mt-3 border-2",
-                    text: "編集",
+                    text: translate(localeJson, "edit"),
                     onClick: () => {
                       localStorage.setItem("familyCode",family_code);
                       router.push("/user/temp-edit");
+                      dispatch(clear());
                       // Implement the desired behavior for the Edit button
                       // Example: Navigate to an edit page
                     },
                   }}
                   parentClass={""}
-                /> */}
+                />
                 {showDelete && (
                   <Button
                     buttonProps={{

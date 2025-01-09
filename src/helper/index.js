@@ -911,3 +911,85 @@ export async function geocodeAddressAndExtractData(address,localeJson,locale,set
         return { prefecture: "", postalCode: "", prefecture_id: "" };
     }
 }
+
+export function parseJapaneseDate(japaneseDateString) {
+    const eraMapping = {
+        "令和": 2019, // Reiwa started in 2019
+        "平成": 1989, // Heisei started in 1989
+        "昭和": 1926, // Showa started in 1926
+        "大正": 1912, // Taisho started in 1912
+        "明治": 1868 // Meiji started in 1868
+    };
+
+    try {
+        // Match the Japanese date string
+        const match = japaneseDateString.match(/(令和|平成|昭和|大正|明治)(\d+)年(\d+)月(\d+)日/);
+        if (!match) {
+            throw new Error("Invalid Japanese date format");
+        }
+
+        const [, era, year, month, day] = match;
+
+        // Convert Japanese year to Gregorian year
+        const gregorianYear = eraMapping[era] + parseInt(year, 10) - 1;
+
+        // Construct the Gregorian date
+        const date = new Date(`${gregorianYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+
+        // Format as 'YYYY/MM/DD'
+        const formattedDate = date.toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+
+        return formattedDate; // Return the formatted Gregorian date
+    } catch (error) {
+        console.error("Error parsing Japanese date:", error);
+        return null; // Return null if parsing fails
+    }
+}
+
+
+export function transformData(input) {
+    const dob = parseJapaneseDate(input.Birthday); // Convert Birthday
+    if (!dob) return null;
+    let age = null;
+
+    if(dob){
+        // Get age and gender from dob
+        age = calculateDOBAge(dob);
+        // const gender = input.Gender === "male"? "男性" : "女性";
+    }
+
+    // Transform input object into required output format
+    return {
+        address: input.Address || "",
+        fullAddress: input.Address || "",
+        dob: dob,
+        age: age?.years||"",
+        gender: "",
+        month: age.months||"",
+        name: input.Name || "",
+        prefecture_id: "",
+        postal_code: "",
+        refugeeName: "",
+    };
+}
+
+function calculateDOBAge(birthdate) {
+    const birthdateObj = new Date(birthdate);
+    const currentDate = new Date();
+    let years = currentDate.getFullYear() - birthdateObj.getFullYear();
+    let months = currentDate.getMonth() - birthdateObj.getMonth();
+    if (currentDate.getDate() < birthdateObj.getDate()) {
+      // Adjust for cases where the birthdate has not occurred yet in the current month
+      months--;
+    }
+    if (months < 0) {
+      // Adjust for cases where the birthdate month is ahead of the current month
+      years--;
+      months += 12;
+    }
+    return { years, months };
+  }
