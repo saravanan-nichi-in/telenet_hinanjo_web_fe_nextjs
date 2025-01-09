@@ -121,7 +121,8 @@ const handleScan = async () => {
     if(result)
     {
       setScanResult(data[0].base64);
-        setPerspectiveImageCroppingVisible(true);
+      ocrResult(data[0].base64);
+        // setPerspectiveImageCroppingVisible(true);
         setLoader(false);
     }
     else {
