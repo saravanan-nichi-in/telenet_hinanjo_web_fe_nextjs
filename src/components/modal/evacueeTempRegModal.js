@@ -12,7 +12,7 @@ import {
   compareAddresses,
   geocodeAddressAndExtractData,
   extractAddress,
-  transformData,
+  // transformData,
 } from "@/helper";
 import {
   Button,
@@ -717,19 +717,19 @@ export default function EvacueeTempRegModal(props) {
       {
         console.log(data);
         setScanResult(data[0].base64);
-        if(data[0].recognizedata)
-        {
-            let data = data[0].recognizedata;
-            let ocrText = transformData(data);
-            formikRef.current.resetForm();
-            createEvacuee(ocrText, formikRef.current.setFieldValue);
-            setLoader(false);
-        }
-        else {
+        // if(data[0].recognizedata)
+        // {
+        //     let data = data[0].recognizedata;
+        //     let ocrText = transformData(data);
+        //     formikRef.current.resetForm();
+        //     createEvacuee(ocrText, formikRef.current.setFieldValue);
+        //     setLoader(false);
+        // }
+        // else {
           // ocrResult(progress.base64);
           setPerspectiveImageCroppingVisible(true);
           setLoader(false);
-        }
+        // }
       }
       else {
         setLoader(false)

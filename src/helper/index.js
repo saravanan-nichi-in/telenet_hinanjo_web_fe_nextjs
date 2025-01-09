@@ -913,21 +913,31 @@ export async function geocodeAddressAndExtractData(address,localeJson,locale,set
 }
 
 export function parseJapaneseDate(japaneseDateString) {
-    // Create an Intl.DateTimeFormat instance for the Japanese calendar
-    const formatter = new Intl.DateTimeFormat('ja-JP-u-ca-japanese', {
-        era: 'long',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        timeZone: 'Asia/Tokyo'
-    });
+    const eraMapping = {
+        "令和": 2019, // Reiwa started in 2019
+        "平成": 1989, // Heisei started in 1989
+        "昭和": 1926, // Showa started in 1926
+        "大正": 1912, // Taisho started in 1912
+        "明治": 1868 // Meiji started in 1868
+    };
 
     try {
-        // Parse the Japanese date string into a Date object
-        const parsedDate = new Date(formatter.format(new Date(japaneseDateString)));
+        // Match the Japanese date string
+        const match = japaneseDateString.match(/(令和|平成|昭和|大正|明治)(\d+)年(\d+)月(\d+)日/);
+        if (!match) {
+            throw new Error("Invalid Japanese date format");
+        }
 
-        // Format the parsed date as 'YYYY/MM/DD'
-        const formattedDate = parsedDate.toLocaleDateString('ja-JP', {
+        const [, era, year, month, day] = match;
+
+        // Convert Japanese year to Gregorian year
+        const gregorianYear = eraMapping[era] + parseInt(year, 10) - 1;
+
+        // Construct the Gregorian date
+        const date = new Date(`${gregorianYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+
+        // Format as 'YYYY/MM/DD'
+        const formattedDate = date.toLocaleDateString('ja-JP', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -939,6 +949,7 @@ export function parseJapaneseDate(japaneseDateString) {
         return null; // Return null if parsing fails
     }
 }
+
 
 export function transformData(input) {
     const dob = parseJapaneseDate(input.Birthday); // Convert Birthday
