@@ -727,6 +727,7 @@ export default function EvacueeTempRegModal(props) {
         // }
         // else {
           ocrResult(data[0].base64);
+          return;
           // setPerspectiveImageCroppingVisible(true);
           // setLoader(false);
         // }
