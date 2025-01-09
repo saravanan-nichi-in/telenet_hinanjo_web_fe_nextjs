@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
-
+import { gender_en, gender_jp } from '@/utils/constant';
 import { convertToSingleByte, getJapaneseDateTimeDisplayActualFormat, toastDisplay, getValueByKeyRecursively as translate } from '@/helper'
 import { LayoutContext } from "@/layout/context/layoutcontext";
 import { CheckInOutServices, TempRegisterServices, UserPlaceListServices, UserDashboardServices, CommonServices } from "@/services";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCheckOutData } from "@/redux/checkout";
-import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal } from "@/components";
+import { Button, ButtonRounded, CommonPage, CustomHeader, Input, ValidationError, Password, CommonDialog, YappleModal, BarcodeDialog, QrScannerModal, InputDropdown, Calendar } from "@/components";
 
 export default function Admission() {
   const { locale, localeJson, setLoader } = useContext(LayoutContext);
@@ -32,6 +32,7 @@ export default function Admission() {
   const [isRecording, setIsRecording] = useState(false);
   const [isMRecording, setMIsRecording] = useState(false);
   const [inputType, setInputType] = useState("password");
+  const [isVisible,setIsVisible] = useState(false);
   const formikRef = useRef();
 
   const schema = Yup.object().shape({
@@ -54,9 +55,30 @@ export default function Admission() {
       },
       message: translate(localeJson, "family_code_required"),
     }),
+    tel: Yup.string()
+    .test(
+      "starts-with-zero",
+      translate(localeJson, "phone_num_start"),
+      (value) => {
+        if (value) {
+          value = convertToSingleByte(value);
+          return value.charAt(0) === "0";
+        }
+        return true; // Return true for empty values
+      }
+    )
+    .test("matches-pattern", translate(localeJson, "phone"), (value) => {
+      if (value) {
+        const singleByteValue = convertToSingleByte(value);
+        return /^[0-9]{10,11}$/.test(singleByteValue);
+      }
+      return true; // Allow empty values
+    }),
+    gender: Yup.string().nullable(),
+    dob: Yup.date().nullable()
   });
 
-  const initialValues = { name: "", password: "", familyCode: "" };
+  const initialValues = { name: "", password: "", familyCode: "",dob:"",gender: "",tel: "", };
 
   const { getList, eventCheckOut, placeCheckout } = CheckInOutServices;
   const { getBasicDetailsUsingUUID, getPPID } = TempRegisterServices;
@@ -85,11 +107,23 @@ export default function Admission() {
   const getSearchResult = (res) => {
     if (res?.success && !_.isEmpty(res?.data)) {
       const data = res.data.model;
+      const count = res.data.count||"";
+      if(count == 1){
       setSearchResult(data);
       setTableLoading(false);
       dispatch(setCheckOutData(data))
       setLoader(false);
+      setIsVisible(false);
       router.push("/user/checkout/details")
+      }
+      else if(count>1) {
+        setLoader(false);
+        setIsVisible(true);
+      }
+      else {
+        setLoader(false);
+        setIsVisible(false);
+      }
     } else {
       setSearchResult([]);
       setTableLoading(false);
@@ -689,6 +723,121 @@ export default function Admission() {
                                 />
                               </div>
                             </div>
+                            {
+                                isVisible && (
+                                  <>
+                                <div className="mb-3 w-12">
+                                <div className="flex w-12">
+                                  <div className="w-12">
+                                  <Input
+                            inputProps={{
+                              inputParentClassName: `w-full custom_input ${errors.tel && touched.tel && "p-invalid"
+                                }`,
+                              labelProps: {
+                                text: translate(localeJson, "phone_number"),
+                                inputLabelClassName: "block font-bold",
+                                inputLabelSpanClassName: "p-error",
+                                labelMainClassName: "pb-1",
+                              },
+                              inputClassName: "w-full",
+                              id: "tel",
+                              name: "tel",
+                              value: values.tel,
+                              inputMode: "numeric",
+                              placeholder: translate(
+                                localeJson,
+                                "without_hypen"
+                              ),
+                              onChange: (evt) => {
+                                const re = /^[0-9-]+$/;
+                                let val;
+                                if (
+                                  evt.target.value === "" ||
+                                  re.test(convertToSingleByte(evt.target.value))
+                                ) {
+                                  val = evt.target.value.replace(/-/g, "");
+                                  setFieldValue("tel", val);
+                                }
+                              },
+                              onBlur: handleBlur,
+                            }}
+                          />
+                                  </div>
+                                </div>
+                                <div className="w-11">
+                                  <ValidationError
+                                    errorBlock={
+                                      errors.tel && touched.tel && errors.tel
+                                    }
+                                  />
+                                </div>
+                              </div>
+                               <div className="mb-3 w-12">
+                               <div className="flex w-12">
+                                 <div className="w-12">
+                                 <Calendar calendarProps={{
+                              calendarParentClassName: `lg:w-full ${errors.dob &&
+                                touched.dob &&
+                                "p-invalid"
+                                }`,
+                                labelProps: {
+                                  text: translate(localeJson, 'c_dob'),
+                                  calendarLabelClassName: "block"
+                                },
+                              date: values.dob,
+                              calendarClassName: "w-full",
+                              name: "dob",
+                              onChange: handleChange,
+                              onBlur: handleBlur,
+
+                            }}
+                            />
+                                 </div>
+                               </div>
+                               <div className="w-11">
+                                 <ValidationError
+                                   errorBlock={
+                                     errors.dob && touched.dob && errors.dob
+                                   }
+                                 />
+                               </div>
+                             </div>
+                             <div className="mb-3 w-12"> 
+                              <div className="flex w-12">
+                              <div className="w-12">
+                              <InputDropdown inputDropdownProps={{
+                        inputDropdownParenClassName: `custom_input ${errors.gender && touched.gender && "p-invalid pb-1"
+                          }`,
+                        labelProps: {
+                          text: translate(localeJson, 'gender_external_modal'),
+                          inputDropdownLabelClassName: "block",
+                          inputDropdownLabelSpanClassName: "p-error",
+                          // spanText: "*"
+                        },
+                        inputDropdownClassName: "w-full ",
+                        name: "gender",
+                        value: values.gender,
+                        options: locale == "ja" ? gender_jp : gender_en,
+                        optionLabel: "name",
+                        onChange: handleChange,
+                        onBlur: handleBlur,
+                        emptyMessage: translate(localeJson, "data_not_found"),
+                      }}
+                      />
+                      </div>
+                      </div>
+                      <div className="w-11">
+                      <ValidationError
+                        errorBlock={
+                          errors.gender && touched.gender && errors.gender
+                        }
+                      />
+                              </div>
+                             </div>
+                             
+                             </>
+                                )
+                              }
                           </div>
                         </div>
                       </div>
