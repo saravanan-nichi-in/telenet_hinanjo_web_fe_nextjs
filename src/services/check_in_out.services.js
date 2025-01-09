@@ -1,5 +1,6 @@
 import axios from '@/utils/api';
 import { toastDisplay } from '@/helper';
+import toast from 'react-hot-toast';
 
 /* Identity and Access management (IAM) */
 export const CheckInOutServices = {
@@ -24,6 +25,9 @@ function _getList(payload, callBackFun) {
     .then((response) => {
       if (response && response.data) {
         callBackFun(response.data);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+        });
       }
     })
     .catch((error) => {
