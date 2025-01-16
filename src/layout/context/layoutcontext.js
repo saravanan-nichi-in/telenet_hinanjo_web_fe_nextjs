@@ -116,7 +116,7 @@ export const LayoutProvider = (props) => {
             if (result.result && result.data?.options.length > 0) {
               const firstScanner = result.data.options[0];
               setSelectedScanner(firstScanner.deviceName);
-      
+             
               await webFxScaner.setScanner({
                 deviceName: firstScanner.deviceName,
                 source: 'Camera',
@@ -125,7 +125,6 @@ export const LayoutProvider = (props) => {
                 brightness: 0,
                 contrast: 0,
                 quality: 100,
-                recognizeType: "JPDL"
               });
       
               console.log('First scanner initialized:', firstScanner.deviceName);
