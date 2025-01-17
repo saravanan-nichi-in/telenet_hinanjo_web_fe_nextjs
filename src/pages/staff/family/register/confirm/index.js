@@ -545,7 +545,7 @@ staffRegisterUser(modifiedJson, (res) => {
                     {basicFamilyDetail[0]?.tel}
                   </div>
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 hidden">
                   <div className=" flex_row_space_between">
                     <label className="header_table">
                       {translate(localeJson, "password")}

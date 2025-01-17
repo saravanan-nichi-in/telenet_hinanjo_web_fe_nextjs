@@ -342,9 +342,9 @@ const handleScan = async () => {
   }, [evacuee]);
 
   useEffect(() => {
-    let postal_code = layoutReducer?.user?.place?.zip_code;
-    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let address = layoutReducer?.user?.place?.address;
+    let postal_code = layoutReducer?.user?.place?.zip_code_default;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id_default;
+    let address = layoutReducer?.user?.place?.address_default;
 
     formikRef.current.setFieldValue(
       "postalCode",
