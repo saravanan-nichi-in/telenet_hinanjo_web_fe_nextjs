@@ -226,9 +226,9 @@ const handleScan = async () => {
 
   // Update evacuee details on creation by selected place
   const fetchDetailsByPlaceAndUpdateEvacuee = () => {
-    let postal_code = layoutReducer?.user?.place?.zip_code;
-    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let address = layoutReducer?.user?.place?.address;
+    let postal_code = layoutReducer?.user?.place?.zip_code_default;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id_default;
+    let address = layoutReducer?.user?.place?.address_default;
 
     if (postal_code?.replace(/-/g, "")) {
       let evacueeArray = {
