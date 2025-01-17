@@ -159,7 +159,7 @@ const handleScan = async () => {
     setLoader(true);
     const {result,data}= await scan();
     if(result)
-    {
+    {   
       setScanResult(data[0].base64);
       ocrResult(data[0].base64);
       return;
@@ -183,9 +183,9 @@ const handleScan = async () => {
 
   // Fetch details from store & update
   useEffect(() => {
-    let postal_code = layoutReducer?.user?.place?.zip_code;
-    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let address = layoutReducer?.user?.place?.address;
+    let postal_code = layoutReducer?.user?.place?.zip_code_default;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id_default;
+    let address = layoutReducer?.user?.place?.address_default;
     formikRef.current.setFieldValue("postalCode", postal_code ? postal_code.replace(/-/g, "") : null);
     formikRef.current.setFieldValue("prefecture_id", prefecture_id);
     formikRef.current.setFieldValue("address", address);
@@ -211,9 +211,9 @@ const handleScan = async () => {
 
   // Update evacuee details on creation by selected place
   const fetchDetailsByPlaceAndUpdateEvacuee = () => {
-    let postal_code = layoutReducer?.user?.place?.zip_code;
-    let prefecture_id = layoutReducer?.user?.place?.prefecture_id;
-    let address = layoutReducer?.user?.place?.address;
+    let postal_code = layoutReducer?.user?.place?.zip_code_default;
+    let prefecture_id = layoutReducer?.user?.place?.prefecture_id_default;
+    let address = layoutReducer?.user?.place?.address_default;
 
     if (postal_code?.replace(/-/g, "") || address) {
       let evacueeArray = {
