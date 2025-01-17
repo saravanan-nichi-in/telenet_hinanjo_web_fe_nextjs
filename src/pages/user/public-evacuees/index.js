@@ -116,6 +116,9 @@ export default function PublicEvacuee() {
                 })
                 setList(preparedList);
              }
+             else {
+                setList([]);
+             }
                 setTotalCount(response.data.total);
                 
                 setTableLoading(false);
